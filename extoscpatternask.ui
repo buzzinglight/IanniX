@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ExtOscPatternAsk</class>
+ <widget class="QDialog" name="ExtOscPatternAsk">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>685</width>
+    <height>328</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+	font: 12px &quot;Lucida Sans&quot;;
+}
+
+QWidget#ExtOscPatternAsk {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
+}
+
+QTextEdit#help {
+	color: white;
+	background-color: transparent;
+}
+
+
+QPushButton {
+	color: white;
+	border: 1px solid rgb(60, 60, 60);
+	min-width: 70px;
+	min-height: 30px;
+	border-radius: 4px;
+	color: rgb(192, 192, 192);
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 255), stop:1 rgba(61, 61, 61, 255));
+
+}
+QPushButton:hover {
+	border: 1px solid rgb(0, 187, 255);
+	background-color: rgb(0, 137, 241, 128);
+}
+QPushButton::checked {
+	background-color: rgb(0, 187, 255);
+	color: white;
+}
+
+QTreeWidget {
+	color: black;
+	font: 11px &quot;Lucida Console&quot;;
+}
+
+QTreeWidget::item {
+/*
+	background: qlineargradient(spread:pad, x1:0, y1:0.006, x2:0, y2:1, stop:0 rgba(0, 187, 255, 128), stop:1 rgba(0, 147, 215, 128));
+	color: black;
+	border: 1px solid rgba(0, 147, 215, 255);
+	border-radius: 10px;
+*/
+	height: 18px;
+	margin: 3px
+}
+/*
+QTreeWidget::item:selected {
+	background: rgba(0, 107, 175, 255);
+	color: white;
+	border: 1px solid rgba(0, 147, 215, 255);
+	border-radius: 10px;
+	height: 18px;
+	margin: 3px
+}
+*/</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QTreeWidget" name="listWidget">
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="animated">
+        <bool>true</bool>
+       </property>
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>New Column</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="help_2">
+         <property name="minimumSize">
+          <size>
+           <width>72</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="IanniX.qrc">
+           <normaloff>:/actions/res_icon_help.png</normaloff>:/actions/res_icon_help.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="addButton">
+         <property name="minimumSize">
+          <size>
+           <width>72</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>+</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="removeButton">
+         <property name="minimumSize">
+          <size>
+           <width>72</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="IanniX.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>ExtOscPatternAsk</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>362</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ExtOscPatternAsk</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>298</x>
+     <y>362</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addButton</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternAsk</receiver>
+   <slot>actionAddMessage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>641</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>657</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>removeButton</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternAsk</receiver>
+   <slot>actionRemoveMessage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>641</x>
+     <y>267</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>631</x>
+     <y>114</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>help_2</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternAsk</receiver>
+   <slot>help()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>267</x>
+     <y>-106</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>itemClicked(QListWidgetItem*)</slot>
+  <slot>actionAddMessage()</slot>
+  <slot>actionRemoveMessage()</slot>
+  <slot>help()</slot>
+ </slots>
+</ui>
