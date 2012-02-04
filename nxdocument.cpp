@@ -17,7 +17,9 @@ QString NxDocument::serialize(UiRenderOptions *renderOptions) {
 
     if(renderOptions) {
         retour += QString(COMMAND_ZOOM + " %1").arg(renderOptions->zoomValue) + COMMAND_END;
+        retour += QString(COMMAND_SPEED + " %1").arg(renderOptions->timeFactor) + COMMAND_END;
         retour += QString(COMMAND_CENTER + " %1 %2").arg(-renderOptions->axisCenter.x()).arg(-renderOptions->axisCenter.y()) + COMMAND_END;
+        ///CG/// Need to serialize rotation here?
     }
 
     //Browse documents

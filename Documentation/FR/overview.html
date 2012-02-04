@@ -1,0 +1,346 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="fr" />
+  <meta name="language" content="fr" />
+  <meta name="designer" content="buzzing light" />
+  <meta name="description" content="IanniX documentation" />
+  <link href="../Common/css/reset.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/font/stylesheet.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../Common/jquery.js">
+</script>
+
+  <title>IanniX — Interface graphique</title>
+  <style type="text/css">
+/*<![CDATA[*/
+  a.c1 {color:#aaa; text-decoration:none;}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class='main container'>
+    <table class="onglets" summary="">
+      <tr>
+        <td class="onglet"><a href="intro.html">Introduction</a></td>
+
+        <td class="onglet"><a href="objets.html">Objets<br />
+        fondamentaux</a></td>
+
+        <td class="onglet"><a href="messages.html">Messages émis<br />
+        et reçus</a></td>
+
+        <td class="onglet" id='actif'><a href="overview.html">Interface<br />
+        graphique</a></td>
+
+        <td class="onglet"><a href="script.html">Scripts</a></td>
+
+        <td class="onglet"><a href="reference.html">Référence</a></td>
+
+        <td class="onglet"><a href="listing.html">Index<br />
+        des fonctions</a></td>
+      </tr>
+    </table>
+
+    <div class="langue">
+      <a class="c1" href="../EN/overview.html">English version</a>
+    </div>
+
+    <h2 id="shortcuts">Raccourcis</h2>
+
+    <h3>Partition et objets :</h3>
+
+    <ul>
+      <li><code>CONTROL</code>/<code>COMMAND</code> : naviguer dans la partition sans
+      déplacer ou sélectionner les objets</li>
+
+      <li><code>SHIFT</code> : ajouter des objets dans la sélection</li>
+
+      <li><code>ALT</code> : navigation 3D</li>
+
+      <li><code>WHEEL</code> : zoom</li>
+
+      <li><code>SHIFT+WHEEL</code> : zoom rapide</li>
+
+      <li><code>ESC</code> : annule la sélection ou le plein écran</li>
+    </ul>
+
+    <h3>Édition de courbe:</h3>
+
+    <ul>
+      <li><code>DOUBLE-CLICK</code> sur la courbe : ajouter un point sur la courbe</li>
+      <li><code>DOUBLE-CLICK</code> sur un point : bascule entre Bezier ou ligne droite</li>
+      <li><code>CONTROL</code>/<code>COMMAND:</code>+<code>DOUBLE-CLIC</code> supprimer un point sur la courbe</li>
+    </ul>
+    <h2>Présentation générale</h2><img width='775' src="../Common/img/globale.png" alt=
+    "Interface Globale" />
+
+    <table summary="">
+      <tr class="overview_menu">
+        <td>
+          <p>Barre d'outils :</p>
+
+          <ol class="bleu">
+            <li><span class="noir">Ajouter un trigger</span></li>
+
+            <li><span class="noir">Dessiner une courbe à main levée</span></li>
+
+            <li><span class="noir">Dessiner une courbe point par point</span></li>
+
+            <li><span class="noir">Ajouter un cercle</span></li>
+
+            <li><span class="noir">Ajouter un curseur<br />
+            Pour ajouter un curseur sur une courbe, sélectionnez la courbe et cliquez sur
+            ce bouton.</span></li>
+
+            <li><span class="noir">Verrouiller la position des objets pour se déplacer
+            dans la partition</span></li>
+
+            <li><span class="noir">Afficher les labels</span></li>
+
+            <li><span class="noir">Afficher les axes</span></li>
+
+            <li><span class="noir">Ajuster à la grille</span></li>
+
+            <li><span class="noir">Afficher l'inspecteur</span></li>
+
+            <li><span class="noir">Afficher la barre de lecture</span></li>
+
+            <li><span class="noir">Plein écran</span></li>
+
+            <li><span class="noir">Ouvrir le dossier des patchs</span></li>
+
+            <li><span class="noir">Ouvrir l'aide</span></li>
+          </ol><br />
+
+          <p>La barre d'outils vous permet d'ajouter des objets manuellement.</p>
+        </td>
+
+        <td>
+          <p>L'inspecteur :</p>
+
+          <ol class="orange">
+            <li><span class="noir">Partitions</span></li>
+
+            <li><a href="overview.html#inspector">Informations sur les objets</a></li>
+
+            <li><a href="overview.html#selectobjects">Selectionner des objets</a></li>
+
+            <li><a href="overview.html#messages">Messages</a></li>
+
+            <li><span class="noir">Coordonnées du pointeur</span></li>
+          </ol>
+        </td>
+
+        <td>
+          <p>Barre de lecture :</p>
+
+          <ol class="vert">
+            <li><span class="noir">Retour à zéro</span></li>
+
+            <li><span class="noir">Lecture</span></li>
+
+            <li><a href="reference.html#speed">Réglage de la vitesse de
+            lecture.</a><br />
+            <span class="noir">Vous pouvez aussi écrire directement la vitesse souhaitée
+            dans le rectangle à droite.</span></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+    <br />
+
+    <h2 id="inspector">L'inspecteur</h2>
+
+    <p>Ce menu dépend de l'objet sélectionné sur la partition.</p>
+
+    <h3>Trigger</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_trigger.png" alt="Inspector Trigger" class=
+        "inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><span class="noir">Changer les</span> <a href=
+            "objets.html">identifiants</a></li>
+
+            <li><a href="objets.html#setpos">Position</a></li>
+
+            <li><a href="reference.html#setsize">Taille</a></li>
+
+            <li><a href="reference.html#setlabel">Label</a></li>
+
+            <li><a href="objets.html#setactive">Actif/inactif</a></li>
+
+            <li><a href="reference.html#colors">Couleur</a></li>
+
+            <li><a href="messages.html">Message</a></li>
+
+            <li><a href="reference.html#settriggeroff">Trigger-off</a></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+
+    <h3>Curseur</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_cursor.png" alt="Inspector Curseur" class=
+        "inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><span class="noir">Changer les</span> <a href=
+            "objets.html">identifiants</a></li>
+
+            <li><a href="reference.html#setsize">Epaisseur</a></li>
+
+            <li><a href="reference.html#setlabel">Label</a></li>
+
+            <li><a href="objets.html#setactive">Actif/inactif</a></li>
+
+            <li><a href="reference.html#colors">Couleur</a></li>
+
+            <li><a href="messages.html">Message</a></li>
+
+            <li><a href="reference.html#setwidth">Largeur</a></li>
+
+            <li><a href="reference.html#setpattern">Pattern</a></li>
+
+            <li><a href="reference.html#setoffset">Décalage temporel</a></li>
+
+            <li><a href="reference.html#settime">Position sur la courbe en
+            seconde</a></li>
+
+            <li><a href="reference.html#setspeed">Vitesse du curseur</a></li>
+
+            <li><a href="reference.html#setspeedf">Vitesse instantanée du
+            curseur</a></li>
+
+            <li><a href="reference.html#setbounds">Mapping des valeurs</a></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+
+    <h3>Courbe</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_curve.png" alt="Inspector Courbe" class=
+        "inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><span class="noir">Changer les</span> <a href=
+            "objets.html">identifiants</a></li>
+
+            <li><a href="objets.html#setpos">Position</a></li>
+
+            <li><a href="reference.html#setresize">Taille</a></li>
+
+            <li><a href="reference.html#setsize">Epaisseur</a></li>
+
+            <li><a href="reference.html#setlabel">Label</a></li>
+
+            <li><a href="objets.html#setactive">Actif/inactif</a></li>
+
+            <li><a href="reference.html#colors">Couleur</a></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+    <br />
+
+    <h3 id="selectobjects">Selectionner des objets</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_selection.png" alt="Inspector Selection"
+        class="inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><a href="reference.html#setactive">Activer/désactiver les
+            groupes</a></li>
+
+            <li><span class="noir">Informations sur les objets</span></li>
+
+            <li><span class="noir">Informations sur les groupes</span></li>
+
+            <li><span class="noir">Z-layers</span></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+    <br />
+
+    <h3 id="messages">Messages</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_message.png" alt="Inspector Message" class=
+        "inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><a href="messages.html#send">Messages envoyés</a></li>
+
+            <li><a href="messages.html#receive">Messages reçus</a></li>
+
+            <li><a href="messages.html#receive">Port OSC de réception (par défaut
+            1234)</a></li>
+
+            <li><span class="noir">Port UDP</span></li>
+
+            <li><a href="messages.html#setmessage">Message</a></li>
+
+            <li><span class="noir">Serial port</span></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+
+    <h2 id="shortcutmenus">Menus de contexte</h2>
+
+    <p>Un menu de contexte est fourni pour manager les fichiers dans la liste "Scripts &amp; Style" de
+    l'inspecteur. Le menu s'ouvre avec un clic droit dans un script ou un fichier de style. (Ou utiliser
+    ctrl+clic sur Macintosh).</p>
+
+    <h3>Commandes du menu Script-File</h3>
+
+    <ul>
+      <li><code>Run:</code> Exécute le script ou le style dans le fichier</li>
+
+      <li><code>New:</code> Créer un nouveau script ou fichier de style</li>
+
+      <li><code>Duplicate:</code> Duplique le script ou le fichier de style</li>
+
+      <li><code>Delete:</code> Supprime le script ou le fichier de style</li>
+
+      <li><code>Open:</code> Ouvre le script ou le fichier de style</li>
+
+      <li><code>Open in external editor:</code> Ouvre le script ou le fichier de style dans
+      l'éditeur de système enregistré pour les fichiers *.nxscript.</li>
+    </ul>
+
+    <h3>Note: Un fichier de style est similaire à un script mais doit seulement contenir des commandes
+    qui altèrent l'apparence de la partition.</h3>
+
+  </div>
+</body>
+</html>

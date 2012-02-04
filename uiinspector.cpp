@@ -26,6 +26,9 @@ UiInspector::UiInspector(QWidget *parent) :
     ui->colorCombo3->clear();
     ui->colorCombo4->clear();
 
+    ui->syncMessageLabel->setVisible(false);
+    ui->syncMessageEdit->setVisible(false);
+
     actionInfoLock = true;
     //needRefresh = true;
     startTimer(100);
@@ -65,19 +68,29 @@ QTreeWidget* UiInspector::getProjectScripts() const {
     return ui->projectScripts;
 }
 
+void UiInspector::changeID_success(bool result, quint16 newId) {  ////CG////
+    if (result)
+        foreach(NxObject *object, *(render->getSelection())) //This should only loop once
+            object->setId(newId);
+    else
+        QMessageBox::information(0, tr("Can't change ID."), tr("Another object has this ID.\nTry deleting that object, or change its ID."), QMessageBox::Ok);
+}
 
 void UiInspector::actionInfo() {
     if(!actionInfoLock) {
         factory->pushSnapshot();
         foreach(NxObject *object, *(render->getSelection())) {
-            if(ui->IDSpin == sender())
-                object->setId(ui->IDSpin->value());
-            else if(ui->positionX == sender())
-                object->setPos(QPointF(ui->positionX->value(), object->getPos().y()));
+            //if(ui->IDSpin == sender()) {  ///Issue - if object was not changed, it conflicts with itself - change spin into a button/dialog combo like group
+            //    object->setId(ui->IDSpin->value());
+            //    emit(actionChangeID(ui->IDSpin->value()));   ////CG////
+            //}
+            //else
+            if(ui->positionX == sender())
+                object->setPos(NxPoint(ui->positionX->value(), object->getPos().y(), object->getPos().z()));
             else if(ui->positionY == sender())
-                object->setPos(QPointF(object->getPos().x(), ui->positionY->value()));
+                object->setPos(NxPoint(object->getPos().x(), ui->positionY->value(), object->getPos().z()));
             else if(ui->positionZ == sender())
-                object->setZ(ui->positionZ->value());
+                object->setPos(NxPoint(object->getPos().x(), object->getPos().y(), ui->positionZ->value()));
             else if(ui->activityCheck == sender())
                 object->setActive(ui->activityCheck->isChecked());
             else if(ui->labelLine == sender())
@@ -115,9 +128,9 @@ void UiInspector::actionInfo() {
             else if(object->getType() == ObjectsTypeCurve) {
                 NxCurve *curve = (NxCurve*)object;
                 if(ui->sizeWSpin == sender())
-                    curve->setResize(QSizeF(ui->sizeWSpin->value(), curve->getResize().height()));
+                    curve->setResize(NxSize(ui->sizeWSpin->value(), curve->getResize().height()));
                 else if(ui->sizeHSpin == sender())
-                    curve->setResize(QSizeF(curve->getResize().width(), ui->sizeHSpin->value()));
+                    curve->setResize(NxSize(curve->getResize().width(), ui->sizeHSpin->value()));
             }
             else if(object->getType() == ObjectsTypeTrigger) {
                 NxTrigger *trigger = (NxTrigger*)object;
@@ -185,12 +198,27 @@ void UiInspector::actionNetwork() {
         factory->pushSnapshot();
         emit(transportMessageChange(ui->transportMessageEdit->text()));
     }
+    else if(ui->syncMessageEdit == sender()) {
+        factory->pushSnapshot();
+        emit(syncMessageChange(ui->syncMessageEdit->text()));
+    }
+}
+
+void UiInspector::actionInfoID() {
+    bool ok = false;
+    quint16 oldId = ui->newIdButton->text().toInt();
+    quint16 newId = QInputDialog::getInt(0, tr("IanniX Inspector"), tr("Enter the new ID:"), oldId ,0 ,32767 ,1 , &ok);
+    if(ok && (newId != oldId)) {
+        factory->pushSnapshot();
+        emit(actionChangeID(oldId, newId));
+        needRefresh = true;
+    }
 }
 
 
 void UiInspector::actionInfoGroup() {
     bool ok = false;
-    QString groupeId = QInputDialog::getText(0, tr("IanniX Inspector"), tr("Enter the name of the destination group:"), QLineEdit::Normal, ui->groupIdButton->text().remove(tr(" (change)")), &ok);
+    QString groupeId = QInputDialog::getText(0, tr("IanniX Inspector"), tr("Enter the name of the destination group:"), QLineEdit::Normal, ui->groupIdButton->text(), &ok);
     if(ok) {
         factory->pushSnapshot();
         foreach(NxObject *object, *(render->getSelection()))
@@ -217,7 +245,7 @@ void UiInspector::logOscSend(const QString & message) {
 void UiInspector::logOscReceive(const QString & message) {
     ui->oscReceiveText->appendPlainText(message);
 }
-void UiInspector::setMousePos(const QPointF & pos) {
+void UiInspector::setMousePos(const NxPoint & pos) {
     ui->mouseLabel->setText(tr("Mouse") + " : " + QString().setNum(pos.x(), 'f', 3) + " / " + QString().setNum(pos.y(), 'f', 3));
 }
 void UiInspector::setMouseZoom(qreal zoom) {
@@ -292,11 +320,20 @@ void UiInspector::refresh() {
             if((object->getType() == ObjectsTypeCursor) && (((NxCursor*)object)->getCurve()))
                 counterCursorsCurve++;
 
-            change(indexObject, ui->IDSpin, object->getId(), prevObject->getId());
-            change(indexObject, ui->groupIdButton, object->getGroupId() + tr(" (change)"), prevObject->getGroupId() + tr(" (change)"));
+            if (objects->count() > 1)  ////CG//// Don't allow ID change if more than one object selected
+                ui->newIdButton->setDisabled(true);
+            else
+                 ui->newIdButton->setDisabled(false);
+
+            QString thisID = QString::number(object->getId());
+            QString prevID = QString::number(prevObject->getId());
+            change(indexObject, ui->newIdButton, thisID , prevID);
+
+            change(indexObject, ui->groupIdButton, object->getGroupId(), prevObject->getGroupId());
+
             change(indexObject, ui->positionX, object->getPos().x(), prevObject->getPos().x());
             change(indexObject, ui->positionY, object->getPos().y(), prevObject->getPos().y());
-            change(indexObject, ui->positionZ, object->getZ(), prevObject->getZ());
+            change(indexObject, ui->positionZ, object->getPos().z(), prevObject->getPos().z());
             change(indexObject, ui->activityCheck, object->getActive(), prevObject->getActive());
             change(indexObject, ui->labelLine, object->getLabel(), prevObject->getLabel());
             change(indexObject, ui->colorCombo1, object->getColorActiveVerbose(), prevObject->getColorActiveVerbose());
@@ -379,7 +416,7 @@ void UiInspector::refresh() {
     ui->labelSelection->setVisible(!showGenericInfo);
     ui->separator1->setVisible(showCursorInfo | showTriggerInfo);
 
-    ui->IDSpin->setVisible(showGenericInfo);
+    ui->newIdButton->setVisible(showGenericInfo);
     ui->IDLabel->setVisible(showGenericInfo);
     ui->groupIdButton->setVisible(showGenericInfo);
     ui->positionX->setVisible(showCurveInfo | showTriggerInfo);
@@ -531,6 +568,11 @@ QList<NxGroup*> UiInspector::getSelectedCC2Object() const {
     return groups;
 }
 
+////CG//// Created to clear treewidget selections to avoid a crash on object deletion
+void UiInspector::clearCCselections() {
+    ui->ccView->clearSelection();
+    ui->cc2View->clearSelection();
+}
 
 quint16 UiInspector::getCurrentTab() const {
     return ui->tab->currentIndex();
@@ -594,6 +636,10 @@ void UiInspector::setTransportMessage(const QString & message) {
     ui->transportMessageEdit->setText(message);
     transportMessageChange(message);
 }
+void UiInspector::setSyncMessage(const QString & message) {
+    ui->syncMessageEdit->setText(message);
+    syncMessageChange(message);
+}
 
 quint16 UiInspector::getOSCPort() {
     return ui->oscInPortSpin->value();
@@ -607,4 +653,6 @@ const QString UiInspector::getSerialPort() {
 const QString UiInspector::getTransportMessage() {
     return ui->transportMessageEdit->text();
 }
-
+const QString UiInspector::getSyncMessage() {
+    return ui->syncMessageEdit->text();
+}

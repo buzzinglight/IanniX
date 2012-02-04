@@ -6,7 +6,7 @@
 #include <QFile>
 #include <QTime>
 #include <QWheelEvent>
-#include <math.h>
+#include <QtCore/qmath.h>
 #include <QClipboard>
 #include "nxdocument.h"
 #include "nxobjectfactoryinterface.h"
@@ -34,8 +34,8 @@ private:
     QList<NxObject*> selectionRect;
     NxObject *selectedHover;
     QList<NxObject*> selection;
-    QPointF rotation, translation;
-    QPointF rotationDrag, translationDrag;
+    NxPoint rotation, translation;
+    NxPoint rotationDrag, translationDrag;
     qreal scale;
 public:
     inline QList<NxObject*> *getSelection() {
@@ -74,12 +74,15 @@ public:
         return triggerAutosize;
     }
 
+    inline void setRotation(NxPoint _rotation) {  ///CG///
+        rotation = _rotation;
+    }
 
 signals:
     void setPerfOpenGL(const QString & val);
-    void editingStart(const QPointF &);
+    void editingStart(const NxPoint &);
     void editingStop();
-    void editingMove(const QPointF &);
+    void editingMove(const NxPoint &, bool add);
     void escFullscreen();
 
 private:
@@ -94,7 +97,7 @@ private slots:
 public:
     inline void refresh() { resizeGL(); updateGL(); }
     inline void simpleRefresh() { updateGL(); }
-    void loadTexture(const QString & name, const QString & filename, const QRectF & mapping);
+    void loadTexture(const QString & name, const QString & filename, const NxRect & mapping);
     inline void setInterval(quint16 ms) {
         timer->setInterval(ms);
     }
@@ -109,10 +112,11 @@ public:
     inline UiRenderOptions* getRenderOptions() {
         return renderOptions;
     }
-    void centerOn(const QPointF & center);
+    void centerOn(const NxPoint & center);
+    void rotateTo(const NxPoint & rotation);
 
 private:
-    QPointF mousePressedRawPos, mousePressedAreaPos, mousePressedAreaPosNoCenter, mousePressedAxisCenter;
+    NxPoint mousePressedRawPos, mousePressedAreaPos, mousePressedAreaPosNoCenter, mousePressedAxisCenter;
     bool mousePressed, mouseCommand, mouseShift, mouseObjectDrag, mouseSnap;
     bool canObjectDrag;
     qreal pinchValue;
@@ -141,7 +145,7 @@ public:
 
 signals:
     void objectSelected(QList<NxObject*>);
-    void mousePosChanged(const QPointF &);
+    void mousePosChanged(const NxPoint &);
     void mouseZoomChanged(qreal);
 
 protected:
@@ -163,6 +167,7 @@ public slots:
     void actionRemove()     { emit(actionRouteRemove()); }
     void actionUndo()       { emit(actionRouteUndo()); }
     void actionRedo()       { emit(actionRouteRedo()); }
+    void actionSync()       { emit(actionRouteSync()); }
     void actionCopy();
     void actionPaste();
     void actionDuplicate();
@@ -174,6 +179,7 @@ public slots:
 
 signals:
     void actionRouteNew();
+    void actionRouteNew_script();
     void actionRouteOpen();
     void actionRouteSave();
     void actionRouteSave_as();
@@ -182,6 +188,8 @@ signals:
     void actionRouteRename();
     void actionRouteRemove();
     void actionRouteQuit();
+    void actionRouteSync();
+
     void actionRouteUndo();
     void actionRouteRedo();
     void selectionChanged();

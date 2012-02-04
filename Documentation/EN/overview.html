@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="fr" />
+  <meta name="language" content="fr" />
+  <meta name="designer" content="buzzing light" />
+  <meta name="description" content="IanniX documentation" />
+  <link href="../Common/css/reset.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/font/stylesheet.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../Common/jquery.js">
+</script>
+
+  <title>IanniX — Graphical interface</title>
+  <style type="text/css">
+/*<![CDATA[*/
+  a.c1 {color:#aaa; text-decoration:none;}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class='main container'>
+    <table class="onglets" summary="">
+      <tr>
+        <td class="onglet"><a href="intro.html">Introduction</a></td>
+
+        <td class="onglet"><a href="objets.html">Main<br />
+        elements</a></td>
+
+        <td class="onglet"><a href="messages.html">Messages sent<br />
+        and received</a></td>
+
+        <td class="onglet" id='actif'><a href="overview.html">Graphical<br />
+        interface</a></td>
+
+        <td class="onglet"><a href="script.html">Scripts</a></td>
+
+        <td class="onglet"><a href="reference.html">Reference</a></td>
+
+        <td class="onglet"><a href="listing.html">Functions<br />
+        index</a></td>
+      </tr>
+    </table>
+
+    <div class="langue">
+      <a class="c1" href="../FR/overview.html">Version française</a>
+    </div>
+
+
+    <h2 id="shortcuts">Keyboard Shortcuts</h2>
+
+    <h3>In the Score and for Objects:</h3>
+
+    <ul>
+      <li><code>CONTROL</code>/<code>COMMAND:</code> browse into the score without moving
+      or selecting objects</li>
+
+      <li><code>SHIFT:</code> add objects into the selection</li>
+
+      <li><code>ALT:</code> 3D navigation</li>
+
+      <li><code>WHEEL:</code> zoom</li>
+
+      <li><code>SHIFT+WHEEL:</code> quick zoom</li>
+
+      <li><code>ESC:</code> cancel the selection or fullscreen display</li>
+    </ul>
+
+    <h3>Editing curve:</h3>
+
+    <ul>
+      <li><code>DOUBLE-CLICK</code> on curve : add a point on the curve</li>
+      <li><code>DOUBLE-CLICK</code> on a point : toggle point between Bezier or straight line</li>
+      <li><code>CONTROL</code>/<code>COMMAND:</code>+<code>DOUBLE-CLIC</code> remove a point on the curve</li>
+    </ul>
+
+
+    <h2>Overview</h2><img width='775' src="../Common/img/globale.png" alt=
+    "Interface Globale" />
+
+    <table summary="">
+      <tr class="overview_menu">
+        <td>
+          <p>Toolbar:</p>
+
+          <ol class="bleu">
+            <li><span class="noir">Add a trigger</span></li>
+
+            <li><span class="noir">Draw freehand curve</span></li>
+
+            <li><span class="noir">Draw point-by-point curve</span></li>
+
+            <li><span class="noir">Add a circle</span></li>
+
+            <li><span class="noir">Add a cursor<br />
+            To add a cursor on a curve, select the curve and click on this
+            button</span></li>
+
+            <li><span class="noir">Lock the position of objects to move in the
+            score</span></li>
+
+            <li><span class="noir">Display the labels</span></li>
+
+            <li><span class="noir">Display the axes</span></li>
+
+            <li><span class="noir">Snap to grid</span></li>
+
+            <li><span class="noir">Display the inspector</span></li>
+
+            <li><span class="noir">Display playbar</span></li>
+
+            <li><span class="noir">Fullscreen</span></li>
+
+            <li><span class="noir">Open the patches folder</span></li>
+
+            <li><span class="noir">Open the help</span></li>
+          </ol><br />
+
+          <p>The toolbar allows you to add objects manually.</p>
+        </td>
+
+        <td>
+          <p>Inspector:</p>
+
+          <ol class="orange">
+            <li><span class="noir">Scores and Scripts</span></li>
+
+            <li><a href="overview.html#inspector">Object Property Inspector</a></li>
+
+            <li><a href="overview.html#selectobjects">Select Objects</a></li>
+
+            <li><a href="overview.html#messages">messages</a></li>
+
+            <li><span class="noir">Pointer Coordinates</span></li>
+          </ol>
+        </td>
+
+        <td>
+          <p>Playback:</p>
+
+          <ol class="vert">
+            <li><span class="noir">Fast rewind</span></li>
+
+            <li><span class="noir">Play</span></li>
+
+            <li><a href="reference.html#speed">Setting the playback speed.</a><br />
+            <span class="noir">You can also write directly the desired speed in the box
+            to the right.</span></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+    <br />
+
+    <h2 id="inspector">The inspector</h2>
+
+    <p>The Property Inspector display changes depending on whether a curve, cursor or trigger is selected in the score.</p>
+
+    <h3>Trigger</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_trigger.png" alt="Inspector Trigger" class=
+        "inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><span class="noir">Change the</span> <a href=
+            "objets.html">identifiers</a></li>
+
+            <li><a href="objets.html#setpos">Position</a></li>
+
+            <li><a href="reference.html#setsize">Size</a></li>
+
+            <li><a href="reference.html#setlabel">Label</a></li>
+
+            <li><a href="objets.html#setactive">Active/inactive</a></li>
+
+            <li><a href="reference.html#colors">Color</a></li>
+
+            <li><a href="messages.html">Message</a></li>
+
+            <li><a href="reference.html#settriggeroff">Trigger-off</a></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+
+    <h3>Cursor</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_cursor.png" alt="Inspector Curseur" class=
+        "inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><span class="noir">Change the</span> <a href=
+            "objets.html">identifiers</a></li>
+
+            <li><a href="reference.html#setsize">Thickness</a></li>
+
+            <li><a href="reference.html#setlabel">Label</a></li>
+
+            <li><a href="objets.html#setactive">Active/inactive</a></li>
+
+            <li><a href="reference.html#colors">Color</a></li>
+
+            <li><a href="messages.html">Message</a></li>
+
+            <li><a href="reference.html#setwidth">Width</a></li>
+
+            <li><a href="reference.html#setpattern">Pattern</a></li>
+
+            <li><a href="reference.html#setoffset">Lag</a></li>
+
+            <li><a href="reference.html#settime">Position on the curve in second</a></li>
+
+            <li><a href="reference.html#setspeed">Speed of the cursor</a></li>
+
+            <li><a href="reference.html#setspeedf">Instant speed of the cursor</a></li>
+
+            <li><a href="reference.html#setbounds">Mapping of the values</a></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+
+    <h3>Curve</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_curve.png" alt="Inspector Courbe" class=
+        "inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><span class="noir">Change the</span> <a href=
+            "objets.html">identifiers</a></li>
+
+            <li><a href="objets.html#setpos">Position</a></li>
+
+            <li><a href="reference.html#setresize">Size</a></li>
+
+            <li><a href="reference.html#setsize">Thickness</a></li>
+
+            <li><a href="reference.html#setlabel">Label</a></li>
+
+            <li><a href="objets.html#setactive">Active/inactive</a></li>
+
+            <li><a href="reference.html#colors">Color</a></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+    <br />
+
+    <h3 id="selectobjects">Select objects</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_selection.png" alt="Inspector Selection"
+        class="inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><a href="reference.html#setactive">Enable / disable groups</a></li>
+
+            <li><span class="noir">Information about objects</span></li>
+
+            <li><span class="noir">Information about groups</span></li>
+
+            <li><span class="noir">Z-layers</span></li>
+          </ol>
+        </td>
+      </tr>
+    </table><br />
+    <br />
+    <br />
+
+    <h3 id="messages">Messages</h3>
+
+    <table class="inspector" summary="">
+      <tr>
+        <td><img src="../Common/img/inspector_message.png" alt="Inspector Message" class=
+        "inspector" /></td>
+
+        <td>
+          <ol class="liste_inspector">
+            <li><a href="messages.html#send">Messages sent</a></li>
+
+            <li><a href="messages.html#receive">Messages received</a></li>
+
+            <li><a href="messages.html#receive">Input OSC port (by default 1234)</a></li>
+
+            <li><span class="noir">UDP port</span></li>
+
+            <li><a href="messages.html#setmessage">Message</a></li>
+
+            <li><span class="noir">Serial port</span></li>
+          </ol>
+        </td>
+      </tr>
+    </table>
+    <br/>
+
+    <h2 id="shortcutmenus">Context menus</h2>
+
+    <p>A context menu is provided for managing files in the "Scripts &amp; Style" list
+    of the Inspector.  The menu opens with a right-click on a script or style file.
+    (Or use CONTROL Click on Macintosh).</p>
+
+    <h3>Commands on Script-File Menu</h3>
+
+    <ul>
+      <li><code>Run:</code> Run the script or style in the file</li>
+
+      <li><code>New:</code> Create a new script or style file</li>
+
+      <li><code>Duplicate:</code> Duplicate the script or style file</li>
+
+      <li><code>Delete:</code> Delete the script or style file</li>
+
+      <li><code>Open:</code> Open the script or style file</li>
+
+      <li><code>Open in external editor:</code> Open the script or style file in the
+      system-registered editor for *.nxscript files.</li>
+    </ul>
+
+    <h3>Note: A style file is similar to a script file but should contain only commands
+    that alter the appearance of the score.</h3>
+  </div>
+</body>
+</html>

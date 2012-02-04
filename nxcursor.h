@@ -1,8 +1,6 @@
 #ifndef NXCURSOR_H
 #define NXCURSOR_H
 
-#include <QLineF>
-#include <QPolygonF>
 #include <QEasingCurve>
 #include "nxcurve.h"
 #include "nxtrigger.h"
@@ -16,21 +14,22 @@
 
 
 class NxCursor : public NxObject {
-    Q_OBJECT;
-    Q_PROPERTY(QString start READ getStart WRITE setStart);
-    Q_PROPERTY(qreal timeStartOffset READ getTimeStartOffset WRITE setTimeStartOffset);
-    Q_PROPERTY(qreal timeInitialOffset READ getTimeInitialOffset WRITE setTimeInitialOffset);
-    Q_PROPERTY(qreal timeEndOffset READ getTimeEndOffset WRITE setTimeEndOffset);
-    Q_PROPERTY(QString boundsSource READ getBoundsSource WRITE setBoundsSource);
-    Q_PROPERTY(QString boundsTarget READ getBoundsTarget WRITE setBoundsTarget);
-    Q_PROPERTY(qreal timeFactor READ getTimeFactor WRITE setTimeFactor);
-    Q_PROPERTY(qreal timeFactorAuto READ getTimeFactorAuto WRITE setTimeFactorAuto);
-    Q_PROPERTY(qreal timeFactorF READ getTimeFactorF WRITE setTimeFactorF);
-    Q_PROPERTY(qreal cursorWidth READ getWidth WRITE setWidth);
-    Q_PROPERTY(qreal easingStartDuration READ getEasingStartDuration WRITE setEasingStartDuration);
-    Q_PROPERTY(quint16 easingStart READ getEasingStart WRITE setEasingStart);
-    Q_PROPERTY(quint16 nbLoop READ getNbLoop WRITE setNbLoop);
-    Q_PROPERTY(qreal timeLocal READ getTimeLocal WRITE setTimeLocal);
+    Q_OBJECT
+    Q_PROPERTY(QString start READ getStart WRITE setStart)
+    Q_PROPERTY(qreal timeStartOffset READ getTimeStartOffset WRITE setTimeStartOffset)
+    Q_PROPERTY(qreal timeInitialOffset READ getTimeInitialOffset WRITE setTimeInitialOffset)
+    Q_PROPERTY(qreal timeEndOffset READ getTimeEndOffset WRITE setTimeEndOffset)
+    Q_PROPERTY(QString boundsSource READ getBoundsSource WRITE setBoundsSource)
+    Q_PROPERTY(QString boundsTarget READ getBoundsTarget WRITE setBoundsTarget)
+    Q_PROPERTY(qreal timeFactor READ getTimeFactor WRITE setTimeFactor)
+    Q_PROPERTY(qreal timeFactorAuto READ getTimeFactorAuto WRITE setTimeFactorAuto)
+    Q_PROPERTY(qreal timeFactorF READ getTimeFactorF WRITE setTimeFactorF)
+    Q_PROPERTY(qreal cursorWidth READ getWidth WRITE setWidth)
+    Q_PROPERTY(qreal cursorDepth READ getDepth WRITE setDepth)
+    Q_PROPERTY(qreal easingStartDuration READ getEasingStartDuration WRITE setEasingStartDuration)
+    Q_PROPERTY(quint16 easingStart READ getEasingStart WRITE setEasingStart)
+    Q_PROPERTY(quint16 nbLoop READ getNbLoop WRITE setNbLoop)
+    Q_PROPERTY(qreal timeLocal READ getTimeLocal WRITE setTimeLocal)
 
 
 public:
@@ -39,23 +38,20 @@ public:
 private:
     NxCurve *curve;
 private:
-    qreal timeLocal, timeLocalAbsolute, time;
+    qreal timeLocal, timeLocalOld, timeLocalAbsolute, time, timeOld, nextTimeOld;
     qreal timeStartOffset, timeEndOffset, timeInitialOffset;
     qreal easingStartDuration;
     QEasingCurve easing;
     qreal timeFactor, timeFactorF;
-    qint32 nbTimeOld;
     quint16 nbLoop, nbLoopOld;
-    quint64 loopGuard;
-    qreal width;
-    QRectF boundsSource, boundsTarget;
+    qreal width, depth;
+    NxRect boundsSource, boundsTarget;
     bool boundsSourceIsBoundingRect;
-    QLineF previousCursor;
+    NxLine previousCursor;
     bool previousCursorReliable;
     QRect boundingRectSearch;
     QVector<qreal> start;
-    QLineF cursor;
-    QPainterPath cursorPolyPath, cursorPolyPathIntersection;
+    NxLine cursor, cursorOld;
 public:
     inline quint8 getType() const {
         return ObjectsTypeCursor;
@@ -67,19 +63,13 @@ public:
     void setTime(qreal delta);
     inline void setTimeLocal(qreal _timeLocal) {
         timeLocal = _timeLocal * timeFactor;
-        timeLocalAbsolute = abs(timeLocal);
+        timeLocalAbsolute = qAbs(timeLocal);
+        timeLocalOld = timeLocal;
         setNbLoop(0);
         setTime(0);
     }
     inline qreal getTimeLocal() const {
         return timeLocal;
-    }
-
-    inline qreal getFatTimeFactor() const {
-        return getFatTimeFactor(nbLoop);
-    }
-    inline qreal getFatTimeFactor(quint16 _nbLoop) const {
-        return timeFactor * timeFactorF * start.at(_nbLoop%start.count());
     }
 
     inline void setStart(const QString & startStr) {
@@ -138,14 +128,19 @@ public:
         return timeInitialOffset;
     }
 
-    inline const QPointF getCursorValue(const QPointF & _pos) const {
-        return QPointF( ((_pos.x() - boundsSource.left())   / boundsSource.width())  * boundsTarget.width()  + boundsTarget.left() , ((_pos.y() - boundsSource.bottom()) / boundsSource.height()) * boundsTarget.height() + boundsTarget.bottom() );
+    inline const NxPoint getCursorValue(const NxPoint & _pos) const {
+        NxRect _boundsSource = boundsSource;
+        if(_boundsSource.width() == 0)  _boundsSource.setWidth(0.0001);
+        if(_boundsSource.height() == 0) _boundsSource.setHeight(0.0001);
+        if(_boundsSource.length() == 0) _boundsSource.setLength(0.0001);
+        return NxPoint( ((_pos.x() - _boundsSource.left())   / _boundsSource.width())  * boundsTarget.width() + boundsTarget.left() ,
+                        ((_pos.y() - _boundsSource.bottom()) / _boundsSource.height()) * boundsTarget.height() + boundsTarget.bottom() );
     }
 
     inline void setBoundsSource(const QString & _bounds) {
         QStringList bounds = _bounds.split(" ", QString::SkipEmptyParts);
         if(bounds.count() == 4) {
-            boundsSource = QRectF(QPointF(bounds[0].toDouble(), bounds[1].toDouble()), QPointF(bounds[2].toDouble(), bounds[3].toDouble()));
+            boundsSource = NxRect(NxPoint(bounds[0].toDouble(), bounds[1].toDouble()), NxPoint(bounds[2].toDouble(), bounds[3].toDouble()));
             boundsSourceIsBoundingRect = false;
         }
     }
@@ -155,7 +150,7 @@ public:
     inline void setBoundsTarget(const QString & _bounds) {
         QStringList bounds = _bounds.split(" ", QString::SkipEmptyParts);
         if(bounds.count() == 4)
-            boundsTarget = QRectF(QPointF(bounds[0].toDouble(), bounds[1].toDouble()), QPointF(bounds[2].toDouble(), bounds[3].toDouble()));
+            boundsTarget = NxRect(NxPoint(bounds[0].toDouble(), bounds[1].toDouble()), NxPoint(bounds[2].toDouble(), bounds[3].toDouble()));
     }
     inline const QString getBoundsTarget() {
         return QString("%1 %2 %3 %4").arg(boundsTarget.topLeft().x()).arg(boundsTarget.topLeft().y()).arg(boundsTarget.bottomRight().x()).arg(boundsTarget.bottomRight().y());
@@ -193,6 +188,14 @@ public:
         return width;
     }
 
+    inline void setDepth(qreal _depth) {
+        depth = _depth;
+        calculate();
+    }
+    inline qreal getDepth() {
+        return depth;
+    }
+
     inline NxCurve* getCurve() {
         return curve;
     }
@@ -205,33 +208,8 @@ public:
         calculate();
     }
 
-    inline bool contains(NxTrigger *trigger) {
-        if((previousCursorReliable) && (trigger->getActive()) && (trigger->getZ() == getZ()) && (cursorPoly.containsPoint(trigger->getPos(), Qt::WindingFill)))
-            return true;
-        else
-            return false;
-    }
-    inline bool trig(NxCurve *collisionCurve) {
-        if((previousCursorReliable) && (performCollision) && (collisionCurve) && (collisionCurve->getActive()) && (collisionCurve->getZ() == getZ()) && (collisionCurve != curve)) {
-            cursorPolyPath = QPainterPath();
-            cursorPolyPath.addPolygon(cursorPoly);
-            cursorPolyPath.translate(-collisionCurve->getPos());
-            cursorPolyPathIntersection = collisionCurve->getPath().intersected(cursorPolyPath);
-            if(cursorPolyPathIntersection.elementCount() > 0) {
-                for(quint16 pathPointsIndex = 0 ; pathPointsIndex < cursorPolyPathIntersection.elementCount() ; pathPointsIndex++)
-                    if(cursorPolyPathIntersection.elementAt(pathPointsIndex).isMoveTo()) {
-                        QPointF collisionPoint = QPointF(cursorPolyPathIntersection.elementAt(pathPointsIndex).x, cursorPolyPathIntersection.elementAt(pathPointsIndex).y) + collisionCurve->getPos();
-                        factory->sendMessage(this, 0, this, collisionCurve, collisionPoint, getCursorValue(collisionPoint));
-                        return true;
-                    }
-                return true;
-            }
-            else
-                return false;
-        }
-        else
-            return false;
-    }
+    bool contains(NxTrigger *trigger);
+    bool trig(NxCurve *collisionCurve);
 
     inline void calcBoundingRect() {
         //Bounding rect + margin
@@ -242,11 +220,11 @@ public:
         boundingRectSearch = boundingRectSearch.normalized();
 
         if((boundsSourceIsBoundingRect) && (curve))
-            boundsSource = QRectF(curve->getBoundingRect().normalized().bottomLeft(), curve->getBoundingRect().normalized().topRight());
+            boundsSource = NxRect(curve->getBoundingRect().normalized().bottomLeft(), curve->getBoundingRect().normalized().topRight());
     }
-    inline bool isMouseHover(const QPointF & mouse) {
-        QRectF mouseAdjusted = QRectF(mouse - QPointF(renderOptions->objectSize/2, renderOptions->objectSize/2), mouse + QPointF(renderOptions->objectSize/2, renderOptions->objectSize/2));
-        if((cursor.intersect(QLineF(mouseAdjusted.topLeft(), mouseAdjusted.bottomRight()), 0) == QLineF::BoundedIntersection) || (cursor.intersect(QLineF(mouseAdjusted.bottomLeft(), mouseAdjusted.topRight()), 0) == QLineF::BoundedIntersection))
+    inline bool isMouseHover(const NxPoint & mouse) {
+        NxRect mouseAdjusted = NxRect(mouse - NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2), mouse + NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2));
+        if((cursor.intersect(NxLine(mouseAdjusted.topLeft(), mouseAdjusted.bottomRight()), 0) == NxLine::BoundedIntersection) || (cursor.intersect(NxLine(mouseAdjusted.bottomLeft(), mouseAdjusted.topRight()), 0) == NxLine::BoundedIntersection))
             return true;
         else
             return false;
@@ -274,12 +252,12 @@ public:
 
 
 private:
-    QPolygonF cursorPoly;
-    QPointF cursorPos, cursorRelativePos;
-    qreal cursorAngle;
+    NxPolygon cursorPoly;
+    NxPoint cursorPos, cursorPosOld, cursorRelativePos;
+    qreal cursorAngle, cursorAngleOld;
 public:
     void calculate();
-    inline const QPolygonF & getCurrentPolygon() {
+    inline const NxPolygon & getCurrentPolygon() {
         return cursorPoly;
     }
     inline qreal getCurrentPositionPercent() {
@@ -291,13 +269,13 @@ public:
         else
             return 0;
     }
-    inline const QPointF & getCurrentValue() {
+    inline const NxPoint & getCurrentValue() {
         return cursorRelativePos;
     }
     inline qreal getCurrentAngle() {
         return cursorAngle;
     }
-    inline const QPointF & getCurrentPos() {
+    inline const NxPoint & getCurrentPos() {
         return cursorPos;
     }
 

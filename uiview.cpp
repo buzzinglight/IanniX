@@ -26,6 +26,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionCut, SIGNAL(triggered()), ui->render, SLOT(actionCut()));
     connect(ui->actionSelect_all, SIGNAL(triggered()), ui->render, SLOT(actionSelect_all()));
     connect(ui->actionDelete, SIGNAL(triggered()), ui->render, SLOT(actionDelete()));
+    connect(ui->actionSync, SIGNAL(triggered()), ui->render, SLOT(actionSync()));
 
     connect(ui->actionFullscreen, SIGNAL(triggered()), SLOT(actionFullscreen()));
     connect(ui->actionToggle_Inspector, SIGNAL(triggered()), SLOT(actionToggle_Inspector()));
@@ -108,8 +109,6 @@ void UiView::actionFullscreen() {
         ui->inspector->parentWidget()->setVisible(wasInspectorVisible);
         ui->transport->parentWidget()->setVisible(wasTransportVisible);
         ui->menubar->setVisible(true);
-        //ui->render->getRenderOptions()->paintAxisGrid = true;
-        //ui->render->getRenderOptions()->paintAxisMain = true;
     }
     else {
         setWindowState(windowState() | Qt::WindowFullScreen);
@@ -120,8 +119,6 @@ void UiView::actionFullscreen() {
         ui->menubar->setVisible(false);
         ui->inspector->parentWidget()->hide();
         ui->transport->parentWidget()->hide();
-        //ui->render->getRenderOptions()->paintAxisGrid = false;
-        //ui->render->getRenderOptions()->paintAxisMain = false;
     }
     ui->render->selectionClear(true);
 }

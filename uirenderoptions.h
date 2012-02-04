@@ -3,15 +3,15 @@
 
 #include <QObject>
 #include <QRect>
-#include <QPointF>
 #include <QColor>
 #include <QMap>
 #include <QtOpenGL>
+#include "iannix_spec.h"
 
 typedef struct _Texture {
 public:
     GLuint texture;
-    QRectF mapping;
+    NxRect mapping;
 } Texture;
 Q_DECLARE_TYPEINFO(Texture, Q_PRIMITIVE_TYPE);
 
@@ -22,12 +22,14 @@ public:
     explicit UiRenderOptions(QObject *parent):QObject(parent) { }
 
 public:
-    QRectF axisArea;
+    NxRect axisArea;
     QRect axisAreaSearch;
     qreal zoomValue, zoomLinear, axisGrid;
-    QPointF axisCenter;
+    NxPoint axisCenter;
     QGLWidget *render;
     QFont renderFont;
+    qreal timeFactor;
+    bool allowSelection;
 
 public:
     QMap<QString, Texture> textures;
@@ -48,15 +50,15 @@ public:
     inline qreal transformY(qreal y) {
         return y;
     }
-    inline QPointF transform(const QPointF & pt) {
-        return QPointF(transformX(pt.x()), transformY(pt.y()));
+    inline NxPoint transform(const NxPoint & pt) {
+        return NxPoint(transformX(pt.x()), transformY(pt.y()));
     }
     */
 
 public:
     qreal objectSize;
 public:
-    QRectF selectionArea;
+    NxRect selectionArea;
 
 signals:
 

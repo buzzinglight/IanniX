@@ -1,0 +1,601 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="fr" />
+  <meta name="language" content="fr" />
+  <meta name="designer" content="buzzing light" />
+  <meta name="description" content="IanniX documentation" />
+  <link href="../Common/css/reset.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/font/stylesheet.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../Common/jquery.js">
+</script>
+
+  <title>IanniX — Scripts</title>
+  <style type="text/css">
+/*<![CDATA[*/
+  a.c1 {color:#aaa; text-decoration:none;}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class='main container'>
+    <table class="onglets" summary="">
+      <tr>
+        <td class="onglet"><a href="intro.html">Introduction</a></td>
+
+        <td class="onglet"><a href="objets.html">Main<br />
+        elements</a></td>
+
+        <td class="onglet"><a href="messages.html">Messages sent<br />
+        and received</a></td>
+
+        <td class="onglet"><a href="overview.html">Graphical<br />
+        interface</a></td>
+
+        <td class="onglet" id='actif'><a href="script.html">Scripts</a></td>
+
+        <td class="onglet"><a href="reference.html">Reference</a></td>
+
+        <td class="onglet"><a href="listing.html">Functions<br />
+        index</a></td>
+      </tr>
+    </table>
+
+    <div class="langue">
+      <a class="c1" href="../FR/script.html">Version française</a>
+    </div>
+
+    <h2>Principles</h2>
+
+    <p>With IanniX, you can write your own scripts to more easily create your complex
+    projects. Scripts are written in Javascript but even with a limited knowledge of
+    Javascript, many types of useful scripts can be created. In addition to this
+    documentation you are reading, many example scripts are provided for you study. They
+    can be found in the Examples section of the Scripts and Styles browser in the
+    Inspector.</p>
+
+    <p>To open a script for viewing, right click on a script in the browser and choose
+    <code>Open</code>. The context menu also contains other commands for working with
+    scripts. In addition you can run a script by double clicking on its name in the
+    Inspector.</p>
+
+    <p>If you wish to learn more Javascript for more advanced scripting there are many
+    books, online tutorials and reference msterials available to help you. Also, feel
+    free to inquire on the IanniX forum for further information on the conventions used
+    in writing JavaScript, or for tips in writing IanniX scripts.</p>
+
+    <p>Here is a link to the complete language reference of the version of Javascript
+    used in IanniX: <a href=
+    "http://doc.qt.nokia.com/qsa-1.2.2/language.html">Reference</a></p>
+
+    <h2>Controlling IanniX From a Script</h2>
+
+    <h3>The Javascript <code>run()</code> Command</h3>
+
+    <p>The run() function is used to send most commands to IanniX from scripts. Commands
+    must be provided to run() as a single string, so command text must be enclosed
+    quotation marks. Example:</p>
+
+    <p><code>run("zoom 100");</code> Set the display zoom to 100 percent</p>
+
+    <p>To combine numeric parameters with text commands to produce a string to pass to
+    <code>run()</code>, use the concatenation operator. In the following example center_x
+    and center_y are in numeric variables and must be concatenated to the command
+    string.</p>
+
+    <p><code>run("setPos current " + center_x + " " + center_y + " 0");</code></p>
+
+    <p>Other examples:<br /></p>
+
+    <ul>
+      <li>Clear the score:<br />
+      <code>run("clear");</code></li>
+
+      <li>Set the display zoom to 100 percent:<br />
+      <code>run("zoom 100");</code></li>
+
+      <li>Give the trigger an ID based on the value of the script variable
+      <code>myID:</code><br />
+      <code>run("add trigger " + myID);</code></li>
+
+      <li>Set the group of the trigger to be "foo":<br />
+      <code>run("setGroup current foo");</code></li>
+
+      <li>Set the position of the trigger to be x=1, y=3, z=0:<br />
+      <code>run("setPos current 1 3 0");</code></li>
+
+      <li>Set the message for the trigger:<br />
+      <code>run("setMessage current 1, osc://127.0.0.1:57120/trigger trigger_id
+      trigger_xPos trigger_yPos cursor_id");</code></li>
+
+      <li>Scale the trigger to half its default size:<br />
+      <code>run("setSize current 0.5");</code></li>
+    </ul>
+
+    <p>Remember the «<code>;</code>» at the end of each line. Note that constant numeric
+    or string parameters may be included directly in the command string, whereas values
+    in variables must be joined with the concatentation operator. Be sure to include
+    spaces in concatenated strings so that commands and parameters in the resulting
+    string are separated by at least one space.</p>
+
+    <p>See the <a href="listing.html">Functions Index</a> for a list of the functions you
+    can use in the <code>run()</code> command to control IanniX.</p>
+
+    <h3>The <code>title()</code> and <code>ask()</code> Commands</h3>
+
+    <p>In addition to <code>run()</code>, two other Javascript functions are provided for
+    script writing:</p>
+
+    <ul>
+      <li>Declare "name" to be the name of your project:<br />
+      <code>title("name");</code></li>
+
+      <li>Open a window where the user can fill in the constants to initialize the
+      script:<br />
+      <code>ask("category, label, variable, defaultValue);</code><br />
+      <br />
+      The parameter «category» allows the grouping of multiple <code>ask()</code>
+      requests in under a heading. All requests with the same category are grouped under
+      the heading «category». «Label» is used as the data request prompt. «Variable» is
+      the name of a variable that is created to hold the data. «Default» is the value
+      suggested to the user as the default value of the variable. The user is free to
+      name the categories, labels and variables as required.<br /></li>
+    </ul>
+
+    <h3>The Structure of a Script</h3>
+
+    <p>IanniX executes a script in several phases. You can control the phase in which
+    your commands are performed by grouping them under functions that are called at
+    specific phases of execution. The functions are:</p>
+
+    <ul>
+      <li>Called by IanniX to prepare a script run:<br />
+      <code>onCreate()</code><br />
+      {<br />
+      //Insert your commands here<br />
+      };</li>
+
+      <li>Called by IanniX to carry out the intended actions of the script:<br />
+      <code>onConfigure()<br />
+      {<br />
+      //Insert your commands here<br />
+      };</code></li>
+
+      <li>Called each time IanniX receives an OSC message. This section is only required
+      for scripts that are to receive OSC messages. (For example for script
+      configuration):<br />
+      <code>onMessage()<br />
+      {<br />
+      //Insert your commands here<br />
+      };</code></li>
+    </ul>
+
+    <p>Here is an example of a simple script:</p>
+    <br/>
+    <pre>
+          //Setup of the script
+          function onConfigure() {                
+              title("My new script");             //Name the script
+              
+              //Ask for parameters to customize the script behavior
+              iannix.ask("Triggers", "Trigger x-position", "trigger_xPosition", 3);
+          }
+          
+          //Creation of the score
+          function onCreate() {
+              run("clear");                       //Clear score objects
+              run("center 0 0");                  //Center on score origin
+              run("zoom 100");                    //100% zoom
+  
+              run("add trigger 1");               //Add a trigger with ID 1
+              run("setPos current 1 2 0");        //Move the trigger to coordinates (1, 2, 0)
+  
+              addATrigger();                      //Call a your custom function
+          }
+          
+          //Define a custom function
+          function addATrigger() {
+              //Insert the code to add and configure a trigger here
+              //Normally the function addATrigger() would have parameters to pass
+              //it the required features of the trigger to add.
+          }
+                
+</pre>
+
+    <p>The only two functions that should be in the <code>configure()</code> function are
+    <code>title() and <code>ask()</code>. All the rest of your code to be executed should
+    be placed in the <code>create()</code> function. In addition you can define your own
+    functions, define constants, etc. outside of any of the main functions. For example,
+    the function <code>addATrigger()</code>, above.</code></p>
+
+    <h3>Creating your own functions</h3>
+
+    <p>Example: This function provides a random number between parameters
+    <code>min</code> and <code>max</code>.</p>
+
+    <p><code>function randomFloat(min, max) {<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return Math.random() * (max-min) + min;<br />
+    }</code></p>
+
+    <h3>Creating your own libraries of functions</h3>
+
+    <p>Iannix provides the ability to predefine libraries of frequently used functions
+    for use in writing scripts. Files of type <code>&lt;name&gt;.js</code> in the Tools
+    folder are scanned during IanniX startup and variables, classes and function
+    definitons are made available for use in scripts. Note that if a library file is
+    edited while IanniX is running, IanniX must be restarted for the changes to take
+    effect.</p>
+
+    <h3>Predefined helper variables and functions</h3>
+
+    <p>IanniX includes a library of helper functions defined in the file "JavaScript
+    Library.js."<br />
+    The library includes the following functions:</p>
+
+    <h3>Useful Constants</h3>
+
+    <ul>
+      <li><code>E</code>: the mathematical constant e</li>
+
+      <li><code>LN2</code>: the natural logarithm of 2</li>
+
+      <li><code>LN10</code>: the natural logarithm of 10</li>
+
+      <li><code>LOG2E</code>: the base 2 logarithm of e</li>
+
+      <li><code>LOG10E</code>: the logarithm to the base 10 of e</li>
+
+      <li><code>PI</code>: the constant PI</li>
+
+      <li><code>TWO_PI</code>: two times PI</li>
+
+      <li><code>THIRD_PI</code>: Pi over 3</li>
+
+      <li><code>QUARTER_PI</code>: Pi over 4</li>
+
+      <li><code>HALF_PI</code>: Pi over 2</li>
+
+      <li><code>SQRT1_2</code>: one over the square root of two</li>
+
+      <li><code>SQRT2</code>: the square root of two</li>
+    </ul>
+
+    <h3>Math Functions:</h3>
+
+    <ul>
+      <li><code>abs(x)</code>: the absolute value of x</li>
+
+      <li><code>acos(x)</code>: the arccosine of x</li>
+
+      <li><code>asin(x)</code>: the arcsine of x</li>
+
+      <li><code>atan(x)</code>: the arctangent of x</li>
+
+      <li><code>atan2(x,y)</code>: the arctangent of x divided by y</li>
+
+      <li><code>ceil(x)</code>: the next higher integer above x</li>
+
+      <li><code>cos(x)</code>: cosine of x</li>
+
+      <li><code>exp(x)</code>: e to the power x</li>
+
+      <li><code>floor(x)</code>: the next lower integer below x</li>
+
+      <li><code>log(x)</code>: logarithm to the base 2 of x</li>
+
+      <li><code>min(x,y)</code>: the minimum of x and y</li>
+
+      <li><code>max(x,y)</code>: the maximum of x and y</li>
+
+      <li><code>pow(x,y)</code>: x raised to the power y</li>
+
+      <li><code>round(x)</code>: x rounded nearest integer, higher or lower</li>
+
+      <li><code>sin(x)</code>: the sine of x</li>
+
+      <li><code>sqrt(x)</code>: the square root of x</li>
+
+      <li><code>sq(x)</code>: x squared</li>
+
+      <li><code>tan(x)</code>: the tangent of x</li>
+
+      <li><code>degrees(x)</code>: the radian angle x converted into degrees</li>
+
+      <li><code>radians(x)</code>: the degree angle x converted into radians</li>
+
+      <li><code>random(low, high)</code>: returns a random number between low and
+      high</li>
+
+      <li><code>constrain(x, min, max)</code>: values of x below min and above max are
+      discarded</li>
+
+      <li><code>dist(x1, y1, z1, x2, y2, z2)</code>: the distance between the points
+      <code>(x1, y1, z1)</code> and <code>(x2, y2, z2)</code></li>
+    </ul>
+
+    <h3>Data Scaling Functions</h3>
+
+    <ul>
+      <li>Scale x to cover the range from low to high, assuming x ranges between 0.0 and
+      1.0:<br />
+      <code>norm(x, low, high)</code>:</li>
+
+      <li>Scale x to cover the range from low to high, assuming x ranges between 0.0 and
+      1.0,<br />
+      with <code>mid</code> being returned as the value for x=0.5:<br />
+      <code>rangeMid(x, low, mid, high)</code></li>
+
+      <li>Scale x to cover the range from <code>low2</code> to <code>high2</code>,
+      assuming x ranges between <code>low1</code> and <code>high1</code>:<br />
+      <code>map(x, low1, high1, low2, high2)</code></li>
+    </ul>
+
+    <div id="plotting" class='main container'></div>
+
+    <h2>Curve Plotting</h2>
+
+    <p>IanniX provides the <code>plot()</code> function to help you plot 2D or 3D
+    parametric curves based on mathematical functions, either using cartesian or polar
+    coordinates.</p>
+
+    <p>A parametric curve is defined as a function of one independent parameter (usually
+    denoted t) that defines the values of the plotting coordinates as a function of t.
+    For cartesian type plot (i.e. in terms of x, y, x) you must provide functions to
+    define the values of x and y optionally z. as a function of t. For a polar type plot,
+    you must provide functions of t to define r (the radius), theta (the angle) and
+    optionally phi (the angle above or below the plane). In IanniX the functions must
+    define the coordinates for values of t ranging from 0.0 to 1.0.</p>
+
+    <p>The curve plotting features uses a number of advanced Javascript features, but you
+    can use it by inserting your equations into simple patterns, one pattern for x, y, z
+    (Cartesion) curve plotting and another pattern for radial curve plotting.</p>
+
+    <h3>Cartesian Curve Plotting</h3>
+
+    <p>Substitute your expressions for the text to the right of the colons for each of
+    the variables x, y and z in the following pattern. Remember to include the comma at
+    the end of the expression.</p><br />
+    <pre>
+          plot(function(t){ return {
+             index   : 0, nbPoints: 300, 
+             offset  : {x: 0, y:0, z:0}, 
+  
+             x   : expression giving x in terms of t,
+             y   : expression giving y in terms of t,
+             z   : expression giving z in terms of t,
+  
+             t   : [0,1]
+          }});
+                
+</pre>
+
+    <h3>Polar Coordinate Curve Plotting</h3>
+
+    <p>Substitute your expressions for the text to the right of the colons for each of
+    the variables theta, r and phi in the following pattern. Remember to include the
+    comma at the end of the expression.</p><br />
+    <pre>
+          plot(function(t) { return {
+             index   : 0, nbPoints: 300, 
+             offset  : {x: 0, y:0, z:0}, 
+  
+             theta   : expression giving the angle theta (in radians) in terms of t,
+             r       : expression giving r in terms of t,
+             phi     : expression giving the angle phi (in radians) in terms of t,
+  
+             t       : [0,1]
+          }});
+                
+</pre>
+
+    <h3>Example: Script to Create a Parabolic Curve Using Cartesion Coordinates</h3>
+
+    <p>To see the results of this script, run the example "Simple Parabola" in the
+    Inspector Examples files.</p><br/>
+    <pre>
+          function onCreate() {
+              //Viewport setup
+              run("clear");
+              run("center 0 0");
+              run("rotate 0 0 0");
+              run("zoom 100");
+  
+              run("add curve  1000");
+              run("setPos     current 0 0 0");
+          
+              //Plot curve
+              plot(function(t) { return {
+                  index   : 0, nbPoints: 300, 
+                  offset  : {x: 0, y:0, z:0}, 
+  
+                  x   : 5*t,   //i.e. x = 5 times t
+                               //(As t runs from 0 to 1, x runs from 0 to 5.)
+                               
+                  y   : 3*t*t, //i.e. y = t squared
+                               //(as t runs from 0 to 1, y runs from 0 to 3.)
+                               
+                  z   : 0,     //z is always 0
+  
+                  t       : [0,1] }});
+                  
+              //Add a cursor
+              run("add cursor 1001");
+              run("setCurve   current lastCurve");        
+              run("setSpeed   current auto 100");
+          }
+                
+</pre>
+
+    <h3>Example: Script to Create a Simple Spiral Using Radial Coordinates</h3>
+
+    <p>To see the results of this script, run the example "Simple Spiral" in the
+    Inspector Examples files.</p><br/>
+    <pre>
+          function onCreate() {
+              //Viewport setup
+              run("clear");
+              run("center 0 0");
+              run("rotate 0 0 0");
+              run("zoom 100");
+  
+              run("add curve  1000");
+              run("setPos     current 0 0 0");
+          
+              //Plot curve
+              plot(function(t) { return {
+                  index   : 0, nbPoints: 300, 
+                  offset  : {x: 0, y:0, z:0}, 
+  
+                  theta   : TWO_PI * t,	  //i.e. theta = two Pi times t
+                        //(As t runs from 0 to 1, theta runs from 0 to two Pi.)
+                        //Since an angle of 2*Pi in radians is 360 degrees, theta
+                        //rotates once as t goes from 0 to 1.
+                        
+                  r       : 3*t,          //i.e. x = 3 times t
+                        //(As t  runs from 0 to 1, the radius runs from 0 to 3.)
+                             
+                  phi     : 0,		  //phi is always zero
+  
+                  t       : [0,1] }});
+                  
+              //Add a cursor
+              run("add cursor 1001");
+              run("setCurve   current lastCurve");        
+              run("setSpeed   current auto 100");
+          }
+                
+</pre>
+
+    <p>For an example of the interesting and crazy curves you can easily create with
+    parametric equations, try duplicating (with the context menu) the "Learn - Simple
+    Spiral" example in the IanniX Inspector Example scripts. Now open the script with the
+    context menu and change the <code>phi : 0</code> to <code>phi : sin(20*t)</code>.
+    Execute the script by double clicking on it in the Inspector. Now hold down the Alt
+    key and drag the mouse on the score view to see the wavy 3D curve you created. Start
+    the cursor running to see it undulate over the curve.</p>
+
+    <div id="drawingcurves" class='main container'></div>
+
+    <h2>Drawing Curves with Straight Line and Cubic Bezier Segments</h2>
+
+    <p>The IanniX setPointAt() function allows scripts to create 2D and 3D paths from a
+    sequence of straight line and curved (cubic Bezier) segments.</p>
+
+    <h3>Creating a Curve</h3>
+
+    <p>Start a new curve with:<br />
+    <code>run("add curve id");</code><br />
+    Creates a curve object with the specified ID. The curve has not yet been given any
+    points. The location of a new object defaults to (0,0,0).</p>
+
+    <h3>The setPointAt Function</h3>
+
+    <p>The setPointAt function is used to add points to or change points on a curve.
+    There are several behaviors of the setPointAt() function depending the parameters
+    passed to it:<br /></p>
+
+    <ul>
+      <li>To set the first point of the path:<br />
+      <code>run("setPointAt id 0 x y &lt;z&gt;");<br />
+      which defines point number 0 as x, y (and optionally z for a 3D path).</code></li>
+
+      <li>To add a straight line segment to the path:<br />
+      <code>run("setPointAt id pNum x y &lt;z&gt;");</code><br />
+      where pNum is the point number which should always be the previous pNum+1.</li>
+
+      <li>To change the endpoint of a straight line segment in an existing path:<br />
+      <code>run("setPointAt id pNum x y &lt;z&gt;");</code><br />
+      where pNum is the the number of the point to change.</li>
+
+      <li>To add a curved segment and define its curvature:<br />
+      <code>run("setPointAt id pNum x y &lt;z&gt; dxStart dyStart &lt;dzStart&gt; dxEnd
+      dyEnd &lt;dzEnd&gt; ");</code><br />
+      where the end point of the segment is x, y and optionally z. The the segment starts
+      tangent to a line from the start point, (the end of the previous segment) to the
+      point <code>(xStart+dxStart, yStart+dyStart, &lt;zStart+dZstart&gt;)</code>. The
+      segment ends tangent to a line from the end point <code>(x, y, &lt;z&gt;)</code> to
+      the point <code>(x+dxEnd, y+dyEnd, &lt;z+dyEnd&gt;)</code>. Note that the start
+      point would be the point <code>(x, y, &lt;z&gt;)</code> in the previous call to
+      setPointAt.</li>
+
+      <li>To change a previously defined curved segment:<br />
+        <code>run("setPointAt id pNum cx1 cy1 &lt;cz1&gt; cx2 cy2 &lt;cz2&gt; x y
+        &lt;z&gt;");</code><br />
+        where pNum is the number of a previously defined point and the other parameters
+        are as defined above.<br />
+
+        <p>(Optional parameters are indicated by bracketing between &lt; &gt;)</p>
+      </li>
+    </ul>
+
+    <p>All forms of <code>setPointAt</code> specify the location of the point as x y
+    &lt;z&gt;. The forms that specify Bezier segments include two other points, cx1 cy1
+    &lt;cz1&gt; and cx2 cy2 &lt;cz2&gt;, that describe the curvature. The direction of
+    the curve leaving its start point is tangent to the line from the start point to the
+    first control point cx1 cy1 &lt;cz1&gt;. The direction of the curve arriving its end
+    point is tangent to the line from the control point cx2 cy2 &lt;cz2&gt; to the end
+    point x y &lt;z&gt;.</p>
+
+    <h3>Example of Creating a Curve With 2D and 3D Segments</h3>
+
+    <p>The following is the code of the example "Learn - Curve points" that can be found
+    in the Inspector script browser. It creates a path with with five segments and five
+    points. The first segment is a 2D straight line, the next is a 2D Bezier, the next is
+    a 3D straight line, and the fourth segment is a 3D Bezier. Run the example script to
+    see what the curve looks like. To see its shape in 3D hold down the Alt key and drag
+    the mouse on the score area. You can reset the viewing angle by running the "Reset
+    orientation" script in the Tools section of the script browser.</p>
+    <pre>
+   
+          //Creation of the score   
+          function onCreate() {
+              //Viewport setup
+              run("clear");
+              run("center 0 0");
+              run("zoom 100");
+              run("rotate 0 0 0");
+                  
+              //Create a curve
+              run("add curve  1000");
+          
+              //Point number 0
+              //Location x0 = -2, y0 = 1
+              run("setPointAt current  0  -2 1");
+          
+              //Draw a 2D straight segment from point number 0, to
+              //point number 1, which is at (x1,y1) = (-2,3)
+              run("setPointAt current  1   -2  3");
+          
+              //Draw a 2D bezier segment from point number 1, to
+              //point number 2, which is at (x2,y2) = (2,3)
+              //Segment start is tangent to a line from (x1,y1) to (x1+2, y1+2)
+              //Segment end is tangent to a line from (x2,y2) to (x2+0,x2+3)
+              run("setPointAt current  2    2  3   +2 +2   +0 +3 ");
+          
+              //Draw a 3D Straight segment from point number 2, to
+              //point number 3, which is at (x3,y3,z3) = (0,2,1)
+              run("setPointAt current  3    0 2 1");
+          
+              //Draw a 3D bezier segment from point number 3, to
+              //point number 4, which is at (x4,y4,z4) = (-2,-1,0) 
+              //Start tangent to a line from (x3,y3,z3) to (x3+0,y3-1,z3+2)
+              //End tangent to a line from (x4,y4,z4) to (x4+4,x4+0,z4+0)
+              run("setPointAt current  4   -2 -1 0   +0 -1 +2   +4 +0 +0");
+          
+              //Add a cursor on the curve
+              run("add cursor 1");
+              run("setCurve   current lastCurve");        
+              run("setSpeed   current auto 10");
+          }
+        
+</pre>
+  </div>
+</body>
+</html>

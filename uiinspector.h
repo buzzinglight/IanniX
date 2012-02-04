@@ -25,10 +25,11 @@ private:
     NxObjectFactoryInterface *factory;
     QTreeWidgetItem *triggerItem, *curveItem, *cursorItem;
     bool actionInfoLock;
+    bool idConflict;   ////CG//// Indicates the id in the inspector spinbox conflicts with an existing id
 public:
     quint16 nbTriggers, nbCurves, nbCursors;
 public slots:
-    void setMousePos(const QPointF & pos);
+    void setMousePos(const NxPoint & pos);
     void setMouseZoom(qreal zoom);
     void logOscSend(const QString &);
     void logOscReceive(const QString &);
@@ -39,11 +40,16 @@ public slots:
     void actionProjectFiles()         { emit(actionRouteProjectFiles()); }
     void actionProjectScripts()       { emit(actionRouteProjectScripts()); }
     void actionProjectScriptsContext(const QPoint & point)  { emit(actionRouteProjectScriptsContext(point)); }
+    void actionProjectFilesContext(const QPoint & point)  { emit(actionRouteProjectFilesContext(point)); }
     void actionInfo();
+    void actionInfoID();
     void actionColor();
     void actionNetwork();
     void actionInfoGroup();
     void actionMessages();
+
+    void changeID_success(bool result, quint16 newId);   ////CG////
+
     QList<NxObject*> getSelectedCCObject() const;
     QList<NxGroup*> getSelectedCC2Object() const;
     inline QTreeWidgetItem *getTriggerItem() const {
@@ -65,6 +71,7 @@ public slots:
     }
 
 public:
+    void clearCCselections(); ////CG////
     quint16 getCurrentTab() const;
     void setCurrentTab(quint16);
     bool getViewTriggerCheck() const;
@@ -81,10 +88,12 @@ public slots:
     void setUDPPort(quint16 port);
     void setSerialPort(const QString & port);
     void setTransportMessage(const QString & message);
+    void setSyncMessage(const QString & message);
     quint16 getOSCPort();
     quint16 getUDPPort();
     const QString getSerialPort();
     const QString getTransportMessage();
+    const QString getSyncMessage();
 
 private:
     void timerEvent(QTimerEvent *);
@@ -113,11 +122,15 @@ signals:
     void actionRouteProjectScripts();
     void actionRouteProjectStyles();
     void actionRouteProjectScriptsContext(QPoint);
+    void actionRouteProjectFilesContext(QPoint);
     void actionRouteProjectStylesContext(QPoint);
+    void actionChangeID(quint16,quint16); ////CG////
     void oscPortChange(quint16);
     void udpPortChange(quint16);
     void serialPortChange(const QString &);
     void transportMessageChange(const QString &);
+    void syncMessageChange(const QString &);
+    void actionIDchange();
 
 private:
     UiRender *render;

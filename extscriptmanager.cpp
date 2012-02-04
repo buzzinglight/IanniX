@@ -1,9 +1,10 @@
 #include "extscriptmanager.h"
 
-ExtScriptManager::ExtScriptManager(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile, QTreeWidgetItem *parentList) :
+ExtScriptManager::ExtScriptManager(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile, QTreeWidgetItem *parentList, QDir _scriptDir) :
         QObject(_factory), QTreeWidgetItem(parentList, 1024) {
     factory = _factory;
     scriptFile = _scriptFile;
+    scriptDir = _scriptDir;
     objectId = -1;
     connect(&fileWatcher, SIGNAL(fileChanged(QString)), SLOT(fileWatcherChanged(QString)));
     setFlags(Qt::ItemIsSelectable | /*Qt::ItemIsEditable |*/ Qt::ItemIsEnabled);
@@ -40,9 +41,13 @@ bool ExtScriptManager::parseScript(bool configure) {
             script.setProperty("mouseY", mousePos.y());
             script.setProperty("objectId", objectId);
             script.setProperty("iannix", scriptFunctions);
+            script.setProperty("nx", scriptFunctions);
+
+            //Prepend with prepackaged functions
+            QString scriptPreContent = loadLibrary(scriptDir);
 
             //Launch the script
-            QScriptValue scriptReturn = scriptEngine.evaluate(scriptContent);
+            QScriptValue scriptReturn = scriptEngine.evaluate(scriptContent + scriptPreContent);
 
             //Extract function
             scriptOnOSC = script.property("onMessage");
@@ -55,7 +60,7 @@ bool ExtScriptManager::parseScript(bool configure) {
             QStringList errors = scriptEngine.uncaughtExceptionBacktrace();
             QString errorsMessage = "";
             if(scriptReturn.isError())
-                errors << scriptReturn.property("message").toString(); ;
+                errors << scriptReturn.property("message").toString();
             foreach(const QString & error, errors)
                 errorsMessage += error + "\r\n";
             if(errors.count()) {
@@ -79,8 +84,12 @@ bool ExtScriptManager::parseScript(bool configure) {
             //Ask variables to user and sets the variable in the script
             QList<ExtScriptVariable*> variables = variable->ask();
             if(variable->result()) {
-                foreach(ExtScriptVariable *variable, variables)
-                    script.setProperty(variable->getValue(), variable->getDef());
+                foreach(ExtScriptVariable *variable, variables) {
+                    if(variable->isDefFloat())
+                        script.setProperty(variable->getValue(), variable->getDefFloat());
+                    else
+                        script.setProperty(variable->getValue(), variable->getDefStr());
+                }
 
                 //Call the "create()" function
                 scriptCreate.call(QScriptValue(), QScriptValueList());
@@ -92,9 +101,25 @@ bool ExtScriptManager::parseScript(bool configure) {
     return false;
 }
 
-void ExtScriptManager::fileWatcherChanged(const QString &path) {
+void ExtScriptManager::fileWatcherChanged(const QString &) {
     if(isSelected()) {
         parseScript(false);
         factory->execute("fastrewind");
     }
 }
+
+const QString ExtScriptManager::loadLibrary(const QDir & libScriptDir) {
+    QString scriptContent = "";
+
+    QFileInfoList scriptDirs = QDir(libScriptDir.absoluteFilePath("Tools/")).entryInfoList(QStringList() << "*.js", QDir::Files | QDir::NoDotAndDotDot);
+    foreach(const QFileInfo & scriptFile, scriptDirs) {
+        QFile scriptFileContent(scriptFile.absoluteFilePath());
+        if(scriptFileContent.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            //Read file
+            scriptContent += scriptFileContent.readAll();
+            scriptFileContent.close();
+        }
+    }
+    return scriptContent;
+}
+

@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="fr" />
+  <meta name="language" content="fr" />
+  <meta name="designer" content="buzzing light" />
+  <meta name="description" content="IanniX documentation" />
+  <link href="../Common/css/reset.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/font/stylesheet.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../Common/jquery.js">
+</script>
+
+  <title>IanniX — Objets</title>
+  <style type="text/css">
+/*<![CDATA[*/
+  a.c1 {color:#aaa; text-decoration:none;}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class='main container'>
+    <table class="onglets" summary="">
+      <tr>
+        <td class="onglet"><a href="intro.html">Introduction</a></td>
+
+        <td class="onglet" id='actif'><a href="objets.html">Objets<br />
+        fondamentaux</a></td>
+
+        <td class="onglet"><a href="messages.html">Messages émis<br />
+        et reçus</a></td>
+
+        <td class="onglet"><a href="overview.html">Interface<br />
+        graphique</a></td>
+
+        <td class="onglet"><a href="script.html">Scripts</a></td>
+
+        <td class="onglet"><a href="reference.html">Référence</a></td>
+
+        <td class="onglet"><a href="listing.html">Index<br />
+        des fonctions</a></td>
+      </tr>
+    </table>
+
+    <div class="langue">
+      <a class="c1" href="../EN/objets.html">English version</a>
+    </div>
+
+    <h2>Les objets</h2>
+
+    <p>Une partition IanniX se compose de trois objets fondamentaux&nbsp;:</p>
+
+    <ul>
+      <li><b>un trigger</b> est un événement ponctuel positionné dans l'espace ; il est
+      déclenché lors du passage d'<b>un curseur</b>&nbsp;;</li>
+
+      <li><b>une courbe</b> est une suite de points dans l'espace ; elle définit une
+      trajectoire&nbsp;;</li>
+
+      <li><b>un curseur</b> est une tête de lecture. Il déclenche des événements discrets
+      (<b>triggers</b>) ou continus (valeurs). Il peut suivre <b>une courbe</b> ou être
+      complètement libre (contrôlé par la souris, une tablette ou par un autre
+      logiciel).</li>
+    </ul>
+
+    <h2>Ajouter des objets</h2>
+
+    <p>Pour positionner un objet dans l'espace, vous disposez de trois méthodes :</p>
+
+    <ul>
+      <li>&lt;&lt;b&gt;l'interface graphique à l'aide de la <a href="overview.html">barre
+      d'outils</a>&nbsp;;</li>
+
+      <li><b>les interfaces logicielles</b> contrôlant IanniX en Open Sound Control par
+      exemple, grâce au système de <a href="reference.html">commandes
+      IanniX</a>&nbsp;;</li>
+
+      <li><b>les scripts</b> qui créé des partitions génératives via <a href=
+      "script.html">des commandes scriptées</a>.</li>
+    </ul>
+
+    <h2>Vocabulaire fondamental</h2>
+
+    <p>Quelques notions très simples vous permettront de comprendre les mécanismes de
+    IanniX :</p>
+
+    <ul>
+      <li><b>l'identifiant (ID)</b> : chaque objet (trigger, courbe ou curseur) possède
+      un identifiant unique&nbsp;;</li>
+
+      <li><b>le groupe</b> : les objets peuvent être regroupés sous un nom de groupe,
+      permettant le contrôle de plusieurs objets d'un coup.</li>
+    </ul>
+  </div>
+</body>
+</html>

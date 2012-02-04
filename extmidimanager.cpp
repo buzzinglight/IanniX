@@ -11,12 +11,12 @@ void midiCallback(double, std::vector< unsigned char > *receivedMessage, void *u
         switch(status) {
         case STATUS_NOTEOFF:
         case STATUS_NOTEON: {
-                quint8 velocity = receivedMessage->at(2);
-                if ((status == STATUS_NOTEOFF) || (velocity == 0))
-                    midi->receivedMessage(QString("midi://midiin/note %1 %2 0").arg(channel).arg(receivedMessage->at(1)));
-                else
-                    midi->receivedMessage(QString("midi://midiin/note %1 %2 %3").arg(channel).arg(receivedMessage->at(1)).arg(velocity));
-            }
+            quint8 velocity = receivedMessage->at(2);
+            if ((status == STATUS_NOTEOFF) || (velocity == 0))
+                midi->receivedMessage(QString("midi://midiin/note %1 %2 0").arg(channel).arg(receivedMessage->at(1)));
+            else
+                midi->receivedMessage(QString("midi://midiin/note %1 %2 %3").arg(channel).arg(receivedMessage->at(1)).arg(velocity));
+        }
             break;
         case STATUS_CTLCHG:
             midi->receivedMessage(QString("midi://midiin/cc %1 %2 %3").arg(channel).arg(receivedMessage->at(1)).arg(receivedMessage->at(2)));
@@ -108,41 +108,105 @@ void ExtMidiManager::send(const ExtMessage & _message) {
     QString command = _message.getMidiCommand().toLower();
 
     //Send request
-    std::vector<unsigned char> message;
     if(command == "/note") {
-        quint8 note = _message.getMidiValue(1);
-        quint8 velocity = _message.getMidiValue(2);
-        if(velocity > 0)
-            message.push_back(STATUS_NOTEON + (channel & MASK_CHANNEL));
-        else
-            message.push_back(STATUS_NOTEOFF + (channel & MASK_CHANNEL));
-        message.push_back(note & MASK_SAFETY);
-        message.push_back(velocity & MASK_SAFETY);
+        sendNote(portname, channel, _message.getMidiValue(1), _message.getMidiValue(2));
+        quint16 duration = _message.getMidiValue(3);
+        if(duration > 0)
+            new ExtMidiNoteOff(this, portname, channel, _message.getMidiValue(1), duration);
     }
-    else if(command == "/cc") {
-        quint8 controller = _message.getMidiValue(1);
-        quint8 value = _message.getMidiValue(2);
-        // Controller: 0xB0 + channel, ctl, val
-        message.push_back(STATUS_CTLCHG + (channel & MASK_CHANNEL));
-        message.push_back(controller & MASK_SAFETY);
-        message.push_back(value & MASK_SAFETY);
-    }
-    else if(command == "/pgm") {
-        quint8 program = _message.getMidiValue(1);
-        // Program: 0xC0 + channel, pgm
-        message.push_back(STATUS_PROGRAM + (channel & MASK_CHANNEL));
-        message.push_back(program & MASK_SAFETY);
-    }
+    else if(command == "/cc")
+        sendCC(portname, channel, _message.getMidiValue(1), _message.getMidiValue(2));
+    else if(command == "/pgm")
+        sendPGM(portname, channel, _message.getMidiValue(1));
+    else if(command == "/bend")
+        sendBend(portname, channel, _message.getMidiValue(1));
+}
+
+void ExtMidiManager::sendNote(const QString & portname, quint8 channel, quint16 note, quint16 velocity) {
+    std::vector<unsigned char> message;
+
+    note = (note > 0x7f) ? 0x7f : note;
+    velocity = (velocity > 0x7f) ? 0x7f : velocity;
+
+    if(velocity > 0)
+        message.push_back(STATUS_NOTEON + (channel & MASK_CHANNEL));
+    else
+        message.push_back(STATUS_NOTEOFF + (channel & MASK_CHANNEL));
+
+    message.push_back(note & MASK_SAFETY);
+    message.push_back(velocity & MASK_SAFETY);
+
     if((message.size() > 0) && (portOut.contains(portname))) {
         try {
             portOut.value(portname)->sendMessage(&message);
             //Log in the OSC console
-            factory->logOscSend(_message.getVerboseMessage());
+            factory->logOscSend(tr("MIDI %1 on ch. %2, send note(%3)=%4").arg(portname).arg(channel).arg(note).arg(velocity));
         } catch (RtError& err) {
             factory->logOscSend(QString::fromStdString(err.getMessage()));
         }
     }
 }
+void ExtMidiManager::sendCC(const QString & portname, quint8 channel, quint16 controller, quint16 value) {
+    std::vector<unsigned char> message;
+    controller = (controller > 0x7f) ? 0x7f : controller;
+    value = (value > 0x7f) ? 0x7f : value;
+
+    // Controller: 0xB0 + channel, ctl, val
+    message.push_back(STATUS_CTLCHG + (channel & MASK_CHANNEL));
+    message.push_back(controller & MASK_SAFETY);
+    message.push_back(value & MASK_SAFETY);
+
+    if((message.size() > 0) && (portOut.contains(portname))) {
+        try {
+            portOut.value(portname)->sendMessage(&message);
+            //Log in the OSC console
+            factory->logOscSend(tr("MIDI %1 on ch. %2, send CC(%3)=%4").arg(portname).arg(channel).arg(controller).arg(value));
+        } catch (RtError& err) {
+            factory->logOscSend(QString::fromStdString(err.getMessage()));
+        }
+    }
+}
+void ExtMidiManager::sendPGM(const QString & portname, quint8 channel, quint16 program) {
+    std::vector<unsigned char> message;
+    program = (program > 0x7f) ? 0x7f : program;
+
+    // Program: 0xC0 + channel, pgm
+    message.push_back(STATUS_PROGRAM + (channel & MASK_CHANNEL));
+    message.push_back(program & MASK_SAFETY);
+
+    if((message.size() > 0) && (portOut.contains(portname))) {
+        try {
+            portOut.value(portname)->sendMessage(&message);
+            //Log in the OSC console
+            factory->logOscSend(tr("MIDI %1 on ch. %2, send PGM=%3").arg(portname).arg(channel).arg(program));
+        } catch (RtError& err) {
+            factory->logOscSend(QString::fromStdString(err.getMessage()));
+        }
+    }
+}
+void ExtMidiManager::sendBend(const QString & portname, quint8 channel, quint16 bendvalue) {
+    std::vector<unsigned char> message;
+    bendvalue = (bendvalue > 0x3fff) ? 0x3fff : bendvalue;
+
+    // Bend: 0xE0 + channel, 7LeastSigBits, 7MostSigBits
+    quint8 lsb = 0x7f & bendvalue;
+    quint8 msb = 0x7f & (bendvalue  >> 7);
+
+    message.push_back(STATUS_BEND + (channel & MASK_CHANNEL));
+    message.push_back(lsb & MASK_SAFETY);
+    message.push_back(msb & MASK_SAFETY);
+
+    if((message.size() > 0) && (portOut.contains(portname))) {
+        try {
+            portOut.value(portname)->sendMessage(&message);
+            //Log in the OSC console
+            factory->logOscSend(tr("MIDI %1 on ch. %2, send bend=%3").arg(portname).arg(channel).arg(bendvalue));
+        } catch (RtError& err) {
+            factory->logOscSend(QString::fromStdString(err.getMessage()));
+        }
+    }
+}
+
 
 void ExtMidiManager::receivedMessage(const QString & url) {
     //Fire events (log, message and script mapping)

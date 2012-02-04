@@ -34,8 +34,8 @@ public:
     inline const QString getTypeStr() const {
         return "document";
     }
-    inline const QRectF getBoundingRect() const {
-        QRectF boundingRect;
+    inline const NxRect getBoundingRect() const {
+        NxRect boundingRect;
 
         //Browse groups
         QMapIterator<QString, NxGroup*> groupIterator(groups);

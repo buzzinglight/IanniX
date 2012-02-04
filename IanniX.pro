@@ -6,11 +6,21 @@
 
 QT                      += core gui opengl network script
 
-TARGET                  =  IanniX
-TEMPLATE                =  app
+TARGET                   =  IanniX
+TEMPLATE                 =  app
 CONFIG                  += x86 x86_64
 
 debug:DEFINES           += __RTMIDI_DEBUG__
+
+false {
+    CONFIG                  -= x86
+    unix:DEFINES            += KINECT_INSTALLED
+    unix:SOURCES            += qkinect/QKinect.cpp extkinectmanager.cpp
+    unix:HEADERS            += qkinect/QKinect.h extkinectmanager.h
+    unix:LIBS               += -lfreenect
+    unix:INCLUDEPATH        += /usr/local/include/libfreenect
+}
+
 
 SOURCES                 += iannix.cpp \
                            uitransport.cpp \
@@ -38,7 +48,13 @@ SOURCES                 += iannix.cpp \
                            qrtmidi\RtMidi.cpp \
                            extmidimanager.cpp \
                            qjsedit\jsedit.cpp \
-                           uieditor.cpp
+                           uieditor.cpp \
+                           nxpoint.cpp \
+                           nxrect.cpp \
+                           nxsize.cpp \
+                           nxpolygon.cpp \
+                           nxline.cpp \
+                           extoscpatterneditor.cpp
 
 HEADERS                 += iannix.h \
                            uitransport.h \
@@ -72,7 +88,15 @@ HEADERS                 += iannix.h \
                            qrtmidi\RtError.h \
                            extmidimanager.h \
                            qjsedit\jsedit.h \
-                           uieditor.h
+                           uieditor.h \
+                           iannix_spec.h \
+                           iannix_cmd.h \
+                           nxpoint.h \
+                           nxrect.h \
+                           nxsize.h \
+                           nxline.h \
+    nxpolygon.h \
+    extoscpatterneditor.h
 
 FORMS                   += uitransport.ui \
                            uirender.ui \
@@ -82,7 +106,8 @@ FORMS                   += uitransport.ui \
                            uisplash.ui \
                            uiabout.ui \
                            extoscpatternask.ui \
-                           uieditor.ui
+                           uieditor.ui \
+    extoscpatterneditor.ui
 
 TRANSLATIONS            =  iannix_fr.ts
 

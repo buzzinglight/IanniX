@@ -16,6 +16,7 @@ UiEditor::UiEditor(QWidget *parent) :
     ui->jsEditor->setLineNumbersVisible(true);
     ui->jsEditor->setCodeFoldingEnabled(true);
     ui->jsEditor->setBracketsMatchingEnabled(true);
+    ui->jsEditor->setTabStopWidth(20);
 
     /*
     ui->jsEditor->setWindowTitle(QFileInfo(fileName).fileName());
@@ -58,6 +59,7 @@ void UiEditor::openFile(const QFileInfo & _scriptFile) {
         ui->jsEditor->setPlainText(contents);
         setWindowTitle(tr("IanniX — Script Editor — ") + scriptFile.baseName());
         show();
+        raise(); ///CG/// Move opened editor window in front of mail window.
     }
 }
 void UiEditor::save() {

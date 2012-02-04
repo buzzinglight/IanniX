@@ -1,0 +1,2152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="fr" />
+  <meta name="language" content="fr" />
+  <meta name="designer" content="buzzing light" />
+  <meta name="description" content="IanniX documentation" />
+  <link href="../Common/css/reset.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/font/stylesheet.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../Common/jquery.js">
+</script>
+  <script type="text/javascript">
+//<![CDATA[
+                $(document).ready(function() {
+                        $("h3").next().hide();
+                        $("h3").click(function() {
+                                $(this).next().toggle(500);
+                        });
+                        
+                        var anchors = document.location.href.split("#");
+                        if(anchors.length > 1)
+                                $("#" + anchors[1] + " h3").next().toggle(500);
+                });
+  //]]>
+  </script>
+
+  <title>IanniX — Commandes &amp; messages</title>
+  <style type="text/css">
+/*<![CDATA[*/
+  li.c2 {list-style: none}
+  a.c1 {color:#aaa; text-decoration:none;}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class='main container'>
+    <table class="onglets" summary="">
+      <tr>
+        <td class="onglet"><a href="intro.html">Introduction</a></td>
+
+        <td class="onglet"><a href="objets.html">Objets<br />
+        fondamentaux</a></td>
+
+        <td class="onglet"><a href="messages.html">Messages émis<br />
+        et reçus</a></td>
+
+        <td class="onglet"><a href="overview.html">Interface<br />
+        graphique</a></td>
+
+        <td class="onglet"><a href="script.html">Scripts</a></td>
+
+        <td class="onglet" id='actif'><a href="reference.html">Référence</a></td>
+
+        <td class="onglet"><a href="listing.html">Index<br />
+        des fonctions</a></td>
+      </tr>
+    </table>
+
+    <div class="langue">
+      <a class="c1" href="../EN/reference.html">English version</a>
+    </div>
+
+    <h2>Documentation</h2>
+
+    <p>Les commandes IanniX doivent spécifier une cible à chaque exécution :</p>
+
+    <ul>
+      <li><code class="target">id</code> désigne un objet précis.<br />
+      Exemple : <span class="api"><code>remove <span class=
+      "target">2</span></code></span></li>
+
+      <li><code class="target">group_id</code> désigne le groupe entier qui peut être un
+      mot.<br />
+      Exemple : <span class="api"><code>remove <span class=
+      "target">toto</span></code></span></li>
+
+      <li><code class="target">all</code> désigne tous les objets.<br />
+      Exemple : <span class="api"><code>remove <span class=
+      "target">all</span></code></span></li>
+
+      <li><code class="target">current</code> désigne le dernier objet créé.<br />
+      Exemple : <span class="api"><code>remove <span class=
+      "target">current</span></code></span></li>
+    </ul>
+    <hr />
+
+    <h2>Gestion des objets</h2>
+
+    <div id="add" class="fonction">
+      <h3>Ajouter un objet</h3>
+
+      <div class='roll'>
+        <p>Ajoute un objet sur la partition, mais ne spécifie pas sa position (par défaut
+        l'objet est placé au point de coordonnées (0,0,0)). Le mot clef <code>auto</code>
+        attribue automatiquement un ID à votre objet.<br />
+        <br />
+        <span class="api">add <span class="objet">&lt;objet&gt;</span> <span class=
+        "id">&lt;id&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">add</span> <span class=
+        "objet">trigger</span> <span class="id">1</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/add.jpg" alt="add" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code><span class="api">run("add</span> <span class=
+                "objet">trigger</span> <span class="id">1");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setgroup" class="fonction">
+      <h3>Définir un groupe</h3>
+
+      <div class='roll'>
+        <p>Les groupes sont identifiés par un chiffre ou un mot que vous êtes libre de
+        choisir. Les objets n'ont pas l'obligation de faire partie d'un groupe.<br />
+        <br />
+        <span class="api">setGroup <span class="target">&lt;target&gt;</span>
+        <span class="group">&lt;group name&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setGroup</span>
+        <span class="target">current</span> <span class=
+        "group">triggers</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setgroup.png" alt="setGroup" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                <span class="api">run("setGroup</span> <span class=
+                "target">current</span> <span class=
+                "group">triggers");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setpos" class="fonction">
+      <h3>Space position</h3>
+
+      <div class='roll'>
+        <p>Positionne un objet sur la partition via des coordonnées (x,y,z).<br />
+        <br />
+        <span class="api">setPos <span class="target">&lt;target&gt;</span> <span class=
+        "coord">&lt;x&gt;</span> <span class="coord">&lt;y&gt;</span> <span class=
+        "coord">&lt;z&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setPos</span> <span class=
+        "target">1</span> <span class="coord">1</span> <span class="coord">2</span>
+        <span class="coord">0</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setpos.jpg" alt="setPos" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                run("setGroup current triggers");<br />
+                <span class="api">run("setPos</span> <span class="target">1</span>
+                <span class="coord">1</span> <span class="coord">2</span> <span class=
+                "coord">0");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setactive" class="fonction">
+      <h3>Activer/désactiver un objet</h3>
+
+      <div class='roll'>
+        <p>Un objet est actif par défaut, mais vous pouvez le désactiver.<br />
+        <br />
+        <span class="api">setActive <span class="target">&lt;target&gt;</span>
+        <span class="bin">&lt;0|1&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setActive</span>
+        <span class="target">1</span> <span class="bin">0</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setactive.png" alt="setActive" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                run("setGroup current triggers");<br />
+                run("setPos 1 1 2 0");<br />
+                <span class="api">run("setActive</span> <span class="target">1</span>
+                <span class="bin">0");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setmessage" class="fonction">
+      <h3>Affecter un message</h3>
+
+      <div class='roll'>
+        <p>Cette commande définit le message qu'un objet doit envoyer.<br />
+        <br />
+        <span class="api">setMessage <span class="target">&lt;target&gt;</span>
+        <span class="period">&lt;period&gt;</span>, <span class=
+        "message">&lt;message1&gt;</span> <span class=
+        "variable">&lt;variables&gt;</span>, <span class=
+        "message2">&lt;message2&gt;</span>,</span>message2, message3, …<br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setMessage</span>
+        <span class="target">current</span> <span class="period">1</span>, <span class=
+        "message">osc://127.0.0.1:57120/trigger <span class="variable">trigger_id
+        trigger_xPos trigger_yPos cursor_id</span></span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("setMessage <span class="target">current</span> <span class=
+                "period">1</span>, <span class="message">osc://127.0.0.1:57120/trigger
+                <span class="variable">trigger_id trigger_xPos trigger_yPos
+                cursor_id");</span></span><br /></code>
+              </div>
+            </td>
+
+            <td>
+              <p>Le trigger ajouté précédemment enverra respectivement : son ID, son
+              abscisse, son ordonnée et l'ID du curseur l'ayant déclenché.<br />
+              Le protocole utilisé est l'OSC, 127.0.0.1 est l'adresse IP de l'ordinateur
+              lui-même (localhost) et 57120 est le port utilisé pour l'envoi.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="remove" class="fonction">
+      <h3>Supprimer un objet</h3>
+
+      <div class='roll'>
+        <p>Efface un objet de la partition grâce à son ID.<br />
+        <br />
+        <span class="api">remove <span class="target">&lt;target&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">remove</span> <span class=
+        "target">1</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/remove.png" alt="remove" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                run("setGroup current triggers");<br />
+                run("setPos 1 1 2 0");<br />
+                run("setActive 1 0");<br />
+                <span class="api">run("remove</span> <span class=
+                "target">1");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <hr />
+
+    <h2>Trigger</h2>
+
+    <div id="settriggeroff" class="fonction">
+      <h3>Temps avant relâche (NoteOff)</h3>
+
+      <div class='roll'>
+        <p>Lorsqu'une notre est jouée grâce à un trigger, vous pouvez le configurez pour qu'il
+        coupe la note automatiquement après un délai paramétrable. Ce temps Note-off time peut être défini
+        soit par cette méthode, qui définit le temps qui est toujours utilisé par ce trigger,
+        ou le temps de note-off peut être contrôlé par le paramètre de durée dans le message du
+        trigger. Controller l'off-time dans le message permet au temps de contrôler
+        certaines variables de la partition, changeant au fur et à mesure que la partition joue. Le temps avant la relâche doit        
+		être normalement définit à zéro lorsque le temps note-off n'est pas envoyé dans les messages de
+        ce trigger.<br />
+        <br />
+        <span class="api">setTriggerOff <span class="target">&lt;target&gt;</span>
+        <span class="delay">&lt;delay&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setTriggerOff</span>
+        <span class="target">current</span> <span class=
+        "delay">0.5</span></code></span></p><br />
+
+        <table summary="">
+          <tr>
+            <td>
+              <div class="code_triggeroff"></div>
+            </td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                <span class="api">run("setTriggerOff</span> <span class=
+                "target">current</span> <span class="delay">0.5");</span><br /></code>
+              </div>
+            </td>
+
+            <td>
+              <p>Le trigger précédemment créé enverra un message "note off" après une
+              demi-seconde.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <h3 id='variable_trigger'>Messages &amp; variables liés au trigger</h3>
+
+    <div class='roll'>
+      <p>Vous pouvez utiliser les variables suivantes dans les messages envoyés par les
+      triggers :</p>
+
+      <ul>
+        <li><span class="variable"><code>trigger_id</code></span> ID du trigger
+        déclenché</li>
+
+        <li><span class="variable"><code>trigger_group_id</code></span> ID du groupe
+        concerné par le déclenchement</li>
+
+        <li><span class="variable"><code>trigger_document_id</code></span> nom du
+        projet</li>
+
+        <li><span class="variable"><code>trigger_xPos</code></span> abscisse</li>
+
+        <li><span class="variable"><code>trigger_yPos</code></span> ordonnée</li>
+
+        <li><span class="variable"><code>trigger_distance</code></span> straight line
+        distance from the trigger to the cursor at the time of collision</li>
+
+        <li><span class="variable"><code>trigger_value</code></span> 127 quand le trigger
+        est déclenché et 0 lorsque le trigger est éteint</li>
+
+        <li><span class="variable"><code>trigger_side</code></span> 0 when the trigger is
+        on the left of the direction of cursor motion and 1 if on the right</li>
+      </ul>
+
+      <p>Vous pouvez aussi utiliser n'importe laquelle des variables cursor_ du curseur rencontré ou les variables
+      curve_  du curseur de la courbe.</p>
+    </div>
+    <hr />
+
+    <h2>Courbe</h2>
+
+    <div id="setpointsellipse" class="fonction">
+      <h3>Courbes circulaires &amp; ellipses</h3>
+
+      <div class='roll'>
+        <p>Les ellipses sont définies par un grand axe et un petit axe. Pour construire
+        des cercles, les deux axes doivent avoir la même valeur.<br />
+        <br />
+        <span class="api">setPointsEllipse <span class="target">&lt;target&gt;</span>
+        <span class="width">&lt;width&gt;</span> <span class=
+        "height">&lt;height&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setPointsEllipse</span>
+        <span class="target">current</span> <span class="width">2</span> <span class=
+        "height">1</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setpointsellipse.png" alt=
+            "setPointsEllipse" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                <span class="api">run("setPointsEllipse</span> <span class=
+                "target">current</span> <span class="width">2</span> <span class=
+                "height">1");</span><br />
+                run("setPos current 1 1 0");<br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setpointat" class="fonction">
+      <h3>Trajectoire droite</h3>
+
+      <div class='roll'>
+        <p>Une courbe est définie par une séquence de points. L'index des points débute à
+        0.<br />
+        Notez que les coordonnées d'un point sont définies pour être relative à la position de
+        l'objet courbe.<br />
+        Pour plus de détails, voir la section sur <a href="script.html#drawingcurves">dessiner des
+        ocurbes</a> dans la section script.<br />
+        <br />
+        <span class="api">setPointAt <span class="target">&lt;target&gt;</span>
+        <span class="pointindex">&lt;point index&gt;</span> <span class=
+        "coord">&lt;x&gt;</span> <span class="coord">&lt;y&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setPointAt</span>
+        <span class="target">current</span> <span class="pointindex">1</span>
+        <span class="coord">3</span> <span class="coord">3</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setpointat.png" alt="setPointAt" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPos current -1 -1 0");<br />
+                <span class="api">run("setPointAt</span> <span class=
+                "target">current</span> <span class="pointindex">0</span> <span class=
+                "coord">0</span> <span class="coord">0");</span><br />
+                <span class="api">run("setPointAt</span> <span class=
+                "target">current</span> <span class="pointindex">1</span> <span class=
+                "coord">3</span> <span class="coord">3");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="bezier" class="fonction">
+      <h3>Courbe de Bézier</h3>
+
+      <div class='roll'>
+        <p>Pour ajouter des points à une courbe de Bézier, utilisez :<br />
+        <span class="api">setPointAt <span class="target">&lt;target&gt;</span>
+        <span class="path">&lt;path&gt;</span></span><br /></p>
+
+        <p>Les courbes de Bézier sont formées de segments de courbes définis donnant le dernier point
+        pour chaque segment. La courbure est définie par deux "points de contrôle"
+        additionnels par la fonction <code>setPointAt</code>, un définit la
+        direction de la tangente de la courbe à son point de départ et l'autre pour contrôler la
+        direction de la tangente de la courbe à son point final.<br /></p>
+
+        <p>Pour plus de détails sur comment dessiner avec les courbes de Bézier, voir la section <a href=
+        "script.html#drawingcurves">dessiner des courbes</a> dans la section script.</p>
+      </div>
+    </div>
+
+    <div id="setpointstxt" class="fonction">
+      <h3>Texte</h3>
+
+      <div class='roll'>
+        <p>Un caractère peut aussi jouer le rôle de courbe.<br />
+        <br />
+        <span class="api">setPointsTxt <span class="target">&lt;target&gt;</span>
+        <span class="scaling">&lt;scaling&gt;</span> <span class=
+        "font">&lt;font&gt;</span> <span class="text">&lt;text&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setPointsTxt</span>
+        <span class="target">current</span> <span class="scaling">0.1</span> <span class=
+        "font">Arial</span> <span class="text">a</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setpointstxt.png" alt="setPointsTxt" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPos current 0 0 0");<br />
+                <span class="api">run("setPointsTxt</span> <span class=
+                "target">current</span> <span class="scaling">0.1</span> <span class=
+                "font">Arial</span> <span class="text">a");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setpointssvg" class="fonction">
+      <h3>Courbe SVG — chemin cubique</h3>
+
+      <div class='roll'>
+        <p>Une courbe SVG est définie par un path que vous pouvez importer directement
+        depuis un autre logiciel par copier-coller.<br />
+        <br />
+        <span class="api">setPointsSVG <span class="target">&lt;target&gt;</span>
+        <span class="width">&lt;width&gt;</span> <span class=
+        "height">&lt;height&gt;</span> <span class="path">&lt;svg
+        path&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setPointsSVG</span>
+        <span class="target">current</span> <span class="width">5</span> <span class=
+        "height">5</span> <span class="path">M637.599,1569.972c0,0,89.127,0,222.818,
+        0c8.913,0,18.023,0,27.381,0.113C901, 1570,913,1573,926,1576c67,15,128,43,
+        198,28c9-2,17.833-4.277,26.554-6.685c8. 72-2.407,17.255-5.074,25.247-8.562C1224,
+        1567,1239,1514,1256,1469c18-48,69-29, 101-9c81.375,48.125,161.219,103.141,
+        254.032,110.08c13.259,0.991,26.782, 1.001,40.616-0.129C1716,1574,1788,
+        1562,1842,1606c39,32,62,97,119,
+        90c44-6,70-47,101.551-72.846</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setpointssvg.png" alt="setPointsSVG" /></td>
+
+            <td class="code_setpointssvg">
+              <div class="code">
+                <code>run("add curve auto");<br />
+                <span class="api">run("setPointsSVG</span> <span class=
+                "target">current</span> <span class="width">5</span> <span class=
+                "height">5</span> <span class=
+                "path">M637.599,1569.972c0,0,89.127,0,222.818,
+                0c8.913,0,18.023,0,27.381,0.113C901, 1570,913,1573,926,1576c67,15,128,43,
+                198,28c9-2,17.833-4.277,26.554-6.685c8.
+                72-2.407,17.255-5.074,25.247-8.562C1224,
+                1567,1239,1514,1256,1469c18-48,69-29,
+                101-9c81.375,48.125,161.219,103.141, 254.032,110.08c13.259,0.991,26.782,
+                1.001,40.616-0.129C1716,1574,1788, 1562,1842,1606c39,32,62,97,119,
+                90c44-6,70-47,101.551-72.846");</span><br />
+                run("setPos current -3 0 0");<br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setpointssvg2" class="fonction">
+      <h3>Courbe SVG — polygones</h3>
+
+      <div class='roll'>
+        <p>Le SVG path de ces courbes est simplement une série de points (positionnés de
+        manière absolue).<br />
+        <br />
+        <span class="api">setPointsSVG2 <span class="target">&lt;target&gt;</span>
+        <span class="scaling">&lt;scaling&gt;</span> <span class="path">&lt;svg
+        path&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setPointsSVG2</span>
+        <span class="target">current</span> <span class="scaling">1</span> <span class=
+        "path">1,1 1,2 -1,2 -1,-2 -2,0</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setpointssvg2.png" alt="setPointsSVG" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPos current 0 0 0");<br />
+                <span class="api">run("setPointsSVG2</span> <span class=
+                "target">current</span> <span class="scaling">1</span> <span class=
+                "path">1,1 1,2 -1,2 -1,-2 -2,0");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setpontsimg" class="fonction">
+      <h3>Vectorisation automatique</h3>
+
+      <div class='roll'>
+        <p>Une courbe peut être directement construite à partir d'une image par une
+        vectorisation automatique.<br />
+        <br />
+        <span class="api">setPointsImg <span class="target">&lt;target&gt;</span>
+        <span class="scaling">&lt;scaling&gt;</span> <span class=
+        "name">&lt;filename&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setPointsImg</span>
+        <span class="target">current</span> <span class="scaling">0.1</span> <span class=
+        "filename">./Examples/trigger_speaker.png</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setpointsimg.png" alt="setPointsImg" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPos current 1 2 0");<br />
+                <span class="api">run("setPointsImg</span> <span class=
+                "target">current</span> <span class="scaling">0.1</span> <span class=
+                "filename">./Examples/trigger_speaker.png");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setresize" class="fonction">
+      <h3>Taille</h3>
+
+      <div class='roll'>
+        <p>La taille des objets peut être changée directement.<br />
+        <br />
+        <span class="api">setResize <span class="target">&lt;target&gt;</span>
+        <span class="width">&lt;width&gt;</span> <span class=
+        "height">&lt;height&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setResize</span>
+        <span class="target">current</span> <span class="width">2</span> <span class=
+        "height">1</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setresize.png" alt="setResize" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPointsEllipse current 2 1");<br />
+                run("setPos current 1 1 0");<br />
+                <span class="api">run("setResize</span> <span class=
+                "target">current</span> <span class="width">2</span> <span class=
+                "height">1");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <hr />
+
+    <h2>Curseur</h2>
+
+    <div id="setcurve" class="fonction">
+      <h3>Affecter une courbe</h3>
+
+      <div class='roll'>
+        <p>Après avoir créé votre curseur, assurez-vous d'avoir défini la courbe que vous
+        voulez qu'il suive. Vous pouvez utiliser le mot clef <code>lastCurve</code> pour
+        désigner la dernière courbe ajoutée.<br />
+        <br />
+        <span class="api">setCurve <span class="target">&lt;cursor target&gt;</span>
+        <span class="curvetarget">&lt;curve target&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setCurve</span>
+        <span class="target">2</span> <span class=
+        "curvetarget">lastCurve</span></code></span></p>
+
+        <table class="exemple" cellpadding="5" summary="">
+          <tr>
+            <td><img src="../Common/img/setcurve.png" alt="setCurve" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPointsEllipse current 2 2");<br />
+                run("setPos current 0 0 0");<br />
+                run("add cursor 2");<br />
+                <span class="api">run("setCurve</span> <span class="target">2</span>
+                <span class="curvetarget">lastCurve");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setwidth" class="fonction">
+      <h3>Largeur de la tête de lecture</h3>
+
+      <div class='roll'>
+        <p>ous pouvez modifier en temps-réel la largeur d'un curseur pour qu'il active ou
+        non les triggers à proximité.<br />
+        <br />
+        <span class="api">setWidth <span class="target">&lt;target&gt;</span>
+        <span class="width">&lt;width&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setWidth</span>
+        <span class="target">current</span> <span class=
+        "width">3.5</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setwidth.png" alt="setWidth" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add cursor 1");<br />
+                <span class="api">run("setWidth</span> <span class=
+                "target">current</span> <span class="width">3.5");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="settime" class="fonction">
+      <h3>Position instantanée</h3>
+
+      <div class='roll'>
+        <p>La position d'un curseur est modifiable en temps-réel. Cette instruction ne
+        fonctionne pas si vous l'incluez directement dans votre script, car à chaque
+        nouvelle exécution, IanniX effectue un fastrewind.<br />
+        <br />
+        <span class="api">setTime <span class="target">&lt;target&gt;</span> <span class=
+        "time">&lt;time&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setTime</span> <span class=
+        "target">11</span> <span class="time">0</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><object type="application/x-shockwave-flash" data=
+            "../Common/vid/settime.swf" width="195" height="195">
+              <param name="movie" value="../Common/vid/settime.swf" />
+              <param name="quality" value="high" />
+              <param name="bgcolor" value="#000000" />
+              <param name="play" value="true" />
+              <param name="loop" value="true" />
+              <param name="wmode" value="window" />
+              <param name="scale" value="showall" />
+              <param name="menu" value="false" />
+              <param name="allowScriptAccess" value="sameDomain" />
+              <param name="allowFullScreen" value="true" />
+            </object></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPointsEllipse current 2 2");<br />
+                run("setPos current 0 0 0");<br />
+                <br />
+                run("add cursor 11");<br />
+                run("setCurve 11 1");<br />
+                <br />
+                run("add trigger 21");<br />
+                run("setPos current -2 0 0");<br />
+                run("setMessage current 10, direct:// <span class="api">setTime</span>
+                <span class="target">11</span> <span class=
+                "time">0");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setoffset" class="fonction">
+      <h3>Décalage temporel</h3>
+
+      <div class='roll'>
+        <p>Vous pouvez choisir de démarrer votre curseur à un certain point de la courbe
+        (repéré en secondes) puis de le borner entre certaines valeurs (elles aussi en
+        secondes).<br />
+        Par exemple, le décalage 2 4 6 signifie que votre curseur démarrera votre courbe
+        à la position t=2s puis la parcourra jusqu'au point t=6s pour recommencer au
+        point t=4s.<br />
+        <br />
+        <span class="api">setOffset <span class="target">&lt;target&gt;</span>
+        <span class="initial">&lt;initial&gt;</span> <span class=
+        "start">&lt;start&gt;</span> <span class="end">&lt;end&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setOffset</span>
+        <span class="target">current</span> <span class="initial">3</span> <span class=
+        "start">1</span> <span class="end">7</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><object type="application/x-shockwave-flash" data=
+            "../Common/vid/setoffset.swf" width="195" height="195">
+              <param name="movie" value="../Common/vid/setoffset.swf" />
+              <param name="quality" value="high" />
+              <param name="bgcolor" value="#000000" />
+              <param name="play" value="true" />
+              <param name="loop" value="true" />
+              <param name="wmode" value="window" />
+              <param name="scale" value="showall" />
+              <param name="menu" value="false" />
+              <param name="allowScriptAccess" value="sameDomain" />
+              <param name="allowFullScreen" value="true" />
+            </object></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPointAt current 1 6 6");<br />
+                run("setPos current -3 -3 0");<br />
+                run("add cursor 10");<br />
+                run("setCurve 10 1");<br />
+                <span class="api">run("setOffset</span> <span class=
+                "target">current</span> <span class="initial">3</span> <span class=
+                "start">1</span> <span class="end">7");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setbounds" class="fonction">
+      <h3>Mapping des valeurs</h3>
+
+      <div class='roll'>
+        <p>Il est possible de paramétrer votre curseur pour qu'il envoie des valeurs
+        comprises dans un intervalle choisi. Par exemple, s'il évolue dans un carré de
+        3x3, il peut tout de même envoyer ses coordonnées sous forme de valeurs entre 0
+        et 1.<br />
+        Utilisez setBoundsSource pour indiquer à IanniX l'intervalle dans lequel se situe
+        votre curseur et setBoundsTarget pour paramétrer l'intervalle de vos valeurs
+        envoyées. Généralement le BoundsSource est correctement paramétré par
+        défaut.<br />
+        Vous devez utiliser les variables : <code class="variable">cursor_value_x</code>,
+        <code class="variable">cursor_value_y</code>, <code class=
+        "variable">collison_value_x</code> ou <code class=
+        "variable">collison_value_y</code> pour que les valeurs envoyées soient celles du
+        BoundsTarget.<br />
+        <span class="api">setBoundsSource <span class="target">&lt;target&gt;</span>
+        <span class="coord">&lt;x-top-left-corner&gt;</span> <span class=
+        "coord">&lt;y-top-left-corner&gt;</span> <span class=
+        "coord">&lt;x-bottom-right-corner&gt;</span> <span class=
+        "coord">&lt;y-bottom-right-corner&gt;</span></span><br />
+        <span class="api">setBoundsTarget <span class="target">&lt;target&gt;</span>
+        <span class="coord">&lt;x-top-left-value&gt;</span> <span class=
+        "coord">&lt;y-top-left-value&gt;</span> <span class=
+        "coord">&lt;x-bottom-right-value&gt;</span> <span class=
+        "coord">&lt;y-bottom-right-value&gt;</span></span><br />
+        <span class="titre">Exemple : <code><span class="api">setBoundsSource</span>
+        <span class="target">2</span> <span class="coord">0</span> <span class=
+        "coord">3</span> <span class="coord">3</span> <span class="coord">0</span></code>
+        et <code><span class="api">setBoundsTarget</span> <span class="target">2</span>
+        <span class="coord">0</span> <span class="coord">1</span> <span class=
+        "coord">1</span> <span class="coord">0</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><object type="application/x-shockwave-flash" data=
+            "../Common/vid/setbounds.swf" width="195" height="195">
+              <param name="movie" value="../Common/vid/setbounds.swf" />
+              <param name="quality" value="high" />
+              <param name="bgcolor" value="#000000" />
+              <param name="play" value="true" />
+              <param name="loop" value="true" />
+              <param name="wmode" value="window" />
+              <param name="scale" value="showall" />
+              <param name="menu" value="false" />
+              <param name="allowScriptAccess" value="sameDomain" />
+              <param name="allowFullScreen" value="true" />
+            </object></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code"></div><code>run("add curve 1");<br />
+              run("setPos 1 0 0 0");<br />
+              run("setPointAt 1 1 3 3");<br />
+              run("add cursor 2");<br />
+              run("setCurve 2 1");<br /></code> <span class=
+              "api">run("setBoundsSource</span> <span class="target">2</span>
+              <span class="coord">0</span> <span class="coord">3</span> <span class=
+              "coord">3</span> <span class="coord">0");</span><br />
+              <span class="api">run("setBoundsTarget</span> <span class="target">2</span>
+              <span class="coord">0</span> <span class="coord">1</span> <span class=
+              "coord">1</span> <span class="coord">0");</span><br />
+              run("setMessage 2 250, direct:// <span class=
+              "variable">cursor_value_x</span> <span class=
+              "variable">cursor_value_y");</span><br />
+            </td>
+
+            <td class="value"><object type="application/x-shockwave-flash" data=
+            "../Common/vid/setboundsvalue.swf" width="195" height="195">
+              <param name="movie" value="../Common/vid/setboundsvalue.swf" />
+              <param name="quality" value="high" />
+              <param name="bgcolor" value="#000000" />
+              <param name="play" value="true" />
+              <param name="loop" value="true" />
+              <param name="wmode" value="window" />
+              <param name="scale" value="showall" />
+              <param name="menu" value="false" />
+              <param name="allowScriptAccess" value="sameDomain" />
+              <param name="allowFullScreen" value="true" />
+            </object></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <h3 id='variable_cursor'>Messages &amp; variables liées au curseur</h3>
+
+    <div class='roll'>
+      <p>Vous pouvez utiliser les variables suivantes dans les messages envoyés par les
+      curseurs :</p>
+
+      <ul>
+        <li><span class="variable"><code>cursor_id</code></span> ID du curseur</li>
+
+        <li><span class="variable"><code>cursor_group_id</code></span> ID du groupe
+        concerné par le curseur</li>
+
+        <li><span class="variable"><code>cursor_document_id</code></span> nom du
+        projet</li>
+
+        <li><span class="variable"><code>cursor_xPos</code></span>abscisse du
+        curseur</li>
+
+        <li><span class="variable"><code>cursor_yPos</code></span> ordonnée du
+        curseur</li>
+
+        <li><span class="variable"><code>cursor_time</code></span> position du curseur
+        sur la courbe en secondes</li>
+
+        <li><span class="variable"><code>cursor_time_percent</code></span> position du
+        curseur sur la courbe en pourcentage (entre 0 et 1)</li>
+
+        <li><span class="variable"><code>cursor_value_x</code></span> abscisse en accord
+        avec le BoundsTarget spécifié</li>
+
+        <li><span class="variable"><code>cursor_value_y</code></span> ordonnée en accord
+        avec le BoundsTarget spécifié</li>
+
+        <li><span class="variable"><code>cursor_angle</code></span> angle du curseur par
+        rapport à la courbe</li>
+
+        <li><span class="variable"><code>cursor_nb_loop</code></span> nombre de cycles
+        sur la courbe</li>
+      </ul>
+
+      <p>Les curseurs peuvent également envoyer des informations concernant la courbe sur
+      laquelle ils se trouvent et les courbes qu'ils croisent.</p>
+
+      <ul>
+        <li><span class="variable"><code>curve_id</code></span> ID de la courbe concernée
+        par le curseur</li>
+
+        <li><span class="variable"><code>curve_group_id</code></span> ID du groupe de la
+        courbe</li>
+
+        <li><span class="variable"><code>curve_document_id</code></span> nom du
+        projet</li>
+
+        <li><span class="variable"><code>curve_xPos</code></span> abscisse du premier
+        point de la courbe</li>
+
+        <li><span class="variable"><code>curve_yPos</code></span> ordonnée du premier
+        point de la courbe</li>
+
+        <li class="c2"><br /></li>
+
+        <li><span class="variable"><code>collision_curve_id</code></span> ID de la courbe
+        croisée</li>
+
+        <li><span class="variable"><code>collision_xPos</code></span> abscisse du point
+        de la collision</li>
+
+        <li><span class="variable"><code>collision_yPos</code></span> ordonnée du point
+        de la collision</li>
+
+        <li><span class="variable"><code>collison_value_x</code></span> abscisse du point
+        de la collision en accord avec le BoundsTarget spécifié</li>
+
+        <li><span class="variable"><code>collision_value_y</code></span> ordonnée du
+        point de la collision en accord avec le BoundsTarget spécifié</li>
+
+        <li><span class="variable"><code>collision_distance</code></span> straight line
+        distance between the collision point and the cursor</li>
+      </ul>
+    </div>
+    <hr />
+
+    <h2>La vitesse dans IanniX</h2>
+
+    <p>La vitesse de déplacement des curseurs est composée de plusieurs paramètres :
+    <code>speed</code>, <code>speedfactor</code>, <code>speedf</code> and
+    <code>pattern</code>.<br />
+    <code>speed</code> est la vitesse globale de la partition, <code>speedfactor</code>
+    est la vitesse du curseur en lui-même, <code>speedf</code> est la vitesse instantanée
+    du curseur et <code>pattern</code> sert à définir le nombre et le sens des
+    cycles.<br />
+    On peut ainsi écrire la vitesse d'un curseur:
+    (<code>speed</code>)x(<code>speedfactor</code>)x(<code>speedf</code>)x(<code>pattern</code>)
+    with <code>pattern</code>.</p>
+
+    <div id="speed" class="fonction">
+      <h3>Vitesse de la partition</h3>
+
+      <div class='roll'>
+        <p>Vous pouvez modifier la vitesse globale de la partition. Une vitesse négative
+        fera évoluer le temps dans le sens négatif. The speed is a sort of velocity
+        factor that is combined with the speed factor or duration parameter of each
+        cursor to determine the speed, or more intuitively the transit time of the cursor
+        on its curve.</p>
+
+        <p>For more details of the determination of cursor speed, see the following
+        section on the "Speed of a Cursor."<br />
+        <br />
+        <span class="api">speed <span class="speed">&lt;speed&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">speed</span> <span class=
+        "speed">20</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><object type="application/x-shockwave-flash" data=
+            "../Common/vid/speed.swf" width="195" height="195">
+              <param name="movie" value="../Common/vid/speed.swf" />
+              <param name="quality" value="high" />
+              <param name="bgcolor" value="#000000" />
+              <param name="play" value="true" />
+              <param name="loop" value="true" />
+              <param name="wmode" value="window" />
+              <param name="scale" value="showall" />
+              <param name="menu" value="false" />
+              <param name="allowScriptAccess" value="sameDomain" />
+              <param name="allowFullScreen" value="true" />
+            </object></td>
+
+            <td class="code_speed">
+              <div class="code">
+                <code><br />
+                run("setPointsEllipse current 1 1");<br />
+                run("setPos current 1 0 0");<br />
+                run("add cursor 10");<br />
+                run("setCurve 10 1");<br />
+                <br />
+                run("add curve 2");<br />
+                run("setPointsEllipse current 1 1");<br />
+                run("setPos current -1 0 0");<br />
+                run("add cursor 11");<br />
+                run("setCurve 11 2");<br />
+                <br />
+                <span class="api">run("speed</span> <span class=
+                "speed">20");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setspeed" class="fonction">
+      <h3>Vitesse d'un curseur</h3>
+
+      <div class='roll'>
+        <p>Les curseurs ont un facteur vitesse indépendant les uns des autres. La durée
+        de parcours d'une courbe est également paramétrable. Une vitesse négative fera
+        évoluer le curseur dans le sens inverse, mais le temps continuera à s'écouler de
+        manière naturelle.</p>
+
+        <p>La vitesse d'un curseur peut être mieux compris en pensant en termes de temps requis
+        pour un curseur donné de traverser son chemin en une fois. Si la vitesse globale de
+        la partition est définie à 1.0 (avec la commande "speed" ou la réglette),
+        et le temps d'un curseur est défini à 10.0 secondes, le curseur mettra 10 secondes
+        pour parcourir la courbe une fois. Doubler la vitesse globale à 2 coupera le temps de transit
+        du cursor à 5.0 seconds. Aussi, chaque curseur peut avoir son propre temps de transit
+        (ou inversement, vitesse), proportionnel à la vitesse globale de la partition.</p>
+
+        <p>Pour définir la vitesse d'un curseur en termes de durée de temps de transit, utilisez la
+        forme suivante de la commande setSpeed :<br />
+        <span class="api">setSpeed <span class="target">&lt;target&gt;</span> auto
+        <span class="duration">&lt;duration&gt;</span></span></p>
+
+        <p>Pour définir la vitesse d'une curseur en termes de facteur de vitesse (ex : les vitesses utilisant les mêmes
+        unités que la réglette générale) utilisez la forme suivante de la commande :<br />
+        <span class="api">setSpeed <span class="target">&lt;target&gt;</span>
+        <span class="speedfactor">&lt;speed factor&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setSpeed</span>
+        <span class="target">11</span> <span class=
+        "speedfactor">4</span></code></span></p>
+
+        <table class="exemple">
+          <tr>
+            <td><object type="application/x-shockwave-flash" data=
+            "../Common/vid/setspeed.swf" width="195" height="195">
+              <param name="movie" value="../Common/vid/setspeed.swf" />
+              <param name="quality" value="high" />
+              <param name="bgcolor" value="#000000" />
+              <param name="play" value="true" />
+              <param name="loop" value="true" />
+              <param name="wmode" value="window" />
+              <param name="scale" value="showall" />
+              <param name="menu" value="false" />
+              <param name="allowScriptAccess" value="sameDomain" />
+              <param name="allowFullScreen" value="true" />
+            </object></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPointsEllipse current 1 1");<br />
+                run("setPos current -1 0 0");<br />
+                run("add cursor 10");<br />
+                run("setCurve 10 1");<br />
+                <br />
+                run("add curve 2");<br />
+                run("setPointsEllipse current 1 1");<br />
+                run("setPos current 1 0 0");<br />
+                run("add cursor 11");<br />
+                run("setCurve 11 2");<br />
+                <span class="api">run("setSpeed</span> <span class="target">11</span>
+                <span class="speedfactor">4");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setspeedf" class="fonction">
+      <h3>Vitesse instantanée d'un curseur</h3>
+
+      <div class='roll'>
+        <p>Les curseurs ont un facteur de vitesse instantanée indépendant, très utile
+        lors des performances en temps-réel. De la même manière qu'avec setSpeed, une
+        vitesse négative est possible et ne modifiera pas la vitesse de lecture
+        globale.<br />
+        <br />
+        <span class="api">setSpeedF <span class="target">&lt;target&gt;</span>
+        <span class="speedfactor">&lt;speed factor&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setSpeedF</span>
+        <span class="target">11</span> <span class=
+        "speedfactor">cursor_yPos</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><object type="application/x-shockwave-flash" data=
+            "../Common/vid/setspeedf.swf" width="195" height="195">
+              <param name="movie" value="../Common/vid/setspeedf.swf" />
+              <param name="quality" value="high" />
+              <param name="bgcolor" value="#000000" />
+              <param name="play" value="true" />
+              <param name="loop" value="true" />
+              <param name="wmode" value="window" />
+              <param name="scale" value="showall" />
+              <param name="menu" value="false" />
+              <param name="allowScriptAccess" value="sameDomain" />
+              <param name="allowFullScreen" value="true" />
+            </object></td>
+
+            <td class="code_speedf">
+              <div class="code">
+                <code>run("add curve 2");<br />
+                run("setPointsEllipse current 1 1");<br />
+                run("setPos current 1 0 0");<br />
+                run("add cursor 11");<br />
+                run("setCurve 11 2");<br />
+                <br />
+                run("add curve 1");<br />
+                run("setPointAt current 1 0 4");<br />
+                run("setPos current -1 -2 0");<br />
+                run("add cursor 10");<br />
+                run("setCurve 10 1");<br />
+                run("setMessage current 20, direct:// <span class="api">setSpeedF</span>
+                <span class="target">11</span> <span class=
+                "speedfactor">cursor_yPos");</span><br />
+                <br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setpattern" class="fonction">
+      <h3>Motif de répétition</h3>
+
+      <div class='roll'>
+        <p>Ce paramètre désigne le sens et le nombre de cycles. Par exemple pour <code>1
+        1 0</code>, le curseur effectuera deux cycles dans le sens positif et s'arrêtera,
+        l'écriture équivalente est <code>2 0</code>.<br />
+        <br />
+        <span class="api">setPattern <span class="target">&lt;target&gt;</span> 0 0
+        <span class="pattern">&lt;pattern&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setPattern</span>
+        <span class="target">current</span> 0 0 <span class="pattern">1
+        -1</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><object type="application/x-shockwave-flash" data=
+            "../Common/vid/setpattern.swf" width="195" height="195">
+              <param name="movie" value="../Common/vid/setpattern.swf" />
+              <param name="quality" value="high" />
+              <param name="bgcolor" value="#000000" />
+              <param name="play" value="true" />
+              <param name="loop" value="true" />
+              <param name="wmode" value="window" />
+              <param name="scale" value="showall" />
+              <param name="menu" value="false" />
+              <param name="allowScriptAccess" value="sameDomain" />
+              <param name="allowFullScreen" value="true" />
+            </object></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("setPointsEllipse current 2 2");<br />
+                run("setPos current 0 0 0");<br />
+                run("add cursor 10");<br />
+                run("setCurve 10 1");<br />
+                <span class="api">run("setPattern</span> <span class=
+                "target">current</span> 0 0 <span class="pattern">1
+                -1");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <hr />
+
+    <h2>Navigation dans les partitions</h2>
+
+    <div id="clear" class="fonction">
+      <h3>Effacer une partition</h3>
+
+      <div class='roll'>
+        <p>Efface tous les objets de la partition.<br />
+        <br />
+        <span class="api">clear</span><br /></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("clear");<br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="zoom" class="fonction">
+      <h3>Zoom</h3>
+
+      <div class='roll'>
+        <p>Ajuste le zoom en utilisant le script. Le facteur est en pourcentage. Ex : un facteur de
+        200 double la taille de la zone affichée.<br />
+        <br />
+        <span class="api">zoom <span class=
+        "zoomfactor">&lt;zoomfactor&gt;</span></span><br /></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/zoom.jpg" alt="zoom" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("clear"");<br />
+                run("zoom <span class="zoomfactor">2000");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="autosize" class="fonction">
+      <h3>Resize des objets indépendamment du zoom</h3>
+
+      <div class='roll'>
+        <p>Activé par défaut, permet d'augmenter ou de diminuer automatiquement la taille
+        des triggers et curseurs lorsque vous zoomer/dézoomer la partition afin de
+        faciliter la lecture. Seul l'aspect visuel est affecté, la taille réelle des
+        objets n'est pas modifiée.<br />
+        <br />
+        <span class="api">autosize <span class="bin">&lt;0|1&gt;</span></span><br /></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/autosize.png" alt="zoom" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                run("zoom 200");<br />
+                run("autosize <span>0");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="center" class="fonction">
+      <h3>Placer un point au centre de l'écran</h3>
+
+      <div class='roll'>
+        <p>Place le point (x,y) au centre de l'espace de travail.<br />
+        <br />
+        <span class="api">center <span class="coord">&lt;x&gt;</span> <span class=
+        "coord">&lt;y&gt;</span></span><br /></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/center.jpg" alt="center" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("clear");<br />
+                run("zoom 200");<br />
+                run("center <span class="coord">2</span> <span class=
+                "coord">2");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="rotate" class="fonction">
+      <h3>Changer la direction de la vue</h3>
+
+      <div class='roll'>
+        <p>Rotationne la vue en fonction des axes x,y et z<br />
+        <br />
+        <span class="api">rotate <span class="coord">&lt;RotationAboutX-Axis&gt;</span>
+        <span class="coord">&lt;RotationAboutY-Axis&gt;</span> <span class=
+        "coord">&lt;RotationAboutZ-Axis&gt;</span></span><br /></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("rotate 45 0 0");<br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="play" class="fonction">
+      <h3>Jouer la partition</h3>
+
+      <div class='roll'>
+        <p>Déclenche la lecture de la partition.<br />
+        <br />
+        <span class="api">play</span><br /></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/play.png" alt="Play" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("play");<br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="fastrewind" class="fonction">
+      <h3>Fast Rewind</h3>
+
+      <div class='roll'>
+        <p>Retour à 000:00.000.<br />
+        <br />
+        <span class="api">fastrewind</span><br /></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/fastrewind.png" alt="FastRewind" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("fastrewind");<br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <hr />
+
+    <h2>Apparence générale des partitions</h2>
+
+    <div id="setlabel" class="fonction">
+      <h3>Ajouter du texte</h3>
+
+      <div class='roll'>
+        <p>Vous pouvez ajouter une description textuelle de vos objets sur la partition.
+        Afficher/cacher ces descriptions grâce au bouton 7 de la barre d'outils (cf.
+        <a href="overview.html">Interface</a>).</p>
+
+        <p>Tous les types de caractères sont acceptés, il n'y a pas de limite en
+        nombre.<br />
+        <br />
+        <span class="api">setLabel <span class="target">&lt;target&gt;</span>
+        <span class="label">&lt;label&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setLabel</span>
+        <span class="target">current</span> <span class="label">Hello World
+        !</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setlabel.png" alt="setLabel" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger auto");<br />
+                run("setPos current 0 0 0");<br />
+                <span class="api">run("setLabel</span> <span class=
+                "target">current</span> <span class="label">Hello World
+                !");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setsize" class="fonction">
+      <h3>Taille des objets</h3>
+
+      <div class='roll'>
+        <p>Contrairement à <a href="reference.html#setresize">setResize</a>, cette
+        fonction modifie l'épaisseur d'une courbe ou d'un curseur et la taille d'un
+        trigger.<br />
+        <br />
+        <span class="api">setSize <span class="target">&lt;target&gt;</span> <span class=
+        "size">&lt;size&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setSize</span> <span class=
+        "target">1</span> <span class="size">10</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setsize.png" alt="setSize" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add curve 1");<br />
+                run("add trigger 2");<br />
+                run("add cursor 3");<br />
+                run("setCurve 3 1");<br />
+                run("setPos 2 1.5 1.5 0");<br />
+                run("setPointsEllipse 1 2 2");<br />
+                <span class="api">run("setSize</span> <span class="target">1</span>
+                <span class="size">10");</span><br />
+                <span class="api">run("setSize</span> <span class="target">2</span>
+                <span class="size">5");</span><br />
+                <span class="api">run("setSize</span> <span class="target">3</span>
+                <span class="size">7");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <h3>Format des tracés</h3>
+
+    <div class='roll'>
+      <p>Définit un style de pointillé grâce à <code>dash pattern</code> qui doit être
+      une suite de 0 et 1, <code>dash style</code> définit l'espace entre chaque
+      pointillé.<br />
+      <br />
+      <span class="api">setLine <span class="target">&lt;target&gt;</span> <span class=
+      "dash">&lt;dash style&gt;</span> <span class="dash">&lt;dash
+      pattern&gt;</span></span><br />
+      <br />
+      <span class="titre">Exemple : <code><span class="api">setLine</span> <span class=
+      "target">1</span> <span class="dash">2000</span> <span class=
+      "dash">1</span></code></span></p>
+
+      <table class="exemple" summary="">
+        <tr>
+          <td><img src="../Common/img/setline.png" alt="setLine" /></td>
+
+          <td>
+            <div class='copypaste'>
+              Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement du
+              code !
+            </div>
+
+            <div class="code">
+              <code>run("add curve 1");<br />
+              run("setPointsEllipse 1 2.5 2.5");<br />
+              <span class="api">run("setLine</span> <span class="target">1</span>
+              <span class="dash">2000</span> <span class="dash">1");</span><br /></code>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <hr />
+
+    <h2 id="colors">Les couleurs</h2>
+
+    <p>Vous pouvez spécifier directement la couleur d'un objet à l'aide des codes RGB ou
+    HSB avec gestion de l'opacité A.<br />
+    Les valeurs R G B vont de 0 à 255 et celles H S B vont de 0 à 360. L'opacité A est
+    comprise entre 0 (transparence totale) et 255 (aucune transparence).</p>
+
+    <div id="setcoloractive" class="fonction">
+      <h3>Couleur d'un objet actif n'émettant pas de messages</h3>
+
+      <div class='roll'>
+        <p>Modifie la couleur des objets actifs.<br />
+        <br />
+        <span class="api">setColorActive <span class="target">&lt;target&gt;</span>
+        <span class="variable">&lt;variable&gt;</span></span><br />
+        <br />
+        <span class="api">setColorActive <span class="target">&lt;target&gt;</span>
+        <span class="rgb">&lt;r&gt;</span> <span class="rgb">&lt;g&gt;</span>
+        <span class="rgb">&lt;b&gt;</span> <span class="a">&lt;a&gt;</span></span><br />
+        <span class="api">setColorActive2 <span class="target">&lt;target&gt;</span>
+        <span class="hsb">&lt;h&gt;</span> <span class="hsb">&lt;s&gt;</span>
+        <span class="rgb">&lt;b&gt;</span> <span class="a">&lt;a&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setColorActive</span>
+        <span class="target">1</span> <span class="rgb">0</span> <span class=
+        "rgb">255</span> <span class="rgb">0</span> <span class=
+        "a">255</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setcoloractive.png" alt="setcoloractive" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                run("setPos 1 1 1 0");<br />
+                <span class="api">run("setColorActive</span> <span class=
+                "target">1</span> <span class="rgb">0</span> <span class="rgb">255</span>
+                <span class="rgb">0</span> <span class="a">255");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setcolorinactive" class="fonction">
+      <h3>Couleur d'un objet inactif n'émettant pas de messages</h3>
+
+      <div class='roll'>
+        <p>Modifie la couleur des objets inactifs.<br />
+        <br />
+        <span class="api">setColorInactive <span class="target">&lt;target&gt;</span>
+        <span class="variable">&lt;variable&gt;</span></span><br />
+        <br />
+        <span class="api">setColorInactive <span class="target">&lt;target&gt;</span>
+        <span class="rgb">&lt;r&gt;</span> <span class="rgb">&lt;g&gt;</span>
+        <span class="rgb">&lt;b&gt;</span> <span class="a">&lt;a&gt;</span></span><br />
+        <span class="api">setColorInactive2 <span class="target">&lt;target&gt;</span>
+        <span class="hsb">&lt;h&gt;</span> <span class="hsb">&lt;s&gt;</span>
+        <span class="hsb">&lt;b&gt;</span> <span class="a">&lt;a&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">setColorInactive</span>
+        <span class="target">1</span> <span class="rgb">0</span> <span class=
+        "rgb">0</span> <span class="rgb">255</span> <span class=
+        "a">255</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setcolorinactive.png" alt=
+            "setColorInactive" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                run("setPos 1 1 1 0");<br />
+                run("setActive 1 0");<br />
+                <span class="api">run("setColorInactive</span> <span class=
+                "target">1</span> <span class="rgb">0</span> <span class="rgb">0</span>
+                <span class="rgb">255</span> <span class="a">255");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setcoloractivemessage" class="fonction">
+      <h3>Couleur d'un objet actif émettant des messages</h3>
+
+      <div class='roll'>
+        <p>Modifie la couleur d'un objet actif pour lequel un message a déjà été
+        paramétré.<br />
+        <br />
+        <span class="api">setColorActiveMessage <span class=
+        "target">&lt;target&gt;</span> <span class=
+        "variable">&lt;variable&gt;</span></span><br />
+        <br />
+        <span class="api">setColorActiveMessage <span class=
+        "target">&lt;target&gt;</span> <span class="rgb">&lt;r&gt;</span> <span class=
+        "rgb">&lt;g&gt;</span> <span class="rgb">&lt;b&gt;</span> <span class=
+        "a">&lt;a&gt;</span></span><br />
+        <span class="api">setColorActiveMessage2 <span class=
+        "target">&lt;target&gt;</span> <span class="hsb">&lt;h&gt;</span> <span class=
+        "hsb">&lt;s&gt;</span> <span class="hsb">&lt;b&gt;</span> <span class=
+        "a">&lt;a&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class=
+        "api">setColorActiveMessage2</span> <span class="target">1</span> <span class=
+        "hsb">360</span> <span class="hsb">255</span> <span class="hsb">255</span>
+        <span class="a">255</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setcoloractivemessage.png" alt=
+            "setColorActiveMessage" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                run("setPos 1 1 1 0");<br />
+                run("setMessage 1 250, direct:// message");<br />
+                <span class="api">run("setColorActiveMessage2</span> <span class=
+                "target">1</span> <span class="hsb">360</span> <span class=
+                "hsb">255</span> <span class="hsb">255</span> <span class=
+                "a">255");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="setcolorinactivemessage" class="fonction">
+      <h3>Couleur d'un objet inactif émettant des messages</h3>
+
+      <div class='roll'>
+        <p>Modifie la couleur d'un objet inactif pour lequel un message a déjà été
+        paramétré.<br />
+        <br />
+        <span class="api">setColorInactiveMessage <span class=
+        "target">&lt;target&gt;</span> <span class=
+        "variable">&lt;variable&gt;</span></span><br />
+        <br />
+        <span class="api">setColorInactiveMessage <span class=
+        "target">&lt;target&gt;</span> <span class="rgb">&lt;r&gt;</span> <span class=
+        "rgb">&lt;g&gt;</span> <span class="rgb">&lt;b&gt;</span> <span class=
+        "a">&lt;a&gt;</span></span><br />
+        <span class="api">setColorInactiveMessage2 <span class=
+        "target">&lt;target&gt;</span> <span class="hsb">&lt;h&gt;</span> <span class=
+        "hsb">&lt;s&gt;</span> <span class="hsb">&lt;b&gt;</span> <span class=
+        "a">&lt;a&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class=
+        "api">setColorInactiveMessage</span> <span class="target">1</span> <span class=
+        "rgb">0</span> <span class="rgb">127</span> <span class="hsb">127</span>
+        <span class="a">200</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/setcolorinactivemessage.png" alt=
+            "setColorInactiveMessage" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code>run("add trigger 1");<br />
+                run("setPos 1 1 1 0");<br />
+                run("setMessage 1 250, direct:// message");<br />
+                run("setActive 1 0");<br />
+                <span class="api">run("setColorInactiveMessage</span> <span class=
+                "target">1</span> <span class="rgb">0</span> <span class="rgb">127</span>
+                <span class="hsb">127</span> <span class="a">200");</span><br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="registercolor" class="fonction">
+      <h3>Création d'une variable couleur</h3>
+
+      <div class='roll'>
+        <p>IanniX permet également d'enregistrer une couleur comme variable pour la
+        réutiliser avec plus de facilité.<br />
+        <br />
+        <span class="api">registerColor <span class="variable">&lt;variable&gt;</span>
+        <span class="rgb">&lt;r&gt;</span> <span class="rgb">&lt;g&gt;</span>
+        <span class="rgb">&lt;b&gt;</span> <span class="a">&lt;a&gt;</span></span><br />
+        <span class="api">registerColor2 <span class="variable">&lt;variable&gt;</span>
+        <span class="hsb">&lt;h&gt;</span> <span class="hsb">&lt;s&gt;</span>
+        <span class="hsb">&lt;b&gt;</span> <span class="a">&lt;a&gt;</span></span><br />
+        <br />
+        <span class="titre">Exemple : <code><span class="api">registerColor</span>
+        <span class="variable">rougeRGB</span> <span class="rgb">255</span> <span class=
+        "rgb">0</span> <span class="rgb">0</span> <span class="a">255</span></code> et
+        <code><span class="api">registerColor2</span> <span class=
+        "variable">rougeHSB</span> <span class="hsb">360</span> <span class=
+        "hsb">255</span> <span class="hsb">255</span> <span class=
+        "a">255</span></code></span></p>
+
+        <table class="exemple" summary="">
+          <tr>
+            <td><img src="../Common/img/registercolor.png" alt="registerColor" /></td>
+
+            <td>
+              <div class='copypaste'>
+                Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement
+                du code !
+              </div>
+
+              <div class="code">
+                <code><span class="api">run("registerColor</span> <span class=
+                "variable">rougeRGB</span> <span class="rgb">255</span> <span class=
+                "rgb">0</span> <span class="rgb">0</span> <span class=
+                "a">255");</span><br />
+                <span class="api">run("registerColor2</span> <span class=
+                "variable">rougeHSB</span> <span class="hsb">360</span> <span class=
+                "hsb">255</span> <span class="hsb">255</span> <span class=
+                "a">255");</span><br />
+                run("add trigger 1");<br />
+                run("add trigger 2");<br />
+                run("setPos 1 1 2 0");<br />
+                run("setPos 2 1 1 0");<br />
+                run("setColorActive 1 <span class="variable">rougeRGB");</span><br />
+                run("setColorActive 2 <span class="variable">rougeHSB");</span><br />
+                run("setLabel 1 1");<br />
+                run("setLabel 2 2");<br /></code>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <hr />
+
+    <h2 id="texture">Textures</h2>
+
+    <p>Personnalisez votre partition avec vos propres images.<br />
+    <br />
+    Vous pouvez directement modifier le fond de la partition ou l'apparence des triggers
+    à l'aide des variables:</p>
+
+    <ul>
+      <li><span class="variable"><code>background</code></span> background</li>
+
+      <li><span class="variable"><code>trigger_active</code></span> active triggers</li>
+
+      <li><span class="variable"><code>trigger_inactive</code></span> inactive
+      triggers</li>
+
+      <li><span class="variable"><code>trigger_active_message</code></span> active
+      triggers with message</li>
+
+      <li><span class="variable"><code>trigger_inactive_message</code></span> inactive
+      triggers with message</li>
+    </ul><br />
+
+    <div id="registertexture" class="fonction">
+
+    <h3>Création d'une variable texture</h3>
+
+    <div class='roll'>
+      <p>Enregistre votre texture sous une variable. Si vous utilisez les variables
+      ci-dessus, l'apparence est directement modifiée, car les textures natives sont
+      enregistrées sous ces variables. Utilisez l'outil "restore triggers original
+      shapes" de l'inspecteur "scripts &amp; styles" pour retrouver les textures
+      originales.<br />
+      <br />
+      <span class="api">registerTexture <span class="variable">&lt;variable&gt;</span>
+      <span class="coord">&lt;x-top-left-corner&gt;</span> <span class=
+      "coord">&lt;y-top-left-corner&gt;</span> <span class=
+      "coord">&lt;x-bottom-right-corner&gt;</span> <span class=
+      "coord">&lt;y-bottom-right-corner&gt;</span> <span class="filename">&lt;file
+      name&gt;</span></span><br />
+      <br />
+      <span class="titre">Exemple : <code><span class="api">registerTexture</span>
+      <span class="variable">trigger_active</span> <span class="coord">-1</span>
+      <span class="coord">1</span> <span class="coord">1</span> <span class=
+      "coord">-1</span> <span class=
+      "filename">./Examples/trigger_triangle.png</span></code></span></p>
+
+      <table class="exemple" summary="">
+        <tr>
+          <td><img src="../Common/img/registertexture.png" alt="registerTexture" /></td>
+
+          <td>
+            <div class='copypaste'>
+              Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement du
+              code !
+            </div>
+
+            <div class="code">
+              <code><span class="api">run("registerTexture</span> <span class=
+              "variable">trigger_active</span> <span class="coord">-1</span> <span class=
+              "coord">1</span> <span class="coord">1</span> <span class="coord">-1</span>
+              <span class="filename">./Examples/trigger_triangle.png");</span><br />
+              run("add trigger 1");<br />
+              run("add trigger 2");<br />
+              run("add trigger 3");<br />
+              run("setPos 1 1 1 0");<br />
+              run("setPos 3 -1 -1 0");<br />
+              run("setActive 3 0");<br />
+              run("setLabel 1 1");<br />
+              run("setLabel 2 2");<br />
+              run("setLabel 3 3");<br /></code>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="settextureactive" class="fonction">
+    <h3>Texture d'un objet actif n'émettant pas des messages</h3>
+
+    <div class='roll'>
+      <p>Modifie l'aspect d'un seul objet actif. Vous pouvez également utiliser un nom de
+      groupe ou l'une des variables ci-dessus :<br />
+      <br />
+      <span class="api">setTextureActive <span class="target">&lt;target&gt;</span>
+      <span class="variable">&lt;variable&gt;</span></span><br />
+      <br />
+      <span class="titre">Exemple : <code><span class="api">setTextureActive</span>
+      <span class="target">1</span> <span class=
+      "variable">triangle</span></code></span></p>
+
+      <table class="exemple" summary="">
+        <tr>
+          <td><img src="../Common/img/settextureactive.png" alt=
+          "setTextureActive" /></td>
+
+          <td>
+            <div class='copypaste'>
+              Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement du
+              code !
+            </div>
+
+            <div class="code">
+              <code>run("registerTexture triangle -1 1 1 -1
+              ./Examples/trigger_triangle.png");<br />
+              run("add trigger 1");<br />
+              run("add trigger 2");<br />
+              <span class="api">run("setTextureActive</span> <span class=
+              "target">1</span> <span class="variable">triangle");</span><br />
+              run("setPos 1 1 1 0");<br />
+              run("setLabel 1 1");<br />
+              run("setLabel 2 2");<br /></code>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="settextureinactive" class="fonction">
+    <h3>Texture d'un objet inactif n'émettant pas des messages</h3>
+
+    <div class='roll'>
+      <p>Modifie la texture d'un objet ou groupe d'objets inactifs.<br />
+      <br />
+      <span class="api">setTextureInactive <span class="target">&lt;target&gt;</span>
+      <span class="variable">&lt;variable&gt;</span></span><br />
+      <br />
+      <span class="titre">Exemple : <code><span class="api">setTextureInactive</span>
+      <span class="target">2</span> <span class=
+      "variable">triangle</span></code></span></p>
+
+      <table class="exemple" summary="">
+        <tr>
+          <td><img src="../Common/img/settextureinactive.png" alt=
+          "setTextureInactive" /></td>
+
+          <td>
+            <div class='copypaste'>
+              Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement du
+              code !
+            </div>
+
+            <div class="code">
+              <code>run("registerTexture triangle -1 1 1 -1
+              ./Examples/trigger_triangle.png");<br />
+              run("add trigger 1");<br />
+              run("add trigger 2");<br />
+              run("setActive 2 0");<br />
+              <span class="api">run("setTextureInactive</span> <span class=
+              "target">2</span> <span class="variable">triangle");</span><br />
+              run("setPos 1 1 1 0");<br />
+              run("setLabel 1 1");<br />
+              run("setLabel 2 2");<br /></code>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="settextureactivemessage" class="fonction">
+    <h3>Texture d'un objet inactif émettant des messages</h3>
+
+    <div class='roll'>
+      <p>Modifie la texture d'un objet ou groupe d'objets actifs avec message.<br />
+      <br />
+      <span class="api">setTextureActiveMessage <span class=
+      "target">&lt;target&gt;</span> <span class=
+      "variable">&lt;variable&gt;</span></span><br />
+      <br />
+      <span class="titre">Exemple : <code><span class=
+      "api">setTextureActiveMessage</span> <span class="target">triggers</span>
+      <span class="variable">triangle</span></code></span></p>
+
+      <table class="exemple" summary="">
+        <tr>
+          <td><img src="../Common/img/settextureactivemessage.png" alt=
+          "setTextureActiveMessage" /></td>
+
+          <td>
+            <div class='copypaste'>
+              Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement du
+              code !
+            </div>
+
+            <div class="code">
+              <code>run("registerTexture triangle -1 1 1 -1
+              ./Examples/trigger_triangle.png");<br />
+              run("add trigger 1");<br />
+              run("add trigger 2");<br />
+              run("setGroup 1 triggers");<br />
+              run("setGroup 2 triggers");<br />
+              run("setMessage 2 1, direct:// message");<br />
+              <span class="api">run("setTextureActiveMessage</span> <span class=
+              "target">triggers</span> <span class="variable">triangle");</span><br />
+              run("setPos 1 1 1 0");<br />
+              run("setLabel 1 1");<br />
+              run("setLabel 2 2");<br /></code>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="settextureinactivemessage" class="fonction">
+    <h3>Texture d'un objet inactif émettant des messages</h3>
+
+    <div class='roll'>
+      <p>Modifie la texture d'un objet ou groupe d'objets inactifs avec message.<br />
+      <br />
+      <span class="api">setTextureInactiveMessage <span class=
+      "target">&lt;target&gt;</span> <span class=
+      "variable">&lt;variable&gt;</span></span><br />
+      <br />
+      <span class="titre">Exemple : <code><span class=
+      "api">setTextureInactiveMessage</span> <span class="target">triggers</span>
+      <span class="variable">triangle</span></code></span></p>
+
+      <table class="exemple" summary="">
+        <tr>
+          <td><img src="../Common/img/settextureinactivemessage.png" alt=
+          "setTextureInactiveMessage" /></td>
+
+          <td class="code_settextureinactivemessage">
+            <div class="code">
+              <code>run("registerTexture triangle -1 1 1 -1
+              ./Examples/trigger_triangle.png");<br />
+              run("add trigger 1");<br />
+              run("add trigger 2");<br />
+              run("setGroup 1 triggers");<br />
+              run("setGroup 2 triggers");<br />
+              run("setMessage triggers 1, direct:// message");<br />
+              <span class="api">run("setTextureInactiveMessage</span> <span class=
+              "target">triggers</span> <span class="variable">triangle");</span><br />
+              run("setActive 1 0");<br />
+              run("setPos 1 1 1 0");<br />
+              run("setLabel 1 1");<br />
+              run("setLabel 2 2");<br /></code>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

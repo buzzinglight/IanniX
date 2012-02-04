@@ -27,7 +27,6 @@
 #include "uiinspector.h"
 #include "uieditor.h"
 
-
 class IanniX : public NxObjectFactoryInterface, public NxObjectDispatchProperty {
     Q_OBJECT
 
@@ -99,17 +98,18 @@ private:
     QFileSystemWatcher fileWatcher;
     ExtMessage message;
     QHash<QByteArray, ExtMessage> messagesCache;
+    QScriptEngine messageScriptEngine;
 private slots:
     void fileWatcherChanged(const QString &);
 private:
     void fileWatcherFolder(QStringList extension, QDir dir, QTreeWidgetItem *parentList, bool isDocument);
 public slots:
-    const QVariant execute(const QString & command, bool createNewObjectIfExists = false);
+    const QVariant execute(const QString & command, bool createNewObjectIfExists = false, bool dump = false);
     void onOscReceive(const QString & message);
     void onDraw();
     void askNxObject();
     void send(const ExtMessage & message);
-    void sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const QPointF & collisionPoint, const QPointF & collisionValue, const QString & status);
+    void sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status);
 
 
     //EXTERNAL INTERFACES
@@ -122,7 +122,7 @@ private:
     ExtMidiManager *midi;
     bool oscConsoleActive;
     QString defaultMessageTrigger, defaultMessageCursor;
-    NxTrigger *transportObject;
+    NxTrigger *transportObject, *syncObject;
 public:
     void loadProject(const QString & projectFile);
 
@@ -132,7 +132,7 @@ private:
     UiRender *render;
     QTime renderMeasure;
 private:
-    qreal timeLocal, timeTransportRefresh, timePerfRefresh, timePerfCounter, timeFactor;
+    qreal timeLocal, timeTransportRefresh, timePerfRefresh, timePerfCounter;
     QTimer *timer;
     bool forceTimeLocal;
 private slots:
@@ -164,7 +164,7 @@ private:
     QNetworkAccessManager *updateManager;
     void checkForUpdates();
     QTreeWidgetItem *projectScore, *projectScript, *exampleScript, *libScript;
-    QPointF editingStartPoint;
+    NxPoint editingStartPoint;
     bool lastMessageAllow;
     QString lastMessage;
 private slots:
@@ -186,6 +186,7 @@ public slots:
     void actionViewChange();
     void actionCC();
     void actionCC2();
+    void actionChangeID(quint16, quint16); ////CG////
     void actionNew();
     void actionOpen();
     void actionSave();
@@ -196,22 +197,25 @@ public slots:
     void actionDuplicateScore();
     void actionUndo();
     void actionRedo();
+    void actionSync();
     void actionProjectFiles();
     void actionProjectScripts();
     void actionProjectScriptsContext(const QPoint & point);
+    void actionProjectFilesContext(const QPoint & point);
     void actionDrawFreeCurve();
     void actionDrawPointCurve();
     void actionDrawTriggers();
     void actionAddFreeCursor();
     void actionCircleCurve();
-    void editingStart(const QPointF &);
+    void editingStart(const NxPoint &);
     void editingStop();
-    void editingMove(const QPointF &);
+    void editingMove(const NxPoint &, bool add);
     void actionGridChange(qreal val);
     void actionGridOpacityChange(qreal val);
     void actionSnapGrid();
     void actionCloseEvent(QCloseEvent *event);
     void transportMessageChange(const QString & );
+    void syncMessageChange(const QString & );
 public slots:
     void logOscSend(const QString & message);
     void logOscReceive(const QString & message);

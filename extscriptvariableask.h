@@ -18,6 +18,7 @@ public:
 
 private:
     QString group, prompt, value, def;
+    qreal defFloat;
 public:
     void setInfos(const QString & _group, const QString & _prompt, const QString & _value, const QString & _def) {
         group = _group;
@@ -27,11 +28,13 @@ public:
         setText(0, prompt);
         setText(1, def);
     }
-    inline const QString & getGroup() const  { return group; }
-    inline const QString & getPrompt() const { return prompt; }
-    inline const QString & getValue() const  { return value; }
-    inline const QString & getDef() const    { return def; }
-    inline void setDef(const QString & _def) { def = _def; }
+    inline const QString & getGroup() const     { return group; }
+    inline const QString & getPrompt() const    { return prompt; }
+    inline const QString & getValue() const     { return value; }
+    inline const bool isDefFloat() const        { bool ok = false; def.toDouble(&ok); return ok; }
+    inline const QString & getDefStr() const    { return def; }
+    inline const qreal getDefFloat() const    { return def.toDouble(); }  ////CG//// Eliminate warning about returning volatile
+    inline void setDef(const QString & _def)    { def = _def; }
 };
 
 

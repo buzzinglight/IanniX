@@ -27,7 +27,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background: transparent;
-font: 14px &quot;Lucida Sans&quot;;
+font: 14px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
 color: rgba(255,255,255,128);</string>
   </property>
   <widget class="QPushButton" name="logo">

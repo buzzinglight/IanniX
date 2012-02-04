@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
-	font: 12px &quot;Lucida Sans&quot;;
+	font: 12px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
 	color: white;
 }
 
@@ -96,7 +96,7 @@ QDoubleSpinBox::down-button {
 }
 
 QLabel#lastMessage {
-	font: 11px &quot;Lucida Console&quot;;
+	font: 11px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
 	color: rgb(167, 167, 167);
 }</string>
   </property>

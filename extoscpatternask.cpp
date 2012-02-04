@@ -16,14 +16,17 @@ ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject*> *_objects) 
             foreach(const QByteArray & messagePatternItem, messagePatternItems)
                 messagePattern += messagePatternItem + " ";
             messagePattern = messagePattern.trimmed();
-            if(!messagePatterns.contains(messagePattern))
+            if(!messagePatterns.contains(messagePattern)) {
                 messagePatterns.append(messagePattern);
+
+                ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(this);
+                connect(patternEditor, SIGNAL(actionRouteRemove(ExtOscPatternEditor*)), SLOT(actionRemoveMessage(ExtOscPatternEditor*)));
+                foreach(const QByteArray & messagePatternItem, messagePatternItems)
+                    patternEditor->addVariable(messagePatternItem);
+                ui->patternListsLayout->addWidget(patternEditor);
+                patternLists.append(patternEditor);
+            }
         }
-    }
-    foreach(const QString & messagePattern, messagePatterns) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(ui->listWidget);
-        item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        item->setText(0, messagePattern);
     }
 }
 
@@ -41,24 +44,22 @@ void ExtOscPatternAsk::changeEvent(QEvent *e) {
         break;
     }
 }
+void ExtOscPatternAsk::mousePressEvent(QMouseEvent *) {
+    foreach(ExtOscPatternEditor *patternList, patternLists)
+        patternList->editFocusOut();
+}
 
-const QVector< QVector<QByteArray> > ExtOscPatternAsk::getMessagePatterns() const {
-    QVector< QVector<QByteArray> > messagePatterns;
-    for(quint16 index = 0 ; index < ui->listWidget->topLevelItemCount() ; index++) {
-        QVector<QByteArray> messagePatternsItems;
-        QStringList messagePatternsItemsStr = ui->listWidget->topLevelItem(index)->text(0).split(" " , QString::SkipEmptyParts);
-        foreach(const QString & messagePatternsItemStr, messagePatternsItemsStr)
-            messagePatternsItems.append(qPrintable(messagePatternsItemStr));
-        messagePatterns.append(messagePatternsItems);
-    }
-
-    return messagePatterns;
+const QString ExtOscPatternAsk::getMessagePatterns() const {
+    QString messagePattern = "";
+    foreach(ExtOscPatternEditor *patternList, patternLists)
+        messagePattern += ", " + patternList->getPattern();
+    if(messagePattern.count() > 0)
+        messagePattern = "0" + messagePattern;
+    return messagePattern;
 }
 
 void ExtOscPatternAsk::actionAddMessage() {
     QSettings settings;
-    QTreeWidgetItem *item = new QTreeWidgetItem(ui->listWidget);
-    item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     bool isTrigger = false;
     bool isCursor = false;
     foreach(NxObject *object, *objects) {
@@ -67,15 +68,29 @@ void ExtOscPatternAsk::actionAddMessage() {
         else if(object->getType() == ObjectsTypeTrigger)
             isTrigger = true;
     }
+    QString messagePatternItem = "";
     if((isCursor) && (!isTrigger))
-        item->setText(0, settings.value("defaultMessageCursor").toString());
+        messagePatternItem = settings.value("defaultMessageCursor").toString();
     else if((!isCursor) && (isTrigger))
-        item->setText(0, settings.value("defaultMessageTrigger").toString());
+        messagePatternItem = settings.value("defaultMessageTrigger").toString();
     else
-        item->setText(0, settings.value("defaultMessage").toString());
+        messagePatternItem = settings.value("defaultMessage").toString();
+
+
+    QVector< QVector<QByteArray > > messagePatternItemsList = NxObject::parseMessagesPattern(messagePatternItem);
+    foreach(const QVector<QByteArray > & messagePatternItems, messagePatternItemsList) {
+        ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(this);
+        connect(patternEditor, SIGNAL(actionRouteRemove(ExtOscPatternEditor*)), SLOT(actionRemoveMessage(ExtOscPatternEditor*)));
+        foreach(const QByteArray & messagePatternItem, messagePatternItems)
+            patternEditor->addVariable(messagePatternItem);
+        ui->patternListsLayout->addWidget(patternEditor);
+        patternLists.append(patternEditor);
+    }
 }
 
-void ExtOscPatternAsk::actionRemoveMessage() {
-    if(ui->listWidget->currentItem())
-        delete ui->listWidget->currentItem();
+void ExtOscPatternAsk::actionRemoveMessage(ExtOscPatternEditor *editor) {
+    if(editor) {
+        patternLists.removeOne(editor);
+        delete editor;
+    }
 }

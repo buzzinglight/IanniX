@@ -1,6 +1,8 @@
 #ifndef EXTMESSAGE_H
 #define EXTMESSAGE_H
 
+#include <qmath.h>
+#include <QScriptEngine>
 #include <QUdpSocket>
 #include <QTcpSocket>
 #include <QStringList>
@@ -19,15 +21,20 @@ private:
     QHostAddress host;
     quint16 port;
     MessagesType type;
-    QList<quint8> midiValues;
+    QList<quint16> midiValues;
+    QScriptEngine *messageScriptEngine;
+    QScriptValue messageScriptValue, messageScriptResult;
     bool hasAdd;
 public:
     ExtMessage() {
         type = MessagesTypeNo;
         hasAdd = false;
+        messageScriptEngine = 0;
     }
-
-    inline void setUrl(const QUrl & url) {
+    
+    inline void setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine) {
+        messageScriptEngine = _messageScriptEngine;
+        messageScriptValue = messageScriptEngine->globalObject();
         hasAdd = false;
         urlMessage = url;
         urlMessageString = urlMessage.toString();
@@ -35,7 +42,7 @@ public:
         typetag.clear();
         arguments.clear();
         asciiMessage.clear();
-
+        
         if(urlMessage.scheme().toLower() == "osc") {
             type = MessagesTypeOsc;
             host = urlMessage.host().toLower();
@@ -68,104 +75,272 @@ public:
             midiCommand = urlMessage.path().toLower();
         }
     }
-
-    inline bool parse(const QVector<QByteArray> & patternItems, NxTrigger *trigger, NxCursor *cursor, NxCurve *curve, NxCurve *collisionCurve, const QPointF & collisionPoint, const QPointF & collisionValue, const QString & status, const quint16 nbTriggers, const quint16 nbCursors, const quint16 nbCurves) {
-        quint16 patternIndex = 1;
+    
+    bool parse(const QVector<QByteArray> & patternItems, NxTrigger *trigger, NxCursor *cursor, NxCurve *curve, NxCurve *collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status, const quint16 nbTriggers, const quint16 nbCursors, const quint16 nbCurves) {
+        bool suppressSend = false;
         verboseMessage = qPrintable(urlMessageString);
         midiValues.clear();
         asciiMessage = "";
         buffer.clear();
         hasAdd = false;
-
+        
         if(patternItems.count() >= 2) {
-            //Bind values
-            for( ; patternIndex < patternItems.count() ; patternIndex++) {
+            //Messages
+            for(quint16 patternIndex = 1 ; patternIndex < patternItems.count() ; patternIndex++) {
                 QString patternArgument = patternItems.at(patternIndex);
-                if((trigger) && (patternArgument == "trigger_id"))
-                    addFloat(trigger->getId(), "trigger_id", patternIndex);
-                else if((trigger) && (patternArgument == "trigger_group_id"))
-                    addString(trigger->getGroupId(), "trigger_group_id", patternIndex);
-                else if((trigger) && (patternArgument == "trigger_document_id"))
-                    addString(trigger->getDocumentId(), "trigger_document_id", patternIndex);
-                else if((trigger) && (patternArgument == "trigger_xPos"))
-                    addFloat(trigger->getPos().x(), "trigger_xPos", patternIndex);
-                else if((trigger) && (patternArgument == "trigger_yPos"))
-                    addFloat(trigger->getPos().y(), "trigger_yPos", patternIndex);
-                else if((trigger) && (patternArgument == "trigger_value"))
-                    addFloat(trigger->getTrigged(), "trigger_value", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_id"))
-                    addFloat(cursor->getId(), "cursor_id", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_group_id"))
-                    addString(cursor->getGroupId(), "cursor_group_id", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_document_id"))
-                    addString(cursor->getDocumentId(), "cursor_document_id", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_xPos"))
-                    addFloat(cursor->getCurrentPos().x(), "cursor_xPos", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_yPos"))
-                    addFloat(cursor->getCurrentPos().y(), "cursor_yPos", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_value_x"))
-                    addFloat(cursor->getCurrentValue().x(), "cursor_value_x", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_value_y"))
-                    addFloat(cursor->getCurrentValue().y(), "cursor_value_y", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_time"))
-                    addFloat(cursor->getCurrentPosition(), "cursor_time", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_time_percent"))
-                    addFloat(cursor->getCurrentPositionPercent(), "cursor_time_percent", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_angle"))
-                    addFloat(cursor->getCurrentAngle(), "cursor_angle", patternIndex);
-                else if((cursor) && (patternArgument == "cursor_nb_loop"))
-                    addFloat(cursor->getNbLoop(), "cursor_nb_loop", patternIndex);
-                else if((curve) && (patternArgument == "curve_id"))
-                    addFloat(curve->getId(), "curve_id", patternIndex);
-                else if((curve) && (patternArgument == "curve_group_id"))
-                    addString(curve->getGroupId(), "curve_group_id", patternIndex);
-                else if((curve) && (patternArgument == "curve_document_id"))
-                    addString(curve->getDocumentId(), "curve_document_id", patternIndex);
-                else if((curve) && (patternArgument == "curve_xPos"))
-                    addFloat(curve->getPos().x(), "curve_xPos", patternIndex);
-                else if((curve) && (patternArgument == "curve_yPos"))
-                    addFloat(curve->getPos().y(), "curve_yPos", patternIndex);
-                else if(patternArgument == "collision_curve_id") {
-                    if(collisionCurve)
-                        addFloat(collisionCurve->getId(), "collision_curve_id", patternIndex);
-                }
-                else if(patternArgument == "collision_xPos") {
-                    if(collisionCurve)
-                        addFloat(collisionPoint.x(), "collision_xPos", patternIndex);
-                }
-                else if(patternArgument == "collision_yPos") {
-                    if(collisionCurve)
-                        addFloat(collisionPoint.y(), "collision_yPos", patternIndex);
-                }
-                else if(patternArgument == "collision_value_x") {
-                    if(collisionCurve)
-                        addFloat(collisionValue.x(), "collision_value_x", patternIndex);
-                }
-                else if(patternArgument == "collision_value_y") {
-                    if(collisionCurve)
-                        addFloat(collisionValue.y(), "collision_value_y", patternIndex);
-                }
-                else if(patternArgument == "status")
-                    addString(status, "status", patternIndex);
+                bool found = false;
+                
+                if((patternArgument.at(0) == '{') && (messageScriptEngine)) {
+                    patternArgument = patternArgument.trimmed().remove(0, 1);
+                    patternArgument.chop(1);
 
-                else if(patternArgument == "nb_triggers")
-                    addFloat(nbTriggers, "nb_triggers", patternIndex);
-                else if(patternArgument == "nb_cursors")
-                    addFloat(nbCursors, "nb_cursors", patternIndex);
-                else if(patternArgument == "nb_curves")
-                    addFloat(nbCurves, "nb_curves", patternIndex);
+                    if(trigger) {
+                        if(patternArgument.contains("trigger_id"))
+                            messageScriptValue.setProperty("trigger_id", trigger->getId());
+                        if(patternArgument.contains("trigger_group_id"))
+                            messageScriptValue.setProperty("trigger_group_id", trigger->getGroupId());
+                        if(patternArgument.contains("trigger_document_id"))
+                            messageScriptValue.setProperty("trigger_document_id", trigger->getDocumentId());
+                        if(patternArgument.contains("trigger_xPos"))
+                            messageScriptValue.setProperty("trigger_xPos", trigger->getPos().x());
+                        if(patternArgument.contains("trigger_yPos"))
+                            messageScriptValue.setProperty("trigger_yPos", trigger->getPos().y());
+                        if(patternArgument.contains("trigger_zPos"))
+                            messageScriptValue.setProperty("trigger_zPos", trigger->getPos().z());
+                        if(patternArgument.contains("trigger_value"))
+                            messageScriptValue.setProperty("trigger_value", trigger->getTrigged());
+                        if(patternArgument.contains("trigger_distance")) {
+                            NxPoint cursorPosDelta = trigger->getPos() - cursor->getCurrentPos();
+                            messageScriptValue.setProperty("trigger_distance", qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()));
+                        }
+                        if(patternArgument.contains("trigger_side")) {
+                            qreal cursorAngle = fmod(cursor->getCurrentAngle(),360);
+                            float side = 0;
+                            if (cursorAngle == 90 ) //cursor going straight up
+                                side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 1:0;
+                            else if (cursorAngle == 270) //cursor going straight down
+                                side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 0:1;
+                            else if(((0<cursorAngle) && (cursorAngle<90)) || ((270<cursorAngle) && (cursorAngle<360)) ) //cursor going to left
+                                side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 1:0;
+                            else //cursor going to right
+                                side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 0:1;
+                            messageScriptValue.setProperty("trigger_side", side);
+                        }
+                        if(patternArgument.contains("trigger_message_id"))
+                            messageScriptValue.setProperty("trigger_message_id", (quint32)trigger->getMessageId());
+                    }
+                    if(cursor) {
+                        if(patternArgument.contains("cursor_id")) {
+                            messageScriptValue.setProperty("cursor_id", cursor->getId());
+                            //qDebug("%d", tat);
+                        }
+                        if(patternArgument.contains("cursor_group_id"))
+                            messageScriptValue.setProperty("cursor_group_id", cursor->getGroupId());
+                        if(patternArgument.contains("cursor_document_id"))
+                            messageScriptValue.setProperty("cursor_document_id", cursor->getDocumentId());
+                        if(patternArgument.contains("cursor_xPos"))
+                            messageScriptValue.setProperty("cursor_xPos", cursor->getCurrentPos().x());
+                        if(patternArgument.contains("cursor_yPos"))
+                            messageScriptValue.setProperty("cursor_yPos", cursor->getCurrentPos().y());
+                        if(patternArgument.contains("cursor_zPos"))
+                            messageScriptValue.setProperty("cursor_zPos", cursor->getCurrentPos().z());
+                        if(patternArgument.contains("cursor_value_x"))
+                            messageScriptValue.setProperty("cursor_value_x", cursor->getCurrentValue().x());
+                        if(patternArgument.contains("cursor_value_y"))
+                            messageScriptValue.setProperty("cursor_value_y", cursor->getCurrentValue().y());
+                        if(patternArgument.contains("cursor_value_z"))
+                            messageScriptValue.setProperty("cursor_value_z", cursor->getCurrentValue().z());
+                        if(patternArgument.contains("cursor_time"))
+                            messageScriptValue.setProperty("cursor_time", cursor->getCurrentPosition());
+                        if(patternArgument.contains("cursor_time_percent"))
+                            messageScriptValue.setProperty("cursor_time_percent", cursor->getCurrentPositionPercent());
+                        if(patternArgument.contains("cursor_angle"))
+                            messageScriptValue.setProperty("cursor_angle", fmod(cursor->getCurrentAngle(),360));
+                        if(patternArgument.contains("cursor_nb_loop"))
+                            messageScriptValue.setProperty("cursor_nb_loop", cursor->getNbLoop());
+                        if(patternArgument.contains("cursor_message_id"))
+                            messageScriptValue.setProperty("cursor_message_id", (quint32)cursor->getMessageId());
+                    }
+                    if(curve) {
+                        if(patternArgument.contains("curve_id"))
+                            messageScriptValue.setProperty("curve_id", curve->getId());
+                        if(patternArgument.contains("curve_group_id"))
+                            messageScriptValue.setProperty("curve_group_id", curve->getGroupId());
+                        if(patternArgument.contains("curve_document_id"))
+                            messageScriptValue.setProperty("curve_document_id", curve->getDocumentId());
+                        if(patternArgument.contains("curve_xPos"))
+                            messageScriptValue.setProperty("curve_xPos", curve->getPos().x());
+                        if(patternArgument.contains("curve_yPos"))
+                            messageScriptValue.setProperty("curve_yPos", curve->getPos().y());
+                        if(patternArgument.contains("curve_zPos"))
+                            messageScriptValue.setProperty("curve_zPos", curve->getPos().z());
+                    }
+                    if(collisionCurve) {
+                        if(patternArgument.contains("collision_curve_id"))
+                            messageScriptValue.setProperty("collision_curve_id", collisionCurve->getId());
+                        if(patternArgument.contains("collision_xPos"))
+                            messageScriptValue.setProperty("collision_xPos", collisionPoint.x());
+                        if(patternArgument.contains("collision_yPos"))
+                            messageScriptValue.setProperty("collision_yPos", collisionPoint.y());
+                        if(patternArgument.contains("collision_value_x"))
+                            messageScriptValue.setProperty("collision_value_x", collisionValue.x());
+                        if(patternArgument.contains("collision_value_y"))
+                            messageScriptValue.setProperty("collision_value_y", collisionValue.y());
+                        if(patternArgument.contains("collision_distance")) {
+                            NxPoint cursorPosDelta = collisionPoint - cursor->getCurrentPos();
+                            messageScriptValue.setProperty("collision_distance", qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()));
+                        }
+                    }
+                    {
+                        if(patternArgument.contains("status"))
+                            messageScriptValue.setProperty("status", status);
 
-                else {
-                    //If value is not a keyword, add raw value
-                    bool ok = false;
-                    qreal val = patternArgument.toDouble(&ok);
-                    if(ok)
-                        addFloat(val, qPrintable(QString("custom %1").arg(patternIndex)), patternIndex);
+                        if(patternArgument.contains("nb_triggers"))
+                            messageScriptValue.setProperty("nb_triggers", nbTriggers);
+                        if(patternArgument.contains("nb_cursors"))
+                            messageScriptValue.setProperty("nb_cursors", nbCursors);
+                        if(patternArgument.contains("nb_curves"))
+                            messageScriptValue.setProperty("nb_curves", nbCurves);
+                    }
+
+                    messageScriptResult = messageScriptEngine->evaluate(patternArgument);
+                    if(messageScriptResult.isError())
+                        addString("**error**", patternArgument, patternIndex);
+                    else if(messageScriptResult.isString()) {
+                        if(messageScriptResult.toString() == "suppress")
+                            suppressSend = true;
+                        else
+                            found = addString(messageScriptResult.toString(), QString("script %1").arg(patternIndex), patternIndex);
+                    }
                     else
-                        addString(qPrintable(patternArgument), qPrintable(QString("custom %1").arg(patternIndex)), patternIndex);
+                        found = addFloat(messageScriptResult.toNumber(), QString("script %1").arg(patternIndex), patternIndex);
+
+
+                }
+                else {
+                    if(trigger) {
+                        if(patternArgument == "trigger_id")
+                            found = addFloat(trigger->getId(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_group_id")
+                            found = addString(trigger->getGroupId(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_document_id")
+                            found = addString(trigger->getDocumentId(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_xPos")
+                            found = addFloat(trigger->getPos().x(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_yPos")
+                            found = addFloat(trigger->getPos().y(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_zPos")
+                            found = addFloat(trigger->getPos().z(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_value")
+                            found = addFloat(trigger->getTrigged(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_distance") {
+                            NxPoint cursorPosDelta = trigger->getPos() - cursor->getCurrentPos();
+                            found = addFloat(qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()), patternArgument, patternIndex);
+                        }
+                        else if(patternArgument == "trigger_message_id")
+                            found = addFloat(trigger->getMessageId(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_side") {
+                            qreal cursorAngle = fmod(cursor->getCurrentAngle(),360);
+                            float side = 0;
+                            if (cursorAngle == 90 ) //cursor going straight up
+                                side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 1:0;
+                            else if (cursorAngle == 270) //cursor going straight down
+                                side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 0:1;
+                            else if(((0<cursorAngle) && (cursorAngle<90)) || ((270<cursorAngle) && (cursorAngle<360)) ) //cursor going to left
+                                side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 1:0;
+                            else //cursor going to right
+                                side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 0:1;
+                            found = addFloat(side, patternArgument, patternIndex);
+                        }
+                    }
+                    if(cursor) {
+                        if(patternArgument == "cursor_id")
+                            found = addFloat(cursor->getId(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_group_id")
+                            found = addString(cursor->getGroupId(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_document_id")
+                            found = addString(cursor->getDocumentId(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_xPos")
+                            found = addFloat(cursor->getCurrentPos().x(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_yPos")
+                            found = addFloat(cursor->getCurrentPos().y(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_zPos")
+                            found = addFloat(cursor->getCurrentPos().z(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_x")
+                            found = addFloat(cursor->getCurrentValue().x(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_y")
+                            found = addFloat(cursor->getCurrentValue().y(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_z")
+                            found = addFloat(cursor->getCurrentValue().z(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_time")
+                            found = addFloat(cursor->getCurrentPosition(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_time_percent")
+                            found = addFloat(cursor->getCurrentPositionPercent(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_angle")
+                            found = addFloat(fmod(cursor->getCurrentAngle(),360), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_nb_loop")
+                            found = addFloat(cursor->getNbLoop(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_message_id")
+                            found = addFloat(cursor->getMessageId(), patternArgument, patternIndex);
+                    }
+                    if(curve) {
+                        if(patternArgument == "curve_id")
+                            found = addFloat(curve->getId(), patternArgument, patternIndex);
+                        else if(patternArgument == "curve_group_id")
+                            found = addString(curve->getGroupId(), patternArgument, patternIndex);
+                        else if(patternArgument == "curve_document_id")
+                            found = addString(curve->getDocumentId(), patternArgument, patternIndex);
+                        else if(patternArgument == "curve_xPos")
+                            found = addFloat(curve->getPos().x(), patternArgument, patternIndex);
+                        else if(patternArgument == "curve_yPos")
+                            found = addFloat(curve->getPos().y(), patternArgument, patternIndex);
+                        else if(patternArgument == "curve_zPos")
+                            found = addFloat(curve->getPos().z(), patternArgument, patternIndex);
+                    }
+                    if(collisionCurve) {
+                        if(patternArgument == "collision_curve_id")
+                            found = addFloat(collisionCurve->getId(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_xPos")
+                            found = addFloat(collisionPoint.x(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_yPos")
+                            found = addFloat(collisionPoint.y(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_value_x")
+                            found = addFloat(collisionValue.x(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_value_y")
+                            found = addFloat(collisionValue.y(), patternArgument, patternIndex);
+                        else if((patternArgument == "collision_distance") && (cursor)) {
+                            NxPoint cursorPosDelta = collisionPoint - cursor->getCurrentPos();
+                            found = addFloat(qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()), patternArgument, patternIndex);
+                        }
+                    }
+                    else {
+                        if(patternArgument == "status")
+                            found = addString(status, patternArgument, patternIndex);
+                        else if(patternArgument == "nb_triggers")
+                            found = addFloat(nbTriggers, patternArgument, patternIndex);
+                        else if(patternArgument == "nb_cursors")
+                            found = addFloat(nbCursors, patternArgument, patternIndex);
+                        else if(patternArgument == "nb_curves")
+                            found = addFloat(nbCurves, patternArgument, patternIndex);
+                    }
+                }
+                
+                if(!found) {
+                    if(patternArgument.startsWith("collision_"))
+                        suppressSend = true;
+                    else {
+                        //If value is not a keyword, add raw value
+                        bool ok = false;
+                        qreal val = patternArgument.toDouble(&ok);
+                        if(ok)
+                            found = addFloat(val, QString("custom %1").arg(patternIndex), patternIndex);
+                        else
+                            found = addString(qPrintable(patternArgument), QString("custom %1").arg(patternIndex), patternIndex);
+                    }
                 }
             }
 
+            
             if(type == MessagesTypeHttp)
                 verboseMessage = qPrintable(urlMessage.toString());
             else if(type == MessagesTypeOsc) {
@@ -179,16 +354,13 @@ public:
                 asciiMessage = asciiMessage.trimmed();
             }
         }
-
-        return hasAdd;
+        
+        return (hasAdd && !suppressSend);
     }
-
+    
 private:
     /*
     inline void addInt(int i, const char *name, quint16) {
-        verboseMessage = verboseMessage + " " + conversionTemp.setNum(i);
-        hasAdd = true;
-        if(type == MessagesTypeOsc) {
             union { int i; char ch[4]; } u;
             u.i = i;
             arguments += u.ch[3];
@@ -196,19 +368,9 @@ private:
             arguments += u.ch[1];
             arguments += u.ch[0];
             typetag += 'i';
-        }
-        else if(type == MessagesTypeMidi) {
-            midiValues.append(i);
-        }
-        else if(type == MessagesTypeHttp) {
-            urlMessage.addQueryItem(name, QString().setNum(i));
-        }
-        else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect)) {
-            asciiMessage = asciiMessage + " " + conversionTemp.setNum(i);
-        }
     }
     */
-    inline void addString(const QString & str, const char *name, quint16) {
+    inline bool addString(const QString & str, const QString & name, quint16) {
         verboseMessage = verboseMessage + " " + qPrintable(str);
         hasAdd = true;
         if(type == MessagesTypeOsc) {
@@ -216,15 +378,19 @@ private:
             arguments += (char)0;
             pad(arguments);
             typetag += 's';
+            return true;
         }
         else if(type == MessagesTypeHttp) {
             urlMessage.addQueryItem(name, str);
+            return true;
         }
         else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect)) {
             asciiMessage = asciiMessage + " " + qPrintable(str);
+            return true;
         }
+        return true;
     }
-    inline void addFloat(float f, const char *name, quint16) {
+    inline bool addFloat(float f, const QString & name, quint16) {
         verboseMessage = verboseMessage + " " + conversionTemp.setNum(f);
         hasAdd = true;
         if(type == MessagesTypeOsc) {
@@ -235,27 +401,32 @@ private:
             arguments += u.ch[1];
             arguments += u.ch[0];
             typetag += 'f';
+            return true;
         }
         else if(type == MessagesTypeHttp) {
             urlMessage.addQueryItem(name, QString().setNum(f));
+            return true;
         }
         else if(type == MessagesTypeMidi) {
             midiValues.append(f);
+            return true;
         }
         else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect)) {
             asciiMessage = asciiMessage + " " + conversionTemp.setNum(f);
+            return true;
         }
+        return true;
     }
     inline void pad(QByteArray & b) const {
         while (b.size() % 4 != 0)
             b += (char)0;
     }
-
+    
 public:
     inline MessagesType getType() const {
         return type;
     }
-
+    
     inline const QByteArray & getBuffer() const {
         return buffer;
     }
@@ -265,25 +436,25 @@ public:
     inline quint16 getPort() const {
         return port;
     }
-
-
+    
+    
     inline const QString & getMidiCommand() const {
         return midiCommand;
     }
     inline const QString & getMidiPort() const {
         return midiPort;
     }
-    inline quint8 getMidiValue(quint8 index) const {
+    inline quint16 getMidiValue(quint8 index) const {
         if(index < midiValues.count())
             return midiValues.at(index);
         else
             return 0;
     }
-
+    
     inline const QUrl & getUrlMessage() const {
         return urlMessage;
     }
-
+    
     inline const QByteArray & getVerboseMessage() const {
         return verboseMessage;
     }
@@ -296,7 +467,7 @@ public:
 class ExtMessageManager {
 protected:
     NxObjectFactoryInterface *factory;
-
+    
 public:
     ExtMessageManager(NxObjectFactoryInterface *_factory) { factory = _factory; }
     virtual void send(const ExtMessage & message) = 0;

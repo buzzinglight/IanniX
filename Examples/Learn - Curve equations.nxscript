@@ -1,0 +1,233 @@
+//Creation of the score
+function onCreate() {
+	//Viewport setup
+	run("clear");
+	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
+	run("rotate 0 -70 -10");
+	run("center 0 0");
+	run("zoom 210");
+	
+	//ID for curves & cursors
+	var id = 0;
+
+
+	//[TOP LEFT] Add a simple 2D curve based on cartesian coords
+	run("add curve  " + (1000 + id));
+	run("setPos     current -10 7 0");	
+	//Plot curve
+	info = plot(function(t) { return {
+		index   : 0, nbPoints: 100, 
+		offset  : {x: 0, y:0, z:0}, 
+
+		x       : t * 4,
+		y       : cos(2 * t * TWO_PI),
+		z       : 0,
+
+		t       : [0,1] }});
+	//Add a cursor
+	run("add cursor " + id);
+	run("setCurve   current lastCurve");	
+	run("setSpeed   current auto 10");
+	id++;
+
+
+
+	//[TOP MIDDLE] Add a composed 2D curve based on cartesian coords
+	run("add curve  " + (1000 + id));
+	run("setPos     current -4 7 0");	
+	//Plot curve
+	info = plot(function(t) { return {
+		index   : 0, nbPoints: 100, 
+		offset  : {x: 0, y:0, z:0}, 
+
+		x       : t * 4,
+		y       : cos(2 * t * TWO_PI),
+		z       : 0,
+
+		t       : [0,1] }});
+	info = plot(function(t) { return {
+		index   : info.index, nbPoints: 100, 
+		offset  : info.offset, 
+
+		x       : t * 4,
+		y       : exp(-t * 3) * cos(2 * t * TWO_PI) - 1,
+		z       : 0,
+
+		t       : [0,1] }});
+	//Add a cursor
+	run("add cursor " + id);
+	run("setCurve   current lastCurve");	
+	run("setSpeed   current auto 10");	
+	id++;
+
+
+
+	//[TOP RIGHT] Add a simple 2D curve based on parametric coords
+	run("add curve  " + (1000 + id));
+	run("setPos     current 8 7 0");	
+	//Plot curve
+	info = plot(function(t) { return {
+		index   : 0, nbPoints: 200, 
+		offset  : {x: 0, y:0, z:0}, 
+
+		x       : 2 * cos(t * TWO_PI),
+		y       : sin(2 * t * TWO_PI),
+		z       : 0,
+
+		t       : [0,1] }});
+	//Add a cursor
+	run("add cursor " + id);
+	run("setCurve   current lastCurve");	
+	run("setSpeed   current auto 10");	
+	id++;
+
+
+
+
+
+
+	//[BOTTOM LEFT] Add a simple 2D curve based on polar coords
+	run("add curve  " + (1000 + id));
+	run("setPos     current -8 -7 0");	
+	//Plot curve
+	info = plot(function(t) { return {
+		index   : 0, nbPoints: 200, 
+		offset  : {x: 0, y:0, z:0}, 
+
+		theta   : 2 * t * TWO_PI,
+		r       : 2 * t,
+		phi     : 0,
+
+		t       : [0,1] }});
+	//Add a cursor
+	run("add cursor " + id);
+	run("setCurve   current lastCurve");	
+	run("setSpeed   current auto 10");	
+	id++;
+
+
+
+	//[BOTTOM MIDDLE] Add a composed 2D curve based on polar coords
+	run("add curve  " + (1000 + id));
+	run("setPos     current 0 -7 0");	
+	//Plot curve
+	info = plot(function(t) { return {
+		index   : 0, nbPoints: 200, 
+		offset  : {x: 0, y:0, z:0}, 
+
+		theta   : 2 * t * TWO_PI,
+		r       : 2 * t,
+		phi     : 0,
+
+		t       : [0,1] }});
+	info = plot(function(t) { return {
+		index   : info.index, nbPoints: 200, 
+		offset  : info.offset, 
+
+		theta   : cos(2 * t * TWO_PI),
+		r       : 2 * t,
+		phi     : 0,
+
+		t       : [0,1] }});
+	//Add a cursor
+	run("add cursor " + id);
+	run("setCurve   current lastCurve");	
+	run("setSpeed   current auto 10");	
+	id++;
+
+
+
+	//[BOTTOM RIGHT] Add a composed 2D curve based on mixed coords
+	run("add curve  " + (1000 + id));
+	run("setPos     current 8 -7 0");	
+	//Plot curve
+	info = plot(function(t) { return {
+		index   : 0, nbPoints: 100, 
+		offset  : {x: 0, y:0, z:0}, 
+
+		theta   : 2 * t * TWO_PI,
+		r       : 2 * t,
+		phi     : 0,
+
+		t       : [0,1] }});
+	info = plot(function(t) { return {
+		index   : info.index, nbPoints: 100, 
+		offset  : info.offset, 
+
+		x       : sin(2 * t * TWO_PI),
+		y       : 2 * t,
+		z       : 0,
+
+		t       : [0,1] }});
+	//Add a cursor
+	run("add cursor " + id);
+	run("setCurve   current lastCurve");	
+	run("setSpeed   current auto 10");	
+	id++;
+
+
+
+
+
+
+	//[LEFT] Add a simple 3D curve based on cartesian coords
+	run("add curve  " + (1000 + id));
+	run("setPos     current -7 1 0");	
+	//Plot curve
+	info = plot(function(t) { return {
+		index   : 0, nbPoints: 300, 
+		offset  : {x: 0, y:0, z:0}, 
+
+		x       : cos(2 * TWO_PI * t),
+		y       : sin(2 * TWO_PI * t),
+		z       : cos(2 * TWO_PI * t),
+
+		t       : [0,1] }});
+	//Add a cursor
+	run("add cursor " + id);
+	run("setCurve   current lastCurve");	
+	run("setSpeed   current auto 10");	
+	id++;
+
+
+
+	//[CENTER] Add a simple 3D curve based on spherical coords
+	run("add curve  " + (1000 + id));
+	run("setPos     current 0 1 0");	
+	//Plot curve
+	info = plot(function(t) { return {
+		index   : 0, nbPoints: 300, 
+		offset  : {x: 0, y:0, z:0}, 
+
+		theta   : sin(6 * TWO_PI * t),
+		r       : 2.5 - (5 * t),
+		phi     : cos(6 * TWO_PI * t),
+
+		t       : [0,1] }});
+	//Add a cursor
+	run("add cursor " + id);
+	run("setCurve   current lastCurve");	
+	run("setSpeed   current auto 10");	
+	id++;
+
+
+
+	//[RIGHT] Add a simple 3D curve based on spherical coords
+	run("add curve  " + (1000 + id));
+	run("setPos     current 7 1 0");	
+	//Plot curve
+	info = plot(function(t) { return {
+		index   : 0, nbPoints: 300, 
+		offset  : {x: 0, y:0, z:0}, 
+
+		theta   : 20 * t,
+		r       :  3 * t,
+		phi     : 20 * t,
+
+		t       : [0,1] }});
+	//Add a cursor
+	run("add cursor " + id);
+	run("setCurve   current lastCurve");	
+	run("setSpeed   current auto 10");	
+	id++;
+}

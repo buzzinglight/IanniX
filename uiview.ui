@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
-	font: 11px &quot;Lucida Sans&quot;;
+	font: 11px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
 }
 
 QWidget#centralwidget  {
@@ -71,6 +71,8 @@ QDockWidget::title {
     <addaction name="actionDrawTriggers"/>
     <addaction name="actionAddCircleCurve"/>
     <addaction name="actionAddFreeCursor"/>
+    <addaction name="separator"/>
+    <addaction name="actionSync"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -678,6 +680,11 @@ QDockWidget::title {
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionSync">
+   <property name="text">
+    <string>Send a snapshot of score to sync output</string>
    </property>
   </action>
  </widget>

@@ -16,7 +16,7 @@ class ExtScriptManager : public QObject, public QTreeWidgetItem {
     Q_OBJECT
 
 public:
-    explicit ExtScriptManager(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile = QFileInfo(), QTreeWidgetItem *parentList = 0);
+    explicit ExtScriptManager(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile = QFileInfo(), QTreeWidgetItem *parentList = 0, QDir _scriptDir = QDir::current());
 
 protected:
     NxObjectFactoryInterface *factory;
@@ -25,14 +25,15 @@ protected:
     QScriptValue script, scriptOnOSC, scriptOnDraw, scriptOnLoad, scriptCreate, scriptConfigure;
     QScriptEngine scriptEngine;
     QFileInfo scriptFile;
-    QPointF mousePos;
+    NxPoint mousePos;
     QString scriptContent;
+    QDir scriptDir;
     qint16 objectId;
     bool hasChanged;
 
 public:
     bool parseScript(bool configure = true);
-    inline void setMousePos(const QPointF & _pos) {
+    inline void setMousePos(const NxPoint & _pos) {
         mousePos = _pos;
     }
     inline void setObjectId(qint16 _objectId) {
@@ -91,6 +92,9 @@ protected:
         hasChanged = _hasChanged;
         updateTitle();
     }
+
+public:
+    static const QString loadLibrary(const QDir & libScriptDir);
 
 private slots:
     void fileWatcherChanged(const QString &);

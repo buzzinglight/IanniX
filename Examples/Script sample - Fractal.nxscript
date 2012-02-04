@@ -1,0 +1,68 @@
+//Setup of the script
+function onConfigure() {
+	//Name
+	title("Fractal");
+	//Global variables
+	ask("General", "Size of shape", "size", 50);
+	ask("General", "Number of recursions", "max_recursion", 4);
+}
+
+//Creation of the score
+function onCreate() {
+	//Viewport setup
+	run("clear");
+	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
+	run("rotate 0 0 0");
+	run("zoom 1100");
+	
+	//First recursion
+	addCurve(0, {x: -size, y: 0}, {x: size, y: 0});
+
+	//Colors
+	run("setColor cursors 255 255 255 255");
+}
+
+
+//Global index
+var index = 0;
+//Custom function
+function addCurve(recursion, start, end) {
+	//Stop recursivity
+	if(recursion < max_recursion) {
+		index++;
+		var percent = recursion / max_recursion;
+
+		//Divide segment in 3
+		var x1 = (end.x - start.x) * 1 / 3;
+		var y1 = (end.y - start.y) * 1 / 3;
+		var x3 = (end.x - start.x) * 2 / 3;
+		var y3 = (end.y - start.y) * 2 / 3;
+		var x2 = (x1 + x3) * cos(THIRD_PI) - (y3 - y1) * sin(THIRD_PI);
+		var y2 = (y1 + y3) * cos(THIRD_PI) + (x3 - x1) * sin(THIRD_PI);
+		
+		//Add curve
+		run("add curve       " + (1000 + index));
+		run("setPos          current " + start.x + " " + start.y + " 0");
+		run("setGroup        current lines");
+		run("setPointAt      current 1 " + x1 + " " + y1);
+		run("setPointAt      current 2 " + x2 + " " + y2);
+		run("setPointAt      current 3 " + x3 + " " + y3);
+		run("setPointAt      current 4 " + (end.x - start.x) + " " + (end.y - start.y));
+		run("setSize         current 0.5");
+		run("setColorHue     current " + range(percent, 290, 360) + " 255 255 255");
+
+		run("add cursor      " + index);
+		run("setCurve        current lastCurve");
+		run("setPattern      current 0 0 1 -1");
+		run("setBoundsSource current " + (-size) + " " + size + " " + size + " 0");
+		run("setBoundsTarget current 0 1 1 0");
+		run("setGroup        current cursors");
+		run("setWidth        current 0");
+		
+		//Récursivity on segments
+		addCurve(recursion + 1, {x:      start.x, y:      start.y} , {x: x1 + start.x, y: y1 + start.y});
+		addCurve(recursion + 1, {x: x1 + start.x, y: y1 + start.y} , {x: x2 + start.x, y: y2 + start.y});
+		addCurve(recursion + 1, {x: x2 + start.x, y: y2 + start.y} , {x: x3 + start.x, y: y3 + start.y});
+		addCurve(recursion + 1, {x: x3 + start.x, y: y3 + start.y} , {x:      end.x  , y:      end.y  });
+	}
+}

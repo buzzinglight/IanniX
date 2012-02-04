@@ -26,7 +26,7 @@ UiRender::UiRender(QWidget *parent) :
     //Render options
     renderOptions = new UiRenderOptions(this);
     renderOptions->render = this;
-    renderOptions->renderFont = QFont("Lucida Sans");
+    renderOptions->renderFont = QFont("Arial");
     renderOptions->renderFont.setPixelSize(11);
     setTriggerAutosize(true);
     renderOptions->paintAxisGrid = true;
@@ -38,6 +38,7 @@ UiRender::UiRender(QWidget *parent) :
     renderOptions->paintLabel = true;
     renderOptions->axisGrid = 1;
 
+    renderOptions->colors["background"] = QColor(255, 255, 255, 255);
     renderOptions->colors["grid"] = QColor(63, 63, 63, 255);
     renderOptions->colors["axis"] = renderOptions->colors["grid"].lighter(150);
     renderOptions->colors["selection"] = QColor(128, 128, 128, 255);
@@ -89,7 +90,7 @@ void UiRender::setDocument(NxDocument *_document) {
     document = _document;
 }
 
-void UiRender::loadTexture(const QString & name, const QString & filename, const QRectF & mapping) {
+void UiRender::loadTexture(const QString & name, const QString & filename, const NxRect & mapping) {
     if(QFile::exists(filename)) {
         GLuint texture = 0;
 
@@ -109,13 +110,20 @@ void UiRender::loadTexture(const QString & name, const QString & filename, const
         qDebug("Can't load %s", qPrintable(filename));
 }
 
-void UiRender::centerOn(const QPointF & center) {
+void UiRender::centerOn(const NxPoint & center) {
     if(!renderOptions->axisArea.contains(center)) {
         renderOptions->axisCenter = -center;
         zoom();
         resizeGL();
         updateGL();
     }
+}
+
+void UiRender::rotateTo(const NxPoint & rotation) {
+    setRotation(rotation);
+    zoom();
+    resizeGL();
+    updateGL();
 }
 
 //Initialize event
@@ -133,7 +141,7 @@ void UiRender::initializeGL() {
 //Resize event
 void UiRender::resizeGL(int width, int height) {
     //Calculate area
-    renderOptions->axisArea = QRectF(QPointF(0, 0), QSizeF(10, 10));
+    renderOptions->axisArea = NxRect(NxPoint(), NxSize(10, 10));
     if(width > height) {
         if(renderOptions->axisArea.width() > -renderOptions->axisArea.height())
             renderOptions->axisArea.setHeight(-renderOptions->axisArea.width() * (qreal)height/(qreal)width);
@@ -148,7 +156,7 @@ void UiRender::resizeGL(int width, int height) {
     }
     renderOptions->axisArea.setWidth(renderOptions->axisArea.width()   * renderOptions->zoomLinear);
     renderOptions->axisArea.setHeight(renderOptions->axisArea.height() * renderOptions->zoomLinear);
-    renderOptions->axisArea.translate(-QPointF(renderOptions->axisArea.size().width()/2, renderOptions->axisArea.size().height()/2));
+    renderOptions->axisArea.translate(-NxPoint(renderOptions->axisArea.size().width()/2, renderOptions->axisArea.size().height()/2));
 
     renderOptions->axisArea.translate(-renderOptions->axisCenter);
 
@@ -166,8 +174,13 @@ void UiRender::resizeGL(int width, int height) {
     glTranslatef(0.0, 0.0, -150);
     glRotatef(rotation.y(), 1, 0, 0);
     glRotatef(rotation.x(), 0, 1, 0);
+    glRotatef(rotation.z(), 0, 0, 1);
     glScalef(scale, scale, scale);
     glTranslatef(translation.x(), translation.y(), 0);
+    if((rotation.x() == 0) && (rotation.y() == 0) && (rotation.z() == 0))
+        renderOptions->allowSelection = true;
+    else
+        renderOptions->allowSelection = false;
 
     renderOptions->axisArea.translate(renderOptions->axisCenter);
 }
@@ -243,6 +256,9 @@ void UiRender::paintGL() {
             timePerfRefresh = 0;
             timePerfCounter = 0;
         }
+#ifdef KINECT_INSTALLED
+        factory->kinect->paint();
+#endif
     }
 }
 
@@ -254,7 +270,7 @@ void UiRender::paintBackground() {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture.texture);
         glBegin(GL_QUADS);
-        glColor4f(1, 1, 1, 1);
+        glColor4f(renderOptions->colors.value("background").redF(), renderOptions->colors.value("background").greenF(), renderOptions->colors.value("background").blueF(), renderOptions->colors.value("background").alphaF());
         glLineWidth(1);
         glTexCoord2d(0, 0); glVertex3f(texture.mapping.left() , texture.mapping.bottom(), 0);
         glTexCoord2d(1, 0); glVertex3f(texture.mapping.right(), texture.mapping.bottom(), 0);
@@ -367,13 +383,13 @@ void UiRender::mousePressEvent(QMouseEvent *event) {
     setFocus();
 
     //Save state when pressed
-    mousePressedRawPos = event->posF();
+    mousePressedRawPos = NxPoint(event->posF().x(), event->posF().y());
     //Mouse position
-    mousePressedAreaPosNoCenter = QPointF((event->posF().x() - (qreal)size().width()/2) / (qreal)size().width() * renderOptions->axisArea.width(), (event->posF().y() - (qreal)size().height()/2) / (qreal)size().height() * renderOptions->axisArea.height());
+    mousePressedAreaPosNoCenter = NxPoint((event->posF().x() - (qreal)size().width()/2) / (qreal)size().width() * renderOptions->axisArea.width(), (event->posF().y() - (qreal)size().height()/2) / (qreal)size().height() * renderOptions->axisArea.height());
     mousePressedAreaPos = mousePressedAreaPosNoCenter - renderOptions->axisCenter;
     if(mouseSnap) {
-        mousePressedAreaPosNoCenter = QPointF(qRound(mousePressedAreaPosNoCenter.x() / renderOptions->axisGrid) * renderOptions->axisGrid, qRound(mousePressedAreaPosNoCenter.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
-        mousePressedAreaPos = QPointF(qRound(mousePressedAreaPos.x() / renderOptions->axisGrid) * renderOptions->axisGrid, qRound(mousePressedAreaPos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
+        mousePressedAreaPosNoCenter = NxPoint(qRound(mousePressedAreaPosNoCenter.x() / renderOptions->axisGrid) * renderOptions->axisGrid, qRound(mousePressedAreaPosNoCenter.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
+        mousePressedAreaPos = NxPoint(qRound(mousePressedAreaPos.x() / renderOptions->axisGrid) * renderOptions->axisGrid, qRound(mousePressedAreaPos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
     }
 
     mousePressed = true;
@@ -387,15 +403,24 @@ void UiRender::mousePressEvent(QMouseEvent *event) {
         return;
 
     //Start area selection
-    if(editing) {
+    if((editing) && (renderOptions->allowSelection)) {
+        foreach(NxObject *selected, selection)   ///CG/// Adding an object should clear the selection and select the added object
+            selected->setSelected(false);
+        selection.clear();
+        //selectedHover->setSelected(true);   /// select this one
+        //selectionAdd(selectedHover);
         if(editingMode == EditingModeFree) {
-            emit(editingStart(mousePressedAreaPos));
+            //emit(editingStart(mousePressedAreaPos));
+            if(editingFirstPoint)
+                emit(editingStart(mousePressedAreaPos));
+            else
+                emit(editingMove(mousePressedAreaPos, true));
         }
         else if(editingMode == EditingModePoint) {
             if(editingFirstPoint)
                 emit(editingStart(mousePressedAreaPos));
             else
-                emit(editingMove(mousePressedAreaPos));
+                emit(editingMove(mousePressedAreaPos, true));
         }
         else if(editingMode == EditingModeTriggers) {
             emit(editingStart(mousePressedAreaPos));
@@ -411,6 +436,14 @@ void UiRender::mousePressEvent(QMouseEvent *event) {
             renderOptions->selectionArea.setBottomRight(mousePressedAreaPos);
             if(cursor().shape() != Qt::BlankCursor)
                 setCursor(Qt::CrossCursor);
+        } else if (selectedHover) {
+            if (!selectedHover->getSelected()) {  ///CG/// Started dragging an unselected object
+                foreach(NxObject *selected, selection)
+                    selected->setSelected(false);
+                selection.clear();  //deselect any others that may be selected
+                selectedHover->setSelected(true);   /// select this one
+                selectionAdd(selectedHover);
+            }
         }
         else if((!selectedHover) && (cursor().shape() != Qt::BlankCursor))
             setCursor(Qt::ClosedHandCursor);
@@ -418,13 +451,15 @@ void UiRender::mousePressEvent(QMouseEvent *event) {
 }
 void UiRender::mouseReleaseEvent(QMouseEvent *event) {
     //Edition
-    if((editing) && (cursor().shape() != Qt::BlankCursor)) {
+    if((editing) && (renderOptions->allowSelection) && (cursor().shape() != Qt::BlankCursor)) {
+        /*
         if(editingMode == EditingModeFree) {
             emit(editingStop());
             editing = false;
         }
+        */
     }
-    else if(cursor().shape() != Qt::BlankCursor) {
+    else if((cursor().shape() != Qt::BlankCursor) && (renderOptions->allowSelection)) {
         //Copy area selection
         foreach(NxObject *selected, selectionRect)
             selectionAdd(selected);
@@ -435,10 +470,14 @@ void UiRender::mouseReleaseEvent(QMouseEvent *event) {
             object->dragStop();
         if(selectedHover)
             selectedHover->dragStop();
+
+        if (mouseObjectDrag) {   ///CG///
+
+        }
         emit(selectionChanged());
 
         //Simple clic
-        if(mousePressedRawPos == event->posF()) {
+        if(mousePressedRawPos == NxPoint(event->posF().x(), event->posF().y())) {
             if(selectedHover) {
                 //Click on an object
                 if(!mouseShift)
@@ -462,8 +501,8 @@ void UiRender::mouseReleaseEvent(QMouseEvent *event) {
     mousePressed = false;
     mouseShift = false;
     mouseObjectDrag = false;
-    renderOptions->selectionArea.setSize(QSizeF(0, 0));
-    if((cursor().shape() != Qt::BlankCursor) && !((editing) && ((editingMode == EditingModePoint) || (editingMode == EditingModeTriggers) || (editingMode == EditingModeCircle)))) {
+    renderOptions->selectionArea.setSize(NxSize(0, 0));
+    if((cursor().shape() != Qt::BlankCursor) && !((editing) && ((editingMode == EditingModeFree) || (editingMode == EditingModePoint) || (editingMode == EditingModeTriggers) || (editingMode == EditingModeCircle)))) {
         if(mouseShift)
             setCursor(Qt::CrossCursor);
         else
@@ -473,22 +512,25 @@ void UiRender::mouseReleaseEvent(QMouseEvent *event) {
 void UiRender::mouseMoveEvent(QMouseEvent *event) {
     //Mouse position
     bool mouse3D = event->modifiers() & Qt::AltModifier;
-    QPointF mousePosNoCenter = QPointF((event->posF().x() - (qreal)size().width()/2) / (qreal)size().width() * renderOptions->axisArea.width(), (event->posF().y() - (qreal)size().height()/2) / (qreal)size().height() * renderOptions->axisArea.height());
-    QPointF mousePos = mousePosNoCenter - renderOptions->axisCenter, mousePosBackup = mousePos;
-    QPointF deltaMouseRaw = event->posF() - mousePressedRawPos;
+    NxPoint mousePosNoCenter = NxPoint((event->posF().x() - (qreal)size().width()/2) / (qreal)size().width() * renderOptions->axisArea.width(), (event->posF().y() - (qreal)size().height()/2) / (qreal)size().height() * renderOptions->axisArea.height());
+    NxPoint mousePos = mousePosNoCenter - renderOptions->axisCenter, mousePosBackup = mousePos;
+    NxPoint deltaMouseRaw = NxPoint(event->posF().x(), event->posF().y()) - mousePressedRawPos;
 
     if(mouseSnap)
-        mousePos = QPointF(qRound(mousePos.x() / renderOptions->axisGrid) * renderOptions->axisGrid, qRound(mousePos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
+        mousePos = NxPoint(qRound(mousePos.x() / renderOptions->axisGrid) * renderOptions->axisGrid, qRound(mousePos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
     bool noSelection = true;
     emit(mousePosChanged(mousePos));
 
-    if((editing) && (cursor().shape() != Qt::BlankCursor)) {
+    if((editing) && (cursor().shape() != Qt::BlankCursor) && (renderOptions->allowSelection)) {
         if((mousePressed) && (editingMode == EditingModeFree))
-            emit(editingMove(mousePos));
+            emit(editingMove(mousePos, true));
+        else if((!editingFirstPoint) && ((editingMode == EditingModeFree) || (editingMode == EditingModePoint))){
+            emit(editingMove(mousePos, false));
+        }
     }
     else {
         //Cursor
-        if(cursor().shape() != Qt::BlankCursor) {
+        if((cursor().shape() != Qt::BlankCursor) && (renderOptions->allowSelection)) {
             if((mouseShift) && (mousePressed))
                 setCursor(Qt::CrossCursor);
             else if((selectedHover) && (!mousePressed))
@@ -503,19 +545,27 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
         if(mousePressed) {
             if(mouse3D) {
                 if(mouseShift)
-                    translation = translationDrag + 10 * QPointF(deltaMouseRaw.x() / (qreal)size().width(), deltaMouseRaw.y() / (qreal)size().height());
+                    translation = translationDrag + 10 * NxPoint(deltaMouseRaw.x() / (qreal)size().width(), deltaMouseRaw.y() / (qreal)size().height());
                 else
-                    rotation = rotationDrag + 360 * QPointF(deltaMouseRaw.x() / (qreal)size().width(), deltaMouseRaw.y() / (qreal)size().height());
+                    rotation = rotationDrag + 360 * NxPoint(0, deltaMouseRaw.y() / (qreal)size().height(), deltaMouseRaw.x() / (qreal)size().width());
                 refresh();
             }
-            else if((mouseShift) && (cursor().shape() != Qt::BlankCursor)) {
+            else if((mouseShift) && (renderOptions->allowSelection) && (cursor().shape() != Qt::BlankCursor)) {
                 //Selection rect
                 renderOptions->selectionArea.setBottomRight(mousePos);
             }
-            else if((isCanObjectDrag()) && ((selection.contains(selectedHover)) || (selectedHover) || (mouseObjectDrag)) && (!mouseCommand) && (cursor().shape() != Qt::BlankCursor)) {
+            else if((isCanObjectDrag()) && (renderOptions->allowSelection) && ((selection.contains(selectedHover)) || (selectedHover) || (mouseObjectDrag)) && (!mouseCommand) && (cursor().shape() != Qt::BlankCursor)) {
                 if(!mouseObjectDrag) {
                     mouseObjectDrag = true;
                     factory->pushSnapshot();
+
+                    ///CG/// If current object is not selected the selection should be cleared and only this object should be dragged
+                    //if (!selectedHover->getSelected()) {
+                    //    foreach(NxObject* object, selection)
+                    //        object->setSelected(false);
+                    //    selectedHover->       setSelected(true);
+                    //}
+
                     foreach(NxObject* object, selection)
                         object->dragStart();
                     if(selectedHover)
@@ -528,7 +578,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
             }
             else if(!mouseObjectDrag) {
                 //New center
-                renderOptions->axisCenter = mousePressedAxisCenter + QPointF((mousePosNoCenter - mousePressedAreaPosNoCenter).x(), (mousePosNoCenter - mousePressedAreaPosNoCenter).y());
+                renderOptions->axisCenter = mousePressedAxisCenter + NxPoint((mousePosNoCenter - mousePressedAreaPosNoCenter).x(), (mousePosNoCenter - mousePressedAreaPosNoCenter).y());
 
                 //Update
                 refresh();
@@ -536,7 +586,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
         }
 
         mousePos = mousePosBackup;
-        if((factory) && (document) && (cursor().shape() != Qt::BlankCursor)) {
+        if((factory) && (document) && (cursor().shape() != Qt::BlankCursor) && (renderOptions->allowSelection)) {
             QList<NxObject*> eligibleSelection;
 
             //Browse documents
@@ -573,7 +623,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                                             NxObject *object = objectIterator.value();
 
                                             //Is Z visible ?
-                                            if((renderOptions->paintZStart <= object->getZ()) && (object->getZ() <= renderOptions->paintZEnd)) {
+                                            if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd)) {
                                                 //Check selection
                                                 if(object->isMouseHover(mousePos)) {
                                                     if(object->getType() == ObjectsTypeCurve)
@@ -584,7 +634,9 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
 
                                                 //Add the object to selection if click+shift
                                                 if(mouseShift) {
-                                                    QRectF objectBoundingRect = object->getBoundingRect();
+                                                    NxRect objectBoundingRect = object->getBoundingRect();
+                                                    if(objectBoundingRect.width() == 0)  objectBoundingRect.setWidth(0.001);
+                                                    if(objectBoundingRect.height() == 0) objectBoundingRect.setHeight(0.001);
                                                     if(renderOptions->selectionArea.intersects(objectBoundingRect)) {
                                                         selectionRect.append(object);
                                                         object->setSelected(true);
@@ -611,7 +663,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                     if(curve->isMouseHover(mousePos)) {
                         selected = true;
                         if(curve->getSelected())
-                            curve->isOnPathPoint(QRectF(mousePos - QPointF(renderOptions->objectSize/2, renderOptions->objectSize/2) - curve->getPos(), mousePos + QPointF(renderOptions->objectSize/2, renderOptions->objectSize/2) - curve->getPos()));
+                            curve->isOnPathPoint(NxRect(mousePos - NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2) - curve->getPos(), mousePos + NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2) - curve->getPos()));
                     }
 
                 }
@@ -641,20 +693,21 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
         return;
 
     bool mouse3D = event->modifiers() & Qt::AltModifier;
+    bool mouseControl = event->modifiers() & Qt::ControlModifier;
 
     if(mouse3D) {
         scale = 3;
-        rotation = QPointF(0, 0);
-        translation = QPointF(0, 0);
+        rotation = NxPoint();
+        translation = NxPoint();
         refresh();
     }
-    else if(editing) {
+    else if((editing) && (renderOptions->allowSelection)) {
         emit(editingStop());
         editing = false;
     }
-    else if((selectedHover) && (selectedHover->getType() == ObjectsTypeCurve)) {
+    else if((selectedHover) && (renderOptions->allowSelection) && (selectedHover->getType() == ObjectsTypeCurve)) {
         NxCurve *curve = (NxCurve*)selectedHover;
-        curve->addMousePointAt(mousePressedAreaPos);
+        curve->addMousePointAt(mousePressedAreaPos, mouseControl);
     }
     else {
         factory->askNxObject();
@@ -670,15 +723,15 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
         //setCursor(Qt::CrossCursor);
     }
 
-    QPointF translation;
+    NxPoint translation;
     if(event->key() == Qt::Key_Left)
-        translation = QPointF(translationUnit, 0);
+        translation = NxPoint(translationUnit, 0);
     else if(event->key() == Qt::Key_Right)
-        translation = QPointF(-translationUnit, 0);
+        translation = NxPoint(-translationUnit, 0);
     else if(event->key() == Qt::Key_Up)
-        translation = QPointF(0, -translationUnit);
+        translation = NxPoint(0, -translationUnit);
     else if(event->key() == Qt::Key_Down)
-        translation = QPointF(0, translationUnit);
+        translation = NxPoint(0, translationUnit);
     else if(event->key() == Qt::Key_Escape) {
         emit(escFullscreen());
         emit(editingStop());
@@ -851,7 +904,7 @@ void UiRender::actionSelect_all() {
                                         NxObject *object = objectIterator.value();
 
                                         //Is Z visible ?
-                                        if((renderOptions->paintZStart <= object->getZ()) && (object->getZ() <= renderOptions->paintZEnd)) {
+                                        if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd)) {
 
                                             //Add the object to selection
                                             selectionAdd(object);

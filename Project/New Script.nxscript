@@ -1,0 +1,12 @@
+//Script "New Script"
+//Insert requests for global variables:
+function onConfigure() {
+    //title("enter title here");
+    //ask("prompt", "groupName", "variableName", defaultValue);
+}
+
+//Insert code to create score:
+function onCreate() {
+
+
+}

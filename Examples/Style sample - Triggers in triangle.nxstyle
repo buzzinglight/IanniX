@@ -1,0 +1,10 @@
+function onCreate() {
+	//Replace default texture for active triggers that doesn't send message
+	run("registerTexture trigger_active           -1 1 1 -1  ./Examples/trigger_triangle.png");
+	//Replace default texture for inactive triggers that doesn't send message
+	run("registerTexture trigger_inactive         -1 1 1 -1  ./Examples/trigger_triangle.png");
+	//Replace default texture for active triggers that send messages
+	run("registerTexture trigger_active_message   -1 1 1 -1  ./Examples/trigger_triangle.png");
+	//Replace default texture for inactive triggers that send messages
+	run("registerTexture trigger_inactive_message -1 1 1 -1  ./Examples/trigger_triangle.png");
+}

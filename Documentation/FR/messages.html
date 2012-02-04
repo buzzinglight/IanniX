@@ -1,0 +1,450 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="fr" />
+  <meta name="language" content="fr" />
+  <meta name="designer" content="buzzing light" />
+  <meta name="description" content="IanniX documentation" />
+  <link href="../Common/css/reset.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/font/stylesheet.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../Common/jquery.js">
+</script>
+
+  <title>IanniX — Messages</title>
+  <style type="text/css">
+/*<![CDATA[*/
+  p.c2 {font-weight: bold}
+  a.c1 {color:#aaa; text-decoration:none;}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class='main container'>
+    <table class="onglets" summary="">
+      <tr>
+        <td class="onglet"><a href="intro.html">Introduction</a></td>
+
+        <td class="onglet"><a href="objets.html">Objets<br />
+        fondamentaux</a></td>
+
+        <td class="onglet" id='actif'><a href="messages.html">Messages émis<br />
+        et reçus</a></td>
+
+        <td class="onglet"><a href="overview.html">Interface<br />
+        graphique</a></td>
+
+        <td class="onglet"><a href="script.html">Scripts</a></td>
+
+        <td class="onglet"><a href="reference.html">Référence</a></td>
+
+        <td class="onglet"><a href="listing.html">Index<br />
+        des fonctions</a></td>
+      </tr>
+    </table>
+
+    <div class="langue">
+      <a class="c1" href="../EN/messages.html">English version</a>
+    </div>
+
+    <h2>Principe</h2>
+
+    <p>La gestion des messages est la fonction principale de IanniX. Ils peuvent être
+    envoyés par <b>les curseurs</b> et <b>les triggers</b>.<br /></p>
+
+    <p>Pour savoir si les messages sont effectivement reçus ou envoyés, IanniX en affiche
+    une trace dans la<br />
+    <a href='overview.html#Messages'>« Messages »</a> de l'inspecteur.<br /></p>
+
+    <p>b&gt;Les triggers n'envoient généralement qu'un seul message au passage du curseur
+    et IanniX limite l'envoi à 1 message par milliseconde maximum.<br /></p>
+
+    <p><b>Les curseurs</b> génèrent par défaut des messages toutes les 20&nbsp;ms (mais
+    vous pouvez modifier cette période).</p>
+
+    <h2 id="send">Contruction d'un message</h2>
+
+    <h3>Schéma général</h3>
+
+    <p>Pour construire un message dans IanniX, vous devez le formater suivant le modèle
+    ci-dessous :</p>
+
+    <p><code>&lt;protocol&gt;://&lt;destination&gt;/&lt;address&gt;
+    &lt;arguments&gt;</code></p>
+
+    <h3>Protocoles</h3>
+
+    <ul>
+      <li>osc (Open Sound Control), l'IP, le port et l'adresse doivent être
+      spécifiés.<br />
+      Exemple :&nbsp;<code><span class=
+      "message">osc://127.0.0.1:1234/oscAddress</span></code></li>
+
+      <li>serial (ASCII Serial Port).<br />
+      Exemple :&nbsp;<code><span class="message">serial://</span></code></li>
+
+      <li>udp (Raw UDP, PureData compatible), l'IP et le port doivent être
+      spécifiés.<br />
+      Exemple :&nbsp;<code><span class="message">udp//127.0.0.1:5678/</span></code></li>
+
+      <li>http (GET Request), construction URL standard<br />
+      Exemple :&nbsp;<code><span class=
+      "message">http://localhost/myapp/page.php</span></code></li>
+
+      <li>midi (MIDI Protocol), le port doit être spécifié sans espaces ni slashes +
+      <code>note</code>, <code>cc</code>, <code>bend</code> ou <code>pgm (program
+      change)</code>.<br />
+      Exemple :&nbsp;<code><span class="message">midi://portname/note channel note
+      velocity</span><br /></code> Exemple :&nbsp;<code><span class=
+      "message">midi://portname/cc channel controller value</span></code><br />
+      Exemple :&nbsp;<code><span class="message">midi://portname/bend channel
+      value</span></code></li>
+
+      <li><code>direct</code> Envoi d'un message direct à IanniX pour des commandes
+      ultra-rapides.<br />
+      Exemple :&nbsp;<code><span class="message">direct://</span></code></li>
+    </ul>
+
+    <h3>Arguments</h3>
+
+    <p>Les arguments consituent les données utiles du message IanniX. Il s'agit d'une
+    succession de variables qui décrivent l'état d'un objet au moment où le message est
+    envoyé. Ces variables sont détaillées dans la rubriques références pour les <a href=
+    "reference.html#variable_trigger">triggers</a> et les <a href=
+    "reference.html#variable_cursor">curseurs</a>.</p>
+
+    <p>Outre les variables, vous pouvez bien sûr spécifier des valeurs ou chaînes de
+    caractères directement dans le message.</p>
+
+    <p>Enfin, trois variables globales peuvent être utilisées dans tous les messages
+    :</p>
+
+    <ul>
+      <li><span class="variable"><code>nb_triggers</code></span> nombre de triggers</li>
+
+      <li><span class="variable"><code>nb_curves</code></span> nombre de curseurs</li>
+
+      <li><span class="variable"><code>nb_cursors</code></span> nombre de courbes</li>
+    </ul>
+
+    <div id="setmessage">
+      <h2>Éditer les messages envoyés</h2>
+
+      <p>Pour éditer le message qu'un objet doit envoyer, cliquez sur <a href=
+      'overview.html#inspector'>"Edit"</a> dans l'inspecteur après avoir sélectionné
+      l’objet ou double-cliquez sur l’objet lui-même pour faire apparaître cette fenêtre
+      :</p>
+
+      <table class="dialog">
+        <tr>
+          <td><img src="../Common/img/setmessage.png" alt="setMessage" /></td>
+        </tr>
+      </table><br />
+
+      <p>Double-cliquez sur le message pour le modifier. Cliquez sur « - » pour le
+      supprimer et sur « + » pour ajouter d'autres messages.</p>
+
+      <h2 id="receive">Réception d'un message</h2>
+
+      <p>IanniX peut être controlé par :</p>
+
+      <ul>
+        <li><code>osc</code> (Open Sound Control), le port par défaut est
+        <code>1234</code>, l'adresse par défaut est <code>/iannix</code><br />
+        Exemple dans PureData :&nbsp;<span class="message"><code>send /iannix/<span class=
+        "api">zoom</span> <span class="zoomfactor">100</span></code></span></li>
+
+        <li><code>serial</code> (ASCII Serial Port)<br />
+        Exemple avec Arduino :&nbsp;<span class=
+        "message"><code>Serial.println("<span class="api">zoom</span> <span class=
+        "zoomfactor">100</span>");</code></span></li>
+
+        <li><code>udp</code> (Raw UDP, PureData compatible), le port par défaut est
+        <code>1235</code>.<br />
+        Exemple dans PureData :&nbsp;<span class="message"><code>send <span class=
+        "api">zoom</span> <span class="zoomfactor">100</span></code></span></li>
+
+        <li><code>http</code> (GET Reply)<br />
+        Exemple en PHP :&nbsp;<span class="message"><code>echo "<span class=
+        "api">zoom</span> <span class="zoomfactor">100</span>";</code></span></li>
+
+        <li><code>midi</code> (MIDI Protocol)</li>
+
+        <li><code>direct</code> Envoi d'un message direct à IanniX pour des commandes
+        ultra-rapides.<br />
+        Exemple :&nbsp;<span class="message"><code>direct:// <span class="api">zoom</span>
+        <span class="zoomfactor">100</span></code></span></li>
+
+        <li><code>nxscript file</code>&nbsp;(JavaScript), un exemple est donné avec
+        IanniX<br />
+        Exemple :&nbsp;<span class="message"><code>iannix.execute("<span class=
+        "api">zoom</span> <span class="zoomfactor">100</span>");</code></span></li>
+      </ul>
+
+      <p>Vous devez respecter ces syntaxes pour que IanniX puisse lire vos messages.
+      Consulter les documentations de vos logiciels respectifs pour formater correctement
+      l'envoi de vos informations.</p>
+
+      <p class="c2">Toutes les fonctions supportées par IanniX sont décrites dans
+      <a href='reference.html'>la référence</a>.</p>
+
+      <h2 id="MIDI">Détails des messages MIDI</h2>
+
+      <ul>
+        <li>Le port de sortie doit être spécifié sans espaces ou slashes.<br /></li>
+
+        <li>Sur les systèmes Macintosh (et Linux ?), IanniX créé un port de sortie virtuel appelé
+        <code>IanniX_Out</code> qui peut être ouvert dans d'autres applications MIDI.<br /></li>
+
+        <li>Les autres ports MIDI disponibles sont listés dans IanniX dans la vue Message de l'inspecteur.<br /></li>
+
+        <li>Les paramètres d'un message MIDI sont convertis en entier si nécessaire et sont tronqués au rang requis.<br /></li>
+      </ul>
+
+      <p>Messages MIDI Note-On/Note-Off</p>
+
+      <ul>
+        <li>Format :&nbsp;<span class="message">midi://portname/note channel note
+        velocity</span><br /></li>
+
+        <li>Format :&nbsp;<span class="message">midi://portname/note channel note velocity
+        duration</span></li>
+
+        <li>Le canal doit être dans un rang entre 0 et 15 (correspondant aux canaux MIDI de 1 à 16).</li>
+
+        <li>La note doit être dans un rang entre 0 et 127.</li>
+
+        <li>La durée est exprimée en milli-secondes. Ex : 1000 est une seconde.</li>
+
+        <li>Le paramètre de durée est optionnel.  S'il est omis, le note-off ne sera pas automatiquement envoyé.
+        Le message note-off (vitesse nulle) doit être envoyé par d'autres moyens.</li>
+
+        <li>Le paramètre optionnel de la durée dans le message est prévu lorsque l'on veut une 
+			variable durée de la note, définie par les paramètres de la partition chaque fois que 
+			le message est triggé.</li>
+
+        <li>Une note de vélocité zéro est égale à note-off.</li>
+      </ul>
+
+      <p>Messages MIDI CC</p>
+
+      <ul>
+        <li>Format :&nbsp;<span class="message">midi://portname/cc channel controller
+        value</span></li>
+
+        <li>Le canal doit être dans un rang entre 0 et 15 (correspondant aux canaux MIDI de 1 à 16).</li>
+
+        <li>Le contrôleur doit être dans un rang entre 0 et 127.</li>
+
+        <li>La valeur doit être dans un rang entre 0 to 127.</li>
+
+        <li>Voir une spécification MIDI ou la documentation de votre synthétiseur pour les nombres contrôleurs disponibles et comment ils vont affecter le son.</li>
+      </ul>
+
+      <p>Messages MIDI Pitch Bend</p>
+
+      <ul>
+        <li>Format :&nbsp;<code><span class="message">midi://portname/bend channel
+        value</span></code></li>
+
+        <li>Le canal doit être dans un rang entre 0 et 15 (correspondant aux canaux MIDI de 1 à 16).</li>
+
+        <li>La valeur bend doit être dans un rang entre 0 et 16383.<br /></li>
+
+        <li>Une valeur bend de 8192 spécifie un bend de zéro. Les valeurs en-dessous diminuent le bend et les valeurs au-dessus l'augmentent.</li>
+      </ul>
+
+      <p>Messages MIDI Program Change</p>
+
+      <ul>
+        <li>Format :&nbsp;<code><span class="message">midi://portname/pgm channel
+        value</span></code></li>
+
+        <li>Le canal doit être dans un rang entre 0 et 15 (correspondant aux canaux MIDI de 1 à 16).</li>
+
+        <li>La value du pgm doit être dans un rang entre 0 et 127.</li>
+
+        <li>Pour beaucoup de synthétiseurs, le message Program Change sélectionne un nouveau programme, patch ou son avec le nombre dans la banque de son.</li>
+      </ul>
+
+      <p class="c2">Toutes les fonctions supportées par IanniX sont décrites dans <a href=
+      'reference.html'>la référence</a>.</p>
+
+      <h2 id="sendJS">Javascript en Messages</h2>
+
+      <p>Les expressions Javascript peuvent être utilisées dans les messages n'importe où un argument peut être placé.</p>
+
+      <h3>Basiques</h3>
+
+      <ul>
+        <li>Une expression Javascript est indiquée entre accolades,
+        séparée des autres arguments par au moins un espace.</li>
+
+        <li>N'importe quelles variables (voir la section Référence) disponibles pour un message normal
+        sont aussi disponibles pour utiliser des expressions Javascript.</li>
+
+        <li>La valeur insérée dans un message par une expression Javascript est la valeur
+        retournée par l'expression, ou par la dernière expression seule si l'expression complète
+        consiste en plusieurs déclarations.</li>
+
+        <li>En plus des capacités de Javascript, un certain nombre de
+	    fonctions sont fournies pour les calculs souvent nécessaires. (Voir la section Scripts).</li>
+
+        <li>Il est possible de construire expressions utiles même avec des connaissances
+        limitées de Javascript. La syntaxe est aussi très similaire du C ou du Java. Pour apprendre le
+        Javascript, vous pouvez vous référer aux nombreux tutoriels ou documents de référence
+        présents sur Internet, ou dans les livres sur le Javascript.</li>
+      </ul>
+
+      <h3>Exemples :</h3>
+
+      <ul>
+        <li>Ce message envoie la somme de cursor_xPos et de cursor_yPos :<br />
+        &nbsp;<code><span class="message">osc://127.0.0.1:1234/oscAddress
+        {cursor_xPos+cursor_yPos}</span></code></li>
+
+        <li>Ce message envoie le sinus de trois fois cursor_angle. Le sinus qui
+        retourne des valeurs de -1 à 1 est échelonné de 0 à 1 :<br />
+        &nbsp;<code><span class="message">osc://127.0.0.1:1234/oscAddress
+        {map(sin(3*cursor_angle),-1,1,0,1)}</span></code></li>
+
+        <li>Ce message MIDI envoie des nombres de note basés sur cursor_angle (rang de 0 à
+        360), échelonné des rangs 60 à 100:<br />
+        &nbsp;<code>&nbsp;<span class="message">midi://portname/note channel
+        {map(cursor_angle ,0, 360, 60, 100)} velocity</span></code></li>
+
+        <li>Ce message MIDI envoie des nombres de note basés sur cursor_angle échelonnés des rangs
+        60 à 100, la vélocité des notes des rangs 70 à 127 basé sur
+        cursor_time_percent, et des durées de notes aléatoires de 200 milli-secondes à
+        1000 milli-secondes.<br />
+        &nbsp;<code>&nbsp;<span class="message">midi://portname/note channel
+        {map(cursor_angle ,0, 360, 60, 100)} {range(cursor_time_percent, 70, 127)}
+        {random(200,1000)}</span></code></li>
+      </ul>
+
+      <h3>Actions Conditionnelles</h3>
+
+      <ul>
+        <li>Un opérateur conditionnel Javascript de la forme <code><span class=
+        "message">test ? DoIfTrue : DoIfFalse</span></code> permet à l'évaluation de
+        l'expression d'être altérée en fonction d'un test de logique des variables.</li>
+
+        <li>Exemple : Ce message envoie zéro lorsque cursor_time vaut moins que 2 et
+        envoie trigger_xPos si le temps vaut plus que 2.<br />
+        &nbsp;<code><span class="message">osc://127.0.0.1:57120/cursor
+        {(cursor_time&gt;2)?trigger_xPos:0}</span></code></li>
+
+        <li>Exemple : Ce message envoie la distance de collision échelonné des rangs 0 à
+        1, mais uniquement si cursor_angle vaut plus que collision_angle. Autrement
+        le message envoie zéro. Note : L'échelonnage assume que collision_distance est entre
+        0 et 5.<br />
+        &nbsp;<code><span class="message">osc://127.0.0.1:1234/oscAddress {(cursor_angle
+        &gt; collision_angle) ? map(collision_distance ,0 ,5 ,0 ,1):
+        0}</span></code></li>
+      </ul>
+
+      <h3>Suppression d'un Message</h3>
+
+      <ul>
+        <li>Un message est supprimé (pas envoyé) si n'importe laquelle des expressions renvoie
+	    la chaîne "suppress".</li>
+
+        <li>Exemple : Le message suivant envoie 1 si le côté droit du cursor
+        rencontre un trigger. Le message n'est pas envoyé si le côté gauche du curseur
+        rencontre le trigger.<br />
+        &nbsp;<code><span class="message">osc://127.0.0.1:1234/oscAddress {(trigger_side
+        == 1) ? 1 : "suppress")}</span></code></li>
+
+        <li>Exemple : Les variables de curseur de type <code>collision_&lt;variablename&gt;(ex :
+        collision_xPos)</code> ont seulement une valeur significative lorsqu'il y a collision
+        avec une courbe. Cependant, les messages d'un curseur sont produits continuellement pendant que
+        la partition est jouée. Par conséquent, lorsqu'il n'y a pas de collision ces variables
+        retournent "no". Une expression conditionnelle peut être utilisée pour supprimer le message sauf
+        lorsqu'il y a collision.<br />
+        &nbsp;<code><span class="message">osc://127.0.0.1:1234/oscAddress
+        {(collision_xPos == "no") ? "suppress" : collision_xPos}</span></code></li>
+
+        <li>Exemple : Seul ce message est envoyé si le trigger est dans le même groupe que
+        le curseur rencontré. S'il est envoyé, le message inclut trigger_id, trigger_xPos et
+        trigger_yPos.<br />
+        &nbsp;<code><span class="message">osc://127.0.0.1:57120/trigger
+        {(trigger_group_id==cursor_group_id)?trigger_id:"suppress"} trigger_xPos
+        trigger_yPos</span></code></li>
+      </ul>
+
+      <h3>Erreurs</h3>
+
+      <ul>
+        <li>Si une expression contient une erreur, le texte "**error**" est retourné et
+        apparaît dans le message à la place de la valeur retournée.</li>
+
+        <li>Les erreurs dans les messages peuvent être vérifiées dans la fenêtre Message de l'inspecteur pendant que
+        la partition est jouée.</li>
+
+        <li>Les erreurs peuvent inclure des erreurs de syntaxe Javascript ou des références à des variables
+        ou des fonctions inexistantes.</li>
+      </ul>
+
+      <h2 id="recursivity">Récursivité</h2>
+
+      <p>IanniX peut être contrôlé par IanniX lui-même (!). Vous pouvez utiliser tous les
+      protocoles décrits précédemment mais nous vous recommandons d'utiliser l'OSC pour
+      communiquer entre deux IanniX sur des ordinateurs en réseau et d'utiliser la
+      commande <code>direct</code> pour envoyer des messages à l'intérieur même de
+      IanniX.<br />
+      <br />
+      <span class="titre">Exemple :&nbsp;</span><span class=
+      "message"><code>osc://127.0.0.1:1234/iannix/<span class="api">setTime</span>
+      <span class="target">11</span> <span class="time">0</span></code></span> &nbsp;or
+      &nbsp;<span class="message"><code>direct:// <span class="api">setTime</span>
+      <span class="target">11</span> <span class="time">0</span></code>.</span><br />
+      <br /></p>
+
+      <table class="exemple">
+        <tr>
+          <td><object type="application/x-shockwave-flash" data=
+          "../Common/vid/settime.swf" width="195" height="195">
+            <param name="movie" value="../Common/vid/settime.swf" />
+            <param name="quality" value="high" />
+            <param name="bgcolor" value="#000000" />
+            <param name="play" value="true" />
+            <param name="loop" value="true" />
+            <param name="wmode" value="window" />
+            <param name="scale" value="showall" />
+            <param name="menu" value="false" />
+            <param name="allowScriptAccess" value="sameDomain" />
+            <param name="allowFullScreen" value="true" />
+          </object></td>
+
+          <td>
+            <div class='copypaste'>
+              Copier/coller cet exemple dans IanniX pour comprendre le fonctionnement du
+              code !
+            </div>
+
+            <div class="code">
+              <code>run("add curve 1");<br />
+              run("setPointsEllipse current 2 2");<br />
+              run("setPos current 0 0 0");<br />
+              <br />
+              run("add cursor 11");<br />
+              run("setCurve 11 1");<br />
+              <br />
+              run("add trigger 21");<br />
+              run("setPos current -2 0 0&lt;");br/&gt; run("setMessage current 10,
+              direct:// <span class="api">setTime</span> <span class="target">11</span>
+              <span class="time">0");</span><br /></code>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ExtOscPatternEditor</class>
+ <widget class="QWidget" name="ExtOscPatternEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>760</width>
+    <height>62</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+	font: 12px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
+}
+QListWidget {
+	color: white;
+	max-height: 40px;
+}
+
+QListWidget::item {
+	background-color: rgb(44, 167, 218);
+	margin: 2px;
+	border-radius: 8px;
+}
+
+QPlainTextEdit {
+	font: 11px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+}</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>10</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="pageList">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QListWidget" name="patternList">
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOn</enum>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::NoSelection</enum>
+         </property>
+         <property name="verticalScrollMode">
+          <enum>QAbstractItemView::ScrollPerPixel</enum>
+         </property>
+         <property name="horizontalScrollMode">
+          <enum>QAbstractItemView::ScrollPerPixel</enum>
+         </property>
+         <property name="flow">
+          <enum>QListView::LeftToRight</enum>
+         </property>
+         <property name="isWrapping" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>pouet</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>osc</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>cursor_id</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>cursor_toto</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>id</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pageEdit">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QPlainTextEditWithFocus" name="patternEdit">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="removeButton">
+     <property name="minimumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>-</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QPlainTextEditWithFocus</class>
+   <extends>QPlainTextEdit</extends>
+   <header>ExtOscPatternEditor.h</header>
+   <slots>
+    <signal>focusOut()</signal>
+    <signal>focusIn()</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>patternList</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>listDoubleClick()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>45</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternEdit</sender>
+   <signal>focusOut()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>editFocusOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>41</x>
+     <y>33</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>removeButton</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>actionRemove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>793</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>432</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>listDoubleClick()</slot>
+  <slot>editFocusOut()</slot>
+  <slot>actionRemove()</slot>
+ </slots>
+</ui>

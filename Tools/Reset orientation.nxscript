@@ -1,0 +1,4 @@
+//Reset view angle   
+function onCreate() {
+	run("rotate 0 0 0");
+}

@@ -46,12 +46,12 @@ void NxTrigger::paint() {
             color = renderOptions->colors.value("object_selection");
 
         //Start
-        if((renderOptions->paintTriggers) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= z) && (z <= renderOptions->paintZEnd)))
+        if((renderOptions->paintTriggers) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)))
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
         glPushMatrix();
-        glTranslatef(pos.x(), pos.y(), z);
+        glTranslatef(pos.x(), pos.y(), pos.z());
 
         //Draw
         Texture texture;
@@ -97,14 +97,25 @@ void NxTrigger::paint() {
 }
 
 void NxTrigger::trig(NxObject *cursor) {
-    colorTrigged = cursor->getCurrentColor();
-    cursorTrigged = cursor;
-    QTimer::singleShot(qMax(triggerOff*1000, (qreal)80), this, SLOT(trigEnd()));
-    factory->sendMessage(this, this, cursorTrigged);
+    if (!cursorTrigged) {
+        colorTrigged = cursor->getCurrentColor();
+        cursorTrigged = cursor;
+        QTimer::singleShot(qMax(triggerOff*1000, (qreal)80), this, SLOT(trigEnd()));
+        factory->sendMessage(this, this, cursorTrigged);
+    }
 }
 void NxTrigger::trigEnd() {
     NxObject *cursorTriggedTmp = cursorTrigged;
+
+    ////CG//// 
+	//Suppress trigger-off if it is a midi message (note-off will be done by midi note duration in midi message)
+    bool isMidiMessage = false;
+    foreach(const QVector<QByteArray> & messagePattern, this->getMessagePatterns()) {
+        if(messagePattern.at(0).startsWith("midi")  )
+            qDebug() << "NxTrigger:midi message";
+            isMidiMessage = true;
+        }
     cursorTrigged = 0;
-    if(triggerOff > 0)
+    if(triggerOff > 0 && !isMidiMessage)
         factory->sendMessage(this, this, cursorTriggedTmp);
 }

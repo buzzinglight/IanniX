@@ -55,8 +55,8 @@ public:
     inline const QString getTypeStr() const {
         return "group";
     }
-    inline const QRectF getBoundingRect() const {
-        QRectF boundingRect;
+    inline const NxRect getBoundingRect() const {
+        NxRect boundingRect;
 
         //Browse active/inactive objects
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {

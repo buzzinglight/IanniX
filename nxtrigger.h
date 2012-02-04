@@ -4,16 +4,16 @@
 #include "nxobject.h"
 
 class NxTrigger : public NxObject {
-    Q_OBJECT;
-    Q_PROPERTY(QString textureActive READ getTextureActive WRITE setTextureActive);
-    Q_PROPERTY(QString textureInactive READ getTextureInactive WRITE setTextureInactive);
-    Q_PROPERTY(QString textureActiveMessage READ getTextureActiveMessage WRITE setTextureActiveMessage);
-    Q_PROPERTY(QString textureInactiveMessage READ getTextureInactiveMessage WRITE setTextureInactiveMessage);
-    Q_PROPERTY(QString colorActiveMessage READ getColorActiveMessage WRITE setColorActiveMessage);
-    Q_PROPERTY(QString colorInactiveMessage READ getColorInactiveMessage WRITE setColorInactiveMessage);
-    Q_PROPERTY(QString colorActiveMessage2 READ getColorActiveMessage WRITE setColorActiveMessage2);
-    Q_PROPERTY(QString colorInactiveMessage2 READ getColorInactiveMessage WRITE setColorInactiveMessage2);
-    Q_PROPERTY(qreal triggerOff READ getTriggerOff WRITE setTriggerOff);
+    Q_OBJECT
+    Q_PROPERTY(QString textureActive           READ getTextureActive          WRITE setTextureActive)
+    Q_PROPERTY(QString textureInactive         READ getTextureInactive        WRITE setTextureInactive)
+    Q_PROPERTY(QString textureActiveMessage    READ getTextureActiveMessage   WRITE setTextureActiveMessage)
+    Q_PROPERTY(QString textureInactiveMessage  READ getTextureInactiveMessage WRITE setTextureInactiveMessage)
+    Q_PROPERTY(QString colorActiveMessage      READ getColorActiveMessage     WRITE setColorActiveMessage)
+    Q_PROPERTY(QString colorInactiveMessage    READ getColorInactiveMessage   WRITE setColorInactiveMessage)
+    Q_PROPERTY(QString colorActiveMessageHue   READ getColorActiveMessage     WRITE setColorActiveMessageHue)
+    Q_PROPERTY(QString colorInactiveMessageHue READ getColorInactiveMessage   WRITE setColorInactiveMessageHue)
+    Q_PROPERTY(qreal   triggerOff              READ getTriggerOff             WRITE setTriggerOff)
 
 public:
     explicit NxTrigger(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
@@ -79,7 +79,7 @@ public:
             colorActiveMessage = _color;
         }
     }
-    inline void setColorActiveMessage2(const QString & _color) {
+    inline void setColorActiveMessageHue(const QString & _color) {
         QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
         if(colorItem.count() == 4) {
             colorActiveMessage = "";
@@ -112,7 +112,7 @@ public:
         else
             colorInactiveMessage = _color;
     }
-    inline void setColorInactiveMessage2(const QString & _color) {
+    inline void setColorInactiveMessageHue(const QString & _color) {
         QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
         if(colorItem.count() == 4) {
             colorInactiveMessage = "";
@@ -143,11 +143,11 @@ public:
 public:
     inline void calcBoundingRect() {
         //Bounding rect
-        boundingRect = QRectF(-cacheSize, -cacheSize, cacheSize*2, cacheSize*2);
+        boundingRect = NxRect(-cacheSize, -cacheSize, cacheSize*2, cacheSize*2);
         boundingRect.translate(pos);
         boundingRect = boundingRect.normalized();
     }
-    inline bool isMouseHover(const QPointF & mouse) {
+    inline bool isMouseHover(const NxPoint & mouse) {
         if(boundingRect.contains(mouse))
             return true;
         else

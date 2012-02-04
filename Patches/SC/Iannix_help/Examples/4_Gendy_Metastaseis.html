@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 16.0px Monaco; color: #ba0000}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; color: #ba0000}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 16.0px Monaco; min-height: 21.0px}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
+p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #ba0000}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0000c4}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Monaco}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Monaco; min-height: 20.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Monaco; color: #ba0000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #ba0000; min-height: 12.0px}
+span.s1 {color: #000000}
+span.s2 {color: #0000c4}
+span.s3 {color: #187400}
+span.s4 {color: #5e6629}
+span.s5 {color: #ba0000}
+span.s6 {color: #606060}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1">//-&gt; Example Xenakis Metastaseis in Iannix<span class="Apple-converted-space"> </span></p>
+<p class="p2">/*</p>
+<p class="p2"><span class="Apple-converted-space"> </span>sc + iannix = ~80% system cpu on a 2.93GHz Intel Core 2 Duo<span class="Apple-converted-space"> </span></p>
+<p class="p2"><span class="Apple-converted-space"> </span>(but see cpu protection in the defined globalActions[\cursors], ~maxSynths)</p>
+<p class="p2">*/</p>
+<p class="p3"><br></p>
+<p class="p1"><span class="s1">(</span>//1: settings...</p>
+<p class="p4"><br></p>
+<p class="p5"><span class="s1">~inx !? {~inx.removeAll}; </span>//free synthGroup and objects if exist</p>
+<p class="p6">~inx = <span class="s2">Iannix</span>.new;</p>
+<p class="p4"><br></p>
+<p class="p6">s = <span class="s2">Server</span>.local.waitForBoot {</p>
+<p class="p7"><span class="s1"><span class="Apple-tab-span">	</span></span>SynthDef<span class="s1">(</span><span class="s3">\gendy</span><span class="s1">, {</span>|out= 0, t_trig = 1.0, freq = 500, detune = 0, bpf_freq = 1000, lagTime = 0.1, vol = 1.0, pan = 0.0|</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">var</span> synth, numcps, nbGendy = 5, pollAmp;</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>numcps= <span class="s2">Rand</span>(2, 10);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq = <span class="s2">Lag</span>.kr(freq, lagTime);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>detune = detune.clip(0, 10);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>synth = <span class="s2">Pan2</span>.ar(</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">Mix</span>.ar(</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">Gendy3</span>.ar(</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>ampdist:1,</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>durdist:1,</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>adparam:1.0,</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>ddparam:1.0,</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq: freq<span class="Apple-converted-space">  </span>* { <span class="s2">LFNoise2</span>.kr(3).range(detune.neg, detune).midiratio }!nbGendy,</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>ampscale:0.02,<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>durscale:0.01,<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>initCPs:12,<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>mul:0.8,</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>add: 0.0</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>, pan);</p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>synth = <span class="s2">BPF</span>.ar(synth, <span class="s2">Lag</span>.kr(bpf_freq, 0.1), 2);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>synth = <span class="s2">Line</span>.kr(0, 1, 2) * synth;</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>synth = synth * vol *<span class="Apple-converted-space">  </span>(1/nbGendy) * <span class="s2">SinOsc</span>.ar(<span class="s2">Rand</span>(1.0, 6)).range(0.8, 1);</p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">Out</span>.ar(<span class="s2">out</span>, synth)</p>
+<p class="p6"><span class="Apple-tab-span">	</span>}).send(s);</p>
+<p class="p4"><br></p>
+<p class="p5">//FX</p>
+<p class="p7">SynthDef<span class="s1">(</span><span class="s3">\tank</span><span class="s1">, {</span>|inBus = 0, mixFx = 0, feedback = 0, spread = 0.3|<span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="s2">var</span> local, in, amp;</p>
+<p class="p6"><span class="Apple-tab-span">	</span>in = <span class="s2">In</span>.ar(inBus, 2);</p>
+<p class="p6"><span class="Apple-tab-span">	</span>amp = <span class="s2">Amplitude</span>.kr(<span class="s2">Mix</span>.ar(in));</p>
+<p class="p5"><span class="s1"><span class="Apple-tab-span">	</span></span>//in = in * (amp &gt; 0.04); // noise gate</p>
+<p class="p5">//<span class="Apple-tab-span">	</span>in = in * 0.5;</p>
+<p class="p6"><span class="Apple-tab-span">	</span>local = <span class="s2">LocalIn</span>.ar(2) * feedback;</p>
+<p class="p6"><span class="Apple-tab-span">	</span>local = <span class="s2">OnePole</span>.ar(local, spread);<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="Apple-tab-span">	</span>local = <span class="s2">Rotate2</span>.ar(local[0], local[1], 0.237);</p>
+<p class="p6"><span class="Apple-tab-span">	</span>local = <span class="s2">AllpassN</span>.ar(local, 0.05, {<span class="s2">Rand</span>(0.01,0.05)}.dup, 2);</p>
+<p class="p6"><span class="Apple-tab-span">	</span>local = <span class="s2">DelayN</span>.ar(local, 0.3, {<span class="s2">Rand</span>(0.15,0.33)}.dup);</p>
+<p class="p6"><span class="Apple-tab-span">	</span>local = <span class="s2">AllpassN</span>.ar(local, 0.05, {<span class="s2">Rand</span>(0.03,0.15)}.dup, 2);</p>
+<p class="p6"><span class="Apple-tab-span">	</span>local = <span class="s2">LeakDC</span>.ar(local);<span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span>local = local + in;</p>
+<p class="p6"><span class="Apple-tab-span">	</span>4.do {</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">var</span> t;</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>t = {<span class="s2">Rand</span>(0.005,0.02)}.dup;</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>local = <span class="s2">AllpassN</span>.ar(local, t, t, 1);</p>
+<p class="p6"><span class="Apple-tab-span">	</span>};</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="s2">LocalOut</span>.ar(local);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="s2">ReplaceOut</span>.ar(inBus<span class="Apple-converted-space">  </span>, ( local * mixFx ) + ( in * (mixFx-1) ) );</p>
+<p class="p6">}).send(s);</p>
+<p class="p4"><br></p>
+<p class="p6">};</p>
+<p class="p4"><br></p>
+<p class="p8">)</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p5">//check that the server is on, then...</p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s1">(</span>//2: launching...</p>
+<p class="p10"><span class="s1">~maxSynths = 60; </span>//reduce this in case of cpu peak</p>
+<p class="p4"><br></p>
+<p class="p6">~synth !? { ~inx.synthGroup.free };</p>
+<p class="p6">~inx.createSynthGroup;</p>
+<p class="p5">//~inx.synthGroup.run;</p>
+<p class="p6">~synths = ();</p>
+<p class="p5">//{Synth(\gendy)}!30</p>
+<p class="p6">{</p>
+<p class="p4"><br></p>
+<p class="p5">//fx_______</p>
+<p class="p6"><span class="Apple-tab-span">	</span>0.2.wait;</p>
+<p class="p6"><span class="Apple-tab-span">	</span>~fxGroup = <span class="s2">Group</span>(~inx.synthGroup, <span class="s3">\</span><span class="s4">addToTail</span>);</p>
+<p class="p6"><span class="Apple-tab-span">	</span>~fxGroup.run(<span class="s2">false</span>);</p>
+<p class="p6"><span class="Apple-tab-span">	</span>0.2.wait;</p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span>~fx = <span class="s2">Synth</span>(<span class="s3">\tank</span>, [\inBus, ~inx.mixInputID], target: ~fxGroup);<span class="Apple-converted-space"> </span></p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span>~inx.listen(<span class="s3">\cursors</span>)</p>
+<p class="p4"><br></p>
+<p class="p6">}.fork;</p>
+<p class="p6">c = 0;</p>
+<p class="p4"><br></p>
+<p class="p6">~inx.globalActions[<span class="s3">\cursors</span>] = {<span class="s2">|args|</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="s2">var</span> cursor_id, cursor_value_x,<span class="Apple-converted-space">  </span>cursor_value_y;</p>
+<p class="p6"><span class="Apple-tab-span">	</span>#cursor_id, cursor_value_x,<span class="Apple-converted-space">  </span>cursor_value_y = args; <span class="s5">//messages sent by Iannix.app cursors</span></p>
+<p class="p5"><span class="s1"><span class="Apple-tab-span">	</span>if ((~synths[cursor_id].isNil) &amp;&amp; (c &lt; ~maxSynths))<span class="Apple-converted-space">  </span></span>//auto creation of synths, based on existing ID in ~Inx, + cpu protection <span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{c = c+1; ~synths[cursor_id] = <span class="s2">Synth</span>(<span class="s3">\gendy</span>, target: ~inx.synthGroup); ~inx.synthGroup.set(<span class="s3">\vol</span>, -10.dbamp) };</p>
+<p class="p6"><span class="Apple-tab-span">	</span>~synths[cursor_id].set( <span class="s3">\freq</span>, cursor_value_y.linexp(0, 1, 100, 800), <span class="s3">\pan</span>, cursor_value_y*2-1 );</p>
+<p class="p4"><br></p>
+<p class="p5"><span class="s1">}; </span>//can be redefined while playing...</p>
+<p class="p6">~inx.listen(<span class="s3">\cursors</span>);</p>
+<p class="p8">)</p>
+<p class="p4"><br></p>
+<p class="p1">//3: playing...</p>
+<p class="p4"><br></p>
+<p class="p5">//on/off LISTENING Iannix osc messages and sending back play/stop to it</p>
+<p class="p5">//(evaluate each line separately):</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p6">~inx.play(0.4);</p>
+<p class="p6">~inx.fadeTime_(0.5, 1);</p>
+<p class="p4"><br></p>
+<p class="p6">~inx.stop;</p>
+<p class="p5"><span class="s1">~inx.fastrewind; </span>//must be done twice here...<span class="Apple-converted-space"> </span></p>
+<p class="p6">~inx.play(0.1);</p>
+<p class="p5"><span class="s1">~inx.speed_(-0.3) </span>// specific speed command (negative value: reverse )</p>
+<p class="p6">~inx.speed_(10) <span class="s5">// another one</span></p>
+<p class="p4"><br></p>
+<p class="p5">//_________________________________________________________________________</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p4"><span class="Apple-converted-space"> </span></p>
+<p class="p5">//______________________________________________________________________</p>
+<p class="p11"><br></p>
+<p class="p5">//VOLUME</p>
+<p class="p6">~inx.synthGroup.set(<span class="s3">\vol</span>, -10.dbamp)<span class="Apple-converted-space"> </span></p>
+<p class="p6">s.meter;</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p6">/////</p>
+<p class="p5"><span class="s1">(</span>//some settings for the synths and fx...</p>
+<p class="p5">//(evaluate each line separately):</p>
+<p class="p6">~inx.synthGroup.set(<span class="s3">\detune</span>, 3); <span class="s5">//in semitones</span></p>
+<p class="p6">~inx.synthGroup.set(<span class="s3">\detune</span>, 0.1);<span class="Apple-converted-space">  </span><span class="s5">//wooow, back to normal!</span></p>
+<p class="p4"><br></p>
+<p class="p6">~inx.synthGroup.set(<span class="s3">\vol</span>, 1/10); <span class="Apple-converted-space"> </span></p>
+<p class="p4"><br></p>
+<p class="p6">~fxGroup.run; ~fx.set(<span class="s3">\mixFx</span>, 0.3, <span class="s3">\feedback</span>, 0.3, \inBus, ~inx.mixInputID) <span class="s5">//fx ON</span></p>
+<p class="p6">~fxGroup.run(<span class="s2">false</span>); <span class="s5">//fx OFF</span></p>
+<p class="p6">)</p>
+<p class="p6">~inx.objects.postcs;<span class="s6">""</span>;</p>
+<p class="p4"><br></p>
+<p class="p5">//everything has an end...</p>
+<p class="p6">(</p>
+<p class="p6">~inx.stop;</p>
+<p class="p4"><br></p>
+<p class="p6">~inx.removeAll;</p>
+<p class="p6">)</p>
+</body>
+</html>

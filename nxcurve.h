@@ -1,57 +1,54 @@
 #ifndef NXCURVE_H
 #define NXCURVE_H
 
-#include <QPainterPath>
 #include "nxobject.h"
 
 #define CURVE_PATH_POINTS   300
 
-typedef struct _NxCurvePoint {
-    QPointF point;
-    QPointF c1, c2;
-} NxCurvePoint;
-Q_DECLARE_TYPEINFO(NxCurvePoint, Q_PRIMITIVE_TYPE);
+class NxCurvePoint : public NxPoint {
+public:
+    NxCurvePoint() {
+        currentLength = 0;
+        smooth = false;
+    }
 
-enum CurveType       { CurveTypePoints, CurveTypeSVG, CurveTypeSVG2, CurveTypeImage, CurveTypeText, CurveTypeEllipse };
+    NxPoint c1, c2;
+    qreal currentLength;
+    NxRect boundingRect;
+    bool smooth;
+};
+
+enum CurveType       { CurveTypePoints, CurveTypeEllipse };
 
 class NxCurve : public NxObject {
-    Q_OBJECT;
-    Q_PROPERTY(qreal pathLength READ getPathLength);
-    Q_PROPERTY(CurveType curveType READ getCurveType);
-    Q_PROPERTY(QSizeF resize READ getResize WRITE setResize);
-    Q_PROPERTY(qreal resizeF READ getResizeF WRITE setResizeF);
+    Q_OBJECT
+    Q_PROPERTY(qreal pathLength READ getPathLength)
+    Q_PROPERTY(CurveType curveType READ getCurveType)
+    Q_PROPERTY(QString resizeStr READ getResizeStr WRITE setResizeStr)
+    Q_PROPERTY(qreal resizeF READ getResizeF WRITE setResizeF)
 
 public:
     explicit NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
 
 private:
-    QPainterPath path;
     qreal pathLength;
-    QPointF pathPointsCache[CURVE_PATH_POINTS+1];
     QVector<NxObject*> cursors;
     QVector<NxCurvePoint> pathPoints;
-    qint16 selectedPathPointPoint, selectedPathPointControl;
+    qint16 selectedPathPointPoint, selectedPathPointControl1, selectedPathPointControl2;
     CurveType curveType;
-    QString svgPath, imageFilename, textText, textFamily;
+    NxSize ellipseSize;
 public:
-    inline void isOnPathPoint(const QRectF & point) {
-        if(!isDrag) {
-            selectedPathPointPoint = -1;
-            selectedPathPointControl = -1;
-            for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
-                if(point.contains(pathPoints.at(indexPathPoint).point)) {
-                    selectedPathPointPoint = indexPathPoint;
-                    selectedPathPointControl = -1;
-                    break;
-                }
-                else if(point.contains(pathPoints.at(indexPathPoint).point + pathPoints.at(indexPathPoint).c1)) {
-                    selectedPathPointPoint = -1;
-                    selectedPathPointControl = indexPathPoint;
-                    break;
-                }
-            }
-        }
+    inline NxCurvePoint getPathPointsAt(quint16 index) const {
+#ifdef KINECT_INSTALLED
+        NxCurvePoint pt = pathPoints.at(index);
+        pt.setZ(pos.z() + factory->kinect->getDepthAt(pos.x() + pt.x(), pos.y() + pt.y()));
+        return pt;
+#else
+        return pathPoints.at(index);
+#endif
     }
+
+    void isOnPathPoint(const NxRect & point);
     inline CurveType getCurveType() const {
         return curveType;
     }
@@ -59,17 +56,24 @@ public:
     inline void dragStart() {
         isDrag = true;
         if(selectedPathPointPoint >= 0)
-            posDrag = pathPoints.at(selectedPathPointPoint).point;
-        else if(selectedPathPointControl >= 0)
-            posDrag = pathPoints.at(selectedPathPointControl).c1;
+            posDrag = getPathPointsAt(selectedPathPointPoint);
+        else if(selectedPathPointControl1 >= 0)
+            posDrag = getPathPointsAt(selectedPathPointControl1).c1;
+        else if(selectedPathPointControl2 >= 0)
+            posDrag = getPathPointsAt(selectedPathPointControl2).c2;
         else
             posDrag = pos;
     }
-    inline void drag(const QPointF & translation) {
+    inline void drag(const NxPoint & translation) {
         if(selectedPathPointPoint >= 0)
-            setPointAt(selectedPathPointPoint, posDrag + translation, pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2);
-        else if(selectedPathPointControl >= 0)
-            setPointAt(selectedPathPointControl, pathPoints.value(selectedPathPointControl).point, posDrag + translation, pathPoints.value(selectedPathPointControl).c2);
+            setPointAt(selectedPathPointPoint, posDrag + translation, pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth);
+        else if(selectedPathPointControl1 >= 0) {
+            if(selectedPathPointControl1 > 0)
+                pathPoints[selectedPathPointControl1-1].smooth = false;
+            setPointAt(selectedPathPointControl1, pathPoints.value(selectedPathPointControl1), posDrag + translation, pathPoints.value(selectedPathPointControl1).c2, pathPoints.value(selectedPathPointControl1).smooth);
+        }
+        else if(selectedPathPointControl2 >= 0)
+            setPointAt(selectedPathPointControl2, pathPoints.value(selectedPathPointControl2), pathPoints.value(selectedPathPointControl2).c1, posDrag + translation, pathPoints.value(selectedPathPointControl2).smooth);
         else
             setPos(posDrag + translation);
 
@@ -92,41 +96,43 @@ public:
         return cursors.count()-1;
     }
 
-    inline const QPainterPath & getPath() const { return path; }
     inline qreal getPathLength() const  { return pathLength; }
-    void addMousePointAt(const QPointF & _mousePos);
-    void setPointAt(quint16 index, const QPointF & point, const QPointF & c1 = QPointF(0, 0), const QPointF & c2 = QPointF(0, 0));
-    void setPointAt(const QPointF & point, const QPointF & c1 = QPointF(0, 0), const QPointF & c2 = QPointF(0, 0));
+    void addMousePointAt(const NxPoint & _mousePos, bool remove);
+    void removePointAt(quint16 index);
+    const NxPoint & setPointAt(quint16 index, const NxPoint & point, bool smooth, bool boundingRectCalculation = true);
+    const NxPoint & setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation = true);
     void setSVG(const QString & pathData);
     void setSVG2(const QString & polylineData);
     void setImage(const QString & filename);
     void setText(const QString & text, const QString & family);
-    void setEllipse(const QSizeF & size);
-    void resize(const QSizeF & size);
+    void setEllipse(const NxSize & size);
+    void setPath(const QPainterPath &path);
+    void resize(const NxSize & size);
     void resize(qreal sizeFactorW, qreal sizeFactorH);
-    void translate(const QPointF & point);
-    void computePoints();
-    inline QPointF getPointAt(float percent) {
-        return path.pointAtPercent(qMin(1.0F, qMax(0.0F, percent)));
-    }
+    void translate(const NxPoint & point);
+    NxPoint getPointAt(qreal percent);
+    inline NxPoint getPointAt(quint16 index, qreal t);
+    qreal getAngleAt(qreal percent);
+    qreal intersects(NxRect rect, NxPoint* collisionPoint = 0);
 
-    inline void setResize(const QSizeF & size) {
+    inline void setResize(const NxSize & size) {
         resize(size);
-        pathLength = path.length();
-        calcBoundingRect();
-        computePoints();
         calculate();
-        foreach(NxObject *object, cursors)
-            object->calculate();
     }
-    inline const QSizeF getResize() const {
+    inline void setResizeStr(const QString & size) {
+        QStringList sizeItems = size.split(" ", QString::SkipEmptyParts);
+        if(sizeItems.count() >= 2)
+            setResize(NxSize(sizeItems[0].toDouble(), sizeItems[1].toDouble()));
+    }
+    inline const NxSize getResize() const {
         return boundingRect.size();
+    }
+    inline QString getResizeStr() const {
+        return QString("%1 %2").arg(boundingRect.size().width()).arg(boundingRect.size().height());
     }
     inline void setResizeF(qreal sizeF) {
         resize(sizeF, sizeF);
-        pathLength = path.length();
         calcBoundingRect();
-        computePoints();
         calculate();
         foreach(NxObject *object, cursors)
             object->calculate();
@@ -140,19 +146,8 @@ public:
         foreach(NxObject *object, cursors)
             object->calculate();
     }
-    inline void calcBoundingRect() {
-        //Bounding rect
-        if(path.elementCount() > 0)
-            boundingRect = path.boundingRect();
-        boundingRect.translate(pos);
-        boundingRect = boundingRect.normalized();
-    }
-    inline bool isMouseHover(const QPointF & mouse) {
-        if(path.intersects(QRectF((mouse - pos) - QPointF(renderOptions->objectSize/2, renderOptions->objectSize/2), (mouse - pos) + QPointF(renderOptions->objectSize/2, renderOptions->objectSize/2))))
-            return true;
-        else
-            return false;
-    }
+    void calcBoundingRect();
+    bool isMouseHover(const NxPoint & mouse);
 
 
     inline void addCursor(NxObject *cursor) {
@@ -170,13 +165,12 @@ public:
             retour += QString(COMMAND_CURVE_ELL + " %1 %2 %3").arg("current").arg(getResize().width()).arg(getResize().height()) + COMMAND_END;
             retour += QString(COMMAND_RESIZE + " %1 %2 %3").arg("current").arg(getResize().width()).arg(getResize().height()) + COMMAND_END;
         }
-        else if(curveType == CurveTypeText) {
-            retour += QString(COMMAND_CURVE_TXT + " %1 1 %2 %3").arg("current").arg(textFamily).arg(textText) + COMMAND_END;
-            retour += QString(COMMAND_RESIZE + " %1 %2 %3").arg("current").arg(getResize().width()).arg(getResize().height()) + COMMAND_END;
-        }
         else {
-            for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++)
-                retour += QString(COMMAND_CURVE_POINT + " %1 %2 %3 %4 %5 %6 %7 %8").arg("current").arg(indexPathPoint).arg(pathPoints.at(indexPathPoint).point.x()).arg(pathPoints.at(indexPathPoint).point.y()).arg(pathPoints.at(indexPathPoint).c1.x()).arg(pathPoints.at(indexPathPoint).c1.y()).arg(pathPoints.at(indexPathPoint).c2.x()).arg(pathPoints.at(indexPathPoint).c2.y()) + COMMAND_END;
+            for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
+                retour += QString(COMMAND_CURVE_POINT + " %1  %2  %3 %4 %5  ").arg("current").arg(indexPathPoint).arg(getPathPointsAt(indexPathPoint).x()).arg(getPathPointsAt(indexPathPoint).y()).arg(getPathPointsAt(indexPathPoint).z());
+                retour += QString("%1 %2 %3  ").arg(getPathPointsAt(indexPathPoint).c1.x()).arg(getPathPointsAt(indexPathPoint).c1.y()).arg(getPathPointsAt(indexPathPoint).c1.z());
+                retour += QString("%1 %2 %3").arg(getPathPointsAt(indexPathPoint).c2.x()).arg(getPathPointsAt(indexPathPoint).c2.y()).arg(getPathPointsAt(indexPathPoint).c2.z()) + COMMAND_END;
+            }
             retour += QString(COMMAND_LINE + " %1 %2 %3").arg("current").arg(getLineStipple()).arg(getLineFactor()) + COMMAND_END;
         }
         foreach(NxObject *cursor, cursors)

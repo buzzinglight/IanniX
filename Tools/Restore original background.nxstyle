@@ -1,0 +1,4 @@
+//Creation of the score
+function onCreate() {
+	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
+}

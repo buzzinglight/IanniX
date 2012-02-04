@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="fr" />
+  <meta name="language" content="fr" />
+  <meta name="designer" content="buzzing light" />
+  <meta name="description" content="IanniX documentation" />
+  <link href="../Common/css/reset.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/font/stylesheet.css" rel="stylesheet" type="text/css" />
+  <link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../Common/jquery.js">
+</script>
+
+  <title>IanniX — Installation</title>
+  <style type="text/css">
+/*<![CDATA[*/
+  a.c1 {color:#aaa; text-decoration:none;}
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class='main container'>
+    <table class="onglets" summary="">
+      <tr>
+        <td class="onglet" id='actif'><a href="intro.html">Introduction</a></td>
+
+        <td class="onglet"><a href="objets.html">Objets<br />
+        fondamentaux</a></td>
+
+        <td class="onglet"><a href="messages.html">Messages émis<br />
+        et reçus</a></td>
+
+        <td class="onglet"><a href="overview.html">Interface<br />
+        graphique</a></td>
+
+        <td class="onglet"><a href="script.html">Scripts</a></td>
+
+        <td class="onglet"><a href="reference.html">Référence</a></td>
+
+        <td class="onglet"><a href="listing.html">Index<br />
+        des fonctions</a></td>
+      </tr>
+    </table>
+
+    <div class="langue">
+      <a class="c1" href="../EN/intro.html">English version</a>
+    </div>
+
+    <h2>Installation</h2>
+
+    <p>IanniX est compatible avec Linux, Mac OS X 10.6+ et Windows et ne nécessite pas
+    d’installation particulière.<br />
+    Pour les utilisateurs de IanniX sous Linux qui ne souhaitent pas compiler depuis les
+    sources, nous avons inclus une version compilée que vous pourrez exécuter en lançant
+    le fichier <code>IanniX.sh</code>.</p>
+
+    <h2>Open Sound Control</h2>
+
+    <p>L’Open Sound Control est un protocole de communication qui fonctionne sur le
+    réseau IP (donc sur Ethernet, Wi-Fi, sur Internet…). Il est reconnu par tous les
+    systèmes d’exploitation et ne nécessite pas de drivers ou de configuration réseau.
+    Quelques connaissances en réseau sont toutefois nécessaires pour des usages plus
+    poussés.<br />
+    <br />
+    La règle d'or pour l'OSC est de faire correspondre les adresses IP et les ports : un
+    message envoyé par IanniX au <code>127.0.0.1:57120</code> signifie qu'il est envoyé à
+    la machine local sur le port&nbsp;57120. L'application qui veut recevoir ce message
+    devra donc ouvrir le port 57120.</p>
+
+    <h2>MIDI</h2>
+
+    <p>Afin de rester compatible avec les stations MIDI, nous avons intégré nativement le
+    protocole MIDI.<br />
+    Pour les utilisateurs de Windows qui ne possèdent pas de périphériques MIDI
+    matériels, vous devez installer un périphérique MIDI virtuel tel que <a href=
+    "http://www.nerds.de/data/setuploopbe1.exe">LoopBe</a>.</p>
+
+    <h2>Interfaces &amp; logiciels</h2>
+
+    <p>Nous avons mis à votre disposition des patches/interfaces pour les logiciels
+    couramment utilisés que nous avons testés. Cliquez sur le bouton <a href=
+    "overview.html">"Open Patches Folder"</a> de la barre d'outils depuis IanniX pour les
+    découvrir.<br />
+    Il s'agit d'exemples très simples qui illustrent le principe de communication entre
+    IanniX et les logiciels ; nous vous invitons à les modifier et à vous en inspirer
+    pour vos projets.</p>
+
+    <h2>Bugs</h2>
+
+    <p>IanniX est toujours en beta-testing, quelques bugs sont donc encore présents mais
+    la plupart des fonctionnalités peuvent être employées correctement. Vous pouvez
+    signaler les erreurs dans la section « Bugs » de notre <a href=
+    "http://iannix.org/en/community.php">forum</a>.</p>
+
+    <h2>Version tracking</h2>
+
+	<p>Known bugs</p>
+	<ul>
+		<li>on Linux, you need to press on <code>ALT</code>+<code>CONTROL</code> to control IanniX in 3D</li>
+		<li><code>Snap to grid</code> option can make the object selection difficult to use</li>
+		<li>in fullscreen mode, shortcuts may not be accessibles</li>
+		<li>in 3D mode, selection is not possible</li>
+	</ul>
+
+	<p>In the forthcoming version</p>
+	<ul>
+		<li>triggers will be working in 3D (by adding a dimension to cursors)</li>
+		<li>selection will be possible in 3D</li>
+		<li>GUI will be totaly thread-safe to prevent crashes</li>
+	</ul>
+
+	<p>IanniX 0.8.22</p>
+	<ul>
+		<li>JavaScript embeddable in messages</li>
+		<li>bug with variable type (String/float) in scripts</li>
+		<li>iannix.execute("") is shortened to run("") in scripts</li>
+		<li>new scripts functions</li>
+		<li>now in 3D! (triggers not working properly in 3D)</li>
+		<li>2D Bezier curves are editable in the GUI</li>
+		<li>improved freehand tool</li>
+		<li>curve with large amount of points are drawn properly</li>
+		<li>many small bugs in selection fixed</li>
+		<li>fonts problems with Lucida on Windows/Linux/Mac fixed</li>
+		<li>first point of a curve is now independant from curve position (scripts)</li>
+		<li>cursors without OSC-messages don't make the app crash</li>
+	</ul>
+
+    <p>IanniX 0.8.21</p>
+
+    <ul>
+      <li>bug with duplicate function fix</li>
+
+      <li>major cursor bug fix (with pattern like <code>1 -1</code>)</li>
+
+      <li>undo improved and redo added</li>
+
+      <li>mouse in fullscreen mode disabled</li>
+
+      <li>speed slider in transport dock behavior fix</li>
+
+      <li>messages are not sent when fast-rewinding</li>
+
+      <li>about window closes with IanniX</li>
+
+      <li>displays real-time OSC messages on object hover</li>
+
+      <li>objects ID in script examples are now more human-readable</li>
+
+      <li>object center list (in inspector) is now sorted by ID</li>
+
+      <li>MaxMSP example has been updated</li>
+
+      <li>SuperCollider example added</li>
+
+      <li>OSC port in examples is now 57120 to be compatible with SuperCollider</li>
+
+      <li>new simple Javascript example</li>
+
+      <li>trying to make message editor window more readable...</li>
+
+      <li><code>play</code>, <code>stop</code> and <code>fastrewind</code> are now
+      sent</li>
+
+      <li>snap to grid bug on custom grid fix</li>
+
+      <li>objects group is now saved with score and when copying/pasting</li>
+
+      <li>MIDI bug fix</li>
+
+      <li>raw UDP bug fix</li>
+
+      <li>Ableton Live (MIDI) example added</li>
+
+      <li>Arduino (serial port) example added</li>
+
+      <li>groups can be selected from Object Selection panel</li>
+
+      <li>multiple selection is allowed in Object Selection panel</li>
+
+      <li>settings (OSC port, UDP port, Serial port and transport message) are saved when
+      IanniX closes</li>
+
+      <li>message time interval/period can be changed through the inspector</li>
+
+      <li>files can be opened with a drag&amp;drop on the Dock (Mac OS X users)</li>
+
+      <li>files can be opened in command line (1st argument)</li>
+
+      <li>added <code>nb_triggers</code>, <code>nb_curves</code> and
+      <code>nb_cursors</code> arguments for messages</li>
+
+      <li>Cancel button is Message Editor is now working</li>
+    </ul>
+
+    <p>IanniX 0.8.2</p>
+
+    <ul>
+      <li>documentation is now accessible from the Help menu on Windows</li>
+
+      <li>JPG background are now working on Windows and Linux</li>
+
+      <li>you can lock the objects position when you navigate in the score (avoiding
+      moving accidentally objects)</li>
+
+      <li>you can toggle the display of objects labels</li>
+
+      <li>object selection has been enhanced</li>
+
+      <li><code>Snap to grid</code> icon has been added in the toolbar</li>
+
+      <li><code>Patches example folder</code> icon has been added in the toolbar</li>
+
+      <li>displays OSC messages on object hover</li>
+
+      <li>font size bug on Windows fix</li>
+
+      <li>script editor closes with IanniX</li>
+
+      <li>hide menu bar in fullscreen on Windows and Linux</li>
+
+      <li>bug with trigger size/tickness/zoom fix</li>
+
+      <li>bug with cursors on empty curves fix</li>
+
+      <li>minor bugs with inspector fix</li>
+
+      <li>minor bugs with keyboard shortcuts (arrows) fix</li>
+
+      <li>compilation warnings fix</li>
+    </ul>
+  </div>
+</body>
+</html>

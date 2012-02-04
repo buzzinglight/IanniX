@@ -5,7 +5,6 @@
 #define QT_USE_FAST_OPERATOR_PLUS
 
 #include <QObject>
-#include <QPointF>
 #include <QColor>
 #include <QHash>
 #include <QHashIterator>
@@ -13,7 +12,9 @@
 #include <QPainter>
 #include <QTimer>
 #include <QTreeWidgetItem>
-#include <math.h>
+#include <QtCore/qmath.h>
+#include "iannix_spec.h"
+#include "iannix_cmd.h"
 #include "uirenderoptions.h"
 #include "nxobjectfactoryinterface.h"
 
@@ -22,95 +23,26 @@
 enum ObjectsType     { ObjectsTypeCurve=0, ObjectsTypeTrigger=1, ObjectsTypeCursor=2, ObjectsTypeGroup=3, ObjectsTypeDocument=4, ObjectsTypeScheduler=5 };
 enum ObjectsActivity { ObjectsActivityInactive=0, ObjectsActivityActive=1 };
 
-#define COMMAND_END_BYTE        '\n'
-#define COMMAND_END             QString(COMMAND_END_BYTE)
-#define COMMAND_ADD             QString("add")
-#define COMMAND_REMOVE          QString("remove")
-#define COMMAND_CLEAR           QString("clear")
-#define COMMAND_GROUP           QString("setgroup")
-#define COMMAND_TRIGGER_OFF     QString("settriggeroff")
-#define COMMAND_CURSOR_CURVE    QString("setcurve")
-#define COMMAND_CURSOR_WIDTH    QString("setwidth")
-#define COMMAND_CURSOR_START    QString("setpattern")
-#define COMMAND_CURSOR_SPEED    QString("setspeed")
-#define COMMAND_CURSOR_SPEEDF   QString("setspeedf")
-#define COMMAND_CURSOR_OFFSET   QString("setoffset")
-#define COMMAND_CURSOR_BOUNDS_SOURCE   QString("setboundssource")
-#define COMMAND_CURSOR_BOUNDS_TARGET   QString("setboundstarget")
-#define COMMAND_CURSOR_TIME     QString("settime")
-#define COMMAND_CURVE_POINT	 QString("setpointat")
-#define COMMAND_CURVE_TXT	 QString("setpointstxt")
-#define COMMAND_CURVE_SVG	 QString("setpointssvg")
-#define COMMAND_CURVE_SVG2	 QString("setpointssvg2")
-#define COMMAND_CURVE_IMG	 QString("setpointsimg")
-#define COMMAND_CURVE_ELL	 QString("setpointsellipse")
-#define COMMAND_SIZE            QString("setsize")
-#define COMMAND_RESIZE          QString("setresize")
-#define COMMAND_RESIZEF         QString("setresizef")
-#define COMMAND_LINE            QString("setline")
-#define COMMAND_POS             QString("setpos")
-#define COMMAND_ACTIVE          QString("setactive")
-#define COMMAND_LABEL           QString("setlabel")
-#define COMMAND_MESSAGE         QString("setmessage")
-#define COMMAND_MESSAGE_SEND    QString("sendosc")
-#define COMMAND_TEXTURE         QString("registertexture")
-#define COMMAND_GLOBAL_COLOR    QString("registercolor")
-#define COMMAND_GLOBAL_COLOR2   QString("registercolor2")
-#define COMMAND_TEXTURE_ACTIVE  QString("settextureactive")
-#define COMMAND_TEXTURE_INACTIVE  QString("settextureinactive")
-#define COMMAND_TEXTURE_ACTIVE_MESSAGE  QString("settextureactivemessage")
-#define COMMAND_TEXTURE_INACTIVE_MESSAGE  QString("settextureinactivemessage")
-#define COMMAND_COLOR_ACTIVE    QString("setcoloractive")
-#define COMMAND_COLOR_INACTIVE  QString("setcolorinactive")
-#define COMMAND_COLOR_ACTIVE_MESSAGE    QString("setcoloractivemessage")
-#define COMMAND_COLOR_INACTIVE_MESSAGE  QString("setcolorinactivemessage")
-#define COMMAND_COLOR_ACTIVE2    QString("setcoloractive2")
-#define COMMAND_COLOR_INACTIVE2  QString("setcolorinactive2")
-#define COMMAND_COLOR_ACTIVE_MESSAGE2    QString("setcoloractivemessage2")
-#define COMMAND_COLOR_INACTIVE_MESSAGE2  QString("setcolorinactivemessage2")
-#define COMMAND_AUTOSIZE        QString("autosize")
-#define COMMAND_ZOOM            QString("zoom")
-#define COMMAND_CENTER          QString("center")
-#define COMMAND_PLAY            QString("play")
-#define COMMAND_STOP            QString("stop")
-#define COMMAND_FF              QString("fastrewind")
-#define COMMAND_SPEED           QString("speed")
-#define COMMAND_SNAP_PUSH       QString("pushsnapshot")
-#define COMMAND_SNAP_POP        QString("popsnapshot")
-#define COMMAND_LOG             QString("log")
-
-
-class NxObjectDispatchProperty {
-public:
-    virtual quint8 getType() const = 0;
-    virtual const QString getTypeStr() const = 0;
-    virtual void dispatchProperty(const QString & property, const QVariant & value) = 0;
-    virtual const QVariant getProperty(const QString & property) const = 0;
-};
-
-
 class NxObject : public QObject, public NxObjectDispatchProperty, public QTreeWidgetItem {
-    Q_OBJECT;
-    Q_PROPERTY(QRect local READ getLocal);
-    Q_PROPERTY(bool selectedHover READ getSelectedHover WRITE setSelectedHover);
-    Q_PROPERTY(bool selected READ getSelected WRITE setSelected);
-    Q_PROPERTY(quint16 id READ getId WRITE setId);
-    Q_PROPERTY(QString groupId READ getGroupId WRITE setGroupId);
-    Q_PROPERTY(QString documentId READ getDocumentId WRITE setDocumentId);
-    Q_PROPERTY(QString label READ getLabel WRITE setLabel);
-    Q_PROPERTY(QPointF pos READ getPos WRITE setPos);
-    Q_PROPERTY(qreal z READ getZ WRITE setZ);
-    Q_PROPERTY(qreal size READ getSize WRITE setSize);
-    Q_PROPERTY(quint16 lineFactor READ getLineFactor WRITE setLineFactor);
-    Q_PROPERTY(quint16 lineStipple READ getLineStipple WRITE setLineStipple);
-    Q_PROPERTY(QRectF boundingRect READ getBoundingRect);
-    Q_PROPERTY(bool active READ getActive WRITE setActive);
-    Q_PROPERTY(QString colorActive READ getColorActive WRITE setColorActive);
-    Q_PROPERTY(QString colorInactive READ getColorInactive WRITE setColorInactive);
-    Q_PROPERTY(QString colorActive2 READ getColorActive WRITE setColorActive2);
-    Q_PROPERTY(QString colorInactive2 READ getColorInactive WRITE setColorInactive2);
-    Q_PROPERTY(QString messagePatterns READ getMessagePatternsStr WRITE setMessagePatterns);
-    Q_PROPERTY(quint16 messageTimeInterval READ getMessageTimeInterval WRITE setMessageTimeInterval);
+    Q_OBJECT
+    Q_PROPERTY(QRect   local               READ getLocal)
+    Q_PROPERTY(bool    selectedHover       READ getSelectedHover       WRITE setSelectedHover)
+    Q_PROPERTY(bool    selected            READ getSelected            WRITE setSelected)
+    Q_PROPERTY(quint16 id                  READ getId                  WRITE setId)
+    Q_PROPERTY(QString groupId             READ getGroupId             WRITE setGroupId)
+    Q_PROPERTY(QString documentId          READ getDocumentId          WRITE setDocumentId)
+    Q_PROPERTY(QString label               READ getLabel               WRITE setLabel)
+    Q_PROPERTY(QString posStr              READ getPosStr              WRITE setPosStr)
+    Q_PROPERTY(qreal   size                READ getSize                WRITE setSize)
+    Q_PROPERTY(quint16 lineFactor          READ getLineFactor          WRITE setLineFactor)
+    Q_PROPERTY(quint16 lineStipple         READ getLineStipple         WRITE setLineStipple)
+    Q_PROPERTY(bool    active              READ getActive              WRITE setActive)
+    Q_PROPERTY(QString colorActive         READ getColorActive         WRITE setColorActive)
+    Q_PROPERTY(QString colorInactive       READ getColorInactive       WRITE setColorInactive)
+    Q_PROPERTY(QString colorActiveHue      READ getColorActive         WRITE setColorActiveHue)
+    Q_PROPERTY(QString colorInactiveHue    READ getColorInactive       WRITE setColorInactiveHue)
+    Q_PROPERTY(QString messagePatterns     READ getMessagePatternsStr  WRITE setMessagePatterns)
+    Q_PROPERTY(quint16 messageTimeInterval READ getMessageTimeInterval WRITE setMessageTimeInterval)
 
 public:
     bool operator<(const QTreeWidgetItem &other) const {
@@ -135,13 +67,14 @@ protected:
     quint16 id;
     QString groupId, documentId;
     quint8 active;
-    QPointF pos, posDrag, posOffset;
-    qreal z, size;
+    quint64 messageId;
+    NxPoint pos, posDrag, posOffset;
+    qreal size;
     quint16 lineFactor, lineStipple;
     QColor  color, colorActiveColor, colorInactiveColor, colorActiveColorMessage, colorInactiveColorMessage;
     QString colorActive, colorInactive, colorActiveMessage, colorInactiveMessage;
     bool colorGlobal;
-    QRectF boundingRect;
+    NxRect boundingRect;
     QString label;
     QStringList messageLabel;
     bool selectedHover, selected;
@@ -152,10 +85,10 @@ protected:
     bool isDrag, performCollision;
 public slots:
     inline const QRect getLocal() const {
-        return QRect(floor(pos.x() / 10) * 10, floor(pos.y() / 10) * 10, floor(z / 10) * 10, 0);
+        return QRect(floor(pos.x() / 10) * 10, floor(pos.y() / 10) * 10, floor(pos.z() / 10) * 10, 0);
     }
 
-    inline void setPosOffset(const QPointF & _posOffset) {
+    inline void setPosOffset(const NxPoint & _posOffset) {
         posOffset = _posOffset;
     }
     inline void setParentObject(NxObject *_parentObject) {
@@ -215,36 +148,46 @@ public slots:
         return messageLabel;
     }
 
-    inline void setPos(const QPointF & _pos) {
+
+    inline void setMessageId(quint64 _messageId) {
+        messageId = _messageId;
+    }
+    inline quint64 getMessageId() {
+        return messageId;
+    }
+    inline void incMessageId() {
+        messageId++;
+    }
+
+
+    inline void setPos(const NxPoint & _pos) {
         if((pos != _pos) && (factory)) {
             QRect localOld = getLocal();
             pos = _pos + posOffset;
-            posOffset = QPointF(0, 0);
+            posOffset = NxPoint();
             calcBoundingRect();
             calculate();
             factory->setObjectLocal(this, localOld);
         }
     }
-    inline const QPointF & getPos() const {
+    inline void setPosStr(const QString & pos) {
+        QStringList posItems = pos.split(" ", QString::SkipEmptyParts);
+        if(posItems.count() >= 3)
+            setPos(NxPoint(posItems[0].toDouble(), posItems[1].toDouble(), posItems[2].toDouble()));
+    }
+    inline const NxPoint & getPos() const {
         return pos;
     }
+    inline QString getPosStr() const {
+        return QString("%1 %2 %3").arg(pos.x()).arg(pos.y()).arg(pos.z());
+    }
     /*
-    inline const QPointF getPosTransform() const {
+    inline const NxPoint getPosTransform() const {
         return renderOptions->transform(pos);
     }
     */
-    inline void setZ(qreal _z) {
-        if(factory) {
-            QRect localOld = getLocal();
-            z = _z;
-            factory->setObjectLocal(this, localOld);
-        }
-    }
-    inline qreal getZ() const {
-        return z;
-    }
     virtual void calcBoundingRect() = 0;
-    virtual bool isMouseHover(const QPointF & mouse) = 0;
+    virtual bool isMouseHover(const NxPoint & mouse) = 0;
 
     inline void setSize(qreal _size) {
         size = _size;
@@ -270,7 +213,7 @@ public slots:
         posDrag = pos;
         isDrag = true;
     }
-    inline virtual void drag(const QPointF & translation) {
+    inline virtual void drag(const NxPoint & translation) {
         setPos(posDrag + translation);
     }
     inline virtual void dragStop() {
@@ -279,7 +222,7 @@ public slots:
     }
     virtual void calculate() {}
 
-    inline const QRectF & getBoundingRect() const {
+    inline const NxRect & getBoundingRect() const {
         return boundingRect;
     }
 
@@ -308,7 +251,7 @@ public slots:
             colorActive = _color;
         }
     }
-    inline void setColorActive2(const QString & _color) {
+    inline void setColorActiveHue(const QString & _color) {
         QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
         if(colorItem.count() == 4) {
             colorActive = "";
@@ -341,7 +284,7 @@ public slots:
         else
             colorInactive = _color;
     }
-    inline void setColorInactive2(const QString & _color) {
+    inline void setColorInactiveHue(const QString & _color) {
         QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
         if(colorItem.count() == 4) {
             colorInactive = "";
@@ -371,46 +314,7 @@ public slots:
         return color;
     }
 
-    inline void setMessagePatterns(const QString & _messagePatterns) {
-        messagePatterns.clear();
-        messageLabel.clear();
-        performCollision = false;
-        QStringList messagePatternsArray = _messagePatterns.split(",", QString::SkipEmptyParts);
-        bool first = true;
-        foreach(const QString & messagePattern, messagePatternsArray) {
-            QString messageLabelItem = "";
-            if(first) {
-                setMessageTimeInterval(messagePattern.toUInt());
-                first = false;
-            }
-            else {
-                QStringList messagePatternStrings = messagePattern.split(" ", QString::SkipEmptyParts);
-                QVector<QByteArray> messagePattern;
-                foreach(QString messagePatternString, messagePatternStrings) {
-                    messagePattern.append(qPrintable(messagePatternString));
-                    messageLabelItem += messagePatternString + " ";
-                    if(messagePatternString.contains("collision_"))
-                        performCollision = true;
-                }
-                messagePatterns.append(messagePattern);
-                messageLabel.append(messageLabelItem);
-            }
-        }
-    }
-    inline void setMessagePatterns(QVector< QVector<QByteArray> > _messagePatterns) {
-        performCollision = false;
-        messagePatterns = _messagePatterns;
-        messageLabel.clear();
-        foreach(const QVector<QByteArray> & _messagePattern, _messagePatterns) {
-            QString messageLabelItem = "";
-            foreach(const QByteArray & _messagePatternByte, _messagePattern) {
-                messageLabelItem += _messagePatternByte + " ";
-                if(_messagePatternByte.contains("collision_"))
-                    performCollision = true;
-            }
-            messageLabel.append(messageLabelItem);
-        }
-    }
+    void setMessagePatterns(const QString & messagePatternsStr);
     inline const QVector< QVector<QByteArray> > & getMessagePatterns() const {
         return messagePatterns;
     }
@@ -443,7 +347,7 @@ public slots:
     inline QString serialize() {
         QString retour;
         retour += QString(COMMAND_ADD + " %1 %2").arg(getTypeStr()).arg(getId()) + COMMAND_END;
-        retour += QString(COMMAND_POS + " %1 %2 %3 %4").arg("current").arg(getPos().x()).arg(getPos().y()).arg(getZ()) + COMMAND_END;
+        retour += QString(COMMAND_POS + " %1 %2 %3 %4").arg("current").arg(getPos().x()).arg(getPos().y()).arg(getPos().z()) + COMMAND_END;
         retour += QString(COMMAND_ACTIVE + " %1 %2").arg("current").arg(getActive()) + COMMAND_END;
         retour += QString(COMMAND_GROUP + " %1 %2").arg("current").arg(getGroupId()) + COMMAND_END;
 
@@ -463,6 +367,8 @@ public slots:
         return retour;
     }
 
+
+    static QVector< QVector<QByteArray> > parseMessagesPattern(const QString & messagePatternsStr, quint16 *messageInterval = 0);
 
 signals:
 
