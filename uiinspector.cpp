@@ -29,6 +29,14 @@ UiInspector::UiInspector(QWidget *parent) :
     ui->syncMessageLabel->setVisible(false);
     ui->syncMessageEdit->setVisible(false);
 
+
+    ui->easingCombo->clear();
+    NxEasing easing;
+    for(quint16 type = 0 ; type <= 45 ; type++) {
+        easing.setType(type);
+        ui->easingCombo->addItem(QIcon(easing.getPixmap()), tr("Type %1").arg(type));
+    }
+
     actionInfoLock = true;
     //needRefresh = true;
     startTimer(100);
@@ -110,6 +118,8 @@ void UiInspector::actionInfo() {
                     cursor->setTimeLocal(ui->posSpin->value());
                 else if(ui->patternLine == sender())
                     cursor->setStart(ui->patternLine->text());
+                else if(ui->easingCombo == sender())
+                    cursor->setEasing(ui->easingCombo->currentIndex());
                 else if(ui->speedSpin == sender())
                     cursor->setTimeFactor(ui->speedSpin->value());
                 else if(ui->cursorLengthSpin == sender())
@@ -246,10 +256,10 @@ void UiInspector::logOscReceive(const QString & message) {
     ui->oscReceiveText->appendPlainText(message);
 }
 void UiInspector::setMousePos(const NxPoint & pos) {
-    ui->mouseLabel->setText(tr("Mouse") + " : " + QString().setNum(pos.x(), 'f', 3) + " / " + QString().setNum(pos.y(), 'f', 3));
+    ui->mouseLabel->setText(tr("MOUSE") + ": " + QString().setNum(pos.x(), 'f', 3) + " / " + QString().setNum(pos.y(), 'f', 3));
 }
 void UiInspector::setMouseZoom(qreal zoom) {
-    ui->zoomLabel->setText(tr("Zoom") + " : " + QString().setNum(zoom, 'f', 0) + "%");
+    ui->zoomLabel->setText(tr("ZOOM") + ": " + QString().setNum(zoom, 'f', 0) + "%");
 }
 
 void UiInspector::timerEvent(QTimerEvent *) {
@@ -260,16 +270,16 @@ void UiInspector::refresh() {
     nbTriggers = triggerItem->childCount();
     nbCursors = cursorItem->childCount();
     nbCurves = curveItem->childCount();
-    QString triggerStr = tr("Triggers") + " (" + QString().setNum(nbTriggers) + ")";
-    QString cursorStr = tr("Cursors") + " (" + QString().setNum(nbCursors) + ")";
-    QString curveStr = tr("Curves") + " (" + QString().setNum(nbCurves) + ")";
+    QString triggerStr = tr("TRIGGERS") + " (" + QString().setNum(nbTriggers) + ")";
+    QString cursorStr = tr("CURSORS") + " (" + QString().setNum(nbCursors) + ")";
+    QString curveStr = tr("CURVES") + " (" + QString().setNum(nbCurves) + ")";
     triggerItem->setText(0, triggerStr);
     cursorItem->setText(0, cursorStr);
     curveItem->setText(0, curveStr);
     ui->viewTriggerCheck->setText(triggerStr);
     ui->viewCursorCheck->setText(cursorStr);
     ui->viewCurveCheck->setText(curveStr);
-    ui->viewGroupLabel->setText(tr("Groups") + " (" + QString().setNum(ui->cc2View->topLevelItemCount()) + ")");
+    ui->viewGroupLabel->setText(tr("GROUPS") + " (" + QString().setNum(ui->cc2View->topLevelItemCount()) + ")");
 
     actionInfoLock = true;
 
@@ -347,6 +357,7 @@ void UiInspector::refresh() {
 
                 change(indexObject, ui->widthSpin, cursor->getWidth(), prevCursor->getWidth());
                 change(indexObject, ui->patternLine, cursor->getStart(), prevCursor->getStart());
+                change(indexObject, ui->easingCombo, cursor->getEasing(), prevCursor->getEasing());
                 change(indexObject, ui->speedSpin, cursor->getTimeFactor(), prevCursor->getTimeFactor());
                 change(indexObject, ui->speedFSpin, cursor->getTimeFactorF(), prevCursor->getTimeFactorF());
                 change(indexObject, ui->offsetInitialSpin, cursor->getTimeInitialOffset(), prevCursor->getTimeInitialOffset());
@@ -389,17 +400,17 @@ void UiInspector::refresh() {
     }
     ui->typeLabel->setText("");
     if(counterTriggers == 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterTriggers) + " " + tr("trigger"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterTriggers) + " " + tr("TRIGGER"));
     else if(counterTriggers > 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterTriggers) + " " + tr("triggers"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterTriggers) + " " + tr("TRIGGERS"));
     if(counterCurves == 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCurves) + " " + tr("curve"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCurves) + " " + tr("CURVE"));
     else if(counterCurves > 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCurves) + " " + tr("curves"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCurves) + " " + tr("CURVES"));
     if(counterCursors == 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCursors) + " " + tr("cursor"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCursors) + " " + tr("CURSOR"));
     else if(counterCursors > 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCursors) + " " + tr("cursors"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCursors) + " " + tr("CURSORS"));
 
     bool showCursorInfo = false, showTriggerInfo = false, showCurveInfo = false, showCursorCurveInfo = false, showGenericInfo = false;
     if(counterCurves > 0)
@@ -440,6 +451,7 @@ void UiInspector::refresh() {
     ui->widthSpin->setVisible(showCursorInfo);
     ui->widthLabel->setVisible(showCursorInfo);
     ui->patternLine->setVisible(showCursorInfo);
+    ui->easingCombo->setVisible(showCursorInfo);
     ui->patternLabel->setVisible(showCursorInfo);
     ui->speedSpin->setVisible(showCursorCurveInfo);
     ui->offsetInitialSpin->setVisible(showCursorCurveInfo);
@@ -530,6 +542,16 @@ void UiInspector::change(quint16 indexObject, QComboBox *spin, const QString & v
     if(indexObject == 0) {
         spin->setStyleSheet("");
         spin->setCurrentIndex(spin->findText(val));
+    }
+    else if((spin->styleSheet() == "") && (prevVal != val)) {
+        spin->setStyleSheet("");
+        spin->setCurrentIndex(-1);
+    }
+}
+void UiInspector::change(quint16 indexObject, QComboBox *spin, quint16 val, quint16 prevVal) {
+    if(indexObject == 0) {
+        spin->setStyleSheet("");
+        spin->setCurrentIndex(val);
     }
     else if((spin->styleSheet() == "") && (prevVal != val)) {
         spin->setStyleSheet("");

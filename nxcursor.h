@@ -4,6 +4,7 @@
 #include <QEasingCurve>
 #include "nxcurve.h"
 #include "nxtrigger.h"
+#include "nxeasing.h"
 
 #ifndef M_PI
 #define M_PI    (3.14159265358979323846)
@@ -26,8 +27,7 @@ class NxCursor : public NxObject {
     Q_PROPERTY(qreal timeFactorF READ getTimeFactorF WRITE setTimeFactorF)
     Q_PROPERTY(qreal cursorWidth READ getWidth WRITE setWidth)
     Q_PROPERTY(qreal cursorDepth READ getDepth WRITE setDepth)
-    Q_PROPERTY(qreal easingStartDuration READ getEasingStartDuration WRITE setEasingStartDuration)
-    Q_PROPERTY(quint16 easingStart READ getEasingStart WRITE setEasingStart)
+    Q_PROPERTY(quint16 easingStart READ getEasing WRITE setEasing)
     Q_PROPERTY(quint16 nbLoop READ getNbLoop WRITE setNbLoop)
     Q_PROPERTY(qreal timeLocal READ getTimeLocal WRITE setTimeLocal)
 
@@ -38,10 +38,9 @@ public:
 private:
     NxCurve *curve;
 private:
-    qreal timeLocal, timeLocalOld, timeLocalAbsolute, time, timeOld, nextTimeOld;
+    qreal factors, timeLocal, timeLocalOld, timeLocalAbsolute, time, timeOld, nextTimeOld;
     qreal timeStartOffset, timeEndOffset, timeInitialOffset;
-    qreal easingStartDuration;
-    QEasingCurve easing;
+    NxEasing easing;
     qreal timeFactor, timeFactorF;
     quint16 nbLoop, nbLoopOld;
     qreal width, depth;
@@ -93,17 +92,11 @@ public:
     inline quint16 getNbLoop() {
         return nbLoop;
     }
-    inline void setEasingStart(quint16 _easingStart) {
-        easing.setType((QEasingCurve::Type)_easingStart);
+    inline void setEasing(quint16 _easing) {
+        easing.setType(_easing);
     }
-    inline quint16 getEasingStart() {
-        return (quint16)easing.type();
-    }
-    inline void setEasingStartDuration(qreal _easingStartDuration) {
-        easingStartDuration = _easingStartDuration;
-    }
-    inline qreal getEasingStartDuration() {
-        return easingStartDuration;
+    inline quint16 getEasing() {
+        return easing.getType();
     }
 
     inline void setTimeStartOffset(qreal _timeStartOffset) {
@@ -244,7 +237,7 @@ public:
             retour += QString(COMMAND_CURSOR_SPEED + " %1 %2").arg("current").arg(getTimeFactor()) + COMMAND_END;
             retour += QString(COMMAND_CURSOR_SPEEDF + " %1 %2").arg("current").arg(getTimeFactorF()) + COMMAND_END;
             retour += QString(COMMAND_CURSOR_WIDTH + " %1 %2").arg("current").arg(getWidth()) + COMMAND_END;
-            retour += QString(COMMAND_CURSOR_START + " %1 %2 %3 %4").arg("current").arg(getEasingStart()).arg(getEasingStartDuration()).arg(getStart()) + COMMAND_END;
+            retour += QString(COMMAND_CURSOR_START + " %1 %2 %3 %4").arg("current").arg(getEasing()).arg(0).arg(getStart()) + COMMAND_END;
             retour += QString(COMMAND_CURSOR_TIME + " %1 %2").arg("current").arg(getTimeLocal()) + COMMAND_END;
         }
         return retour;
@@ -265,7 +258,7 @@ public:
     }
     inline qreal getCurrentPosition() {
         if(curve)
-            return time * curve->getPathLength();
+            return time * curve->getPathLength() / qAbs(factors);
         else
             return 0;
     }

@@ -1,7 +1,7 @@
 #include "nxcursor.h"
 
 NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
-        NxObject(parent, ccParentItem, _renderOptions) {
+    NxObject(parent, ccParentItem, _renderOptions) {
     curve = 0;
     setTimeLocal(0);
     nextTimeOld = 0;
@@ -28,8 +28,7 @@ NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     setTimeStartOffset(0);
     setTimeEndOffset(-1);
     setTimeInitialOffset(0);
-    setEasingStart(0);
-    setEasingStartDuration(0);
+    setEasing(0);
     setBoundsSource("-10 10 10 -10");
     setBoundsTarget("0 1 1 0");
     boundsSourceIsBoundingRect = true;
@@ -39,16 +38,22 @@ void NxCursor::setTime(qreal delta) {
     if(curve) {
         //TODO overflow si speed négatif + negative values
         //timeLocalAbsolute += delta * timeFactor * timeFactorF * qAbs(start.at(nbLoop % start.count()));
-        qreal factors = timeFactor * timeFactorF * start.at(nbLoop % start.count());
+        factors = timeFactor * timeFactorF * start.at(nbLoop % start.count());
         timeLocalAbsolute += delta * qAbs(factors);
         delta *= factors;
         timeLocalOld = timeLocal;
-        timeLocal += delta;
+        if(time >= 0)
+            timeLocal += delta;
+        else
+            timeLocal = 0;
 
-        qreal timeLocalAbsoluteCopy = timeLocalAbsolute + timeInitialOffset;
-        qreal fakeCurveLength = curve->getPathLength() - timeStartOffset;
+        qreal timeInitialOffsetReal = timeInitialOffset * qAbs(factors);
+        qreal timeStartOffsetReal   = timeStartOffset   * qAbs(factors);
+        qreal timeEndOffsetReal     = timeEndOffset     * qAbs(factors);
+        qreal timeLocalAbsoluteCopy = timeLocalAbsolute + timeInitialOffsetReal;
+        qreal fakeCurveLength = curve->getPathLength() - timeStartOffsetReal;
         if(timeEndOffset > 0)
-            fakeCurveLength = timeEndOffset - timeStartOffset;
+            fakeCurveLength = timeEndOffsetReal - timeStartOffsetReal;
         nbLoop = 0;
         bool patternSignOld = true;
         while((timeLocalAbsoluteCopy > fakeCurveLength) && (fakeCurveLength > 0)) {
@@ -72,15 +77,18 @@ void NxCursor::setTime(qreal delta) {
         else
             time = (fakeCurveLength - timeLocalAbsoluteCopy) / fakeCurveLength;//(fakeCurveLength - timeLocalAbsoluteCopy) / curve->getPathLength();
 
+        if(time <= 0)
+            previousCursorReliable = false;
+
         //Loop
         if(nbLoop != nbLoopOld) {
             previousCursorReliable = false;
-            nextTimeOld = qRound(time)    / curve->getPathLength() * fakeCurveLength + timeStartOffset / curve->getPathLength();
-            time        = qRound(timeOld) / curve->getPathLength() * fakeCurveLength + timeStartOffset / curve->getPathLength();
+            nextTimeOld = qRound(time)    / curve->getPathLength() * fakeCurveLength + timeStartOffsetReal / curve->getPathLength();
+            time        = qRound(timeOld) / curve->getPathLength() * fakeCurveLength + timeStartOffsetReal / curve->getPathLength();
             //qDebug("----------------------------------------------------");
         }
         else
-            time = time / curve->getPathLength() * fakeCurveLength + timeStartOffset / curve->getPathLength();
+            time = time / curve->getPathLength() * fakeCurveLength + timeStartOffsetReal / curve->getPathLength();
         //qDebug("%d -> %d \t %d -> %d \t %f -> %f (%f)\t%d", nbLoopOld, nbLoop, patternSignOld, patternSign, timeOld, time, nextTimeOld, previousCursorReliable);
 
         //Finaly
@@ -103,13 +111,16 @@ void NxCursor::setTime(qreal delta) {
 void NxCursor::calculate() {
     //Cursor line
     if((curve) && (curve->getPathLength() > 0)) {
-        cursorPos = curve->getPointAt(time) + curve->getPos();
-        if(time == 0)
-            cursorAngle = -curve->getAngleAt(time + 0.001);
-        else if(time == 1)
-            cursorAngle = -curve->getAngleAt(time - 0.001);
+        //qreal timeReal = ((qExp(5*time) - 1) / (qExp(5*1) - 1));
+        qreal timeReal = easing.valueForProgress(time);
+
+        cursorPos = curve->getPointAt(timeReal) + curve->getPos();
+        if(timeReal == 0)
+            cursorAngle = -curve->getAngleAt(timeReal + 0.001);
+        else if(timeReal == 1)
+            cursorAngle = -curve->getAngleAt(timeReal - 0.001);
         else
-            cursorAngle = -curve->getAngleAt(time);
+            cursorAngle = -curve->getAngleAt(timeReal);
 
         cursorPosOld = curve->getPointAt(timeOld) + curve->getPos();
         if(timeOld == 0)
@@ -212,20 +223,18 @@ void NxCursor::paint() {
         }
 
         //Cursor chasse-neige
-        if(start.at(nbLoop % start.count()) != 0) {
-            if(true) {
-                glLineWidth(size);
-                glEnable(GL_LINE_STIPPLE);
-                glLineStipple(lineFactor, lineStipple);
-                glBegin(GL_LINE_STRIP);
-                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
-                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
-                glEnd();
-                glDisable(GL_LINE_STIPPLE);
-            }
+        if((time >= 0) && (start.at(nbLoop % start.count()) != 0)) {
+            glLineWidth(size);
+            glEnable(GL_LINE_STIPPLE);
+            glLineStipple(lineFactor, lineStipple);
+            glBegin(GL_LINE_STRIP);
+            glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+            glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+            glEnd();
+            glDisable(GL_LINE_STIPPLE);
 
             //Cursor reader
-            if((timeLocal - timeLocalOld) != 0) {
+            if(((timeLocal - timeLocalOld) != 0) || (!curve)) {
                 glLineWidth(1);
                 glPushMatrix();
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
@@ -248,7 +257,7 @@ void NxCursor::paint() {
 }
 
 void NxCursor::trig() {
-    if(((timeLocal - timeLocalOld) != 0) && (canSendOsc())) {
+    if((((timeLocal - timeLocalOld) != 0) || (!curve)) && (canSendOsc())) {
         factory->sendMessage(this, 0, this);
         incMessageId();
     }

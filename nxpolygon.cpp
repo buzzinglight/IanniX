@@ -1,5 +1,6 @@
 #include "nxpolygon.h"
 
+/*
 static void qt_polygon_isect_line(const NxPoint &p1, const NxPoint &p2, const NxPoint &pos, int *winding)
 {
     qreal x1 = p1.x();
@@ -30,6 +31,7 @@ static void qt_polygon_isect_line(const NxPoint &p1, const NxPoint &p2, const Nx
         }
     }
 }
+*/
 
 NxRect NxPolygon::boundingRect() const {
     if (isEmpty())

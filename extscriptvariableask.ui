@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
-	font: 12px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
+	font: 11px &quot;Arial&quot;;
 }
 
 QWidget#ExtScriptVariableAsk {
@@ -29,6 +29,7 @@ QLabel {
 
 QPushButton {
 	color: white;
+	font: bold;
 	border: 1px solid rgb(60, 60, 60);
 	min-width: 70px;
 	min-height: 30px;
@@ -47,15 +48,64 @@ QPushButton::checked {
 }
 
 QTreeWidget {
-	color: black;
+	alternate-background-color: rgb(79, 79, 81);
+	color: white;
+	border: 0px solid transparent;
+	gridline-color: rgb(150, 152, 137);
+	selection-background-color: rgb(0, 187, 255);
+	background: transparent;
+	background-color: rgb(63, 64, 64);
 }
+QTreeWidget::item {
+}
+QHeaderView {
+	background: transparent;
+	border: 0px solid transparent;
+	color: rgb(203, 203, 203);
+	min-height: 12px;
+}
+QHeaderView::section {
+	background: rgba(255, 255, 255, 64);
+	padding-left: 4px;
+	border: 0px solid transparent;
+	border-top-left-radius:  6px;
+	border-top-right-radius: 6px;
+	font: bold;
+}
+
+QScrollBar:vertical, QScrollBar:horizontal {
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 32);
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+	border: 0px solid transparent;
+	background: rgb(161, 161, 161);
+	border-radius: 3px;
+}
+QScrollBar:vertical {						width: 8px;					}
+QScrollBar:horizontal {					height: 8px;				}
+QScrollBar::handle:vertical {			min-height: 8px;		}
+QScrollBar::handle:horizontal {	min-width: 8px;			}
+QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
+	border: 0px solid transparent;
+	background: transparent;
+	width: 1px;
+	height: 1px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: none;
+}
+
 </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="scriptTitle">
+     <property name="styleSheet">
+      <string notr="true">font: bold;</string>
+     </property>
      <property name="text">
-      <string>Please enter values to launch script</string>
+      <string>PLEASE ENTER VALUES TO LAUNCH SCRIPT:</string>
      </property>
     </widget>
    </item>
@@ -69,12 +119,12 @@ QTreeWidget {
      </property>
      <column>
       <property name="text">
-       <string>Variable</string>
+       <string>VARIABLE</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Value</string>
+       <string>VALUE</string>
       </property>
      </column>
     </widget>

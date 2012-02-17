@@ -394,7 +394,7 @@ private :
 	/// @param[in] _timestamp the timestamp of the operation (not used)
 	//----------------------------------------------------------------------------------------------------------------------
 	static inline void depthCallback(
-																	 freenect_device *_dev,
+                                                                     freenect_device *,
 																	 void *_depth,
 																	 uint32_t _timestamp=0
 																	)
@@ -413,7 +413,7 @@ private :
 	//----------------------------------------------------------------------------------------------------------------------
 
 	static inline void videoCallback(
-																	 freenect_device *_dev,
+                                                                     freenect_device *,
 																	 void *_video,
 																	 uint32_t _timestamp=0
 																	)

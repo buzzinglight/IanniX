@@ -1,10 +1,10 @@
 #include "extscriptmanager.h"
 
-ExtScriptManager::ExtScriptManager(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile, QTreeWidgetItem *parentList, QDir _scriptDir) :
+ExtScriptManager::ExtScriptManager(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile, QTreeWidgetItem *parentList, QDir) :
         QObject(_factory), QTreeWidgetItem(parentList, 1024) {
     factory = _factory;
     scriptFile = _scriptFile;
-    scriptDir = _scriptDir;
+    //scriptDir = _scriptDir;
     objectId = -1;
     connect(&fileWatcher, SIGNAL(fileChanged(QString)), SLOT(fileWatcherChanged(QString)));
     setFlags(Qt::ItemIsSelectable | /*Qt::ItemIsEditable |*/ Qt::ItemIsEnabled);

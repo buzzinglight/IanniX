@@ -30,6 +30,7 @@ QTextEdit#help {
 
 QPushButton {
 	color: white;
+	font: bold;
 	border: 1px solid rgb(60, 60, 60);
 	border-radius: 4px;
 	min-height: 20px;
@@ -42,10 +43,34 @@ QPushButton:hover {
 	border: 1px solid rgb(0, 187, 255);
 	background-color: rgb(0, 137, 241, 128);
 }
-QPushButton::checked {
+QPushButton::checked, QPushButton:pressed {
 	background-color: rgb(0, 187, 255);
 	color: white;
-}</string>
+}
+
+QScrollBar:vertical, QScrollBar:horizontal {
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 32);
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+	border: 0px solid transparent;
+	background: rgb(161, 161, 161);
+	border-radius: 3px;
+}
+QScrollBar:vertical {						width: 8px;					}
+QScrollBar:horizontal {					height: 8px;				}
+QScrollBar::handle:vertical {			min-height: 8px;		}
+QScrollBar::handle:horizontal {	min-width: 8px;			}
+QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
+	border: 0px solid transparent;
+	background: transparent;
+	width: 1px;
+	height: 1px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: none;
+}
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -69,7 +94,7 @@ QPushButton::checked {
         </size>
        </property>
        <property name="text">
-        <string>Add a new message</string>
+        <string>ADD A NEW MESSAGE</string>
        </property>
       </widget>
      </item>

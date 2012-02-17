@@ -184,7 +184,7 @@ struct CoreMidiData {
 //  Class Definitions: RtMidiIn
 //*********************************************************************//
 
-void midiInputCallback( const MIDIPacketList *list, void *procRef, void *srcRef )
+void midiInputCallback( const MIDIPacketList *list, void *procRef, void * )
 {
   RtMidiIn::RtMidiInData *data = static_cast<RtMidiIn::RtMidiInData *> (procRef);
   CoreMidiData *apiData = static_cast<CoreMidiData *> (data->apiData);
@@ -734,7 +734,7 @@ RtMidiOut :: ~RtMidiOut()
 
 char *sysexBuffer = 0;
 
-void sysexCompletionProc( MIDISysexSendRequest * sreq )
+void sysexCompletionProc( MIDISysexSendRequest *  )
 {
   //std::cout << "Completed SysEx send\n";
  delete sysexBuffer;

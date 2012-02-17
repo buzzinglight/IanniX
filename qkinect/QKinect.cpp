@@ -348,7 +348,7 @@ bool QKinect::getDepthRaw(
 //----------------------------------------------------------------------------------------------------------------------
 void QKinect::grabDepth(
     void *_depth,
-    uint32_t _timestamp
+    uint32_t
     )
 {
     // this method fills all the different depth buffers at once
@@ -416,7 +416,7 @@ void QKinect::grabDepth(
 //----------------------------------------------------------------------------------------------------------------------
 void QKinect::grabVideo(
     void *_video,
-    uint32_t _timestamp
+    uint32_t
     )
 {
     // lock our mutex and copy the data from the video buffer

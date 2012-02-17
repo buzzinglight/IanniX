@@ -257,7 +257,8 @@ void UiRender::paintGL() {
             timePerfCounter = 0;
         }
 #ifdef KINECT_INSTALLED
-        factory->kinect->paint();
+        if(factory->kinect)
+            factory->kinect->paint();
 #endif
     }
 }

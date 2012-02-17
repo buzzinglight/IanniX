@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>379</width>
-    <height>673</height>
+    <width>366</width>
+    <height>624</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,10 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
-	font: 11px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
+	font: 10px &quot;Arial&quot;;
+}
+QLabel {
+	font: bold;
 }
 
 QLabel#separator1, QLabel#separator2, QLabel#separator3, QLabel#separator4 {
@@ -62,7 +65,7 @@ QPushButton:hover {
 	border: 1px solid rgb(0, 187, 255);
 	background-color: rgb(0, 137, 241, 128);
 }
-QPushButton::checked {
+QPushButton::checked, QPushButton:pressed {
 	background-color: rgb(0, 187, 255);
 	color: white;
 }
@@ -82,34 +85,77 @@ QCheckBox::indicator:checked {
 }
 
 QDoubleSpinBox, QSpinBox, QLineEdit  {
-	padding: 3px;
+	padding: 2px;
+	padding-top: 0px;
 	color: white;
 }
-QDoubleSpinBox::up-button, QDoubleSpinBox::down-button, QSpinBox::up-button, QSpinBox::down-button   {
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+	width: 5px;
+    image: url(:/icons/res_icon_plus.png);
+	padding: 2px;
 	border: 0px solid transparent;
-	border-radius: 2px;
-	margin: 2px;
+	background: rgba(255, 255, 255, 64);
 }
-QDoubleSpinBox::up-button, QSpinBox::up-button {
-	width: 9px;
-	height: 9px;
-	border-radius: 4px;
-	background-color: rgb(0, 187, 255);
-}
-QDoubleSpinBox::down-button, QSpinBox::down-button {
-	width: 6px;
-	height: 6px;
-	border-radius: 3px;
-	background-color: rgb(0, 187, 255, 128);
-	margin-right: 3px;
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+	width: 5px;
+    image: url(:/icons/res_icon_minus.png);
+	padding: 2px;
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 64);
 }
 
-QSpinBox::up-button#oscInPortSpin,QSpinBox::up-button#udpInPortSpin {
-	background-color: rgb(255, 255, 255, 192);
+
+
+QTreeWidget {
+	alternate-background-color: rgb(79, 79, 81);
+	color: white;
+	border: 0px solid transparent;
+	gridline-color: rgb(150, 152, 137);
+	selection-background-color: rgb(0, 187, 255);
+	background: transparent;
+	background-color: rgb(63, 64, 64);
 }
-QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
-	background-color: rgb(255, 255, 255, 100);
-}</string>
+QTreeWidget::item {
+}
+QHeaderView {
+	background: transparent;
+	border: 0px solid transparent;
+	color: rgb(203, 203, 203);
+	min-height: 12px;
+}
+QHeaderView::section {
+	background: rgba(255, 255, 255, 64);
+	padding-left: 4px;
+	border: 0px solid transparent;
+	border-top-left-radius:  6px;
+	border-top-right-radius: 6px;
+	font: bold;
+}
+
+
+QScrollBar:vertical, QScrollBar:horizontal {
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 32);
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+	border: 0px solid transparent;
+	background: rgb(161, 161, 161);
+	border-radius: 3px;
+}
+QScrollBar:vertical {						width: 8px;					}
+QScrollBar:horizontal {					height: 8px;				}
+QScrollBar::handle:vertical {			min-height: 8px;		}
+QScrollBar::handle:horizontal {	min-width: 8px;			}
+QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
+	border: 0px solid transparent;
+	background: transparent;
+	width: 1px;
+	height: 1px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: none;
+}
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">
@@ -169,11 +215,12 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
            <widget class="QLabel" name="scoreLabel">
             <property name="styleSheet">
              <string notr="true">	color: white;
-	font: 13px;
+	font: 12px;
+	font: bold;
 </string>
             </property>
             <property name="text">
-             <string>Score Center</string>
+             <string>SCORE CENTER</string>
             </property>
            </widget>
           </item>
@@ -190,7 +237,7 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
               <item>
                <widget class="QLabel" name="viewGroupLabel_3">
                 <property name="text">
-                 <string>Scores</string>
+                 <string>SCORES</string>
                 </property>
                </widget>
               </item>
@@ -222,7 +269,7 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
               <item>
                <widget class="QLabel" name="viewGroupLabel_4">
                 <property name="text">
-                 <string>Scripts &amp; styles</string>
+                 <string>SCRIPTS &amp; STYLE</string>
                 </property>
                </widget>
               </item>
@@ -284,11 +331,12 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
             </property>
             <property name="styleSheet">
              <string notr="true">	color: white;
-	font: 13px;
+	font: 12px;
+	font: bold;
 </string>
             </property>
             <property name="text">
-             <string>Trigger</string>
+             <string>TRIGGER</string>
             </property>
            </widget>
           </item>
@@ -315,7 +363,7 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                </size>
               </property>
               <property name="text">
-               <string>ID / Group ID</string>
+               <string>ID / GROUP ID</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -340,7 +388,8 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                </size>
               </property>
               <property name="text">
-               <string>Position (x/y/z)</string>
+               <string>POSITION
+(X / Y / Z)</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -458,7 +507,8 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                </size>
               </property>
               <property name="text">
-               <string>Size (w/h)</string>
+               <string>SIZE
+(W / H)</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -545,7 +595,8 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                </size>
               </property>
               <property name="text">
-               <string>Cursor width</string>
+               <string>CURSOR
+WIDTH</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -598,7 +649,8 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                </size>
               </property>
               <property name="text">
-               <string>Cursor loop pattern</string>
+               <string>CURSOR
+LOOP PATTERN</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -608,7 +660,7 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
               </property>
              </widget>
             </item>
-            <item row="13" column="1" colspan="3">
+            <item row="13" column="1" colspan="2">
              <widget class="QLineEdit" name="patternLine">
               <property name="toolTip">
                <string>Type values separated by spaces</string>
@@ -633,7 +685,8 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                </size>
               </property>
               <property name="text">
-               <string>Cursor offsets</string>
+               <string>CUROR
+OFFSETS</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -650,6 +703,9 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
               </property>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <property name="spacing">
+                 <number>5</number>
+                </property>
                 <item>
                  <widget class="QLabel" name="offsetLabel1">
                   <property name="minimumSize">
@@ -659,7 +715,7 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                    </size>
                   </property>
                   <property name="text">
-                   <string>begins from</string>
+                   <string>BEGINS FROM</string>
                   </property>
                  </widget>
                 </item>
@@ -708,6 +764,9 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <property name="spacing">
+                 <number>5</number>
+                </property>
                 <item>
                  <widget class="QLabel" name="offsetLabel2">
                   <property name="sizePolicy">
@@ -718,12 +777,18 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>55</width>
+                    <width>60</width>
                     <height>0</height>
                    </size>
                   </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="text">
-                   <string>goes from</string>
+                   <string>GOES FROM</string>
                   </property>
                   <property name="wordWrap">
                    <bool>false</bool>
@@ -770,7 +835,7 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                    </size>
                   </property>
                   <property name="text">
-                   <string>to</string>
+                   <string>TO</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -840,7 +905,8 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                </size>
               </property>
               <property name="text">
-               <string>Cursor manual position</string>
+               <string>CURSOR
+MANUAL POS.</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -896,8 +962,8 @@ QSpinBox::down-button#oscInPortSpin,QSpinBox::down-button#udpInPortSpin {
                </size>
               </property>
               <property name="text">
-               <string>Cursor
-speed or length</string>
+               <string>CURSOR SPEED
+or LENGTH</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1005,8 +1071,8 @@ speed or length</string>
                </size>
               </property>
               <property name="text">
-               <string>Cursor
-master speed</string>
+               <string>CUSROR
+MASTER SPEED</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1059,7 +1125,8 @@ master speed</string>
                </size>
               </property>
               <property name="text">
-               <string>Value mapping</string>
+               <string>VALUE
+MAPPING</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1071,25 +1138,28 @@ master speed</string>
             </item>
             <item row="18" column="1" colspan="3">
              <layout class="QGridLayout" name="cursorBoundsLayout">
-              <property name="spacing">
+              <property name="horizontalSpacing">
                <number>0</number>
+              </property>
+              <property name="verticalSpacing">
+               <number>1</number>
               </property>
               <item row="0" column="0">
                <widget class="QLabel" name="cursorBoundsLabel1">
                 <property name="minimumSize">
                  <size>
-                  <width>30</width>
+                  <width>32</width>
                   <height>0</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>30</width>
+                  <width>32</width>
                   <height>16777215</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>from</string>
+                 <string>FROM</string>
                 </property>
                </widget>
               </item>
@@ -1099,7 +1169,7 @@ master speed</string>
                  <string>Type values separated by spaces</string>
                 </property>
                 <property name="text">
-                 <string/>
+                 <string>sdfsdf</string>
                 </property>
                </widget>
               </item>
@@ -1107,18 +1177,18 @@ master speed</string>
                <widget class="QLabel" name="cursorBoundsLabel2">
                 <property name="minimumSize">
                  <size>
-                  <width>30</width>
+                  <width>32</width>
                   <height>0</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>30</width>
+                  <width>32</width>
                   <height>16777215</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>to</string>
+                 <string>TO</string>
                 </property>
                </widget>
               </item>
@@ -1128,7 +1198,7 @@ master speed</string>
                  <string>Type values separated by spaces</string>
                 </property>
                 <property name="text">
-                 <string/>
+                 <string>sqdffsd</string>
                 </property>
                </widget>
               </item>
@@ -1137,7 +1207,7 @@ master speed</string>
             <item row="24" column="0" colspan="4">
              <widget class="QLabel" name="labelSelection">
               <property name="text">
-               <string>No items selected</string>
+               <string>NO ITEMS SELECTED</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1156,10 +1226,10 @@ master speed</string>
                <string>Click to change group</string>
               </property>
               <property name="styleSheet">
-               <string notr="true"/>
+               <string notr="true">font: bold;</string>
               </property>
               <property name="text">
-               <string>Group 2 (change)</string>
+               <string>Group 2</string>
               </property>
              </widget>
             </item>
@@ -1200,7 +1270,7 @@ master speed</string>
                </size>
               </property>
               <property name="text">
-               <string>Trigger-offtime</string>
+               <string>TRIGGER OFF-TIME</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1253,7 +1323,7 @@ master speed</string>
                </size>
               </property>
               <property name="text">
-               <string>Label</string>
+               <string>LABEL</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1285,7 +1355,7 @@ master speed</string>
                </size>
               </property>
               <property name="text">
-               <string>Active</string>
+               <string>ACTIVE</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1297,6 +1367,9 @@ master speed</string>
             </item>
             <item row="6" column="1">
              <widget class="QCheckBox" name="activityCheck">
+              <property name="styleSheet">
+               <string notr="true">padding-left: 2px;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -1310,8 +1383,11 @@ master speed</string>
                 <height>20</height>
                </size>
               </property>
+              <property name="styleSheet">
+               <string notr="true">font: bold;</string>
+              </property>
               <property name="text">
-               <string>Edit</string>
+               <string>EDIT</string>
               </property>
              </widget>
             </item>
@@ -1330,7 +1406,7 @@ master speed</string>
                </size>
               </property>
               <property name="text">
-               <string>OSC Messages</string>
+               <string>MESSAGES</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1355,7 +1431,7 @@ master speed</string>
                </size>
               </property>
               <property name="text">
-               <string>Colors</string>
+               <string>COLORS</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1367,6 +1443,9 @@ master speed</string>
             </item>
             <item row="7" column="1" colspan="3">
              <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <property name="spacing">
+               <number>-1</number>
+              </property>
               <item>
                <widget class="QComboBox" name="colorCombo1">
                 <property name="minimumSize">
@@ -1473,7 +1552,7 @@ master speed</string>
                </size>
               </property>
               <property name="text">
-               <string>Thickness</string>
+               <string>TICKNESS</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1548,7 +1627,7 @@ master speed</string>
             <item row="8" column="2">
              <widget class="QLabel" name="messagesLabel2">
               <property name="text">
-               <string>sent each</string>
+               <string>SENT EACH</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1569,8 +1648,30 @@ master speed</string>
               <property name="toolTip">
                <string>Click to change ID</string>
               </property>
+              <property name="styleSheet">
+               <string notr="true">font: bold;</string>
+              </property>
               <property name="text">
                <string>ID</string>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="3">
+             <widget class="QComboBox" name="easingCombo">
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>80</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Active color</string>
               </property>
              </widget>
             </item>
@@ -1609,11 +1710,12 @@ master speed</string>
             </property>
             <property name="styleSheet">
              <string notr="true">	color: white;
-	font: 13px;
+	font: 12px;
+	font: bold;
 </string>
             </property>
             <property name="text">
-             <string>Object Selection</string>
+             <string>OBJECT SELECTION</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1622,8 +1724,11 @@ master speed</string>
           </item>
           <item>
            <widget class="QCheckBox" name="viewTriggerCheck">
+            <property name="styleSheet">
+             <string notr="true">font: 10px;</string>
+            </property>
             <property name="text">
-             <string>Triggers</string>
+             <string>TRIGGERS</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1632,8 +1737,11 @@ master speed</string>
           </item>
           <item>
            <widget class="QCheckBox" name="viewCurveCheck">
+            <property name="styleSheet">
+             <string notr="true">font: 10px;</string>
+            </property>
             <property name="text">
-             <string>Curves</string>
+             <string>CURVES</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1642,8 +1750,11 @@ master speed</string>
           </item>
           <item>
            <widget class="QCheckBox" name="viewCursorCheck">
+            <property name="styleSheet">
+             <string notr="true">font: 10px;</string>
+            </property>
             <property name="text">
-             <string>Cursors</string>
+             <string>CURSORS</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1663,7 +1774,7 @@ master speed</string>
               <item>
                <widget class="QLabel" name="viewGroupLabel_2">
                 <property name="text">
-                 <string>Objects</string>
+                 <string>OBJECTS</string>
                 </property>
                </widget>
               </item>
@@ -1688,12 +1799,12 @@ master speed</string>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Group ID</string>
+                  <string>GROUP ID</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Active</string>
+                  <string>ACTIVE</string>
                  </property>
                 </column>
                </widget>
@@ -1708,7 +1819,7 @@ master speed</string>
               <item>
                <widget class="QLabel" name="viewGroupLabel">
                 <property name="text">
-                 <string>Groups</string>
+                 <string>GROUPS</string>
                 </property>
                </widget>
               </item>
@@ -1725,7 +1836,7 @@ master speed</string>
                 </attribute>
                 <column>
                  <property name="text">
-                  <string>Groups</string>
+                  <string>GROUPS</string>
                  </property>
                 </column>
                </widget>
@@ -1745,7 +1856,7 @@ master speed</string>
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Z-layers from</string>
+               <string>Z-LAYERS FROM</string>
               </property>
              </widget>
             </item>
@@ -1771,7 +1882,7 @@ master speed</string>
                </sizepolicy>
               </property>
               <property name="text">
-               <string>to</string>
+               <string>TO</string>
               </property>
              </widget>
             </item>
@@ -1817,11 +1928,12 @@ master speed</string>
            <widget class="QLabel" name="oscLabel">
             <property name="styleSheet">
              <string notr="true">	color: white;
-	font: 13px;
+	font: 12px;
+	font: bold;
 </string>
             </property>
             <property name="text">
-             <string>Messages</string>
+             <string>MESSAGES</string>
             </property>
            </widget>
           </item>
@@ -1838,7 +1950,7 @@ master speed</string>
               <item>
                <widget class="QLabel" name="oscSendListLabel">
                 <property name="text">
-                 <string>Sent messages</string>
+                 <string>SENT MESSAGES</string>
                 </property>
                </widget>
               </item>
@@ -1871,7 +1983,7 @@ master speed</string>
               <item>
                <widget class="QLabel" name="oscReceiveListLabel">
                 <property name="text">
-                 <string>Received messages</string>
+                 <string>RECEIVED MESSAGES</string>
                 </property>
                </widget>
               </item>
@@ -1906,16 +2018,25 @@ master speed</string>
             <item>
              <widget class="QLabel" name="oscReceiveListLabel_2">
               <property name="text">
-               <string>Network configuration</string>
+               <string>NETWORK CONFIGURATION</string>
               </property>
              </widget>
             </item>
             <item>
              <layout class="QGridLayout" name="gridLayout">
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="horizontalSpacing">
+               <number>10</number>
+              </property>
               <item row="0" column="0">
                <widget class="QLabel" name="oscInPortLabel">
                 <property name="text">
-                 <string>OSC in port</string>
+                 <string>OSC IN PORT</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -1941,21 +2062,31 @@ master speed</string>
               <item row="1" column="0">
                <widget class="QLabel" name="udpInPortLabel">
                 <property name="text">
-                 <string>Raw UDP port</string>
+                 <string>RAW UDP PORT</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
               <item row="4" column="0">
                <widget class="QLabel" name="serialInPortLabel">
                 <property name="text">
-                 <string>Serial port</string>
+                 <string>SERIAL PORT</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
               <item row="2" column="0">
                <widget class="QLabel" name="transportMessageLabel">
                 <property name="text">
-                 <string>Transport message</string>
+                 <string>TRANSPORT
+MESSAGE</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -1995,7 +2126,11 @@ master speed</string>
               <item row="3" column="0">
                <widget class="QLabel" name="syncMessageLabel">
                 <property name="text">
-                 <string>Sync message</string>
+                 <string>SYNC
+MESSAGE</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -2021,15 +2156,23 @@ master speed</string>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <widget class="QLabel" name="mouseLabel">
+          <property name="styleSheet">
+           <string notr="true">font: 10px &quot;Arial&quot;;
+</string>
+          </property>
           <property name="text">
-           <string>Mouse</string>
+           <string>MOUSE</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="zoomLabel">
+          <property name="styleSheet">
+           <string notr="true">font: 10px &quot;Arial&quot;;
+</string>
+          </property>
           <property name="text">
-           <string>Zoom</string>
+           <string>ZOOM</string>
           </property>
          </widget>
         </item>
@@ -2088,8 +2231,8 @@ master speed</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>110</x>
-     <y>72</y>
+     <x>103</x>
+     <y>37</y>
     </hint>
     <hint type="destinationlabel">
      <x>45</x>
@@ -2104,8 +2247,8 @@ master speed</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>117</x>
-     <y>108</y>
+     <x>103</x>
+     <y>41</y>
     </hint>
     <hint type="destinationlabel">
      <x>72</x>
@@ -2120,8 +2263,8 @@ master speed</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>117</x>
-     <y>130</y>
+     <x>103</x>
+     <y>44</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2136,8 +2279,8 @@ master speed</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>210</x>
-     <y>623</y>
+     <x>118</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>
@@ -2152,8 +2295,8 @@ master speed</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>354</x>
-     <y>623</y>
+     <x>118</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
      <x>237</x>
@@ -2169,7 +2312,7 @@ master speed</string>
    <hints>
     <hint type="sourcelabel">
      <x>174</x>
-     <y>118</y>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2184,8 +2327,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>261</x>
-     <y>118</y>
+     <x>249</x>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
      <x>43</x>
@@ -2200,8 +2343,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>118</y>
+     <x>319</x>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2217,7 +2360,7 @@ master speed</string>
    <hints>
     <hint type="sourcelabel">
      <x>175</x>
-     <y>510</y>
+     <y>479</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2232,8 +2375,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>180</x>
-     <y>354</y>
+     <x>174</x>
+     <y>331</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2249,7 +2392,7 @@ master speed</string>
    <hints>
     <hint type="sourcelabel">
      <x>241</x>
-     <y>447</y>
+     <y>418</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2264,8 +2407,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>338</x>
-     <y>449</y>
+     <x>331</x>
+     <y>418</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2280,8 +2423,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>261</x>
-     <y>510</y>
+     <x>259</x>
+     <y>479</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2328,8 +2471,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>249</x>
-     <y>418</y>
+     <x>252</x>
+     <y>393</y>
     </hint>
     <hint type="destinationlabel">
      <x>181</x>
@@ -2344,8 +2487,8 @@ master speed</string>
    <slot>actionInfoGroup()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>295</x>
-     <y>88</y>
+     <x>344</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2360,8 +2503,8 @@ master speed</string>
    <slot>actionMessages()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>198</x>
-     <y>284</y>
+     <x>190</x>
+     <y>266</y>
     </hint>
     <hint type="destinationlabel">
      <x>319</x>
@@ -2376,8 +2519,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>198</x>
-     <y>227</y>
+     <x>193</x>
+     <y>207</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2393,7 +2536,7 @@ master speed</string>
    <hints>
     <hint type="sourcelabel">
      <x>174</x>
-     <y>479</y>
+     <y>448</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2409,7 +2552,7 @@ master speed</string>
    <hints>
     <hint type="sourcelabel">
      <x>174</x>
-     <y>541</y>
+     <y>510</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2424,8 +2567,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>214</x>
-     <y>386</y>
+     <x>254</x>
+     <y>362</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2456,8 +2599,8 @@ master speed</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>191</x>
-     <y>486</y>
+     <x>78</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2472,8 +2615,8 @@ master speed</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>191</x>
-     <y>520</y>
+     <x>78</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2488,8 +2631,8 @@ master speed</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>622</y>
+     <x>118</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2504,8 +2647,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>180</x>
-     <y>324</y>
+     <x>174</x>
+     <y>300</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2521,7 +2664,7 @@ master speed</string>
    <hints>
     <hint type="sourcelabel">
      <x>174</x>
-     <y>148</y>
+     <y>133</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2536,8 +2679,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>261</x>
-     <y>148</y>
+     <x>249</x>
+     <y>133</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2552,8 +2695,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>214</x>
-     <y>208</y>
+     <x>317</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2568,8 +2711,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>245</x>
-     <y>572</y>
+     <x>337</x>
+     <y>540</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2584,8 +2727,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>245</x>
-     <y>596</y>
+     <x>337</x>
+     <y>561</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2600,8 +2743,8 @@ master speed</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>182</y>
+     <x>118</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2616,8 +2759,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>214</x>
-     <y>208</y>
+     <x>317</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2632,8 +2775,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>214</x>
-     <y>386</y>
+     <x>254</x>
+     <y>362</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2648,8 +2791,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>245</x>
-     <y>572</y>
+     <x>337</x>
+     <y>540</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2664,8 +2807,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>245</x>
-     <y>596</y>
+     <x>337</x>
+     <y>561</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2680,8 +2823,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>622</y>
+     <x>118</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2696,8 +2839,8 @@ master speed</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>173</x>
-     <y>255</y>
+     <x>167</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2712,8 +2855,8 @@ master speed</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>233</x>
-     <y>255</y>
+     <x>224</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2728,8 +2871,8 @@ master speed</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>292</x>
-     <y>255</y>
+     <x>281</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2744,8 +2887,8 @@ master speed</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>352</x>
-     <y>255</y>
+     <x>338</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2761,7 +2904,7 @@ master speed</string>
    <hints>
     <hint type="sourcelabel">
      <x>174</x>
-     <y>178</y>
+     <y>162</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2776,8 +2919,8 @@ master speed</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>554</y>
+     <x>118</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2792,8 +2935,8 @@ master speed</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>554</y>
+     <x>118</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2808,8 +2951,8 @@ master speed</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>622</y>
+     <x>118</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2824,8 +2967,8 @@ master speed</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>427</y>
+     <x>118</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2840,8 +2983,8 @@ master speed</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>182</y>
+     <x>118</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2856,8 +2999,8 @@ master speed</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>427</y>
+     <x>118</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2872,8 +3015,8 @@ master speed</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>343</x>
-     <y>286</y>
+     <x>319</x>
+     <y>264</y>
     </hint>
     <hint type="destinationlabel">
      <x>-229</x>
@@ -2888,8 +3031,8 @@ master speed</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>588</y>
+     <x>118</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>530</x>
@@ -2904,8 +3047,8 @@ master speed</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>588</y>
+     <x>118</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>510</x>
@@ -2942,6 +3085,22 @@ master speed</string>
     <hint type="destinationlabel">
      <x>537</x>
      <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>easingCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>281</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>525</x>
+     <y>139</y>
     </hint>
    </hints>
   </connection>

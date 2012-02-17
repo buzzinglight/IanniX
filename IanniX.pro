@@ -8,9 +8,7 @@ QT                      += core gui opengl network script
 
 TARGET                   =  IanniX
 TEMPLATE                 =  app
-CONFIG                  += x86 x86_64
-
-debug:DEFINES           += __RTMIDI_DEBUG__
+CONFIG                  +=  x86_64
 
 false {
     CONFIG                  -= x86
@@ -21,6 +19,7 @@ false {
     unix:INCLUDEPATH        += /usr/local/include/libfreenect
 }
 
+debug:DEFINES           += __RTMIDI_DEBUG__
 
 SOURCES                 += iannix.cpp \
                            uitransport.cpp \
@@ -54,7 +53,8 @@ SOURCES                 += iannix.cpp \
                            nxsize.cpp \
                            nxpolygon.cpp \
                            nxline.cpp \
-                           extoscpatterneditor.cpp
+                           extoscpatterneditor.cpp \
+    nxeasing.cpp
 
 HEADERS                 += iannix.h \
                            uitransport.h \
@@ -95,8 +95,9 @@ HEADERS                 += iannix.h \
                            nxrect.h \
                            nxsize.h \
                            nxline.h \
-    nxpolygon.h \
-    extoscpatterneditor.h
+                           nxpolygon.h \
+                           extoscpatterneditor.h \
+    nxeasing.h
 
 FORMS                   += uitransport.ui \
                            uirender.ui \
@@ -109,22 +110,22 @@ FORMS                   += uitransport.ui \
                            uieditor.ui \
     extoscpatterneditor.ui
 
-TRANSLATIONS            =  iannix_fr.ts
+TRANSLATIONS             = iannix_fr.ts
 
 RESOURCES               += IanniX.qrc
 
 macx {
-    ICON                =  icon.icns
-    QMAKE_INFO_PLIST    =  ../Info.plist
+    ICON                 = icon.icns
+    QMAKE_INFO_PLIST     = ../Info.plist
 
-    BUNDLE_RES.files    =  icon_green.icns icon_orange.icns
-    BUNDLE_RES.path     =  Contents/Resources
+    BUNDLE_RES.files     = icon_green.icns icon_orange.icns
+    BUNDLE_RES.path      = Contents/Resources
     QMAKE_BUNDLE_DATA   += BUNDLE_RES
 }
 win32 {
     DEFINES             += __WINDOWS_MM__
     LIBS                += -lwinmm -lsetupapi
-    RC_FILE             =  icon.rc
+    RC_FILE              = icon.rc
     SOURCES             += qextserialport\win_qextserialport.cpp qextserialport\qextserialenumerator_win.cpp
     DEFINES             += WINVER=0x0501 # needed for mingw to pull in appropriate dbt business...probably a better way to do this
 }

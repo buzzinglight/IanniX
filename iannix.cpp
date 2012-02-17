@@ -125,6 +125,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     midi = new ExtMidiManager(this);
 
 #ifdef KINECT_INSTALLED
+    kinect = 0;
     kinect = new ExtKinectManager();
 #endif
 
@@ -211,16 +212,16 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     inspector->getProjectScripts()->clear();
     projectScore = new QTreeWidgetItem(inspector->getProjectFiles());
     projectScore->setFlags(Qt::ItemIsEnabled);
-    projectScore->setText(0, tr("Current project"));
+    projectScore->setText(0, tr("CURRENT PROJECT"));
     projectScript = new QTreeWidgetItem(inspector->getProjectScripts());
     projectScript->setFlags(Qt::ItemIsEnabled);
-    projectScript->setText(0, tr("Current project"));
+    projectScript->setText(0, tr("CURRENT PROJECT"));
     libScript = new QTreeWidgetItem(inspector->getProjectScripts());
     libScript->setFlags(Qt::ItemIsEnabled);
-    libScript->setText(0, tr("Tools"));
+    libScript->setText(0, tr("TOOLS"));
     exampleScript = new QTreeWidgetItem(inspector->getProjectScripts());
     exampleScript->setFlags(Qt::ItemIsEnabled);
-    exampleScript->setText(0, tr("Examples"));
+    exampleScript->setText(0, tr("EXAMPLES"));
 
     //Expand
     inspector->getProjectFiles()->expandAll();
@@ -1203,7 +1204,6 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
 
                     else if((commande == COMMAND_CURSOR_START) && (arguments.count() >= 5)) {
                         object->dispatchProperty("easingStart", arguments.at(2).toDouble());
-                        object->dispatchProperty("easingStartDuration", arguments.at(3).toDouble());
                         object->dispatchProperty("start", command.mid(command.indexOf(arguments.at(4), command.indexOf(arguments.at(3))+arguments.at(3).length())).trimmed());
                     }
 

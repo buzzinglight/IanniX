@@ -604,7 +604,7 @@ bool NxCurve::isMouseHover(const NxPoint &mouse) {
 }
 
 qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) {
-    qreal step = 0.01;
+    qreal step = 0.001;
     if(curveType == CurveTypeEllipse) {
         if(boundingRect.intersects(rect)) {
             for(qreal t = 0 ; t <= 1+step ; t += step) {

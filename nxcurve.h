@@ -41,7 +41,8 @@ public:
     inline NxCurvePoint getPathPointsAt(quint16 index) const {
 #ifdef KINECT_INSTALLED
         NxCurvePoint pt = pathPoints.at(index);
-        pt.setZ(pos.z() + factory->kinect->getDepthAt(pos.x() + pt.x(), pos.y() + pt.y()));
+        if((factory) && (factory->kinect))
+            pt.setZ(pos.z() + factory->kinect->getDepthAt(pos.x() + pt.x(), pos.y() + pt.y()));
         return pt;
 #else
         return pathPoints.at(index);

@@ -5,9 +5,9 @@ ExtKinectManager::ExtKinectManager(QWidget *parent) :
     frameCounter = 0;
     threshMin = 0.55;
     threshMax = 0.75;
+    kinect = 0;
 
     //Configuration de la Kinect
-    kinect = 0;
     kinect = QKinect::instance();
     if(kinect)
         kinect->setGreenLed();

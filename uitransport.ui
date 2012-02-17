@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>802</width>
-    <height>61</height>
+    <height>67</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
-	font: 12px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
+	font: 12px &quot;Arial&quot;;
 	color: white;
 }
 
@@ -40,12 +40,14 @@ QPushButton:hover {
 	border: 1px solid rgb(0, 187, 255);
 	background-color: rgb(0, 137, 241, 128);
 }
-QPushButton::checked {
+QPushButton::checked, QPushButton:pressed {
 	background-color: rgb(0, 187, 255);
 	color: white;
 }
 
+
 QLineEdit#timeEdit {
+	font: 12px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
 	font-size: 40px;
 	color: rgb(0, 187, 255);
 }
@@ -63,36 +65,38 @@ QSlider::groove:horizontal {
 	height: 2px;
 }
 QSlider::handle:horizontal {
-	width: 9px;
+	width: 15px;
 	height: 9px;
 	border-radius: 4px;
-	background-color: rgb(0, 187, 255);
 	margin-top: -5px;
 	margin-bottom: -5px;
+	border: 2px solid rgb(0, 133, 181);
+	background-color: rgb(0, 187, 255);
 }
 
 QDoubleSpinBox {
-	padding: 3px;
+	padding: 2px;
+	padding-top: 0px;
 	color: white;
 	font: 10px;
 }
-QDoubleSpinBox::up-button, QDoubleSpinBox::down-button  {
+QDoubleSpinBox, QSpinBox, QLineEdit  {
+	padding: 3px;
+	color: white;
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+	width: 5px;
+    image: url(:/icons/res_icon_plus.png);
+	padding: 2px;
 	border: 0px solid transparent;
-	border-radius: 2px;
-	margin: 2px;
+	background: rgba(255, 255, 255, 64);
 }
-QDoubleSpinBox::up-button {
-	width: 9px;
-	height: 9px;
-	border-radius: 4px;
-	background-color: rgb(0, 187, 255);
-}
-QDoubleSpinBox::down-button {
-	width: 6px;
-	height: 6px;
-	border-radius: 3px;
-	background-color: rgb(0, 187, 255, 128);
-	margin-right: 3px;
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+	width: 5px;
+    image: url(:/icons/res_icon_minus.png);
+	padding: 2px;
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 64);
 }
 
 QLabel#lastMessage {
@@ -247,13 +251,13 @@ QLabel#lastMessage {
           <widget class="QLineEdit" name="timeEdit">
            <property name="minimumSize">
             <size>
-             <width>230</width>
+             <width>240</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>230</width>
+             <width>240</width>
              <height>16777215</height>
             </size>
            </property>

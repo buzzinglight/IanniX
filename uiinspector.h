@@ -109,6 +109,7 @@ public slots:
     void change(quint16 indexObject, QCheckBox *spin, quint8 val, quint8 prevVal);
     void change(quint16 indexObject, QLineEdit *spin, const QString & val, const QString & prevVal);
     void change(quint16 indexObject, QComboBox *spin, const QString & val, const QString & prevVal);
+    void change(quint16 indexObject, QComboBox *spin, quint16 val, quint16 prevVal);
 
     void colorComboAdd(QComboBox *spin, QStringList values);
 
