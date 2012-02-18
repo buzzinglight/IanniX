@@ -104,6 +104,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(render, SIGNAL(editingMove(NxPoint,bool)), SLOT(editingMove(NxPoint,bool)));
     connect(render, SIGNAL(escFullscreen()), view, SLOT(escFullscreen()));
     render->zoom();
+    render->resizeGL();
+    render->updateGL();
     render->loadTexture("background", scriptDir.absoluteFilePath("Tools/background.jpg"), NxRect(NxPoint(), NxPoint()));
     render->loadTexture("trigger_active", scriptDir.absoluteFilePath("Tools/trigger.png"), NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
     render->loadTexture("trigger_inactive", scriptDir.absoluteFilePath("Tools/trigger.png"), NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
@@ -278,10 +280,7 @@ void IanniX::show() {
 }
 
 void IanniX::timerEvent(QTimerEvent *) {
-    transport->setPerfScheduler(QString().setNum((quint16)qRound(1000.0F*timePerfRefresh/timePerfCounter)));
     transport->setPerfCpu(QString().setNum((quint16)qRound(cpu->cpu)));
-    timePerfRefresh = 0;
-    timePerfCounter = 0;
 }
 void IanniX::timerTick() {
     qreal delta = renderMeasure.elapsed() / 1000.0F;
@@ -430,6 +429,11 @@ void IanniX::timerTick() {
 
         emit(updateTransport(timeStr, lastMessage));
         lastMessageAllow = true;
+    }
+    if(timePerfRefresh >= 1) {
+        transport->setPerfScheduler(QString().setNum((quint16)qRound(1000.0F*timePerfRefresh/timePerfCounter)));
+        timePerfRefresh = 0;
+        timePerfCounter = 0;
     }
 
     if(forceTimeLocal)
@@ -1087,7 +1091,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 render->rotateTo(_rotation);
             }
             else if((commande == COMMAND_CENTER) && (arguments.count() >= 3)) {
-                render->getRenderOptions()->axisCenter = NxPoint(-arguments.at(1).toDouble(), -arguments.at(2).toDouble());
+                render->getRenderOptions()->axisCenterDest = NxPoint(-arguments.at(1).toDouble(), -arguments.at(2).toDouble());
                 render->zoom();
             }
             else if((commande == COMMAND_PLAY) && (arguments.count() >= 2)) {

@@ -38,7 +38,7 @@ UiRender::UiRender(QWidget *parent) :
     mouseObjectDrag = false;
     mouseSnap = false;
     selectedHover = 0;
-    scale = 3;
+    scaleDest = 3;
     setCanObjectDrag(true);
 
     //Render options
@@ -130,18 +130,14 @@ void UiRender::loadTexture(const QString & name, const QString & filename, const
 
 void UiRender::centerOn(const NxPoint & center) {
     if(!renderOptions->axisArea.contains(center)) {
-        renderOptions->axisCenter = -center;
+        renderOptions->axisCenterDest = -center;
         zoom();
-        resizeGL();
-        updateGL();
     }
 }
 
 void UiRender::rotateTo(const NxPoint & rotation) {
     setRotation(rotation);
     zoom();
-    resizeGL();
-    updateGL();
 }
 
 //Initialize event
@@ -157,38 +153,59 @@ void UiRender::initializeGL() {
 }
 
 //Resize event
-void UiRender::resizeGL(int width, int height) {
+void UiRender::resizeGL(int, int) {
+    //Set viewport
+    glViewport(0, 0, (GLint)width(), (GLint)height());
+}
+
+//Paint event
+void UiRender::paintGL() {
+    //Intertial system
+    renderOptions->axisCenter = renderOptions->axisCenter + (renderOptions->axisCenterDest - renderOptions->axisCenter) / 3;
+    renderOptions->zoomLinear = renderOptions->zoomLinear + (renderOptions->zoomLinearDest - renderOptions->zoomLinear) / 3;
+    rotation = rotation + (rotationDest - rotation) / 3;
+    translation = translation + (translationDest - translation) / 3;
+    scale = scale + (scaleDest - scale) / 3;
+
+    //Object sizes
+    renderOptions->objectSize = 0.15;
+    if(triggerAutosize)
+        renderOptions->objectSize *= renderOptions->zoomLinear;
+
     //Calculate area
     renderOptions->axisArea = NxRect(NxPoint(), NxSize(10, 10));
-    if(width > height) {
+    if(width() > height()) {
         if(renderOptions->axisArea.width() > -renderOptions->axisArea.height())
-            renderOptions->axisArea.setHeight(-renderOptions->axisArea.width() * (qreal)height/(qreal)width);
+            renderOptions->axisArea.setHeight(-renderOptions->axisArea.width() * (qreal)height()/(qreal)width());
         else
-            renderOptions->axisArea.setWidth(-renderOptions->axisArea.height() * (qreal)width/(qreal)height);
+            renderOptions->axisArea.setWidth(-renderOptions->axisArea.height() * (qreal)width()/(qreal)height());
     }
     else {
         if(renderOptions->axisArea.width() > -renderOptions->axisArea.height())
-            renderOptions->axisArea.setHeight(-renderOptions->axisArea.width() * (qreal)height/(qreal)width);
+            renderOptions->axisArea.setHeight(-renderOptions->axisArea.width() * (qreal)height()/(qreal)width());
         else
-            renderOptions->axisArea.setWidth(-renderOptions->axisArea.height() * (qreal)width/(qreal)height);
+            renderOptions->axisArea.setWidth(-renderOptions->axisArea.height() * (qreal)width()/(qreal)height());
     }
     renderOptions->axisArea.setWidth(renderOptions->axisArea.width()   * renderOptions->zoomLinear);
     renderOptions->axisArea.setHeight(renderOptions->axisArea.height() * renderOptions->zoomLinear);
     renderOptions->axisArea.translate(-NxPoint(renderOptions->axisArea.size().width()/2, renderOptions->axisArea.size().height()/2));
-
     renderOptions->axisArea.translate(-renderOptions->axisCenter);
-
     //With other parameters
     renderOptions->axisAreaSearch.setTopLeft(QPoint(floor(renderOptions->axisArea.topLeft().x() / 10.0F) * 10 - 1, ceil(renderOptions->axisArea.topLeft().y() / 10.0F) * 10 + 1));
     renderOptions->axisAreaSearch.setBottomRight(QPoint(ceil(renderOptions->axisArea.bottomRight().x() / 10.0F) * 10 + 1, floor(renderOptions->axisArea.bottomRight().y() / 10.0F) * 10 - 1));
-
     //Set axis
-    glViewport(0, 0, (GLint)width, (GLint)height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(renderOptions->axisArea.left(), renderOptions->axisArea.right(), renderOptions->axisArea.bottom(), renderOptions->axisArea.top(), 50, 250.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    //Translation
+    renderOptions->axisArea.translate(renderOptions->axisCenter);
+
+    //Start drawing
+    glPushMatrix();
+
+    //First operations
     glTranslatef(0.0, 0.0, -150);
     glRotatef(rotation.y(), 1, 0, 0);
     glRotatef(rotation.x(), 0, 1, 0);
@@ -200,11 +217,6 @@ void UiRender::resizeGL(int width, int height) {
     else
         renderOptions->allowSelection = false;
 
-    renderOptions->axisArea.translate(renderOptions->axisCenter);
-}
-
-//Paint event
-void UiRender::paintGL() {
     //Start measure
     timePerfRefresh += renderMeasure.elapsed() / 1000.0F;
     timePerfCounter++;
@@ -279,6 +291,7 @@ void UiRender::paintGL() {
             factory->kinect->paint();
 #endif
     }
+    glPopMatrix();
 }
 
 
@@ -390,8 +403,8 @@ void UiRender::wheelEvent(QWheelEvent *event) {
 
     //Zoom calculation
     if(mouse3D) {
-        scale = qMax((qreal)0, scale - (qreal)event->delta() / 150.0F);
-        refresh();
+        scaleDest = qMax((qreal)0, scale - (qreal)event->delta() / 150.0F);
+        //refresh();
     }
     else if(event->modifiers() & Qt::ShiftModifier)
         zoom(renderOptions->zoomValue - (qreal)event->delta() / 3.0F);
@@ -564,13 +577,11 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
         if(mousePressed) {
             if(mouse3D) {
                 if(mouseShift)
-                    translation = translationDrag + 10 * NxPoint(deltaMouseRaw.x() / (qreal)size().width(), deltaMouseRaw.y() / (qreal)size().height());
+                    translationDest = translationDrag + 10 * NxPoint(deltaMouseRaw.x() / (qreal)size().width(), deltaMouseRaw.y() / (qreal)size().height());
                 else
-                    rotation = rotationDrag + 360 * NxPoint(0, deltaMouseRaw.y() / (qreal)size().height(), deltaMouseRaw.x() / (qreal)size().width());
-                refresh();
+                    rotationDest = rotationDrag + 360 * NxPoint(0, deltaMouseRaw.y() / (qreal)size().height(), deltaMouseRaw.x() / (qreal)size().width());
             }
             else if((mouseShift) && (renderOptions->allowSelection) && (cursor().shape() != Qt::BlankCursor)) {
-                //Selection rect
                 renderOptions->selectionArea.setBottomRight(mousePos);
             }
             else if((isCanObjectDrag()) && (renderOptions->allowSelection) && ((selection.contains(selectedHover)) || (selectedHover) || (mouseObjectDrag)) && (!mouseCommand) && (cursor().shape() != Qt::BlankCursor)) {
@@ -597,10 +608,10 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
             }
             else if(!mouseObjectDrag) {
                 //New center
-                renderOptions->axisCenter = mousePressedAxisCenter + NxPoint((mousePosNoCenter - mousePressedAreaPosNoCenter).x(), (mousePosNoCenter - mousePressedAreaPosNoCenter).y());
+                renderOptions->axisCenterDest = mousePressedAxisCenter + NxPoint((mousePosNoCenter - mousePressedAreaPosNoCenter).x(), (mousePosNoCenter - mousePressedAreaPosNoCenter).y());
 
                 //Update
-                refresh();
+                //refresh();
             }
         }
 
@@ -715,10 +726,10 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
     bool mouseControl = event->modifiers() & Qt::ControlModifier;
 
     if(mouse3D) {
-        scale = 3;
-        rotation = NxPoint();
-        translation = NxPoint();
-        refresh();
+        scaleDest = 3;
+        rotationDest = NxPoint();
+        translationDest = NxPoint();
+        //refresh();
     }
     else if((editing) && (renderOptions->allowSelection)) {
         emit(editingStop());
@@ -822,19 +833,8 @@ void UiRender::selectionAdd(NxObject *object) {
 }
 
 void UiRender::zoom() {
-    renderOptions->zoomLinear = qMax((qreal)0.05, renderOptions->zoomValue / 100.F);
-    /*
-    qreal zoomSensibility = -5.0;
-    renderOptions->zoomLinear = zoomSensibility / renderOptions->zoomLinear;
-    renderOptions->zoomLinear = 1.0F / renderOptions->zoomLinear;
-    if(renderOptions->zoomLinear < 1.0)
-        renderOptions->zoomLinear = (exp(zoomSensibility * renderOptions->zoomLinear - zoomSensibility) - exp(-zoomSensibility)) / (1 - exp(-zoomSensibility));
-    */
-    renderOptions->objectSize = 0.15;
-    if(triggerAutosize)
-        renderOptions->objectSize *= renderOptions->zoomLinear;
-    emit(mouseZoomChanged(100.0F / renderOptions->zoomLinear));
-    refresh();
+    renderOptions->zoomLinearDest = qMax((qreal)0.05, renderOptions->zoomValue / 100.F);
+    emit(mouseZoomChanged(100.0F / renderOptions->zoomLinearDest));
 }
 void UiRender::zoom(qreal axisZoom) {
     renderOptions->zoomValue = qMax((qreal)0, axisZoom);

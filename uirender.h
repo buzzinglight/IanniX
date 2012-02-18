@@ -53,8 +53,9 @@ private:
     NxObject *selectedHover;
     QList<NxObject*> selection;
     NxPoint rotation, translation;
+    NxPoint rotationDest, translationDest;
     NxPoint rotationDrag, translationDrag;
-    qreal scale;
+    qreal scale, scaleDest;
 public:
     inline QList<NxObject*> *getSelection() {
         return &selection;
@@ -93,7 +94,7 @@ public:
     }
 
     inline void setRotation(NxPoint _rotation) {  ///CG///
-        rotation = _rotation;
+        rotationDest = _rotation;
     }
 
 signals:
@@ -107,14 +108,12 @@ private:
     QTimer *timer;
 protected:
     void initializeGL();
-    inline void resizeGL() { resizeGL(width(), height()); }
     void resizeGL(int width, int height);
     void paintGL();
 private slots:
     void timerTick();
 public:
-    inline void refresh() { resizeGL(); updateGL(); }
-    inline void simpleRefresh() { updateGL(); }
+    inline void resizeGL() { resizeGL(width(), height()); }
     void loadTexture(const QString & name, const QString & filename, const NxRect & mapping);
     inline void setInterval(quint16 ms) {
         timer->setInterval(ms);

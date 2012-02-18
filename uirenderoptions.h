@@ -37,13 +37,23 @@ Q_DECLARE_TYPEINFO(Texture, Q_PRIMITIVE_TYPE);
 class UiRenderOptions : public QObject {
     Q_OBJECT
 public:
-    explicit UiRenderOptions(QObject *parent):QObject(parent) { }
+    explicit UiRenderOptions(QObject *parent):QObject(parent) {
+        zoomValue = 1;
+        zoomLinear = 1;
+        zoomLinearDest = 1;
+        axisGrid = 1;
+        timeFactor = 0;
+        allowSelection = false;
+        paintZStart = 0;
+        paintZEnd = 0;
+        objectSize = 1;
+    }
 
 public:
     NxRect axisArea;
     QRect axisAreaSearch;
-    qreal zoomValue, zoomLinear, axisGrid;
-    NxPoint axisCenter;
+    qreal zoomValue, zoomLinear, zoomLinearDest, axisGrid;
+    NxPoint axisCenter, axisCenterDest;
     QGLWidget *render;
     QFont renderFont;
     qreal timeFactor;
