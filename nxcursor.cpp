@@ -1,3 +1,21 @@
+/*
+    IanniX — a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 — IanniX Association
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "nxcursor.h"
 
 NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
@@ -112,7 +130,7 @@ void NxCursor::calculate() {
     //Cursor line
     if((curve) && (curve->getPathLength() > 0)) {
         //qreal timeReal = ((qExp(5*time) - 1) / (qExp(5*1) - 1));
-        qreal timeReal = easing.valueForProgress(time);
+        qreal timeReal = easing.valueForProgress(time), timeOldReal = easing.valueForProgress(timeOld);
 
         cursorPos = curve->getPointAt(timeReal) + curve->getPos();
         if(timeReal == 0)
@@ -122,13 +140,13 @@ void NxCursor::calculate() {
         else
             cursorAngle = -curve->getAngleAt(timeReal);
 
-        cursorPosOld = curve->getPointAt(timeOld) + curve->getPos();
-        if(timeOld == 0)
-            cursorAngleOld = -curve->getAngleAt(timeOld + 0.001);
-        else if(timeOld == 1)
-            cursorAngleOld = -curve->getAngleAt(timeOld - 0.001);
+        cursorPosOld = curve->getPointAt(timeOldReal) + curve->getPos();
+        if(timeOldReal == 0)
+            cursorAngleOld = -curve->getAngleAt(timeOldReal + 0.001);
+        else if(timeOldReal == 1)
+            cursorAngleOld = -curve->getAngleAt(timeOldReal - 0.001);
         else
-            cursorAngleOld = -curve->getAngleAt(timeOld);
+            cursorAngleOld = -curve->getAngleAt(timeOldReal);
     }
     else {
         NxPoint cursorPosDelta = pos - cursorPos;
@@ -156,9 +174,6 @@ void NxCursor::calculate() {
     cursorOld = NxLine(cursorOldTmp.x1(), cursorOldTmp.y1(), cursorOldTmp.x2(), cursorOldTmp.y2());
     cursorOld.translate(cursorPosOld);
 
-    //qreal xpos = cursorPoly.at(0).x();
-    //qreal ypos = cursorPoly.at(0).y();
-
     QLineF diag1(cursor.p1().x(),cursor.p1().y(),cursor.p2().x(),cursor.p2().y());
     QLineF diag2(cursorOld.p1().x(),cursorOld.p1().y(),cursorOld.p2().x(),cursorOld.p2().y());
     QPointF intersectionPoint;
@@ -174,12 +189,6 @@ void NxCursor::calculate() {
         cursorPoly[2] = cursor.p2();
         cursorPoly[3] = cursorOld.p2();
     }
-
-    //qDebug("%f -> %f  (%f %f)", timeOld, time, cursorOld.p1().x(), cursor.p1().x());
-    //qDebug("(%f-%f) (%f-%f) (%f-%f) (%f-%f)", cursorOld.p1().x(), cursorOld.p1().y(), cursor.p1().x(), cursor.p1().y(), cursor.p2().x(), cursor.p2().y(), cursorOld.p2().x(), cursorOld.p2().y());
-
-
-    //qDebug("%f %f", cursorPoly[0].x(), cursorPoly[2].x());
 
     calcBoundingRect();
 
@@ -224,6 +233,19 @@ void NxCursor::paint() {
 
         //Cursor chasse-neige
         if((time >= 0) && (start.at(nbLoop % start.count()) != 0)) {
+            if(previousCursorReliable) {
+                glLineWidth(size/4);
+                glEnable(GL_LINE_STIPPLE);
+                glLineStipple(lineFactor, lineStipple);
+                glBegin(GL_LINE_LOOP);
+                glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
+                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
+                glEnd();
+                glDisable(GL_LINE_STIPPLE);
+            }
+
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
             glLineStipple(lineFactor, lineStipple);
