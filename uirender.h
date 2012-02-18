@@ -111,7 +111,7 @@ protected:
     void resizeGL(int width, int height);
     void paintGL();
 private slots:
-    void timerEvent();
+    void timerTick();
 public:
     inline void refresh() { resizeGL(); updateGL(); }
     inline void simpleRefresh() { updateGL(); }

@@ -462,6 +462,40 @@ color: rgba(255,255,255,128);</string>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QLineEdit" name="perfCpuEdit">
+           <property name="minimumSize">
+            <size>
+             <width>40</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>40</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>CPU usage</string>
+           </property>
+           <property name="inputMask">
+            <string>009 %; </string>
+           </property>
+           <property name="text">
+            <string> %</string>
+           </property>
+           <property name="cursorPosition">
+            <number>5</number>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>

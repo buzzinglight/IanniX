@@ -29,6 +29,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     splash->show();
     QTimer::singleShot(1500, this, SLOT(closeSplash()));
     scriptDir = QDir::current();
+    cpu = new NxCpu(this);
+    startTimer(1000);
 
     //Update management
     updateManager = new QNetworkAccessManager(this);
@@ -163,7 +165,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     timePerfCounter = 0;
     timer = new QTimer(this);
     timer->setInterval(5);
-    connect(timer, SIGNAL(timeout()), this, SLOT(timerEvent()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(timerTick()));
     actionFast_rewind();
     actionTabChange(0);
 
@@ -255,11 +257,6 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     actionFast_rewind();
 }
 
-qreal IanniX::getCpuUsage() {
-    qreal cpu = 0;
-    return cpu;
-}
-
 void IanniX::setScheduler(bool start) {
     if(start) {
         timer->start();
@@ -280,8 +277,13 @@ void IanniX::show() {
     view->activateWindow();
 }
 
-
-void IanniX::timerEvent() {
+void IanniX::timerEvent(QTimerEvent *) {
+    transport->setPerfScheduler(QString().setNum((quint16)qRound(1000.0F*timePerfRefresh/timePerfCounter)));
+    transport->setPerfCpu(QString().setNum((quint16)qRound(cpu->cpu)));
+    timePerfRefresh = 0;
+    timePerfCounter = 0;
+}
+void IanniX::timerTick() {
     qreal delta = renderMeasure.elapsed() / 1000.0F;
     if(forceTimeLocal) {
         delta = 0;
@@ -298,7 +300,6 @@ void IanniX::timerEvent() {
     timePerfRefresh += delta;
     timePerfCounter++;
     renderMeasure.start();
-    getCpuUsage();
 
     //Browse documents
     QRect local;
@@ -431,16 +432,9 @@ void IanniX::timerEvent() {
         lastMessageAllow = true;
     }
 
-    if(timePerfRefresh >= 1) {
-        transport->setPerfScheduler(QString().setNum((quint16)qRound(1000.0F*timePerfRefresh/timePerfCounter)));
-        timePerfRefresh = 0;
-        timePerfCounter = 0;
-    }
-
     if(forceTimeLocal)
         forceTimeLocal = false;
 }
-
 
 void IanniX::checkForUpdates() {
     QString url = "http://www.iannix.org/download/updates.php?id=" + QSettings().value("id").toString() + "&package=" + (QCoreApplication::applicationName() + "__" + QCoreApplication::applicationVersion()).toLower().replace(" ", "_").replace(".", "_");
@@ -618,7 +612,7 @@ void IanniX::actionChangeID(quint16 idOld, quint16 idNew) {   ////CG////
     NxObject *existingObject = 0;
     existingObject = currentDocument->getObject(idNew);
     if(existingObject) {
-            inspector->changeID_success(false, 0);
+        inspector->changeID_success(false, 0);
     } else {
         NxObject *thisObject = 0;
         thisObject = currentDocument->getObject(idOld);
@@ -708,9 +702,9 @@ void IanniX::actionRename() {
 }
 void IanniX::actionRemove() {
     //if(currentDocument) {
-     //   int rep = QMessageBox::question(0, tr("File remove"), tr("The file will be removed from your disk. Are you sure?"), QMessageBox::Yes | QMessageBox::No);
-     //   if(rep == QMessageBox::Yes)
-      //      currentDocument->remove();
+    //   int rep = QMessageBox::question(0, tr("File remove"), tr("The file will be removed from your disk. Are you sure?"), QMessageBox::Yes | QMessageBox::No);
+    //   if(rep == QMessageBox::Yes)
+    //      currentDocument->remove();
     //}
     ExtScriptManager *fileList = (ExtScriptManager*)inspector->getProjectFiles()->currentItem();
     if(currentDocument) {

@@ -149,8 +149,11 @@ void NxCursor::calculate() {
             cursorAngleOld = -curve->getAngleAt(timeOldReal);
     }
     else {
-        NxPoint cursorPosDelta = pos - cursorPos;
         cursorPos = pos;
+
+        NxPoint cursorPosDelta = cursorPosOld - cursorPos;
+
+        //cursorPos = pos;
         previousCursorReliable = true;
 
         if((cursorPosDelta.x() > 0) && (cursorPosDelta.y() >= 0))
@@ -193,6 +196,12 @@ void NxCursor::calculate() {
     calcBoundingRect();
 
     previousCursor = cursor;
+    if((curve) && (curve->getPathLength() > 0)) {
+    }
+    else {
+        cursorPosOld = cursorPos;
+        cursorAngleOld = cursorAngle;
+    }
 }
 
 

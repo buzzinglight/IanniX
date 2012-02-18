@@ -54,7 +54,8 @@ SOURCES                 += iannix.cpp \
                            nxpolygon.cpp \
                            nxline.cpp \
                            extoscpatterneditor.cpp \
-    nxeasing.cpp
+    nxeasing.cpp \
+    nxcpu.cpp
 
 HEADERS                 += iannix.h \
                            uitransport.h \
@@ -97,7 +98,8 @@ HEADERS                 += iannix.h \
                            nxline.h \
                            nxpolygon.h \
                            extoscpatterneditor.h \
-    nxeasing.h
+    nxeasing.h \
+    nxcpu.h
 
 FORMS                   += uitransport.ui \
                            uirender.ui \

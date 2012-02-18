@@ -53,7 +53,7 @@ void ExtUdpManager::parseOSC() {
         QStringList commandItems = commands.split(COMMAND_END, QString::SkipEmptyParts);;
         foreach(const QString & command, commandItems) {
             //Fire events (log, message and script mapping)
-            QString url = "udp://" + receivedHost.toString() + ":" + QString().setNum(receivedPort) + "/ ";
+            QString url = tr("udp://%1:%2/").arg(receivedHost.toString()).arg(receivedPort);
             factory->logOscReceive(url + command);
             factory->execute(command);
             factory->onOscReceive(url + command);

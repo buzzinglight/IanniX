@@ -29,6 +29,7 @@
 #include <QFileSystemWatcher>
 #include <QApplication>
 #include <QFileOpenEvent>
+#include "nxcpu.h"
 #include <time.h>
 #include "nxobjectfactoryinterface.h"
 #include "extoscmanager.h"
@@ -149,18 +150,19 @@ public:
 private:
     UiRender *render;
     QTime renderMeasure;
+    NxCpu *cpu;
 private:
     qreal timeLocal, timeTransportRefresh, timePerfRefresh, timePerfCounter;
     QTimer *timer;
     bool forceTimeLocal;
+protected:
+    void timerEvent(QTimerEvent *);
 private slots:
-    void timerEvent();
+    void timerTick();
     void closeSplash();
 signals:
     void updateTransport(QString, QString);
 public:
-    qreal getCpuUsage();
-
     void setScheduler(bool start);
     inline bool getScheduler() const {
         if(timer)

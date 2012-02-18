@@ -53,6 +53,13 @@ const QString UiTransport::getPerfScheduler() const {
     return ui->perfSchedulerEdit->text();
 }
 
+void UiTransport::setPerfCpu(const QString & val) {
+    ui->perfCpuEdit->setText(val);
+}
+const QString UiTransport::getPerfCpu() const {
+    return ui->perfCpuEdit->text();
+}
+
 void UiTransport::setPerfOpenGL(const QString & val) {
     if(!ui->perfOpenGLEdit->hasFocus())
         ui->perfOpenGLEdit->setText(val);

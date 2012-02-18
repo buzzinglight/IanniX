@@ -119,7 +119,7 @@ void ExtOscManager::parseOSC() {
                 }
 
                 //Fire events (log, message and script mapping)
-                QString url = "osc://" + receivedHost.toString() + ":" + QString().setNum(receivedPort) + QString(addressBuffer) + " ";
+                QString url = tr("osc://%1:%2%3 ").arg(receivedHost.toString()).arg(receivedPort).arg(addressBuffer);
                 factory->logOscReceive(url + command);
                 factory->execute(command);
                 factory->onOscReceive(url + command);

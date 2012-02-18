@@ -80,7 +80,7 @@ UiRender::UiRender(QWidget *parent) :
     timePerfRefresh = 0;
     timePerfCounter = 0;
     timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(timerEvent()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(timerTick()));
     timer->start(25);
 }
 UiRender::~UiRender() {
@@ -99,7 +99,7 @@ void UiRender::changeEvent(QEvent *e) {
 
 
 //Force refresh
-void UiRender::timerEvent() {
+void UiRender::timerTick() {
     updateGL();
 }
 

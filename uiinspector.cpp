@@ -47,6 +47,7 @@ UiInspector::UiInspector(QWidget *parent) :
     ui->syncMessageLabel->setVisible(false);
     ui->syncMessageEdit->setVisible(false);
 
+    actionInfoLock = true;
 
     ui->easingCombo->clear();
     NxEasing easing;
@@ -55,7 +56,6 @@ UiInspector::UiInspector(QWidget *parent) :
         ui->easingCombo->addItem(QIcon(easing.getPixmap()), tr("Type %1").arg(type));
     }
 
-    actionInfoLock = true;
     //needRefresh = true;
     startTimer(100);
 
@@ -274,10 +274,10 @@ void UiInspector::logOscReceive(const QString & message) {
     ui->oscReceiveText->appendPlainText(message);
 }
 void UiInspector::setMousePos(const NxPoint & pos) {
-    ui->mouseLabel->setText(tr("MOUSE") + ": " + QString().setNum(pos.x(), 'f', 3) + " / " + QString().setNum(pos.y(), 'f', 3));
+    ui->mouseLabel->setText(tr("MOUSE: %1 / %2").arg(pos.x(), 0, 'f', 3).arg(pos.y(), 0, 'f', 3));
 }
 void UiInspector::setMouseZoom(qreal zoom) {
-    ui->zoomLabel->setText(tr("ZOOM") + ": " + QString().setNum(zoom, 'f', 0) + "%");
+    ui->zoomLabel->setText(tr("ZOOM: %1%").arg(zoom, 0, 'f', 1));
 }
 
 void UiInspector::timerEvent(QTimerEvent *) {
@@ -288,16 +288,16 @@ void UiInspector::refresh() {
     nbTriggers = triggerItem->childCount();
     nbCursors = cursorItem->childCount();
     nbCurves = curveItem->childCount();
-    QString triggerStr = tr("TRIGGERS") + " (" + QString().setNum(nbTriggers) + ")";
-    QString cursorStr = tr("CURSORS") + " (" + QString().setNum(nbCursors) + ")";
-    QString curveStr = tr("CURVES") + " (" + QString().setNum(nbCurves) + ")";
+    QString triggerStr = tr("TRIGGERS (%1)").arg(nbTriggers);
+    QString cursorStr = tr("CURSORS (%1)").arg(nbCursors);
+    QString curveStr = tr("CURVES (%1)").arg(nbCurves);
     triggerItem->setText(0, triggerStr);
     cursorItem->setText(0, cursorStr);
     curveItem->setText(0, curveStr);
     ui->viewTriggerCheck->setText(triggerStr);
     ui->viewCursorCheck->setText(cursorStr);
     ui->viewCurveCheck->setText(curveStr);
-    ui->viewGroupLabel->setText(tr("GROUPS") + " (" + QString().setNum(ui->cc2View->topLevelItemCount()) + ")");
+    ui->viewGroupLabel->setText(tr("GROUPS (%1)").arg(ui->cc2View->topLevelItemCount()));
 
     actionInfoLock = true;
 
