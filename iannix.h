@@ -23,11 +23,13 @@
 #include <QTimer>
 #include <QTime>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QFileSystemWatcher>
 #include <QApplication>
+#include <QDomDocument>
 #include <QFileOpenEvent>
 #include "nxcpu.h"
 #include <time.h>
@@ -80,7 +82,6 @@ private:
 public:
     NxGroup* addGroup(const QString & documentId, const QString & groupId);
     void setObjectActivity(void *_object, quint8 activeOld);
-    void setObjectLocal(void *_object, QRect localOld);
     void setObjectGroupId(void *_object, const QString & groupIdOld);
     void removeObject(NxObject *object);
 public:
@@ -227,6 +228,9 @@ public slots:
     void actionDrawTriggers();
     void actionAddFreeCursor();
     void actionCircleCurve();
+    void actionImportSVG(const QString &filename);
+    void actionImportImage(const QString &filename);
+    void actionImportText(const QString &font, const QString &text);
     void editingStart(const NxPoint &);
     void editingStop();
     void editingMove(const NxPoint &, bool add);
@@ -240,6 +244,11 @@ public slots:
     void logOscSend(const QString & message);
     void logOscReceive(const QString & message);
     void pushSnapshot();
+
+
+    //FAST IMPORT
+public:
+    void actionImportSVG(const QDomElement &xmlElement, qreal scale);
 };
 
 #endif // IANNIX_H

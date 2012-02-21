@@ -52,6 +52,18 @@ void NxCurve::paint() {
         if(selected)
             color = renderOptions->colors.value("object_selection");
 
+        //Hide curve if a cursor is present but inactive
+        if((renderOptions->paintCurvesOpacity) && (cursors.count() > 0)) {
+            bool display = false;
+            foreach(NxObject *cursor, cursors)
+                if(cursor->getHasActivity()) {
+                    display = true;
+                    break;
+                }
+            if(!display)
+                color.setAlpha(color.alpha() / 4);
+        }
+
         //Start
         if((renderOptions->paintCurves) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)))
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
@@ -253,9 +265,9 @@ void NxCurve::setSVG(const QString & pathData) {
     pathPoints.clear();
 
     QStringList tokens = pathData.split(QRegExp("(?=[A-Za-z])"), QString::SkipEmptyParts);
-    NxPoint firstPoint;
     quint16 index = 0;
     NxPoint currentPoint = NxPoint();
+    NxPoint firstPoint;
     foreach(QString token, tokens) {
         QString command = "";
         char svgCommand = token.at(0).toLatin1();
@@ -271,44 +283,59 @@ void NxCurve::setSVG(const QString & pathData) {
         }
 
         switch(svgCommand) {
+        case 'C':
+            //Cubic curve to
+            currentPoint = setPointAt(index, NxPoint(params.at(4), params.at(5)), NxPoint(params.at(0), params.at(1)) - NxPoint(params.at(4), params.at(5)), NxPoint(params.at(2), params.at(3)) - NxPoint(params.at(4), params.at(5)), false);
+            break;
+        case 'c':
+            //Cubic curve to
+            currentPoint = setPointAt(index, currentPoint + NxPoint(params.at(4), params.at(5)), NxPoint(params.at(0), params.at(1)) - NxPoint(params.at(4), params.at(5)), NxPoint(params.at(2), params.at(3)) - NxPoint(params.at(4), params.at(5)), false);
+            break;
+        case 'H':
+            //Horizontal line to
+            currentPoint = setPointAt(index, NxPoint(params.at(0), currentPoint.y()), NxPoint(), NxPoint(), false);
+            break;
+        case 'h':
+            //Horizontal line to
+            currentPoint = setPointAt(index, currentPoint + NxPoint(params.at(0), 0), NxPoint(), NxPoint(), false);
+            break;
+        case 'L':
+            //Line to
+            currentPoint = setPointAt(index, NxPoint(params.at(0), params.at(1)), NxPoint(), NxPoint(), false);
+            break;
+        case 'l':
+            //Line to
+            currentPoint = setPointAt(index, currentPoint + NxPoint(params.at(0), params.at(1)), NxPoint(), NxPoint(), false);
+            break;
+        case 'M':
+            //Move to
+            currentPoint = setPointAt(index, NxPoint(params.at(0), params.at(1)), NxPoint(), NxPoint(), false);
+            break;
+        case 'm':
+            //Move to
+            currentPoint = setPointAt(index, currentPoint + NxPoint(params.at(0), params.at(1)), NxPoint(), NxPoint(), false);
+            break;
+        case 'V':
+            //Vertical line to
+            currentPoint = setPointAt(index, NxPoint(currentPoint.x(), params.at(0)), NxPoint(), NxPoint(), false);
+            break;
+        case 'v':
+            //Vertical line to
+            currentPoint = setPointAt(index, currentPoint + NxPoint(0, params.at(0)), NxPoint(), NxPoint(), false);
+            break;
+
+        case 'Z':
+        case 'z':
+            setPointAt(index++, firstPoint, false);
+            break;
+
         case 'A':
             //qDebug("arcAbs");
             break;
         case 'a':
             //qDebug("arcRel");
             break;
-        case 'C':
-            //qDebug("curvetoCubicAbs (%f %f - %f %f) %f %f", params.at(0), params.at(1), params.at(2), params.at(3), params.at(4), params.at(5));
-            currentPoint = setPointAt(index, NxPoint(params.at(4), params.at(5)), NxPoint(params.at(0), params.at(1)) - NxPoint(params.at(4), params.at(5)), NxPoint(params.at(2), params.at(3)) - NxPoint(params.at(4), params.at(5)), false);
-            break;
-        case 'c':
-            //qDebug("curvetoCubicRel (%f %f - %f %f) %f %f", params.at(0), params.at(1), params.at(2), params.at(3), params.at(4), params.at(5));
-            currentPoint = setPointAt(index, currentPoint + NxPoint(params.at(4), params.at(5)), NxPoint(params.at(0), params.at(1)) - NxPoint(params.at(4), params.at(5)), NxPoint(params.at(2), params.at(3)) - NxPoint(params.at(4), params.at(5)), false);
-            break;
-        case 'H':
-            //qDebug("linetoHorizontalAbs %f", params.at(0));
-            currentPoint = setPointAt(index, NxPoint(params.at(0), currentPoint.y()), NxPoint(), NxPoint(), false);
-            break;
-        case 'h':
-            //qDebug("linetoHorizontalRel %f", params.at(0));
-            currentPoint = setPointAt(index, currentPoint + NxPoint(params.at(0), 0), NxPoint(), NxPoint(), false);
-            break;
-        case 'L':
-            //qDebug("linetoAbs %f %f", params.at(0), params.at(1));
-            currentPoint = setPointAt(index, NxPoint(params.at(0), params.at(1)), NxPoint(), NxPoint(), false);
-            break;
-        case 'l':
-            //qDebug("linetoRel %f %f", params.at(0), params.at(1));
-            currentPoint = setPointAt(index, currentPoint + NxPoint(params.at(0), params.at(1)), NxPoint(), NxPoint(), false);
-            break;
-        case 'M':
-            //qDebug("movetoAbs %f %f", params.at(0), params.at(1));
-            currentPoint = setPointAt(index, NxPoint(params.at(0), params.at(1)), NxPoint(), NxPoint(), false);
-            break;
-        case 'm':
-            //qDebug("movetoRel %f %f", params.at(0), params.at(1));
-            currentPoint = setPointAt(index, currentPoint + NxPoint(params.at(0), params.at(1)), NxPoint(), NxPoint(), false);
-            break;
+
         case 'Q':
             //qDebug("curvetoQuadraticAbs");
             break;
@@ -329,34 +356,15 @@ void NxCurve::setSVG(const QString & pathData) {
         case 't':
             //qDebug("curvetoQuadraticSmoothRel");
             break;
-        case 'V':
-            //qDebug("linetoVerticalAbs %f", params.at(0));
-            currentPoint = setPointAt(index, NxPoint(currentPoint.x(), params.at(0)), NxPoint(), NxPoint(), false);
-            break;
-        case 'v':
-            //qDebug("linetoVerticalRel %f", params.at(0));
-            currentPoint = setPointAt(index, currentPoint + NxPoint(0, params.at(0)), NxPoint(), NxPoint(), false);
-            break;
-
-        case 'Z':
-        case 'z':
-            //qDebug("closePath");
-            //TODO
-            //setPointAt(firstPoint);
-            break;
         }
-        /*
-          TODO
         if(index == 0)
             firstPoint = currentPoint;
-        */
         index++;
     }
 
     //Scale
     resize(1, -1);
     calcBoundingRect();
-    setPos(firstPoint);
 }
 void NxCurve::setSVG2(const QString & polylineData) {
     curveType = CurveTypePoints;
@@ -384,7 +392,7 @@ void NxCurve::setImage(const QString & filename) {
 
     //Create mask
     QBitmap bitmap(pixmap.createHeuristicMask());
-    bitmap.save(file.dir().absolutePath() + QDir::separator() + file.baseName() + "_mask.png");
+    //bitmap.save(file.dir().absolutePath() + QDir::separator() + file.baseName() + "_mask.png");
 
     //Create path
     pathPoints.clear();

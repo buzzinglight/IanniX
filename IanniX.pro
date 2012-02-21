@@ -4,19 +4,19 @@
 #
 #-------------------------------------------------
 
-QT                      += core gui opengl network script
+QT                      += core gui opengl network script xml
 
 TARGET                   =  IanniX
 TEMPLATE                 =  app
 CONFIG                  +=  x86_64
 
 false {
-    CONFIG                  -= x86
-    unix:DEFINES            += KINECT_INSTALLED
-    unix:SOURCES            += qkinect/QKinect.cpp extkinectmanager.cpp
-    unix:HEADERS            += qkinect/QKinect.h extkinectmanager.h
-    unix:LIBS               += -lfreenect
-    unix:INCLUDEPATH        += /usr/local/include/libfreenect
+    CONFIG              -= x86
+    unix:DEFINES        += KINECT_INSTALLED
+    unix:SOURCES        += qkinect/QKinect.cpp extkinectmanager.cpp
+    unix:HEADERS        += qkinect/QKinect.h extkinectmanager.h
+    unix:LIBS           += -lfreenect
+    unix:INCLUDEPATH    += /usr/local/include/libfreenect
 }
 
 debug:DEFINES           += __RTMIDI_DEBUG__
@@ -54,8 +54,8 @@ SOURCES                 += iannix.cpp \
                            nxpolygon.cpp \
                            nxline.cpp \
                            extoscpatterneditor.cpp \
-    nxeasing.cpp \
-    nxcpu.cpp
+                           nxeasing.cpp \
+                           nxcpu.cpp
 
 HEADERS                 += iannix.h \
                            uitransport.h \
@@ -98,8 +98,8 @@ HEADERS                 += iannix.h \
                            nxline.h \
                            nxpolygon.h \
                            extoscpatterneditor.h \
-    nxeasing.h \
-    nxcpu.h
+                           nxeasing.h \
+                           nxcpu.h
 
 FORMS                   += uitransport.ui \
                            uirender.ui \
@@ -110,7 +110,7 @@ FORMS                   += uitransport.ui \
                            uiabout.ui \
                            extoscpatternask.ui \
                            uieditor.ui \
-    extoscpatterneditor.ui
+                           extoscpatterneditor.ui
 
 TRANSLATIONS             = iannix_fr.ts
 

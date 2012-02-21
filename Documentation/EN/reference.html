@@ -117,8 +117,8 @@
               </div>
 
               <div class="code">
-                <code><span class="api">run("add</span> <span class=
-                "objet">trigger</span> <span class="id">1");</span><br /></code>
+                <code><span class="api">add</span> <span class=
+                "objet">trigger</span> <span class="id">1</span><br /></code>
               </div>
             </td>
           </tr>
@@ -149,10 +149,10 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                <span class="api">run("setGroup</span> <span class=
+                <code>add trigger 1<br />
+                <span class="api">setGroup</span> <span class=
                 "target">current</span> <span class=
-                "group">triggers");</span><br /></code>
+                "group">triggers</span><br /></code>
               </div>
             </td>
           </tr>
@@ -184,11 +184,11 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                run("setGroup current triggers");<br />
-                <span class="api">run("setPos</span> <span class="target">1</span>
+                <code>add trigger 1<br />
+                setGroup current triggers<br />
+                <span class="api">setPos</span> <span class="target">1</span>
                 <span class="coord">1</span> <span class="coord">2</span> <span class=
-                "coord">0");</span><br /></code>
+                "coord">0</span><br /></code>
               </div>
             </td>
           </tr>
@@ -218,11 +218,11 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                run("setGroup current triggers");<br />
-                run("setPos 1 1 2 0");<br />
-                <span class="api">run("setActive</span> <span class="target">1</span>
-                <span class="bin">0");</span><br /></code>
+                <code>add trigger 1<br />
+                setGroup current triggers<br />
+                setPos 1 1 2 0<br />
+                <span class="api">setActive</span> <span class="target">1</span>
+                <span class="bin">0</span><br /></code>
               </div>
             </td>
           </tr>
@@ -255,10 +255,10 @@
               </div>
 
               <div class="code">
-                <code>run("setMessage <span class="target">current</span> <span class=
+                <code>setMessage <span class="target">current</span> <span class=
                 "period">1</span>, <span class="message">osc://127.0.0.1:57120/trigger
                 <span class="variable">trigger_id trigger_xPos trigger_yPos
-                cursor_id");</span></span><br /></code>
+                cursor_id</span></span><br /></code>
               </div>
             </td>
 
@@ -294,12 +294,12 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                run("setGroup current triggers");<br />
-                run("setPos 1 1 2 0");<br />
-                run("setActive 1 0");<br />
-                <span class="api">run("remove</span> <span class=
-                "target">1");</span><br /></code>
+                <code>add trigger 1<br />
+                setGroup current triggers<br />
+                setPos 1 1 2 0<br />
+                setActive 1 0<br />
+                <span class="api">remove</span> <span class=
+                "target">1</span><br /></code>
               </div>
             </td>
           </tr>
@@ -342,9 +342,9 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                <span class="api">run("setTriggerOff</span> <span class=
-                "target">current</span> <span class="delay">0.5");</span><br /></code>
+                <code>add trigger 1<br />
+                <span class="api">setTriggerOff</span> <span class=
+                "target">current</span> <span class="delay">0.5</span><br /></code>
               </div>
             </td>
 
@@ -419,11 +419,11 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                <span class="api">run("setPointsEllipse</span> <span class=
+                <code>add curve 1<br />
+                <span class="api">setPointsEllipse</span> <span class=
                 "target">current</span> <span class="width">2</span> <span class=
-                "height">1");</span><br />
-                run("setPos current 1 1 0");<br /></code>
+                "height">1</span><br />
+                setPos current 1 1 0<br /></code>
               </div>
             </td>
           </tr>
@@ -460,14 +460,14 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPos current -1 -1 0");<br />
-                <span class="api">run("setPointAt</span> <span class=
+                <code>add curve 1<br />
+                setPos current -1 -1 0<br />
+                <span class="api">setPointAt</span> <span class=
                 "target">current</span> <span class="pointindex">0</span> <span class=
-                "coord">0</span> <span class="coord">0");</span><br />
-                <span class="api">run("setPointAt</span> <span class=
+                "coord">0</span> <span class="coord">0</span><br />
+                <span class="api">setPointAt</span> <span class=
                 "target">current</span> <span class="pointindex">1</span> <span class=
-                "coord">3</span> <span class="coord">3");</span><br /></code>
+                "coord">3</span> <span class="coord">3</span><br /></code>
               </div>
             </td>
           </tr>
@@ -518,11 +518,11 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPos current 0 0 0");<br />
-                <span class="api">run("setPointsTxt</span> <span class=
+                <code>add curve 1<br />
+                setPos current 0 0 0<br />
+                <span class="api">setPointsTxt</span> <span class=
                 "target">current</span> <span class="scaling">0.1</span> <span class=
-                "font">Arial</span> <span class="text">a");</span><br /></code>
+                "font">Arial</span> <span class="text">a</span><br /></code>
               </div>
             </td>
           </tr>
@@ -558,8 +558,8 @@
 
             <td class="code_setpointssvg">
               <div class="code">
-                <code>run("add curve auto");<br />
-                <span class="api">run("setPointsSVG</span> <span class=
+                <code>add curve auto<br />
+                <span class="api">setPointsSVG</span> <span class=
                 "target">current</span> <span class="width">5</span> <span class=
                 "height">5</span> <span class=
                 "path">M637.599,1569.972c0,0,89.127,0,222.818,
@@ -569,8 +569,8 @@
                 1567,1239,1514,1256,1469c18-48,69-29,
                 101-9c81.375,48.125,161.219,103.141, 254.032,110.08c13.259,0.991,26.782,
                 1.001,40.616-0.129C1716,1574,1788, 1562,1842,1606c39,32,62,97,119,
-                90c44-6,70-47,101.551-72.846");</span><br />
-                run("setPos current -3 0 0");<br /></code>
+                90c44-6,70-47,101.551-72.846</span><br />
+                setPos current -3 0 0<br /></code>
               </div>
             </td>
           </tr>
@@ -603,11 +603,11 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPos current 0 0 0");<br />
-                <span class="api">run("setPointsSVG2</span> <span class=
+                <code>add curve 1<br />
+                setPos current 0 0 0<br />
+                <span class="api">setPointsSVG2</span> <span class=
                 "target">current</span> <span class="scaling">1</span> <span class=
-                "path">1,1 1,2 -1,2 -1,-2 -2,0");</span><br /></code>
+                "path">1,1 1,2 -1,2 -1,-2 -2,0</span><br /></code>
               </div>
             </td>
           </tr>
@@ -640,11 +640,11 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPos current 1 2 0");<br />
-                <span class="api">run("setPointsImg</span> <span class=
+                <code>add curve 1<br />
+                setPos current 1 2 0<br />
+                <span class="api">setPointsImg</span> <span class=
                 "target">current</span> <span class="scaling">0.1</span> <span class=
-                "filename">./Examples/trigger_speaker.png");</span><br /></code>
+                "filename">./Examples/trigger_speaker.png</span><br /></code>
               </div>
             </td>
           </tr>
@@ -676,12 +676,12 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPointsEllipse current 2 1");<br />
-                run("setPos current 1 1 0");<br />
-                <span class="api">run("setResize</span> <span class=
+                <code>add curve 1<br />
+                setPointsEllipse current 2 1<br />
+                setPos current 1 1 0<br />
+                <span class="api">setResize</span> <span class=
                 "target">current</span> <span class="width">2</span> <span class=
-                "height">1");</span><br /></code>
+                "height">1</span><br /></code>
               </div>
             </td>
           </tr>
@@ -716,12 +716,12 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPointsEllipse current 2 2");<br />
-                run("setPos current 0 0 0");<br />
-                run("add cursor 2");<br />
-                <span class="api">run("setCurve</span> <span class="target">2</span>
-                <span class="curvetarget">lastCurve");</span><br /></code>
+                <code>add curve 1<br />
+                setPointsEllipse current 2 2<br />
+                setPos current 0 0 0<br />
+                add cursor 2<br />
+                <span class="api">setCurve</span> <span class="target">2</span>
+                <span class="curvetarget">lastCurve</span><br /></code>
               </div>
             </td>
           </tr>
@@ -752,9 +752,9 @@
               </div>
 
               <div class="code">
-                <code>run("add cursor 1");<br />
-                <span class="api">run("setWidth</span> <span class=
-                "target">current</span> <span class="width">3.5");</span><br /></code>
+                <code>add cursor 1<br />
+                <span class="api">setWidth</span> <span class=
+                "target">current</span> <span class="width">3.5</span><br /></code>
               </div>
             </td>
           </tr>
@@ -798,18 +798,18 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPointsEllipse current 2 2");<br />
-                run("setPos current 0 0 0");<br />
+                <code>add curve 1<br />
+                setPointsEllipse current 2 2<br />
+                setPos current 0 0 0<br />
                 <br />
-                run("add cursor 11");<br />
-                run("setCurve 11 1");<br />
+                add cursor 11<br />
+                setCurve 11 1<br />
                 <br />
-                run("add trigger 21");<br />
-                run("setPos current -2 0 0");<br />
-                run("setMessage current 10, direct:// <span class="api">setTime</span>
+                add trigger 21<br />
+                setPos current -2 0 0<br />
+                setMessage current 10, direct:// <span class="api">setTime</span>
                 <span class="target">11</span> <span class=
-                "time">0");</span><br /></code>
+                "time">0</span><br /></code>
               </div>
             </td>
           </tr>
@@ -857,14 +857,14 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPointAt current 1 6 6");<br />
-                run("setPos current -3 -3 0");<br />
-                run("add cursor 10");<br />
-                run("setCurve 10 1");<br />
-                <span class="api">run("setOffset</span> <span class=
+                <code>add curve 1<br />
+                setPointAt current 1 6 6<br />
+                setPos current -3 -3 0<br />
+                add cursor 10<br />
+                setCurve 10 1<br />
+                <span class="api">setOffset</span> <span class=
                 "target">current</span> <span class="initial">3</span> <span class=
-                "start">1</span> <span class="end">7");</span><br /></code>
+                "start">1</span> <span class="end">7</span><br /></code>
               </div>
             </td>
           </tr>
@@ -925,20 +925,20 @@
                 Copy / paste this example in IanniX to understand how the code works!
               </div>
 
-              <div class="code"></div><code>run("add curve 1");<br />
-              run("setPos 1 0 0 0");<br />
-              run("setPointAt 1 1 3 3");<br />
-              run("add cursor 2");<br />
-              run("setCurve 2 1");<br /></code> <span class=
-              "api">run("setBoundsSource</span> <span class="target">2</span>
+              <div class="code"></div><code>add curve 1<br />
+              setPos 1 0 0 0<br />
+              setPointAt 1 1 3 3<br />
+              add cursor 2<br />
+              setCurve 2 1<br /></code> <span class=
+              "api">setBoundsSource</span> <span class="target">2</span>
               <span class="coord">0</span> <span class="coord">3</span> <span class=
-              "coord">3</span> <span class="coord">0");</span><br />
-              <span class="api">run("setBoundsTarget</span> <span class="target">2</span>
+              "coord">3</span> <span class="coord">0</span><br />
+              <span class="api">setBoundsTarget</span> <span class="target">2</span>
               <span class="coord">0</span> <span class="coord">1</span> <span class=
-              "coord">1</span> <span class="coord">0");</span><br />
-              run("setMessage 2 250, direct:// <span class=
+              "coord">1</span> <span class="coord">0</span><br />
+              setMessage 2 250, direct:// <span class=
               "variable">cursor_value_x</span> <span class=
-              "variable">cursor_value_y");</span><br />
+              "variable">cursor_value_y</span><br />
             </td>
 
             <td class="value"><object type="application/x-shockwave-flash" data=
@@ -1085,19 +1085,19 @@
             <td class="code_speed">
               <div class="code">
                 <code><br />
-                run("setPointsEllipse current 1 1");<br />
-                run("setPos current 1 0 0");<br />
-                run("add cursor 10");<br />
-                run("setCurve 10 1");<br />
+                setPointsEllipse current 1 1<br />
+                setPos current 1 0 0<br />
+                add cursor 10<br />
+                setCurve 10 1<br />
                 <br />
-                run("add curve 2");<br />
-                run("setPointsEllipse current 1 1");<br />
-                run("setPos current -1 0 0");<br />
-                run("add cursor 11");<br />
-                run("setCurve 11 2");<br />
+                add curve 2<br />
+                setPointsEllipse current 1 1<br />
+                setPos current -1 0 0<br />
+                add cursor 11<br />
+                setCurve 11 2<br />
                 <br />
-                <span class="api">run("speed</span> <span class=
-                "speed">20");</span><br /></code>
+                <span class="api">speed</span> <span class=
+                "speed">20</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1156,19 +1156,19 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPointsEllipse current 1 1");<br />
-                run("setPos current -1 0 0");<br />
-                run("add cursor 10");<br />
-                run("setCurve 10 1");<br />
+                <code>add curve 1<br />
+                setPointsEllipse current 1 1<br />
+                setPos current -1 0 0<br />
+                add cursor 10<br />
+                setCurve 10 1<br />
                 <br />
-                run("add curve 2");<br />
-                run("setPointsEllipse current 1 1");<br />
-                run("setPos current 1 0 0");<br />
-                run("add cursor 11");<br />
-                run("setCurve 11 2");<br />
-                <span class="api">run("setSpeed</span> <span class="target">11</span>
-                <span class="speedfactor">4");</span><br /></code>
+                add curve 2<br />
+                setPointsEllipse current 1 1<br />
+                setPos current 1 0 0<br />
+                add cursor 11<br />
+                setCurve 11 2<br />
+                <span class="api">setSpeed</span> <span class="target">11</span>
+                <span class="speedfactor">4</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1209,20 +1209,20 @@
 
             <td class="code_speedf">
               <div class="code">
-                <code>run("add curve 2");<br />
-                run("setPointsEllipse current 1 1");<br />
-                run("setPos current 1 0 0");<br />
-                run("add cursor 11");<br />
-                run("setCurve 11 2");<br />
+                <code>add curve 2<br />
+                setPointsEllipse current 1 1<br />
+                setPos current 1 0 0<br />
+                add cursor 11<br />
+                setCurve 11 2<br />
                 <br />
-                run("add curve 1");<br />
-                run("setPointAt current 1 0 4");<br />
-                run("setPos current -1 -2 0");<br />
-                run("add cursor 10");<br />
-                run("setCurve 10 1");<br />
-                run("setMessage current 20, direct:// <span class="api">setSpeedF</span>
+                add curve 1<br />
+                setPointAt current 1 0 4<br />
+                setPos current -1 -2 0<br />
+                add cursor 10<br />
+                setCurve 10 1<br />
+                setMessage current 20, direct:// <span class="api">setSpeedF</span>
                 <span class="target">11</span> <span class=
-                "speedfactor">cursor_yPos");</span><br />
+                "speedfactor">cursor_yPos</span><br />
                 <br /></code>
               </div>
             </td>
@@ -1268,14 +1268,14 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("setPointsEllipse current 2 2");<br />
-                run("setPos current 0 0 0");<br />
-                run("add cursor 10");<br />
-                run("setCurve 10 1");<br />
-                <span class="api">run("setPattern</span> <span class=
+                <code>add curve 1<br />
+                setPointsEllipse current 2 2<br />
+                setPos current 0 0 0<br />
+                add cursor 10<br />
+                setCurve 10 1<br />
+                <span class="api">setPattern</span> <span class=
                 "target">current</span> 0 0 <span class="pattern">1
-                -1");</span><br /></code>
+                -1</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1302,7 +1302,7 @@
               </div>
 
               <div class="code">
-                <code>run("clear");<br /></code>
+                <code>clear<br /></code>
               </div>
             </td>
           </tr>
@@ -1330,8 +1330,8 @@
               </div>
 
               <div class="code">
-                <code>run("clear"");<br />
-                run("zoom <span class="zoomfactor">2000");</span><br /></code>
+                <code>clear"<br />
+                zoom <span class="zoomfactor">2000</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1360,9 +1360,9 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                run("zoom 200");<br />
-                run("autosize <span>0");</span><br /></code>
+                <code>add trigger 1<br />
+                zoom 200<br />
+                autosize <span>0</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1389,10 +1389,10 @@
               </div>
 
               <div class="code">
-                <code>run("clear");<br />
-                run("zoom 200");<br />
-                run("center <span class="coord">2</span> <span class=
-                "coord">2");</span><br /></code>
+                <code>clear<br />
+                zoom 200<br />
+                center <span class="coord">2</span> <span class=
+                "coord">2</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1418,7 +1418,7 @@
               </div>
 
               <div class="code">
-                <code>run("rotate 45 0 0");<br /></code>
+                <code>rotate 45 0 0<br /></code>
               </div>
             </td>
           </tr>
@@ -1444,7 +1444,7 @@
               </div>
 
               <div class="code">
-                <code>run("play");<br /></code>
+                <code>play<br /></code>
               </div>
             </td>
           </tr>
@@ -1470,7 +1470,7 @@
               </div>
 
               <div class="code">
-                <code>run("fastrewind");<br /></code>
+                <code>fastrewind<br /></code>
               </div>
             </td>
           </tr>
@@ -1508,11 +1508,11 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger auto");<br />
-                run("setPos current 0 0 0");<br />
-                <span class="api">run("setLabel</span> <span class=
+                <code>add trigger auto<br />
+                setPos current 0 0 0<br />
+                <span class="api">setLabel</span> <span class=
                 "target">current</span> <span class="label">Hello World
-                !");</span><br /></code>
+                !</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1543,18 +1543,18 @@
               </div>
 
               <div class="code">
-                <code>run("add curve 1");<br />
-                run("add trigger 2");<br />
-                run("add cursor 3");<br />
-                run("setCurve 3 1");<br />
-                run("setPos 2 1.5 1.5 0");<br />
-                run("setPointsEllipse 1 2 2");<br />
-                <span class="api">run("setSize</span> <span class="target">1</span>
-                <span class="size">10");</span><br />
-                <span class="api">run("setSize</span> <span class="target">2</span>
-                <span class="size">5");</span><br />
-                <span class="api">run("setSize</span> <span class="target">3</span>
-                <span class="size">7");</span><br /></code>
+                <code>add curve 1<br />
+                add trigger 2<br />
+                add cursor 3<br />
+                setCurve 3 1<br />
+                setPos 2 1.5 1.5 0<br />
+                setPointsEllipse 1 2 2<br />
+                <span class="api">setSize</span> <span class="target">1</span>
+                <span class="size">10</span><br />
+                <span class="api">setSize</span> <span class="target">2</span>
+                <span class="size">5</span><br />
+                <span class="api">setSize</span> <span class="target">3</span>
+                <span class="size">7</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1586,10 +1586,10 @@
             </div>
 
             <div class="code">
-              <code>run("add curve 1");<br />
-              run("setPointsEllipse 1 2.5 2.5");<br />
-              <span class="api">run("setLine</span> <span class="target">1</span>
-              <span class="dash">2000</span> <span class="dash">1");</span><br /></code>
+              <code>add curve 1<br />
+              setPointsEllipse 1 2.5 2.5<br />
+              <span class="api">setLine</span> <span class="target">1</span>
+              <span class="dash">2000</span> <span class="dash">1</span><br /></code>
             </div>
           </td>
         </tr>
@@ -1635,11 +1635,11 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                run("setPos 1 1 1 0");<br />
-                <span class="api">run("setColorActive</span> <span class=
+                <code>add trigger 1<br />
+                setPos 1 1 1 0<br />
+                <span class="api">setColorActive</span> <span class=
                 "target">1</span> <span class="rgb">0</span> <span class="rgb">255</span>
-                <span class="rgb">0</span> <span class="a">255");</span><br /></code>
+                <span class="rgb">0</span> <span class="a">255</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1679,12 +1679,12 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                run("setPos 1 1 1 0");<br />
-                run("setActive 1 0");<br />
-                <span class="api">run("setColorInactive</span> <span class=
+                <code>add trigger 1<br />
+                setPos 1 1 1 0<br />
+                setActive 1 0<br />
+                <span class="api">setColorInactive</span> <span class=
                 "target">1</span> <span class="rgb">0</span> <span class="rgb">0</span>
-                <span class="rgb">255</span> <span class="a">255");</span><br /></code>
+                <span class="rgb">255</span> <span class="a">255</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1728,13 +1728,13 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                run("setPos 1 1 1 0");<br />
-                run("setMessage 1 250, direct:// message");<br />
-                <span class="api">run("setColorActiveMessage2</span> <span class=
+                <code>add trigger 1<br />
+                setPos 1 1 1 0<br />
+                setMessage 1 250, direct:// message<br />
+                <span class="api">setColorActiveMessage2</span> <span class=
                 "target">1</span> <span class="hsb">360</span> <span class=
                 "hsb">255</span> <span class="hsb">255</span> <span class=
-                "a">255");</span><br /></code>
+                "a">255</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1778,13 +1778,13 @@
               </div>
 
               <div class="code">
-                <code>run("add trigger 1");<br />
-                run("setPos 1 1 1 0");<br />
-                run("setMessage 1 250, direct:// message");<br />
-                run("setActive 1 0");<br />
-                <span class="api">run("setColorInactiveMessage</span> <span class=
+                <code>add trigger 1<br />
+                setPos 1 1 1 0<br />
+                setMessage 1 250, direct:// message<br />
+                setActive 1 0<br />
+                <span class="api">setColorInactiveMessage</span> <span class=
                 "target">1</span> <span class="rgb">0</span> <span class="rgb">127</span>
-                <span class="hsb">127</span> <span class="a">200");</span><br /></code>
+                <span class="hsb">127</span> <span class="a">200</span><br /></code>
               </div>
             </td>
           </tr>
@@ -1823,22 +1823,22 @@
               </div>
 
               <div class="code">
-                <code><span class="api">run("registerColor</span> <span class=
+                <code><span class="api">registerColor</span> <span class=
                 "variable">rougeRGB</span> <span class="rgb">255</span> <span class=
                 "rgb">0</span> <span class="rgb">0</span> <span class=
-                "a">255");</span><br />
-                <span class="api">run("registerColor2</span> <span class=
+                "a">255</span><br />
+                <span class="api">registerColor2</span> <span class=
                 "variable">rougeHSB</span> <span class="hsb">360</span> <span class=
                 "hsb">255</span> <span class="hsb">255</span> <span class=
-                "a">255");</span><br />
-                run("add trigger 1");<br />
-                run("add trigger 2");<br />
-                run("setPos 1 1 2 0");<br />
-                run("setPos 2 1 1 0");<br />
-                run("setColorActive 1 <span class="variable">rougeRGB");</span><br />
-                run("setColorActive 2 <span class="variable">rougeHSB");</span><br />
-                run("setLabel 1 1");<br />
-                run("setLabel 2 2");<br /></code>
+                "a">255</span><br />
+                add trigger 1<br />
+                add trigger 2<br />
+                setPos 1 1 2 0<br />
+                setPos 2 1 1 0<br />
+                setColorActive 1 <span class="variable">rougeRGB</span><br />
+                setColorActive 2 <span class="variable">rougeHSB</span><br />
+                setLabel 1 1<br />
+                setLabel 2 2<br /></code>
               </div>
             </td>
           </tr>
@@ -1902,19 +1902,19 @@
             </div>
 
             <div class="code">
-              <code><span class="api">run("registerTexture</span> <span class=
+              <code><span class="api">registerTexture</span> <span class=
               "variable">trigger_active</span> <span class="coord">-1</span> <span class=
               "coord">1</span> <span class="coord">1</span> <span class="coord">-1</span>
-              <span class="filename">./Examples/trigger_triangle.png");</span><br />
-              run("add trigger 1");<br />
-              run("add trigger 2");<br />
-              run("add trigger 3");<br />
-              run("setPos 1 1 1 0");<br />
-              run("setPos 3 -1 -1 0");<br />
-              run("setActive 3 0");<br />
-              run("setLabel 1 1");<br />
-              run("setLabel 2 2");<br />
-              run("setLabel 3 3");<br /></code>
+              <span class="filename">./Examples/trigger_triangle.png</span><br />
+              add trigger 1<br />
+              add trigger 2<br />
+              add trigger 3<br />
+              setPos 1 1 1 0<br />
+              setPos 3 -1 -1 0<br />
+              setActive 3 0<br />
+              setLabel 1 1<br />
+              setLabel 2 2<br />
+              setLabel 3 3<br /></code>
             </div>
           </td>
         </tr>
@@ -1947,15 +1947,15 @@
             </div>
 
             <div class="code">
-              <code>run("registerTexture triangle -1 1 1 -1
-              ./Examples/trigger_triangle.png");<br />
-              run("add trigger 1");<br />
-              run("add trigger 2");<br />
-              <span class="api">run("setTextureActive</span> <span class=
-              "target">1</span> <span class="variable">triangle");</span><br />
-              run("setPos 1 1 1 0");<br />
-              run("setLabel 1 1");<br />
-              run("setLabel 2 2");<br /></code>
+              <code>registerTexture triangle -1 1 1 -1
+              ./Examples/trigger_triangle.png<br />
+              add trigger 1<br />
+              add trigger 2<br />
+              <span class="api">setTextureActive</span> <span class=
+              "target">1</span> <span class="variable">triangle</span><br />
+              setPos 1 1 1 0<br />
+              setLabel 1 1<br />
+              setLabel 2 2<br /></code>
             </div>
           </td>
         </tr>
@@ -1987,16 +1987,16 @@
             </div>
 
             <div class="code">
-              <code>run("registerTexture triangle -1 1 1 -1
-              ./Examples/trigger_triangle.png");<br />
-              run("add trigger 1");<br />
-              run("add trigger 2");<br />
-              run("setActive 2 0");<br />
-              <span class="api">run("setTextureInactive</span> <span class=
-              "target">2</span> <span class="variable">triangle");</span><br />
-              run("setPos 1 1 1 0");<br />
-              run("setLabel 1 1");<br />
-              run("setLabel 2 2");<br /></code>
+              <code>registerTexture triangle -1 1 1 -1
+              ./Examples/trigger_triangle.png<br />
+              add trigger 1<br />
+              add trigger 2<br />
+              setActive 2 0<br />
+              <span class="api">setTextureInactive</span> <span class=
+              "target">2</span> <span class="variable">triangle</span><br />
+              setPos 1 1 1 0<br />
+              setLabel 1 1<br />
+              setLabel 2 2<br /></code>
             </div>
           </td>
         </tr>
@@ -2029,18 +2029,18 @@
             </div>
 
             <div class="code">
-              <code>run("registerTexture triangle -1 1 1 -1
-              ./Examples/trigger_triangle.png");<br />
-              run("add trigger 1");<br />
-              run("add trigger 2");<br />
-              run("setGroup 1 triggers");<br />
-              run("setGroup 2 triggers");<br />
-              run("setMessage 2 1, direct:// message");<br />
-              <span class="api">run("setTextureActiveMessage</span> <span class=
-              "target">triggers</span> <span class="variable">triangle");</span><br />
-              run("setPos 1 1 1 0");<br />
-              run("setLabel 1 1");<br />
-              run("setLabel 2 2");<br /></code>
+              <code>registerTexture triangle -1 1 1 -1
+              ./Examples/trigger_triangle.png<br />
+              add trigger 1<br />
+              add trigger 2<br />
+              setGroup 1 triggers<br />
+              setGroup 2 triggers<br />
+              setMessage 2 1, direct:// message<br />
+              <span class="api">setTextureActiveMessage</span> <span class=
+              "target">triggers</span> <span class="variable">triangle</span><br />
+              setPos 1 1 1 0<br />
+              setLabel 1 1<br />
+              setLabel 2 2<br /></code>
             </div>
           </td>
         </tr>
@@ -2070,19 +2070,19 @@
 
           <td class="code_settextureinactivemessage">
             <div class="code">
-              <code>run("registerTexture triangle -1 1 1 -1
-              ./Examples/trigger_triangle.png");<br />
-              run("add trigger 1");<br />
-              run("add trigger 2");<br />
-              run("setGroup 1 triggers");<br />
-              run("setGroup 2 triggers");<br />
-              run("setMessage triggers 1, direct:// message");<br />
-              <span class="api">run("setTextureInactiveMessage</span> <span class=
-              "target">triggers</span> <span class="variable">triangle");</span><br />
-              run("setActive 1 0");<br />
-              run("setPos 1 1 1 0");<br />
-              run("setLabel 1 1");<br />
-              run("setLabel 2 2");<br /></code>
+              <code>registerTexture triangle -1 1 1 -1
+              ./Examples/trigger_triangle.png<br />
+              add trigger 1<br />
+              add trigger 2<br />
+              setGroup 1 triggers<br />
+              setGroup 2 triggers<br />
+              setMessage triggers 1, direct:// message<br />
+              <span class="api">setTextureInactiveMessage</span> <span class=
+              "target">triggers</span> <span class="variable">triangle</span><br />
+              setActive 1 0<br />
+              setPos 1 1 1 0<br />
+              setLabel 1 1<br />
+              setLabel 2 2<br /></code>
             </div>
           </td>
         </tr>

@@ -26,6 +26,7 @@ UiRender::UiRender(QWidget *parent) :
     ui->setupUi(this);
     setCursor(Qt::OpenHandCursor);
     grabGesture(Qt::PinchGesture);
+    setAcceptDrops(true);
 
     //Initialisations
     factory = 0;
@@ -33,11 +34,13 @@ UiRender::UiRender(QWidget *parent) :
     setDocument(0);
     setMouseTracking(true);
     editing = false;
+    isRemoving = false;
     mousePressed = false;
     mouseShift = false;
     mouseObjectDrag = false;
     mouseSnap = false;
     selectedHover = 0;
+    scale = 1;
     scaleDest = 3;
     setCanObjectDrag(true);
 
@@ -212,7 +215,7 @@ void UiRender::paintGL() {
     glRotatef(rotation.z(), 0, 0, 1);
     glScalef(scale, scale, scale);
     glTranslatef(translation.x(), translation.y(), 0);
-    if((rotation.x() == 0) && (rotation.y() == 0) && (rotation.z() == 0))
+    if((rotationDest.x() == 0) && (rotationDest.y() == 0) && (rotationDest.z() == 0))
         renderOptions->allowSelection = true;
     else
         renderOptions->allowSelection = false;
@@ -242,7 +245,6 @@ void UiRender::paintGL() {
 
         //Draw objects
         //Browse documents
-        QRect local;
         QMapIterator<QString, NxGroup*> groupIterator(document->groups);
         while (groupIterator.hasNext()) {
             groupIterator.next();
@@ -254,32 +256,24 @@ void UiRender::paintGL() {
 
             //Browse active/inactive objects
             for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
-
                 //Browse all types of objects
                 for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
+                    //Browse objects
+                    QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
+                    while (objectIterator.hasNext()) {
+                        objectIterator.next();
+                        NxObject *object = objectIterator.value();
 
-                    //Browse locals cursors
-                    QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(group->objects[activityIterator][typeIterator]);
-                    while (localIterator.hasNext()) {
-                        localIterator.next();
-                        local = localIterator.key();
-
-                        //Is object in viewport ?
-                        if((typeIterator != ObjectsTypeTrigger) || (renderOptions->axisAreaSearch.contains(local.x(), local.y()))) {
-                            //Browse objects
-                            QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator].value(local));
-                            while (objectIterator.hasNext()) {
-                                objectIterator.next();
-                                NxObject *object = objectIterator.value();
-
-                                //Draw the object
-                                object->paint();
-                            }
-                        }
+                        //Draw the object
+                        if(!isRemoving)
+                            object->paint();
+                        else
+                            break;
                     }
                 }
             }
         }
+        isRemoving = false;
 
         if(timePerfRefresh >= 1) {
             emit(setPerfOpenGL(QString().setNum((quint16)qRound(timePerfCounter/timePerfRefresh))));
@@ -627,56 +621,41 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
 
                 //Is groups visible ?
                 if(group->checkState(0) == Qt::Checked) {
-
                     //Browse active/inactive objects
                     for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
-
                         //Browse all types of objects
                         for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-
                             //Are objects visible ?
                             if(((typeIterator == ObjectsTypeCursor) && (renderOptions->paintCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->paintCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->paintTriggers))) {
+                                //Browse objects
+                                QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
+                                while (objectIterator.hasNext()) {
+                                    objectIterator.next();
+                                    NxObject *object = objectIterator.value();
 
-                                //Browse locals cursors
-                                QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(group->objects[activityIterator][typeIterator]);
-                                while (localIterator.hasNext()) {
-                                    localIterator.next();
-                                    QRect local = localIterator.key();
+                                    //Is Z visible ?
+                                    if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd)) {
+                                        //Check selection
+                                        if(object->isMouseHover(mousePos)) {
+                                            if(object->getType() == ObjectsTypeCurve)
+                                                eligibleSelection.prepend(object);
+                                            else
+                                                eligibleSelection.append(object);
+                                        }
 
-                                    //Is object in viewport ?
-                                    if((typeIterator != ObjectsTypeTrigger) || (renderOptions->axisAreaSearch.contains(local.x(), local.y()))) {
-
-                                        //Browse objects
-                                        QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator].value(local));
-                                        while (objectIterator.hasNext()) {
-                                            objectIterator.next();
-                                            NxObject *object = objectIterator.value();
-
-                                            //Is Z visible ?
-                                            if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd)) {
-                                                //Check selection
-                                                if(object->isMouseHover(mousePos)) {
-                                                    if(object->getType() == ObjectsTypeCurve)
-                                                        eligibleSelection.prepend(object);
-                                                    else
-                                                        eligibleSelection.append(object);
-                                                }
-
-                                                //Add the object to selection if click+shift
-                                                if(mouseShift) {
-                                                    NxRect objectBoundingRect = object->getBoundingRect();
-                                                    if(objectBoundingRect.width() == 0)  objectBoundingRect.setWidth(0.001);
-                                                    if(objectBoundingRect.height() == 0) objectBoundingRect.setHeight(0.001);
-                                                    if(renderOptions->selectionArea.intersects(objectBoundingRect)) {
-                                                        selectionRect.append(object);
-                                                        object->setSelected(true);
-                                                    }
-                                                    else {
-                                                        selectionRect.removeOne(object);
-                                                        if(!selection.contains(object))
-                                                            object->setSelected(false);
-                                                    }
-                                                }
+                                        //Add the object to selection if click+shift
+                                        if(mouseShift) {
+                                            NxRect objectBoundingRect = object->getBoundingRect();
+                                            if(objectBoundingRect.width() == 0)  objectBoundingRect.setWidth(0.001);
+                                            if(objectBoundingRect.height() == 0) objectBoundingRect.setHeight(0.001);
+                                            if(renderOptions->selectionArea.intersects(objectBoundingRect)) {
+                                                selectionRect.append(object);
+                                                object->setSelected(true);
+                                            }
+                                            else {
+                                                selectionRect.removeOne(object);
+                                                if(!selection.contains(object))
+                                                    object->setSelected(false);
                                             }
                                         }
                                     }
@@ -767,7 +746,7 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
         emit(editingStop());
     }
     else if(event->key() == Qt::Key_S) {
-        QImage snapshot = grabFrameBuffer(true);
+        QImage snapshot = grabFrameBuffer(false);
         snapshot.save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString(QDir::separator()) + "IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
     }
     else if(event->key() == Qt::Key_Escape) {
@@ -807,7 +786,48 @@ bool UiRender::event(QEvent *event) {
     }
     return QGLWidget::event(event);
 }
-
+void UiRender::dragEnterEvent(QDragEnterEvent *event) {
+    const QMimeData* mimeData = event->mimeData();
+    bool ok = false;
+    if (mimeData->hasUrls()) {
+        QList<QUrl> urlList = mimeData->urls();
+        for(int i = 0; i < urlList.size() && i < 32; ++i) {
+            QString filename = urlList.at(i).toLocalFile();
+            if(filename.toLower().endsWith("svg"))
+                ok = true;
+            else if((filename.toLower().endsWith("png")) || (filename.toLower().endsWith("jpg")) || (filename.toLower().endsWith("jpeg")))
+                ok = true;
+        }
+    }
+    else if(mimeData->text() != "")
+        ok = true;
+    if(ok)
+        event->acceptProposedAction();
+}
+void UiRender::dropEvent(QDropEvent *event) {
+    const QMimeData* mimeData = event->mimeData();
+    bool ok = false;
+    if (mimeData->hasUrls()) {
+        QList<QUrl> urlList = mimeData->urls();
+        for(int i = 0; i < urlList.size() && i < 32; ++i) {
+            QString filename = urlList.at(i).toLocalFile();
+            if(filename.toLower().endsWith("svg")) {
+                ok = true;
+                actionImportSVG(filename);
+            }
+            else if((filename.toLower().endsWith("png")) || (filename.toLower().endsWith("jpg")) || (filename.toLower().endsWith("jpeg"))) {
+                ok = true;
+                actionImportImage(filename);
+            }
+        }
+    }
+    else if(mimeData->text() != "") {
+        ok = true;
+        actionImportText("", mimeData->text());
+    }
+    if(ok)
+        event->acceptProposedAction();
+}
 
 void UiRender::selectionClear(bool hoverAussi) {
     //Clear selection
@@ -906,29 +926,17 @@ void UiRender::actionSelect_all() {
 
                         //Are objects visible ?
                         if(((typeIterator == ObjectsTypeCursor) && (renderOptions->paintCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->paintCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->paintTriggers))) {
+                            //Browse objects
+                            QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
+                            while (objectIterator.hasNext()) {
+                                objectIterator.next();
+                                NxObject *object = objectIterator.value();
 
-                            //Browse locals cursors
-                            QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(group->objects[activityIterator][typeIterator]);
-                            while (localIterator.hasNext()) {
-                                localIterator.next();
-                                QRect local = localIterator.key();
+                                //Is Z visible ?
+                                if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd)) {
 
-                                //Is object in viewport ?
-                                if((typeIterator != ObjectsTypeTrigger) || (renderOptions->axisAreaSearch.contains(local.x(), local.y()))) {
-
-                                    //Browse objects
-                                    QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator].value(local));
-                                    while (objectIterator.hasNext()) {
-                                        objectIterator.next();
-                                        NxObject *object = objectIterator.value();
-
-                                        //Is Z visible ?
-                                        if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd)) {
-
-                                            //Add the object to selection
-                                            selectionAdd(object);
-                                        }
-                                    }
+                                    //Add the object to selection
+                                    selectionAdd(object);
                                 }
                             }
                         }

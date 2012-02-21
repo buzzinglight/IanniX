@@ -41,7 +41,7 @@ QTabWidget::pane {
 	border: 1px solid rgba(255, 255, 255, 32);
 }
 
-QLabel, QCheckBox#viewTriggerCheck, QCheckBox#viewCurveCheck, QCheckBox#viewCursorCheck {
+QLabel, QCheckBox#viewTriggerCheck, QCheckBox#viewCurveCheck, QCheckBox#viewCurveOpacityCheck, QCheckBox#viewCursorCheck {
 	color: rgb(220, 220, 220);
 }
 
@@ -1724,6 +1724,9 @@ MAPPING</string>
           </item>
           <item>
            <widget class="QCheckBox" name="viewTriggerCheck">
+            <property name="toolTip">
+             <string>Display/hide triggers</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font: 10px;</string>
             </property>
@@ -1737,6 +1740,9 @@ MAPPING</string>
           </item>
           <item>
            <widget class="QCheckBox" name="viewCurveCheck">
+            <property name="toolTip">
+             <string>Display/hide curves</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font: 10px;</string>
             </property>
@@ -1750,6 +1756,9 @@ MAPPING</string>
           </item>
           <item>
            <widget class="QCheckBox" name="viewCursorCheck">
+            <property name="toolTip">
+             <string>Display/hide cursors</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">font: 10px;</string>
             </property>
@@ -1780,6 +1789,9 @@ MAPPING</string>
               </item>
               <item>
                <widget class="QTreeWidget" name="ccView">
+                <property name="toolTip">
+                 <string>List of objects</string>
+                </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
                 </property>
@@ -1825,6 +1837,9 @@ MAPPING</string>
               </item>
               <item>
                <widget class="QTreeWidget" name="cc2View">
+                <property name="toolTip">
+                 <string>List of objects groups</string>
+                </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
                 </property>
@@ -1862,6 +1877,9 @@ MAPPING</string>
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="viewZStartSpin">
+              <property name="toolTip">
+               <string>Only display objects where Z-value is included in range</string>
+              </property>
               <property name="minimum">
                <double>-9999.000000000000000</double>
               </property>
@@ -1888,6 +1906,9 @@ MAPPING</string>
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="viewZEndSpin">
+              <property name="toolTip">
+               <string>Only display objects where Z-value is included in range</string>
+              </property>
               <property name="minimum">
                <double>-9999.000000000000000</double>
               </property>
@@ -1900,6 +1921,22 @@ MAPPING</string>
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="viewCurveOpacityCheck">
+            <property name="toolTip">
+             <string>Display/hide curves where cursors are steady or invisible</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font: 10px;</string>
+            </property>
+            <property name="text">
+             <string>LIGHT OFF UNUSED CURVES</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -2047,6 +2084,9 @@ MAPPING</string>
                   <width>60</width>
                   <height>16777215</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string/>
                 </property>
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2231,8 +2271,8 @@ MESSAGE</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>103</x>
-     <y>37</y>
+     <x>110</x>
+     <y>72</y>
     </hint>
     <hint type="destinationlabel">
      <x>45</x>
@@ -2247,8 +2287,8 @@ MESSAGE</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>103</x>
-     <y>41</y>
+     <x>110</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
      <x>72</x>
@@ -2263,8 +2303,8 @@ MESSAGE</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>103</x>
-     <y>44</y>
+     <x>110</x>
+     <y>100</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2279,8 +2319,8 @@ MESSAGE</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>86</y>
+     <x>211</x>
+     <y>573</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>
@@ -2295,8 +2335,8 @@ MESSAGE</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>86</y>
+     <x>345</x>
+     <y>573</y>
     </hint>
     <hint type="destinationlabel">
      <x>237</x>
@@ -2599,8 +2639,8 @@ MESSAGE</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>79</y>
+     <x>168</x>
+     <y>458</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2615,8 +2655,8 @@ MESSAGE</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>79</y>
+     <x>168</x>
+     <y>488</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2631,8 +2671,8 @@ MESSAGE</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>79</y>
+     <x>215</x>
+     <y>588</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2743,8 +2783,8 @@ MESSAGE</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>80</y>
+     <x>126</x>
+     <y>181</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2823,8 +2863,8 @@ MESSAGE</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>79</y>
+     <x>215</x>
+     <y>588</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2919,8 +2959,8 @@ MESSAGE</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>79</y>
+     <x>215</x>
+     <y>520</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2935,8 +2975,8 @@ MESSAGE</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>79</y>
+     <x>215</x>
+     <y>520</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2951,8 +2991,8 @@ MESSAGE</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>79</y>
+     <x>215</x>
+     <y>588</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2967,8 +3007,8 @@ MESSAGE</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>80</y>
+     <x>126</x>
+     <y>403</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2983,8 +3023,8 @@ MESSAGE</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>80</y>
+     <x>126</x>
+     <y>181</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2999,8 +3039,8 @@ MESSAGE</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>80</y>
+     <x>126</x>
+     <y>403</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3031,8 +3071,8 @@ MESSAGE</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>79</y>
+     <x>215</x>
+     <y>555</y>
     </hint>
     <hint type="destinationlabel">
      <x>530</x>
@@ -3047,8 +3087,8 @@ MESSAGE</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>79</y>
+     <x>215</x>
+     <y>555</y>
     </hint>
     <hint type="destinationlabel">
      <x>510</x>
@@ -3101,6 +3141,22 @@ MESSAGE</string>
     <hint type="destinationlabel">
      <x>525</x>
      <y>139</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>viewCurveOpacityCheck</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionViewChange()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>23</x>
+     <y>588</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-226</x>
+     <y>545</y>
     </hint>
    </hints>
   </connection>

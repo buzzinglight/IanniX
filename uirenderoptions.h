@@ -65,7 +65,7 @@ public:
 
 public:
     bool paintBackground, paintAxisGrid, paintAxisMain;
-    bool paintTriggers, paintCursors, paintCurves;
+    bool paintTriggers, paintCursors, paintCurves, paintCurvesOpacity;
     bool paintThisGroup;
     bool paintLabel;
     qreal paintZStart, paintZEnd;

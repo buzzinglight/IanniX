@@ -83,6 +83,10 @@ QDockWidget::title {
     <addaction name="actionSave"/>
     <addaction name="actionSave_all"/>
     <addaction name="separator"/>
+    <addaction name="actionImoprt_SVG"/>
+    <addaction name="actionImoprt_Image"/>
+    <addaction name="actionImoprt_Text"/>
+    <addaction name="separator"/>
     <addaction name="actionRename"/>
     <addaction name="actionRemove"/>
     <addaction name="actionDuplicateScore"/>
@@ -685,6 +689,21 @@ QDockWidget::title {
   <action name="actionSync">
    <property name="text">
     <string>Send a snapshot of score to sync output</string>
+   </property>
+  </action>
+  <action name="actionImoprt_SVG">
+   <property name="text">
+    <string>Import SVG…</string>
+   </property>
+  </action>
+  <action name="actionImoprt_Image">
+   <property name="text">
+    <string>Import image…</string>
+   </property>
+  </action>
+  <action name="actionImoprt_Text">
+   <property name="text">
+    <string>Import glyph…</string>
    </property>
   </action>
  </widget>

@@ -98,6 +98,8 @@ public:
     void setViewCurveCheck(bool);
     bool getViewCursorCheck() const;
     void setViewCursorCheck(bool);
+    bool getViewCurveOpacityCheck() const;
+    void setViewCurveOpacityCheck(bool);
 public slots:
     void setOSCOk(bool);
     void setUDPOk(bool);

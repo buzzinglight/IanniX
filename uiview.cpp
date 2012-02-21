@@ -35,6 +35,9 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionDuplicateScore, SIGNAL(triggered()), ui->render, SLOT(actionDuplicateScore()));
     connect(ui->actionRename, SIGNAL(triggered()), ui->render, SLOT(actionRename()));
     connect(ui->actionRemove, SIGNAL(triggered()), ui->render, SLOT(actionRemove()));
+    connect(ui->actionImoprt_SVG, SIGNAL(triggered()), SLOT(actionImportSVG()));
+    connect(ui->actionImoprt_Image, SIGNAL(triggered()), SLOT(actionImportImage()));
+    connect(ui->actionImoprt_Text, SIGNAL(triggered()), SLOT(actionImportText()));
 
     connect(ui->actionRedo, SIGNAL(triggered()), ui->render, SLOT(actionRedo()));
     connect(ui->actionUndo, SIGNAL(triggered()), ui->render, SLOT(actionUndo()));
@@ -168,7 +171,36 @@ void UiView::actionZoom_initial() {
 void UiView::actionToggleLabel() {
     ui->render->getRenderOptions()->paintLabel = ui->actionToggleLabel->isChecked();
 }
+void UiView::actionImportSVG() {
+    QString fileName = QFileDialog::getOpenFileName(0, tr("Select a SVG file…"), QDir::currentPath(), tr("SVG Files (*.svg)"));
+    if(fileName != "")
+        emit(actionRouteImportSVG(fileName));
+}
+void UiView::actionImportImage() {
+    QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images (*.png *.jpg *.jpeg)"));
+    if(fileName != "")
+        emit(actionRouteImportImage(fileName));
+}
+void UiView::actionImportText() {
+    QString font = "";
+    QString text = QInputDialog::getText(0, tr("Type a glyph or text…"), tr("Type a glyphe or a text to import in IanniX"), QLineEdit::Normal, tr(""));
+    if(text != "")
+        emit(actionRouteImportText(font, text));
+}
+
 void UiView::actionLockPos() {
+    if(ui->actionDrawTriggers->isChecked()) {
+        ui->actionDrawTriggers->setChecked(false);
+        emit(actionRouteDrawTriggers());
+    }
+    else if(ui->actionDrawPointCurve->isChecked()) {
+        ui->actionDrawPointCurve->setChecked(false);
+        emit(actionRouteDrawPointCurve());
+    }
+    else if(ui->actionDrawFreeCurve->isChecked()) {
+        ui->actionDrawFreeCurve->setChecked(false);
+        emit(actionRouteDrawFreeCurve());
+    }
     ui->render->setCanObjectDrag(!ui->actionLockPos->isChecked());
 }
 

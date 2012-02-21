@@ -33,9 +33,9 @@ private:
     QEasingCurve easing;
 
 public:
-    inline void setType(quint16 type)   { easing.setType((QEasingCurve::Type)type); }
-    inline quint16 getType() const      { return easing.type(); }
-    inline qreal valueForProgress(qreal progress) const { return easing.valueForProgress(progress); }
+    inline void setType(quint16 type)           { easing.setType((QEasingCurve::Type)type); }
+    inline quint16 getType() const              { return easing.type(); }
+    inline qreal getValue(qreal progress) const { return easing.valueForProgress(progress); }
 
 public:
     QPixmap getPixmap() const;

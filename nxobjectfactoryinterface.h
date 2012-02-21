@@ -41,7 +41,6 @@ public:
 
 public:
     virtual void setObjectActivity(void *_object, quint8 activeOld) = 0;
-    virtual void setObjectLocal(void *_object, QRect localOld) = 0;
     virtual void setObjectGroupId(void *_object, const QString & groupIdOld) = 0;
 
 public slots:

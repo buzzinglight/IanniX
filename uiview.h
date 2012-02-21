@@ -59,6 +59,9 @@ public slots:
     void actionAddFreeCursor()    { emit(actionRouteAddFreeCursor()); }
     void actionCircleCurve()      { emit(actionRouteCircleCurve()); }
     void actionSnapGrid()         { emit(actionRouteSnapGrid()); }
+    void actionImportSVG();
+    void actionImportImage();
+    void actionImportText();
     void actionLockPos();
     void actionToggleLabel();
     void actionAbout()            { emit(actionRouteAbout()); }
@@ -93,6 +96,9 @@ signals:
     void actionRouteSnapGrid();
     void actionRouteAbout();
     void actionRouteQuit();
+    void actionRouteImportSVG(QString);
+    void actionRouteImportImage(QString);
+    void actionRouteImportText(QString,QString);
     void actionRouteCloseEvent(QCloseEvent*);
 
 protected:

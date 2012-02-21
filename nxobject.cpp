@@ -31,6 +31,7 @@ NxObject::NxObject(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     parentObject = 0;
     selectedHover = false;
     selected = false;
+    hasActivity = true;
     setMessageTimeInterval(1);
     isDrag = false;
     performCollision = false;
@@ -122,15 +123,6 @@ void NxObject::setMessagePatterns(const QString & messagePatternsStr) {
 
     if(messagePattern.count() > 0)
         messagePatterns.append(messagePattern);
-
-    /*
-    foreach(const QVector<QByteArray> & m1, messagePatterns) {
-        qDebug("----");
-        foreach(const QByteArray & m2, m1)
-            qDebug("%s", qPrintable(QString(m2)));
-        qDebug("----");
-    }
-    */
 }
 
 QVector< QVector<QByteArray> > NxObject::parseMessagesPattern(const QString & messagePatternsStr, quint16 *messageInterval) {

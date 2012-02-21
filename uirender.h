@@ -121,6 +121,7 @@ public:
 
 private:
     UiRenderOptions *renderOptions;
+    bool isRemoving;
 private:
     void paintBackground();
     void paintAxisGrid();
@@ -129,6 +130,7 @@ public:
     inline UiRenderOptions* getRenderOptions() {
         return renderOptions;
     }
+    void flagIsRemoving() { isRemoving = true; }
     void centerOn(const NxPoint & center);
     void rotateTo(const NxPoint & rotation);
 
@@ -144,6 +146,8 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
     bool event(QEvent *event);
+    void dragEnterEvent(QDragEnterEvent *);
+    void dropEvent(QDropEvent *);
 public:
     void zoom();
     void zoom(qreal axisZoom);
@@ -185,6 +189,9 @@ public slots:
     void actionUndo()       { emit(actionRouteUndo()); }
     void actionRedo()       { emit(actionRouteRedo()); }
     void actionSync()       { emit(actionRouteSync()); }
+    void actionImportSVG(QString val)    { emit(actionRouteImportSVG(val)); }
+    void actionImportImage(QString val)  { emit(actionRouteImportImage(val)); }
+    void actionImportText(QString val, QString val2)  { emit(actionRouteImportText(val, val2)); }
     void actionCopy();
     void actionPaste();
     void actionDuplicate();
@@ -206,6 +213,9 @@ signals:
     void actionRouteRemove();
     void actionRouteQuit();
     void actionRouteSync();
+    void actionRouteImportSVG(QString);
+    void actionRouteImportImage(QString);
+    void actionRouteImportText(QString,QString);
 
     void actionRouteUndo();
     void actionRouteRedo();

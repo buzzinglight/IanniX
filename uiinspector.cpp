@@ -642,6 +642,13 @@ void UiInspector::setViewCursorCheck(bool val) {
     ui->viewCursorCheck->setChecked(val);
 }
 
+bool UiInspector::getViewCurveOpacityCheck() const {
+    return ui->viewCurveOpacityCheck->isChecked();
+}
+void UiInspector::setViewCurveOpacityCheck(bool val) {
+    ui->viewCurveOpacityCheck->setChecked(val);
+}
+
 void UiInspector::setOSCOk(bool val) {
     if(val)
         ui->oscInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");

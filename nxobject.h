@@ -43,7 +43,6 @@ enum ObjectsActivity { ObjectsActivityInactive=0, ObjectsActivityActive=1 };
 
 class NxObject : public QObject, public NxObjectDispatchProperty, public QTreeWidgetItem {
     Q_OBJECT
-    Q_PROPERTY(QRect   local               READ getLocal)
     Q_PROPERTY(bool    selectedHover       READ getSelectedHover       WRITE setSelectedHover)
     Q_PROPERTY(bool    selected            READ getSelected            WRITE setSelected)
     Q_PROPERTY(quint16 id                  READ getId                  WRITE setId)
@@ -95,17 +94,13 @@ protected:
     NxRect boundingRect;
     QString label;
     QStringList messageLabel;
-    bool selectedHover, selected;
+    bool selectedHover, selected, hasActivity;
     QVector< QVector<QByteArray> > messagePatterns;
     QTime messageTime;
     quint16 messageTimeInterval;
     NxObject *parentObject;
     bool isDrag, performCollision;
 public slots:
-    inline const QRect getLocal() const {
-        return QRect(floor(pos.x() / 10) * 10, floor(pos.y() / 10) * 10, floor(pos.z() / 10) * 10, 0);
-    }
-
     inline void setPosOffset(const NxPoint & _posOffset) {
         posOffset = _posOffset;
     }
@@ -127,6 +122,10 @@ public slots:
     }
     inline bool getSelected() const {
         return selected;
+    }
+
+    inline bool getHasActivity() const {
+        return hasActivity;
     }
 
     inline void setId(quint16 _id) {
@@ -180,12 +179,10 @@ public slots:
 
     inline void setPos(const NxPoint & _pos) {
         if((pos != _pos) && (factory)) {
-            QRect localOld = getLocal();
             pos = _pos + posOffset;
             posOffset = NxPoint();
             calcBoundingRect();
             calculate();
-            factory->setObjectLocal(this, localOld);
         }
     }
     inline void setPosStr(const QString & pos) {

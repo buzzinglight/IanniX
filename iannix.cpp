@@ -53,6 +53,9 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteSnapGrid()), SLOT(actionSnapGrid()));
     connect(view, SIGNAL(actionRouteCloseEvent(QCloseEvent*)), SLOT(actionCloseEvent(QCloseEvent*)));
     connect(view, SIGNAL(actionRouteAbout()), SLOT(actionLogo()));
+    connect(view, SIGNAL(actionRouteImportSVG(QString)),            SLOT(actionImportSVG(QString)));
+    connect(view, SIGNAL(actionRouteImportImage(QString)),          SLOT(actionImportImage(QString)));
+    connect(view, SIGNAL(actionRouteImportText(QString,QString)),   SLOT(actionImportText(QString,QString)));
 
 
     //Transport
@@ -99,6 +102,9 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(render, SIGNAL(actionRouteUndo()), SLOT(actionUndo()));
     connect(render, SIGNAL(actionRouteSync()), SLOT(actionSync()));
     connect(render, SIGNAL(actionRouteRedo()), SLOT(actionRedo()));
+    connect(render, SIGNAL(actionRouteImportSVG(QString)),          SLOT(actionImportSVG(QString)));
+    connect(render, SIGNAL(actionRouteImportImage(QString)),        SLOT(actionImportImage(QString)));
+    connect(render, SIGNAL(actionRouteImportText(QString,QString)), SLOT(actionImportText(QString,QString)));
     connect(render, SIGNAL(editingStop()), SLOT(editingStop()));
     connect(render, SIGNAL(editingStart(NxPoint)), SLOT(editingStart(NxPoint)));
     connect(render, SIGNAL(editingMove(NxPoint,bool)), SLOT(editingMove(NxPoint,bool)));
@@ -257,6 +263,130 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     //Projet par défault
     loadProject("Project/root.root");
     actionFast_rewind();
+
+
+    //Conversion d'EDL
+    QString tracks;
+    for(quint16 i = 0 ; i < 10 ; i++) {
+        QString sequence = tr("SEQ%1").arg(i);
+        QFile edl(tr("EDL-%1.txt").arg(sequence));
+        if(edl.exists() && edl.open(QFile::ReadOnly)) {
+            tracks += tr("{\tsequence: \"%1\",\n"
+                         "\ttrajectories: [\n").arg(sequence);
+            QString edlContent = edl.readAll();
+            QStringList edlTracklistsSeparator = edlContent.split("TRACK NAME:\t", QString::SkipEmptyParts);
+            for(quint16 i = 1 ; i < edlTracklistsSeparator.count() ; i++) {
+                QStringList edlTracklists = edlTracklistsSeparator[i].split("\n", QString::SkipEmptyParts);
+                QString name, info, start, end, duration;
+                qreal startSec = 0, endSec = 0, durationSec = 0;
+                for(quint16 j = 0 ; j < edlTracklists.count() ; j++) {
+                    if(j == 4) {
+                        QStringList edlTracklistChannel = edlTracklists[j].split("\t");
+                        if(edlTracklistChannel.count() > 5) {
+                            QStringList edlTracklistChannelName = edlTracklistChannel[2].split(" ");
+                            name     = edlTracklistChannelName[0];
+                            info     = edlTracklistChannel[2].replace(name + " ", "");
+
+                            start    = edlTracklistChannel[3];
+                            QStringList startSeparator = start.split(":");
+                            startSec = startSeparator[0].toDouble()*3600 + startSeparator[1].toDouble()*60 + startSeparator[2].toDouble() + startSeparator[3].toDouble()*1./25.;
+                            startSec -= 60;
+
+                            end      = edlTracklistChannel[4];
+                            QStringList endSeparator = end.split(":");
+                            endSec = endSeparator[0].toDouble()*3600 + endSeparator[1].toDouble()*60 + endSeparator[2].toDouble() + endSeparator[3].toDouble()*1./25.;
+                            endSec -= 60;
+
+                            duration = edlTracklistChannel[5];
+                            QStringList durationSeparator = duration.split(":");
+                            durationSec = durationSeparator[0].toDouble()*3600 + durationSeparator[1].toDouble()*60 + durationSeparator[2].toDouble() + durationSeparator[3].toDouble()*1./25.;
+                        }
+                    }
+                }
+                tracks += tr("\t{\tsequence: \"%1\", calque: \"\",\n"
+                             "\t\tname: \"%2\", start: %3, duration: %4, acceleration: 1,\n"
+                             "\t\tedlStart: \"%5\", edlEnd: \"%6\",\n"
+                             "\t\tinfo: \"%7\", color: colors.green,\n"
+                             "\t\tsize: {x: 0, y: 0, z: 0},\n"
+                             "\t\tpoints: [	{x: -30, y: -5, z: -5, extra: \"smooth\"},\n"
+                             "\t\t          {x:   0, y:  0, z:  5, extra: \"smooth\"},\n"
+                             "\t\t          {x:  30, y:  5, z: -5, extra: \"smooth\"},\n"
+                             "\t\t        ]},\n").arg(sequence).arg(name).arg(startSec).arg(durationSec).arg(start).arg(end).arg(info);
+            }
+            tracks += "]}, \n";
+        }
+        edl.close();
+    }
+    if(tracks != "") {
+        QFile edlOut("EDL-out.js");
+        if(edlOut.open(QFile::WriteOnly)) {
+            tracks = tr("var data = [\n%1];").arg(tracks);
+            edlOut.write(qPrintable(tracks));
+            edlOut.close();
+        }
+    }
+}
+
+void IanniX::actionImportSVG(const QString &filename) {
+    qreal scale = 0.01;
+    bool ok = false;
+    scale = QInputDialog::getDouble(0, tr("SVG Import"), tr("SVG coordinates system & IanniX coordinates system are differents.\nYou need to scale the SVG to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 2, &ok);
+    if(ok) {
+        QDomDocument xmlDoc;
+        QFile svgFile(filename);
+        if(svgFile.open(QFile::ReadOnly)) {
+            xmlDoc.setContent(svgFile.readAll());
+            actionImportSVG(xmlDoc.documentElement(), scale);
+            svgFile.close();
+        }
+    }
+}
+void IanniX::actionImportSVG(const QDomElement &xmlElement, qreal scale) {
+    QDomNode xmlNode = xmlElement.firstChild();
+    while(!xmlNode.isNull()) {
+        QDomElement xmlData = xmlNode.toElement();
+        if((!xmlData.isNull()) && (xmlData.tagName() == "path")) {
+            execute(COMMAND_ADD + " curve auto");
+            execute(COMMAND_CURVE_PATH + " current " + QString::number(scale) + " " + xmlData.attribute("d"));
+        }
+        else if((!xmlData.isNull()) && (xmlData.tagName() == "polyline")) {
+            execute(COMMAND_ADD + " curve auto");
+            execute(COMMAND_CURVE_LINES + " current " + QString::number(scale) + " " + xmlData.attribute("points"));
+        }
+        actionImportSVG(xmlData, scale);
+        xmlNode = xmlNode.nextSibling();
+    }
+}
+void IanniX::actionImportImage(const QString &filename) {
+    qreal scale = 0.01;
+    bool ok = false;
+    scale = QInputDialog::getDouble(0, tr("Image import"), tr("Image coordinates system & IanniX coordinates system are differents.\nYou need to scale the image to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 2, &ok);
+    if(ok) {
+        execute(COMMAND_ADD + " curve auto");
+        execute(COMMAND_CURVE_IMG + " current " + QString::number(scale) + " " + filename);
+    }
+}
+void IanniX::actionImportText(const QString &font, const QString &text) {
+    qreal scale = 0.1;
+    bool ok = false;
+
+    QString fontReal = font;
+    if(fontReal == "") {
+        ok = false;
+        QFont fontFont = QFontDialog::getFont(&ok);
+        if(ok)
+            fontReal = fontFont.family();
+        else
+            return;
+    }
+
+    fontReal = fontReal.replace(" ", "_");
+    ok = false;
+    scale = QInputDialog::getDouble(0, tr("Text import"), tr("Text coordinates system & IanniX coordinates system are differents.\nYou need to scale the text to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 2, &ok);
+    if(ok) {
+        execute(COMMAND_ADD + " curve auto");
+        execute(COMMAND_CURVE_TXT + " current " + QString::number(scale) + " " + fontReal + " " + text);
+    }
 }
 
 void IanniX::setScheduler(bool start) {
@@ -301,7 +431,6 @@ void IanniX::timerTick() {
     renderMeasure.start();
 
     //Browse documents
-    QRect local;
     QRect cursorBoundingRectSearch;
     //QHashIterator<QString, NxDocument*> documentIterator(documents);
     /*while (documentIterator.hasNext())*/ {
@@ -318,88 +447,56 @@ void IanniX::timerTick() {
                 //Browse active/inactive objects
                 for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
 
-                    //Browse locals cursors
-                    QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(group->objects[activityIterator][ObjectsTypeCursor]);
-                    while (localIterator.hasNext()) {
-                        localIterator.next();
-                        local = localIterator.key();
+                    //Browse cursors
+                    QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][ObjectsTypeCursor]);
+                    while (objectIterator.hasNext()) {
+                        objectIterator.next();
+                        NxCursor *cursor = (NxCursor*)objectIterator.value();
 
-                        //Browse cursors
-                        QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][ObjectsTypeCursor].value(local));
-                        while (objectIterator.hasNext()) {
-                            objectIterator.next();
-                            NxCursor *cursor = (NxCursor*)objectIterator.value();
+                        //Cursor reset
+                        if(forceTimeLocal) {
+                            cursor->setTimeLocal(timeLocal);
+                            cursor->setMessageId(0);
+                        }
 
-                            //Cursor reset
-                            if(forceTimeLocal) {
-                                cursor->setTimeLocal(timeLocal);
-                                cursor->setMessageId(0);
-                            }
+                        //Set time for a cursor
+                        cursor->setTime(delta * render->getRenderOptions()->timeFactor);
 
-                            //Set time for a cursor
-                            cursor->setTime(delta * render->getRenderOptions()->timeFactor);
+                        //Is cursor active ?
+                        if((!forceTimeLocal) && (cursor->getActive())) {
+                            //Messages
+                            cursor->trig();
 
-                            //Is cursor active ?
-                            if((!forceTimeLocal) && (cursor->getActive())) {
-                                //Messages
-                                cursor->trig();
+                            //Bounding search
+                            cursorBoundingRectSearch = cursor->getBoundingRectSearch();
 
-                                //Bounding search
-                                cursorBoundingRectSearch = cursor->getBoundingRectSearch();
+                            //Browse groups
+                            QMapIterator<QString, NxGroup*> groupIteratorTrigger(document->groups);
+                            while (groupIteratorTrigger.hasNext()) {
+                                groupIteratorTrigger.next();
+                                NxGroup *group = groupIteratorTrigger.value();
 
-                                //Browse groups
-                                QMapIterator<QString, NxGroup*> groupIteratorTrigger(document->groups);
-                                while (groupIteratorTrigger.hasNext()) {
-                                    groupIteratorTrigger.next();
-                                    NxGroup *group = groupIteratorTrigger.value();
+                                //Browse active triggers
+                                QHashIterator<quint16, NxObject*> objectIteratorTrigger(group->objects[ObjectsActivityActive][ObjectsTypeTrigger]);
+                                while (objectIteratorTrigger.hasNext()) {
+                                    objectIteratorTrigger.next();
 
-                                    //Browse locals cursors
-                                    QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(group->objects[ObjectsActivityActive][ObjectsTypeTrigger]);
-                                    while (localIterator.hasNext()) {
-                                        localIterator.next();
-                                        local = localIterator.key();
+                                    NxTrigger *trigger = (NxTrigger*)objectIteratorTrigger.value();
 
-                                        //Is cursor inside ?
-                                        if((cursorBoundingRectSearch.contains(QPoint(local.x(), local.y()))) && (cursor->getLocal().width() == local.width())) {
+                                    //Check the collision
+                                    if(cursor->contains(trigger))
+                                        trigger->trig(cursor);
+                                }
 
-                                            //Browse active triggers
-                                            QHashIterator<quint16, NxObject*> objectIteratorTrigger(group->objects[ObjectsActivityActive][ObjectsTypeTrigger].value(local));
-                                            while (objectIteratorTrigger.hasNext()) {
-                                                objectIteratorTrigger.next();
+                                //Browse active triggers
+                                QHashIterator<quint16, NxObject*> objectIteratorCurve(group->objects[ObjectsActivityActive][ObjectsTypeCurve]);
+                                while (objectIteratorCurve.hasNext()) {
+                                    objectIteratorCurve.next();
 
-                                                NxTrigger *trigger = (NxTrigger*)objectIteratorTrigger.value();
+                                    NxCurve *curve = (NxCurve*)objectIteratorCurve.value();
 
-                                                //Check the collision
-                                                if(cursor->contains(trigger)) {
-                                                    trigger->trig(cursor);
-                                                }
-                                            }
-                                        }
-                                    }
-
-
-                                    //Browse locals curves
-                                    QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator2(group->objects[ObjectsActivityActive][ObjectsTypeCurve]);
-                                    while (localIterator2.hasNext()) {
-                                        localIterator2.next();
-                                        local = localIterator2.key();
-
-                                        //Is cursor inside ?
-                                        if(true/*(cursorBoundingRectSearch.contains(QPoint(local.x(), local.y()))) && (cursor->getLocal().width() == local.width())*/) {
-
-                                            //Browse active triggers
-                                            QHashIterator<quint16, NxObject*> objectIteratorCurve(group->objects[ObjectsActivityActive][ObjectsTypeCurve].value(local));
-                                            while (objectIteratorCurve.hasNext()) {
-                                                objectIteratorCurve.next();
-
-                                                NxCurve *curve = (NxCurve*)objectIteratorCurve.value();
-
-                                                //Check the collision
-                                                cursor->trig(curve);
-                                            }
-                                        }
-                                    }
-
+                                    //Check the collision
+                                    cursor->trig(curve);
                                 }
                             }
                         }
@@ -562,6 +659,10 @@ void IanniX::actionViewChange() {
         render->getRenderOptions()->paintCursors = true;
     else
         render->getRenderOptions()->paintCursors = false;
+    if(inspector->getViewCurveOpacityCheck())
+        render->getRenderOptions()->paintCurvesOpacity = true;
+    else
+        render->getRenderOptions()->paintCurvesOpacity = false;
     render->getRenderOptions()->paintZStart = inspector->getViewZStart();
     render->getRenderOptions()->paintZEnd = inspector->getViewZEnd();
 }
@@ -590,20 +691,14 @@ void IanniX::actionCC2() {
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-                //Browse locals cursors
-                QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(group->objects[activityIterator][typeIterator]);
-                while (localIterator.hasNext()) {
-                    localIterator.next();  ////Crash here after group select & then script open////
-                    QRect local = localIterator.key();
-                    //Browse objects
-                    QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator].value(local));
-                    while (objectIterator.hasNext()) {
-                        objectIterator.next();
-                        NxObject *object = objectIterator.value();
-                        render->selectionAdd(object);
-                        center += object->getPos();
-                        centerCounter++;
-                    }
+                //Browse objects
+                QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
+                while (objectIterator.hasNext()) {
+                    objectIterator.next();
+                    NxObject *object = objectIterator.value();
+                    render->selectionAdd(object);
+                    center += object->getPos();
+                    centerCounter++;
                 }
             }
         }
@@ -924,20 +1019,8 @@ void IanniX::setObjectActivity(void *_object, quint8 activeOld) {
         addGroup(object->getDocumentId(), object->getGroupId());
 
     //Move object
-    documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[activeOld][object->getType()][object->getLocal()].remove(object->getId());
-    documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[object->getActive()][object->getType()][object->getLocal()].insert(object->getId(), object);
-}
-void IanniX::setObjectLocal(void *_object, QRect localOld) {
-    //Extract object
-    NxObject *object = (NxObject*)_object;
-
-    //Add a group if not allocated
-    if(!documents.value(object->getDocumentId())->groups.contains(object->getGroupId()))
-        addGroup(object->getDocumentId(), object->getGroupId());
-
-    //Move object
-    documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[object->getActive()][object->getType()][localOld].remove(object->getId());
-    documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[object->getActive()][object->getType()][object->getLocal()].insert(object->getId(), object);
+    documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[activeOld][object->getType()].remove(object->getId());
+    documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[object->getActive()][object->getType()].insert(object->getId(), object);
 }
 void IanniX::setObjectGroupId(void *_object, const QString & groupIdOld) {
     //Extract object
@@ -948,11 +1031,11 @@ void IanniX::setObjectGroupId(void *_object, const QString & groupIdOld) {
         addGroup(object->getDocumentId(), object->getGroupId());
 
     //Move object
-    documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[object->getActive()][object->getType()][object->getLocal()].insert(object->getId(), object);
+    documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[object->getActive()][object->getType()].insert(object->getId(), object);
 
     //Remove a group if empty
     if(documents.value(object->getDocumentId())->groups.contains(groupIdOld)) {
-        documents.value(object->getDocumentId())->groups.value(groupIdOld)->objects[object->getActive()][object->getType()][object->getLocal()].remove(object->getId());
+        documents.value(object->getDocumentId())->groups.value(groupIdOld)->objects[object->getActive()][object->getType()].remove(object->getId());
         if(documents.value(object->getDocumentId())->groups.value(groupIdOld)->getCount() == 0) {
             NxGroup *group = documents.value(object->getDocumentId())->groups.value(groupIdOld);
             documents.value(object->getDocumentId())->groups.remove(groupIdOld);
@@ -963,6 +1046,9 @@ void IanniX::setObjectGroupId(void *_object, const QString & groupIdOld) {
 
 void IanniX::removeObject(NxObject *object) {
     if(object) {
+        if(render)
+            render->flagIsRemoving();
+
         if(object->getType() == ObjectsTypeCurve) {
             NxCurve *curve = (NxCurve*)object;
             QStringList commands;
@@ -979,7 +1065,7 @@ void IanniX::removeObject(NxObject *object) {
         }
 
         //Remove the object
-        documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[object->getActive()][object->getType()][object->getLocal()].remove(object->getId());
+        documents.value(object->getDocumentId())->groups.value(object->getGroupId())->objects[object->getActive()][object->getType()].remove(object->getId());
         documents.value(object->getDocumentId())->objects.remove(object->getId());
 
 
@@ -1026,8 +1112,8 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 id = currentDocument->nextAvailableId();
 
             //Répétiteur de message
-            QString commandReplace = command;
-            sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), commandReplace.replace("auto", QString().setNum(id)));
+            //QString commandReplace = command;
+            //sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), commandReplace.replace("auto", QString().setNum(id)));
 
             NxObject *object = 0;
             QString type = arguments.at(1).toLower();
@@ -1067,7 +1153,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 return 0;
         }
         else {
-            sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), command);
+            //sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), command);
 
             if((commande == COMMAND_TEXTURE) && (arguments.count() >= 7)) {
                 QString filename = command.mid(command.indexOf(arguments.at(6), command.indexOf(arguments.at(5))+arguments.at(5).length())).trimmed();
@@ -1271,9 +1357,19 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                                                   NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()),
                                                   NxPoint(arguments.at(5).toDouble(), arguments.at(6).toDouble()),
                                                   NxPoint(arguments.at(7).toDouble(), arguments.at(8).toDouble()), false);
-                            else if(arguments.count() >= 6) // 3 (x, y, z)
+                            else if(arguments.count() >= 7) // 3 (x, y, z) smooth
                                 curve->setPointAt(arguments.at(2).toDouble(),
-                                                  NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()), false);
+                                                  NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()), true);
+                            else if(arguments.count() >= 6) { // 3 (x, y, z)  OR  (x, y) smooth
+                                bool ok = false;
+                                arguments.at(5).toDouble(&ok);
+                                if(ok)
+                                    curve->setPointAt(arguments.at(2).toDouble(),
+                                                      NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()), false);
+                                else
+                                    curve->setPointAt(arguments.at(2).toDouble(),
+                                                      NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()), true);
+                            }
                             else if(arguments.count() >= 5) // 2 (x, y)
                                 curve->setPointAt(arguments.at(2).toDouble(),
                                                   NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()), false);
@@ -1298,7 +1394,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                             return curve->getPathLength();
                         }
                     }
-                    else if((commande == COMMAND_CURVE_SVG) && (arguments.count() == 4)) {
+                    else if(((commande == COMMAND_CURVE_SVG) || (commande == COMMAND_CURVE_PATH)) && (arguments.count() >= 4)) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
                             curve->setSVG(command.mid(command.indexOf(arguments.at(3), command.indexOf(arguments.at(2))+arguments.at(2).length())).trimmed());

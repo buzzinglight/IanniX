@@ -25,17 +25,6 @@
 #include "nxcurve.h"
 #include "nxcursor.h"
 
-inline uint qHash(const QRect &rect) {
-    uint code = 0;
-
-    code |= (rect.x() << 16);
-    code |= (rect.y() & 0x0000ffff);
-    code ^= (rect.width() << 16);
-    code ^= (rect.height() & 0x0000ffff);
-
-    return code;
-}
-
 class NxGroup : public QObject, public NxObjectDispatchProperty, public QTreeWidgetItem {
     Q_OBJECT
 public:
@@ -46,20 +35,12 @@ public:
 
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-
-                //Browse locals cursors
-                QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(objects[activityIterator][typeIterator]);
-                while (localIterator.hasNext()) {
-                    localIterator.next();
-                    QRect local = localIterator.key();
-
-                    //Browse objects
-                    QHashIterator<quint16, NxObject*> objectIterator(objects[activityIterator][typeIterator].value(local));
-                    while (objectIterator.hasNext()) {
-                        objectIterator.next();
-                        NxObject *object = objectIterator.value();
-                        object->dispatchProperty(property, value);
-                    }
+                //Browse objects
+                QHashIterator<quint16, NxObject*> objectIterator(objects[activityIterator][typeIterator]);
+                while (objectIterator.hasNext()) {
+                    objectIterator.next();
+                    NxObject *object = objectIterator.value();
+                    object->dispatchProperty(property, value);
                 }
             }
         }
@@ -82,19 +63,12 @@ public:
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
 
-                //Browse locals cursors
-                QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(objects[activityIterator][typeIterator]);
-                while (localIterator.hasNext()) {
-                    localIterator.next();
-                    QRect local = localIterator.key();
-
-                    //Browse objects
-                    QHashIterator<quint16, NxObject*> objectIterator(objects[activityIterator][typeIterator].value(local));
-                    while (objectIterator.hasNext()) {
-                        objectIterator.next();
-                        NxObject *object = objectIterator.value();
-                        boundingRect = boundingRect.united(object->getBoundingRect());
-                    }
+                //Browse objects
+                QHashIterator<quint16, NxObject*> objectIterator(objects[activityIterator][typeIterator]);
+                while (objectIterator.hasNext()) {
+                    objectIterator.next();
+                    NxObject *object = objectIterator.value();
+                    boundingRect = boundingRect.united(object->getBoundingRect());
                 }
             }
         }
@@ -106,17 +80,11 @@ public:
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-                //Browse locals cursors
-                QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(objects[activityIterator][typeIterator]);
-                while (localIterator.hasNext()) {
-                    localIterator.next();
-                    QRect local = localIterator.key();
-                    //Browse objects
-                    QHashIterator<quint16, NxObject*> objectIterator(objects[activityIterator][typeIterator].value(local));
-                    while (objectIterator.hasNext()) {
-                        objectIterator.next();
-                        counter++;
-                    }
+                //Browse objects
+                QHashIterator<quint16, NxObject*> objectIterator(objects[activityIterator][typeIterator]);
+                while (objectIterator.hasNext()) {
+                    objectIterator.next();
+                    counter++;
                 }
             }
         }
@@ -124,8 +92,8 @@ public:
     }
 
 public:
-    //activity + type + 3D grid localisation (x,y,width) + objectID = object !
-    QHash<QRect, QHash<quint16, NxObject* > > objects[ObjectsActivityLenght][ObjectsTypeLength];
+    //activity + type + objectID = object !
+    QHash< quint16, NxObject* > objects[ObjectsActivityLenght][ObjectsTypeLength];
 
 protected:
     QString id;

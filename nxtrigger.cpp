@@ -129,8 +129,7 @@ void NxTrigger::trigEnd() {
 	//Suppress trigger-off if it is a midi message (note-off will be done by midi note duration in midi message)
     bool isMidiMessage = false;
     foreach(const QVector<QByteArray> & messagePattern, this->getMessagePatterns()) {
-        if(messagePattern.at(0).startsWith("midi")  )
-            qDebug() << "NxTrigger:midi message";
+        if(messagePattern.at(0).startsWith("midi"))
             isMidiMessage = true;
         }
     cursorTrigged = 0;

@@ -130,7 +130,7 @@ void NxCursor::calculate() {
     //Cursor line
     if((curve) && (curve->getPathLength() > 0)) {
         //qreal timeReal = ((qExp(5*time) - 1) / (qExp(5*1) - 1));
-        qreal timeReal = easing.valueForProgress(time), timeOldReal = easing.valueForProgress(timeOld);
+        qreal timeReal = easing.getValue(time), timeOldReal = easing.getValue(timeOld);
 
         cursorPos = curve->getPointAt(timeReal) + curve->getPos();
         if(timeReal == 0)
@@ -202,6 +202,11 @@ void NxCursor::calculate() {
         cursorPosOld = cursorPos;
         cursorAngleOld = cursorAngle;
     }
+
+    if((timeLocal - timeLocalOld) != 0)
+        hasActivity = true;
+    else
+        hasActivity = false;
 }
 
 
@@ -228,20 +233,19 @@ void NxCursor::paint() {
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
 
-
-        //Label
-        if((renderOptions->paintLabel) && (label != ""))
-            renderOptions->render->renderText(cursorPos.x(), cursorPos.y(), cursorPos.z(), label, renderOptions->renderFont);
-        if(selectedHover) {
-            qreal startY = 0;
-            foreach(const QString & messageLabelItem, messageLabel) {
-                renderOptions->render->renderText(cursorPos.x(), cursorPos.y() + startY, cursorPos.z(), messageLabelItem, renderOptions->renderFont);
-                startY -= cacheSize * 1.5;
-            }
-        }
-
         //Cursor chasse-neige
         if((time >= 0) && (start.at(nbLoop % start.count()) != 0)) {
+            //Label
+            if((renderOptions->paintLabel) && (label != ""))
+                renderOptions->render->renderText(cursorPos.x(), cursorPos.y(), cursorPos.z(), label, renderOptions->renderFont);
+            if(selectedHover) {
+                qreal startY = 0;
+                foreach(const QString & messageLabelItem, messageLabel) {
+                    renderOptions->render->renderText(cursorPos.x(), cursorPos.y() + startY, cursorPos.z(), messageLabelItem, renderOptions->renderFont);
+                    startY -= cacheSize * 1.5;
+                }
+            }
+
             if(previousCursorReliable) {
                 glLineWidth(size/4);
                 glEnable(GL_LINE_STIPPLE);
@@ -265,7 +269,7 @@ void NxCursor::paint() {
             glDisable(GL_LINE_STIPPLE);
 
             //Cursor reader
-            if(((timeLocal - timeLocalOld) != 0) || (!curve)) {
+            if((hasActivity) || (!curve)) {
                 glLineWidth(1);
                 glPushMatrix();
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
@@ -288,7 +292,7 @@ void NxCursor::paint() {
 }
 
 void NxCursor::trig() {
-    if((((timeLocal - timeLocalOld) != 0) || (!curve)) && (canSendOsc())) {
+    if(((hasActivity) || (!curve)) && (canSendOsc())) {
         factory->sendMessage(this, 0, this);
         incMessageId();
     }

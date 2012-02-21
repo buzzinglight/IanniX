@@ -53,20 +53,13 @@ QString NxDocument::serialize(UiRenderOptions *renderOptions) {
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
                 //Cursors are serialized with curves
                 if(typeIterator != ObjectsTypeCursor) {
-                    //Browse locals
-                    QHashIterator< QRect, QHash<quint16, NxObject*> > localIterator(group->objects[activityIterator][typeIterator]);
-                    while (localIterator.hasNext()) {
-                        localIterator.next();
-                        QRect local = localIterator.key();
+                    //Browse objects
+                    QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
+                    while (objectIterator.hasNext()) {
+                        objectIterator.next();
+                        NxObject *object = objectIterator.value();
 
-                        //Browse objects
-                        QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator].value(local));
-                        while (objectIterator.hasNext()) {
-                            objectIterator.next();
-                            NxObject *object = objectIterator.value();
-
-                            retour += object->serialize() + COMMAND_END;
-                        }
+                        retour += object->serialize() + COMMAND_END;
                     }
                 }
             }

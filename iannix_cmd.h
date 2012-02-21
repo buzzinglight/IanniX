@@ -45,8 +45,9 @@
 #define COMMAND_CURVE_POINT_RMV             QString("removepointat")
 #define COMMAND_CURVE_TXT                   QString("setpointstxt")
 #define COMMAND_CURVE_SVG                   QString("setpointssvg")
-#define COMMAND_CURVE_LINES                 QString("setpointslines")
 #define COMMAND_CURVE_SVG2                  QString("setpointssvg2")
+#define COMMAND_CURVE_PATH                  QString("setpointspath")
+#define COMMAND_CURVE_LINES                 QString("setpointslines")
 #define COMMAND_CURVE_IMG                   QString("setpointsimg")
 #define COMMAND_CURVE_ELL                   QString("setpointsellipse")
 
