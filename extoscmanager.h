@@ -19,6 +19,7 @@
 #ifndef OSCMANAGER_H
 #define OSCMANAGER_H
 
+#include <QByteArray>
 #include "extmessage.h"
 
 class ExtOscManager : public QObject, public ExtMessageManager {
@@ -30,6 +31,10 @@ public:
 private:
     QUdpSocket *socket;
     QString oscMatchAdress;
+    QHostAddress bundleHost;
+    quint16 bundlePort;
+    QList<ExtMessage> bundleMessages;
+    quint64 bundleMessageId;
 
 private:
     quint8 bufferI[4096], bufferO[4096];
@@ -44,6 +49,9 @@ signals:
 
 public:
     void send(const ExtMessage & message);
+    void setBundleMessageId(qint64 _bundleMessageId) { bundleMessageId = _bundleMessageId; }
+    void openBundle(QHostAddress &_bundleHost, quint16 _bundlePort);
+    void closeBundle();
 private slots:
     void parseOSC();
 };

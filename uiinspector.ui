@@ -2109,7 +2109,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
+              <item row="5" column="0">
                <widget class="QLabel" name="serialInPortLabel">
                 <property name="text">
                  <string>SERIAL PORT</string>
@@ -2119,7 +2119,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
+              <item row="3" column="0">
                <widget class="QLabel" name="transportMessageLabel">
                 <property name="text">
                  <string>TRANSPORT
@@ -2146,14 +2146,14 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1">
+              <item row="5" column="1" colspan="2">
                <widget class="QLineEdit" name="serialInPortEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
+              <item row="3" column="1" colspan="2">
                <widget class="QLineEdit" name="transportMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2163,7 +2163,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
+              <item row="4" column="0">
                <widget class="QLabel" name="syncMessageLabel">
                 <property name="text">
                  <string>SYNC
@@ -2174,13 +2174,53 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
+              <item row="4" column="1" colspan="2">
                <widget class="QLineEdit" name="syncMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>osc://</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="bundleMessageLabel">
+                <property name="text">
+                 <string>MAKE OSC
+BUNDLE ON</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="bundleMessageEdit">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="inputMask">
+                 <string>000.000.000.000;_</string>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QSpinBox" name="bundleMessagePort">
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="minimum">
+                 <number>1024</number>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
                 </property>
                </widget>
               </item>
@@ -2640,7 +2680,7 @@ MESSAGE</string>
    <hints>
     <hint type="sourcelabel">
      <x>168</x>
-     <y>458</y>
+     <y>423</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2656,7 +2696,7 @@ MESSAGE</string>
    <hints>
     <hint type="sourcelabel">
      <x>168</x>
-     <y>488</y>
+     <y>453</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3157,6 +3197,54 @@ MESSAGE</string>
     <hint type="destinationlabel">
      <x>-226</x>
      <y>545</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bundleMessageEdit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>276</x>
+     <y>471</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bundleMessageEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>473</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>496</x>
+     <y>695</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bundleMessagePort</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>326</x>
+     <y>475</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>340</y>
     </hint>
    </hints>
   </connection>

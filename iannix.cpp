@@ -25,6 +25,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     projectScore = 0;
     freehandCurveId = 0;
     lastMessageAllow = true;
+    oscBundleHost = QHostAddress("127.0.0.2");
+    oscBundlePort = 0;
     splash = new UiSplash(0);
     splash->show();
     QTimer::singleShot(1500, this, SLOT(closeSplash()));
@@ -83,6 +85,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(inspector, SIGNAL(actionRouteProjectFilesContext(QPoint)), SLOT(actionProjectFilesContext(QPoint)));
     connect(inspector, SIGNAL(transportMessageChange(QString)), SLOT(transportMessageChange(QString)));
     connect(inspector, SIGNAL(syncMessageChange(QString)), SLOT(syncMessageChange(QString)));
+    connect(inspector, SIGNAL(bundleMessageChange(QString,quint16)), SLOT(bundleMessageChange(QString,quint16)));
 
     //Render
     render = view->getRender();
@@ -211,11 +214,17 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     if((forceSettings) || (!settings.childKeys().contains("updatePeriod")))
         settings.setValue("updatePeriod", 1);
 
+    if((forceSettings) || (!settings.childKeys().contains("bundleHost")))
+        settings.setValue("bundleHost", "127.0.0.1");
+    if((forceSettings) || (!settings.childKeys().contains("bundlePort")))
+        settings.setValue("bundlePort", "57121");
+
     inspector->setOSCPort(settings.value("oscPort").toUInt());
     inspector->setUDPPort(settings.value("udpPort").toUInt());
     inspector->setSerialPort(settings.value("serialPort").toString());
     inspector->setTransportMessage(settings.value("defaultMessageTransport").toString());
     inspector->setSyncMessage(settings.value("defaultMessageSync").toString());
+    inspector->setBundleMessage(settings.value("bundleHost").toString(), settings.value("bundlePort").toUInt());
     defaultMessageTrigger = settings.value("defaultMessageTrigger").toString();
     defaultMessageCursor = settings.value("defaultMessageCursor").toString();
 
@@ -430,6 +439,12 @@ void IanniX::timerTick() {
     timePerfCounter++;
     renderMeasure.start();
 
+    //Open a bundle if necessary
+    if((forceTimeLocal) && (osc))
+        osc->setBundleMessageId(0);
+    if(osc)
+        osc->openBundle(oscBundleHost, oscBundlePort);
+
     //Browse documents
     QRect cursorBoundingRectSearch;
     //QHashIterator<QString, NxDocument*> documentIterator(documents);
@@ -505,6 +520,10 @@ void IanniX::timerTick() {
             }
         }
     }
+
+    //Close the bundle if necessary
+    if(osc)
+        osc->closeBundle();
 
     if(timeTransportRefresh >= 0.06) {
         timeTransportRefresh = 0;
@@ -1716,6 +1735,10 @@ void IanniX::transportMessageChange(const QString & message) {
 void IanniX::syncMessageChange(const QString & message) {
     syncObject->setMessagePatterns("1," + message);
 }
+void IanniX::bundleMessageChange(const QString &host, quint16 port) {
+    oscBundleHost = QHostAddress(host);
+    oscBundlePort = port;
+}
 
 void IanniX::actionCloseEvent(QCloseEvent *event) {
     quint16 nbFileNoSave = 0;
@@ -1751,6 +1774,8 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     settings.setValue("serialPort", inspector->getSerialPort());
     settings.setValue("defaultMessageTransport", inspector->getTransportMessage());
     settings.setValue("defaultMessageSync", inspector->getSyncMessage());
+    settings.setValue("bundleHost", inspector->getBundleHost());
+    settings.setValue("bundlePort", inspector->getBundlePort());
 
     event->accept();
 }

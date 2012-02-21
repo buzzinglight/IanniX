@@ -141,6 +141,8 @@ private:
     ExtSerialManager *serial;
     ExtMidiManager *midi;
     bool oscConsoleActive;
+    QHostAddress oscBundleHost;
+    quint16 oscBundlePort;
     QString defaultMessageTrigger, defaultMessageCursor;
     NxTrigger *transportObject, *syncObject;
 public:
@@ -240,6 +242,7 @@ public slots:
     void actionCloseEvent(QCloseEvent *event);
     void transportMessageChange(const QString & );
     void syncMessageChange(const QString & );
+    void bundleMessageChange(const QString &, quint16);
 public slots:
     void logOscSend(const QString & message);
     void logOscReceive(const QString & message);

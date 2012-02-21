@@ -230,6 +230,10 @@ void UiInspector::actionNetwork() {
         factory->pushSnapshot();
         emit(syncMessageChange(ui->syncMessageEdit->text()));
     }
+    else if((sender() == ui->bundleMessageEdit) || (sender() == ui->bundleMessagePort)) {
+        factory->pushSnapshot();
+        emit(bundleMessageChange(ui->bundleMessageEdit->text(), ui->bundleMessagePort->value()));
+    }
 }
 
 void UiInspector::actionInfoID() {
@@ -687,6 +691,11 @@ void UiInspector::setSyncMessage(const QString & message) {
     ui->syncMessageEdit->setText(message);
     syncMessageChange(message);
 }
+void UiInspector::setBundleMessage(const QString &message, quint16 port) {
+    ui->bundleMessageEdit->setText(message);
+    ui->bundleMessagePort->setValue(port);
+    bundleMessageChange(message, port);
+}
 
 quint16 UiInspector::getOSCPort() {
     return ui->oscInPortSpin->value();
@@ -702,4 +711,10 @@ const QString UiInspector::getTransportMessage() {
 }
 const QString UiInspector::getSyncMessage() {
     return ui->syncMessageEdit->text();
+}
+const QString UiInspector::getBundleHost() {
+    return ui->bundleMessageEdit->text();
+}
+quint16 UiInspector::getBundlePort() {
+    return ui->bundleMessagePort->value();
 }

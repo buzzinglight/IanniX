@@ -23,6 +23,7 @@ ExtOscManager::ExtOscManager(NxObjectFactoryInterface *_factory)
     : QObject(_factory), ExtMessageManager(_factory) {
     //OSC adress of IanniX
     oscMatchAdress = "/iannix/";
+    bundleMessageId = 0;
 
     //Create a new UDP socket and bind signals
     socket = new QUdpSocket(this);
@@ -130,9 +131,56 @@ void ExtOscManager::parseOSC() {
 
 
 void ExtOscManager::send(const ExtMessage & message) {
-    //Write a message on the opened socket
-    socket->writeDatagram(message.getBuffer(), message.getHost(), message.getPort());
+    if((message.getPort() == bundlePort) && (message.getHost() == bundleHost))
+        //Add message to bundle
+        bundleMessages.append(message);
+    else {
+        //Write a message on the opened socket
+        socket->writeDatagram(message.getBuffer(), message.getHost(), message.getPort());
 
-    //Log in the OSC console
-    factory->logOscSend(message.getVerboseMessage());
+        //Log in the OSC console
+        factory->logOscSend(message.getVerboseMessage());
+    }
+}
+void ExtOscManager::openBundle(QHostAddress &_bundleHost, quint16 _bundlePort) {
+    bundleHost = _bundleHost;
+    bundlePort = _bundlePort;
+    bundleMessages.clear();
+}
+void ExtOscManager::closeBundle() {
+    if((bundlePort) && (!bundleHost.isNull()) && (bundleMessages.count() > 0)) {
+        QByteArray messageBuffer;
+        //Bundle
+        messageBuffer += "#bundle";
+        messageBuffer += (char)0;
+        //Timecode
+        union { int i; char ch[8]; } u;
+        u.i = bundleMessageId++;
+        messageBuffer += u.ch[7];
+        messageBuffer += u.ch[6];
+        messageBuffer += u.ch[5];
+        messageBuffer += u.ch[4];
+        messageBuffer += u.ch[3];
+        messageBuffer += u.ch[2];
+        messageBuffer += u.ch[1];
+        messageBuffer += u.ch[0];
+
+        factory->logOscSend("--- bundle start ---");
+        foreach(const ExtMessage &bundleMessage, bundleMessages) {
+            //Size of message
+            union { int i; char ch[4]; } u;
+            u.i = bundleMessage.getBuffer().count();
+            messageBuffer += u.ch[3];
+            messageBuffer += u.ch[2];
+            messageBuffer += u.ch[1];
+            messageBuffer += u.ch[0];
+            //Message content
+            messageBuffer += bundleMessage.getBuffer();
+            //Log in the OSC console
+            factory->logOscSend(bundleMessage.getVerboseMessage());
+        }
+        bundleMessages.clear();
+        factory->logOscSend("--- bundle end ---");
+        socket->writeDatagram(messageBuffer, QHostAddress("127.0.0.1"), 57120);
+    }
 }

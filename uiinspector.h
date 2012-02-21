@@ -109,11 +109,14 @@ public slots:
     void setSerialPort(const QString & port);
     void setTransportMessage(const QString & message);
     void setSyncMessage(const QString & message);
+    void setBundleMessage(const QString & message, quint16 port);
     quint16 getOSCPort();
     quint16 getUDPPort();
     const QString getSerialPort();
     const QString getTransportMessage();
     const QString getSyncMessage();
+    const QString getBundleHost();
+    quint16 getBundlePort();
 
 private:
     void timerEvent(QTimerEvent *);
@@ -148,6 +151,7 @@ signals:
     void actionChangeID(quint16,quint16); ////CG////
     void oscPortChange(quint16);
     void udpPortChange(quint16);
+    void bundleMessageChange(const QString &, quint16);
     void serialPortChange(const QString &);
     void transportMessageChange(const QString &);
     void syncMessageChange(const QString &);
