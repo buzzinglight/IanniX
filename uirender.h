@@ -56,6 +56,7 @@ private:
     NxPoint rotationDest, translationDest;
     NxPoint rotationDrag, translationDrag;
     qreal scale, scaleDest;
+    bool colorTheme;
 public:
     inline QList<NxObject*> *getSelection() {
         return &selection;
@@ -79,6 +80,8 @@ public:
     inline void unsetEditing() {
         editing = false;
     }
+
+    bool getColorTheme() const { return colorTheme; }
 
 
     void setDocument(NxDocument *_document);
@@ -178,6 +181,7 @@ private:
 signals:
 
 public slots:
+    void setColorTheme(bool);
     void actionNew()        { emit(actionRouteNew()); }
     void actionOpen()       { emit(actionRouteOpen()); }
     void actionSave()       { emit(actionRouteSave()); }

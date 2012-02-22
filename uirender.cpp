@@ -59,23 +59,6 @@ UiRender::UiRender(QWidget *parent) :
     renderOptions->paintLabel = true;
     renderOptions->axisGrid = 1;
 
-    renderOptions->colors["background"] = QColor(255, 255, 255, 255);
-    renderOptions->colors["grid"] = QColor(63, 63, 63, 255);
-    renderOptions->colors["axis"] = renderOptions->colors["grid"].lighter(150);
-    renderOptions->colors["selection"] = QColor(128, 128, 128, 255);
-    renderOptions->colors["object_selection"] = QColor(255, 240, 34, 255);
-    renderOptions->colors["object_hover"] = QColor(33, 255, 166, 255);
-    renderOptions->colors["debug"] = QColor(100, 100, 100, 255);
-
-    renderOptions->colors["trigger_active"] = QColor(0, 187, 255, 255);
-    renderOptions->colors["trigger_inactive"] = QColor(255, 255, 255, 92);
-    renderOptions->colors["trigger_active_message"] = QColor(0, 187, 255, 255);
-    renderOptions->colors["trigger_inactive_message"] = QColor(255, 255, 255, 92);
-
-    renderOptions->colors["curve_active"] = QColor(255, 255, 255, 175);
-    renderOptions->colors["curve_inactive"] = QColor(255, 255, 255, 92);
-    renderOptions->colors["cursor_active"] = QColor(255, 81, 31, 255);
-    renderOptions->colors["cursor_inactive"] = QColor(255, 255, 255, 92);
 
     zoom(100);
 
@@ -97,6 +80,51 @@ void UiRender::changeEvent(QEvent *e) {
         break;
     default:
         break;
+    }
+}
+
+void UiRender::setColorTheme(bool _colorTheme) {
+    colorTheme = _colorTheme;
+
+    if(!colorTheme) {
+        renderOptions->colors["empty"]              = QColor( 20,  20,  20, 255);
+        renderOptions->colors["background"]         = QColor(255, 255, 255, 255);
+        renderOptions->colors["grid"]               = QColor( 45,  45,  45, 255);
+        renderOptions->colors["axis"]               = QColor( 60,  60,  60, 255);
+        renderOptions->colors["selection"]          = QColor(255, 255, 255,  40);
+        renderOptions->colors["object_selection"]   = QColor(255, 240,  35, 255);
+        renderOptions->colors["object_hover"]       = QColor( 35, 255, 165, 255);
+
+        renderOptions->colors["curve_active"]       = QColor(255, 255, 255, 175);
+        renderOptions->colors["curve_inactive"]     = QColor(255, 255, 255,  92);
+
+        renderOptions->colors["cursor_active"]      = QColor(255,  80,  30, 255);
+        renderOptions->colors["cursor_inactive"]    = QColor(255, 255, 255,  92);
+
+        renderOptions->colors["trigger_active"]             = QColor(  0, 185, 255, 255);
+        renderOptions->colors["trigger_active_message"]     = QColor(  0, 185, 255, 255);
+        renderOptions->colors["trigger_inactive"]           = QColor(255, 255, 255, 92);
+        renderOptions->colors["trigger_inactive_message"]   = QColor(255, 255, 255, 92);
+    }
+    else {
+        renderOptions->colors["empty"]              = QColor(242, 241, 237, 255);
+        renderOptions->colors["background"]         = QColor(255, 255, 255, 255);
+        renderOptions->colors["grid"]               = QColor(220, 220, 220, 255);
+        renderOptions->colors["axis"]               = QColor(215, 215, 215, 255);
+        renderOptions->colors["selection"]          = QColor(  0,   0,   0,  40);
+        renderOptions->colors["object_selection"]   = QColor(255-255, 255-240,  255-35, 255);
+        renderOptions->colors["object_hover"]       = QColor(220,   0,  90, 255);
+
+        renderOptions->colors["curve_active"]       = QColor(  0,   0,   0, 175);
+        renderOptions->colors["curve_inactive"]     = QColor(  0,   0,   0,  92);
+
+        renderOptions->colors["cursor_active"]      = QColor(255,  80,  30, 255);
+        renderOptions->colors["cursor_inactive"]    = QColor(  0,   0,   0,  92);
+
+        renderOptions->colors["trigger_active"]             = QColor(  0, 185, 255, 255);
+        renderOptions->colors["trigger_active_message"]     = QColor(  0, 185, 255, 255);
+        renderOptions->colors["trigger_inactive"]           = QColor(  0,   0,   0, 92);
+        renderOptions->colors["trigger_inactive_message"]   = QColor(  0,   0,   0, 92);
     }
 }
 
@@ -230,7 +258,7 @@ void UiRender::paintGL() {
     */
 
     //Clear
-    glClearColor(0, 0, 0, 0);
+    glClearColor(renderOptions->colors["empty"].redF(), renderOptions->colors["empty"].greenF(), renderOptions->colors["empty"].blueF(), renderOptions->colors["empty"].alphaF());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if((factory) && (document)) {
@@ -378,7 +406,7 @@ void UiRender::paintAxisGrid() {
 //Draw selection
 void UiRender::paintSelection() {
     //Axis color
-    glColor4f(renderOptions->colors.value("selection").redF(), renderOptions->colors.value("selection").greenF(), renderOptions->colors.value("selection").blueF(), 0.7);
+    glColor4f(renderOptions->colors.value("selection").redF(), renderOptions->colors.value("selection").greenF(), renderOptions->colors.value("selection").blueF(), renderOptions->colors.value("selection").alphaF());
     glLineWidth(1);
 
     //Draw axis

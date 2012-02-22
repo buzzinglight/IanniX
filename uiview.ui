@@ -91,6 +91,8 @@ QDockWidget::title {
     <addaction name="actionRemove"/>
     <addaction name="actionDuplicateScore"/>
     <addaction name="separator"/>
+    <addaction name="actionReloadScript"/>
+    <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -129,6 +131,9 @@ QDockWidget::title {
     <addaction name="actionZoom_initial"/>
     <addaction name="actionZoom_out"/>
     <addaction name="actionToggle_Autosize"/>
+    <addaction name="separator"/>
+    <addaction name="actionShowEditor"/>
+    <addaction name="actionLight"/>
    </widget>
    <widget class="QMenu" name="menuPlayback">
     <property name="title">
@@ -210,6 +215,8 @@ QDockWidget::title {
    <addaction name="actionToggle_Inspector"/>
    <addaction name="actionToggle_Transport"/>
    <addaction name="actionFullscreen"/>
+   <addaction name="separator"/>
+   <addaction name="actionLight"/>
    <addaction name="separator"/>
    <addaction name="actionPatchesFolder"/>
    <addaction name="actionHelp"/>
@@ -704,6 +711,34 @@ QDockWidget::title {
   <action name="actionImoprt_Text">
    <property name="text">
     <string>Import glyph…</string>
+   </property>
+  </action>
+  <action name="actionShowEditor">
+   <property name="text">
+    <string>Show script editor</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionReloadScript">
+   <property name="text">
+    <string>Reload last script</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionLight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_light.png</normaloff>:/actions/res_icon_light.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lighter color theme</string>
    </property>
   </action>
  </widget>

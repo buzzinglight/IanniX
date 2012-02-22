@@ -78,6 +78,7 @@ public:
     //OBJECT MANAGEMENT
 private:
     NxDocument *currentDocument;
+    ExtScriptManager *currentScript;
     QList<ExtScriptManager*> activeScripts;
 public:
     NxGroup* addGroup(const QString & documentId, const QString & groupId);
@@ -223,6 +224,7 @@ public slots:
     void actionSync();
     void actionProjectFiles();
     void actionProjectScripts();
+    void actionProjectScript();
     void actionProjectScriptsContext(const QPoint & point);
     void actionProjectFilesContext(const QPoint & point);
     void actionDrawFreeCurve();
@@ -239,6 +241,8 @@ public slots:
     void actionGridChange(qreal val);
     void actionGridOpacityChange(qreal val);
     void actionSnapGrid();
+    void actionShowEditor();
+    void actionReloadScript();
     void actionCloseEvent(QCloseEvent *event);
     void transportMessageChange(const QString & );
     void syncMessageChange(const QString & );

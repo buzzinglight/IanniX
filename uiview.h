@@ -59,12 +59,15 @@ public slots:
     void actionAddFreeCursor()    { emit(actionRouteAddFreeCursor()); }
     void actionCircleCurve()      { emit(actionRouteCircleCurve()); }
     void actionSnapGrid()         { emit(actionRouteSnapGrid()); }
+    void actionShowEditor()       { emit(actionRouteShowEditor()); }
+    void actionReloadScript()     { emit(actionRouteReloadScript()); }
     void actionImportSVG();
     void actionImportImage();
     void actionImportText();
     void actionLockPos();
     void actionToggleLabel();
     void actionAbout()            { emit(actionRouteAbout()); }
+    void setColorTheme(bool);
 
     void unToogleDraw(quint16 id);
     void gridChange();
@@ -94,6 +97,8 @@ signals:
     void actionRouteGridChange(qreal);
     void actionRouteGridOpacityChange(qreal);
     void actionRouteSnapGrid();
+    void actionRouteShowEditor();
+    void actionRouteReloadScript();
     void actionRouteAbout();
     void actionRouteQuit();
     void actionRouteImportSVG(QString);

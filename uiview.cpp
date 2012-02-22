@@ -57,6 +57,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionZoom_in, SIGNAL(triggered()), SLOT(actionZoom_in()));
     connect(ui->actionZoom_out, SIGNAL(triggered()), SLOT(actionZoom_out()));
     connect(ui->actionZoom_initial, SIGNAL(triggered()), SLOT(actionZoom_initial()));
+    connect(ui->actionLight, SIGNAL(triggered(bool)), ui->render, SLOT(setColorTheme(bool)));
 
     connect(ui->actionToggleLabel, SIGNAL(triggered()), SLOT(actionToggleLabel()));
     connect(ui->actionLockPos, SIGNAL(triggered()), SLOT(actionLockPos()));
@@ -73,6 +74,8 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionAddFreeCursor, SIGNAL(triggered()), SLOT(actionAddFreeCursor()));
     connect(ui->actionAddCircleCurve, SIGNAL(triggered()), SLOT(actionCircleCurve()));
     connect(ui->actionSnapGrid, SIGNAL(triggered()), SLOT(actionSnapGrid()));
+    connect(ui->actionShowEditor, SIGNAL(triggered()), SLOT(actionShowEditor()));
+    connect(ui->actionReloadScript, SIGNAL(triggered()), SLOT(actionReloadScript()));
 
     connect(ui->action10Seconds, SIGNAL(triggered()), SLOT(gridChange()));
     connect(ui->action1second, SIGNAL(triggered()), SLOT(gridChange()));
@@ -202,6 +205,10 @@ void UiView::actionLockPos() {
         emit(actionRouteDrawFreeCurve());
     }
     ui->render->setCanObjectDrag(!ui->actionLockPos->isChecked());
+}
+
+void UiView::setColorTheme(bool val) {
+    ui->actionLight->setChecked(val);
 }
 
 void UiView::unToogleDraw(quint16 id) {

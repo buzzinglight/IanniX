@@ -33,13 +33,12 @@ function addCircle(circleIndex) {
 	run("setPattern       current 0 0 1");
 	run("setGroup         current cursors");
 	run("setWidth         current 0.1");
-	run("setColor         current 90 255 255 255");
 	
 	run("add trigger      " + (2000 + circleIndex));
 	run("setGroup         current triggers");
 	run("setPos           current " + (circleIndex / 5) + " " + (circleIndex / 5) + " 0 ");
 	run("setSize          current 0.8"); 
-	run("setColor         current 255 255 255 255");
+	run("setColor         current 170 180 190 255");
 	//Syntax : serial:// note <PIN> <FREQUENCY> <DURATION>
 	run("setMessage       current 1, serial:// note 8 " + (circleIndex * 30 + 220) + " 30");
 }

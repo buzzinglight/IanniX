@@ -224,24 +224,6 @@ function onCreate() {
 	ajouterCurseur(c[1007], {id: 7, group:"Cursor107", speed:"1.06", value_bottom: 50, value_top: 70}, {xThresh: 5.0, curve: c[1008], curveHeightFrom: 1, curveHeightTo: 1.7, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1008], {id: 8, group:"Cursor108", speed:"1.07", value_bottom: 50, value_top: 70}, {xThresh: 5.0, curve: c[1001], curveHeightFrom: 1, curveHeightTo: 1.0, curveWidthFrom: 1, curveWidthTo: 1.0});
 
-		
-	run("setColorHue Curve1 255 0 255 255");
-	run("setColorHue Curve2 255 0 255 255");
-	run("setColorHue Curve3 255 0 255 255");
-	run("setColorHue Curve4 255 0 255 255");
-	run("setColorHue Curve5 255 0 255 255");
-	run("setColorHue Curve6 255 0 255 255");
-	run("setColorHue Curve7 255 0 255 255");
-	run("setColorHue Curve8 255 0 255 255");
-	run("setColorHue Cursor101 0 255 255 255");
-	run("setColorHue Cursor102 0 255 255 255");
-	run("setColorHue Cursor103 0 255 255 255");
-	run("setColorHue Cursor104 0 255 255 255");
-	run("setColorHue Cursor105 0 255 255 255");
-	run("setColorHue Cursor106 0 255 255 255");
-	run("setColorHue Cursor107 0 255 255 255");
-	run("setColorHue Cursor108 0 255 255 255");
-	
 	
 	i = 1011;
 	c[i] = nouvelleCourbe({id: i, group: "Curve11", yPos: -5});
@@ -476,24 +458,6 @@ function onCreate() {
 	ajouterCurseur(c[1016], {id: 16, group:"Cursor116", speed:"1.13", value_bottom: 70, value_top: 90}, {xThresh: 5.0, curve: c[1017], curveHeightFrom: 1, curveHeightTo: 1.6, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1017], {id: 17, group:"Cursor117", speed:"1.14", value_bottom: 70, value_top: 90}, {xThresh: 5.0, curve: c[1018], curveHeightFrom: 1, curveHeightTo: 1.7, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1018], {id: 18, group:"Cursor118", speed:"1.15", value_bottom: 70, value_top: 90}, {xThresh: 5.0, curve: c[1011], curveHeightFrom: 1, curveHeightTo: 1.0, curveWidthFrom: 1, curveWidthTo: 1.0});	
-
-		
-	run("setColorHue Curve11 255 0 255 255");
-	run("setColorHue Curve12 255 0 255 255");
-	run("setColorHue Curve13 255 0 255 255");
-	run("setColorHue Curve14 255 0 255 255");
-	run("setColorHue Curve15 255 0 255 255");
-	run("setColorHue Curve16 255 0 255 255");
-	run("setColorHue Curve17 255 0 255 255");
-	run("setColorHue Curve18 255 0 255 255");
-	run("setColorHue Cursor111 0 255 255 255");
-	run("setColorHue Cursor112 0 255 255 255");
-	run("setColorHue Cursor113 0 255 255 255");
-	run("setColorHue Cursor114 0 255 255 255");
-	run("setColorHue Cursor115 0 255 255 255");
-	run("setColorHue Cursor116 0 255 255 255");
-	run("setColorHue Cursor117 0 255 255 255");
-	run("setColorHue Cursor118 0 255 255 255");
 	
 	i = 1021;
 	c[i] = nouvelleCourbe({id: i, group: "Curve21", yPos: -10});
@@ -696,24 +660,6 @@ function onCreate() {
 	ajouterCurseur(c[1026], {id: 26, group:"Cursor126", speed:"1.21", value_bottom: 90, value_top: 110}, {xThresh: 5.0, curve: c[1027], curveHeightFrom: 1, curveHeightTo: 1.6, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1027], {id: 27, group:"Cursor127", speed:"1.22", value_bottom: 90, value_top: 110}, {xThresh: 5.0, curve: c[1028], curveHeightFrom: 1, curveHeightTo: 1.7, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1028], {id: 28, group:"Cursor128", speed:"1.23", value_bottom: 90, value_top: 110}, {xThresh: 5.0, curve: c[1021], curveHeightFrom: 1, curveHeightTo: 1.0, curveWidthFrom: 1, curveWidthTo: 1.0});	
-
-		
-	run("setColorHue Curve21 255 0 255 255");
-	run("setColorHue Curve22 255 0 255 255");
-	run("setColorHue Curve23 255 0 255 255");
-	run("setColorHue Curve24 255 0 255 255");
-	run("setColorHue Curve25 255 0 255 255");
-	run("setColorHue Curve26 255 0 255 255");
-	run("setColorHue Curve27 255 0 255 255");
-	run("setColorHue Curve28 255 0 255 255");
-	run("setColorHue Cursor121 0 255 255 255");
-	run("setColorHue Cursor122 0 255 255 255");
-	run("setColorHue Cursor123 0 255 255 255");
-	run("setColorHue Cursor124 0 255 255 255");
-	run("setColorHue Cursor125 0 255 255 255");
-	run("setColorHue Cursor126 0 255 255 255");
-	run("setColorHue Cursor127 0 255 255 255");
-	run("setColorHue Cursor128 0 255 255 255");
 	
 	i = 1031;
 	c[i] = nouvelleCourbe({id: i, group: "Curve31", yPos: -15});
@@ -1039,24 +985,6 @@ function onCreate() {
 	ajouterCurseur(c[1036], {id: 36, group:"Cursor136", speed:"1.21", value_bottom: 110, value_top: 130}, {xThresh: 5.0, curve: c[1037], curveHeightFrom: 1, curveHeightTo: 1.6, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1037], {id: 37, group:"Cursor137", speed:"1.22", value_bottom: 110, value_top: 130}, {xThresh: 5.0, curve: c[1038], curveHeightFrom: 1, curveHeightTo: 1.7, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1038], {id: 38, group:"Cursor138", speed:"1.23", value_bottom: 110, value_top: 130}, {xThresh: 5.0, curve: c[1031], curveHeightFrom: 1, curveHeightTo: 1.0, curveWidthFrom: 1, curveWidthTo: 1.0});	
-
-		
-	run("setColorHue Curve31 255 0 255 255");
-	run("setColorHue Curve32 255 0 255 255");
-	run("setColorHue Curve33 255 0 255 255");
-	run("setColorHue Curve34 255 0 255 255");
-	run("setColorHue Curve35 255 0 255 255");
-	run("setColorHue Curve36 255 0 255 255");
-	run("setColorHue Curve37 255 0 255 255");
-	run("setColorHue Curve38 255 0 255 255");
-	run("setColorHue Cursor131 0 255 255 255");
-	run("setColorHue Cursor132 0 255 255 255");
-	run("setColorHue Cursor133 0 255 255 255");
-	run("setColorHue Cursor134 0 255 255 255");
-	run("setColorHue Cursor135 0 255 255 255");
-	run("setColorHue Cursor136 0 255 255 255");
-	run("setColorHue Cursor137 0 255 255 255");
-	run("setColorHue Cursor138 0 255 255 255");
 	
 	i = 1041;
 	c[i] = nouvelleCourbe({id: i, group: "Curve41", yPos: -20});
@@ -1202,24 +1130,6 @@ function onCreate() {
 	ajouterCurseur(c[1046], {id: 46, group:"Cursor146", speed:"1.13", value_bottom: 130, value_top: 150}, {xThresh: 5.0, curve: c[1047], curveHeightFrom: 1, curveHeightTo: 1.6, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1047], {id: 47, group:"Cursor147", speed:"1.14", value_bottom: 130, value_top: 150}, {xThresh: 5.0, curve: c[1048], curveHeightFrom: 1, curveHeightTo: 1.7, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1048], {id: 48, group:"Cursor148", speed:"1.15", value_bottom: 130, value_top: 150}, {xThresh: 5.0, curve: c[1041], curveHeightFrom: 1, curveHeightTo: 1.0, curveWidthFrom: 1, curveWidthTo: 1.0});	
-
-		
-	run("setColorHue Curve41 255 0 255 255");
-	run("setColorHue Curve42 255 0 255 255");
-	run("setColorHue Curve43 255 0 255 255");
-	run("setColorHue Curve44 255 0 255 255");
-	run("setColorHue Curve45 255 0 255 255");
-	run("setColorHue Curve46 255 0 255 255");
-	run("setColorHue Curve47 255 0 255 255");
-	run("setColorHue Curve48 255 0 255 255");
-	run("setColorHue Cursor141 0 255 255 255");
-	run("setColorHue Cursor142 0 255 255 255");
-	run("setColorHue Cursor143 0 255 255 255");
-	run("setColorHue Cursor144 0 255 255 255");
-	run("setColorHue Cursor145 0 255 255 255");
-	run("setColorHue Cursor146 0 255 255 255");
-	run("setColorHue Cursor147 0 255 255 255");
-	run("setColorHue Cursor148 0 255 255 255");
 	
 	
 	i = 1051;
@@ -1487,24 +1397,6 @@ function onCreate() {
 	ajouterCurseur(c[1056], {id: 56, group:"Cursor156", speed:"1.05", value_bottom: 150, value_top: 170}, {xThresh: 5.0, curve: c[1057], curveHeightFrom: 1, curveHeightTo: 1.6, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1057], {id: 57, group:"Cursor157", speed:"1.06", value_bottom: 150, value_top: 170}, {xThresh: 5.0, curve: c[1058], curveHeightFrom: 1, curveHeightTo: 1.7, curveWidthFrom: 1, curveWidthTo: 1.0});	
 	ajouterCurseur(c[1058], {id: 58, group:"Cursor158", speed:"1.07", value_bottom: 150, value_top: 170}, {xThresh: 5.0, curve: c[1051], curveHeightFrom: 1, curveHeightTo: 1.0, curveWidthFrom: 1, curveWidthTo: 1.0});	
-
-		
-	run("setColorHue Curve51 255 0 255 255");
-	run("setColorHue Curve52 255 0 255 255");
-	run("setColorHue Curve53 255 0 255 255");
-	run("setColorHue Curve54 255 0 255 255");
-	run("setColorHue Curve15 255 0 255 255");
-	run("setColorHue Curve56 255 0 255 255");
-	run("setColorHue Curve57 255 0 255 255");
-	run("setColorHue Curve58 255 0 255 255");
-	run("setColorHue Cursor151 0 255 255 255");
-	run("setColorHue Cursor152 0 255 255 255");
-	run("setColorHue Cursor153 0 255 255 255");
-	run("setColorHue Cursor154 0 255 255 255");
-	run("setColorHue Cursor155 0 255 255 255");
-	run("setColorHue Cursor156 0 255 255 255");
-	run("setColorHue Cursor157 0 255 255 255");
-	run("setColorHue Cursor158 0 255 255 255");
 
 
 }

@@ -33,7 +33,7 @@ function addLine(lineIndex, start, end) {
 	run("setGroup        current lines");
 	run("setPointAt      current 0 " + start.x + " " + start.y);
 	run("setPointAt      current 1 " + end.x   + " " + end.y);
-	run("setColorHue     current " + rangeMid(percent, 74, 30, 74) + " 255 255 255");
+	run("setColorHue     current " + rangeMid(percent, 74, 30, 74) + " 255 192 255");
 
 	run("add cursor      " + lineIndex);
 	run("setCurve        current lastCurve");
@@ -41,7 +41,7 @@ function addLine(lineIndex, start, end) {
 	run("setBoundsSource current " + (-circleRadius2) + " " + circleRadius2 + " " + circleRadius2 + " " + -circleRadius2);
 	run("setBoundsTarget current 0 1 1 0");
 	run("setSpeed        current " + (2 + percent * 2));
-	run("setColorHue     current 44 0 255 255");
+	run("setColorHue     current 44 0 192 255");
 	run("setSize         current 2");
 	
 	run("add trigger     " + (2000 + lineIndex));

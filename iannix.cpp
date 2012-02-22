@@ -22,6 +22,7 @@
 IanniX::IanniX(QObject *parent, bool forceSettings) :
     NxObjectFactoryInterface(parent) {
     currentDocument = 0;
+    currentScript = 0;
     projectScore = 0;
     freehandCurveId = 0;
     lastMessageAllow = true;
@@ -53,6 +54,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteGridChange(qreal)), SLOT(actionGridChange(qreal)));
     connect(view, SIGNAL(actionRouteGridOpacityChange(qreal)), SLOT(actionGridOpacityChange(qreal)));
     connect(view, SIGNAL(actionRouteSnapGrid()), SLOT(actionSnapGrid()));
+    connect(view, SIGNAL(actionRouteShowEditor()), SLOT(actionShowEditor()));
+    connect(view, SIGNAL(actionRouteReloadScript()), SLOT(actionReloadScript()));
     connect(view, SIGNAL(actionRouteCloseEvent(QCloseEvent*)), SLOT(actionCloseEvent(QCloseEvent*)));
     connect(view, SIGNAL(actionRouteAbout()), SLOT(actionLogo()));
     connect(view, SIGNAL(actionRouteImportSVG(QString)),            SLOT(actionImportSVG(QString)));
@@ -219,6 +222,9 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     if((forceSettings) || (!settings.childKeys().contains("bundlePort")))
         settings.setValue("bundlePort", "57121");
 
+    if((forceSettings) || (!settings.childKeys().contains("colorTheme")))
+        settings.setValue("colorTheme", false);
+
     inspector->setOSCPort(settings.value("oscPort").toUInt());
     inspector->setUDPPort(settings.value("udpPort").toUInt());
     inspector->setSerialPort(settings.value("serialPort").toString());
@@ -227,6 +233,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     inspector->setBundleMessage(settings.value("bundleHost").toString(), settings.value("bundlePort").toUInt());
     defaultMessageTrigger = settings.value("defaultMessageTrigger").toString();
     defaultMessageCursor = settings.value("defaultMessageCursor").toString();
+    render->setColorTheme(settings.value("colorTheme").toBool());
+    view->setColorTheme(render->getColorTheme());
 
     bool settingsOk = settings.childKeys().contains("lastUpdate") && settings.childKeys().contains("updatePeriod") && settings.childKeys().contains("id");
     if(settingsOk) {
@@ -867,17 +875,20 @@ void IanniX::actionProjectFiles() {
 }
 void IanniX::actionProjectScripts() {
     if((inspector->getProjectScripts()->currentItem()->type() == 1024) && (currentDocument)) {
-        ExtScriptManager *scriptList = (ExtScriptManager*)inspector->getProjectScripts()->currentItem();
-        if(scriptList) {
-            pushSnapshot();
-            scriptList->parseScript();
-            if(!activeScripts.contains(scriptList))
-                activeScripts.append(scriptList);
-            render->selectionClear(true);
-            actionFast_rewind();
-            editor->openFile(scriptList->getScriptFile());
-            view->activateWindow();
-        }
+        currentScript = (ExtScriptManager*)inspector->getProjectScripts()->currentItem();
+        actionProjectScript();
+    }
+}
+void IanniX::actionProjectScript() {
+    if(currentScript) {
+        pushSnapshot();
+        currentScript->parseScript();
+        if(!activeScripts.contains(currentScript))
+            activeScripts.append(currentScript);
+        render->selectionClear(true);
+        actionFast_rewind();
+        editor->openFile(currentScript->getScriptFile());
+        view->activateWindow();
     }
 }
 
@@ -1729,6 +1740,13 @@ void IanniX::actionGridOpacityChange(qreal val) {
 void IanniX::actionSnapGrid() {
     render->actionSnapGrid();
 }
+void IanniX::actionShowEditor() {
+    editor->show();
+}
+void IanniX::actionReloadScript() {
+    actionProjectScript();
+}
+
 void IanniX::transportMessageChange(const QString & message) {
     transportObject->setMessagePatterns("1," + message);
 }
@@ -1776,6 +1794,7 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     settings.setValue("defaultMessageSync", inspector->getSyncMessage());
     settings.setValue("bundleHost", inspector->getBundleHost());
     settings.setValue("bundlePort", inspector->getBundlePort());
+    settings.setValue("colorTheme", render->getColorTheme());
 
     event->accept();
 }

@@ -34,7 +34,7 @@ function addCircle(circleIndex, center) {
 	run("setGroup         current lines");
 	run("setPointsEllipse current " + (circleSize / circleRatio / 2) + " " + circleSize / 2);
 	run("setPos           current " + center.x + " " + center.y + " 0");
-	run("setColorHue      current 303 " + rangeMid(percent, 255, 0, 255) + " 255 255");
+	run("setColorHue      current 303 " + rangeMid(percent, 255, 0, 255) + " 192 255");
 	run("setSize          current 0.2");
 	
 	run("add cursor       " + circleIndex);
@@ -46,7 +46,7 @@ function addCircle(circleIndex, center) {
 		run("setSpeed         current " + speed);
 	run("setBoundsSource  current " + -2*circleSize + " " + 2*circleSize + " " + 2*circleSize + " " + -2*circleSize);
 	run("setBoundsTarget  current 0 1 1 0");
-	run("setColorHue      current " + range(percent, 0, 200) + " 100 255 255");
+	run("setColorHue      current " + range(percent, 0, 200) + " 100 192 255");
 	run("setWidth         current 2");
 	
 	run("add              trigger " + (2000 + circleIndex));
