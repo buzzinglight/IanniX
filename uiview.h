@@ -63,6 +63,7 @@ public slots:
     void actionReloadScript()     { emit(actionRouteReloadScript()); }
     void actionImportSVG();
     void actionImportImage();
+    void actionImportBackground();
     void actionImportText();
     void actionLockPos();
     void actionToggleLabel();
@@ -103,6 +104,7 @@ signals:
     void actionRouteQuit();
     void actionRouteImportSVG(QString);
     void actionRouteImportImage(QString);
+    void actionRouteImportBackground(QString);
     void actionRouteImportText(QString,QString);
     void actionRouteCloseEvent(QCloseEvent*);
 

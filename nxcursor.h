@@ -266,6 +266,7 @@ private:
     NxPolygon cursorPoly;
     NxPoint cursorPos, cursorPosOld, cursorRelativePos;
     qreal cursorAngle, cursorAngleOld;
+    qreal cursorAngleRoll, cursorAnglePitch;
 public:
     void calculate();
     inline const NxPolygon & getCurrentPolygon() {
@@ -285,6 +286,12 @@ public:
     }
     inline qreal getCurrentAngle() {
         return cursorAngle;
+    }
+    inline qreal getCurrentAngleRoll() {
+        return cursorAngleRoll;
+    }
+    inline qreal getCurrentAnglePitch() {
+        return cursorAnglePitch;
     }
     inline const NxPoint & getCurrentPos() {
         return cursorPos;

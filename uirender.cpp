@@ -28,6 +28,9 @@ UiRender::UiRender(QWidget *parent) :
     grabGesture(Qt::PinchGesture);
     setAcceptDrops(true);
 
+    //FollowId
+    followId = 5678;
+
     //Initialisations
     factory = 0;
     document = 0;
@@ -89,8 +92,8 @@ void UiRender::setColorTheme(bool _colorTheme) {
     if(!colorTheme) {
         renderOptions->colors["empty"]              = QColor( 20,  20,  20, 255);
         renderOptions->colors["background"]         = QColor(255, 255, 255, 255);
-        renderOptions->colors["grid"]               = QColor( 45,  45,  45, 255);
-        renderOptions->colors["axis"]               = QColor( 60,  60,  60, 255);
+        renderOptions->colors["grid"]               = QColor(255, 255, 255,  23);
+        renderOptions->colors["axis"]               = QColor(255, 255, 255,  18);
         renderOptions->colors["selection"]          = QColor(255, 255, 255,  40);
         renderOptions->colors["object_selection"]   = QColor(255, 240,  35, 255);
         renderOptions->colors["object_hover"]       = QColor( 35, 255, 165, 255);
@@ -109,10 +112,10 @@ void UiRender::setColorTheme(bool _colorTheme) {
     else {
         renderOptions->colors["empty"]              = QColor(242, 241, 237, 255);
         renderOptions->colors["background"]         = QColor(255, 255, 255, 255);
-        renderOptions->colors["grid"]               = QColor(220, 220, 220, 255);
-        renderOptions->colors["axis"]               = QColor(215, 215, 215, 255);
+        renderOptions->colors["grid"]               = QColor(  0,   0,   0,  20);
+        renderOptions->colors["axis"]               = QColor(  0,   0,   0,  13);
         renderOptions->colors["selection"]          = QColor(  0,   0,   0,  40);
-        renderOptions->colors["object_selection"]   = QColor(255-255, 255-240,  255-35, 255);
+        renderOptions->colors["object_selection"]   = QColor(  0,  15, 220, 255);
         renderOptions->colors["object_hover"]       = QColor(220,   0,  90, 255);
 
         renderOptions->colors["curve_active"]       = QColor(  0,   0,   0, 175);
@@ -123,8 +126,8 @@ void UiRender::setColorTheme(bool _colorTheme) {
 
         renderOptions->colors["trigger_active"]             = QColor(  0, 185, 255, 255);
         renderOptions->colors["trigger_active_message"]     = QColor(  0, 185, 255, 255);
-        renderOptions->colors["trigger_inactive"]           = QColor(  0,   0,   0, 92);
-        renderOptions->colors["trigger_inactive_message"]   = QColor(  0,   0,   0, 92);
+        renderOptions->colors["trigger_inactive"]           = QColor(  0,   0,   0,  92);
+        renderOptions->colors["trigger_inactive_message"]   = QColor(  0,   0,   0,  92);
     }
 }
 
@@ -194,7 +197,9 @@ void UiRender::paintGL() {
     //Intertial system
     renderOptions->axisCenter = renderOptions->axisCenter + (renderOptions->axisCenterDest - renderOptions->axisCenter) / 3;
     renderOptions->zoomLinear = renderOptions->zoomLinear + (renderOptions->zoomLinearDest - renderOptions->zoomLinear) / 3;
-    rotation = rotation + (rotationDest - rotation) / 3;
+    rotation = rotation + (rotationDest - rotation) / 6;
+    if(qAbs(rotation.z() - rotationDest.z()) > 180)
+        rotation.setZ(rotationDest.z());
     translation = translation + (translationDest - translation) / 3;
     scale = scale + (scaleDest - scale) / 3;
 
@@ -227,7 +232,7 @@ void UiRender::paintGL() {
     //Set axis
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(renderOptions->axisArea.left(), renderOptions->axisArea.right(), renderOptions->axisArea.bottom(), renderOptions->axisArea.top(), 50, 250.0);
+    glFrustum(renderOptions->axisArea.left(), renderOptions->axisArea.right(), renderOptions->axisArea.bottom(), renderOptions->axisArea.top(), 50, 650.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     //Translation
@@ -238,11 +243,21 @@ void UiRender::paintGL() {
 
     //First operations
     glTranslatef(0.0, 0.0, -150);
+
+    if((followId > 0) && (document) && (document->objects.contains(followId)) && (document->objects.value(followId)->getType() == ObjectsTypeCursor)) {
+        NxCursor *object = (NxCursor*)document->objects.value(followId);
+        rotationDest.setX(-object->getCurrentAngleRoll());
+        rotationDest.setY(-82 - object->getCurrentAnglePitch());
+        rotationDest.setZ(-object->getCurrentAngle() + 90);
+        translationDest = -object->getCurrentPos();
+        scaleDest = 3 * 5;
+    }
     glRotatef(rotation.y(), 1, 0, 0);
     glRotatef(rotation.x(), 0, 1, 0);
     glRotatef(rotation.z(), 0, 0, 1);
     glScalef(scale, scale, scale);
-    glTranslatef(translation.x(), translation.y(), 0);
+    glTranslatef(translation.x(), translation.y(), translation.z());
+
     if((rotationDest.x() == 0) && (rotationDest.y() == 0) && (rotationDest.z() == 0))
         renderOptions->allowSelection = true;
     else
@@ -844,8 +859,13 @@ void UiRender::dropEvent(QDropEvent *event) {
                 actionImportSVG(filename);
             }
             else if((filename.toLower().endsWith("png")) || (filename.toLower().endsWith("jpg")) || (filename.toLower().endsWith("jpeg"))) {
-                ok = true;
-                actionImportImage(filename);
+                QString item = QInputDialog::getItem(0, tr("Image drop…"), tr("Please select the desired action:"), QStringList() << tr("Use this image as a background") << tr("Try to vectorize this image automaticaly"), 0, false, &ok);
+                if(ok) {
+                    if(item == tr("Use this image as a background"))
+                        actionImportBackground(filename);
+                    else
+                        actionImportImage(filename);
+                }
             }
         }
     }

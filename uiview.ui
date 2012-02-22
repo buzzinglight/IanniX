@@ -83,9 +83,10 @@ QDockWidget::title {
     <addaction name="actionSave"/>
     <addaction name="actionSave_all"/>
     <addaction name="separator"/>
+    <addaction name="actionImoprt_Text"/>
     <addaction name="actionImoprt_SVG"/>
     <addaction name="actionImoprt_Image"/>
-    <addaction name="actionImoprt_Text"/>
+    <addaction name="actionImoprt_Background"/>
     <addaction name="separator"/>
     <addaction name="actionRename"/>
     <addaction name="actionRemove"/>
@@ -739,6 +740,11 @@ QDockWidget::title {
    </property>
    <property name="text">
     <string>Lighter color theme</string>
+   </property>
+  </action>
+  <action name="actionImoprt_Background">
+   <property name="text">
+    <string>Import background image…</string>
    </property>
   </action>
  </widget>

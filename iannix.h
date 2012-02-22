@@ -234,6 +234,7 @@ public slots:
     void actionCircleCurve();
     void actionImportSVG(const QString &filename);
     void actionImportImage(const QString &filename);
+    void actionImportBackground(const QString &filename);
     void actionImportText(const QString &font, const QString &text);
     void editingStart(const NxPoint &);
     void editingStop();

@@ -60,6 +60,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteAbout()), SLOT(actionLogo()));
     connect(view, SIGNAL(actionRouteImportSVG(QString)),            SLOT(actionImportSVG(QString)));
     connect(view, SIGNAL(actionRouteImportImage(QString)),          SLOT(actionImportImage(QString)));
+    connect(view, SIGNAL(actionRouteImportBackground(QString)),     SLOT(actionImportBackground(QString)));
     connect(view, SIGNAL(actionRouteImportText(QString,QString)),   SLOT(actionImportText(QString,QString)));
 
 
@@ -110,6 +111,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(render, SIGNAL(actionRouteRedo()), SLOT(actionRedo()));
     connect(render, SIGNAL(actionRouteImportSVG(QString)),          SLOT(actionImportSVG(QString)));
     connect(render, SIGNAL(actionRouteImportImage(QString)),        SLOT(actionImportImage(QString)));
+    connect(render, SIGNAL(actionRouteImportBackground(QString)),   SLOT(actionImportBackground(QString)));
     connect(render, SIGNAL(actionRouteImportText(QString,QString)), SLOT(actionImportText(QString,QString)));
     connect(render, SIGNAL(editingStop()), SLOT(editingStop()));
     connect(render, SIGNAL(editingStart(NxPoint)), SLOT(editingStart(NxPoint)));
@@ -347,7 +349,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 void IanniX::actionImportSVG(const QString &filename) {
     qreal scale = 0.01;
     bool ok = false;
-    scale = QInputDialog::getDouble(0, tr("SVG Import"), tr("SVG coordinates system & IanniX coordinates system are differents.\nYou need to scale the SVG to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 2, &ok);
+    scale = QInputDialog::getDouble(0, tr("SVG Import"), tr("SVG coordinates system & IanniX coordinates system are differents.\nYou need to scale the SVG to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 3, &ok);
     if(ok) {
         QDomDocument xmlDoc;
         QFile svgFile(filename);
@@ -377,12 +379,25 @@ void IanniX::actionImportSVG(const QDomElement &xmlElement, qreal scale) {
 void IanniX::actionImportImage(const QString &filename) {
     qreal scale = 0.01;
     bool ok = false;
-    scale = QInputDialog::getDouble(0, tr("Image import"), tr("Image coordinates system & IanniX coordinates system are differents.\nYou need to scale the image to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 2, &ok);
+    scale = QInputDialog::getDouble(0, tr("Image import"), tr("Image coordinates system & IanniX coordinates system are differents.\nYou need to scale the image to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 3, &ok);
     if(ok) {
         execute(COMMAND_ADD + " curve auto");
         execute(COMMAND_CURVE_IMG + " current " + QString::number(scale) + " " + filename);
     }
 }
+void IanniX::actionImportBackground(const QString &filename) {
+    QPixmap pixmap(filename);
+    if(!pixmap.isNull()) {
+        qreal scale = 100*qMin(8 / (qreal)pixmap.width(), 8 / (qreal)pixmap.height());
+        bool ok = false;
+        scale = QInputDialog::getDouble(0, tr("Image import"), tr("Image coordinates system & IanniX coordinates system are differents.\nYou need to scale the image to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 3, &ok);
+        if(ok) {
+            scale /= 100.;
+            execute(COMMAND_TEXTURE + " background " + tr("%1 %2 %3 %4").arg(-scale * pixmap.width() / 2).arg(scale * pixmap.height() / 2).arg(scale * pixmap.width() / 2).arg(-scale * pixmap.height() / 2) + " " + filename);
+        }
+    }
+}
+
 void IanniX::actionImportText(const QString &font, const QString &text) {
     qreal scale = 0.1;
     bool ok = false;
@@ -399,7 +414,7 @@ void IanniX::actionImportText(const QString &font, const QString &text) {
 
     fontReal = fontReal.replace(" ", "_");
     ok = false;
-    scale = QInputDialog::getDouble(0, tr("Text import"), tr("Text coordinates system & IanniX coordinates system are differents.\nYou need to scale the text to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 2, &ok);
+    scale = QInputDialog::getDouble(0, tr("Text import"), tr("Text coordinates system & IanniX coordinates system are differents.\nYou need to scale the text to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 3, &ok);
     if(ok) {
         execute(COMMAND_ADD + " curve auto");
         execute(COMMAND_CURVE_TXT + " current " + QString::number(scale) + " " + fontReal + " " + text);

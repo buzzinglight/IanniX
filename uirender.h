@@ -57,7 +57,11 @@ private:
     NxPoint rotationDrag, translationDrag;
     qreal scale, scaleDest;
     bool colorTheme;
+    quint16 followId;
 public:
+    inline void setFollowId(quint16 _followId) { followId = _followId; }
+    inline quint16 getFollowId() { return followId; }
+
     inline QList<NxObject*> *getSelection() {
         return &selection;
     }
@@ -193,9 +197,10 @@ public slots:
     void actionUndo()       { emit(actionRouteUndo()); }
     void actionRedo()       { emit(actionRouteRedo()); }
     void actionSync()       { emit(actionRouteSync()); }
-    void actionImportSVG(QString val)    { emit(actionRouteImportSVG(val)); }
-    void actionImportImage(QString val)  { emit(actionRouteImportImage(val)); }
-    void actionImportText(QString val, QString val2)  { emit(actionRouteImportText(val, val2)); }
+    void actionImportSVG(QString val)                   { emit(actionRouteImportSVG(val)); }
+    void actionImportImage(QString val)                 { emit(actionRouteImportImage(val)); }
+    void actionImportBackground(QString val)            { emit(actionRouteImportBackground(val)); }
+    void actionImportText(QString val, QString val2)    { emit(actionRouteImportText(val, val2)); }
     void actionCopy();
     void actionPaste();
     void actionDuplicate();
@@ -219,6 +224,7 @@ signals:
     void actionRouteSync();
     void actionRouteImportSVG(QString);
     void actionRouteImportImage(QString);
+    void actionRouteImportBackground(QString);
     void actionRouteImportText(QString,QString);
 
     void actionRouteUndo();

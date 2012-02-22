@@ -147,6 +147,11 @@ void NxCursor::calculate() {
             cursorAngleOld = -curve->getAngleAt(timeOldReal - 0.001);
         else
             cursorAngleOld = -curve->getAngleAt(timeOldReal);
+
+        //Infos en +
+        //NxPoint cursorPosDelta = cursorPosOld - cursorPos;
+        cursorAngleRoll = 0;//-qSin(cursorPosDelta.x() * M_PI) * 180 * 2;
+        cursorAnglePitch = 0;//qSin(cursorPosDelta.y() * M_PI) * 180 * 5;
     }
     else {
         cursorPos = pos;
@@ -279,10 +284,10 @@ void NxCursor::paint() {
                 if((timeLocal - timeLocalOld) > 0)  glVertex3f(size2, 0, 0);
                 else                                glVertex3f(-size2, 0, 0);
                 glVertex3f(0, -size2, 0);
-                glVertex3f(0, 0, size2/2);
+                //glVertex3f(0, 0, size2/2);
                 glVertex3f(0, size2, 0);
-                glVertex3f(0, 0, -size2/2);
-                glVertex3f(0, -size2, 0);
+                //glVertex3f(0, 0, -size2/2);
+                //glVertex3f(0, -size2, 0);
                 glEnd();
 
                 glPopMatrix();

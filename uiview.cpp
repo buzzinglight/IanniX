@@ -37,6 +37,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionRemove, SIGNAL(triggered()), ui->render, SLOT(actionRemove()));
     connect(ui->actionImoprt_SVG, SIGNAL(triggered()), SLOT(actionImportSVG()));
     connect(ui->actionImoprt_Image, SIGNAL(triggered()), SLOT(actionImportImage()));
+    connect(ui->actionImoprt_Background, SIGNAL(triggered()), SLOT(actionImportBackground()));
     connect(ui->actionImoprt_Text, SIGNAL(triggered()), SLOT(actionImportText()));
 
     connect(ui->actionRedo, SIGNAL(triggered()), ui->render, SLOT(actionRedo()));
@@ -183,6 +184,11 @@ void UiView::actionImportImage() {
     QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images (*.png *.jpg *.jpeg)"));
     if(fileName != "")
         emit(actionRouteImportImage(fileName));
+}
+void UiView::actionImportBackground() {
+    QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images (*.png *.jpg *.jpeg)"));
+    if(fileName != "")
+        emit(actionRouteImportBackground(fileName));
 }
 void UiView::actionImportText() {
     QString font = "";
