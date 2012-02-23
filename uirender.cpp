@@ -267,10 +267,6 @@ void UiRender::paintGL() {
     timePerfRefresh += renderMeasure.elapsed() / 1000.0F;
     timePerfCounter++;
     renderMeasure.start();
-    /*
-    if(factory)
-        factory->onDraw();
-    */
 
     //Clear
     glClearColor(renderOptions->colors["empty"].redF(), renderOptions->colors["empty"].greenF(), renderOptions->colors["empty"].blueF(), renderOptions->colors["empty"].alphaF());

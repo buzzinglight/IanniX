@@ -115,8 +115,9 @@ void NxTrigger::paint() {
 }
 
 void NxTrigger::trig(NxObject *cursor) {
-    if (!cursorTrigged) {
-        colorTrigged = cursor->getCurrentColor();
+    if((!cursor) || (!cursorTrigged)) {
+        if(cursor)
+            colorTrigged = cursor->getCurrentColor();
         cursorTrigged = cursor;
         QTimer::singleShot(qMax(triggerOff*1000, (qreal)80), this, SLOT(trigEnd()));
         factory->sendMessage(this, this, cursorTrigged);

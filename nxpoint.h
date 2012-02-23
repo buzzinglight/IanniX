@@ -26,19 +26,24 @@ public:
     NxPoint();
     NxPoint(qreal xpos, qreal ypos);
     NxPoint(qreal xpos, qreal ypos, qreal zpos);
-    NxPoint(qreal xpos, qreal ypos, qreal zpos, qreal tpos);
+    NxPoint(qreal xpos, qreal ypos, qreal zpos, qreal sx, qreal sy, qreal sz);
+    NxPoint(float xpos, float ypos, float zpos, int dummy);
 
     bool isNull() const;
 
     qreal x() const;
     qreal y() const;
     qreal z() const;
-    qreal t() const;
+    qreal sx() const;
+    qreal sy() const;
+    qreal sz() const;
 
     void setX(qreal x);
     void setY(qreal y);
     void setZ(qreal z);
-    void setT(qreal t);
+    void setSx(qreal sx);
+    void setSy(qreal sy);
+    void setSz(qreal sz);
 
     qreal length() const;
     qreal lengthSquared() const;
@@ -70,41 +75,44 @@ public:
     QPointF toPointF() const;
 
 private:
-    float xp, yp, zp, tp;
-
-    NxPoint(float xpos, float ypos, float zpos, float wpos, int dummy);
+    float xp, yp, zp;
+    float sxp, syp, szp;
 };
 Q_DECLARE_TYPEINFO(NxPoint, Q_MOVABLE_TYPE);
 
-inline NxPoint::NxPoint() : xp(0.0f), yp(0.0f), zp(0.0f), tp(0.0f) {}
-
-inline NxPoint::NxPoint(qreal xpos, qreal ypos) : xp(xpos), yp(ypos), zp(0.0f), tp(0.0f) {}
-
-inline NxPoint::NxPoint(qreal xpos, qreal ypos, qreal zpos) : xp(xpos), yp(ypos), zp(zpos), tp(0.0f) {}
-
-inline NxPoint::NxPoint(qreal xpos, qreal ypos, qreal zpos, qreal wpos) : xp(xpos), yp(ypos), zp(zpos), tp(wpos) {}
-
-inline NxPoint::NxPoint(float xpos, float ypos, float zpos, float wpos, int) : xp(xpos), yp(ypos), zp(zpos), tp(wpos) {}
+inline NxPoint::NxPoint()                                        : xp(0.0f), yp(0.0f), zp(0.0f), sxp(0.0f), syp(0.0f), szp(0.0f) {}
+inline NxPoint::NxPoint(qreal xpos, qreal ypos)                  : xp(xpos), yp(ypos), zp(0.0f), sxp(0.0f), syp(0.0f), szp(0.0f) {}
+inline NxPoint::NxPoint(qreal xpos, qreal ypos, qreal zpos)      : xp(xpos), yp(ypos), zp(zpos), sxp(0.0f), syp(0.0f), szp(0.0f) {}
+inline NxPoint::NxPoint(float xpos, float ypos, float zpos, int) : xp(xpos), yp(ypos), zp(zpos), sxp(0.0f), syp(0.0f), szp(0.0f) {}
+inline NxPoint::NxPoint(qreal xpos, qreal ypos, qreal zpos, qreal sx, qreal sy, qreal sz) : xp(xpos), yp(ypos), zp(zpos), sxp(sx), syp(sy), szp(sz) {}
 
 inline bool NxPoint::isNull() const {
-    return qIsNull(xp) && qIsNull(yp) && qIsNull(zp) && qIsNull(tp);
+    return qIsNull(xp) && qIsNull(yp) && qIsNull(zp);
 }
 
-inline qreal NxPoint::x() const { return qreal(xp); }
-inline qreal NxPoint::y() const { return qreal(yp); }
-inline qreal NxPoint::z() const { return qreal(zp); }
-inline qreal NxPoint::t() const { return qreal(tp); }
+inline qreal NxPoint::x() const  { return qreal(xp); }
+inline qreal NxPoint::y() const  { return qreal(yp); }
+inline qreal NxPoint::z() const  { return qreal(zp); }
+inline qreal NxPoint::sx() const { return qreal(sxp); }
+inline qreal NxPoint::sy() const { return qreal(syp); }
+inline qreal NxPoint::sz() const { return qreal(szp); }
 
-inline void NxPoint::setX(qreal aX) { xp = aX; }
-inline void NxPoint::setY(qreal aY) { yp = aY; }
-inline void NxPoint::setZ(qreal aZ) { zp = aZ; }
-inline void NxPoint::setT(qreal aT) { tp = aT; }
+inline void NxPoint::setX(qreal aX)   { xp = aX; }
+inline void NxPoint::setY(qreal aY)   { yp = aY; }
+inline void NxPoint::setZ(qreal aZ)   { zp = aZ; }
+inline void NxPoint::setSx(qreal aSx) { sxp = aSx; }
+inline void NxPoint::setSy(qreal aSy) { syp = aSy; }
+inline void NxPoint::setSz(qreal aSz) { szp = aSz; }
 
 inline NxPoint &NxPoint::operator+=(const NxPoint &vector) {
     xp += vector.xp;
     yp += vector.yp;
     zp += vector.zp;
-    tp += vector.tp;
+
+    sxp += vector.sxp;
+    syp += vector.syp;
+    szp += vector.szp;
+
     return *this;
 }
 
@@ -112,7 +120,11 @@ inline NxPoint &NxPoint::operator-=(const NxPoint &vector) {
     xp -= vector.xp;
     yp -= vector.yp;
     zp -= vector.zp;
-    tp -= vector.tp;
+
+    sxp -= vector.sxp;
+    syp -= vector.syp;
+    szp -= vector.szp;
+
     return *this;
 }
 
@@ -120,7 +132,11 @@ inline NxPoint &NxPoint::operator*=(qreal factor) {
     xp *= factor;
     yp *= factor;
     zp *= factor;
-    tp *= factor;
+
+    sxp *= factor;
+    syp *= factor;
+    szp *= factor;
+
     return *this;
 }
 
@@ -128,7 +144,11 @@ inline NxPoint &NxPoint::operator*=(const NxPoint &vector) {
     xp *= vector.xp;
     yp *= vector.yp;
     zp *= vector.zp;
-    tp *= vector.tp;
+
+    sxp *= vector.sxp;
+    syp *= vector.syp;
+    szp *= vector.szp;
+
     return *this;
 }
 
@@ -136,51 +156,57 @@ inline NxPoint &NxPoint::operator/=(qreal divisor) {
     xp /= divisor;
     yp /= divisor;
     zp /= divisor;
-    tp /= divisor;
+
+    sxp *= divisor;
+    syp *= divisor;
+    szp *= divisor;
+
     return *this;
 }
 
 inline bool operator==(const NxPoint &v1, const NxPoint &v2) {
-    return v1.xp == v2.xp && v1.yp == v2.yp && v1.zp == v2.zp && v1.tp == v2.tp;
+    return v1.xp == v2.xp && v1.yp == v2.yp && v1.zp == v2.zp && v1.sxp == v2.sxp && v1.syp == v2.syp && v1.szp == v2.szp;
 }
 
 inline bool operator!=(const NxPoint &v1, const NxPoint &v2) {
-    return v1.xp != v2.xp || v1.yp != v2.yp || v1.zp != v2.zp || v1.tp != v2.tp;
+    return v1.xp != v2.xp || v1.yp != v2.yp || v1.zp != v2.zp || v1.sxp != v2.sxp || v1.syp != v2.syp || v1.szp != v2.szp;
 }
 
 inline const NxPoint operator+(const NxPoint &v1, const NxPoint &v2) {
-    return NxPoint(v1.xp + v2.xp, v1.yp + v2.yp, v1.zp + v2.zp, v1.tp + v2.tp, 1);
+    return NxPoint(v1.xp + v2.xp, v1.yp + v2.yp, v1.zp + v2.zp, v1.sxp + v2.sxp, v1.syp + v2.syp, v1.szp + v2.szp);
 }
 
 inline const NxPoint operator-(const NxPoint &v1, const NxPoint &v2) {
-    return NxPoint(v1.xp - v2.xp, v1.yp - v2.yp, v1.zp - v2.zp, v1.tp - v2.tp, 1);
+    return NxPoint(v1.xp - v2.xp, v1.yp - v2.yp, v1.zp - v2.zp, v1.sxp - v2.sxp, v1.syp - v2.syp, v1.szp - v2.szp);
 }
 
 inline const NxPoint operator*(qreal factor, const NxPoint &vector) {
-    return NxPoint(vector.xp * factor, vector.yp * factor, vector.zp * factor, vector.tp * factor, 1);
+    return NxPoint(vector.xp * factor, vector.yp * factor, vector.zp * factor, vector.sxp * factor, vector.syp * factor, vector.szp * factor);
 }
 
 inline const NxPoint operator*(const NxPoint &vector, qreal factor) {
-    return NxPoint(vector.xp * factor, vector.yp * factor, vector.zp * factor, vector.tp * factor, 1);
+    return NxPoint(vector.xp * factor, vector.yp * factor, vector.zp * factor, vector.sxp * factor, vector.syp * factor, vector.szp * factor);
 }
 
 inline const NxPoint operator*(const NxPoint &v1, const NxPoint& v2) {
-    return NxPoint(v1.xp * v2.xp, v1.yp * v2.yp, v1.zp * v2.zp, v1.tp * v2.tp, 1);
+    return NxPoint(v1.xp * v2.xp, v1.yp * v2.yp, v1.zp * v2.zp, v1.sxp * v2.sxp, v1.syp * v2.syp, v1.szp * v2.szp);
 }
 
 inline const NxPoint operator-(const NxPoint &vector) {
-    return NxPoint(-vector.xp, -vector.yp, -vector.zp, -vector.tp, 1);
+    return NxPoint(-vector.xp, -vector.yp, -vector.zp, -vector.sxp, -vector.syp, -vector.szp);
 }
 
 inline const NxPoint operator/(const NxPoint &vector, qreal divisor) {
-    return NxPoint(vector.xp / divisor, vector.yp / divisor, vector.zp / divisor, vector.tp / divisor, 1);
+    return NxPoint(vector.xp / divisor, vector.yp / divisor, vector.zp / divisor, vector.sxp / divisor, vector.syp / divisor, vector.szp / divisor);
 }
 
 inline bool qFuzzyCompare(const NxPoint& v1, const NxPoint& v2) {
     return qFuzzyCompare(v1.xp, v2.xp) &&
-           qFuzzyCompare(v1.yp, v2.yp) &&
-           qFuzzyCompare(v1.zp, v2.zp) &&
-           qFuzzyCompare(v1.tp, v2.tp);
+            qFuzzyCompare(v1.yp, v2.yp) &&
+            qFuzzyCompare(v1.zp, v2.zp) &&
+            qFuzzyCompare(v1.sxp, v2.sxp) &&
+            qFuzzyCompare(v1.syp, v2.syp) &&
+            qFuzzyCompare(v1.szp, v2.szp);
 }
 
 #endif

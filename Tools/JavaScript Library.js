@@ -24,6 +24,24 @@ function ask(_category, _label, _variable, _defaultValue) {
 	return iannix.ask(_category, _label, _variable, _defaultValue);
 }
 
+//Prototypes for Strings
+String.prototype.trim = function()
+	{ return (this.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "")) }
+String.prototype.startsWith = function(str) 
+	{ return (this.match("^"+str)==str) }
+String.prototype.endsWith = function(str) 
+	{ return (this.match(str+"$")==str) }
+String.prototype.replaceAll = function(str, str2)
+	{ return (this.replace(new RegExp(str, 'g'), str2)) }
+String.prototype.pad = function(length) {
+	var str = '' + this;
+    while (str.length < length) {
+        str = '0' + str;
+    }
+    return str;
+}
+   
+
 //Constants
 var E          = Math.E;
 var LN2        = Math.LN2;

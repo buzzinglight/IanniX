@@ -69,7 +69,7 @@ bool ExtScriptManager::parseScript(bool configure) {
 
             //Extract function
             scriptOnOSC = script.property("onMessage");
-            scriptOnDraw = script.property("onDraw");
+            scriptOnDraw = script.property("onTick");
             scriptOnLoad = script.property("onLoad");
             scriptCreate = script.property("onCreate");
             scriptConfigure  = script.property("onConfigure");

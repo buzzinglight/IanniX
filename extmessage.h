@@ -162,12 +162,24 @@ public:
                             messageScriptValue.setProperty("cursor_yPos", cursor->getCurrentPos().y());
                         if(patternArgument.contains("cursor_zPos"))
                             messageScriptValue.setProperty("cursor_zPos", cursor->getCurrentPos().z());
+                        if(patternArgument.contains("cursor_sxPos"))
+                            messageScriptValue.setProperty("cursor_sxPos", cursor->getCurrentPos().sx());
+                        if(patternArgument.contains("cursor_syPos"))
+                            messageScriptValue.setProperty("cursor_syPos", cursor->getCurrentPos().sy());
+                        if(patternArgument.contains("cursor_szPos"))
+                            messageScriptValue.setProperty("cursor_szPos", cursor->getCurrentPos().sz());
                         if(patternArgument.contains("cursor_value_x"))
                             messageScriptValue.setProperty("cursor_value_x", cursor->getCurrentValue().x());
                         if(patternArgument.contains("cursor_value_y"))
                             messageScriptValue.setProperty("cursor_value_y", cursor->getCurrentValue().y());
                         if(patternArgument.contains("cursor_value_z"))
                             messageScriptValue.setProperty("cursor_value_z", cursor->getCurrentValue().z());
+                        if(patternArgument.contains("cursor_value_sx"))
+                            messageScriptValue.setProperty("cursor_value_sx", cursor->getCurrentValue().sx());
+                        if(patternArgument.contains("cursor_value_sy"))
+                            messageScriptValue.setProperty("cursor_value_sy", cursor->getCurrentValue().sy());
+                        if(patternArgument.contains("cursor_value_sz"))
+                            messageScriptValue.setProperty("cursor_value_sz", cursor->getCurrentValue().sz());
                         if(patternArgument.contains("cursor_time"))
                             messageScriptValue.setProperty("cursor_time", cursor->getCurrentPosition());
                         if(patternArgument.contains("cursor_time_percent"))
@@ -284,12 +296,24 @@ public:
                             found = addFloat(cursor->getCurrentPos().y(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_zPos")
                             found = addFloat(cursor->getCurrentPos().z(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_sxPos")
+                            found = addFloat(cursor->getCurrentPos().sx(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_syPos")
+                            found = addFloat(cursor->getCurrentPos().sy(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_szPos")
+                            found = addFloat(cursor->getCurrentPos().sz(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_value_x")
                             found = addFloat(cursor->getCurrentValue().x(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_value_y")
                             found = addFloat(cursor->getCurrentValue().y(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_value_z")
                             found = addFloat(cursor->getCurrentValue().z(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_sx")
+                            found = addFloat(cursor->getCurrentValue().sx(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_sy")
+                            found = addFloat(cursor->getCurrentValue().sy(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_sz")
+                            found = addFloat(cursor->getCurrentValue().sz(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_time")
                             found = addFloat(cursor->getCurrentPosition(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_time_percent")
@@ -388,7 +412,8 @@ private:
             typetag += 'i';
     }
     */
-    inline bool addString(const QString & str, const QString & name, quint16) {
+    inline bool addString(QString str, const QString & name, quint16) {
+        str = str.replace("_", " ");
         verboseMessage = verboseMessage + " " + qPrintable(str);
         hasAdd = true;
         if(type == MessagesTypeOsc) {

@@ -544,6 +544,8 @@ void IanniX::timerTick() {
         }
     }
 
+    onDraw();
+
     //Close the bundle if necessary
     if(osc)
         osc->closeBundle();
@@ -658,11 +660,14 @@ void IanniX::actionGoto() {
             qreal milli = transportTime2.at(1).toUInt();
             qreal sec = transportTime2.at(0).toUInt();
             qreal min = transportTime.at(0).toUInt();
-            timeLocal = min * 60 + sec + milli / 1000.F;
-            forceTimeLocal = true;
-            setScheduler(true);
+            actionGoto(min * 60 + sec + milli / 1000.F);
         }
     }
+}
+void IanniX::actionGoto(qreal gotoTime) {
+    timeLocal = gotoTime;
+    forceTimeLocal = true;
+    setScheduler(true);
 }
 
 void IanniX::actionSetScheduler() {
@@ -881,10 +886,15 @@ void IanniX::actionProjectFiles() {
         if(scriptList) {
             currentDocument = scriptList;
             render->setDocument(currentDocument);
-            view->setWindowTitle(tr("IanniX — ") + currentDocument->getScriptFile().baseName());
             currentDocument->load();
             render->selectionClear(true);
             //actionFast_rewind();
+            if((currentScript) && (currentDocument))
+                view->setWindowTitle(tr("IanniX — %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
+            else if(currentDocument)
+                view->setWindowTitle(tr("IanniX / %1").arg(currentDocument->getScriptFile().baseName()));
+            else
+                view->setWindowTitle(tr("IanniX"));
         }
     }
 }
@@ -904,6 +914,12 @@ void IanniX::actionProjectScript() {
         actionFast_rewind();
         editor->openFile(currentScript->getScriptFile());
         view->activateWindow();
+        if((currentScript) && (currentDocument))
+            view->setWindowTitle(tr("IanniX — %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
+        else if(currentDocument)
+            view->setWindowTitle(tr("IanniX / %1").arg(currentDocument->getScriptFile().baseName()));
+        else
+            view->setWindowTitle(tr("IanniX"));
     }
 }
 
@@ -1239,17 +1255,29 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 }
                 actionSpeed();
             }
+            else if((commande == COMMAND_TITLE) && (arguments.count() >= 1)) {
+                return view->windowTitle();
+            }
             else if((commande == COMMAND_STOP) && (arguments.count() >= 1)) {
                 transport->setPlay_pause(false);
                 setScheduler(false);
                 sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
                 actionSpeed();
             }
+            else if((commande == COMMAND_GOTO) && (arguments.count() >= 2)) {
+                actionGoto(arguments.at(1).toDouble());
+            }
+            else if((commande == COMMAND_SLEEP) && (arguments.count() >= 2)) {
+                QMutex mutex;
+                QWaitCondition sleep;
+                sleep.wait(&mutex, arguments.at(1).toDouble());
+            }
             else if((commande == COMMAND_FF) && (arguments.count() >= 1)) {
                 actionFast_rewind();
             }
             else if((commande == COMMAND_LOG) && (arguments.count() >= 2)) {
                 lastMessage = command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+1)).trimmed();
+                this->logOscReceive(tr("Script : %1").arg(lastMessage));
             }
             else if((commande == COMMAND_CLEAR) && (arguments.count() >= 1)) {
                 if(currentDocument) {
@@ -1278,9 +1306,17 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if((commande == COMMAND_SPEED) && (arguments.count() >= 2)) {
                 transport->setSpeed(arguments.at(1).toDouble());
+                return transport->getSpeed();
             }
-            else if((commande == COMMAND_MESSAGE_SEND) && (arguments.count() >= 4)) {
-
+            else if((commande == COMMAND_SPEED) && (arguments.count() >= 1)) {
+                return transport->getSpeed();
+            }
+            else if((commande == COMMAND_MESSAGE_SEND) && (arguments.count() >= 2)) {
+                QString mess = "1," + command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+arguments.at(0).length()));
+                NxTrigger *obj = new NxTrigger(this, 0, 0);
+                obj->setMessagePatterns(mess);
+                obj->trig(0);
+                delete obj;
             }
             else if((commande == COMMAND_AUTOSIZE) && (arguments.count() >= 2)) {
                 render->setTriggerAutosize(arguments.at(1).toDouble());
@@ -1324,10 +1360,6 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
 
                     else if((commande == COMMAND_LABEL) && (arguments.count() >= 3)) {
                         object->dispatchProperty("label", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                    }
-
-                    else if((commande == COMMAND_MESSAGE_SEND) && (arguments.count() >= 2)) {
-                        object->dispatchProperty("sendosc", 0);
                     }
 
                     else if((commande == COMMAND_RESIZE) && (arguments.count() >= 4)) {
@@ -1392,41 +1424,47 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                     else if((commande == COMMAND_CURVE_POINT) && (arguments.count() >= 5)) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
-                            if(arguments.count() >= 12)      // 9 (x, y, z), (c1x, c1y, c1z), (c2x, c2y, c2z)
+                            if(arguments.count() >= 21)  // 3+18 (x, y, z, sx, sy, sz), (c1x, c1y, c1z, c1sx, c1sy, c1sz), (c2x, c2y, c2z, c2sx, c2sy, c2z)
                                 curve->setPointAt(arguments.at(2).toDouble(),
-                                                  NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()),
-                                                  NxPoint(arguments.at(6).toDouble(), arguments.at(7).toDouble(), arguments.at(8).toDouble()),
+                                                  NxPoint(arguments.at(3).toDouble(),  arguments.at(4).toDouble(),  arguments.at(5).toDouble(),  arguments.at(6).toDouble(),  arguments.at(7).toDouble(),  arguments.at(8).toDouble()),
+                                                  NxPoint(arguments.at(9).toDouble(),  arguments.at(10).toDouble(), arguments.at(11).toDouble(), arguments.at(12).toDouble(), arguments.at(13).toDouble(), arguments.at(14).toDouble()),
+                                                  NxPoint(arguments.at(15).toDouble(), arguments.at(16).toDouble(), arguments.at(17).toDouble(), arguments.at(18).toDouble(), arguments.at(19).toDouble(), arguments.at(20).toDouble()), false);
+                            else if(arguments.count() >= 15)  // 3+12 (x, y, sx, sy), (c1x, c1y, c1sx, c1sy), (c2x, c2y, c2sx, c2sy)
+                                curve->setPointAt(arguments.at(2).toDouble(),
+                                                  NxPoint(arguments.at(3).toDouble(),  arguments.at(4).toDouble(),  0, arguments.at(5).toDouble(),  arguments.at(6).toDouble(),  0),
+                                                  NxPoint(arguments.at(7).toDouble(),  arguments.at(8).toDouble(),  0, arguments.at(9).toDouble(),  arguments.at(10).toDouble(), 0),
+                                                  NxPoint(arguments.at(11).toDouble(), arguments.at(12).toDouble(), 0, arguments.at(13).toDouble(), arguments.at(14).toDouble(), 0), false);
+                            else if(arguments.count() >= 12) // 3+9 (x, y, z), (c1x, c1y, c1z), (c2x, c2y, c2z)
+                                curve->setPointAt(arguments.at(2).toDouble(),
+                                                  NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(),  arguments.at(5).toDouble()),
+                                                  NxPoint(arguments.at(6).toDouble(), arguments.at(7).toDouble(),  arguments.at(8).toDouble()),
                                                   NxPoint(arguments.at(9).toDouble(), arguments.at(10).toDouble(), arguments.at(11).toDouble()), false);
-                            else if(arguments.count() >= 9) // 6 (x, y), (c1x, c1y), (c2x, c2y)
+                            else if(arguments.count() >= 10) // 3+6 (x, y, z, sx, sy, sz) // REQUIRES A DUMMY ARGUMENT
+                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble(), arguments.at(6).toDouble(), arguments.at(7).toDouble(), arguments.at(8).toDouble()), false);
+                            else if(arguments.count() >= 9)  // 3+6 (x, y), (c1x, c1y), (c2x, c2y)
                                 curve->setPointAt(arguments.at(2).toDouble(),
                                                   NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()),
                                                   NxPoint(arguments.at(5).toDouble(), arguments.at(6).toDouble()),
                                                   NxPoint(arguments.at(7).toDouble(), arguments.at(8).toDouble()), false);
-                            else if(arguments.count() >= 7) // 3 (x, y, z) smooth
-                                curve->setPointAt(arguments.at(2).toDouble(),
-                                                  NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()), true);
-                            else if(arguments.count() >= 6) { // 3 (x, y, z)  OR  (x, y) smooth
-                                bool ok = false;
-                                arguments.at(5).toDouble(&ok);
-                                if(ok)
-                                    curve->setPointAt(arguments.at(2).toDouble(),
-                                                      NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()), false);
-                                else
-                                    curve->setPointAt(arguments.at(2).toDouble(),
-                                                      NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()), true);
-                            }
-                            else if(arguments.count() >= 5) // 2 (x, y)
-                                curve->setPointAt(arguments.at(2).toDouble(),
-                                                  NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()), false);
+                            else if(arguments.count() >= 7) // 3+4 (x, y, sx, sy)
+                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), 0, arguments.at(5).toDouble(), arguments.at(6).toDouble(), 0), false);
+                            else if(arguments.count() >= 6) // 3+3 (x, y, z)
+                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()), false);
+                            else if(arguments.count() >= 5) // 3+2 (x, y)
+                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()), false);
                             return curve->getPathLength();
                         }
                     }
                     else if((commande == COMMAND_CURVE_POINT_SMOOTH) && (arguments.count() >= 5)) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
-                            if(arguments.count() >= 6)      // x, y, z
+                            if(arguments.count() >= 9)      // 3+6 (x, y, z, sx, sy, sz)
+                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble(), arguments.at(6).toDouble(), arguments.at(7).toDouble(), arguments.at(8).toDouble()), true);
+                            else if(arguments.count() >= 7) // 3+4 (x, y, sx, sy)
+                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), 0, arguments.at(5).toDouble(), arguments.at(6).toDouble(), 0), true);
+                            else if(arguments.count() >= 6) // 3+3 (x, y, z)
                                 curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()), true);
-                            else if(arguments.count() >= 5) // x, y
+                            else if(arguments.count() >= 5) // 3+2 (x, y)
                                 curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()), true);
                         }
                     }

@@ -133,6 +133,8 @@ void NxCursor::calculate() {
         qreal timeReal = easing.getValue(time), timeOldReal = easing.getValue(timeOld);
 
         cursorPos = curve->getPointAt(timeReal) + curve->getPos();
+        //qDebug("%f %f %f %f %f %f", cursorPos.x(), cursorPos.y(), cursorPos.z(), cursorPos.sx(), cursorPos.sy(), cursorPos.sz());
+
         if(timeReal == 0)
             cursorAngle = -curve->getAngleAt(timeReal + 0.001);
         else if(timeReal == 1)
@@ -233,10 +235,9 @@ void NxCursor::paint() {
             color = renderOptions->colors.value("object_selection");
 
         //Start
-        if((renderOptions->paintCursors) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)))
-            glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
-        else
-            glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
+        if(!((renderOptions->paintCursors) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd))))
+            color.setAlphaF(0.1);
+        glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 
         //Cursor chasse-neige
         if((time >= 0) && (start.at(nbLoop % start.count()) != 0)) {
@@ -272,10 +273,10 @@ void NxCursor::paint() {
             glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
             glEnd();
             glDisable(GL_LINE_STIPPLE);
+            glLineWidth(1);
 
             //Cursor reader
             if((hasActivity) || (!curve)) {
-                glLineWidth(1);
                 glPushMatrix();
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
                 glRotatef(cursorAngle, 0, 0, 1);
@@ -290,6 +291,34 @@ void NxCursor::paint() {
                 //glVertex3f(0, -size2, 0);
                 glEnd();
 
+                glPopMatrix();
+            }
+
+            //Special feature YEOSU
+            if((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz())) {
+                glPushMatrix();
+                glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
+                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 5);
+
+                qreal lats = 20, longs = 20;
+                qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
+                for(quint16 i = 0; i <= lats; i++) {
+                    qreal lat0 = M_PI * (-0.5 + (qreal)(i - 1) / lats);
+                    qreal lat1 = M_PI * (-0.5 + (qreal)(i    ) / lats);
+                    qreal z0  = qSin(lat0) * rz, zr0 = qCos(lat0);
+                    qreal z1  = qSin(lat1) * rz, zr1 = qCos(lat1);
+                    glBegin(GL_LINE_STRIP);
+                    for(quint16 j = 0; j <= longs; j++) {
+                        qreal lng = 2 * M_PI * (qreal)(j - 1) / longs;
+                        qreal x = qCos(lng) * rx;
+                        qreal y = qSin(lng) * ry;
+                        glNormal3f(x * zr0, y * zr0, z0);
+                        glVertex3f(x * zr0, y * zr0, z0);
+                        glNormal3f(x * zr1, y * zr1, z1);
+                        glVertex3f(x * zr1, y * zr1, z1);
+                    }
+                    glEnd();
+                }
                 glPopMatrix();
             }
         }

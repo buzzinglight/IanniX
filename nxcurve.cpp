@@ -96,8 +96,8 @@ void NxCurve::paint() {
                     NxPoint c1 = p1 + getPathPointsAt(indexPoint+1).c1, c2 = p2 + getPathPointsAt(indexPoint+1).c2;
 
                     GLfloat ctrlpoints[4][3] = {
-                        { p1.x(),  p1.y(),  p1.z()  }, { c1.x(), c1.y(), c1.z() },
-                        { c2.x(), c2.y(), c2.z() }, { p2.x(),  p2.y(),  p2.z()  } };
+                        { p1.x(), p1.y(), p1.z() }, { c1.x(), c1.y(), c1.z() },
+                        { c2.x(), c2.y(), c2.z() }, { p2.x(), p2.y(), p2.z() } };
                     glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
                     glEnable(GL_MAP1_VERTEX_3);
                     glBegin(GL_LINE_STRIP);
@@ -228,6 +228,9 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
     pointStruct.setX(point.x());
     pointStruct.setY(point.y());
     pointStruct.setZ(point.z());
+    pointStruct.setSx(point.sx());
+    pointStruct.setSy(point.sy());
+    pointStruct.setSz(point.sz());
     pointStruct.c1 = c1;
     pointStruct.c2 = c2;
     pointStruct.smooth = smooth;
@@ -503,16 +506,22 @@ inline NxPoint NxCurve::getPointAt(quint16 index, qreal t) {
     NxPoint c1 = getPathPointsAt(index+1).c1, c2 = getPathPointsAt(index+1).c2;
     qreal mt = 1 - t;
     if((c1 == NxPoint()) && (c2 == NxPoint())) {
-        return NxPoint( p1.x()*mt + p2.x()*t,
-                        p1.y()*mt + p2.y()*t,
-                        p1.z()*mt + p2.z()*t );
+        return NxPoint( p1. x()*mt + p2. x()*t,
+                        p1. y()*mt + p2. y()*t,
+                        p1. z()*mt + p2. z()*t,
+                        p1.sx()*mt + p2.sx()*t,
+                        p1.sy()*mt + p2.sy()*t,
+                        p1.sz()*mt + p2.sz()*t);
     }
     else {
         NxPoint p1c = p1 + c1, p2c = p2 + c2;
         qreal t2 = t*t, t3 = t2*t, mt2 = mt*mt, mt3 = mt2*mt;
-        return NxPoint( p1.x()*mt3 + 3*p1c.x()*t*mt2 + 3*p2c.x()*t2*mt + p2.x()*t3,
-                        p1.y()*mt3 + 3*p1c.y()*t*mt2 + 3*p2c.y()*t2*mt + p2.y()*t3,
-                        p1.z()*mt3 + 3*p1c.z()*t*mt2 + 3*p2c.z()*t2*mt + p2.z()*t3 );
+        return NxPoint( p1. x()*mt3 + 3*p1c. x()*t*mt2 + 3*p2c. x()*t2*mt + p2. x()*t3,
+                        p1. y()*mt3 + 3*p1c. y()*t*mt2 + 3*p2c. y()*t2*mt + p2. y()*t3,
+                        p1. z()*mt3 + 3*p1c. z()*t*mt2 + 3*p2c. z()*t2*mt + p2. z()*t3,
+                        p1.sx()*mt3 + 3*p1c.sx()*t*mt2 + 3*p2c.sx()*t2*mt + p2.sx()*t3,
+                        p1.sy()*mt3 + 3*p1c.sy()*t*mt2 + 3*p2c.sy()*t2*mt + p2.sy()*t3,
+                        p1.sz()*mt3 + 3*p1c.sz()*t*mt2 + 3*p2c.sz()*t2*mt + p2.sz()*t3);
     }
 }
 

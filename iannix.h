@@ -203,6 +203,7 @@ public slots:
     void actionFast_rewind();
     void actionLogo();
     void actionGoto();
+    void actionGoto(qreal);
     void actionSetScheduler();
     void actionSetOpenGL();
     void actionSpeed();

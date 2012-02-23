@@ -102,6 +102,9 @@
 #define COMMAND_FF                          QString("fastrewind")
 #define COMMAND_SPEED                       QString("speed")
 #define COMMAND_LOG                         QString("log")
+#define COMMAND_GOTO                        QString("goto")
+#define COMMAND_TITLE                       QString("title")
+#define COMMAND_SLEEP                       QString("sleep")
 
 #define COMMAND_SNAP_PUSH                   QString("pushsnapshot")
 #define COMMAND_SNAP_POP                    QString("popsnapshot")
