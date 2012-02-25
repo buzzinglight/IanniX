@@ -57,9 +57,14 @@ public:
     inline void setObjectId(qint16 _objectId) {
         objectId = _objectId;
     }
-    inline void onOSCCall(const QString & message) {
-        if(scriptOnOSC.isValid())
-            scriptOnOSC.call(QScriptValue(), QScriptValueList() << message);
+    inline void onOSCCall(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments) {
+        if(scriptOnOSC.isValid()) {
+            QString argumentsStr = "";
+            foreach(const QString & argument, arguments)
+                argumentsStr += "\"" + argument + "\",";
+            argumentsStr.chop(1);
+            scriptOnOSC.call(QScriptValue(), QScriptValueList() << protocol << host << port << destination << scriptEngine.evaluate(tr("[%5]").arg(argumentsStr)));
+        }
     }
     inline void onDrawCall(qreal time) {
         if(scriptOnDraw.isValid())

@@ -31,16 +31,16 @@ void midiCallback(double, std::vector< unsigned char > *receivedMessage, void *u
         case STATUS_NOTEON: {
             quint8 velocity = receivedMessage->at(2);
             if ((status == STATUS_NOTEOFF) || (velocity == 0))
-                midi->receivedMessage(QString("midi://midiin/note %1 %2 0").arg(channel).arg(receivedMessage->at(1)));
+                midi->receivedMessage("note", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)) << "0");
             else
-                midi->receivedMessage(QString("midi://midiin/note %1 %2 %3").arg(channel).arg(receivedMessage->at(1)).arg(velocity));
+                midi->receivedMessage("note", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)) << QString::number(velocity));
         }
             break;
         case STATUS_CTLCHG:
-            midi->receivedMessage(QString("midi://midiin/cc %1 %2 %3").arg(channel).arg(receivedMessage->at(1)).arg(receivedMessage->at(2)));
+            midi->receivedMessage("cc", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)) << QString::number(receivedMessage->at(2)));
             break;
         case STATUS_PROGRAM:
-            midi->receivedMessage(QString("midi://midiin/pgm %1 %2").arg(channel).arg(receivedMessage->at(1)));
+            midi->receivedMessage("pgm", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)));
             break;
         }
     }
@@ -226,9 +226,12 @@ void ExtMidiManager::sendBend(const QString & portname, quint8 channel, quint16 
 }
 
 
-void ExtMidiManager::receivedMessage(const QString & url) {
+void ExtMidiManager::receivedMessage(const QString & destination, const QStringList & arguments) {
     //Fire events (log, message and script mapping)
-    factory->logOscReceive(url);
-    factory->onOscReceive(url);
+    QString verbose = "midi://midiin/" + destination;
+    foreach(const QString &argument, arguments)
+        verbose += " " + argument;
+    factory->logOscReceive(verbose);
+    factory->onOscReceive("midi", "midiin", "", destination, arguments);
 }
 

@@ -152,7 +152,7 @@ QDockWidget::title {
    <property name="minimumSize">
     <size>
      <width>54</width>
-     <height>65</height>
+     <height>42</height>
     </size>
    </property>
    <property name="features">
@@ -162,7 +162,7 @@ QDockWidget::title {
     <set>Qt::BottomDockWidgetArea</set>
    </property>
    <property name="windowTitle">
-    <string>Transport</string>
+    <string>TRANSPORT</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
@@ -183,7 +183,7 @@ QDockWidget::title {
     <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
    </property>
    <property name="windowTitle">
-    <string>Inspector</string>
+    <string>INSPECTOR</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>

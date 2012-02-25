@@ -42,10 +42,24 @@ protected:
 private:
     NxObjectFactoryInterface *factory;
     QTreeWidgetItem *triggerItem, *curveItem, *cursorItem;
+    QList<QString> wasGroupChecked;
     bool actionInfoLock;
     bool idConflict;   ////CG//// Indicates the id in the inspector spinbox conflicts with an existing id
 public:
     quint16 nbTriggers, nbCurves, nbCursors;
+    inline Qt::CheckState getWasGroupChecked(const QString & groupId) {
+        if(wasGroupChecked.contains(groupId))
+            return Qt::Unchecked;
+        else
+            return Qt::Checked;
+    }
+    inline void updateWasGroupChecked(NxGroup *group) {
+        if((group->checkState(0) == Qt::Checked) && (wasGroupChecked.contains(group->getId())))
+            wasGroupChecked.removeOne(group->getId());
+        else if((group->checkState(0) == Qt::Unchecked) && (!wasGroupChecked.contains(group->getId())))
+            wasGroupChecked.append(group->getId());
+    }
+
 public slots:
     void setMousePos(const NxPoint & pos);
     void setMouseZoom(qreal zoom);

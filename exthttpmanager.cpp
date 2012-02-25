@@ -43,10 +43,9 @@ void ExtHttpManager::parse(QNetworkReply *reply) {
     QStringList commandItems = QString(reply->readAll()).split(COMMAND_END, QString::SkipEmptyParts);;
     foreach(const QString & command, commandItems) {
         //Fire events (log, message and script mapping)
-        QString url = reply->url().toString() + " ";
-        factory->logOscReceive(url + command);
+        factory->logOscReceive(reply->url().toString() + " " + command);
         factory->execute(command);
-        factory->onOscReceive(url + command);
+        factory->onOscReceive("http", reply->url().host(), QString::number(reply->url().port()), reply->url().path(), command.split(" ", QString::SkipEmptyParts));
     }
 }
 

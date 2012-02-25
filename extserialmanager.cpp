@@ -112,11 +112,9 @@ void ExtSerialManager::parse() {
                 command.remove(COMMAND_END);
 
                 //Fire events (log, message and script mapping)
-                QString url = "serial://" + portname + "/ ";
-                factory->logOscReceive(url + command);
+                factory->logOscReceive("serial://" + portname + "/ " + command);
                 factory->execute(command);
-                factory->onOscReceive(url + command);
-                qDebug(">%s<", qPrintable(command));
+                factory->onOscReceive("serial", portname, "", "", command.split(" ", QString::SkipEmptyParts));
             }
             else
                 command += reception.at(index);

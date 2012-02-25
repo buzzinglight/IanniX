@@ -298,16 +298,16 @@ void NxCursor::paint() {
             if((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz())) {
                 glPushMatrix();
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
-                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 5);
+                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 8);
 
-                qreal lats = 20, longs = 20;
+                qreal lats = 40, longs = 40;
                 qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
                 for(quint16 i = 0; i <= lats; i++) {
                     qreal lat0 = M_PI * (-0.5 + (qreal)(i - 1) / lats);
                     qreal lat1 = M_PI * (-0.5 + (qreal)(i    ) / lats);
                     qreal z0  = qSin(lat0) * rz, zr0 = qCos(lat0);
                     qreal z1  = qSin(lat1) * rz, zr1 = qCos(lat1);
-                    glBegin(GL_LINE_STRIP);
+                    glBegin(GL_QUAD_STRIP);
                     for(quint16 j = 0; j <= longs; j++) {
                         qreal lng = 2 * M_PI * (qreal)(j - 1) / longs;
                         qreal x = qCos(lng) * rx;

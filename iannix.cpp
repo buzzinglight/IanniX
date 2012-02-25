@@ -226,6 +226,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 
     if((forceSettings) || (!settings.childKeys().contains("colorTheme")))
         settings.setValue("colorTheme", false);
+    if((forceSettings) || (!settings.childKeys().contains("opacityCurve")))
+        settings.setValue("opacityCurve", false);
 
     inspector->setOSCPort(settings.value("oscPort").toUInt());
     inspector->setUDPPort(settings.value("udpPort").toUInt());
@@ -237,6 +239,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     defaultMessageCursor = settings.value("defaultMessageCursor").toString();
     render->setColorTheme(settings.value("colorTheme").toBool());
     view->setColorTheme(render->getColorTheme());
+    inspector->setViewCurveOpacityCheck(settings.value("opacityCurve").toBool());
 
     bool settingsOk = settings.childKeys().contains("lastUpdate") && settings.childKeys().contains("updatePeriod") && settings.childKeys().contains("id");
     if(settingsOk) {
@@ -1063,7 +1066,7 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
 
 
 NxGroup* IanniX::addGroup(const QString & documentId, const QString & groupId) {
-    NxGroup *group = new NxGroup(this, inspector->getViewGroup());
+    NxGroup *group = new NxGroup(this, inspector->getViewGroup(), inspector->getWasGroupChecked(groupId));
     group->setId(groupId);
     documents.value(documentId)->groups[group->getId()] = group;
     documents.value(documentId)->setCurrentGroup(group);
@@ -1138,6 +1141,7 @@ void IanniX::removeObject(NxObject *object) {
         if(documents.value(object->getDocumentId())->groups.value(object->getGroupId())->getCount() == 0) {
             NxGroup *group = documents.value(object->getDocumentId())->groups.value(object->getGroupId());
             documents.value(object->getDocumentId())->groups.remove(object->getGroupId());
+            inspector->updateWasGroupChecked(group);
             delete group;
         }
 
@@ -1310,6 +1314,13 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if((commande == COMMAND_SPEED) && (arguments.count() >= 1)) {
                 return transport->getSpeed();
+            }
+            else if((commande == COMMAND_TOGGLE_GROUP) && (arguments.count() >= 3)) {
+                Qt::CheckState state = Qt::Unchecked;
+                if(arguments.at(2).toUInt() > 0)
+                    state = Qt::Checked;
+                if((currentDocument) && (currentDocument->groups.contains(arguments.at(1))))
+                    currentDocument->groups.value(arguments.at(1))->setCheckState(0, state);
             }
             else if((commande == COMMAND_MESSAGE_SEND) && (arguments.count() >= 2)) {
                 QString mess = "1," + command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+arguments.at(0).length()));
@@ -1649,9 +1660,9 @@ void IanniX::send(const ExtMessage & message) {
     logOscReceive(message.getVerboseMessage());
 }
 
-void IanniX::onOscReceive(const QString & message) {
+void IanniX::onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments) {
     foreach(ExtScriptManager *document, activeScripts)
-        document->onOSCCall(message);
+        document->onOSCCall(protocol, host, port, destination, arguments);
 }
 void IanniX::onDraw() {
     foreach(ExtScriptManager *document, activeScripts)
@@ -1848,6 +1859,7 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     settings.setValue("bundleHost", inspector->getBundleHost());
     settings.setValue("bundlePort", inspector->getBundlePort());
     settings.setValue("colorTheme", render->getColorTheme());
+    settings.setValue("opacityCurve", inspector->getViewCurveOpacityCheck());
 
     event->accept();
 }

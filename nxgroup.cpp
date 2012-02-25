@@ -18,8 +18,8 @@
 
 #include "nxgroup.h"
 
-NxGroup::NxGroup(NxObjectFactoryInterface *parent, QTreeWidget *parentList) :
+NxGroup::NxGroup(NxObjectFactoryInterface *parent, QTreeWidget *parentList, Qt::CheckState state) :
     QObject(parent), QTreeWidgetItem(parentList) {
     setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable);
-    setCheckState(0, Qt::Checked);
+    setCheckState(0, state);
 }

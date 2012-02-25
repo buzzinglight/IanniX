@@ -28,7 +28,7 @@
 class NxGroup : public QObject, public NxObjectDispatchProperty, public QTreeWidgetItem {
     Q_OBJECT
 public:
-    explicit NxGroup(NxObjectFactoryInterface *parent, QTreeWidget *parentItem);
+    explicit NxGroup(NxObjectFactoryInterface *parent, QTreeWidget *parentItem, Qt::CheckState state);
     inline void dispatchProperty(const QString & property, const QVariant & value) {
         //Browse active/inactive objects
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {

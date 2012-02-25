@@ -82,7 +82,9 @@ void ExtOscManager::parseOSC() {
 
 
                 //Parse content
-                QString command = QString(addressBuffer).remove(oscMatchAdress) + " ";
+                QString commandDestination = QString(addressBuffer).remove(oscMatchAdress);
+                QString command = commandDestination + " ";
+                QStringList commandArguments;
                 quint16 indexDataBuffer = 0;
                 while((indexBuffer < bufferISize) && (indexDataBuffer < indexArgumentsBuffer)) {
                     //Integer argument
@@ -93,7 +95,9 @@ void ExtOscManager::parseOSC() {
                         u.ch[1] = bufferI[indexBuffer + 2];
                         u.ch[0] = bufferI[indexBuffer + 3];
                         indexBuffer += 4;
-                        command += QString().setNum(u.i) + " ";
+                        QString commandValue = QString().setNum(u.i);
+                        command += commandValue + " ";
+                        commandArguments << commandValue;
                     }
                     //Float argument
                     else if(argumentsBuffer[indexDataBuffer] == 'f') {
@@ -103,16 +107,20 @@ void ExtOscManager::parseOSC() {
                         u.ch[1] = bufferI[indexBuffer + 2];
                         u.ch[0] = bufferI[indexBuffer + 3];
                         indexBuffer += 4;
-                        command += QString().setNum(u.f) + " ";
+                        QString commandValue = QString().setNum(u.f);
+                        command += commandValue + " ";
+                        commandArguments << commandValue;
                     }
                     //String argument
                     else if(argumentsBuffer[indexDataBuffer] == 's') {
+                        QString commandValue = "";
                         while((indexBuffer < bufferISize) && (bufferI[indexBuffer]) != 0)
-                            command += bufferI[indexBuffer++];
+                            commandValue += bufferI[indexBuffer++];
                         indexBuffer++;
                         while(indexBuffer % 4 != 0)
                             indexBuffer++;
-                        command += " ";
+                        command += commandValue + " ";
+                        commandArguments << commandValue;
                     }
                     else
                         indexBuffer += 4;
@@ -120,10 +128,9 @@ void ExtOscManager::parseOSC() {
                 }
 
                 //Fire events (log, message and script mapping)
-                QString url = tr("osc://%1:%2%3 ").arg(receivedHost.toString()).arg(receivedPort).arg(addressBuffer);
-                factory->logOscReceive(url + command);
+                factory->logOscReceive(tr("osc://%1:%2%3%4").arg(receivedHost.toString()).arg(receivedPort).arg(oscMatchAdress).arg(command));
                 factory->execute(command);
-                factory->onOscReceive(url + command);
+                factory->onOscReceive("osc", receivedHost.toString(), QString::number(receivedPort), commandDestination, commandArguments);
             }
         }
     }

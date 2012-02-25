@@ -126,7 +126,7 @@ private:
     void fileWatcherFolder(QStringList extension, QDir dir, QTreeWidgetItem *parentList, bool isDocument);
 public slots:
     const QVariant execute(const QString & command, bool createNewObjectIfExists = false, bool dump = false);
-    void onOscReceive(const QString & message);
+    void onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments);
     void onDraw();
     void askNxObject();
     void send(const ExtMessage & message);

@@ -57,7 +57,7 @@ public:
     void sendBend(const QString & portname, quint8 channel, quint16 bendvalue);
 
 public slots:
-    void receivedMessage(const QString & url);
+    void receivedMessage(const QString & destination, const QStringList &arguments);
 };
 
 

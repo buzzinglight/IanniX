@@ -132,6 +132,19 @@ QHeaderView::section {
 	font: bold;
 }
 
+QTreeView::indicator {
+	border: 1px solid rgb(60, 60, 60);
+	width: 11px;
+	height: 11px;
+}
+QTreeView::indicator:unchecked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
+}
+QTreeView::indicator:checked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+}
+
+
 
 QScrollBar:vertical, QScrollBar:horizontal {
 	border: 0px solid transparent;
