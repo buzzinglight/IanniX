@@ -220,6 +220,25 @@ void NxCurve::removePointAt(quint16 index) {
     calcBoundingRect();
 }
 
+const void NxCurve::shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation) {
+    if(index < pathPoints.count()) {
+        qint16 indexPoint;
+        if((direction < 0) && (index > 1)) {
+            NxPoint ptDelta = pathPoints[index] - pathPoints[index-1];
+            pathPoints.remove(index);
+            for(indexPoint = (index-1) ; indexPoint >= 0 ; indexPoint--)
+                setPointAt(indexPoint, pathPoints[indexPoint] + ptDelta, pathPoints[indexPoint].c1, pathPoints[indexPoint].c2, pathPoints[indexPoint].smooth, false);
+        }
+        else if((direction >= 0) && (index < pathPoints.count()-1)) {
+            NxPoint ptDelta = pathPoints[index] - pathPoints[index+1];
+            pathPoints.remove(index);
+            for(indexPoint = index ; indexPoint < pathPoints.count() ; indexPoint++)
+                setPointAt(indexPoint, pathPoints[indexPoint] + ptDelta, pathPoints[indexPoint].c1, pathPoints[indexPoint].c2, pathPoints[indexPoint].smooth, false);
+        }
+    }
+    if(boundingRectCalculation)
+        calcBoundingRect();
+}
 const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, bool smooth, bool boundingRectCalculation) {
     return setPointAt(index, point, NxPoint(), NxPoint(), smooth, boundingRectCalculation);
 }
@@ -497,7 +516,8 @@ void NxCurve::resize(const NxSize & size) {
 }
 void NxCurve::translate(const NxPoint & point) {
     for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++)
-        setPointAt(indexPoint, getPathPointsAt(indexPoint)  + point, getPathPointsAt(indexPoint).c1, getPathPointsAt(indexPoint).c2, getPathPointsAt(indexPoint).smooth);
+        setPointAt(indexPoint, getPathPointsAt(indexPoint) + point, getPathPointsAt(indexPoint).c1, getPathPointsAt(indexPoint).c2, getPathPointsAt(indexPoint).smooth, false);
+    calcBoundingRect();
 }
 
 
@@ -658,7 +678,7 @@ qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) {
     }
     else {
         if(boundingRect.intersects(rect)) {
-            for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
+            for(quint16 indexPathPoint = 1 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
                 if(getPathPointsAt(indexPathPoint).boundingRect.intersects(rect)) {
                     for(qreal t = 0 ; t <= 1+step ; t += step) {
                         NxPoint pt1 = getPointAt(indexPathPoint-1, t), pt2 = getPointAt(indexPathPoint-1, t+step);

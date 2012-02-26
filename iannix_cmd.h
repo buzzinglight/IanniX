@@ -40,6 +40,8 @@
 #define COMMAND_CURSOR_BOUNDS_TARGET        QString("setboundstarget")
 #define COMMAND_CURSOR_TIME                 QString("settime")
 
+#define COMMAND_CURVE_POINT_SHIFT           QString("shiftpoints")
+#define COMMAND_CURVE_POINT_TRANSLATE       QString("translatepoints")
 #define COMMAND_CURVE_POINT                 QString("setpointat")
 #define COMMAND_CURVE_POINT_SMOOTH          QString("setsmoothpointat")
 #define COMMAND_CURVE_POINT_RMV             QString("removepointat")

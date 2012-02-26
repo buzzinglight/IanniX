@@ -891,13 +891,13 @@ void IanniX::actionProjectFiles() {
             render->setDocument(currentDocument);
             currentDocument->load();
             render->selectionClear(true);
-            //actionFast_rewind();
             if((currentScript) && (currentDocument))
                 view->setWindowTitle(tr("IanniX — %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
             else if(currentDocument)
                 view->setWindowTitle(tr("IanniX / %1").arg(currentDocument->getScriptFile().baseName()));
             else
                 view->setWindowTitle(tr("IanniX"));
+            actionGoto(timeLocal);
         }
     }
 }
@@ -914,7 +914,6 @@ void IanniX::actionProjectScript() {
         if(!activeScripts.contains(currentScript))
             activeScripts.append(currentScript);
         render->selectionClear(true);
-        actionFast_rewind();
         editor->openFile(currentScript->getScriptFile());
         view->activateWindow();
         if((currentScript) && (currentDocument))
@@ -923,6 +922,7 @@ void IanniX::actionProjectScript() {
             view->setWindowTitle(tr("IanniX / %1").arg(currentDocument->getScriptFile().baseName()));
         else
             view->setWindowTitle(tr("IanniX"));
+        actionGoto(timeLocal);
     }
 }
 
@@ -1430,6 +1430,18 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
                             curve->removePointAt(arguments.at(2).toDouble());
+                        }
+                    }
+                    else if((commande == COMMAND_CURVE_POINT_SHIFT) && (arguments.count() >= 4)) {
+                        if(object->getType() == ObjectsTypeCurve) {
+                            NxCurve *curve = (NxCurve*)object;
+                            curve->shiftPointAt(arguments.at(2).toUInt(), arguments.at(3).toInt());
+                        }
+                    }
+                    else if((commande == COMMAND_CURVE_POINT_TRANSLATE) && (arguments.count() >= 5)) {
+                        if(object->getType() == ObjectsTypeCurve) {
+                            NxCurve *curve = (NxCurve*)object;
+                            curve->translate(NxPoint(arguments.at(2).toDouble(), arguments.at(3).toDouble(), arguments.at(4).toDouble()));
                         }
                     }
                     else if((commande == COMMAND_CURVE_POINT) && (arguments.count() >= 5)) {

@@ -1,0 +1,71 @@
+//Creation of the score
+function onCreate() {
+	//Viewport setup
+	run("clear");
+	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
+	run("rotate 0 -80 10");
+	run("center 0 0");
+	run("zoom 110");
+	
+	//Create your own curve!!
+	addCurve([
+			{x: -5, y:  0, z: -2},
+			{x: -3, y: -4, z: -2},
+			{x: -1, y:  2, z:  2},
+			{x:  1, y: -1, z:  2},
+			{x:  3, y:  4, z:  2},
+			{x:  5, y:  2, z: -2},
+			], {nb: 10, factor: 0.2});
+}
+
+//Custom function
+var id = 0;
+function addCurve(pts, thick) {
+	//Browse delta-curves
+	for(var i = 0 ; i < thick.nb ; i++) {
+		//Create curves
+		var val = 1+map(i, 0, thick.nb, -thick.factor, thick.factor);
+		run("add curve        " + (1000 + id));
+		run("setGroup         current lines");
+
+		//Browse points
+		for(var ptIndex = 0 ; ptIndex < pts.length ; ptIndex++) {
+			if((ptIndex == 0) || (ptIndex == (pts.length-1)))
+				run("setSmoothPointAt current " + ptIndex + " " + pts[ptIndex].x + " " + pts[ptIndex].y + " " + pts[ptIndex].z);
+			else
+				run("setSmoothPointAt current " + ptIndex + " " + (pts[ptIndex].x*val) + " " + (pts[ptIndex].y*val) + " " +(pts[ptIndex].z*val));
+		}
+		if(val == 1)
+			run("setColor     current 255 80 30 255");
+		
+		//Create cursors
+		run("add cursor       " + id);
+		run("setGroup         current values");
+		run("setCurve         current lastCurve");
+		run("setSpeed         current auto 10");
+		run("setBoundsSource  current -5 5 5 -5");
+		run("setBoundsTarget  current 0 1 1 0");
+			
+		//Increment ID
+		id++
+	}
+}
+
+/*
+    IanniX — a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 — IanniX Association
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+

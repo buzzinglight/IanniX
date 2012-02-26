@@ -120,6 +120,7 @@ public:
     void removePointAt(quint16 index);
     const NxPoint & setPointAt(quint16 index, const NxPoint & point, bool smooth, bool boundingRectCalculation = true);
     const NxPoint & setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation = true);
+    const void shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation = true);
     void setSVG(const QString & pathData);
     void setSVG2(const QString & polylineData);
     void setImage(const QString & filename);
