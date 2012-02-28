@@ -131,6 +131,7 @@ public slots:
     void askNxObject();
     void send(const ExtMessage & message);
     void sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status);
+    QImage takeScreenshot();
 
 
     //EXTERNAL INTERFACES

@@ -19,16 +19,22 @@
 #include "exthttpmanager.h"
 
 ExtHttpManager::ExtHttpManager(NxObjectFactoryInterface *_factory)
-    : QObject(_factory), ExtMessageManager(_factory) {
+    : QTcpServer(_factory), ExtMessageManager(_factory) {
     //Initialization
     factory = _factory;
 
     //Manager
     http = new QNetworkAccessManager(this);
     connect(http, SIGNAL(finished(QNetworkReply*)), SLOT(parse(QNetworkReply*)));
+}
 
-    //Browsers
-    QDesktopServices::setUrlHandler("iannix", this, "parseService");
+void ExtHttpManager::openPort(quint16 port) {
+    //Initialization
+    close();
+    if(listen(QHostAddress::Any, port))
+        emit(openPortStatus(true));
+    else
+        emit(openPortStatus(false));
 }
 
 void ExtHttpManager::send(const ExtMessage & message) {
@@ -38,6 +44,7 @@ void ExtHttpManager::send(const ExtMessage & message) {
     //Log in the OSC console
     factory->logOscSend(message.getVerboseMessage());
 }
+
 
 void ExtHttpManager::parse(QNetworkReply *reply) {
     QStringList commandItems = QString(reply->readAll()).split(COMMAND_END, QString::SkipEmptyParts);;
@@ -51,4 +58,63 @@ void ExtHttpManager::parse(QNetworkReply *reply) {
 
 void ExtHttpManager::parseService(const QUrl &url) {
     qDebug("%s", qPrintable(url.toString()));
+}
+
+
+//HTTP reception
+void ExtHttpManager::incomingConnection(int socketDescriptor) {
+    QTcpSocket *socket = new QTcpSocket(this);
+    connect(socket, SIGNAL(readyRead()),    this, SLOT(readClient()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(discardClient()));
+    socket->setSocketDescriptor(socketDescriptor);
+}
+void ExtHttpManager::readClient() {
+    QTcpSocket *socket = (QTcpSocket*)sender();
+    if(socket->canReadLine()) {
+        QStringList tokens = QString(socket->readLine()).split(QRegExp("[ \r\n][ \r\n]*"));
+        if((tokens.count() > 1) && (tokens[0] == "GET")) {
+            QUrl url(tokens[1]);
+
+            QList<QString> commands;
+            for(quint16 index = 0 ; index < url.queryItems().count() ; index++)
+                if(url.queryItems()[index].first.toLower().startsWith("run"))
+                    commands.append(url.queryItems()[index].second);
+
+            QTextStream os(socket);
+            if(commands.count() > 0) {
+                os.setAutoDetectUnicode(true);
+                os << "HTTP/1.0 200 Ok\r\n"
+                      "Content-Type: text/html; charset=\"utf-8\"\r\n"
+                      "Access-Control-Allow-Origin: *\r\n"
+                      "\r\n";
+
+                QString response = "";
+                foreach(const QString & command, commands)
+                    response += factory->execute(command).toString();
+
+                os << response;
+            }
+            else {
+                os << "HTTP/1.0 200 Ok\r\n"
+                      "Content-Type: image/jpeg\r\n"
+                      "Access-Control-Allow-Origin: *\r\n"
+                      "\r\n";
+
+                QByteArray byteArray;
+                QBuffer buffer(&byteArray);
+                factory->takeScreenshot().save(&buffer, "PNG");
+                os.flush();
+                socket->write(byteArray);
+            }
+
+            socket->close();
+
+            if(socket->state() == QTcpSocket::UnconnectedState)
+                delete socket;
+        }
+    }
+}
+void ExtHttpManager::discardClient() {
+    QTcpSocket* socket = (QTcpSocket*)sender();
+    socket->deleteLater();
 }

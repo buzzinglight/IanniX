@@ -153,6 +153,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(udp, SIGNAL(openPortStatus(bool)), inspector, SLOT(setUDPOk(bool)));
 
     http = new ExtHttpManager(this);
+    connect(inspector, SIGNAL(httpPortChange(quint16)), http, SLOT(openPort(quint16)));
+    connect(http, SIGNAL(openPortStatus(bool)), inspector, SLOT(setHttpOk(bool)));
 
     serial = new ExtSerialManager(this);
     connect(inspector, SIGNAL(serialPortChange(QString)), serial, SLOT(openPort(QString)));
@@ -189,9 +191,11 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     QSettings settings;
     //UDP
     if((forceSettings) || (!settings.childKeys().contains("oscPort")))
-        settings.setValue("oscPort", 1234);
+        settings.setValue("oscPort",  1234);
     if((forceSettings) || (!settings.childKeys().contains("udpPort")))
-        settings.setValue("udpPort", 1235);
+        settings.setValue("udpPort",  1235);
+    if((forceSettings) || (!settings.childKeys().contains("httpPort")))
+        settings.setValue("httpPort", 1236);
 #ifdef Q_OS_MAC
     if((forceSettings) || (!settings.childKeys().contains("serialPort")))
         settings.setValue("serialPort", "/dev/tty.usbserial-A600afc5:BAUD115200:DATA_8:PAR_NONE:STOP_1:FLOW_OFF");
@@ -231,6 +235,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 
     inspector->setOSCPort(settings.value("oscPort").toUInt());
     inspector->setUDPPort(settings.value("udpPort").toUInt());
+    inspector->setHttpPort(settings.value("httpPort").toUInt());
     inspector->setSerialPort(settings.value("serialPort").toString());
     inspector->setTransportMessage(settings.value("defaultMessageTransport").toString());
     inspector->setSyncMessage(settings.value("defaultMessageSync").toString());
@@ -312,12 +317,12 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
                             start    = edlTracklistChannel[3];
                             QStringList startSeparator = start.split(":");
                             startSec = startSeparator[0].toDouble()*3600 + startSeparator[1].toDouble()*60 + startSeparator[2].toDouble() + startSeparator[3].toDouble()*1./25.;
-                            startSec -= 60;
+                            startSec -= 3600;
 
                             end      = edlTracklistChannel[4];
                             QStringList endSeparator = end.split(":");
                             endSec = endSeparator[0].toDouble()*3600 + endSeparator[1].toDouble()*60 + endSeparator[2].toDouble() + endSeparator[3].toDouble()*1./25.;
-                            endSec -= 60;
+                            endSec -= 3600;
 
                             duration = edlTracklistChannel[5];
                             QStringList durationSeparator = duration.split(":");
@@ -1271,6 +1276,9 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             else if((commande == COMMAND_GOTO) && (arguments.count() >= 2)) {
                 actionGoto(arguments.at(1).toDouble());
             }
+            else if((commande == COMMAND_GOTO) && (arguments.count() >= 1)) {
+                return timeLocal;
+            }
             else if((commande == COMMAND_SLEEP) && (arguments.count() >= 2)) {
                 QMutex mutex;
                 QWaitCondition sleep;
@@ -1664,6 +1672,10 @@ void IanniX::sendMessage(void *_object, void *_trigger, void *_cursor, void *_co
             object->setMessageLabel(sentMessages);
     }
 }
+QImage IanniX::takeScreenshot() {
+    return render->grabFrameBuffer(false);
+}
+
 void IanniX::send(const ExtMessage & message) {
     //Launch
     execute(message.getAsciiMessage());
@@ -1865,6 +1877,7 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     QSettings settings;
     settings.setValue("oscPort", inspector->getOSCPort());
     settings.setValue("udpPort", inspector->getUDPPort());
+    settings.setValue("httpPort", inspector->getHttpPort());
     settings.setValue("serialPort", inspector->getSerialPort());
     settings.setValue("defaultMessageTransport", inspector->getTransportMessage());
     settings.setValue("defaultMessageSync", inspector->getSyncMessage());

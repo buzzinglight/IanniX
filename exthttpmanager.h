@@ -23,9 +23,10 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QDesktopServices>
+#include <QTcpServer>
 #include "extmessage.h"
 
-class ExtHttpManager : public QObject, public ExtMessageManager {
+class ExtHttpManager : public QTcpServer, public ExtMessageManager {
     Q_OBJECT
 
 private:
@@ -37,10 +38,22 @@ public:
 public:
     void send(const ExtMessage & message);
 
+public slots:
+    void openPort(quint16);
+signals:
+    void openPortStatus(bool);
+
 private slots:
     void parse(QNetworkReply*);
 public slots:
     void parseService(const QUrl &url);
+
+protected:
+    void incomingConnection(int socketDescriptor);
+private slots:
+    void readClient();
+    void discardClient();
+
  };
 
 #endif // EXTHTTPMANAGER_H

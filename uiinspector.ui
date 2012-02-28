@@ -2122,7 +2122,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="0">
+              <item row="6" column="0">
                <widget class="QLabel" name="serialInPortLabel">
                 <property name="text">
                  <string>SERIAL PORT</string>
@@ -2132,7 +2132,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
+              <item row="4" column="0">
                <widget class="QLabel" name="transportMessageLabel">
                 <property name="text">
                  <string>TRANSPORT
@@ -2159,14 +2159,14 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1" colspan="2">
+              <item row="6" column="1" colspan="2">
                <widget class="QLineEdit" name="serialInPortEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1" colspan="2">
+              <item row="4" column="1" colspan="2">
                <widget class="QLineEdit" name="transportMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2176,7 +2176,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
+              <item row="5" column="0">
                <widget class="QLabel" name="syncMessageLabel">
                 <property name="text">
                  <string>SYNC
@@ -2187,7 +2187,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1" colspan="2">
+              <item row="5" column="1" colspan="2">
                <widget class="QLineEdit" name="syncMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2197,7 +2197,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
+              <item row="3" column="0">
                <widget class="QLabel" name="bundleMessageLabel">
                 <property name="text">
                  <string>MAKE OSC
@@ -2208,7 +2208,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
+              <item row="3" column="1">
                <widget class="QLineEdit" name="bundleMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2221,8 +2221,34 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="2" column="2">
+              <item row="3" column="2">
                <widget class="QSpinBox" name="bundleMessagePort">
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="minimum">
+                 <number>1024</number>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="httpInPortLabel">
+                <property name="text">
+                 <string>HTTP IN PORT</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QSpinBox" name="httpInPortSpin">
                 <property name="maximumSize">
                  <size>
                   <width>60</width>
@@ -2693,7 +2719,7 @@ BUNDLE ON</string>
    <hints>
     <hint type="sourcelabel">
      <x>168</x>
-     <y>423</y>
+     <y>393</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2709,7 +2735,7 @@ BUNDLE ON</string>
    <hints>
     <hint type="sourcelabel">
      <x>168</x>
-     <y>453</y>
+     <y>423</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3258,6 +3284,22 @@ BUNDLE ON</string>
     <hint type="destinationlabel">
      <x>543</x>
      <y>340</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>httpInPortSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-242</x>
+     <y>364</y>
     </hint>
    </hints>
   </connection>

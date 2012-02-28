@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QPixmap>
 #ifdef KINECT_INSTALLED
 #include "extkinectmanager.h"
 #endif
@@ -42,6 +43,7 @@ public:
 public:
     virtual void setObjectActivity(void *_object, quint8 activeOld) = 0;
     virtual void setObjectGroupId(void *_object, const QString & groupIdOld) = 0;
+    virtual QImage takeScreenshot() = 0;
 
 public slots:
     virtual void askNxObject() = 0;
