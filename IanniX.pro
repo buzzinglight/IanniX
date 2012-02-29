@@ -43,10 +43,10 @@ SOURCES                 += iannix.cpp \
                            exthttpmanager.cpp \
                            extserialmanager.cpp \
                            iannixapp.cpp \
-                           qextserialport\qextserialport.cpp \
-                           qrtmidi\RtMidi.cpp \
+                           qextserialport/qextserialport.cpp \
+                           qrtmidi/RtMidi.cpp \
                            extmidimanager.cpp \
-                           qjsedit\jsedit.cpp \
+                           qjsedit/jsedit.cpp \
                            uieditor.cpp \
                            nxpoint.cpp \
                            nxrect.cpp \
@@ -82,13 +82,13 @@ HEADERS                 += iannix.h \
                            extserialmanager.h \
                            extmessage.h \
                            iannixapp.h \
-                           qextserialport\qextserialport.h \
-                           qextserialport\qextserialenumerator.h \
-                           qextserialport\qextserialport_global.h \
-                           qrtmidi\RtMidi.h \
-                           qrtmidi\RtError.h \
+                           qextserialport/qextserialport.h \
+                           qextserialport/qextserialenumerator.h \
+                           qextserialport/qextserialport_global.h \
+                           qrtmidi/RtMidi.h \
+                           qrtmidi/RtError.h \
                            extmidimanager.h \
-                           qjsedit\jsedit.h \
+                           qjsedit/jsedit.h \
                            uieditor.h \
                            iannix_spec.h \
                            iannix_cmd.h \
