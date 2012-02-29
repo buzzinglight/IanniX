@@ -21,9 +21,96 @@ false {
 
 debug:DEFINES           += __RTMIDI_DEBUG__
 
-SOURCES                 += iannix.cpp uitransport.cpp  uirender.cpp  uiinspector.cpp  uiview.cpp  nxobject.cpp  nxdocument.cpp  nxtrigger.cpp  nxgroup.cpp  nxcurve.cpp  nxcursor.cpp  extoscmanager.cpp  extscriptmanager.cpp  extscriptvariableask.cpp  uisplash.cpp  uiabout.cpp  extoscpatternask.cpp  exttcpmanager.cpp  extudpmanager.cpp  exthttpmanager.cpp  extserialmanager.cpp  iannixapp.cpp  qextserialport\qextserialport.cpp  qrtmidi\RtMidi.cpp  extmidimanager.cpp  qjsedit\jsedit.cpp  uieditor.cpp  nxpoint.cpp  nxrect.cpp  nxsize.cpp  nxpolygon.cpp  nxline.cpp  extoscpatterneditor.cpp  nxeasing.cpp  nxcpu.cpp
-HEADERS                 += iannix.h  uitransport.h  uirender.h  uiinspector.h  uirenderoptions.h  uiview.h  nxobject.h  nxobjectfactoryinterface.h  nxdocument.h  nxtrigger.h  nxgroup.h  nxcurve.h  nxcursor.h  extoscmanager.h  extscriptmanager.h  extscriptvariableask.h  uisplash.h  uiabout.h  extoscpatternask.h  exttcpmanager.h  extudpmanager.h  exthttpmanager.h  extserialmanager.h  extmessage.h  iannixapp.h  qextserialport\qextserialport.h  qextserialport\qextserialenumerator.h  qextserialport\qextserialport_global.h  qrtmidi\RtMidi.h  qrtmidi\RtError.h  extmidimanager.h  qjsedit\jsedit.h  uieditor.h  iannix_spec.h  iannix_cmd.h  nxpoint.h  nxrect.h  nxsize.h  nxline.h  nxpolygon.h  extoscpatterneditor.h  nxeasing.h  nxcpu.h
-FORMS                   += uitransport.ui  uirender.ui  uiinspector.ui  uiview.ui  extscriptvariableask.ui  uisplash.ui  uiabout.ui  extoscpatternask.ui  uieditor.ui  extoscpatterneditor.ui
+SOURCES                 += iannix.cpp \
+                           uitransport.cpp \
+                           uirender.cpp \
+                           uiinspector.cpp \
+                           uiview.cpp \
+                           nxobject.cpp \
+                           nxdocument.cpp \
+                           nxtrigger.cpp \
+                           nxgroup.cpp \
+                           nxcurve.cpp \
+                           nxcursor.cpp \
+                           extoscmanager.cpp \
+                           extscriptmanager.cpp \
+                           extscriptvariableask.cpp \
+                           uisplash.cpp \
+                           uiabout.cpp \
+                           extoscpatternask.cpp \
+                           exttcpmanager.cpp \
+                           extudpmanager.cpp \
+                           exthttpmanager.cpp \
+                           extserialmanager.cpp \
+                           iannixapp.cpp \
+                           qextserialport\qextserialport.cpp \
+                           qrtmidi\RtMidi.cpp \
+                           extmidimanager.cpp \
+                           qjsedit\jsedit.cpp \
+                           uieditor.cpp \
+                           nxpoint.cpp \
+                           nxrect.cpp \
+                           nxsize.cpp \
+                           nxpolygon.cpp \
+                           nxline.cpp \
+                           extoscpatterneditor.cpp \
+                           nxeasing.cpp \
+                           nxcpu.cpp
+
+HEADERS                 += iannix.h \
+                           uitransport.h \
+                           uirender.h \
+                           uiinspector.h \
+                           uirenderoptions.h \
+                           uiview.h \
+                           nxobject.h \
+                           nxobjectfactoryinterface.h \
+                           nxdocument.h \
+                           nxtrigger.h \
+                           nxgroup.h \
+                           nxcurve.h \
+                           nxcursor.h \
+                           extoscmanager.h \
+                           extscriptmanager.h \
+                           extscriptvariableask.h \
+                           uisplash.h \
+                           uiabout.h \
+                           extoscpatternask.h \
+                           exttcpmanager.h \
+                           extudpmanager.h \
+                           exthttpmanager.h \
+                           extserialmanager.h \
+                           extmessage.h \
+                           iannixapp.h \
+                           qextserialport\qextserialport.h \
+                           qextserialport\qextserialenumerator.h \
+                           qextserialport\qextserialport_global.h \
+                           qrtmidi\RtMidi.h \
+                           qrtmidi\RtError.h \
+                           extmidimanager.h \
+                           qjsedit\jsedit.h \
+                           uieditor.h \
+                           iannix_spec.h \
+                           iannix_cmd.h \
+                           nxpoint.h \
+                           nxrect.h \
+                           nxsize.h \
+                           nxline.h \
+                           nxpolygon.h \
+                           extoscpatterneditor.h \
+                           nxeasing.h \
+                           nxcpu.h
+
+FORMS                   += uitransport.ui \
+                           uirender.ui \
+                           uiinspector.ui \
+                           uiview.ui \
+                           extscriptvariableask.ui \
+                           uisplash.ui \
+                           uiabout.ui \
+                           extoscpatternask.ui \
+                           uieditor.ui \
+                           extoscpatterneditor.ui
 
 TRANSLATIONS             = iannix_fr.ts
 
