@@ -744,16 +744,18 @@ JSEdit::JSEdit(QWidget *parent)
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateSidebar()));
     connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateSidebar(QRect, int)));
 
-#if defined(Q_OS_MAC)
     QFont textFont = font();
-    textFont.setPointSize(12);
+    textFont.setPixelSize(12);
+#ifdef Q_OS_MAC
     textFont.setFamily("Monaco");
-    setFont(textFont);
-#elif defined(Q_OS_UNIX)
-    QFont textFont = font();
-    textFont.setFamily("Monospace");
-    setFont(textFont);
 #endif
+#ifdef Q_OS_LINUX
+    textFont.setFamily("Monospace");
+#endif
+#ifdef Q_OS_WIN
+    textFont.setFamily("Lucida Console");
+#endif
+    setFont(textFont);
 }
 
 JSEdit::~JSEdit()

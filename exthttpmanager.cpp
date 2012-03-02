@@ -57,7 +57,7 @@ void ExtHttpManager::parse(QNetworkReply *reply) {
 }
 
 void ExtHttpManager::parseService(const QUrl &url) {
-    qDebug("%s", qPrintable(url.toString()));
+    qDebug("=ASK=> %s", qPrintable(url.toString()));
 }
 
 

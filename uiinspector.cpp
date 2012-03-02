@@ -51,7 +51,7 @@ UiInspector::UiInspector(QWidget *parent) :
 
     ui->easingCombo->clear();
     NxEasing easing;
-    for(quint16 type = 0 ; type <= 45 ; type++) {
+    for(quint16 type = 0 ; type < 45 ; type++) {
         easing.setType(type);
         ui->easingCombo->addItem(QIcon(easing.getPixmap()), tr("Type %1").arg(type));
     }

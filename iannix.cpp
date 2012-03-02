@@ -293,6 +293,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 
 
     //Conversion d'EDL
+    /*
     QString tracks;
     for(quint16 i = 0 ; i < 10 ; i++) {
         QString sequence = tr("SEQ%1").arg(i);
@@ -352,6 +353,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
             edlOut.close();
         }
     }
+    */
 }
 
 void IanniX::actionImportSVG(const QString &filename) {
