@@ -77,8 +77,7 @@ void ExtHttpManager::readClient() {
 
             QList<QString> commands;
             for(quint16 index = 0 ; index < url.queryItems().count() ; index++)
-                if(url.queryItems()[index].first.toLower().startsWith("run"))
-                    commands.append(url.queryItems()[index].second);
+                commands.append(url.queryItems()[index].second);
 
             QTextStream os(socket);
             if(commands.count() > 0) {
@@ -89,8 +88,12 @@ void ExtHttpManager::readClient() {
                       "\r\n";
 
                 QString response = "";
-                foreach(const QString & command, commands)
+                foreach(const QString & command, commands) {
+                    //Fire events (log, message and script mapping)
+                    factory->logOscReceive(url.toString());
                     response += factory->execute(command).toString();
+                    factory->onOscReceive("http", socket->peerAddress().toString(), QString::number(socket->peerPort()), url.path(), command.split(" ", QString::SkipEmptyParts));
+                }
 
                 os << response;
             }

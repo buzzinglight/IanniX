@@ -18,9 +18,8 @@ function onCreate() {
 	run("zoom 150");
 	
 	//Line curves
-	for(var lineIndex = 0 ; lineIndex < lineMax ; lineIndex++) {
+	for(var lineIndex = 0 ; lineIndex < lineMax ; lineIndex++)
 		addLine();
-	}
 }
 
 //Custom function

@@ -15,17 +15,17 @@ function onCreate() {
 	for(var index = 0 ; index < number_of_lines ; index++) {
 		//Add curves with ID 1000, 1001, 1002, ...
 		run("add curve " + (1000 + index));
-		//Move this curve to (x,y,z) = (index,-4,0)
-		run("setPos current " + (-index) + " 0 0");
-		//Add points to make a "grid"
-		run("setPointAt current 1 " + index + " " + ((number_of_lines - index) / vertical_grid_dilatation));
+		//Set the first point on the current curve
+		run("setPointAt current 0 " + (-index) + " 0");
+		//Set the second point on the current curve
+		run("setPointAt current 1 0 " + ((number_of_lines - index) / vertical_grid_dilatation));
 		
 		//Add a cursor with ID 0, 1, 2, ...
 		run("add cursor " + index);
 		//Link cursor to previous created curve
 		run("setCurve current lastCurve");
 		//Cursor width
-		run("setWidth current 1");
+		run("setWidth current 1.5");
 		//Play curve ONE time (speed = 1 then speed = 0)
 		run("setPattern current 0 0 1 0");
 		//Mapping

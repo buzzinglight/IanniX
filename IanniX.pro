@@ -8,7 +8,7 @@ QT                      += core gui opengl network script xml
 
 TARGET                   =  IanniX
 TEMPLATE                 =  app
-CONFIG                  +=  x86_64
+CONFIG                  +=  x86 x86_64
 
 false {
     CONFIG              -= x86
