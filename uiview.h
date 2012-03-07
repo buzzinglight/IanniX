@@ -112,6 +112,7 @@ protected:
     void changeEvent(QEvent *e);
     void keyPressEvent(QKeyEvent *event);
     void closeEvent(QCloseEvent *);
+    void tabletEvent(QTabletEvent *);
 
 private:
     Ui::UiView *ui;

@@ -53,7 +53,7 @@ UiInspector::UiInspector(QWidget *parent) :
     NxEasing easing;
     for(quint16 type = 0 ; type < 45 ; type++) {
         easing.setType(type);
-        ui->easingCombo->addItem(QIcon(easing.getPixmap()), tr("Type %1").arg(type));
+        ui->easingCombo->addItem(QIcon(easing.getPixmap()), tr("Type") + QString(" %1").arg(type));
     }
 
     //needRefresh = true;
@@ -195,13 +195,6 @@ void UiInspector::actionColor() {
                     trigger->setColorInactiveMessage(val);
             }
         }
-        /*
-        QStringList oldValStr = combo.split(" ", QString::SkipEmptyParts);
-        if(oldValStr.count() == 4) {
-            QColor oldVal(oldValStr[0].toUInt(), oldValStr[1].toUInt(), oldValStr[2].toUInt(), oldValStr[3].toUInt());
-            QColor val = QColorDialog::getColor(oldVal, 0, tr("IanniX Color Inspector"), QColorDialog::ShowAlphaChannel);
-        }
-        */
         refresh();
     }
 }
@@ -283,10 +276,10 @@ void UiInspector::logOscReceive(const QString & message) {
     ui->oscReceiveText->appendPlainText(message);
 }
 void UiInspector::setMousePos(const NxPoint & pos) {
-    ui->mouseLabel->setText(tr("MOUSE: %1 / %2").arg(pos.x(), 0, 'f', 3).arg(pos.y(), 0, 'f', 3));
+    ui->mouseLabel->setText(tr("MOUSE:") + QString(" %1 / %2").arg(pos.x(), 0, 'f', 3).arg(pos.y(), 0, 'f', 3));
 }
 void UiInspector::setMouseZoom(qreal zoom) {
-    ui->zoomLabel->setText(tr("ZOOM: %1%").arg(zoom, 0, 'f', 1));
+    ui->zoomLabel->setText(tr("ZOOM:") + QString(" %1%").arg(zoom, 0, 'f', 1));
 }
 
 void UiInspector::timerEvent(QTimerEvent *) {
@@ -297,16 +290,16 @@ void UiInspector::refresh() {
     nbTriggers = triggerItem->childCount();
     nbCursors = cursorItem->childCount();
     nbCurves = curveItem->childCount();
-    QString triggerStr = tr("TRIGGERS (%1)").arg(nbTriggers);
-    QString cursorStr = tr("CURSORS (%1)").arg(nbCursors);
-    QString curveStr = tr("CURVES (%1)").arg(nbCurves);
+    QString triggerStr = tr("TRIGGERS") + QString(" (%1)").arg(nbTriggers);
+    QString cursorStr = tr("CURSORS") + QString(" (%1)").arg(nbCursors);
+    QString curveStr = tr("CURVES") + QString(" (%1)").arg(nbCurves);
     triggerItem->setText(0, triggerStr);
     cursorItem->setText(0, cursorStr);
     curveItem->setText(0, curveStr);
     ui->viewTriggerCheck->setText(triggerStr);
     ui->viewCursorCheck->setText(cursorStr);
     ui->viewCurveCheck->setText(curveStr);
-    ui->viewGroupLabel->setText(tr("GROUPS (%1)").arg(ui->cc2View->topLevelItemCount()));
+    ui->viewGroupLabel->setText(tr("GROUPS") + QString(" (%1)").arg(ui->cc2View->topLevelItemCount()));
 
     actionInfoLock = true;
 
@@ -396,7 +389,6 @@ void UiInspector::refresh() {
 
                 if(cursor->getCurve()) {
                     ui->posSpin->setValue(cursor->getCurrentPosition());
-                    //ui->cursorPosLabel->setText(tr("Cursor Speed/Length") + "\r\n(" + QString().setNum(cursor->getCurrentPosition(), 'f', 3) + "s.)");
                     change(indexObject, ui->speedSpin, cursor->getTimeFactor(), prevCursor->getTimeFactor());
                     change(indexObject, ui->cursorLengthSpin, cursor->getCurve()->getPathLength() / cursor->getTimeFactor(), prevCursor->getCurve()->getPathLength() / prevCursor->getTimeFactor());
                 }

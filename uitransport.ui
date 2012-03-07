@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>iannix — Transport</string>
+   <string>IanniX — Transport</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
@@ -265,10 +265,10 @@ QLabel#lastMessage {
             <string>Elapsed time</string>
            </property>
            <property name="inputMask">
-            <string>999:99.999; </string>
+            <string notr="true">999:99.999; </string>
            </property>
            <property name="text">
-            <string>444:44.444</string>
+            <string notr="true">444:44.444</string>
            </property>
           </widget>
          </item>
@@ -424,10 +424,10 @@ color: rgba(255,255,255,128);</string>
             <string>Scheduler accuracy</string>
            </property>
            <property name="inputMask">
-            <string>009 ms; </string>
+            <string notr="true">009 ms; </string>
            </property>
            <property name="text">
-            <string> ms</string>
+            <string notr="true"> ms</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -452,10 +452,10 @@ color: rgba(255,255,255,128);</string>
             <string>Graphism accuracy</string>
            </property>
            <property name="inputMask">
-            <string>009 fps; </string>
+            <string notr="true">009 fps; </string>
            </property>
            <property name="text">
-            <string> fps</string>
+            <string notr="true"> fps</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -480,13 +480,13 @@ color: rgba(255,255,255,128);</string>
             <string>CPU usage</string>
            </property>
            <property name="inputMask">
-            <string>009 %; </string>
+            <string notr="true">009 %; </string>
            </property>
            <property name="text">
-            <string> %</string>
+            <string notr="true"> %</string>
            </property>
            <property name="cursorPosition">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>

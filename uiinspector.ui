@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>iannix — Inspector</string>
+   <string>IanniX — Inspector</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
@@ -427,7 +427,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
                </size>
               </property>
               <property name="suffix">
-               <string>s</string>
+               <string notr="true">s</string>
               </property>
               <property name="decimals">
                <number>2</number>
@@ -458,7 +458,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
                </size>
               </property>
               <property name="suffix">
-               <string>s</string>
+               <string notr="true">s</string>
               </property>
               <property name="decimals">
                <number>2</number>
@@ -489,7 +489,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
                </size>
               </property>
               <property name="suffix">
-               <string>s</string>
+               <string notr="true">s</string>
               </property>
               <property name="decimals">
                <number>2</number>
@@ -546,7 +546,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
                </size>
               </property>
               <property name="suffix">
-               <string>s</string>
+               <string notr="true">s</string>
               </property>
               <property name="decimals">
                <number>2</number>
@@ -577,7 +577,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
                </size>
               </property>
               <property name="suffix">
-               <string>s</string>
+               <string notr="true">s</string>
               </property>
               <property name="decimals">
                <number>2</number>
@@ -634,7 +634,7 @@ WIDTH</string>
                </size>
               </property>
               <property name="suffix">
-               <string>s</string>
+               <string notr="true">s</string>
               </property>
               <property name="decimals">
                <number>2</number>
@@ -747,7 +747,7 @@ OFFSETS</string>
                    </size>
                   </property>
                   <property name="suffix">
-                   <string>s</string>
+                   <string notr="true">s</string>
                   </property>
                   <property name="minimum">
                    <double>-999999.000000000000000</double>
@@ -823,7 +823,7 @@ OFFSETS</string>
                    </size>
                   </property>
                   <property name="suffix">
-                   <string>s</string>
+                   <string notr="true">s</string>
                   </property>
                   <property name="decimals">
                    <number>2</number>
@@ -870,7 +870,7 @@ OFFSETS</string>
                    </size>
                   </property>
                   <property name="suffix">
-                   <string>s</string>
+                   <string notr="true">s</string>
                   </property>
                   <property name="decimals">
                    <number>2</number>
@@ -944,7 +944,7 @@ MANUAL POS.</string>
                </size>
               </property>
               <property name="suffix">
-               <string>s</string>
+               <string notr="true">s</string>
               </property>
               <property name="decimals">
                <number>2</number>
@@ -1002,6 +1002,9 @@ or LENGTH</string>
                   <height>16777215</height>
                  </size>
                 </property>
+                <property name="suffix">
+                 <string notr="true"/>
+                </property>
                 <property name="decimals">
                  <number>3</number>
                 </property>
@@ -1019,7 +1022,7 @@ or LENGTH</string>
               <item>
                <widget class="QLabel" name="cursorPosLabel2">
                 <property name="text">
-                 <string>=</string>
+                 <string notr="true">=</string>
                 </property>
                </widget>
               </item>
@@ -1038,7 +1041,7 @@ or LENGTH</string>
                  </size>
                 </property>
                 <property name="suffix">
-                 <string>s</string>
+                 <string notr="true">s</string>
                 </property>
                 <property name="decimals">
                  <number>2</number>
@@ -1108,6 +1111,9 @@ MASTER SPEED</string>
                 <width>60</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="suffix">
+               <string notr="true"/>
               </property>
               <property name="decimals">
                <number>3</number>
@@ -1182,7 +1188,7 @@ MAPPING</string>
                  <string>Type values separated by spaces</string>
                 </property>
                 <property name="text">
-                 <string>sdfsdf</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -1211,7 +1217,7 @@ MAPPING</string>
                  <string>Type values separated by spaces</string>
                 </property>
                 <property name="text">
-                 <string>sqdffsd</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -1242,7 +1248,7 @@ MAPPING</string>
                <string notr="true">font: bold;</string>
               </property>
               <property name="text">
-               <string>Group 2</string>
+               <string>GROUP</string>
               </property>
              </widget>
             </item>
@@ -1308,7 +1314,7 @@ MAPPING</string>
                </size>
               </property>
               <property name="suffix">
-               <string>s</string>
+               <string notr="true">s</string>
               </property>
               <property name="decimals">
                <number>3</number>
@@ -1590,7 +1596,7 @@ MAPPING</string>
                </size>
               </property>
               <property name="suffix">
-               <string/>
+               <string notr="true"/>
               </property>
               <property name="decimals">
                <number>3</number>
@@ -1621,7 +1627,7 @@ MAPPING</string>
                </size>
               </property>
               <property name="suffix">
-               <string>ms</string>
+               <string notr="true">ms</string>
               </property>
               <property name="decimals">
                <number>0</number>
@@ -2166,16 +2172,6 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1" colspan="2">
-               <widget class="QLineEdit" name="transportMessageEdit">
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>osc://</string>
-                </property>
-               </widget>
-              </item>
               <item row="5" column="0">
                <widget class="QLabel" name="syncMessageLabel">
                 <property name="text">
@@ -2193,7 +2189,7 @@ MESSAGE</string>
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string>osc://</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -2214,10 +2210,10 @@ BUNDLE ON</string>
                  <string notr="true"/>
                 </property>
                 <property name="inputMask">
-                 <string>000.000.000.000;_</string>
+                 <string notr="true">000.000.000.000;_</string>
                 </property>
                 <property name="text">
-                 <string>...</string>
+                 <string notr="true">...</string>
                 </property>
                </widget>
               </item>
@@ -2260,6 +2256,16 @@ BUNDLE ON</string>
                 </property>
                 <property name="maximum">
                  <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1" colspan="2">
+               <widget class="QLineEdit" name="transportMessageEdit">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -3032,38 +3038,6 @@ BUNDLE ON</string>
    </hints>
   </connection>
   <connection>
-   <sender>transportMessageEdit</sender>
-   <signal>editingFinished()</signal>
-   <receiver>UiInspector</receiver>
-   <slot>actionNetwork()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>215</x>
-     <y>520</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>378</x>
-     <y>346</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>transportMessageEdit</sender>
-   <signal>returnPressed()</signal>
-   <receiver>UiInspector</receiver>
-   <slot>actionNetwork()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>215</x>
-     <y>520</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>378</x>
-     <y>301</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>serialInPortEdit</sender>
    <signal>returnPressed()</signal>
    <receiver>UiInspector</receiver>
@@ -3300,6 +3274,38 @@ BUNDLE ON</string>
     <hint type="destinationlabel">
      <x>-242</x>
      <y>364</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>transportMessageEdit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>520</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>346</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>transportMessageEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>520</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>301</y>
     </hint>
    </hints>
   </connection>

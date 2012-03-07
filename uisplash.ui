@@ -94,7 +94,7 @@ color: rgba(255,255,255,128);</string>
     <string notr="true">font: 10px;</string>
    </property>
    <property name="text">
-    <string>www.iannix.org</string>
+    <string notr="true">www.iannix.org</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

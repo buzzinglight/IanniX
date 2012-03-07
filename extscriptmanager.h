@@ -63,7 +63,7 @@ public:
             foreach(const QString & argument, arguments)
                 argumentsStr += "\"" + argument + "\",";
             argumentsStr.chop(1);
-            scriptOnOSC.call(QScriptValue(), QScriptValueList() << protocol << host << port << destination << scriptEngine.evaluate(tr("[%5]").arg(argumentsStr)));
+            scriptOnOSC.call(QScriptValue(), QScriptValueList() << protocol << host << port << destination << scriptEngine.evaluate(QString("[%5]").arg(argumentsStr)));
         }
     }
     inline void onDrawCall(qreal time) {

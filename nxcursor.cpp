@@ -295,7 +295,7 @@ void NxCursor::paint() {
             }
 
             //Special feature YEOSU
-            if((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz())) {
+            if(true && ((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz()))) {
                 glPushMatrix();
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
                 glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 8);

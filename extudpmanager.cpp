@@ -52,7 +52,7 @@ void ExtUdpManager::parseOSC() {
         QStringList commandItems = commands.split(COMMAND_END, QString::SkipEmptyParts);;
         foreach(const QString & command, commandItems) {
             //Fire events (log, message and script mapping)
-            factory->logOscReceive(tr("udp://%1:%2/%3").arg(receivedHost.toString()).arg(receivedPort).arg(command));
+            factory->logOscReceive(QString("udp://%1:%2/%3").arg(receivedHost.toString()).arg(receivedPort).arg(command));
             factory->execute(command);
             factory->onOscReceive("udp", receivedHost.toString(), QString::number(receivedPort), "", command.split(" ", QString::SkipEmptyParts));
         }

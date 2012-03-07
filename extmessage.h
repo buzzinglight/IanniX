@@ -27,7 +27,7 @@
 #include "nxdocument.h"
 #include "nxobjectfactoryinterface.h"
 
-enum MessagesType     { MessagesTypeNo, MessagesTypeDirect, MessagesTypeOsc, MessagesTypeUdp, MessagesTypeTcp, MessagesTypeHttp, MessagesTypeSerial, MessagesTypeMidi };
+enum MessagesType     { MessagesTypeNo, MessagesTypeDirect, MessagesTypeOsc, MessagesTypeUdp, MessagesTypeTcp, MessagesTypeHttp, MessagesTypeSerial, MessagesTypeMidi, MessagesTypeMouse, MessagesTypeTablet };
 
 class ExtMessage {
 private:
@@ -91,6 +91,12 @@ public:
             type = MessagesTypeMidi;
             midiPort = urlMessage.host().toLower();
             midiCommand = urlMessage.path().toLower();
+        }
+        else if(urlMessage.scheme().toLower() == "mouse") {
+            type = MessagesTypeMouse;
+        }
+        else if(urlMessage.scheme().toLower() == "tablet") {
+            type = MessagesTypeTablet;
         }
     }
     
@@ -392,7 +398,7 @@ public:
                 pad(buffer);
                 buffer += arguments;
             }
-            else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect)) {
+            else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
                 asciiMessage = asciiMessage.trimmed();
             }
         }
@@ -427,7 +433,7 @@ private:
             urlMessage.addQueryItem(name, str);
             return true;
         }
-        else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect)) {
+        else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
             asciiMessage = asciiMessage + " " + qPrintable(str);
             return true;
         }
@@ -454,7 +460,7 @@ private:
             midiValues.append(f);
             return true;
         }
-        else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect)) {
+        else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
             asciiMessage = asciiMessage + " " + conversionTemp.setNum(f);
             return true;
         }

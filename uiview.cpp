@@ -20,8 +20,8 @@
 #include "ui_uiview.h"
 
 UiView::UiView(QWidget *parent) :
-        QMainWindow(parent),
-        ui(new Ui::UiView) {
+    QMainWindow(parent),
+    ui(new Ui::UiView) {
     ui->setupUi(this);
     ui->render->setFocus();
 
@@ -126,6 +126,10 @@ void UiView::closeEvent(QCloseEvent *event) {
     emit(actionRouteCloseEvent(event));
 }
 
+void UiView::tabletEvent(QTabletEvent *event) {
+    //qDebug("%d : (%f, %f, %f) p=%f angle=%f tp=%f dx=%f dy=%f", event->uniqueId(), event->hiResGlobalPos().x(), event->hiResGlobalPos().y(), event->z(), event->pressure(), event->rotation(), event->tangentialPressure(), event->xTilt(), event->yTilt());
+}
+
 void UiView::actionFullscreen() {
     if(isFullScreen()) {
         setWindowState(windowState() & ~Qt::WindowFullScreen);
@@ -176,23 +180,23 @@ void UiView::actionToggleLabel() {
     ui->render->getRenderOptions()->paintLabel = ui->actionToggleLabel->isChecked();
 }
 void UiView::actionImportSVG() {
-    QString fileName = QFileDialog::getOpenFileName(0, tr("Select a SVG file…"), QDir::currentPath(), tr("SVG Files (*.svg)"));
+    QString fileName = QFileDialog::getOpenFileName(0, tr("Select a SVG file…"), QDir::currentPath(), tr("SVG Files") + " (*.svg)");
     if(fileName != "")
         emit(actionRouteImportSVG(fileName));
 }
 void UiView::actionImportImage() {
-    QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images (*.png *.jpg *.jpeg)"));
+    QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images") + " (*.png *.jpg *.jpeg)");
     if(fileName != "")
         emit(actionRouteImportImage(fileName));
 }
 void UiView::actionImportBackground() {
-    QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images (*.png *.jpg *.jpeg)"));
+    QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images") + " (*.png *.jpg *.jpeg)");
     if(fileName != "")
         emit(actionRouteImportBackground(fileName));
 }
 void UiView::actionImportText() {
     QString font = "";
-    QString text = QInputDialog::getText(0, tr("Type a glyph or text…"), tr("Type a glyphe or a text to import in IanniX"), QLineEdit::Normal, tr(""));
+    QString text = QInputDialog::getText(0, tr("Type a glyph or text…"), tr("Type a glyphe or a text to import in IanniX"), QLineEdit::Normal, "");
     if(text != "")
         emit(actionRouteImportText(font, text));
 }
@@ -250,7 +254,7 @@ void UiView::gridChange() {
     else if(action == ui->actionCustomValue) {
         qreal val = QInputDialog::getDouble(0, tr("Custom grid value"), tr("Enter the desired grid time value in seconds:"), 0.500, 0.00001, 9999999, 3, &ok);
         if(ok) {
-            ui->actionCustomValue->setText(tr("Custom value : %1 sec").arg(val));
+            ui->actionCustomValue->setText(tr("Custom value:") + QString(" %1 ").arg(val) + tr("sec"));
             actionRouteGridChange(val);
         }
     }

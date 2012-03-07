@@ -296,10 +296,10 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     /*
     QString tracks;
     for(quint16 i = 0 ; i < 10 ; i++) {
-        QString sequence = tr("SEQ%1").arg(i);
-        QFile edl(tr("EDL-%1.txt").arg(sequence));
+        QString sequence = QString("SEQ%1").arg(i);
+        QFile edl(QString("EDL-%1.txt").arg(sequence));
         if(edl.exists() && edl.open(QFile::ReadOnly)) {
-            tracks += tr("{\tsequence: \"%1\",\n"
+            tracks += QString("{\tsequence: \"%1\",\n"
                          "\ttrajectories: [\n").arg(sequence);
             QString edlContent = edl.readAll();
             QStringList edlTracklistsSeparator = edlContent.split("TRACK NAME:\t", QString::SkipEmptyParts);
@@ -331,7 +331,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
                         }
                     }
                 }
-                tracks += tr("\t{\tsequence: \"%1\", calque: \"\",\n"
+                tracks += QString("\t{\tsequence: \"%1\", calque: \"\",\n"
                              "\t\tname: \"%2\", start: %3, duration: %4, acceleration: 1,\n"
                              "\t\tedlStart: \"%5\", edlEnd: \"%6\",\n"
                              "\t\tinfo: \"%7\", color: colors.green,\n"
@@ -348,7 +348,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     if(tracks != "") {
         QFile edlOut("EDL-out.js");
         if(edlOut.open(QFile::WriteOnly)) {
-            tracks = tr("var data = [\n%1];").arg(tracks);
+            tracks = QString("var data = [\n%1];").arg(tracks);
             edlOut.write(qPrintable(tracks));
             edlOut.close();
         }
@@ -403,7 +403,7 @@ void IanniX::actionImportBackground(const QString &filename) {
         scale = QInputDialog::getDouble(0, tr("Image import"), tr("Image coordinates system & IanniX coordinates system are differents.\nYou need to scale the image to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 3, &ok);
         if(ok) {
             scale /= 100.;
-            execute(COMMAND_TEXTURE + " background " + tr("%1 %2 %3 %4").arg(-scale * pixmap.width() / 2).arg(scale * pixmap.height() / 2).arg(scale * pixmap.width() / 2).arg(-scale * pixmap.height() / 2) + " " + filename);
+            execute(COMMAND_TEXTURE + " background " + QString("%1 %2 %3 %4").arg(-scale * pixmap.width() / 2).arg(scale * pixmap.height() / 2).arg(scale * pixmap.width() / 2).arg(-scale * pixmap.height() / 2) + " " + filename);
         }
     }
 }
@@ -899,9 +899,9 @@ void IanniX::actionProjectFiles() {
             currentDocument->load();
             render->selectionClear(true);
             if((currentScript) && (currentDocument))
-                view->setWindowTitle(tr("IanniX — %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
+                view->setWindowTitle(tr("IanniX") + QString(" — %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
             else if(currentDocument)
-                view->setWindowTitle(tr("IanniX / %1").arg(currentDocument->getScriptFile().baseName()));
+                view->setWindowTitle(tr("IanniX") + QString(" / %1").arg(currentDocument->getScriptFile().baseName()));
             else
                 view->setWindowTitle(tr("IanniX"));
             actionGoto(timeLocal);
@@ -924,9 +924,9 @@ void IanniX::actionProjectScript() {
         editor->openFile(currentScript->getScriptFile());
         view->activateWindow();
         if((currentScript) && (currentDocument))
-            view->setWindowTitle(tr("IanniX — %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
+            view->setWindowTitle(tr("IanniX") + QString(" — %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
         else if(currentDocument)
-            view->setWindowTitle(tr("IanniX / %1").arg(currentDocument->getScriptFile().baseName()));
+            view->setWindowTitle(tr("IanniX") + QString(" / %1").arg(currentDocument->getScriptFile().baseName()));
         else
             view->setWindowTitle(tr("IanniX"));
         actionGoto(timeLocal);
@@ -1291,7 +1291,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if((commande == COMMAND_LOG) && (arguments.count() >= 2)) {
                 lastMessage = command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+1)).trimmed();
-                this->logOscReceive(tr("Script : %1").arg(lastMessage));
+                this->logOscReceive(tr("Script:") + QString(" %1").arg(lastMessage));
             }
             else if((commande == COMMAND_CLEAR) && (arguments.count() >= 1)) {
                 if(currentDocument) {
@@ -1331,6 +1331,9 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                     state = Qt::Checked;
                 if((currentDocument) && (currentDocument->groups.contains(arguments.at(1))))
                     currentDocument->groups.value(arguments.at(1))->setCheckState(0, state);
+            }
+            else if((commande == COMMAND_MOUSE) && (arguments.count() >= 3)) {
+                QCursor::setPos(arguments.at(1).toInt(), arguments.at(2).toInt());
             }
             else if((commande == COMMAND_MESSAGE_SEND) && (arguments.count() >= 2)) {
                 QString mess = "1," + command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+arguments.at(0).length()));
@@ -1859,10 +1862,10 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     }
 
     if(nbFileNoSave > 0) {
-        QString ess = " has";
+        QString ess = " " + tr("has");
         if(nbFileNoSave > 1)
-            ess = "s have";
-        int rep = QMessageBox::question(0, tr("Score save"), QString().setNum(nbFileNoSave) + tr(" document") + ess + tr(" been changed without saving.\n\nDo you want to save modifications?"), QMessageBox::SaveAll | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel);
+            ess = tr("s have");
+        int rep = QMessageBox::question(0, tr("Score save"), tr("%1 document%2 been changed without saving.\n\nDo you want to save modifications?").arg(nbFileNoSave).arg(ess), QMessageBox::SaveAll | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel);
         if(rep == QMessageBox::Cancel) {
             event->ignore();
             return;
@@ -1942,7 +1945,7 @@ void IanniX::fileWatcherChanged(const QString & path) {
             if(document->getScriptFile() == currentDocument->getScriptFile())
                 inspector->getProjectFiles()->setCurrentItem(document);
         }
-        view->setWindowTitle(tr("IanniX — ") + currentDocument->getScriptFile().baseName());
+        view->setWindowTitle(tr("IanniX") + " — " + currentDocument->getScriptFile().baseName());
     }
 }
 

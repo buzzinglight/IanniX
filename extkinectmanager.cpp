@@ -52,7 +52,7 @@ ExtKinectManager::ExtKinectManager(QWidget *parent) :
     //Configuration GUI
     resize(320, 240);
     setWindowFlags(Qt::Tool);
-    setWindowTitle(tr("IanniX — Kinect"));
+    setWindowTitle(tr("IanniX") + " — " + tr("Kinect"));
     move(0, 0);
 
     labelCam = new QLabel();
@@ -128,7 +128,7 @@ void ExtKinectManager::timerEvent(QTimerEvent *event) {
     }
     else if(event->timerId() == timerCounter) {
         if(frameCounter > 0)
-            qDebug("%s", qPrintable(tr("%1 fps").arg(frameCounter/5)));
+            qDebug("%s", qPrintable(QString("%1 fps").arg(frameCounter/5)));
         frameCounter = 0;
     }
 }

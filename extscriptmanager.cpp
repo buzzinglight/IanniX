@@ -85,7 +85,7 @@ bool ExtScriptManager::parseScript(bool configure) {
                 QMessageBox message;
                 message.setText(tr("Error found"));
                 message.setInformativeText(errorsMessage);
-                message.setWindowTitle(tr("IanniX Script Error"));
+                message.setWindowTitle(tr("IanniX") + " — " + tr("Script Error"));
                 message.setStandardButtons(QMessageBox::Ok);
                 message.exec();
             }

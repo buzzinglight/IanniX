@@ -64,6 +64,7 @@
 #define COMMAND_MESSAGE_SEND                QString("sendosc")
 
 #define COMMAND_TOGGLE_GROUP                QString("togglegroup")
+#define COMMAND_MOUSE                       QString("mouse")
 
 #define COMMAND_TEXTURE                     QString("registertexture")
 

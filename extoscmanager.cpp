@@ -128,7 +128,7 @@ void ExtOscManager::parseOSC() {
                 }
 
                 //Fire events (log, message and script mapping)
-                factory->logOscReceive(tr("osc://%1:%2%3%4").arg(receivedHost.toString()).arg(receivedPort).arg(oscMatchAdress).arg(command));
+                factory->logOscReceive(QString("osc://%1:%2%3%4").arg(receivedHost.toString()).arg(receivedPort).arg(oscMatchAdress).arg(command));
                 factory->execute(command);
                 factory->onOscReceive("osc", receivedHost.toString(), QString::number(receivedPort), commandDestination, commandArguments);
             }
