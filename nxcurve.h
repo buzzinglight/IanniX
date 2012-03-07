@@ -20,6 +20,7 @@
 #define NXCURVE_H
 
 #include "nxobject.h"
+#include "qmath.h"
 
 #define CURVE_PATH_POINTS   300
 
@@ -202,5 +203,21 @@ public:
     void paint();
 
 };
+
+static void pathArcSegment(QPainterPath &path,
+                           qreal xc, qreal yc,
+                           qreal th0, qreal th1,
+                           qreal rx, qreal ry, qreal xAxisRotation);
+static void pathArc(QPainterPath &path,
+                    qreal               rx,
+                    qreal               ry,
+                    qreal               x_axis_rotation,
+                    int         large_arc_flag,
+                    int         sweep_flag,
+                    qreal               x,
+                    qreal               y,
+                    qreal curx, qreal cury);
+static bool parsePathDataFast(const QString &dataStr, QPainterPath &path);
+static inline void parseNumbersArray(const QChar *&str, QVarLengthArray<qreal, 8> &points);
 
 #endif // NXCURVE_H
