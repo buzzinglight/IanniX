@@ -75,7 +75,7 @@ void UiEditor::openFile(const QFileInfo & _scriptFile) {
         //contents.replace("\t", "  ");
 
         ui->jsEditor->setPlainText(contents);
-        setWindowTitle(tr("IanniX") + " — " + tr("Script Editor") + " — " + scriptFile.baseName());
+        setWindowTitle(tr("IanniX") + QString(" - ") + tr("Script Editor") + QString(" - ") + scriptFile.baseName());
         show();
         raise(); ///CG/// Move opened editor window in front of mail window.
     }

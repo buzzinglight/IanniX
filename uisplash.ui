@@ -56,7 +56,7 @@ color: rgba(255,255,255,128);</string>
    </property>
    <property name="icon">
     <iconset resource="IanniX.qrc">
-     <normaloff>:/general/res_splash.png</normaloff>:/general/res_splash.png</iconset>
+     <normaloff>:/general/res_splash2.png</normaloff>:/general/res_splash2.png</iconset>
    </property>
    <property name="iconSize">
     <size>

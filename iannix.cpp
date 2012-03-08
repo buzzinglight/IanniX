@@ -899,7 +899,7 @@ void IanniX::actionProjectFiles() {
             currentDocument->load();
             render->selectionClear(true);
             if((currentScript) && (currentDocument))
-                view->setWindowTitle(tr("IanniX") + QString(" — %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
+                view->setWindowTitle(tr("IanniX") + QString(" - %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
             else if(currentDocument)
                 view->setWindowTitle(tr("IanniX") + QString(" / %1").arg(currentDocument->getScriptFile().baseName()));
             else
@@ -924,7 +924,7 @@ void IanniX::actionProjectScript() {
         editor->openFile(currentScript->getScriptFile());
         view->activateWindow();
         if((currentScript) && (currentDocument))
-            view->setWindowTitle(tr("IanniX") + QString(" — %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
+            view->setWindowTitle(tr("IanniX") + QString(" - %2 / %1").arg(currentDocument->getScriptFile().baseName()).arg(currentScript->getScriptFile().baseName()));
         else if(currentDocument)
             view->setWindowTitle(tr("IanniX") + QString(" / %1").arg(currentDocument->getScriptFile().baseName()));
         else
@@ -1945,7 +1945,7 @@ void IanniX::fileWatcherChanged(const QString & path) {
             if(document->getScriptFile() == currentDocument->getScriptFile())
                 inspector->getProjectFiles()->setCurrentItem(document);
         }
-        view->setWindowTitle(tr("IanniX") + " — " + currentDocument->getScriptFile().baseName());
+        view->setWindowTitle(tr("IanniX") + QString(" - ") + currentDocument->getScriptFile().baseName());
     }
 }
 

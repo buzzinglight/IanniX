@@ -23,6 +23,10 @@ UiSplash::UiSplash(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UiSplash) {
     ui->setupUi(this);
+
+#ifdef Q_OS_MAC
+    ui->logo->setIcon(QIcon(":/general/res_splash.png"));
+#endif
     setWindowFlags(Qt::FramelessWindowHint);
     ui->version->setText(tr("version") + " " + QString(QCoreApplication::applicationVersion()) + " " + tr("beta"));
     QRect screen = QApplication::desktop()->geometry();

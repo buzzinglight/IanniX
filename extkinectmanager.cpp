@@ -52,7 +52,7 @@ ExtKinectManager::ExtKinectManager(QWidget *parent) :
     //Configuration GUI
     resize(320, 240);
     setWindowFlags(Qt::Tool);
-    setWindowTitle(tr("IanniX") + " — " + tr("Kinect"));
+    setWindowTitle(tr("IanniX") + QString(" - ") + tr("Kinect"));
     move(0, 0);
 
     labelCam = new QLabel();
