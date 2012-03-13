@@ -30,6 +30,29 @@ QDockWidget::title {
      text-align: center;
      background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
      padding-left: 5px;
+}
+
+QSplitter::handle {
+	background: rgb(255, 255, 255, 30);
+}
+QSplitter::handle:pressed {
+	background: rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 4px; }
+QSplitter::handle:vertical     		{	height: 4px; }
+
+
+QToolButton {
+	border: 0px solid transparent;
+	border-radius: 4px;
+	background-color: transparent;
+	margin: 4px;
+	min-width: 32px;
+	min-height: 32px;
+}
+QToolButton:pressed, QToolButton:checked {
+	border: 0px solid transparent;
+    background-color: rgba(0, 0, 0, 24);
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -152,7 +175,7 @@ QDockWidget::title {
    <property name="minimumSize">
     <size>
      <width>54</width>
-     <height>42</height>
+     <height>54</height>
     </size>
    </property>
    <property name="features">
@@ -200,7 +223,6 @@ QDockWidget::title {
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="separator"/>
    <addaction name="actionDrawTriggers"/>
    <addaction name="actionDrawFreeCurve"/>
    <addaction name="actionDrawPointCurve"/>
@@ -212,6 +234,10 @@ QDockWidget::title {
    <addaction name="separator"/>
    <addaction name="actionGrid"/>
    <addaction name="actionSnapGrid"/>
+   <addaction name="separator"/>
+   <addaction name="actionAllow_triggers_selection"/>
+   <addaction name="actionAllow_curves_selection"/>
+   <addaction name="actionAllow_cursors_selection"/>
    <addaction name="separator"/>
    <addaction name="actionToggle_Inspector"/>
    <addaction name="actionToggle_Transport"/>
@@ -745,6 +771,51 @@ QDockWidget::title {
   <action name="actionImoprt_Background">
    <property name="text">
     <string>Import background image…</string>
+   </property>
+  </action>
+  <action name="actionAllow_triggers_selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/general/res_icon_trigger_select.png</normaloff>:/general/res_icon_trigger_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Allow triggers selection</string>
+   </property>
+  </action>
+  <action name="actionAllow_curves_selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/general/res_icon_curve_select.png</normaloff>:/general/res_icon_curve_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Allow curves selection</string>
+   </property>
+  </action>
+  <action name="actionAllow_cursors_selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/general/res_icon_cursor_select.png</normaloff>:/general/res_icon_cursor_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Allow cursors selection</string>
    </property>
   </action>
  </widget>

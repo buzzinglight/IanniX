@@ -31,7 +31,8 @@ NxObject::NxObject(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     parentObject = 0;
     selectedHover = false;
     selected = false;
-    hasActivity = true;
+    hasActivity = false;
+    hasActivityOld = false;
     setMessageTimeInterval(1);
     isDrag = false;
     performCollision = false;

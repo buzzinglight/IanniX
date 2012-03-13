@@ -48,6 +48,8 @@
 #include "uiinspector.h"
 #include "uieditor.h"
 
+enum SchedulerActivity { SchedulerOff, SchedulerOn, SchedulerOneShot };
+
 class IanniX : public NxObjectFactoryInterface, public NxObjectDispatchProperty {
     Q_OBJECT
 
@@ -126,8 +128,8 @@ private:
     void fileWatcherFolder(QStringList extension, QDir dir, QTreeWidgetItem *parentList, bool isDocument);
 public slots:
     const QVariant execute(const QString & command, bool createNewObjectIfExists = false, bool dump = false);
-    void onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments);
-    void onDraw();
+    QString onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments);
+    QString onDraw();
     void askNxObject();
     void send(const ExtMessage & message);
     void sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status);
@@ -167,8 +169,10 @@ private slots:
     void closeSplash();
 signals:
     void updateTransport(QString, QString);
+private:
+    SchedulerActivity schedulerActivity;
 public:
-    void setScheduler(bool start);
+    void setScheduler(SchedulerActivity _schedulerActivity);
     inline bool getScheduler() const {
         if(timer)
             return timer->isActive();
@@ -237,6 +241,7 @@ public slots:
     void actionImportSVG(const QString &filename);
     void actionImportImage(const QString &filename);
     void actionImportBackground(const QString &filename);
+    void actionSelectionModeChange(bool,bool,bool);
     void actionImportText(const QString &font, const QString &text);
     void editingStart(const NxPoint &);
     void editingStop();

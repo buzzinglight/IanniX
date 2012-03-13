@@ -62,7 +62,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteImportImage(QString)),          SLOT(actionImportImage(QString)));
     connect(view, SIGNAL(actionRouteImportBackground(QString)),     SLOT(actionImportBackground(QString)));
     connect(view, SIGNAL(actionRouteImportText(QString,QString)),   SLOT(actionImportText(QString,QString)));
-
+    connect(view, SIGNAL(actionRouteSelectionModeChange(bool,bool,bool)), SLOT(actionSelectionModeChange(bool,bool,bool)));
 
     //Transport
     transport = view->getTransport();
@@ -408,6 +408,12 @@ void IanniX::actionImportBackground(const QString &filename) {
     }
 }
 
+void IanniX::actionSelectionModeChange(bool cursors, bool curves, bool triggers) {
+    render->getRenderOptions()->allowSelectionCursors  = cursors;
+    render->getRenderOptions()->allowSelectionCurves   = curves;
+    render->getRenderOptions()->allowSelectionTriggers = triggers;
+}
+
 void IanniX::actionImportText(const QString &font, const QString &text) {
     qreal scale = 0.1;
     bool ok = false;
@@ -431,8 +437,9 @@ void IanniX::actionImportText(const QString &font, const QString &text) {
     }
 }
 
-void IanniX::setScheduler(bool start) {
-    if(start) {
+void IanniX::setScheduler(SchedulerActivity _schedulerActivity) {
+    schedulerActivity = _schedulerActivity;
+    if(schedulerActivity != SchedulerOff) {
         timer->start();
         renderMeasure.start();
     }
@@ -459,7 +466,8 @@ void IanniX::timerTick() {
     if(forceTimeLocal) {
         delta = 0;
         timeTransportRefresh = 9999;
-        setScheduler(false);
+        if(schedulerActivity == SchedulerOneShot)
+            setScheduler(SchedulerOff);
     }
     timeLocal += delta * render->getRenderOptions()->timeFactor;
     if(timeLocal < 0) {
@@ -511,7 +519,7 @@ void IanniX::timerTick() {
                         cursor->setTime(delta * render->getRenderOptions()->timeFactor);
 
                         //Is cursor active ?
-                        if((!forceTimeLocal) && (cursor->getActive())) {
+                        if((!forceTimeLocal) && (cursor->getActive()) && (group->checkState(0) == Qt::Checked)) {
                             //Messages
                             cursor->trig();
 
@@ -641,11 +649,11 @@ void IanniX::actionToggle_Autosize() {
 
 void IanniX::actionPlay_pause() {
     if(getScheduler()) {
-        setScheduler(false);
+        setScheduler(SchedulerOff);
         sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
     }
     else {
-        setScheduler(true);
+        setScheduler(SchedulerOn);
         sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
     }
     view->activateWindow();
@@ -653,7 +661,7 @@ void IanniX::actionPlay_pause() {
 void IanniX::actionFast_rewind() {
     forceTimeLocal = true;
     timeLocal = 0;
-    setScheduler(true);
+    setScheduler(SchedulerOneShot);
     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "fastrewind");
     view->activateWindow();
 }
@@ -677,7 +685,8 @@ void IanniX::actionGoto() {
 void IanniX::actionGoto(qreal gotoTime) {
     timeLocal = gotoTime;
     forceTimeLocal = true;
-    setScheduler(true);
+    if(schedulerActivity == SchedulerOff)
+        setScheduler(SchedulerOneShot);
 }
 
 void IanniX::actionSetScheduler() {
@@ -1256,12 +1265,12 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 if(arguments.at(1).toDouble() != 0) {
                     transport->setPlay_pause(true);
                     transport->setSpeed(arguments.at(1).toDouble());
-                    setScheduler(true);
+                    setScheduler(SchedulerOn);
                     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
                 }
                 else {
                     transport->setPlay_pause(false);
-                    setScheduler(false);
+                    setScheduler(SchedulerOff);
                     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
                 }
                 actionSpeed();
@@ -1271,7 +1280,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if((commande == COMMAND_STOP) && (arguments.count() >= 1)) {
                 transport->setPlay_pause(false);
-                setScheduler(false);
+                setScheduler(SchedulerOff);
                 sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
                 actionSpeed();
             }
@@ -1689,13 +1698,17 @@ void IanniX::send(const ExtMessage & message) {
     logOscReceive(message.getVerboseMessage());
 }
 
-void IanniX::onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments) {
+QString IanniX::onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments) {
+    QString retour = "";
     foreach(ExtScriptManager *document, activeScripts)
-        document->onOSCCall(protocol, host, port, destination, arguments);
+        retour += document->onOSCCall(protocol, host, port, destination, arguments);
+    return retour;
 }
-void IanniX::onDraw() {
+QString IanniX::onDraw() {
+    QString retour = "";
     foreach(ExtScriptManager *document, activeScripts)
-        document->onDrawCall(timeLocal);
+        retour += document->onDrawCall(timeLocal);
+    return retour;
 }
 
 void IanniX::askNxObject() {
@@ -1826,9 +1839,15 @@ void IanniX::editingMove(const NxPoint & point, bool add) {
 void IanniX::actionGridChange(qreal val) {
     render->getRenderOptions()->axisGrid = val;
 }
-void IanniX::actionGridOpacityChange(qreal val) {
-    render->getRenderOptions()->colors["grid"] = QColor(255*val, 255*val, 255*val, 255);
-    render->getRenderOptions()->colors["axis"] = render->getRenderOptions()->colors["grid"].lighter(150);
+void IanniX::actionGridOpacityChange(qreal val) {    
+    if(!render->getColorTheme()) {
+        render->getRenderOptions()->colors["grid"] = QColor(255, 255, 255,  23*val);
+        render->getRenderOptions()->colors["axis"] = QColor(255, 255, 255,  18*val);
+    }
+    else {
+        render->getRenderOptions()->colors["grid"] = QColor(  0,   0,   0,  20*val);
+        render->getRenderOptions()->colors["axis"] = QColor(  0,   0,   0,  13*val);
+    }
 }
 void IanniX::actionSnapGrid() {
     render->actionSnapGrid();

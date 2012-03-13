@@ -76,8 +76,17 @@ void ExtHttpManager::readClient() {
             QUrl url(tokens[1]);
 
             QList<QString> commands;
-            for(quint16 index = 0 ; index < url.queryItems().count() ; index++)
-                commands.append(url.queryItems()[index].second);
+            QPair<QString,qint8> picFormat;
+            picFormat.first = "png";
+            picFormat.second = -1;
+            for(quint16 index = 0 ; index < url.queryItems().count() ; index++) {
+                if((url.queryItems()[index].first.toLower() != "png") && (url.queryItems()[index].first.toLower() != "jpg"))
+                    commands.append(url.queryItems()[index].second);
+                else {
+                    picFormat.first  = url.queryItems()[index].first.toLower();
+                    picFormat.second = url.queryItems()[index].second.toInt();
+                }
+            }
 
             QTextStream os(socket);
             if(commands.count() > 0) {
@@ -92,7 +101,9 @@ void ExtHttpManager::readClient() {
                     //Fire events (log, message and script mapping)
                     factory->logOscReceive(url.toString());
                     response += factory->execute(command).toString();
-                    factory->onOscReceive("http", socket->peerAddress().toString(), QString::number(socket->peerPort()), url.path(), command.split(" ", QString::SkipEmptyParts));
+                    QString responseOsc = factory->onOscReceive("http", socket->peerAddress().toString(), QString::number(socket->peerPort()), url.path(), command.split(" ", QString::SkipEmptyParts));
+                    if((responseOsc != "undefined") && (responseOsc != ""))
+                        response += "\n" + responseOsc;
                 }
 
                 os << response;
@@ -105,7 +116,9 @@ void ExtHttpManager::readClient() {
 
                 QByteArray byteArray;
                 QBuffer buffer(&byteArray);
-                factory->takeScreenshot().save(&buffer, "PNG");
+                if(picFormat.second == 0)
+                    picFormat.second = -1;
+                factory->takeScreenshot().save(&buffer, qPrintable(picFormat.first), picFormat.second);
                 os.flush();
                 socket->write(byteArray);
             }

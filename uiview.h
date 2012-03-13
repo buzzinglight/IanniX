@@ -61,6 +61,7 @@ public slots:
     void actionSnapGrid()         { emit(actionRouteSnapGrid()); }
     void actionShowEditor()       { emit(actionRouteShowEditor()); }
     void actionReloadScript()     { emit(actionRouteReloadScript()); }
+    void actionSelectionModeChange();
     void actionImportSVG();
     void actionImportImage();
     void actionImportBackground();
@@ -97,6 +98,7 @@ signals:
     void actionRouteCircleCurve();
     void actionRouteGridChange(qreal);
     void actionRouteGridOpacityChange(qreal);
+    void actionRouteSelectionModeChange(bool,bool,bool);
     void actionRouteSnapGrid();
     void actionRouteShowEditor();
     void actionRouteReloadScript();

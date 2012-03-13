@@ -1,16 +1,12 @@
 All platforms
 -------------
-Download Qt for your OS :
-	- ftp://ftp.qt.nokia.com/qtsdk/qt-sdk-linux-x86-opensource-2010.05.1.bin
-	- ftp://ftp.qt.nokia.com/qtsdk/qt-sdk-linux-x86_64-opensource-2010.05.1.bin
-	- ftp://ftp.qt.nokia.com/qtsdk/qt-sdk-mac-opensource-2010.05.dmg
-	- ftp://ftp.qt.nokia.com/qtsdk/qt-sdk-win-opensource-2010.05.exe
+Download Qt for your OS (http://qt.nokia.com/downloads/) and select Qt 4.7.4 for better performances.
 
-Windows & Mac OS X
+Linux, Mac OS X & Linux
 ------------------
 Open the project (.PRO) then build !
 
-Linux
+Linux (if missing libraries)
 -----
 chmod u+x <name of Qt package>
 ./<name of Qt package>

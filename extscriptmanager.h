@@ -57,18 +57,20 @@ public:
     inline void setObjectId(qint16 _objectId) {
         objectId = _objectId;
     }
-    inline void onOSCCall(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments) {
+    inline QString onOSCCall(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments) {
         if(scriptOnOSC.isValid()) {
             QString argumentsStr = "";
             foreach(const QString & argument, arguments)
                 argumentsStr += "\"" + argument + "\",";
             argumentsStr.chop(1);
-            scriptOnOSC.call(QScriptValue(), QScriptValueList() << protocol << host << port << destination << scriptEngine.evaluate(QString("[%5]").arg(argumentsStr)));
+            return scriptOnOSC.call(QScriptValue(), QScriptValueList() << protocol << host << port << destination << scriptEngine.evaluate(QString("[%5]").arg(argumentsStr))).toString();
         }
+        return "";
     }
-    inline void onDrawCall(qreal time) {
+    inline QString onDrawCall(qreal time) {
         if(scriptOnDraw.isValid())
-            scriptOnDraw.call(QScriptValue(), QScriptValueList() << time);
+            return scriptOnDraw.call(QScriptValue(), QScriptValueList() << time).toString();
+        return "";
     }
     inline const QFileInfo & getScriptFile() const {
         return scriptFile;

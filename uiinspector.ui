@@ -168,6 +168,16 @@ QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
 	background: none;
 }
+
+
+QSplitter::handle {
+	background: rgb(255, 255, 255, 30);
+}
+QSplitter::handle:pressed {
+	background: rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 4px; }
+QSplitter::handle:vertical     		{	height: 4px; }
 </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">

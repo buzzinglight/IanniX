@@ -54,14 +54,12 @@ NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
 
 void NxCursor::setTime(qreal delta) {
     if(curve) {
-        //TODO overflow si speed négatif + negative values
-        //timeLocalAbsolute += delta * timeFactor * timeFactorF * qAbs(start.at(nbLoop % start.count()));
-        factors = timeFactor * timeFactorF * start.at(nbLoop % start.count());
-        timeLocalAbsolute += delta * qAbs(factors);
-        delta *= factors;
         timeLocalOld = timeLocal;
+
+        factors = timeFactor * timeFactorF * start.at(nbLoop % start.count());
+        timeLocalAbsolute += delta * timeFactor * timeFactorF * qAbs(start.at(nbLoop % start.count()));
         if(time >= 0)
-            timeLocal += delta;
+            timeLocal     += delta * factors;
         else
             timeLocal = 0;
 
@@ -73,11 +71,17 @@ void NxCursor::setTime(qreal delta) {
         if(timeEndOffset > 0)
             fakeCurveLength = timeEndOffsetReal - timeStartOffsetReal;
         nbLoop = 0;
-        bool patternSignOld = true;
-        while((timeLocalAbsoluteCopy > fakeCurveLength) && (fakeCurveLength > 0)) {
-            patternSignOld = (start.at(nbLoop % start.count()) > 0);
-            nbLoop++;
-            timeLocalAbsoluteCopy -= fakeCurveLength;
+        if(timeLocalAbsoluteCopy > 0) {
+            while((timeLocalAbsoluteCopy > fakeCurveLength) && (fakeCurveLength > 0)) {
+                nbLoop++;
+                timeLocalAbsoluteCopy -= fakeCurveLength;
+            }
+        }
+        else {
+            while((timeLocalAbsoluteCopy < 0) && (fakeCurveLength > 0)) {
+                nbLoop++;
+                timeLocalAbsoluteCopy += fakeCurveLength;
+            }
         }
 
         //Preparation of time difference
@@ -89,13 +93,13 @@ void NxCursor::setTime(qreal delta) {
         previousCursorReliable = true;
 
         //Time calculation
-        bool patternSign = (factors >= 0);// && (timeFactorF >= 0) && (timeFactor >= 0);
-        if(patternSign)
-            time = timeLocalAbsoluteCopy / fakeCurveLength;//timeLocalAbsoluteCopy / curve->getPathLength();
-        else
-            time = (fakeCurveLength - timeLocalAbsoluteCopy) / fakeCurveLength;//(fakeCurveLength - timeLocalAbsoluteCopy) / curve->getPathLength();
+        time = timeLocalAbsoluteCopy / fakeCurveLength;
+        if(start.at(nbLoop % start.count()) >= 0)
+            time = timeLocalAbsoluteCopy / fakeCurveLength;
+        else if(start.at(nbLoop % start.count()) < 0)
+            time = (fakeCurveLength - timeLocalAbsoluteCopy) / fakeCurveLength;
 
-        if(time <= 0)
+        if((time < 0) || (time > 1))
             previousCursorReliable = false;
 
         //Loop
@@ -103,25 +107,24 @@ void NxCursor::setTime(qreal delta) {
             previousCursorReliable = false;
             nextTimeOld = qRound(time)    / curve->getPathLength() * fakeCurveLength + timeStartOffsetReal / curve->getPathLength();
             time        = qRound(timeOld) / curve->getPathLength() * fakeCurveLength + timeStartOffsetReal / curve->getPathLength();
-            //qDebug("----------------------------------------------------");
         }
         else
             time = time / curve->getPathLength() * fakeCurveLength + timeStartOffsetReal / curve->getPathLength();
-        //qDebug("%d -> %d \t %d -> %d \t %f -> %f (%f)\t%d", nbLoopOld, nbLoop, patternSignOld, patternSign, timeOld, time, nextTimeOld, previousCursorReliable);
 
         //Finaly
         nbLoopOld = nbLoop;
         calculate();
 
-        //Easing
-        /*
-        qreal timeLocalEasing = timeLocal;
-        if((0 < timeLocalAbsolute) && (timeLocalAbsolute < easingStartDuration)) {
-            timeLocalEasing = easingStartDuration * easing.valueForProgress(timeLocalAbsolute/easingStartDuration);
-            if(timeLocal < 0)
-                timeLocalEasing = -timeLocalEasing;
+        //Activity
+        if(qAbs(timeLocal - timeLocalOld) < 0.00001) {
+            if(!hasActivityOld)
+                hasActivity = false;
+            hasActivityOld = false;
         }
-        */
+        else {
+            hasActivity = true;
+            hasActivityOld = true;
+        }
     }
 }
 
@@ -129,11 +132,9 @@ void NxCursor::setTime(qreal delta) {
 void NxCursor::calculate() {
     //Cursor line
     if((curve) && (curve->getPathLength() > 0)) {
-        //qreal timeReal = ((qExp(5*time) - 1) / (qExp(5*1) - 1));
         qreal timeReal = easing.getValue(time), timeOldReal = easing.getValue(timeOld);
 
         cursorPos = curve->getPointAt(timeReal) + curve->getPos();
-        //qDebug("%f %f %f %f %f %f", cursorPos.x(), cursorPos.y(), cursorPos.z(), cursorPos.sx(), cursorPos.sy(), cursorPos.sz());
 
         if(timeReal == 0)
             cursorAngle = -curve->getAngleAt(timeReal + 0.001);
@@ -209,11 +210,6 @@ void NxCursor::calculate() {
         cursorPosOld = cursorPos;
         cursorAngleOld = cursorAngle;
     }
-
-    if((timeLocal - timeLocalOld) != 0)
-        hasActivity = true;
-    else
-        hasActivity = false;
 }
 
 
@@ -240,7 +236,7 @@ void NxCursor::paint() {
         glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 
         //Cursor chasse-neige
-        if((time >= 0) && (start.at(nbLoop % start.count()) != 0)) {
+        if((previousCursorReliable) && (0.0F <= time) && (time <= 1.0F) && (start.at(nbLoop % start.count()) != 0)) {
             //Label
             if((renderOptions->paintLabel) && (label != ""))
                 renderOptions->render->renderText(cursorPos.x(), cursorPos.y(), cursorPos.z(), label, renderOptions->renderFont);
@@ -252,18 +248,16 @@ void NxCursor::paint() {
                 }
             }
 
-            if(previousCursorReliable) {
-                glLineWidth(size/4);
-                glEnable(GL_LINE_STIPPLE);
-                glLineStipple(lineFactor, lineStipple);
-                glBegin(GL_LINE_LOOP);
-                glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
-                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
-                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
-                glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
-                glEnd();
-                glDisable(GL_LINE_STIPPLE);
-            }
+            glLineWidth(size/4);
+            glEnable(GL_LINE_STIPPLE);
+            glLineStipple(lineFactor, lineStipple);
+            glBegin(GL_LINE_LOOP);
+            glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
+            glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+            glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+            glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
+            glEnd();
+            glDisable(GL_LINE_STIPPLE);
 
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
@@ -276,19 +270,18 @@ void NxCursor::paint() {
             glLineWidth(1);
 
             //Cursor reader
-            if((hasActivity) || (!curve)) {
+            if((previousCursorReliable) || (!curve)) {
                 glPushMatrix();
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
                 glRotatef(cursorAngle, 0, 0, 1);
                 qreal size2 = cacheSize/2;
                 glBegin(GL_TRIANGLE_FAN);
-                if((timeLocal - timeLocalOld) > 0)  glVertex3f(size2, 0, 0);
-                else                                glVertex3f(-size2, 0, 0);
+                if(hasActivity) {
+                    if((time - timeOld) >= 0)  glVertex3f(size2, 0, 0);
+                    else                       glVertex3f(-size2, 0, 0);
+                }
                 glVertex3f(0, -size2, 0);
-                //glVertex3f(0, 0, size2/2);
                 glVertex3f(0, size2, 0);
-                //glVertex3f(0, 0, -size2/2);
-                //glVertex3f(0, -size2, 0);
                 glEnd();
 
                 glPopMatrix();
@@ -318,6 +311,18 @@ void NxCursor::paint() {
                         glVertex3f(x * zr1, y * zr1, z1);
                     }
                     glEnd();
+
+                    glBegin(GL_LINE_STRIP);
+                    for(quint16 j = 0; j <= longs; j++) {
+                        qreal lng = 2 * M_PI * (qreal)(j - 1) / longs;
+                        qreal x = qCos(lng) * rx;
+                        qreal y = qSin(lng) * ry;
+                        glNormal3f(x * zr0, y * zr0, z0);
+                        glVertex3f(x * zr0, y * zr0, z0);
+                        glNormal3f(x * zr1, y * zr1, z1);
+                        glVertex3f(x * zr1, y * zr1, z1);
+                    }
+                    glEnd();
                 }
                 glPopMatrix();
             }
@@ -326,7 +331,7 @@ void NxCursor::paint() {
 }
 
 void NxCursor::trig() {
-    if(((hasActivity) || (!curve)) && (canSendOsc())) {
+    if(((previousCursorReliable) || (!curve)) && (canSendOsc())) {
         factory->sendMessage(this, 0, this);
         incMessageId();
     }

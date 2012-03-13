@@ -665,7 +665,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                         //Browse all types of objects
                         for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
                             //Are objects visible ?
-                            if(((typeIterator == ObjectsTypeCursor) && (renderOptions->paintCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->paintCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->paintTriggers))) {
+                            if((((typeIterator == ObjectsTypeCursor) && (renderOptions->allowSelectionCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->allowSelectionCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->allowSelectionTriggers))) && (((typeIterator == ObjectsTypeCursor) && (renderOptions->paintCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->paintCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->paintTriggers)))) {
                                 //Browse objects
                                 QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
                                 while (objectIterator.hasNext()) {
@@ -969,7 +969,7 @@ void UiRender::actionSelect_all() {
                     for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
 
                         //Are objects visible ?
-                        if(((typeIterator == ObjectsTypeCursor) && (renderOptions->paintCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->paintCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->paintTriggers))) {
+                        if((((typeIterator == ObjectsTypeCursor) && (renderOptions->allowSelectionCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->allowSelectionCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->allowSelectionTriggers))) && (((typeIterator == ObjectsTypeCursor) && (renderOptions->paintCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->paintCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->paintTriggers)))) {
                             //Browse objects
                             QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
                             while (objectIterator.hasNext()) {

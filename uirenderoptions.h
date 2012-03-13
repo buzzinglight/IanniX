@@ -44,6 +44,9 @@ public:
         axisGrid = 1;
         timeFactor = 0;
         allowSelection = false;
+        allowSelectionCursors = true;
+        allowSelectionCurves = true;
+        allowSelectionTriggers = true;
         paintZStart = 0;
         paintZEnd = 0;
         objectSize = 1;
@@ -58,6 +61,7 @@ public:
     QFont renderFont;
     qreal timeFactor;
     bool allowSelection;
+    bool allowSelectionCursors, allowSelectionCurves, allowSelectionTriggers;
 
 public:
     QMap<QString, Texture> textures;

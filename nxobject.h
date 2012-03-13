@@ -94,7 +94,7 @@ protected:
     NxRect boundingRect;
     QString label;
     QStringList messageLabel;
-    bool selectedHover, selected, hasActivity;
+    bool selectedHover, selected, hasActivity, hasActivityOld;
     QVector< QVector<QByteArray> > messagePatterns;
     QTime messageTime;
     quint16 messageTimeInterval;

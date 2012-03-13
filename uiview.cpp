@@ -91,6 +91,10 @@ UiView::UiView(QWidget *parent) :
     connect(ui->action25_opaque, SIGNAL(triggered()), SLOT(gridOpacityChange()));
     connect(ui->action10_opaque, SIGNAL(triggered()), SLOT(gridOpacityChange()));
 
+    connect(ui->actionAllow_cursors_selection,  SIGNAL(changed()), SLOT(actionSelectionModeChange()));
+    connect(ui->actionAllow_curves_selection,   SIGNAL(changed()), SLOT(actionSelectionModeChange()));
+    connect(ui->actionAllow_triggers_selection, SIGNAL(changed()), SLOT(actionSelectionModeChange()));
+
     connect(ui->actionHelp, SIGNAL(triggered()), SLOT(help()));
 }
 
@@ -179,6 +183,10 @@ void UiView::actionZoom_initial() {
 void UiView::actionToggleLabel() {
     ui->render->getRenderOptions()->paintLabel = ui->actionToggleLabel->isChecked();
 }
+void UiView::actionSelectionModeChange() {
+    emit(actionRouteSelectionModeChange(ui->actionAllow_cursors_selection->isChecked(), ui->actionAllow_curves_selection->isChecked(), ui->actionAllow_triggers_selection->isChecked()));
+}
+
 void UiView::actionImportSVG() {
     QString fileName = QFileDialog::getOpenFileName(0, tr("Select a SVG file…"), QDir::currentPath(), tr("SVG Files") + " (*.svg)");
     if(fileName != "")
@@ -272,15 +280,15 @@ void UiView::gridOpacityChange() {
     QAction *action = (QAction*)sender();
     bool ok = true;
     if(action == ui->actionOpaque)
-        actionRouteGridOpacityChange(0.5);
+        actionRouteGridOpacityChange(2);
     else if(action == ui->action75_opaque)
-        actionRouteGridOpacityChange(0.33);
+        actionRouteGridOpacityChange(1.5);
     else if(action == ui->action50_opaque)
-        actionRouteGridOpacityChange(0.25);
+        actionRouteGridOpacityChange(1);
     else if(action == ui->action25_opaque)
-        actionRouteGridOpacityChange(0.20);
+        actionRouteGridOpacityChange(0.5);
     else if(action == ui->action10_opaque)
-        actionRouteGridOpacityChange(0.15);
+        actionRouteGridOpacityChange(0.3);
     if(ok) {
         ui->actionOpaque->setChecked(false);
         ui->action75_opaque->setChecked(false);
