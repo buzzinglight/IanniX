@@ -109,7 +109,8 @@ void ExtSerialManager::parse() {
                 reception.remove(0, index+1);
                 index = 0;
 
-                command.remove(COMMAND_END);
+                command = command.replace('\n', "");
+                command = command.replace('\r', "");
 
                 //Fire events (log, message and script mapping)
                 factory->logOscReceive("serial://" + portname + "/ " + command);
