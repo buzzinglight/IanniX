@@ -577,7 +577,7 @@ QToolButton:pressed, QToolButton:checked {
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Opaque</string>
+    <string>100% opaque</string>
    </property>
   </action>
   <action name="action75_opaque">

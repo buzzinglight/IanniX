@@ -243,6 +243,7 @@ public slots:
     void actionImportBackground(const QString &filename);
     void actionSelectionModeChange(bool,bool,bool);
     void actionImportText(const QString &font, const QString &text);
+    void actionImportOldIanniXScore(const QString & filename);
     void editingStart(const NxPoint &);
     void editingStop();
     void editingMove(const NxPoint &, bool add);

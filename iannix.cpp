@@ -209,7 +209,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("serialPort", "/dev/tty.usbserial-A600afc5:BAUD115200:DATA_8:PAR_NONE:STOP_1:FLOW_OFF");
 #endif
     //if((forceSettings) || (!settings.childKeys().contains("édefaultMessageTrigger")))
-    settings.setValue("defaultMessageTrigger", "osc://127.0.0.1:57120/trigger trigger_id trigger_xPos trigger_yPos cursor_id");
+    settings.setValue("defaultMessageTrigger", "osc://127.0.0.1:57120/trigger trigger_id trigger_xPos trigger_yPos trigger_zPos cursor_id");
     //if((forceSettings) || (!settings.childKeys().contains("defaultMessageCursor")))
     settings.setValue("defaultMessageCursor", "osc://127.0.0.1:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos");
     //if((forceSettings) || (!settings.childKeys().contains("defaultMessage")))
@@ -293,6 +293,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 
 
     //Conversion d'EDL
+    //actionImportOldIanniXScore("tutorials/Tutorial 1.xml");
     /*
     QString tracks;
     for(quint16 i = 0 ; i < 10 ; i++) {
@@ -434,6 +435,57 @@ void IanniX::actionImportText(const QString &font, const QString &text) {
     if(ok) {
         execute(COMMAND_ADD + " curve auto");
         execute(COMMAND_CURVE_TXT + " current " + QString::number(scale) + " " + fontReal + " " + text);
+    }
+}
+
+void IanniX::actionImportOldIanniXScore(const QString &filename) {
+    QDomDocument xmlDoc;
+    QFile xmlFile(filename);
+    if((xmlFile.exists()) && (xmlFile.open(QFile::ReadOnly))) {
+        xmlDoc.setContent(xmlFile.readAll());
+        xmlFile.close();
+
+        //Racine
+        QDomElement xmlRoot = xmlDoc.documentElement();
+
+        //Parse les menaces
+        QDomNode xmlNxScore = xmlRoot.firstChild();
+        while(!xmlNxScore.isNull()) {
+            QDomElement xmlNxElement = xmlNxScore.toElement();
+
+            if((!xmlNxElement.isNull()) && (xmlNxElement.tagName() == "NxEnv")) {
+            }
+            else if((!xmlNxElement.isNull()) && (xmlNxElement.tagName() == "NxCurve")) {
+                execute("add curve "              + xmlNxElement.attribute("ID"));
+                execute("setGroup  current group" + xmlNxElement.attribute("groupID"));
+                execute("setLabel  current "      + xmlNxElement.attribute("name"));
+                execute("setActive current "      + xmlNxElement.attribute("active"));
+                bool isSmooth = (xmlNxElement.attribute("drawType")=="7");
+                qreal scale = xmlNxElement.attribute("scale").toDouble();
+                bool colorFirst = true;
+                QDomNode xmlNxSub = xmlNxElement.firstChild();
+                while(!xmlNxSub.isNull()) {
+                    QDomElement xmlNxSubElement = xmlNxSub.toElement();
+                    if((!xmlNxSubElement.isNull()) && (xmlNxSubElement.tagName() == "Position"))
+                        execute("setPos current " + xmlNxSubElement.attribute("x") + " " + xmlNxSubElement.attribute("y") + " " + xmlNxSubElement.attribute("z"));
+                    else if((!xmlNxSubElement.isNull()) && (xmlNxSubElement.tagName() == "NxPoint") && (!isSmooth))
+                        execute("setPointAt current " + xmlNxSubElement.attribute("ID") + " " + xmlNxSubElement.attribute("x") + " " + QString::number(xmlNxSubElement.attribute("y").toDouble() * scale) + " " + xmlNxSubElement.attribute("z"));
+                    else if((!xmlNxSubElement.isNull()) && (xmlNxSubElement.tagName() == "NxPoint") && (isSmooth))
+                        execute("setSmoothPointAt current " + xmlNxSubElement.attribute("ID") + " " + xmlNxSubElement.attribute("x") + " " + QString::number(xmlNxSubElement.attribute("y").toDouble() * scale) + " " + xmlNxSubElement.attribute("z"));
+                    else if((!xmlNxSubElement.isNull()) && (xmlNxSubElement.tagName() == "color") && (colorFirst)) {
+                        execute("setColorActive        current " + xmlNxSubElement.attribute("r") + " " + xmlNxSubElement.attribute("g") + " " + xmlNxSubElement.attribute("b") + " " + xmlNxSubElement.attribute("a"));
+                        execute("setColorActiveMessage current " + xmlNxSubElement.attribute("r") + " " + xmlNxSubElement.attribute("g") + " " + xmlNxSubElement.attribute("b") + " " + xmlNxSubElement.attribute("a"));
+                        colorFirst = false;
+                    }
+                    else if((!xmlNxSubElement.isNull()) && (xmlNxSubElement.tagName() == "color")) {
+                        execute("setColorInactive        current " + xmlNxSubElement.attribute("r") + " " + xmlNxSubElement.attribute("g") + " " + xmlNxSubElement.attribute("b") + " " + xmlNxSubElement.attribute("a"));
+                        execute("setColorInactiveMessage current " + xmlNxSubElement.attribute("r") + " " + xmlNxSubElement.attribute("g") + " " + xmlNxSubElement.attribute("b") + " " + xmlNxSubElement.attribute("a"));
+                    }
+                    xmlNxSub = xmlNxSub.nextSibling();
+                }
+            }
+            xmlNxScore = xmlNxScore.nextSibling();
+        }
     }
 }
 
