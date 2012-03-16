@@ -170,6 +170,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>addButton</tabstop>
+  <tabstop>help</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources>
   <include location="IanniX.qrc"/>
  </resources>

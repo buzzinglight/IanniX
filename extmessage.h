@@ -75,6 +75,7 @@ public:
         }
         else if(urlMessage.scheme().toLower() == "tcp") {
             type = MessagesTypeTcp;
+            address += urlMessage.authority() + urlMessage.path();
         }
         else if(urlMessage.scheme().toLower() == "udp") {
             type = MessagesTypeUdp;
@@ -398,7 +399,7 @@ public:
                 pad(buffer);
                 buffer += arguments;
             }
-            else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
+            else if((type == MessagesTypeTcp) || (type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
                 asciiMessage = asciiMessage.trimmed();
             }
         }
@@ -433,6 +434,10 @@ private:
             urlMessage.addQueryItem(name, str);
             return true;
         }
+        else if(type == MessagesTypeTcp) {
+            asciiMessage = asciiMessage + qPrintable("<argument type=\"s\" value=\"" + str + "\"/>");
+            return true;
+        }
         else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
             asciiMessage = asciiMessage + " " + qPrintable(str);
             return true;
@@ -454,6 +459,10 @@ private:
         }
         else if(type == MessagesTypeHttp) {
             urlMessage.addQueryItem(name, QString().setNum(f));
+            return true;
+        }
+        else if(type == MessagesTypeTcp) {
+            asciiMessage = asciiMessage + qPrintable("<ARGUMENT TYPE=\"f\" VALUE=\"" + QString::number(f) + "\"/>");
             return true;
         }
         else if(type == MessagesTypeMidi) {
@@ -509,6 +518,9 @@ public:
     }
     inline const QByteArray & getAsciiMessage() const {
         return asciiMessage;
+    }
+    inline const QByteArray & getAddress() const {
+        return address;
     }
 };
 

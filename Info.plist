@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string>IanniX</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleIconFile</key>
+	<string>icon.icns</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>nxscore</string>
+				<string>NXSCORE</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icon.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>IanniX Score</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>nxscript</string>
+				<string>NXSCRIPT</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icon_orange.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>IanniX Script</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>nxstyle</string>
+				<string>NXSTYLE</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icon_green.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>IanniX Style</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+	</array>
+	<key>NSHumanReadableCopyright</key>
+	<string>IanniX Association</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.music</string>
+	<key>CFBundleSignature</key>
+	<string>INNX</string>
+	<key>CFBundleVersion</key>
+	<string>0.8.33</string>
+</dict>
+</plist>

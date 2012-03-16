@@ -134,6 +134,8 @@ public slots:
     void send(const ExtMessage & message);
     void sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status);
     QImage takeScreenshot();
+public:
+    qreal getTimeLocal() const { return timeLocal; }
 
 
     //EXTERNAL INTERFACES
@@ -196,6 +198,7 @@ private:
     NxPoint editingStartPoint;
     bool lastMessageAllow;
     QString lastMessage;
+    QIcon iconAppPlay, iconAppPause;
 private slots:
     void checkForUpdatesFinished(QNetworkReply*);
 public:

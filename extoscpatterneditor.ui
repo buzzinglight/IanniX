@@ -130,6 +130,11 @@ QPlainTextEdit {
    </slots>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>patternList</tabstop>
+  <tabstop>removeButton</tabstop>
+  <tabstop>patternEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

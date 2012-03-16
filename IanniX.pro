@@ -118,7 +118,7 @@ RESOURCES               += IanniX.qrc
 
 macx {
     ICON                 = icon.icns
-    QMAKE_INFO_PLIST     = ../Info.plist
+    QMAKE_INFO_PLIST     = Info.plist
 
     BUNDLE_RES.files     = icon_green.icns icon_orange.icns
     BUNDLE_RES.path      = Contents/Resources

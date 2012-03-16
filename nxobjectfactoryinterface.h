@@ -54,6 +54,7 @@ public slots:
     virtual void logOscSend(const QString & message) = 0;
     virtual void logOscReceive(const QString & message) = 0;
     virtual void pushSnapshot() = 0;
+    virtual qreal getTimeLocal() const = 0;
 };
 
 #endif // NXOBJECTFACTORYINTERFACE_H

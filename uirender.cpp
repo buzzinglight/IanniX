@@ -198,7 +198,7 @@ void UiRender::paintGL() {
     renderOptions->axisCenter = renderOptions->axisCenter + (renderOptions->axisCenterDest - renderOptions->axisCenter) / 3;
     renderOptions->zoomLinear = renderOptions->zoomLinear + (renderOptions->zoomLinearDest - renderOptions->zoomLinear) / 3;
     rotation = rotation + (rotationDest - rotation) / 6;
-    if(qAbs(rotation.z() - rotationDest.z()) > 180)
+    if(qAbs(rotation.z() - rotationDest.z()) > 360)
         rotation.setZ(rotationDest.z());
     translation = translation + (translationDest - translation) / 3;
     scale = scale + (scaleDest - scale) / 3;
@@ -246,8 +246,8 @@ void UiRender::paintGL() {
 
     if((followId > 0) && (document) && (document->objects.contains(followId)) && (document->objects.value(followId)->getType() == ObjectsTypeCursor)) {
         NxCursor *object = (NxCursor*)document->objects.value(followId);
-        rotationDest.setX(-object->getCurrentAngleRoll());
-        rotationDest.setY(-82 - object->getCurrentAnglePitch());
+        //rotationDest.setX(-object->getCurrentAngleRoll());
+        //rotationDest.setY(-82 - object->getCurrentAnglePitch());
         rotationDest.setZ(-object->getCurrentAngle() + 90);
         translationDest = -object->getCurrentPos();
         scaleDest = 3 * 5;

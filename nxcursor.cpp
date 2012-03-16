@@ -25,6 +25,9 @@ NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     nextTimeOld = 0;
     timeOld = 0;
     time = 0;
+    timeLocal = 0;
+    timeLocalOld = 0;
+    timeLocalAbsolute = 0;
     previousCursorReliable = false;
     cursorPoly = NxPolygon(4);
     cursorPoly[0] = NxPoint();

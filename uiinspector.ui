@@ -2089,7 +2089,7 @@ MAPPING</string>
              </widget>
             </item>
             <item>
-             <layout class="QGridLayout" name="gridLayout">
+             <layout class="QGridLayout" name="gridLayout" columnstretch="1,1,1">
               <property name="topMargin">
                <number>5</number>
               </property>
@@ -2138,7 +2138,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="0">
+              <item row="7" column="0">
                <widget class="QLabel" name="serialInPortLabel">
                 <property name="text">
                  <string>SERIAL PORT</string>
@@ -2148,7 +2148,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
+              <item row="5" column="0">
                <widget class="QLabel" name="transportMessageLabel">
                 <property name="text">
                  <string>TRANSPORT
@@ -2175,14 +2175,14 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="1" colspan="2">
+              <item row="7" column="1" colspan="2">
                <widget class="QLineEdit" name="serialInPortEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
                </widget>
               </item>
-              <item row="5" column="0">
+              <item row="6" column="0">
                <widget class="QLabel" name="syncMessageLabel">
                 <property name="text">
                  <string>SYNC
@@ -2193,7 +2193,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1" colspan="2">
+              <item row="6" column="1" colspan="2">
                <widget class="QLineEdit" name="syncMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2203,7 +2203,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
+              <item row="4" column="0">
                <widget class="QLabel" name="bundleMessageLabel">
                 <property name="text">
                  <string>MAKE OSC
@@ -2214,7 +2214,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
+              <item row="4" column="1">
                <widget class="QLineEdit" name="bundleMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2227,7 +2227,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="2">
+              <item row="4" column="2">
                <widget class="QSpinBox" name="bundleMessagePort">
                 <property name="maximumSize">
                  <size>
@@ -2269,13 +2269,53 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1" colspan="2">
+              <item row="5" column="1" colspan="2">
                <widget class="QLineEdit" name="transportMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
                 <property name="text">
                  <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="tcpInPortLabel">
+                <property name="text">
+                 <string>TCP/XML
+SERVER PORT</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QSpinBox" name="tcpInPortSpin">
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="minimum">
+                 <number>1024</number>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QLabel" name="tcpInClientLabel">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -2319,25 +2359,57 @@ BUNDLE ON</string>
   </layout>
  </widget>
  <tabstops>
+  <tabstop>tab</tabstop>
+  <tabstop>projectFiles</tabstop>
+  <tabstop>projectScripts</tabstop>
+  <tabstop>newIdButton</tabstop>
+  <tabstop>groupIdButton</tabstop>
   <tabstop>positionX</tabstop>
   <tabstop>positionY</tabstop>
   <tabstop>positionZ</tabstop>
+  <tabstop>sizeWSpin</tabstop>
+  <tabstop>sizeHSpin</tabstop>
+  <tabstop>sizeSpin</tabstop>
+  <tabstop>labelLine</tabstop>
+  <tabstop>activityCheck</tabstop>
+  <tabstop>colorCombo1</tabstop>
+  <tabstop>colorCombo2</tabstop>
+  <tabstop>colorCombo3</tabstop>
+  <tabstop>colorCombo4</tabstop>
+  <tabstop>messagesButton</tabstop>
+  <tabstop>triggerOffSpin</tabstop>
   <tabstop>widthSpin</tabstop>
+  <tabstop>patternLine</tabstop>
+  <tabstop>easingCombo</tabstop>
   <tabstop>offsetInitialSpin</tabstop>
   <tabstop>offsetStartSpin</tabstop>
   <tabstop>offsetEndSpin</tabstop>
+  <tabstop>posSpin</tabstop>
   <tabstop>speedSpin</tabstop>
   <tabstop>cursorLengthSpin</tabstop>
-  <tabstop>oscSendText</tabstop>
-  <tabstop>oscReceiveText</tabstop>
-  <tabstop>projectFiles</tabstop>
-  <tabstop>projectScripts</tabstop>
+  <tabstop>speedFSpin</tabstop>
+  <tabstop>cursorBoundsLine1</tabstop>
+  <tabstop>cursorBoundsLine2</tabstop>
   <tabstop>viewCurveCheck</tabstop>
   <tabstop>viewTriggerCheck</tabstop>
   <tabstop>viewCursorCheck</tabstop>
+  <tabstop>ccView</tabstop>
   <tabstop>cc2View</tabstop>
   <tabstop>viewZStartSpin</tabstop>
   <tabstop>viewZEndSpin</tabstop>
+  <tabstop>viewCurveOpacityCheck</tabstop>
+  <tabstop>oscSendText</tabstop>
+  <tabstop>oscReceiveText</tabstop>
+  <tabstop>oscInPortSpin</tabstop>
+  <tabstop>udpInPortSpin</tabstop>
+  <tabstop>httpInPortSpin</tabstop>
+  <tabstop>tcpInPortSpin</tabstop>
+  <tabstop>bundleMessageEdit</tabstop>
+  <tabstop>bundleMessagePort</tabstop>
+  <tabstop>transportMessageEdit</tabstop>
+  <tabstop>syncMessageEdit</tabstop>
+  <tabstop>serialInPortEdit</tabstop>
+  <tabstop>messagesSpin</tabstop>
  </tabstops>
  <resources>
   <include location="IanniX.qrc"/>

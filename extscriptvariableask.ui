@@ -141,6 +141,10 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>variablesList</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

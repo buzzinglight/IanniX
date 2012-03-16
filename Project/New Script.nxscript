@@ -10,3 +10,11 @@ function onCreate() {
 
 
 }
+
+//If a message is received
+function onMessage(protocol, host, port, destination, values) {
+	//Message reception
+	console("Received on '" + protocol + "' (" + host + ":" + port + ") to '" + destination + "', " + values.length + " values : ");
+	for(var valueIndex = 0 ; valueIndex < values.length ; valueIndex++)
+		console("- arg " + valueIndex + " = " + values[valueIndex]);
+}

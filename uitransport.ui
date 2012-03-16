@@ -486,7 +486,7 @@ color: rgba(255,255,255,128);</string>
             <string notr="true"> %</string>
            </property>
            <property name="cursorPosition">
-            <number>0</number>
+            <number>5</number>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -582,8 +582,11 @@ QPushButton:hover {
   <tabstop>ffButton</tabstop>
   <tabstop>playButton</tabstop>
   <tabstop>timeEdit</tabstop>
+  <tabstop>speedSlider</tabstop>
+  <tabstop>speedSpin</tabstop>
   <tabstop>perfSchedulerEdit</tabstop>
   <tabstop>perfOpenGLEdit</tabstop>
+  <tabstop>perfCpuEdit</tabstop>
   <tabstop>logoButton</tabstop>
  </tabstops>
  <resources>

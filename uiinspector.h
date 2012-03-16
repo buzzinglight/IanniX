@@ -117,9 +117,12 @@ public:
 public slots:
     void setOSCOk(bool);
     void setUDPOk(bool);
+    void setTCPOk(bool);
     void setHttpOk(bool);
     void setSerialOk(bool);
     void setOSCPort(quint16 port);
+    void setTCPPort(quint16 port);
+    void setTCPClients(quint16 nb);
     void setUDPPort(quint16 port);
     void setHttpPort(quint16 port);
     void setSerialPort(const QString & port);
@@ -168,6 +171,7 @@ signals:
     void actionChangeID(quint16,quint16); ////CG////
     void oscPortChange(quint16);
     void udpPortChange(quint16);
+    void tcpPortChange(quint16);
     void httpPortChange(quint16);
     void bundleMessageChange(const QString &, quint16);
     void serialPortChange(const QString &);

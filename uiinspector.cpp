@@ -53,7 +53,7 @@ UiInspector::UiInspector(QWidget *parent) :
     NxEasing easing;
     for(quint16 type = 0 ; type < 45 ; type++) {
         easing.setType(type);
-        ui->easingCombo->addItem(QIcon(easing.getPixmap()), tr("Type") + QString(" %1").arg(type));
+        ui->easingCombo->addItem(QIcon(easing.getPixmap()), tr("Easing") + QString(" %1").arg(type));
     }
 
     //needRefresh = true;
@@ -209,6 +209,11 @@ void UiInspector::actionNetwork() {
         factory->pushSnapshot();
         ui->udpInPortSpin->setStyleSheet("");
         emit(udpPortChange(ui->udpInPortSpin->value()));
+    }
+    else if(ui->tcpInPortSpin == sender()) {
+        factory->pushSnapshot();
+        ui->tcpInPortSpin->setStyleSheet("");
+        emit(tcpPortChange(ui->tcpInPortSpin->value()));
     }
     if(ui->httpInPortSpin == sender()) {
         factory->pushSnapshot();
@@ -656,6 +661,12 @@ void UiInspector::setOSCOk(bool val) {
     else
         ui->oscInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
 }
+void UiInspector::setTCPOk(bool val) {
+    if(val)
+        ui->tcpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
+    else
+        ui->tcpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
+}
 void UiInspector::setUDPOk(bool val) {
     if(val)
         ui->udpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
@@ -678,6 +689,19 @@ void UiInspector::setOSCPort(quint16 port) {
     ui->oscInPortSpin->setValue(port);
     oscPortChange(port);
 }
+void UiInspector::setTCPPort(quint16 port) {
+    ui->tcpInPortSpin->setValue(port);
+    tcpPortChange(port);
+}
+void UiInspector::setTCPClients(quint16 nb) {
+    if(nb == 0)
+        ui->tcpInClientLabel->setText(tr("No client connected"));
+    else if(nb == 1)
+        ui->tcpInClientLabel->setText(tr("1 client connected"));
+    else
+        ui->tcpInClientLabel->setText(tr("%1 clients connected").arg(nb));
+}
+
 void UiInspector::setUDPPort(quint16 port) {
     ui->udpInPortSpin->setValue(port);
     udpPortChange(port);

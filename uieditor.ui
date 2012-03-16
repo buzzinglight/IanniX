@@ -61,6 +61,9 @@
    <header>qjsedit/jsedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>jsEditor</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

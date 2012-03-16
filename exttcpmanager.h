@@ -20,20 +20,31 @@
 #define EXTTCPMANAGER_H
 
 #include "extmessage.h"
+#include <QTcpServer>
+#include <QDomDocument>
 
-class ExtTcpManager : public QObject, public ExtMessageManager {
+class ExtTcpManager : public QTcpServer, public ExtMessageManager {
     Q_OBJECT
 
 public:
     ExtTcpManager(NxObjectFactoryInterface *_factory);
+private:
+    QList<QTcpSocket*> sockets;
 
 public slots:
-    void openPort(quint16) {}
+    void openPort(quint16 port);
 signals:
     void openPortStatus(bool);
+    void clientsStatus(quint16 nb);
 
 public:
-    void send(const ExtMessage & ) {}
+    void send(const ExtMessage & );
+
+protected:
+    void incomingConnection(int socketDescriptor);
+private slots:
+    void readClient();
+    void discardClient();
 };
 
 #endif // EXTTCPMANAGER_H

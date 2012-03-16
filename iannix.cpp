@@ -28,12 +28,15 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     lastMessageAllow = true;
     oscBundleHost = QHostAddress("127.0.0.2");
     oscBundlePort = 0;
+    scriptDir = QDir::current();
+    cpu = new NxCpu(this);
+
     splash = new UiSplash(0);
     splash->show();
     QTimer::singleShot(1500, this, SLOT(closeSplash()));
-    scriptDir = QDir::current();
-    cpu = new NxCpu(this);
-    startTimer(1000);
+
+    iconAppPlay  = QIcon(QPixmap(":icons/res_appicon_play.png"));
+    iconAppPause = QIcon(QPixmap(":icons/res_appicon_pause.png"));
 
     //Update management
     updateManager = new QNetworkAccessManager(this);
@@ -147,6 +150,9 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(osc, SIGNAL(openPortStatus(bool)), inspector, SLOT(setOSCOk(bool)));
 
     tcp = new ExtTcpManager(this);
+    connect(inspector, SIGNAL(tcpPortChange(quint16)), tcp, SLOT(openPort(quint16)));
+    connect(tcp, SIGNAL(openPortStatus(bool)), inspector, SLOT(setTCPOk(bool)));
+    connect(tcp, SIGNAL(clientsStatus(quint16)), inspector, SLOT(setTCPClients(quint16)));
 
     udp = new ExtUdpManager(this);
     connect(inspector, SIGNAL(udpPortChange(quint16)), udp, SLOT(openPort(quint16)));
@@ -196,6 +202,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("udpPort",  1235);
     if((forceSettings) || (!settings.childKeys().contains("httpPort")))
         settings.setValue("httpPort", 1236);
+    if((forceSettings) || (!settings.childKeys().contains("tcpPort")))
+        settings.setValue("tcpPort", 3000);
 #ifdef Q_OS_MAC
     if((forceSettings) || (!settings.childKeys().contains("serialPort")))
         settings.setValue("serialPort", "/dev/tty.usbserial-A600afc5:BAUD115200:DATA_8:PAR_NONE:STOP_1:FLOW_OFF");
@@ -235,6 +243,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 
     inspector->setOSCPort(settings.value("oscPort").toUInt());
     inspector->setUDPPort(settings.value("udpPort").toUInt());
+    inspector->setTCPPort(settings.value("tcpPort").toUInt());
     inspector->setHttpPort(settings.value("httpPort").toUInt());
     inspector->setSerialPort(settings.value("serialPort").toString());
     inspector->setTransportMessage(settings.value("defaultMessageTransport").toString());
@@ -290,7 +299,6 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     //Projet par défault
     loadProject("Project/root.root");
     actionFast_rewind();
-
 
     //Conversion d'EDL
     //actionImportOldIanniXScore("tutorials/Tutorial 1.xml");
@@ -355,6 +363,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         }
     }
     */
+    startTimer(1000);
 }
 
 void IanniX::actionImportSVG(const QString &filename) {
@@ -498,6 +507,10 @@ void IanniX::setScheduler(SchedulerActivity _schedulerActivity) {
     else
         timer->stop();
     transport->setPlay_pause(getScheduler());
+    if(getScheduler())
+        QApplication::setWindowIcon(iconAppPause);
+    else
+        QApplication::setWindowIcon(iconAppPlay);
 }
 
 void IanniX::closeSplash() {
@@ -1315,13 +1328,11 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if((commande == COMMAND_PLAY) && (arguments.count() >= 2)) {
                 if(arguments.at(1).toDouble() != 0) {
-                    transport->setPlay_pause(true);
                     transport->setSpeed(arguments.at(1).toDouble());
                     setScheduler(SchedulerOn);
                     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
                 }
                 else {
-                    transport->setPlay_pause(false);
                     setScheduler(SchedulerOff);
                     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
                 }
@@ -1331,7 +1342,6 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 return view->windowTitle();
             }
             else if((commande == COMMAND_STOP) && (arguments.count() >= 1)) {
-                transport->setPlay_pause(false);
                 setScheduler(SchedulerOff);
                 sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
                 actionSpeed();

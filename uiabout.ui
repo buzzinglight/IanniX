@@ -162,6 +162,10 @@ p, li { white-space: pre-wrap; }
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>header</tabstop>
+  <tabstop>credits</tabstop>
+ </tabstops>
  <resources>
   <include location="IanniX.qrc"/>
  </resources>
