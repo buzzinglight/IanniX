@@ -220,6 +220,11 @@ void UiInspector::actionNetwork() {
         ui->httpInPortSpin->setStyleSheet("");
         emit(httpPortChange(ui->httpInPortSpin->value()));
     }
+    else if(ui->ipOutEdit == sender()) {
+        factory->pushSnapshot();
+        ui->ipOutEdit->setStyleSheet("");
+        emit(ipOutChange(ui->ipOutEdit->text()));
+    }
     else if(ui->serialInPortEdit == sender()) {
         factory->pushSnapshot();
         ui->serialInPortEdit->setStyleSheet("");
@@ -679,6 +684,12 @@ void UiInspector::setHttpOk(bool val) {
     else
         ui->httpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
 }
+void UiInspector::setIpOutOk(bool val) {
+    if(val)
+        ui->ipOutEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
+    else
+        ui->ipOutEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
+}
 void UiInspector::setSerialOk(bool val) {
     if(val)
         ui->serialInPortEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
@@ -710,6 +721,10 @@ void UiInspector::setHttpPort(quint16 port) {
     ui->httpInPortSpin->setValue(port);
     httpPortChange(port);
 }
+void UiInspector::setIpOut(const QString & ip) {
+    ui->ipOutEdit->setText(ip);
+    ipOutChange(ip);
+}
 void UiInspector::setSerialPort(const QString & port) {
     ui->serialInPortEdit->setText(port);
     serialPortChange(port);
@@ -736,6 +751,12 @@ quint16 UiInspector::getUDPPort() {
 }
 quint16 UiInspector::getHttpPort() {
     return ui->httpInPortSpin->value();
+}
+quint16 UiInspector::getTCPPort() {
+    return ui->tcpInPortSpin->value();
+}
+const QString UiInspector::getIpOut() {
+    return ui->ipOutEdit->text();
 }
 const QString UiInspector::getSerialPort() {
     return ui->serialInPortEdit->text();

@@ -37,7 +37,7 @@ public slots:
     const QString getTime() const;
     void setPerfScheduler(const QString & val);
     const QString getPerfCpu() const;
-    void setPerfCpu(const QString & val);
+    void setPerfCpu(quint16 cpu);
     const QString getPerfScheduler() const;
     void setPerfOpenGL(const QString & val);
     const QString getPerfOpenGL() const;

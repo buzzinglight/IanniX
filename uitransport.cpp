@@ -53,8 +53,15 @@ const QString UiTransport::getPerfScheduler() const {
     return ui->perfSchedulerEdit->text();
 }
 
-void UiTransport::setPerfCpu(const QString & val) {
-    ui->perfCpuEdit->setText(val);
+void UiTransport::setPerfCpu(quint16 cpu) {
+    ui->perfCpuEdit->setText(QString::number(cpu));
+    if(cpu < 50)
+        ui->perfCpuEdit->setStyleSheet("");
+    else if((60 <= cpu) && (cpu < 85))
+        ui->perfCpuEdit->setStyleSheet("color: #FF8600;");
+    else
+        ui->perfCpuEdit->setStyleSheet("color: #FF2C00;");
+
 }
 const QString UiTransport::getPerfCpu() const {
     return ui->perfCpuEdit->text();

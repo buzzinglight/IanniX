@@ -71,6 +71,7 @@ void NxCursor::setTime(qreal delta) {
         qreal timeEndOffsetReal     = timeEndOffset     * qAbs(factors);
         qreal timeLocalAbsoluteCopy = timeLocalAbsolute + timeInitialOffsetReal;
         qreal fakeCurveLength = curve->getPathLength() - timeStartOffsetReal;
+
         if(timeEndOffset > 0)
             fakeCurveLength = timeEndOffsetReal - timeStartOffsetReal;
         nbLoop = 0;
@@ -80,12 +81,14 @@ void NxCursor::setTime(qreal delta) {
                 timeLocalAbsoluteCopy -= fakeCurveLength;
             }
         }
+        /*
         else {
             while((timeLocalAbsoluteCopy < 0) && (fakeCurveLength > 0)) {
                 nbLoop++;
                 timeLocalAbsoluteCopy += fakeCurveLength;
             }
         }
+        */
 
         //Preparation of time difference
         if(!previousCursorReliable)
@@ -234,14 +237,15 @@ void NxCursor::paint() {
             color = renderOptions->colors.value("object_selection");
 
         //Start
-        if(!((renderOptions->paintCursors) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd))))
+        bool opacityCheck = ((renderOptions->paintCursors) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)));
+        if(!opacityCheck)
             color.setAlphaF(0.1);
         glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 
         //Cursor chasse-neige
         if((previousCursorReliable) && (0.0F <= time) && (time <= 1.0F) && (start.at(nbLoop % start.count()) != 0)) {
             //Label
-            if((renderOptions->paintLabel) && (label != ""))
+            if((opacityCheck) && (renderOptions->paintLabel) && (label != ""))
                 renderOptions->render->renderText(cursorPos.x(), cursorPos.y(), cursorPos.z(), label, renderOptions->renderFont);
             if(selectedHover) {
                 qreal startY = 0;
@@ -251,6 +255,7 @@ void NxCursor::paint() {
                 }
             }
 
+            /*
             glLineWidth(size/4);
             glEnable(GL_LINE_STIPPLE);
             glLineStipple(lineFactor, lineStipple);
@@ -261,6 +266,7 @@ void NxCursor::paint() {
             glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
             glEnd();
             glDisable(GL_LINE_STIPPLE);
+            */
 
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);

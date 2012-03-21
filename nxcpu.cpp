@@ -4,7 +4,7 @@ NxCpu::NxCpu(QObject *parent) :
     QThread(parent) {
     cpu = 0;
     mem = 0;
-    //start();
+    start();
 }
 
 void NxCpu::run() {
@@ -25,6 +25,6 @@ void NxCpu::run() {
             mem = columns[2].toDouble();
         }
 #endif
-        sleep(5);
+        sleep(3);
     }
 }

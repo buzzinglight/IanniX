@@ -168,6 +168,11 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 
     midi = new ExtMidiManager(this);
 
+    ipOutId = -1;
+    connect(inspector, SIGNAL(ipOutChange(QString)), SLOT(setIpOut(QString)));
+    connect(this, SIGNAL(ipOutStatus(bool)), inspector, SLOT(setIpOutOk(bool)));
+
+
 #ifdef KINECT_INSTALLED
     kinect = 0;
     kinect = new ExtKinectManager();
@@ -204,6 +209,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("httpPort", 1236);
     if((forceSettings) || (!settings.childKeys().contains("tcpPort")))
         settings.setValue("tcpPort", 3000);
+    if((forceSettings) || (!settings.childKeys().contains("ipOut")))
+        settings.setValue("ipOut", "127.0.0.1");
 #ifdef Q_OS_MAC
     if((forceSettings) || (!settings.childKeys().contains("serialPort")))
         settings.setValue("serialPort", "/dev/tty.usbserial-A600afc5:BAUD115200:DATA_8:PAR_NONE:STOP_1:FLOW_OFF");
@@ -216,16 +223,13 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     if((forceSettings) || (!settings.childKeys().contains("serialPort")))
         settings.setValue("serialPort", "/dev/tty.usbserial-A600afc5:BAUD115200:DATA_8:PAR_NONE:STOP_1:FLOW_OFF");
 #endif
-    //if((forceSettings) || (!settings.childKeys().contains("édefaultMessageTrigger")))
-    settings.setValue("defaultMessageTrigger", "osc://127.0.0.1:57120/trigger trigger_id trigger_xPos trigger_yPos trigger_zPos cursor_id");
-    //if((forceSettings) || (!settings.childKeys().contains("defaultMessageCursor")))
-    settings.setValue("defaultMessageCursor", "osc://127.0.0.1:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos");
-    //if((forceSettings) || (!settings.childKeys().contains("defaultMessage")))
-    settings.setValue("defaultMessage", "osc://127.0.0.1:57120/object trigger_id cursor_id");
-    if((forceSettings) || (!settings.childKeys().contains("defaultMessageTransport")))
-        settings.setValue("defaultMessageTransport", "osc://127.0.0.1:57120/transport status nb_triggers nb_cursors nb_curves");
-    //settings.setValue("defaultMessageSync", "osc://127.0.0.1:57120/iannix/ status");
+
+    settings.setValue("defaultMessageTrigger", "osc://ip_out:57120/trigger trigger_id trigger_xPos trigger_yPos trigger_zPos cursor_id");
+    settings.setValue("defaultMessageCursor", "osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos");
+    settings.setValue("defaultMessage", "osc://ip_out:57120/object trigger_id cursor_id");
+    settings.setValue("defaultMessageTransport", "osc://ip_out:57120/transport status nb_triggers nb_cursors nb_curves");
     settings.setValue("defaultMessageSync", "");
+
     if((forceSettings) || (!settings.childKeys().contains("defaultMessageSync")))
         settings.setValue("defaultMessageSync", "osc://127.0.0.1:57120/iannix/ status");
     if((forceSettings) || (!settings.childKeys().contains("updatePeriod")))
@@ -245,6 +249,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     inspector->setUDPPort(settings.value("udpPort").toUInt());
     inspector->setTCPPort(settings.value("tcpPort").toUInt());
     inspector->setHttpPort(settings.value("httpPort").toUInt());
+    inspector->setIpOut(settings.value("ipOut").toString());
     inspector->setSerialPort(settings.value("serialPort").toString());
     inspector->setTransportMessage(settings.value("defaultMessageTransport").toString());
     inspector->setSyncMessage(settings.value("defaultMessageSync").toString());
@@ -524,7 +529,7 @@ void IanniX::show() {
 }
 
 void IanniX::timerEvent(QTimerEvent *) {
-    transport->setPerfCpu(QString().setNum((quint16)qRound(cpu->cpu)));
+    transport->setPerfCpu((quint16)qRound(cpu->cpu));
 }
 void IanniX::timerTick() {
     qreal delta = renderMeasure.elapsed() / 1000.0F;
@@ -1403,6 +1408,12 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 if((currentDocument) && (currentDocument->groups.contains(arguments.at(1))))
                     currentDocument->groups.value(arguments.at(1))->setCheckState(0, state);
             }
+            else if((commande == COMMAND_TOGGLE_GROUP) && (arguments.count() >= 2)) {
+                if((currentDocument) && (currentDocument->groups.contains(arguments.at(1))))
+                    return (currentDocument->groups.value(arguments.at(1))->checkState(0) == Qt::Checked)?(1):(0);
+                else
+                    return -1;
+            }
             else if((commande == COMMAND_MOUSE) && (arguments.count() >= 3)) {
                 QCursor::setPos(arguments.at(1).toInt(), arguments.at(2).toInt());
             }
@@ -1546,7 +1557,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                                                   NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(),  arguments.at(5).toDouble()),
                                                   NxPoint(arguments.at(6).toDouble(), arguments.at(7).toDouble(),  arguments.at(8).toDouble()),
                                                   NxPoint(arguments.at(9).toDouble(), arguments.at(10).toDouble(), arguments.at(11).toDouble()), false);
-                            else if(arguments.count() >= 10) // 3+6 (x, y, z, sx, sy, sz) // REQUIRES A DUMMY ARGUMENT
+                            else if(arguments.count() >= 10) // 3+6+1 (x, y, z, sx, sy, sz) // REQUIRES A DUMMY ARGUMENT
                                 curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble(), arguments.at(6).toDouble(), arguments.at(7).toDouble(), arguments.at(8).toDouble()), false);
                             else if(arguments.count() >= 9)  // 3+6 (x, y), (c1x, c1y), (c2x, c2y)
                                 curve->setPointAt(arguments.at(2).toDouble(),
@@ -1721,7 +1732,7 @@ void IanniX::sendMessage(void *_object, void *_trigger, void *_cursor, void *_co
             if(messagesCache.contains(messagePattern.at(0)))
                 message = messagesCache.value(messagePattern.at(0));
             else {
-                message.setUrl(QUrl(messagePattern.at(0), QUrl::TolerantMode), &messageScriptEngine);
+                message.setUrl(QUrl(messagePattern.at(0), QUrl::TolerantMode), &messageScriptEngine, ipOut);
                 messagesCache.insert(messagePattern.at(0), message);
             }
             if(message.parse(messagePattern, trigger, cursor, curve, collisionCurve, collisionPoint, collisionValue, status, inspector->nbTriggers, inspector->nbCursors, inspector->nbCurves)) {
@@ -1932,6 +1943,27 @@ void IanniX::bundleMessageChange(const QString &host, quint16 port) {
     oscBundlePort = port;
 }
 
+void IanniX::setIpOut(const QString & ip) {
+    ipOut = ip;
+    messagesCache.clear();
+    //emit(ipOutStatus(false));
+    /*
+    if(ipOutId >= 0)
+        QHostInfo::abortHostLookup(ipOutId);
+        */
+    //ipOutId = QHostInfo::lookupHost(ipOut, this, SLOT(ipOutStatusFound(QHostInfo)));
+    qDebug(">> %s %d", qPrintable(ipOut), ipOutId);
+}
+void IanniX::ipOutStatusFound(const QHostInfo &hostInfo) {
+    qDebug("LA %s %d %d", qPrintable(hostInfo.errorString()), hostInfo.error(), hostInfo.lookupId());
+    if(hostInfo.error() == QHostInfo::NoError) {
+        emit(ipOutStatus(true));
+        qDebug("ICI quand même ?");
+    }
+    else
+        emit(ipOutStatus(false));
+}
+
 void IanniX::actionCloseEvent(QCloseEvent *event) {
     quint16 nbFileNoSave = 0;
     QHashIterator<QString, NxDocument*> documentIterator(documents);
@@ -1964,6 +1996,8 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     settings.setValue("oscPort", inspector->getOSCPort());
     settings.setValue("udpPort", inspector->getUDPPort());
     settings.setValue("httpPort", inspector->getHttpPort());
+    settings.setValue("tcpPort", inspector->getTCPPort());
+    settings.setValue("ipOut", inspector->getIpOut());
     settings.setValue("serialPort", inspector->getSerialPort());
     settings.setValue("defaultMessageTransport", inspector->getTransportMessage());
     settings.setValue("defaultMessageSync", inspector->getSyncMessage());

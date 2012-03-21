@@ -2096,7 +2096,7 @@ MAPPING</string>
               <property name="horizontalSpacing">
                <number>10</number>
               </property>
-              <item row="0" column="0">
+              <item row="1" column="0">
                <widget class="QLabel" name="oscInPortLabel">
                 <property name="text">
                  <string>OSC IN PORT</string>
@@ -2106,7 +2106,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
+              <item row="1" column="1">
                <widget class="QSpinBox" name="oscInPortSpin">
                 <property name="maximumSize">
                  <size>
@@ -2128,7 +2128,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="0">
+              <item row="2" column="0">
                <widget class="QLabel" name="udpInPortLabel">
                 <property name="text">
                  <string>RAW UDP PORT</string>
@@ -2138,7 +2138,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="0">
+              <item row="8" column="0">
                <widget class="QLabel" name="serialInPortLabel">
                 <property name="text">
                  <string>SERIAL PORT</string>
@@ -2148,7 +2148,7 @@ MAPPING</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="0">
+              <item row="6" column="0">
                <widget class="QLabel" name="transportMessageLabel">
                 <property name="text">
                  <string>TRANSPORT
@@ -2159,7 +2159,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
+              <item row="2" column="1">
                <widget class="QSpinBox" name="udpInPortSpin">
                 <property name="maximumSize">
                  <size>
@@ -2175,14 +2175,14 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="1" colspan="2">
+              <item row="8" column="1" colspan="2">
                <widget class="QLineEdit" name="serialInPortEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
                </widget>
               </item>
-              <item row="6" column="0">
+              <item row="7" column="0">
                <widget class="QLabel" name="syncMessageLabel">
                 <property name="text">
                  <string>SYNC
@@ -2193,7 +2193,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="1" colspan="2">
+              <item row="7" column="1" colspan="2">
                <widget class="QLineEdit" name="syncMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2203,7 +2203,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
+              <item row="5" column="0">
                <widget class="QLabel" name="bundleMessageLabel">
                 <property name="text">
                  <string>MAKE OSC
@@ -2214,7 +2214,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1">
+              <item row="5" column="1">
                <widget class="QLineEdit" name="bundleMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2227,7 +2227,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="2">
+              <item row="5" column="2">
                <widget class="QSpinBox" name="bundleMessagePort">
                 <property name="maximumSize">
                  <size>
@@ -2243,7 +2243,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
+              <item row="3" column="0">
                <widget class="QLabel" name="httpInPortLabel">
                 <property name="text">
                  <string>HTTP IN PORT</string>
@@ -2253,7 +2253,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
+              <item row="3" column="1">
                <widget class="QSpinBox" name="httpInPortSpin">
                 <property name="maximumSize">
                  <size>
@@ -2269,7 +2269,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1" colspan="2">
+              <item row="6" column="1" colspan="2">
                <widget class="QLineEdit" name="transportMessageEdit">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2279,7 +2279,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
+              <item row="4" column="0">
                <widget class="QLabel" name="tcpInPortLabel">
                 <property name="text">
                  <string>TCP/XML
@@ -2290,7 +2290,7 @@ SERVER PORT</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
+              <item row="4" column="1">
                <widget class="QSpinBox" name="tcpInPortSpin">
                 <property name="maximumSize">
                  <size>
@@ -2306,7 +2306,7 @@ SERVER PORT</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="2">
+              <item row="4" column="2">
                <widget class="QLabel" name="tcpInClientLabel">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2316,6 +2316,30 @@ SERVER PORT</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="ipOutLabel">
+                <property name="text">
+                 <string>DEFAULT IP
+(ALIAS IP_OUT)</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="ipOutEdit">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="inputMask">
+                 <string notr="true">000.000.000.000;_</string>
+                </property>
+                <property name="text">
+                 <string notr="true">...</string>
                 </property>
                </widget>
               </item>
@@ -2438,8 +2462,8 @@ SERVER PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>110</x>
-     <y>72</y>
+     <x>103</x>
+     <y>36</y>
     </hint>
     <hint type="destinationlabel">
      <x>45</x>
@@ -2454,8 +2478,8 @@ SERVER PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>110</x>
-     <y>86</y>
+     <x>103</x>
+     <y>39</y>
     </hint>
     <hint type="destinationlabel">
      <x>72</x>
@@ -2470,8 +2494,8 @@ SERVER PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>110</x>
-     <y>100</y>
+     <x>103</x>
+     <y>41</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2486,8 +2510,8 @@ SERVER PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>211</x>
-     <y>573</y>
+     <x>118</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>
@@ -2502,8 +2526,8 @@ SERVER PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>345</x>
-     <y>573</y>
+     <x>118</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
      <x>237</x>
@@ -2518,8 +2542,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>102</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2534,8 +2558,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>249</x>
-     <y>102</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>43</x>
@@ -2550,8 +2574,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>319</x>
-     <y>102</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2566,8 +2590,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>175</x>
-     <y>479</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2582,8 +2606,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>331</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2598,8 +2622,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>241</x>
-     <y>418</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2614,8 +2638,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>331</x>
-     <y>418</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2630,8 +2654,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>479</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -2646,8 +2670,8 @@ SERVER PORT</string>
    <slot>actionProjectFiles()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
-     <y>105</y>
+     <x>71</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>66</x>
@@ -2662,8 +2686,8 @@ SERVER PORT</string>
    <slot>actionProjectScripts()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>392</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>143</x>
@@ -2678,8 +2702,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>252</x>
-     <y>393</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>181</x>
@@ -2694,8 +2718,8 @@ SERVER PORT</string>
    <slot>actionInfoGroup()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
-     <y>80</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2710,8 +2734,8 @@ SERVER PORT</string>
    <slot>actionMessages()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>190</x>
-     <y>266</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>319</x>
@@ -2726,8 +2750,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>193</x>
-     <y>207</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2742,8 +2766,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>448</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2758,8 +2782,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>510</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2774,8 +2798,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>254</x>
-     <y>362</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2790,8 +2814,8 @@ SERVER PORT</string>
    <slot>actionProjectScriptsContext(QPoint)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>87</x>
-     <y>392</y>
+     <x>94</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2806,8 +2830,8 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>168</x>
-     <y>393</y>
+     <x>212</x>
+     <y>358</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2822,8 +2846,8 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>168</x>
-     <y>423</y>
+     <x>212</x>
+     <y>388</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2854,8 +2878,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>300</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -2870,8 +2894,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>133</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2886,8 +2910,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>249</x>
-     <y>133</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2902,8 +2926,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>317</x>
-     <y>188</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2918,8 +2942,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>540</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2934,8 +2958,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>561</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2950,8 +2974,8 @@ SERVER PORT</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>181</y>
+     <x>118</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2966,8 +2990,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>317</x>
-     <y>188</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2982,8 +3006,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>254</x>
-     <y>362</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2998,8 +3022,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>540</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3014,8 +3038,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>561</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3046,8 +3070,8 @@ SERVER PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>167</x>
-     <y>238</y>
+     <x>98</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3062,8 +3086,8 @@ SERVER PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>238</y>
+     <x>98</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3078,8 +3102,8 @@ SERVER PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>281</x>
-     <y>238</y>
+     <x>98</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3094,8 +3118,8 @@ SERVER PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>338</x>
-     <y>238</y>
+     <x>98</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3110,8 +3134,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>162</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3142,8 +3166,8 @@ SERVER PORT</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>403</y>
+     <x>118</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3158,8 +3182,8 @@ SERVER PORT</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>181</y>
+     <x>118</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3174,8 +3198,8 @@ SERVER PORT</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>403</y>
+     <x>118</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3190,8 +3214,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>319</x>
-     <y>264</y>
+     <x>78</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>-229</x>
@@ -3238,8 +3262,8 @@ SERVER PORT</string>
    <slot>actionProjectFilesContext(QPoint)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>105</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>234</x>
@@ -3254,8 +3278,8 @@ SERVER PORT</string>
    <slot>actionInfoID()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>154</x>
-     <y>79</y>
+     <x>118</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>537</x>
@@ -3270,8 +3294,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>281</x>
-     <y>350</y>
+     <x>98</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>525</x>
@@ -3286,8 +3310,8 @@ SERVER PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>23</x>
-     <y>588</y>
+     <x>30</x>
+     <y>56</y>
     </hint>
     <hint type="destinationlabel">
      <x>-226</x>
@@ -3302,8 +3326,8 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>276</x>
-     <y>471</y>
+     <x>274</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
      <x>522</x>
@@ -3318,8 +3342,8 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>130</x>
-     <y>473</y>
+     <x>271</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
      <x>496</x>
@@ -3350,8 +3374,8 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>439</y>
+     <x>212</x>
+     <y>418</y>
     </hint>
     <hint type="destinationlabel">
      <x>-242</x>
@@ -3388,6 +3412,54 @@ SERVER PORT</string>
     <hint type="destinationlabel">
      <x>378</x>
      <y>301</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tcpInPortSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-243</x>
+     <y>409</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ipOutEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>170</x>
+     <y>308</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-537</x>
+     <y>135</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ipOutEdit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>218</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-537</x>
+     <y>450</y>
     </hint>
    </hints>
   </connection>

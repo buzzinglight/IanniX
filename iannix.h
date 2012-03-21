@@ -29,6 +29,7 @@
 #include <QNetworkReply>
 #include <QFileSystemWatcher>
 #include <QApplication>
+#include <QHostInfo>
 #include <QDomDocument>
 #include <QFileOpenEvent>
 #include "nxcpu.h"
@@ -151,8 +152,15 @@ private:
     quint16 oscBundlePort;
     QString defaultMessageTrigger, defaultMessageCursor;
     NxTrigger *transportObject, *syncObject;
+    QString ipOut;
+    int ipOutId;
 public:
     void loadProject(const QString & projectFile);
+public slots:
+    void setIpOut(const QString &);
+    void ipOutStatusFound(const QHostInfo &);
+signals:
+    void ipOutStatus(bool);
 
 
     //TIME MANAGEMENT

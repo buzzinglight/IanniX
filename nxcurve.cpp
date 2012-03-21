@@ -68,7 +68,8 @@ void NxCurve::paint() {
         }
 
         //Start
-        if((renderOptions->paintCurves) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)))
+        bool opacityCheck = (renderOptions->paintCurves) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd));
+        if(opacityCheck)
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
@@ -77,7 +78,7 @@ void NxCurve::paint() {
         glTranslatef(pos.x(), pos.y(), pos.z());
 
         //Label
-        if((renderOptions->paintLabel) && (label != "")) {
+        if((opacityCheck) && (renderOptions->paintLabel) && (label != "")) {
             NxPoint pt = getPathPointsAt(0);
             renderOptions->render->renderText(pt.x(), pt.y(), pt.z(), label, renderOptions->renderFont);
         }
@@ -109,7 +110,7 @@ void NxCurve::paint() {
                     glEnd();
                     glDisable(GL_MAP1_VERTEX_3);
 
-                    if(indexPoint == selectedPathPointPoint)
+                    if((selected) && (indexPoint == selectedPathPointPoint))
                         renderOptions->render->renderText(p1.x(), p1.y(), p1.z(), QString::number(indexPoint), renderOptions->renderFont);
                 }
             }

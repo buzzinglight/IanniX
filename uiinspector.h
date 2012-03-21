@@ -119,12 +119,14 @@ public slots:
     void setUDPOk(bool);
     void setTCPOk(bool);
     void setHttpOk(bool);
+    void setIpOutOk(bool);
     void setSerialOk(bool);
     void setOSCPort(quint16 port);
     void setTCPPort(quint16 port);
     void setTCPClients(quint16 nb);
     void setUDPPort(quint16 port);
     void setHttpPort(quint16 port);
+    void setIpOut(const QString & ip);
     void setSerialPort(const QString & port);
     void setTransportMessage(const QString & message);
     void setSyncMessage(const QString & message);
@@ -132,6 +134,8 @@ public slots:
     quint16 getOSCPort();
     quint16 getUDPPort();
     quint16 getHttpPort();
+    quint16 getTCPPort();
+    const QString getIpOut();
     const QString getSerialPort();
     const QString getTransportMessage();
     const QString getSyncMessage();
@@ -174,6 +178,7 @@ signals:
     void tcpPortChange(quint16);
     void httpPortChange(quint16);
     void bundleMessageChange(const QString &, quint16);
+    void ipOutChange(const QString &);
     void serialPortChange(const QString &);
     void transportMessageChange(const QString &);
     void syncMessageChange(const QString &);

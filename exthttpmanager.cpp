@@ -79,17 +79,19 @@ void ExtHttpManager::readClient() {
             QPair<QString,qint8> picFormat;
             picFormat.first = "png";
             picFormat.second = -1;
+            bool isPic = false;
             for(quint16 index = 0 ; index < url.queryItems().count() ; index++) {
                 if((url.queryItems()[index].first.toLower() != "png") && (url.queryItems()[index].first.toLower() != "jpg"))
                     commands.append(url.queryItems()[index].second);
                 else {
+                    isPic = true;
                     picFormat.first  = url.queryItems()[index].first.toLower();
                     picFormat.second = url.queryItems()[index].second.toInt();
                 }
             }
 
             QTextStream os(socket);
-            if(commands.count() > 0) {
+            if((commands.count() > 0) && (!isPic)) {
                 os.setAutoDetectUnicode(true);
                 os << "HTTP/1.0 200 Ok\r\n"
                       "Content-Type: text/html; charset=\"utf-8\"\r\n"

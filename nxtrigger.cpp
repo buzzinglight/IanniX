@@ -64,7 +64,8 @@ void NxTrigger::paint() {
             color = renderOptions->colors.value("object_selection");
 
         //Start
-        if((renderOptions->paintTriggers) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)))
+        bool opacityCheck = ((renderOptions->paintTriggers) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)));
+        if(opacityCheck)
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
@@ -87,7 +88,7 @@ void NxTrigger::paint() {
         }
 
         //Label
-        if((renderOptions->paintLabel) && (label != ""))
+        if((opacityCheck) && (renderOptions->paintLabel) && (label != ""))
             renderOptions->render->renderText(cacheSize * 1.1 * texture.mapping.right()/2, cacheSize * 1.1 * texture.mapping.top(), 0, label, renderOptions->renderFont);
         if(selectedHover) {
             qreal startY = 0;

@@ -50,11 +50,13 @@ public:
         messageScriptEngine = 0;
     }
     
-    inline void setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine) {
+    inline void setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine, const QString &ipOut) {
         messageScriptEngine = _messageScriptEngine;
         messageScriptValue = messageScriptEngine->globalObject();
         hasAdd = false;
         urlMessage = url;
+        if(urlMessage.host().toLower() == "ip_out")
+            urlMessage.setHost(ipOut);
         urlMessageString = urlMessage.toString();
         address.clear();
         typetag.clear();
