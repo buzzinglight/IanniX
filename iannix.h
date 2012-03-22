@@ -166,7 +166,8 @@ signals:
     //TIME MANAGEMENT
 private:
     UiRender *render;
-    QTime renderMeasure;
+    qreal renderMeasureAbsoluteValOld;
+    QTime renderMeasureAbsolute;
     NxCpu *cpu;
 private:
     qreal timeLocal, timeTransportRefresh, timePerfRefresh, timePerfCounter;

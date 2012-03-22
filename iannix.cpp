@@ -227,8 +227,10 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     settings.setValue("defaultMessageTrigger", "osc://ip_out:57120/trigger trigger_id trigger_xPos trigger_yPos trigger_zPos cursor_id");
     settings.setValue("defaultMessageCursor", "osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos");
     settings.setValue("defaultMessage", "osc://ip_out:57120/object trigger_id cursor_id");
-    settings.setValue("defaultMessageTransport", "osc://ip_out:57120/transport status nb_triggers nb_cursors nb_curves");
     settings.setValue("defaultMessageSync", "");
+
+    if((forceSettings) || (!settings.childKeys().contains("defaultMessageTransport")))
+        settings.setValue("defaultMessageTransport", "osc://ip_out:57120/transport status nb_triggers nb_cursors nb_curves");
 
     if((forceSettings) || (!settings.childKeys().contains("defaultMessageSync")))
         settings.setValue("defaultMessageSync", "osc://127.0.0.1:57120/iannix/ status");
@@ -507,11 +509,13 @@ void IanniX::setScheduler(SchedulerActivity _schedulerActivity) {
     schedulerActivity = _schedulerActivity;
     if(schedulerActivity != SchedulerOff) {
         timer->start();
-        renderMeasure.start();
+        renderMeasureAbsoluteValOld = 0;
+        renderMeasureAbsolute.start();
     }
     else
         timer->stop();
     transport->setPlay_pause(getScheduler());
+    timeTransportRefresh = 9999;
     if(getScheduler())
         QApplication::setWindowIcon(iconAppPause);
     else
@@ -532,7 +536,9 @@ void IanniX::timerEvent(QTimerEvent *) {
     transport->setPerfCpu((quint16)qRound(cpu->cpu));
 }
 void IanniX::timerTick() {
-    qreal delta = renderMeasure.elapsed() / 1000.0F;
+    qreal renderMeasureAbsoluteVal = renderMeasureAbsolute.elapsed() / 1000.0F;
+    qreal delta = renderMeasureAbsoluteVal - renderMeasureAbsoluteValOld;
+    renderMeasureAbsoluteValOld = renderMeasureAbsoluteVal;
     if(forceTimeLocal) {
         delta = 0;
         timeTransportRefresh = 9999;
@@ -548,7 +554,6 @@ void IanniX::timerTick() {
     timeTransportRefresh += delta;
     timePerfRefresh += delta;
     timePerfCounter++;
-    renderMeasure.start();
 
     //Open a bundle if necessary
     if((forceTimeLocal) && (osc))
@@ -638,7 +643,7 @@ void IanniX::timerTick() {
     if(osc)
         osc->closeBundle();
 
-    if(timeTransportRefresh >= 0.06) {
+    if(timeTransportRefresh >= 0.03) {
         timeTransportRefresh = 0;
         QString timeStr = "";
 

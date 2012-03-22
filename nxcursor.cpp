@@ -340,7 +340,7 @@ void NxCursor::paint() {
 }
 
 void NxCursor::trig() {
-    if(((previousCursorReliable) || (!curve)) && (canSendOsc())) {
+    if((((previousCursorReliable) && (hasActivity)) || (!curve)) && (canSendOsc())) {
         factory->sendMessage(this, 0, this);
         incMessageId();
     }
