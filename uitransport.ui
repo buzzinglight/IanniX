@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>802</width>
+    <width>1004</width>
     <height>67</height>
    </rect>
   </property>
@@ -249,16 +249,22 @@ QLabel#lastMessage {
          </property>
          <item>
           <widget class="QLineEdit" name="timeEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>240</width>
-             <height>0</height>
+             <height>55</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>240</width>
-             <height>16777215</height>
+             <height>55</height>
             </size>
            </property>
            <property name="toolTip">
@@ -268,7 +274,7 @@ QLabel#lastMessage {
             <string notr="true">999:99.999; </string>
            </property>
            <property name="text">
-            <string notr="true">444:44.444</string>
+            <string notr="true">000:00.000</string>
            </property>
           </widget>
          </item>
@@ -301,6 +307,24 @@ QLabel#lastMessage {
          </property>
          <item>
           <widget class="QLabel" name="lastMessage">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>450</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>450</width>
+             <height>35</height>
+            </size>
+           </property>
            <property name="text">
             <string>No message</string>
            </property>
@@ -427,7 +451,7 @@ color: rgba(255,255,255,128);</string>
             <string notr="true">009 ms; </string>
            </property>
            <property name="text">
-            <string notr="true"> ms</string>
+            <string notr="true">0 ms</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -455,7 +479,7 @@ color: rgba(255,255,255,128);</string>
             <string notr="true">009 fps; </string>
            </property>
            <property name="text">
-            <string notr="true"> fps</string>
+            <string notr="true">0 fps</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -483,7 +507,7 @@ color: rgba(255,255,255,128);</string>
             <string notr="true">009 %; </string>
            </property>
            <property name="text">
-            <string notr="true"> %</string>
+            <string notr="true">0 %</string>
            </property>
            <property name="cursorPosition">
             <number>5</number>

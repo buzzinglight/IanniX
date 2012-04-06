@@ -26,6 +26,7 @@ NxObject::NxObject(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     documentId.clear();
     groupId.clear();
     id = 0;
+    messageTimeNowOld = 0;
     active = ObjectsActivityInactive;
     pos = NxPoint();
     parentObject = 0;

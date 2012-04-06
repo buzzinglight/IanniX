@@ -40,15 +40,15 @@ void NxTrigger::paint() {
         color = colorTrigged;
     else if(messagePatterns.count() > 0) {
         if(active)
-            color = (colorActiveMessage != "")?(renderOptions->colors.value(colorActiveMessage)):(colorActiveColorMessage);
+            color = (!colorActiveMessage.isEmpty())?(renderOptions->colors.value(colorActiveMessage)):(colorActiveColorMessage);
         else
-            color = (colorInactiveMessage != "")?(renderOptions->colors.value(colorInactiveMessage)):(colorInactiveColorMessage);
+            color = (!colorInactiveMessage.isEmpty())?(renderOptions->colors.value(colorInactiveMessage)):(colorInactiveColorMessage);
     }
     else {
         if(active)
-            color = (colorActive != "")?(renderOptions->colors.value(colorActive)):(colorActiveColor);
+            color = (!colorActive.isEmpty())?(renderOptions->colors.value(colorActive)):(colorActiveColor);
         else
-            color = (colorInactive != "")?(renderOptions->colors.value(colorInactive)):(colorInactiveColor);
+            color = (!colorInactive.isEmpty())?(renderOptions->colors.value(colorInactive)):(colorInactiveColor);
     }
 
     //Size of trigger
@@ -88,7 +88,7 @@ void NxTrigger::paint() {
         }
 
         //Label
-        if((opacityCheck) && (renderOptions->paintLabel) && (label != ""))
+        if((opacityCheck) && (renderOptions->paintLabel) && (!label.isEmpty()))
             renderOptions->render->renderText(cacheSize * 1.1 * texture.mapping.right()/2, cacheSize * 1.1 * texture.mapping.top(), 0, label, renderOptions->renderFont);
         if(selectedHover) {
             qreal startY = 0;

@@ -49,7 +49,7 @@ void ExtOscPatternEditor::listDoubleClick() {
     ui->stackedWidget->setCurrentIndex(1);
 }
 void ExtOscPatternEditor::editFocusOut() {
-    if(ui->patternEdit->toPlainText() != "") {
+    if(!ui->patternEdit->toPlainText().isEmpty()) {
         ui->patternList->clear();
         QVector< QVector<QByteArray > > messagePatternItemsList = NxObject::parseMessagesPattern(ui->patternEdit->toPlainText().replace("\t", " "));
         foreach(const QVector<QByteArray > & messagePatternItems, messagePatternItemsList) {

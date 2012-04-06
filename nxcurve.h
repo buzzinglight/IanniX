@@ -48,6 +48,7 @@ class NxCurve : public NxObject {
 
 public:
     explicit NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
+    ~NxCurve();
 
 private:
     qreal pathLength;
@@ -56,6 +57,8 @@ private:
     qint16 selectedPathPointPoint, selectedPathPointControl1, selectedPathPointControl2;
     CurveType curveType;
     NxSize ellipseSize;
+    GLuint glListCurve;
+    bool glListCurveRecreate;
 public:
     inline NxCurvePoint getPathPointsAt(quint16 index) const {
 #ifdef KINECT_INSTALLED
@@ -121,7 +124,7 @@ public:
     void removePointAt(quint16 index);
     const NxPoint & setPointAt(quint16 index, const NxPoint & point, bool smooth, bool boundingRectCalculation = true);
     const NxPoint & setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation = true);
-    const void shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation = true);
+    void shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation = true);
     void setSVG(const QString & pathData);
     void setSVG2(const QString & polylineData);
     void setImage(const QString & filename);
@@ -204,11 +207,11 @@ public:
 
 };
 
-static void pathArcSegment(QPainterPath &path,
+void pathArcSegment(QPainterPath &path,
                            qreal xc, qreal yc,
                            qreal th0, qreal th1,
                            qreal rx, qreal ry, qreal xAxisRotation);
-static void pathArc(QPainterPath &path,
+void pathArc(QPainterPath &path,
                     qreal               rx,
                     qreal               ry,
                     qreal               x_axis_rotation,
@@ -217,7 +220,7 @@ static void pathArc(QPainterPath &path,
                     qreal               x,
                     qreal               y,
                     qreal curx, qreal cury);
-static bool parsePathDataFast(const QString &dataStr, QPainterPath &path);
-static inline void parseNumbersArray(const QChar *&str, QVarLengthArray<qreal, 8> &points);
+bool parsePathDataFast(const QString &dataStr, QPainterPath &path);
+void parseNumbersArray(const QChar *&str, QVarLengthArray<qreal, 8> &points);
 
 #endif // NXCURVE_H

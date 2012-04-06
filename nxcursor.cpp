@@ -20,6 +20,8 @@
 
 NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
     NxObject(parent, ccParentItem, _renderOptions) {
+    glListCursorRecreate = true;
+    glListCursor = glGenLists(1);
     curve = 0;
     setTimeLocal(0);
     nextTimeOld = 0;
@@ -54,13 +56,21 @@ NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     setBoundsTarget("0 1 1 0");
     boundsSourceIsBoundingRect = true;
 }
+NxCursor::~NxCursor() {
+    glDeleteLists(glListCursor, 1);
+}
 
 void NxCursor::setTime(qreal delta) {
     if(curve) {
         timeLocalOld = timeLocal;
 
-        factors = timeFactor * timeFactorF * start.at(nbLoop % start.count());
-        timeLocalAbsolute += delta * timeFactor * timeFactorF * qAbs(start.at(nbLoop % start.count()));
+        qint16 indexOfZero = start.indexOf(0);
+        qreal loopFactor = start.at(nbLoop % start.count());
+        if((indexOfZero > 0) && (nbLoop > indexOfZero))
+            loopFactor = 0;
+
+        factors = timeFactor * timeFactorF * loopFactor;
+        timeLocalAbsolute += delta * timeFactor * timeFactorF * qAbs(loopFactor);
         if(time >= 0)
             timeLocal     += delta * factors;
         else
@@ -100,9 +110,9 @@ void NxCursor::setTime(qreal delta) {
 
         //Time calculation
         time = timeLocalAbsoluteCopy / fakeCurveLength;
-        if(start.at(nbLoop % start.count()) >= 0)
+        if(loopFactor >= 0)
             time = timeLocalAbsoluteCopy / fakeCurveLength;
-        else if(start.at(nbLoop % start.count()) < 0)
+        else if(loopFactor < 0)
             time = (fakeCurveLength - timeLocalAbsoluteCopy) / fakeCurveLength;
 
         if((time < 0) || (time > 1))
@@ -213,6 +223,8 @@ void NxCursor::calculate() {
     if((curve) && (curve->getPathLength() > 0)) {
     }
     else {
+        if((cursorPos.sx() != cursorPosOld.sx()) || (cursorPos.sy() != cursorPosOld.sy()) || (cursorPos.sz() != cursorPosOld.sz()))
+            glListCursorRecreate = true;
         cursorPosOld = cursorPos;
         cursorAngleOld = cursorAngle;
     }
@@ -222,9 +234,9 @@ void NxCursor::calculate() {
 void NxCursor::paint() {
     //Color
     if(active)
-        color = (colorActive != "")?(renderOptions->colors.value(colorActive)):(colorActiveColor);
+        color = (!colorActive.isEmpty())?(renderOptions->colors.value(colorActive)):(colorActiveColor);
     else
-        color = (colorInactive != "")?(renderOptions->colors.value(colorInactive)):(colorInactiveColor);
+        color = (!colorInactive.isEmpty())?(renderOptions->colors.value(colorInactive)):(colorInactiveColor);
 
     if(color.alpha() > 0) {
         //Size of cursors
@@ -245,7 +257,7 @@ void NxCursor::paint() {
         //Cursor chasse-neige
         if((previousCursorReliable) && (0.0F <= time) && (time <= 1.0F) && (start.at(nbLoop % start.count()) != 0)) {
             //Label
-            if((opacityCheck) && (renderOptions->paintLabel) && (label != ""))
+            if((opacityCheck) && (renderOptions->paintLabel) && (!label.isEmpty()))
                 renderOptions->render->renderText(cursorPos.x(), cursorPos.y(), cursorPos.z(), label, renderOptions->renderFont);
             if(selectedHover) {
                 qreal startY = 0;
@@ -255,23 +267,10 @@ void NxCursor::paint() {
                 }
             }
 
-            /*
-            glLineWidth(size/4);
-            glEnable(GL_LINE_STIPPLE);
-            glLineStipple(lineFactor, lineStipple);
-            glBegin(GL_LINE_LOOP);
-            glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
-            glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
-            glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
-            glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
-            glEnd();
-            glDisable(GL_LINE_STIPPLE);
-            */
-
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
             glLineStipple(lineFactor, lineStipple);
-            glBegin(GL_LINE_STRIP);
+            glBegin(GL_LINES);
             glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
             glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
             glEnd();
@@ -300,39 +299,34 @@ void NxCursor::paint() {
             if(true && ((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz()))) {
                 glPushMatrix();
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
-                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 8);
+                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 16.F);
 
-                qreal lats = 40, longs = 40;
-                qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
-                for(quint16 i = 0; i <= lats; i++) {
-                    qreal lat0 = M_PI * (-0.5 + (qreal)(i - 1) / lats);
-                    qreal lat1 = M_PI * (-0.5 + (qreal)(i    ) / lats);
-                    qreal z0  = qSin(lat0) * rz, zr0 = qCos(lat0);
-                    qreal z1  = qSin(lat1) * rz, zr1 = qCos(lat1);
-                    glBegin(GL_QUAD_STRIP);
-                    for(quint16 j = 0; j <= longs; j++) {
-                        qreal lng = 2 * M_PI * (qreal)(j - 1) / longs;
-                        qreal x = qCos(lng) * rx;
-                        qreal y = qSin(lng) * ry;
-                        glNormal3f(x * zr0, y * zr0, z0);
-                        glVertex3f(x * zr0, y * zr0, z0);
-                        glNormal3f(x * zr1, y * zr1, z1);
-                        glVertex3f(x * zr1, y * zr1, z1);
-                    }
-                    glEnd();
-
+                if(glListCursorRecreate) {
+                    glNewList(glListCursor, GL_COMPILE);
+                    qreal lats = 20, longs = 20;
+                    qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
                     glBegin(GL_LINE_STRIP);
-                    for(quint16 j = 0; j <= longs; j++) {
-                        qreal lng = 2 * M_PI * (qreal)(j - 1) / longs;
-                        qreal x = qCos(lng) * rx;
-                        qreal y = qSin(lng) * ry;
-                        glNormal3f(x * zr0, y * zr0, z0);
-                        glVertex3f(x * zr0, y * zr0, z0);
-                        glNormal3f(x * zr1, y * zr1, z1);
-                        glVertex3f(x * zr1, y * zr1, z1);
+                    for(quint16 i = 0; i <= lats; i++) {
+                        qreal lat0 = M_PI * (-0.5 + (qreal)(i - 1) / lats);
+                        qreal lat1 = M_PI * (-0.5 + (qreal)(i    ) / lats);
+                        qreal z0  = qSin(lat0) * rz, zr0 = qCos(lat0);
+                        qreal z1  = qSin(lat1) * rz, zr1 = qCos(lat1);
+
+                        for(quint16 j = 0; j <= longs; j++) {
+                            qreal lng = 2 * M_PI * (qreal)(j - 1) / longs;
+                            qreal x = qCos(lng) * rx;
+                            qreal y = qSin(lng) * ry;
+                            glNormal3f(x * zr0, y * zr0, z0);
+                            glVertex3f(x * zr0, y * zr0, z0);
+                            glNormal3f(x * zr1, y * zr1, z1);
+                            glVertex3f(x * zr1, y * zr1, z1);
+                        }
                     }
                     glEnd();
+                    glEndList();
+                    glListCursorRecreate = false;
                 }
+                glCallList(glListCursor);
                 glPopMatrix();
             }
         }

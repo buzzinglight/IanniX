@@ -429,17 +429,17 @@ void UiInspector::refresh() {
     }
     ui->typeLabel->setText("");
     if(counterTriggers == 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterTriggers) + " " + tr("TRIGGER"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterTriggers) + " " + tr("TRIGGER"));
     else if(counterTriggers > 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterTriggers) + " " + tr("TRIGGERS"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterTriggers) + " " + tr("TRIGGERS"));
     if(counterCurves == 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCurves) + " " + tr("CURVE"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCurves) + " " + tr("CURVE"));
     else if(counterCurves > 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCurves) + " " + tr("CURVES"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCurves) + " " + tr("CURVES"));
     if(counterCursors == 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCursors) + " " + tr("CURSOR"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCursors) + " " + tr("CURSOR"));
     else if(counterCursors > 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString().setNum(counterCursors) + " " + tr("CURSORS"));
+        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCursors) + " " + tr("CURSORS"));
 
     bool showCursorInfo = false, showTriggerInfo = false, showCurveInfo = false, showCursorCurveInfo = false, showGenericInfo = false;
     if(counterCurves > 0)
@@ -523,7 +523,7 @@ void UiInspector::change(quint16 indexObject, QDoubleSpinBox *spin, qreal val, q
         spin->setStyleSheet("");
         spin->setValue(val);
     }
-    else if((spin->styleSheet() == "") && (prevVal != val)) {
+    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
         spin->setStyleSheet("color: gray;");
     }
 }
@@ -532,7 +532,7 @@ void UiInspector::change(quint16 indexObject, QSpinBox *spin, qint32 val, qint32
         spin->setStyleSheet("");
         spin->setValue(val);
     }
-    else if((spin->styleSheet() == "") && (prevVal != val)) {
+    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
         spin->setStyleSheet("color: gray;");
     }
 }
@@ -541,7 +541,7 @@ void UiInspector::change(quint16 indexObject, QPushButton *spin, const QString &
         spin->setStyleSheet("");
         spin->setText(val);
     }
-    else if((spin->styleSheet() == "") && (prevVal != val)) {
+    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
         spin->setStyleSheet("color: gray;");
     }
 }
@@ -550,7 +550,7 @@ void UiInspector::change(quint16 indexObject, QCheckBox *spin, quint8 val, quint
         spin->setStyleSheet("");
         spin->setChecked(val);
     }
-    else if((spin->styleSheet() == "") && (prevVal != val)) {
+    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
         spin->setStyleSheet("QCheckBox::indicator { background-color: rgba(50, 237, 255, 128); }");
     }
 }
@@ -559,7 +559,7 @@ void UiInspector::change(quint16 indexObject, QLineEdit *spin, const QString & v
         spin->setStyleSheet("");
         spin->setText(val);
     }
-    else if((spin->styleSheet() == "") && (prevVal != val)) {
+    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
         spin->setStyleSheet("QCheckBox::indicator { background-color: rgba(50, 237, 255, 128); }");
     }
 }
@@ -572,7 +572,7 @@ void UiInspector::change(quint16 indexObject, QComboBox *spin, const QString & v
         spin->setStyleSheet("");
         spin->setCurrentIndex(spin->findText(val));
     }
-    else if((spin->styleSheet() == "") && (prevVal != val)) {
+    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
         spin->setStyleSheet("");
         spin->setCurrentIndex(-1);
     }
@@ -582,7 +582,7 @@ void UiInspector::change(quint16 indexObject, QComboBox *spin, quint16 val, quin
         spin->setStyleSheet("");
         spin->setCurrentIndex(val);
     }
-    else if((spin->styleSheet() == "") && (prevVal != val)) {
+    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
         spin->setStyleSheet("");
         spin->setCurrentIndex(-1);
     }

@@ -105,7 +105,6 @@ public slots:
     inline const QString & getId() const {
         return id;
     }
-
 };
 
 

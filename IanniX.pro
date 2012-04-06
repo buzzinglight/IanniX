@@ -128,7 +128,7 @@ win32 {
     DEFINES             += __WINDOWS_MM__
     LIBS                += -lwinmm -lsetupapi
     RC_FILE              = icon.rc
-    SOURCES             += qextserialport\win_qextserialport.cpp qextserialport\qextserialenumerator_win.cpp
+    SOURCES             += qextserialport/win_qextserialport.cpp qextserialport/qextserialenumerator_win.cpp
     DEFINES             += WINVER=0x0501 # needed for mingw to pull in appropriate dbt business...probably a better way to do this
 }
 linux* {
@@ -140,7 +140,7 @@ linux* {
 macx {
     DEFINES             += __MACOSX_CORE__
     LIBS                += -framework CoreMidi -framework CoreAudio -framework CoreFoundation -framework IOKit -framework Carbon
-    SOURCES             += qextserialport\qextserialenumerator_osx.cpp
+    SOURCES             += qextserialport/qextserialenumerator_osx.cpp
 }
-unix:SOURCES            += qextserialport\posix_qextserialport.cpp
-unix:!macx:SOURCES      += qextserialport\qextserialenumerator_unix.cpp
+unix:SOURCES            += qextserialport/posix_qextserialport.cpp
+unix:!macx:SOURCES      += qextserialport/qextserialenumerator_unix.cpp

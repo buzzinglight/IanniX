@@ -95,7 +95,7 @@ void ExtOscManager::parseOSC() {
                         u.ch[1] = bufferI[indexBuffer + 2];
                         u.ch[0] = bufferI[indexBuffer + 3];
                         indexBuffer += 4;
-                        QString commandValue = QString().setNum(u.i);
+                        QString commandValue = QString::number(u.i);
                         command += commandValue + " ";
                         commandArguments << commandValue;
                     }
@@ -107,7 +107,7 @@ void ExtOscManager::parseOSC() {
                         u.ch[1] = bufferI[indexBuffer + 2];
                         u.ch[0] = bufferI[indexBuffer + 3];
                         indexBuffer += 4;
-                        QString commandValue = QString().setNum(u.f);
+                        QString commandValue = QString::number(u.f);
                         command += commandValue + " ";
                         commandArguments << commandValue;
                     }

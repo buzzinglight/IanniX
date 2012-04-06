@@ -69,7 +69,7 @@ public:
     inline void clear() {
         QStringList commands;
         foreach(NxObject *object, objects)
-            commands << COMMAND_REMOVE + " " + QString().setNum(object->getId());
+            commands << COMMAND_REMOVE + " " + QString::number(object->getId());
         foreach(const QString & command, commands)
             execute(command);
         groups.clear();

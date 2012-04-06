@@ -52,6 +52,7 @@ class NxCursor : public NxObject {
 
 public:
     explicit NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
+    ~NxCursor();
 
 private:
     NxCurve *curve;
@@ -69,6 +70,8 @@ private:
     QRect boundingRectSearch;
     QVector<qreal> start;
     NxLine cursor, cursorOld;
+    GLuint glListCursor;
+    bool glListCursorRecreate;
 public:
     inline quint8 getType() const {
         return ObjectsTypeCursor;
@@ -100,7 +103,7 @@ public:
     inline const QString getStart() {
         QString retour;
         foreach(qreal startItem, start)
-            retour += QString().setNum(startItem) + " ";
+            retour += QString::number(startItem) + " ";
         return retour.trimmed();
     }
 

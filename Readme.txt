@@ -18,5 +18,6 @@ sudo apt-get install libxrender-dev
 sudo apt-get install mesa-common-dev
 sudo apt-get install libglu1-mesa-dev
 sudo apt-get install libasound2-dev
+sudo apt-get install gtk2-engines-pixbuf
 
 If opengl is slow, check Graphical Card drivers.

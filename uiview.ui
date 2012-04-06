@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>975</width>
     <height>700</height>
    </rect>
   </property>
@@ -14,11 +14,7 @@
    <string>IanniX — View</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	font: 11px &quot;Arial&quot;;
-}
-
-QWidget#centralwidget  {
+   <string notr="true">QWidget#centralwidget  {
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
 }
 
@@ -70,7 +66,7 @@ QToolButton:pressed, QToolButton:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1000</width>
+     <width>975</width>
      <height>22</height>
     </rect>
    </property>
@@ -185,7 +181,7 @@ QToolButton:pressed, QToolButton:checked {
     <set>Qt::BottomDockWidgetArea</set>
    </property>
    <property name="windowTitle">
-    <string>TRANSPORT</string>
+    <string>Transport</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
@@ -206,7 +202,7 @@ QToolButton:pressed, QToolButton:checked {
     <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
    </property>
    <property name="windowTitle">
-    <string>INSPECTOR</string>
+    <string>Inspector</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>

@@ -116,7 +116,7 @@ public:
         return colorActiveColorMessage;
     }
     inline const QString getColorActiveMessageVerbose() const {
-        if(colorActiveMessage != "")
+        if(!colorActiveMessage.isEmpty())
             return colorActiveMessage;
         else
             return QString("%1 %2 %3 %4").arg(colorActiveColorMessage.red()).arg(colorActiveColorMessage.green()).arg(colorActiveColorMessage.blue()).arg(colorActiveColorMessage.alpha());
@@ -148,7 +148,7 @@ public:
         return colorInactiveColorMessage;
     }
     inline const QString getColorInactiveMessageVerbose() const {
-        if(colorInactiveMessage != "")
+        if(!colorInactiveMessage.isEmpty())
             return colorInactiveMessage;
         else
             return QString("%1 %2 %3 %4").arg(colorInactiveColorMessage.red()).arg(colorInactiveColorMessage.green()).arg(colorInactiveColorMessage.blue()).arg(colorInactiveColorMessage.alpha());
@@ -179,11 +179,11 @@ public:
         retour += QString(COMMAND_TEXTURE_INACTIVE + " %1 %2").arg("current").arg(getTextureInactive()) + COMMAND_END;
         retour += QString(COMMAND_TEXTURE_ACTIVE_MESSAGE + " %1 %2").arg("current").arg(getTextureActiveMessage()) + COMMAND_END;
         retour += QString(COMMAND_TEXTURE_INACTIVE_MESSAGE + " %1 %2").arg("current").arg(getTextureInactiveMessage()) + COMMAND_END;
-        if(colorActiveMessage != "")
+        if(!colorActiveMessage.isEmpty())
             retour += QString(COMMAND_COLOR_ACTIVE_MESSAGE + " %1 %2").arg("current").arg(getColorActiveMessage()) + COMMAND_END;
         else
             retour += QString(COMMAND_COLOR_ACTIVE_MESSAGE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColorMessage().red()).arg(getColorActiveColorMessage().green()).arg(getColorActiveColorMessage().blue()).arg(getColorActiveColorMessage().alpha()) + COMMAND_END;
-        if(colorInactiveMessage != "")
+        if(!colorInactiveMessage.isEmpty())
             retour += QString(COMMAND_COLOR_INACTIVE_MESSAGE + " %1 %2").arg("current").arg(getColorInactiveMessage()) + COMMAND_END;
         else
             retour += QString(COMMAND_COLOR_INACTIVE_MESSAGE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColorMessage().red()).arg(getColorInactiveColorMessage().green()).arg(getColorInactiveColorMessage().blue()).arg(getColorInactiveColorMessage().alpha()) + COMMAND_END;

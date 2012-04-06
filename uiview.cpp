@@ -130,7 +130,7 @@ void UiView::closeEvent(QCloseEvent *event) {
     emit(actionRouteCloseEvent(event));
 }
 
-void UiView::tabletEvent(QTabletEvent *event) {
+void UiView::tabletEvent(QTabletEvent *) {
     //qDebug("%d : (%f, %f, %f) p=%f angle=%f tp=%f dx=%f dy=%f", event->uniqueId(), event->hiResGlobalPos().x(), event->hiResGlobalPos().y(), event->z(), event->pressure(), event->rotation(), event->tangentialPressure(), event->xTilt(), event->yTilt());
 }
 
@@ -189,23 +189,23 @@ void UiView::actionSelectionModeChange() {
 
 void UiView::actionImportSVG() {
     QString fileName = QFileDialog::getOpenFileName(0, tr("Select a SVG file…"), QDir::currentPath(), tr("SVG Files") + " (*.svg)");
-    if(fileName != "")
+    if(!fileName.isEmpty())
         emit(actionRouteImportSVG(fileName));
 }
 void UiView::actionImportImage() {
     QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images") + " (*.png *.jpg *.jpeg)");
-    if(fileName != "")
+    if(!fileName.isEmpty())
         emit(actionRouteImportImage(fileName));
 }
 void UiView::actionImportBackground() {
     QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images") + " (*.png *.jpg *.jpeg)");
-    if(fileName != "")
+    if(!fileName.isEmpty())
         emit(actionRouteImportBackground(fileName));
 }
 void UiView::actionImportText() {
     QString font = "";
     QString text = QInputDialog::getText(0, tr("Type a glyph or text…"), tr("Type a glyphe or a text to import in IanniX"), QLineEdit::Normal, "");
-    if(text != "")
+    if(!text.isEmpty())
         emit(actionRouteImportText(font, text));
 }
 

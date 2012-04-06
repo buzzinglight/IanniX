@@ -58,6 +58,7 @@ private:
     qreal scale, scaleDest;
     bool colorTheme;
     quint16 followId;
+    bool firstLaunch;
 public:
     inline void setFollowId(quint16 _followId) { followId = _followId; }
     inline quint16 getFollowId() { return followId; }
@@ -117,8 +118,6 @@ protected:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
-private slots:
-    void timerTick();
 public:
     inline void resizeGL() { resizeGL(width(), height()); }
     void loadTexture(const QString & name, const QString & filename, const NxRect & mapping);

@@ -22,6 +22,8 @@
 UiRender::UiRender(QWidget *parent) :
     QGLWidget(parent),
     ui(new Ui::UiRender) {
+    firstLaunch = true;
+
     //Initialize view
     ui->setupUi(this);
     setCursor(Qt::OpenHandCursor);
@@ -69,8 +71,8 @@ UiRender::UiRender(QWidget *parent) :
     timePerfRefresh = 0;
     timePerfCounter = 0;
     timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(timerTick()));
-    timer->start(25);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
+    timer->start(20);
 }
 UiRender::~UiRender() {
     delete ui;
@@ -132,11 +134,6 @@ void UiRender::setColorTheme(bool _colorTheme) {
 }
 
 
-//Force refresh
-void UiRender::timerTick() {
-    updateGL();
-}
-
 //Setters
 void UiRender::setDocument(NxDocument *_document) {
     document = _document;
@@ -182,6 +179,11 @@ void UiRender::initializeGL() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
     //Force resize
     resizeGL();
 }
@@ -194,6 +196,15 @@ void UiRender::resizeGL(int, int) {
 
 //Paint event
 void UiRender::paintGL() {
+    if(firstLaunch) {
+        loadTexture("background", "Tools/background.jpg", NxRect(NxPoint(), NxPoint()));
+        loadTexture("trigger_active", "Tools/trigger.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
+        loadTexture("trigger_inactive", "Tools/trigger.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
+        loadTexture("trigger_active_message", "Tools/trigger_message.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
+        loadTexture("trigger_inactive_message", "Tools/trigger_message.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
+        firstLaunch = false;
+    }
+
     //Intertial system
     renderOptions->axisCenter = renderOptions->axisCenter + (renderOptions->axisCenterDest - renderOptions->axisCenter) / 3;
     renderOptions->zoomLinear = renderOptions->zoomLinear + (renderOptions->zoomLinearDest - renderOptions->zoomLinear) / 3;
@@ -315,7 +326,7 @@ void UiRender::paintGL() {
         isRemoving = false;
 
         if(timePerfRefresh >= 1) {
-            emit(setPerfOpenGL(QString().setNum((quint16)qRound(timePerfCounter/timePerfRefresh))));
+            emit(setPerfOpenGL(QString::number((quint16)qRound(timePerfCounter/timePerfRefresh))));
             timePerfRefresh = 0;
             timePerfCounter = 0;
         }
@@ -495,6 +506,15 @@ void UiRender::mousePressEvent(QMouseEvent *event) {
         }
         editingFirstPoint = false;
     }
+    else if(!renderOptions->allowSelection) {
+        foreach(NxObject *selected, selection)   ///CG/// Adding an object should clear the selection and select the added object
+            selected->setSelected(false);
+        selection.clear();
+        if(selectedHover) {
+            selectedHover->setSelectedHover(false);
+            selectedHover = 0;
+        }
+    }
     else {
         if(mouseShift) {
             renderOptions->selectionArea.setTopLeft(mousePressedAreaPos);
@@ -649,7 +669,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
         }
 
         mousePos = mousePosBackup;
-        if((factory) && (document) && (cursor().shape() != Qt::BlankCursor) && (renderOptions->allowSelection)) {
+        if((factory) && (document) && (cursor().shape() != Qt::BlankCursor) && (renderOptions->allowSelection) && (isCanObjectDrag())) {
             QList<NxObject*> eligibleSelection;
 
             //Browse documents
@@ -773,13 +793,13 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
 
     NxPoint translation;
     if(event->key() == Qt::Key_Left)
-        translation = NxPoint(translationUnit, 0);
+        renderOptions->axisCenterDest += NxPoint(translationUnit, 0);
     else if(event->key() == Qt::Key_Right)
-        translation = NxPoint(-translationUnit, 0);
+        renderOptions->axisCenterDest += NxPoint(-translationUnit, 0);
     else if(event->key() == Qt::Key_Up)
-        translation = NxPoint(0, -translationUnit);
+        renderOptions->axisCenterDest += NxPoint(0, -translationUnit);
     else if(event->key() == Qt::Key_Down)
-        translation = NxPoint(0, translationUnit);
+        renderOptions->axisCenterDest += NxPoint(0, translationUnit);
     else if(event->key() == Qt::Key_Escape) {
         emit(escFullscreen());
         emit(editingStop());
@@ -838,7 +858,7 @@ void UiRender::dragEnterEvent(QDragEnterEvent *event) {
                 ok = true;
         }
     }
-    else if(mimeData->text() != "")
+    else if(!mimeData->text().isEmpty())
         ok = true;
     if(ok)
         event->acceptProposedAction();
@@ -865,7 +885,7 @@ void UiRender::dropEvent(QDropEvent *event) {
             }
         }
     }
-    else if(mimeData->text() != "") {
+    else if(!mimeData->text().isEmpty()) {
         ok = true;
         actionImportText("", mimeData->text());
     }
@@ -944,7 +964,7 @@ void UiRender::actionCut() {
     actionCopy();
     QStringList commands;
     foreach(NxObject *object, selection)
-        commands << COMMAND_REMOVE + " " + QString().setNum(object->getId()) + COMMAND_END;
+        commands << COMMAND_REMOVE + " " + QString::number(object->getId()) + COMMAND_END;
     foreach(const QString & command, commands)
         factory->execute(command);
 }
@@ -994,7 +1014,7 @@ void UiRender::actionDelete() {
     factory->pushSnapshot();
     QStringList commands;
     foreach(NxObject *object, selection)
-        commands << COMMAND_REMOVE + " " + QString().setNum(object->getId());
+        commands << COMMAND_REMOVE + " " + QString::number(object->getId());
     selectionClear();
     selectedHover = 0;
     foreach(const QString & command, commands)

@@ -96,7 +96,8 @@ protected:
     QStringList messageLabel;
     bool selectedHover, selected, hasActivity, hasActivityOld;
     QVector< QVector<QByteArray> > messagePatterns;
-    QTime messageTime;
+    QDateTime messageTime;
+    qint64 messageTimeNowOld;
     quint16 messageTimeInterval;
     NxObject *parentObject;
     bool isDrag, performCollision;
@@ -130,7 +131,7 @@ public slots:
 
     inline void setId(quint16 _id) {
         id = _id;
-        setText(0, QString().setNum(id));
+        setText(0, QString::number(id));
     }
     inline quint16 getId() const {
         return id;
@@ -285,7 +286,7 @@ public slots:
         return colorActiveColor;
     }
     inline const QString getColorActiveVerbose() const {
-        if(colorActive != "")
+        if(!colorActive.isEmpty())
             return colorActive;
         else
             return QString("%1 %2 %3 %4").arg(colorActiveColor.red()).arg(colorActiveColor.green()).arg(colorActiveColor.blue()).arg(colorActiveColor.alpha());
@@ -317,7 +318,7 @@ public slots:
         return colorInactiveColor;
     }
     inline const QString getColorInactiveVerbose() const {
-        if(colorInactive != "")
+        if(!colorInactive.isEmpty())
             return colorInactive;
         else
             return QString("%1 %2 %3 %4").arg(colorInactiveColor.red()).arg(colorInactiveColor.green()).arg(colorInactiveColor.blue()).arg(colorInactiveColor.alpha());
@@ -343,8 +344,9 @@ public slots:
         return messagePatternsStr.trimmed();
     }
     inline bool canSendOsc() {
-        if((messageTimeInterval > 0) && (messageTime.elapsed() >= messageTimeInterval)) {
-            messageTime.start();
+        qint64 messageTimeNow = messageTime.currentMSecsSinceEpoch();
+        if((messageTimeInterval > 0) && ((messageTimeNow - messageTimeNowOld) >= messageTimeInterval)) {
+            messageTimeNowOld = messageTimeNow;
             return true;
         }
         else
@@ -366,17 +368,17 @@ public slots:
         retour += QString(COMMAND_ACTIVE + " %1 %2").arg("current").arg(getActive()) + COMMAND_END;
         retour += QString(COMMAND_GROUP + " %1 %2").arg("current").arg(getGroupId()) + COMMAND_END;
 
-        if(colorActive != "")
+        if(!colorActive.isEmpty())
             retour += QString(COMMAND_COLOR_ACTIVE + " %1 %2").arg("current").arg(getColorActive()) + COMMAND_END;
         else
             retour += QString(COMMAND_COLOR_ACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColor().red()).arg(getColorActiveColor().green()).arg(getColorActiveColor().blue()).arg(getColorActiveColor().alpha()) + COMMAND_END;
-        if(colorInactive != "")
+        if(!colorInactive.isEmpty())
             retour += QString(COMMAND_COLOR_INACTIVE + " %1 %2").arg("current").arg(getColorInactive()) + COMMAND_END;
         else
             retour += QString(COMMAND_COLOR_INACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColor().red()).arg(getColorInactiveColor().green()).arg(getColorInactiveColor().blue()).arg(getColorInactiveColor().alpha()) + COMMAND_END;
 
         retour += QString(COMMAND_SIZE + " %1 %2").arg("current").arg(getSize()) + COMMAND_END;
-        retour += QString(COMMAND_MESSAGE + " %1 %2, %3").arg("current").arg(QString().setNum(messageTimeInterval)).arg(getMessagePatternsStr()) + COMMAND_END;
+        retour += QString(COMMAND_MESSAGE + " %1 %2, %3").arg("current").arg(QString::number(messageTimeInterval)).arg(getMessagePatternsStr()) + COMMAND_END;
         retour += QString(COMMAND_LABEL + " %1 %2").arg("current").arg(getLabel()) + COMMAND_END;
         retour += serializeCustom();
         return retour;

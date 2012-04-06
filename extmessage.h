@@ -32,10 +32,10 @@ enum MessagesType     { MessagesTypeNo, MessagesTypeDirect, MessagesTypeOsc, Mes
 class ExtMessage {
 private:
     QByteArray arguments, typetag, address, buffer;
-    QByteArray verboseMessage, asciiMessage, conversionTemp;
+    QByteArray verboseMessage, asciiMessage;
     QString midiCommand, midiPort;
     QUrl urlMessage;
-    QString urlMessageString;
+    QByteArray urlMessageString;
     QHostAddress host;
     quint16 port;
     MessagesType type;
@@ -55,15 +55,18 @@ public:
         messageScriptValue = messageScriptEngine->globalObject();
         hasAdd = false;
         urlMessage = url;
+
+        QString scheme = urlMessage.scheme().toLower();
+
         if(urlMessage.host().toLower() == "ip_out")
             urlMessage.setHost(ipOut);
-        urlMessageString = urlMessage.toString();
+        urlMessageString = qPrintable(urlMessage.toString());
         address.clear();
         typetag.clear();
         arguments.clear();
         asciiMessage.clear();
         
-        if(urlMessage.scheme().toLower() == "osc") {
+        if(scheme == "osc") {
             type = MessagesTypeOsc;
             host = urlMessage.host().toLower();
             port = urlMessage.port();
@@ -72,49 +75,49 @@ public:
             pad(address);
             typetag += ',';
         }
-        else if(urlMessage.scheme().toLower() == "http") {
+        else if(scheme == "http") {
             type = MessagesTypeHttp;
         }
-        else if(urlMessage.scheme().toLower() == "tcp") {
+        else if(scheme == "tcp") {
             type = MessagesTypeTcp;
             address += urlMessage.authority() + urlMessage.path();
         }
-        else if(urlMessage.scheme().toLower() == "udp") {
+        else if(scheme == "udp") {
             type = MessagesTypeUdp;
             host = urlMessage.host();
             port = urlMessage.port();
         }
-        else if(urlMessage.scheme().toLower() == "serial") {
+        else if(scheme == "serial") {
             type = MessagesTypeSerial;
         }
-        else if(urlMessage.scheme().toLower() == "direct") {
+        else if(scheme == "direct") {
             type = MessagesTypeDirect;
         }
-        else if(urlMessage.scheme().toLower() == "midi") {
+        else if(scheme == "midi") {
             type = MessagesTypeMidi;
             midiPort = urlMessage.host().toLower();
             midiCommand = urlMessage.path().toLower();
         }
-        else if(urlMessage.scheme().toLower() == "mouse") {
+        else if(scheme == "mouse") {
             type = MessagesTypeMouse;
         }
-        else if(urlMessage.scheme().toLower() == "tablet") {
+        else if(scheme == "tablet") {
             type = MessagesTypeTablet;
         }
     }
     
     bool parse(const QVector<QByteArray> & patternItems, NxTrigger *trigger, NxCursor *cursor, NxCurve *curve, NxCurve *collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status, const quint16 nbTriggers, const quint16 nbCursors, const quint16 nbCurves) {
         bool suppressSend = false;
-        verboseMessage = qPrintable(urlMessageString);
+        verboseMessage = urlMessageString;
         midiValues.clear();
-        asciiMessage = "";
+        asciiMessage.clear();
         buffer.clear();
         hasAdd = false;
         
         if(patternItems.count() >= 2) {
             //Messages
             for(quint16 patternIndex = 1 ; patternIndex < patternItems.count() ; patternIndex++) {
-                QString patternArgument = patternItems.at(patternIndex);
+                QByteArray patternArgument = patternItems.at(patternIndex);
                 bool found = false;
                 
                 if((patternArgument.at(0) == '{') && (messageScriptEngine)) {
@@ -386,7 +389,7 @@ public:
                         if(ok)
                             found = addFloat(val, QString("custom %1").arg(patternIndex), patternIndex);
                         else
-                            found = addString(qPrintable(patternArgument), QString("custom %1").arg(patternIndex), patternIndex);
+                            found = addString(patternArgument, QString("custom %1").arg(patternIndex), patternIndex);
                     }
                 }
             }
@@ -447,7 +450,7 @@ private:
         return true;
     }
     inline bool addFloat(float f, const QString & name, quint16) {
-        verboseMessage = verboseMessage + " " + conversionTemp.setNum(f);
+        verboseMessage = verboseMessage + " " + QByteArray::number(f);
         hasAdd = true;
         if(type == MessagesTypeOsc) {
             union { float f; char ch[4]; } u;
@@ -460,7 +463,7 @@ private:
             return true;
         }
         else if(type == MessagesTypeHttp) {
-            urlMessage.addQueryItem(name, QString().setNum(f));
+            urlMessage.addQueryItem(name, QString::number(f));
             return true;
         }
         else if(type == MessagesTypeTcp) {
@@ -472,7 +475,7 @@ private:
             return true;
         }
         else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
-            asciiMessage = asciiMessage + " " + conversionTemp.setNum(f);
+            asciiMessage = asciiMessage + " " + QByteArray::number(f);
             return true;
         }
         return true;

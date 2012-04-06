@@ -20,8 +20,8 @@
 #include "ui_uitransport.h"
 
 UiTransport::UiTransport(QWidget *parent) :
-        QWidget(parent),
-        ui(new Ui::UiTransport) {
+    QWidget(parent),
+    ui(new Ui::UiTransport) {
     ui->setupUi(this);
 }
 
@@ -55,12 +55,17 @@ const QString UiTransport::getPerfScheduler() const {
 
 void UiTransport::setPerfCpu(quint16 cpu) {
     ui->perfCpuEdit->setText(QString::number(cpu));
-    if(cpu < 60)
-        ui->perfCpuEdit->setStyleSheet("");
-    else if((60 <= cpu) && (cpu < 85))
-        ui->perfCpuEdit->setStyleSheet("color: #FF8600;");
-    else
-        ui->perfCpuEdit->setStyleSheet("color: #FF2C00;");
+    if(cpu == 0)
+        ui->perfCpuEdit->setVisible(false);
+    else {
+        ui->perfCpuEdit->setVisible(true);
+        if(cpu < 60)
+            ui->perfCpuEdit->setStyleSheet("");
+        else if((60 <= cpu) && (cpu < 85))
+            ui->perfCpuEdit->setStyleSheet("color: #FF8600;");
+        else
+            ui->perfCpuEdit->setStyleSheet("color: #FF2C00;");
+    }
 
 }
 const QString UiTransport::getPerfCpu() const {

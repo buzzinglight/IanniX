@@ -81,11 +81,12 @@ void ExtHttpManager::readClient() {
             picFormat.second = -1;
             bool isPic = false;
             for(quint16 index = 0 ; index < url.queryItems().count() ; index++) {
-                if((url.queryItems()[index].first.toLower() != "png") && (url.queryItems()[index].first.toLower() != "jpg"))
+                QString first = url.queryItems()[index].first.toLower();
+                if((first != "png") && (first != "jpg"))
                     commands.append(url.queryItems()[index].second);
                 else {
                     isPic = true;
-                    picFormat.first  = url.queryItems()[index].first.toLower();
+                    picFormat.first  = first;
                     picFormat.second = url.queryItems()[index].second.toInt();
                 }
             }
@@ -104,7 +105,7 @@ void ExtHttpManager::readClient() {
                     factory->logOscReceive(url.toString());
                     response += factory->execute(command).toString();
                     QString responseOsc = factory->onOscReceive("http", socket->peerAddress().toString(), QString::number(socket->peerPort()), url.path(), command.split(" ", QString::SkipEmptyParts));
-                    if((responseOsc != "undefined") && (responseOsc != ""))
+                    if((responseOsc != "undefined") && (!responseOsc.isEmpty()))
                         response += "\n" + responseOsc;
                 }
 

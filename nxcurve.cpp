@@ -24,6 +24,8 @@ Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
 NxCurve::NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
     NxObject(parent, ccParentItem, _renderOptions) {
     calcBoundingRect();
+    glListCurveRecreate = true;
+    glListCurve = glGenLists(1);
     setSize(1.2);
     setLineFactor(1);
     setLineStipple(0xFFFF);
@@ -36,6 +38,9 @@ NxCurve::NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem
     setPointAt(0, NxPoint(), NxPoint(), NxPoint(), false);
     setMessageTimeInterval(20);
 }
+NxCurve::~NxCurve() {
+    glDeleteLists(glListCurve, 1);
+}
 
 void NxCurve::paint() {
 #ifdef KINECT_INSTALLED
@@ -44,9 +49,9 @@ void NxCurve::paint() {
 
     //Color
     if(active)
-        color = (colorActive != "")?(renderOptions->colors.value(colorActive)):(colorActiveColor);
+        color = (!colorActive.isEmpty())?(renderOptions->colors.value(colorActive)):(colorActiveColor);
     else
-        color = (colorInactive != "")?(renderOptions->colors.value(colorInactive)):(colorInactiveColor);
+        color = (!colorInactive.isEmpty())?(renderOptions->colors.value(colorInactive)):(colorInactiveColor);
 
     if(color.alpha() > 0) {
         //Mouse hover
@@ -78,44 +83,58 @@ void NxCurve::paint() {
         glTranslatef(pos.x(), pos.y(), pos.z());
 
         //Label
-        if((opacityCheck) && (renderOptions->paintLabel) && (label != "")) {
+        if((opacityCheck) && (renderOptions->paintLabel) && (!label.isEmpty())) {
             NxPoint pt = getPathPointsAt(0);
             renderOptions->render->renderText(pt.x(), pt.y(), pt.z(), label, renderOptions->renderFont);
         }
 
         //Draw
-        glLineWidth(size);
-        glEnable(GL_LINE_STIPPLE);
-        glLineStipple(lineFactor, lineStipple);
-        if(curveType == CurveTypeEllipse) {
-            glBegin(GL_LINE_LOOP);
-            for(qreal angle = 0 ; angle <= 2*M_PI ; angle += 0.1)
-                glVertex3f(ellipseSize.width() * qCos(angle), ellipseSize.height() * qSin(angle), 0);
-            glEnd();
-        }
-        else {
-            for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
-                if(indexPoint < pathPoints.count()-1) {
-                    NxPoint p1 = getPathPointsAt(indexPoint), p2 = getPathPointsAt(indexPoint+1);
-                    NxPoint c1 = p1 + getPathPointsAt(indexPoint+1).c1, c2 = p2 + getPathPointsAt(indexPoint+1).c2;
+        if(glListCurveRecreate) {
+            glNewList(glListCurve, GL_COMPILE);
+            glLineWidth(size);
+            glEnable(GL_LINE_STIPPLE);
+            glLineStipple(lineFactor, lineStipple);
+            if(curveType == CurveTypeEllipse) {
+                glBegin(GL_LINE_LOOP);
+                for(qreal angle = 0 ; angle <= 2*M_PI ; angle += 0.1)
+                    glVertex3f(ellipseSize.width() * qCos(angle), ellipseSize.height() * qSin(angle), 0);
+                glEnd();
+            }
+            else {
+                for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
+                    if(indexPoint < pathPoints.count()-1) {
+                        NxPoint p1 = getPathPointsAt(indexPoint), p2 = getPathPointsAt(indexPoint+1);
+                        NxPoint c1 = p1 + getPathPointsAt(indexPoint+1).c1, c2 = p2 + getPathPointsAt(indexPoint+1).c2;
 
-                    GLfloat ctrlpoints[4][3] = {
-                        { p1.x(), p1.y(), p1.z() }, { c1.x(), c1.y(), c1.z() },
-                        { c2.x(), c2.y(), c2.z() }, { p2.x(), p2.y(), p2.z() } };
-                    glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
-                    glEnable(GL_MAP1_VERTEX_3);
-                    glBegin(GL_LINE_STRIP);
-                    for(GLfloat t = 0.0f ; t <= 1.05f ; t += 0.05f)
-                        glEvalCoord1f(t);
-                    glEnd();
-                    glDisable(GL_MAP1_VERTEX_3);
+                        if((c1 == NxPoint()) && (c2 == NxPoint())) {
+                            glBegin(GL_LINES);
+                            glVertex3f(p1.x(), p1.y(), p1.z());
+                            glVertex3f(p2.x(), p2.y(), p2.z());
+                            glEnd();
+                        }
+                        else {
+                            GLfloat ctrlpoints[4][3] = {
+                                { p1.x(), p1.y(), p1.z() }, { c1.x(), c1.y(), c1.z() },
+                                { c2.x(), c2.y(), c2.z() }, { p2.x(), p2.y(), p2.z() } };
+                            glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
+                            glEnable(GL_MAP1_VERTEX_3);
+                            glBegin(GL_LINE_STRIP);
+                            for(GLfloat t = 0.0f ; t <= 1.05f ; t += 0.05f)
+                                glEvalCoord1f(t);
+                            glEnd();
+                            glDisable(GL_MAP1_VERTEX_3);
+                        }
 
-                    if((selected) && (indexPoint == selectedPathPointPoint))
-                        renderOptions->render->renderText(p1.x(), p1.y(), p1.z(), QString::number(indexPoint), renderOptions->renderFont);
+                        if((selected) && (indexPoint == selectedPathPointPoint))
+                            renderOptions->render->renderText(p1.x(), p1.y(), p1.z(), QString::number(indexPoint), renderOptions->renderFont);
+                    }
                 }
             }
+            glDisable(GL_LINE_STIPPLE);
+            glEndList();
+            glListCurveRecreate = true;
         }
-        glDisable(GL_LINE_STIPPLE);
+        glCallList(glListCurve);
 
         //Selection
         if(selected) {
@@ -227,7 +246,7 @@ void NxCurve::removePointAt(quint16 index) {
     calcBoundingRect();
 }
 
-const void NxCurve::shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation) {
+void NxCurve::shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation) {
     if(index < pathPoints.count()) {
         qint16 indexPoint;
         if((direction < 0) && (index > 1)) {
@@ -250,6 +269,7 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, bool s
     return setPointAt(index, point, NxPoint(), NxPoint(), smooth, boundingRectCalculation);
 }
 const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation) {
+    glListCurveRecreate = true;
     NxCurvePoint pointStruct;
     pointStruct.setX(point.x());
     pointStruct.setY(point.y());
@@ -671,7 +691,7 @@ void NxCurve::isOnPathPoint(const NxRect & point) {
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-static void pathArcSegment(QPainterPath &path,
+void pathArcSegment(QPainterPath &path,
                            qreal xc, qreal yc,
                            qreal th0, qreal th1,
                            qreal rx, qreal ry, qreal xAxisRotation)
@@ -704,7 +724,7 @@ static void pathArcSegment(QPainterPath &path,
                  a00 * x3 + a01 * y3, a10 * x3 + a11 * y3);
 }
 
-static void pathArc(QPainterPath &path,
+void pathArc(QPainterPath &path,
                     qreal               rx,
                     qreal               ry,
                     qreal               x_axis_rotation,
@@ -783,7 +803,7 @@ static void pathArc(QPainterPath &path,
                        rx, ry, x_axis_rotation);
     }
 }
-static bool parsePathDataFast(const QString &dataStr, QPainterPath &path)
+bool parsePathDataFast(const QString &dataStr, QPainterPath &path)
 {
     qreal x0 = 0, y0 = 0;              // starting point
     qreal x = 0, y = 0;                // current point
@@ -1206,26 +1226,7 @@ static qreal toDouble(const QChar *&str)
     return val;
 
 }
-static qreal toDouble(const QString &str, bool *ok = NULL)
-{
-    const QChar *c = str.constData();
-    qreal res = toDouble(c);
-    if (ok) {
-        *ok = ((*c) == QLatin1Char('\0'));
-    }
-    return res;
-}
-
-static qreal toDouble(const QStringRef &str, bool *ok = NULL)
-{
-    const QChar *c = str.constData();
-    qreal res = toDouble(c);
-    if (ok) {
-        *ok = (c == (str.constData() + str.length()));
-    }
-    return res;
-}
-static inline void parseNumbersArray(const QChar *&str, QVarLengthArray<qreal, 8> &points)
+void parseNumbersArray(const QChar *&str, QVarLengthArray<qreal, 8> &points)
 {
     while (str->isSpace())
         ++str;

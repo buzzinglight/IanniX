@@ -26,7 +26,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     projectScore = 0;
     freehandCurveId = 0;
     lastMessageAllow = true;
-    oscBundleHost = QHostAddress("127.0.0.2");
+    oscBundleHost = QHostAddress("127.0.0.1");
     oscBundlePort = 0;
     scriptDir = QDir::current();
     cpu = new NxCpu(this);
@@ -34,6 +34,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     splash = new UiSplash(0);
     splash->show();
     QTimer::singleShot(1500, this, SLOT(closeSplash()));
+    QCoreApplication::processEvents();
 
     iconAppPlay  = QIcon(QPixmap(":icons/res_appicon_play.png"));
     iconAppPause = QIcon(QPixmap(":icons/res_appicon_pause.png"));
@@ -121,13 +122,6 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(render, SIGNAL(editingMove(NxPoint,bool)), SLOT(editingMove(NxPoint,bool)));
     connect(render, SIGNAL(escFullscreen()), view, SLOT(escFullscreen()));
     render->zoom();
-    render->resizeGL();
-    render->updateGL();
-    render->loadTexture("background", scriptDir.absoluteFilePath("Tools/background.jpg"), NxRect(NxPoint(), NxPoint()));
-    render->loadTexture("trigger_active", scriptDir.absoluteFilePath("Tools/trigger.png"), NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
-    render->loadTexture("trigger_inactive", scriptDir.absoluteFilePath("Tools/trigger.png"), NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
-    render->loadTexture("trigger_active_message", scriptDir.absoluteFilePath("Tools/trigger_message.png"), NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
-    render->loadTexture("trigger_inactive_message", scriptDir.absoluteFilePath("Tools/trigger_message.png"), NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
 
     //Message script engine
     QScriptValue messageScript = messageScriptEngine.globalObject();
@@ -361,7 +355,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         }
         edl.close();
     }
-    if(tracks != "") {
+    if(!tracks.isEmpty()) {
         QFile edlOut("EDL-out.js");
         if(edlOut.open(QFile::WriteOnly)) {
             tracks = QString("var data = [\n%1];").arg(tracks);
@@ -436,7 +430,7 @@ void IanniX::actionImportText(const QString &font, const QString &text) {
     bool ok = false;
 
     QString fontReal = font;
-    if(fontReal == "") {
+    if(fontReal.isEmpty()) {
         ok = false;
         QFont fontFont = QFontDialog::getFont(&ok);
         if(ok)
@@ -650,22 +644,22 @@ void IanniX::timerTick() {
         quint16 min = timeLocal / 60;
         if(min < 10) timeStr += "00";
         else if(min < 100) timeStr += "0";
-        timeStr += QString().setNum(min) + ":";
+        timeStr += QString::number(min) + ":";
 
         quint8 sec = (int)floor(timeLocal) % 60;
         if(sec < 10) timeStr += "0";
-        timeStr += QString().setNum(sec) + ":";
+        timeStr += QString::number(sec) + ":";
 
         quint16 milli = (timeLocal - floor(timeLocal)) * 1000;
         if(milli < 10)       timeStr += "00";
         else if(milli < 100) timeStr += "0";
-        timeStr += QString().setNum(milli);
+        timeStr += QString::number(milli);
 
         emit(updateTransport(timeStr, lastMessage));
         lastMessageAllow = true;
     }
     if(timePerfRefresh >= 1) {
-        transport->setPerfScheduler(QString().setNum((quint16)qRound(1000.0F*timePerfRefresh/timePerfCounter)));
+        transport->setPerfScheduler(QString::number((quint16)qRound(1000.0F*timePerfRefresh/timePerfCounter)));
         timePerfRefresh = 0;
         timePerfCounter = 0;
     }
@@ -867,7 +861,7 @@ void IanniX::actionNew() {
     if(projectScore) {
         bool ok;
         QString text = QInputDialog::getText(0, tr("New score"), tr("Enter the name of your new score:"), QLineEdit::Normal, "New Document " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
-        if((ok) && (text != "")) {
+        if((ok) && (!text.isEmpty())) {
             if(!QFile::exists(scriptDir.absoluteFilePath(text +  ".nxscore"))) {
                 QFile newFile(scriptDir.absoluteFilePath(text +  ".nxscore"));
                 if(newFile.open(QIODevice::WriteOnly)) {
@@ -887,7 +881,7 @@ void IanniX::actionNew_script() {  ///CG///
     if(projectScore) {
         bool ok;
         QString text = QInputDialog::getText(0, tr("New score"), tr("Enter the name of your new score:"), QLineEdit::Normal, "New Document " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
-        if((ok) && (text != "")) {
+        if((ok) && (!text.isEmpty())) {
             if(!QFile::exists(scriptDir.absoluteFilePath(text +  ".nxscore"))) {
                 QFile newFile(scriptDir.absoluteFilePath(text +  ".nxscore"));
                 if(newFile.open(QIODevice::WriteOnly)) {
@@ -906,7 +900,7 @@ void IanniX::actionNew_script() {  ///CG///
 
 void IanniX::actionOpen() {
     QString fileName = QFileDialog::getExistingDirectory(0, tr("Open IanniX Project Folder"), QString("./scores/"));
-    if(fileName != "")
+    if(!fileName.isEmpty())
         loadProject(fileName + QString(QDir::separator()));
 }
 void IanniX::actionSave() {
@@ -922,7 +916,7 @@ void IanniX::actionRename() {
     //if(currentDocument) {
     //    bool ok;
     //    QString text = QInputDialog::getText(0, tr("File rename"), tr("Enter the desired name of your score:"), QLineEdit::Normal, currentDocument->getScriptFile().baseName(), &ok);
-    //    if((ok) && (text != ""))
+    //    if((ok) && (!text.isEmpty()))
     //        currentDocument->rename(currentDocument->getScriptFile().absoluteFilePath().replace(currentDocument->getScriptFile().baseName()+".", text+"."));
     //}
     if(currentDocument) {
@@ -930,7 +924,7 @@ void IanniX::actionRename() {
         ExtScriptManager *fileList = (ExtScriptManager*)inspector->getProjectFiles()->currentItem();
         QString text = QInputDialog::getText(0, tr("File rename"), tr("New name of script:"), QLineEdit::Normal, fileList->getScriptFile().baseName(), &ok);
         QString f = fileList->getScriptFile().absoluteFilePath().replace(fileList->getScriptFile().baseName()+".", text+".");
-        if((ok) && (f != "")) {
+        if((ok) && (!f.isEmpty())) {
             if(!QFile::exists(f)) {
                 QFile::rename(fileList->getScriptFile().absoluteFilePath(), f);
             }
@@ -959,7 +953,7 @@ void IanniX::actionDuplicateScore() {
     if(currentDocument) {
         bool ok;
         QString text = QInputDialog::getText(0, tr("File duplication"), tr("Enter the desired name of the duplicated score"), QLineEdit::Normal, currentDocument->getScriptFile().baseName(), &ok);
-        if((ok) && (text != "")) {
+        if((ok) && (!text.isEmpty())) {
             currentDocument->setNewFilename(currentDocument->getScriptFile().absoluteFilePath().replace(currentDocument->getScriptFile().baseName()+".", text+"."));
             currentDocument->save(render->getRenderOptions());
         }
@@ -1039,7 +1033,7 @@ void IanniX::actionProjectFilesContext(const QPoint & point) {   ///CG///
                         bool ok;
                         QString text = QInputDialog::getText(0, tr("File duplication"), tr("Name of duplicate script:"), QLineEdit::Normal, fileList->getScriptFile().baseName(), &ok);
                         QString f = fileList->getScriptFile().absoluteFilePath().replace(fileList->getScriptFile().baseName()+".", text+".");
-                        if((ok) && (f != "")) {
+                        if((ok) && (!f.isEmpty())) {
                             if(!QFile::exists(f)) {
                                 QFile::copy(fileList->getScriptFile().absoluteFilePath(), f);
                             }
@@ -1092,7 +1086,7 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
                         bool ok;
                         QString text = QInputDialog::getText(0, tr("New script"), tr("Name of new script:"), QLineEdit::Normal, "New Document " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
                         QString f = scriptList->getScriptFile().absoluteFilePath().replace(scriptList->getScriptFile().baseName()+".", text+".");
-                        if((ok) && (text != "")) {
+                        if((ok) && (!text.isEmpty())) {
                             if(!QFile::exists(f)) {
                                 QFile newFile(f);
                                 if(newFile.open(QIODevice::WriteOnly)) {
@@ -1111,7 +1105,7 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
                         bool ok;
                         QString text = QInputDialog::getText(0, tr("File duplication"), tr("Name of duplicate script:"), QLineEdit::Normal, scriptList->getScriptFile().baseName(), &ok);
                         QString f = scriptList->getScriptFile().absoluteFilePath().replace(scriptList->getScriptFile().baseName()+".", text+".");
-                        if((ok) && (f != "")) {
+                        if((ok) && (!f.isEmpty())) {
                             if(!QFile::exists(f)) {
                                 QFile::copy(scriptList->getScriptFile().absoluteFilePath(), f);
                             }
@@ -1125,7 +1119,7 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
                         bool ok;
                         QString text = QInputDialog::getText(0, tr("File rename"), tr("New name of script:"), QLineEdit::Normal, scriptList->getScriptFile().baseName(), &ok);
                         QString f = scriptList->getScriptFile().absoluteFilePath().replace(scriptList->getScriptFile().baseName()+".", text+".");
-                        if((ok) && (f != "")) {
+                        if((ok) && (!f.isEmpty())) {
                             if(!QFile::exists(f)) {
                                 QFile::rename(scriptList->getScriptFile().absoluteFilePath(), f);
                             }
@@ -1208,7 +1202,7 @@ void IanniX::removeObject(NxObject *object) {
             NxCurve *curve = (NxCurve*)object;
             QStringList commands;
             foreach(NxObject *object, curve->getCursors())
-                commands << COMMAND_REMOVE + " " + QString().setNum(object->getId()) + COMMAND_END;
+                commands << COMMAND_REMOVE + " " + QString::number(object->getId()) + COMMAND_END;
             foreach(const QString & command, commands) {
                 execute(command);
             }
@@ -1269,7 +1263,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
 
             //Répétiteur de message
             //QString commandReplace = command;
-            //sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), commandReplace.replace("auto", QString().setNum(id)));
+            //sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), commandReplace.replace("auto", QString::number(id)));
 
             NxObject *object = 0;
             QString type = arguments.at(1).toLower();
@@ -1408,8 +1402,16 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if((commande == COMMAND_TOGGLE_GROUP) && (arguments.count() >= 3)) {
                 Qt::CheckState state = Qt::Unchecked;
-                if(arguments.at(2).toUInt() > 0)
+                if(arguments.at(2).toInt() < 0) {
+                    if((currentDocument) && (currentDocument->groups.contains(arguments.at(1))))
+                        state = currentDocument->groups.value(arguments.at(1))->checkState(0);
+                    if(state == Qt::Unchecked)
+                        state = Qt::Checked;
+                    else
+                        state = Qt::Unchecked;
+                } else if(arguments.at(2).toInt() > 0)
                     state = Qt::Checked;
+
                 if((currentDocument) && (currentDocument->groups.contains(arguments.at(1))))
                     currentDocument->groups.value(arguments.at(1))->setCheckState(0, state);
             }
@@ -1450,7 +1452,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                         if((object->getType() == ObjectsTypeCursor) || (object->getType() == ObjectsTypeCurve) || (object->getType() == ObjectsTypeTrigger)) {
                             NxObject *objectObj = (NxObject*)object;
                             QString groupId = arguments.at(2);
-                            if(groupId == "")
+                            if(groupId.isEmpty())
                                 groupId = documents[objectObj->getDocumentId()]->getCurrentGroup()->getId();
                             objectObj->dispatchProperty("groupId", groupId);
                         }
@@ -2105,7 +2107,7 @@ void IanniX::fileWatcherFolder(QStringList extension, QDir dir, QTreeWidgetItem 
             if(documentIterator.value() == document)
                 destroyKey = documentIterator.key();
         }
-        if(destroyKey != "")
+        if(!destroyKey.isEmpty())
             documents.remove(destroyKey);
         parentList->removeChild(document);
     }
