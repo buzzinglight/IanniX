@@ -52,10 +52,10 @@ public:
     inline void setX(qreal pos) { setLeft(pos); }
     inline void setY(qreal pos) { setTop(pos); }
 
-    inline NxPoint topLeft() const     { return NxPoint(xp, yp, 0); }
-    inline NxPoint bottomRight() const { return NxPoint(xp+w, yp+h, 0); }
-    inline NxPoint topRight() const    { return NxPoint(xp+w, yp, 0); }
-    inline NxPoint bottomLeft() const  { return NxPoint(xp, yp+h, 0); }
+    inline NxPoint topLeft() const     { return NxPoint(xp, yp, zp); }
+    inline NxPoint bottomRight() const { return NxPoint(xp+w, yp+h, zp); }
+    inline NxPoint topRight() const    { return NxPoint(xp+w, yp, zp); }
+    inline NxPoint bottomLeft() const  { return NxPoint(xp, yp+h, zp); }
     inline NxPoint center() const;
 
     void setTopLeft(const NxPoint &p);

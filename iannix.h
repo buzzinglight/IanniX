@@ -58,6 +58,7 @@ private:
     QDir scriptDir;
 public:
     explicit IanniX(QObject *parent, bool forceSettings);
+    void readyToStart();
     inline void dispatchProperty(const QString & property, const QVariant & value) {
         //Browse documents
         QHashIterator<QString, NxDocument*> documentIterator(documents);
@@ -152,15 +153,18 @@ private:
     quint16 oscBundlePort;
     QString defaultMessageTrigger, defaultMessageCursor;
     NxTrigger *transportObject, *syncObject;
-    QString ipOut;
+    QString ipOut, midiOut;
     int ipOutId;
 public:
     void loadProject(const QString & projectFile);
 public slots:
     void setIpOut(const QString &);
+    void setMidiOut(const QString &);
     void ipOutStatusFound(const QHostInfo &);
+    void setMidiOutNewDevice(const QString &midi);
 signals:
     void ipOutStatus(bool);
+    void midiOutStatus(bool);
 
 
     //TIME MANAGEMENT

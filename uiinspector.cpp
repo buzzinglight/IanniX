@@ -148,10 +148,14 @@ void UiInspector::actionInfo() {
                     cursor->setTimeStartOffset(ui->offsetStartSpin->value());
                 else if(ui->offsetEndSpin == sender())
                     cursor->setTimeEndOffset(ui->offsetEndSpin->value());
-                else if(ui->cursorBoundsLine1 == sender())
-                    cursor->setBoundsSource(ui->cursorBoundsLine1->text());
-                else if(ui->cursorBoundsLine2 == sender())
-                    cursor->setBoundsTarget(ui->cursorBoundsLine2->text());
+                else if(ui->cursorBoundsLineSource1 == sender())
+                    cursor->setBoundsSource(ui->cursorBoundsLineSource1->text(), 0);
+                else if(ui->cursorBoundsLineSource2 == sender())
+                    cursor->setBoundsSource(ui->cursorBoundsLineSource2->text(), 1);
+                else if(ui->cursorBoundsLineTarget1 == sender())
+                    cursor->setBoundsTarget(ui->cursorBoundsLineTarget1->text(), 0);
+                else if(ui->cursorBoundsLineTarget2 == sender())
+                    cursor->setBoundsTarget(ui->cursorBoundsLineTarget2->text(), 1);
             }
             else if(object->getType() == ObjectsTypeCurve) {
                 NxCurve *curve = (NxCurve*)object;
@@ -224,6 +228,11 @@ void UiInspector::actionNetwork() {
         factory->pushSnapshot();
         ui->ipOutEdit->setStyleSheet("");
         emit(ipOutChange(ui->ipOutEdit->text()));
+    }
+    else if(ui->midiOutCombo == sender()) {
+        factory->pushSnapshot();
+        ui->midiOutCombo->setStyleSheet("");
+        emit(midiOutChange(ui->midiOutCombo->currentText()));
     }
     else if(ui->serialInPortEdit == sender()) {
         factory->pushSnapshot();
@@ -393,8 +402,10 @@ void UiInspector::refresh() {
                 change(indexObject, ui->offsetInitialSpin, cursor->getTimeInitialOffset(), prevCursor->getTimeInitialOffset());
                 change(indexObject, ui->offsetStartSpin, cursor->getTimeStartOffset(), prevCursor->getTimeStartOffset());
                 change(indexObject, ui->offsetEndSpin, cursor->getTimeEndOffset(), prevCursor->getTimeEndOffset());
-                change(indexObject, ui->cursorBoundsLine1, cursor->getBoundsSource(), prevCursor->getBoundsSource());
-                change(indexObject, ui->cursorBoundsLine2, cursor->getBoundsTarget(), prevCursor->getBoundsTarget());
+                change(indexObject, ui->cursorBoundsLineSource1, cursor->getBoundsSource(0), prevCursor->getBoundsSource(0));
+                change(indexObject, ui->cursorBoundsLineSource2, cursor->getBoundsSource(1), prevCursor->getBoundsSource(1));
+                change(indexObject, ui->cursorBoundsLineTarget1, cursor->getBoundsTarget(0), prevCursor->getBoundsTarget(0));
+                change(indexObject, ui->cursorBoundsLineTarget2, cursor->getBoundsTarget(1), prevCursor->getBoundsTarget(1));
                 change(indexObject, ui->messagesSpin, object->getMessageTimeInterval(), prevObject->getMessageTimeInterval());
 
                 if(cursor->getCurve()) {
@@ -500,8 +511,10 @@ void UiInspector::refresh() {
     ui->cursorBoundsLabel2->setVisible(showCursorCurveInfo);
     ui->speedFLabel->setVisible(showCursorCurveInfo);
     ui->speedFSpin->setVisible(showCursorCurveInfo);
-    ui->cursorBoundsLine1->setVisible(showCursorCurveInfo);
-    ui->cursorBoundsLine2->setVisible(showCursorCurveInfo);
+    ui->cursorBoundsLineSource1->setVisible(showCursorCurveInfo);
+    ui->cursorBoundsLineSource2->setVisible(showCursorCurveInfo);
+    ui->cursorBoundsLineTarget1->setVisible(showCursorCurveInfo);
+    ui->cursorBoundsLineTarget2->setVisible(showCursorCurveInfo);
 
     ui->triggerOffLabel->setVisible(showTriggerInfo);
     ui->triggerOffSpin->setVisible(showTriggerInfo);
@@ -725,6 +738,14 @@ void UiInspector::setIpOut(const QString & ip) {
     ui->ipOutEdit->setText(ip);
     ipOutChange(ip);
 }
+void UiInspector::setMidiOut(const QString & midi) {
+    ui->midiOutCombo->setCurrentIndex(ui->midiOutCombo->findText(midi, Qt::MatchFixedString));
+    midiOutChange(ui->midiOutCombo->currentText());
+}
+void UiInspector::setMidiOutNewDevice(const QString &midi) {
+    ui->midiOutCombo->addItem(midi);
+}
+
 void UiInspector::setSerialPort(const QString & port) {
     ui->serialInPortEdit->setText(port);
     serialPortChange(port);

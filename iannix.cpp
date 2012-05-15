@@ -165,6 +165,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     ipOutId = -1;
     connect(inspector, SIGNAL(ipOutChange(QString)), SLOT(setIpOut(QString)));
     connect(this, SIGNAL(ipOutStatus(bool)), inspector, SLOT(setIpOutOk(bool)));
+    connect(inspector, SIGNAL(midiOutChange(QString)), SLOT(setMidiOut(QString)));
+    connect(this, SIGNAL(midiOutStatus(bool)), inspector, SLOT(setMidiOutOk(bool)));
 
 
 #ifdef KINECT_INSTALLED
@@ -205,6 +207,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("tcpPort", 3000);
     if((forceSettings) || (!settings.childKeys().contains("ipOut")))
         settings.setValue("ipOut", "127.0.0.1");
+    if((forceSettings) || (!settings.childKeys().contains("midiOut")))
+        settings.setValue("midiOut", "iannix_out");
 #ifdef Q_OS_MAC
     if((forceSettings) || (!settings.childKeys().contains("serialPort")))
         settings.setValue("serialPort", "/dev/tty.usbserial-A600afc5:BAUD115200:DATA_8:PAR_NONE:STOP_1:FLOW_OFF");
@@ -246,6 +250,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     inspector->setTCPPort(settings.value("tcpPort").toUInt());
     inspector->setHttpPort(settings.value("httpPort").toUInt());
     inspector->setIpOut(settings.value("ipOut").toString());
+    inspector->setMidiOut(settings.value("midiOut").toString());
     inspector->setSerialPort(settings.value("serialPort").toString());
     inspector->setTransportMessage(settings.value("defaultMessageTransport").toString());
     inspector->setSyncMessage(settings.value("defaultMessageSync").toString());
@@ -296,10 +301,6 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     QDir libDir("./Tools/");
     fileWatcherFolder(QStringList() << "*.nxscript" << "*.nxstyle", libDir, libScript, false);
     fileWatcherFolder(QStringList() << "*.nxscript" << "*.nxstyle", examplesDir, exampleScript, false);
-
-    //Projet par défault
-    loadProject("Project/root.root");
-    actionFast_rewind();
 
     //Conversion d'EDL
     //actionImportOldIanniXScore("tutorials/Tutorial 1.xml");
@@ -364,6 +365,14 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         }
     }
     */
+}
+
+void IanniX::readyToStart() {
+    qDebug("Ready to start!");
+    //Projet par défault
+    loadProject("Project/root.root");
+    actionFast_rewind();
+
     startTimer(1000);
 }
 
@@ -1152,6 +1161,7 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
 
 NxGroup* IanniX::addGroup(const QString & documentId, const QString & groupId) {
     NxGroup *group = new NxGroup(this, inspector->getViewGroup(), inspector->getWasGroupChecked(groupId));
+    inspector->getViewGroup()->sortItems(0, Qt::AscendingOrder);
     group->setId(groupId);
     documents.value(documentId)->groups[group->getId()] = group;
     documents.value(documentId)->setCurrentGroup(group);
@@ -1400,26 +1410,45 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             else if((commande == COMMAND_SPEED) && (arguments.count() >= 1)) {
                 return transport->getSpeed();
             }
-            else if((commande == COMMAND_TOGGLE_GROUP) && (arguments.count() >= 3)) {
-                Qt::CheckState state = Qt::Unchecked;
-                if(arguments.at(2).toInt() < 0) {
-                    if((currentDocument) && (currentDocument->groups.contains(arguments.at(1))))
-                        state = currentDocument->groups.value(arguments.at(1))->checkState(0);
-                    if(state == Qt::Unchecked)
-                        state = Qt::Checked;
-                    else
-                        state = Qt::Unchecked;
-                } else if(arguments.at(2).toInt() > 0)
-                    state = Qt::Checked;
+            else if((commande == COMMAND_TOGGLE_GROUP) && (arguments.count() >= 3) && (currentDocument)) {
+                QString key = arguments.at(1);
+                quint16 posWild = key.indexOf("*");
+                if(posWild > 0) key = key.left(posWild);
 
-                if((currentDocument) && (currentDocument->groups.contains(arguments.at(1))))
-                    currentDocument->groups.value(arguments.at(1))->setCheckState(0, state);
+                QMapIterator<QString, NxGroup*> groupIterator(currentDocument->groups);
+                while (groupIterator.hasNext()) {
+                    groupIterator.next();
+                    NxGroup *group = groupIterator.value();
+
+                    Qt::CheckState state = Qt::Unchecked;
+                    if(arguments.at(2).toInt() < 0) {
+                        if(groupIterator.key().startsWith(key))
+                            state = group->checkState(0);
+                        if(state == Qt::Unchecked)
+                            state = Qt::Checked;
+                        else
+                            state = Qt::Unchecked;
+                    } else if(arguments.at(2).toInt() > 0)
+                        state = Qt::Checked;
+
+                    if(groupIterator.key().startsWith(key))
+                        group->setCheckState(0, state);
+                }
             }
-            else if((commande == COMMAND_TOGGLE_GROUP) && (arguments.count() >= 2)) {
-                if((currentDocument) && (currentDocument->groups.contains(arguments.at(1))))
-                    return (currentDocument->groups.value(arguments.at(1))->checkState(0) == Qt::Checked)?(1):(0);
-                else
-                    return -1;
+            else if((commande == COMMAND_TOGGLE_GROUP) && (arguments.count() >= 2) && (currentDocument)) {
+                QString key = arguments.at(1);
+                quint16 posWild = key.indexOf("*");
+                if(posWild > 0) key = key.left(posWild);
+
+                QMapIterator<QString, NxGroup*> groupIterator(currentDocument->groups);
+                while (groupIterator.hasNext()) {
+                    groupIterator.next();
+                    if(groupIterator.key().startsWith(key)) {
+                        NxGroup *group = groupIterator.value();
+                        return (group->checkState(0) == Qt::Checked)?(1):(0);
+                    }
+                }
+                return -1;
             }
             else if((commande == COMMAND_MOUSE) && (arguments.count() >= 3)) {
                 QCursor::setPos(arguments.at(1).toInt(), arguments.at(2).toInt());
@@ -1739,7 +1768,7 @@ void IanniX::sendMessage(void *_object, void *_trigger, void *_cursor, void *_co
             if(messagesCache.contains(messagePattern.at(0)))
                 message = messagesCache.value(messagePattern.at(0));
             else {
-                message.setUrl(QUrl(messagePattern.at(0), QUrl::TolerantMode), &messageScriptEngine, ipOut);
+                message.setUrl(QUrl(messagePattern.at(0), QUrl::TolerantMode), &messageScriptEngine, ipOut, midiOut);
                 messagesCache.insert(messagePattern.at(0), message);
             }
             if(message.parse(messagePattern, trigger, cursor, curve, collisionCurve, collisionPoint, collisionValue, status, inspector->nbTriggers, inspector->nbCursors, inspector->nbCurves)) {
@@ -1838,13 +1867,13 @@ void IanniX::actionAddFreeCursor() {
             NxCurve *curve = (NxCurve*)object;
             quint16 cursorId = execute(QString("add cursor auto")).toUInt();
             execute(QString("setCurve %1 %2").arg(cursorId).arg(curve->getId()));
-            execute(QString("setPattern %1 0 0 1").arg(cursorId));
+            execute(QString("setPattern %1 0 0 1 0").arg(cursorId));
             execute(QString("setOffset %1 %2 0 end").arg(cursorId).arg(curve->getMaxOffset() / 2));
         }
     }
     if(freeCursor) {
         quint16 cursorId = execute(QString("add cursor auto")).toUInt();
-        execute(QString("setPattern %1 0 0 1").arg(cursorId));
+        execute(QString("setPattern %1 0 0 1 0").arg(cursorId));
     }
 }
 void IanniX::actionCircleCurve() {
@@ -1888,7 +1917,7 @@ void IanniX::editingStop() {
             execute(QString("removePointAt %1 %2").arg(freehandCurveId).arg(freehandCurveIndex));
             quint16 cursorId = execute(QString("add cursor auto")).toUInt();
             execute(QString("setCurve %1 %2").arg(cursorId).arg(freehandCurveId));
-            execute(QString("setPattern %1 0 0 1").arg(cursorId));
+            execute(QString("setPattern %1 0 0 1 0").arg(cursorId));
         }
         else
             execute(QString("remove %1").arg(freehandCurveId));
@@ -1959,7 +1988,6 @@ void IanniX::setIpOut(const QString & ip) {
         QHostInfo::abortHostLookup(ipOutId);
         */
     //ipOutId = QHostInfo::lookupHost(ipOut, this, SLOT(ipOutStatusFound(QHostInfo)));
-    qDebug(">> %s %d", qPrintable(ipOut), ipOutId);
 }
 void IanniX::ipOutStatusFound(const QHostInfo &hostInfo) {
     qDebug("LA %s %d %d", qPrintable(hostInfo.errorString()), hostInfo.error(), hostInfo.lookupId());
@@ -1969,6 +1997,13 @@ void IanniX::ipOutStatusFound(const QHostInfo &hostInfo) {
     }
     else
         emit(ipOutStatus(false));
+}
+void IanniX::setMidiOut(const QString & midi) {
+    midiOut = midi;
+    messagesCache.clear();
+}
+void IanniX::setMidiOutNewDevice(const QString &midi) {
+    inspector->setMidiOutNewDevice(midi);
 }
 
 void IanniX::actionCloseEvent(QCloseEvent *event) {

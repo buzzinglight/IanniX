@@ -43,7 +43,8 @@ function addLine(lineIndex, start, end) {
 	run("setSpeed        current " + (2 + percent * 2));
 	run("setColor        current 170 180 190 255");
 	run("setSize         current 2");
-	
+	run("setPattern      current 0 0 1");
+
 	run("add trigger     " + (2000 + lineIndex));
 	run("setGroup        current triggers");
 	run("setPos          current " + (end.x * 0.9) + " " + (end.y * 0.9) + " 0");

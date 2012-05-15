@@ -40,6 +40,7 @@ function addLine(lineIndex, start, end) {
 	run("setGroup        current values");
 	run("setBoundsSource current " + (-circleRadius2) + " " + circleRadius2 + " " + circleRadius2 + " " + -circleRadius2);
 	run("setBoundsTarget current 0 1 1 0");
+	run("setPattern      current 0 0 1");
 	run("setSpeed        current " + (2 + percent * 2));
 	run("setColor        current 170 180 190 255");
 	run("setSize         current 2");

@@ -36,6 +36,7 @@ function addGlyph(texte, index, xPos) {
 	run("setWidth        current 2");
 	run("setBoundsSource current 0 4 14 0");
 	run("setBoundsTarget current 0 1 1 0");
+	run("setPattern      current 0 0 1");
 }
 
 //Custom function

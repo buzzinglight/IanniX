@@ -50,7 +50,7 @@ public:
         messageScriptEngine = 0;
     }
     
-    inline void setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine, const QString &ipOut) {
+    inline void setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine, const QString &ipOut, const QString &midiOut) {
         messageScriptEngine = _messageScriptEngine;
         messageScriptValue = messageScriptEngine->globalObject();
         hasAdd = false;
@@ -60,6 +60,8 @@ public:
 
         if(urlMessage.host().toLower() == "ip_out")
             urlMessage.setHost(ipOut);
+        else if(urlMessage.host().toLower() == "midi_out")
+            urlMessage.setHost(midiOut);
         urlMessageString = qPrintable(urlMessage.toString());
         address.clear();
         typetag.clear();
@@ -137,6 +139,12 @@ public:
                             messageScriptValue.setProperty("trigger_yPos", trigger->getPos().y());
                         if(patternArgument.contains("trigger_zPos"))
                             messageScriptValue.setProperty("trigger_zPos", trigger->getPos().z());
+                        if(patternArgument.contains("trigger_value_x"))
+                            messageScriptValue.setProperty("trigger_value_x", cursor->getCursorValue(trigger->getPos()).x());
+                        if(patternArgument.contains("trigger_value_y"))
+                            messageScriptValue.setProperty("trigger_value_y", cursor->getCursorValue(trigger->getPos()).y());
+                        if(patternArgument.contains("trigger_value_z"))
+                            messageScriptValue.setProperty("trigger_value_z", cursor->getCursorValue(trigger->getPos()).z());
                         if(patternArgument.contains("trigger_value"))
                             messageScriptValue.setProperty("trigger_value", trigger->getTrigged());
                         if(patternArgument.contains("trigger_distance")) {
@@ -236,7 +244,6 @@ public:
                     {
                         if(patternArgument.contains("status"))
                             messageScriptValue.setProperty("status", status);
-
                         if(patternArgument.contains("nb_triggers"))
                             messageScriptValue.setProperty("nb_triggers", nbTriggers);
                         if(patternArgument.contains("nb_cursors"))
@@ -273,6 +280,12 @@ public:
                             found = addFloat(trigger->getPos().y(), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_zPos")
                             found = addFloat(trigger->getPos().z(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_value_x")
+                            found = addFloat(cursor->getCursorValue(trigger->getPos()).x(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_value_y")
+                            found = addFloat(cursor->getCursorValue(trigger->getPos()).y(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_value_z")
+                            found = addFloat(cursor->getCursorValue(trigger->getPos()).z(), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_value")
                             found = addFloat(trigger->getTrigged(), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_distance") {
@@ -368,7 +381,9 @@ public:
                         }
                     }
                     else {
-                        if(patternArgument == "status")
+                        if(patternArgument == "timetag")
+                            found = addTimeTag(getTimeTag(), patternArgument, patternIndex);
+                        else if(patternArgument == "status")
                             found = addString(status, patternArgument, patternIndex);
                         else if(patternArgument == "nb_triggers")
                             found = addFloat(nbTriggers, patternArgument, patternIndex);
@@ -413,6 +428,14 @@ public:
     }
     
 private:
+    inline qint64 getTimeTag() {
+        const qint64 january_1_1900 = -2208988800000ll;
+        qint64 ntpMSecs = QDateTime::currentMSecsSinceEpoch() - january_1_1900;
+        union { quint32 i[2]; qint64 t; } u;
+        u.i[1] = ntpMSecs / 1000;
+        u.i[0] = 0x100000000ll * (ntpMSecs % 1000) / 1000;
+        return u.t;
+    }
     /*
     inline void addInt(int i, const char *name, quint16) {
             union { int i; char ch[4]; } u;
@@ -476,6 +499,41 @@ private:
         }
         else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
             asciiMessage = asciiMessage + " " + QByteArray::number(f);
+            return true;
+        }
+        return true;
+    }
+    inline bool addTimeTag(qint64 t, const QString & name, quint16) {
+        verboseMessage = verboseMessage + " " + QByteArray::number(t);
+        hasAdd = true;
+        if(type == MessagesTypeOsc) {
+            union { qint64 t; char ch[8]; } u;
+            u.t = t;
+            arguments += u.ch[7];
+            arguments += u.ch[6];
+            arguments += u.ch[5];
+            arguments += u.ch[4];
+            arguments += u.ch[3];
+            arguments += u.ch[2];
+            arguments += u.ch[1];
+            arguments += u.ch[0];
+            typetag += 't';
+            return true;
+        }
+        else if(type == MessagesTypeHttp) {
+            urlMessage.addQueryItem(name, QString::number(t));
+            return true;
+        }
+        else if(type == MessagesTypeTcp) {
+            asciiMessage = asciiMessage + qPrintable("<ARGUMENT TYPE=\"t\" VALUE=\"" + QString::number(t) + "\"/>");
+            return true;
+        }
+        else if(type == MessagesTypeMidi) {
+            midiValues.append(t);
+            return true;
+        }
+        else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
+            asciiMessage = asciiMessage + " " + QByteArray::number(t);
             return true;
         }
         return true;

@@ -61,8 +61,6 @@ ExtMidiManager::ExtMidiManager(NxObjectFactoryInterface *_factory)
             QString portName = QString::fromStdString(portListIn->getPortName(portListInIndex));
             portName = portName.replace(" ", "");
             portName = portName.replace("/", "");
-            factory->logOscSend("MIDI In Found : " + portName);
-            qDebug("%s", qPrintable("MIDI In Found : " + portName));
             portName = portName.toLower();
             portIn.insert(portName, new RtMidiIn());
             portIn.value(portName)->openPort(portListInIndex);
@@ -82,8 +80,7 @@ ExtMidiManager::ExtMidiManager(NxObjectFactoryInterface *_factory)
             QString portName = QString::fromStdString(portListOut->getPortName(portListOutIndex));
             portName = portName.replace(" ", "");
             portName = portName.replace("/", "");
-            factory->logOscSend("MIDI Out Found : " + portName);
-            qDebug("%s", qPrintable("MIDI Out Found : " + portName));
+            factory->setMidiOutNewDevice(portName);
             portName = portName.toLower();
             portOut.insert(portName, new RtMidiOut());
             portOut.value(portName)->openPort(portListOutIndex);
@@ -110,6 +107,7 @@ ExtMidiManager::ExtMidiManager(NxObjectFactoryInterface *_factory)
             portOut.value(portOutName)->openVirtualPort(portOutName.toStdString());
         if(portIn.value(portInName) != 0)
             portIn.value(portInName)->openVirtualPort(portInName.toStdString());
+        factory->setMidiOutNewDevice("IanniX_Out");
 #endif
     } catch (RtError& err) {
         factory->logOscSend(QString::fromStdString(err.getMessage()));

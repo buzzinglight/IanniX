@@ -47,6 +47,7 @@ function addLine() {
 			run("setColorHue      current " + colorHue + " 255 200 " + random(130, 150));
 			run("setWidth         current 0.2");
 			run("setSize          current 2");
+			run("setPattern       current 0 0 1");
 		}
 		
 		id++

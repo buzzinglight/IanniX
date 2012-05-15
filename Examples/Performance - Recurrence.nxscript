@@ -1447,7 +1447,6 @@ function ajouterCurseur(info, param, control) {
 	run("setWidth current 4.5");
 	run("setBoundsSource current " + info.bounds.xMin + " " + (info.bounds.yMax+info.yPos) + " " + info.bounds.xMax + " " + (info.bounds.yMin+info.yPos));
 	run("setBoundsTarget current 0 " + param.value_top + " 1 " + param.value_bottom);
-	run("setPattern current 0 0 1 0");
 	if(control != undefined)
 		run("setMessage current 20, osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y, direct:// setResize {(cursor_xPos>" + control.xThresh + ")?(" + control.curve.id + "):(-1)} {map(cursor_value_y," + param.value_bottom + "," + param.value_top + "," + (control.curveWidthFrom*control.curve.bounds.xMax) + "," + (control.curveWidthTo*control.curve.bounds.xMax) + ")} {map(cursor_value_y," + param.value_bottom + "," + param.value_top + "," + (control.curveHeightFrom*control.curve.bounds.yMax) + "," + (control.curveHeightTo*control.curve.bounds.yMax) + ")}");
 	else

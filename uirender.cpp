@@ -72,7 +72,6 @@ UiRender::UiRender(QWidget *parent) :
     timePerfCounter = 0;
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
-    timer->start(20);
 }
 UiRender::~UiRender() {
     delete ui;
@@ -186,12 +185,14 @@ void UiRender::initializeGL() {
 
     //Force resize
     resizeGL();
+    factory->readyToStart();
 }
 
 //Resize event
 void UiRender::resizeGL(int, int) {
     //Set viewport
     glViewport(0, 0, (GLint)width(), (GLint)height());
+    timer->start(20);
 }
 
 //Paint event
@@ -208,9 +209,9 @@ void UiRender::paintGL() {
     //Intertial system
     renderOptions->axisCenter = renderOptions->axisCenter + (renderOptions->axisCenterDest - renderOptions->axisCenter) / 3;
     renderOptions->zoomLinear = renderOptions->zoomLinear + (renderOptions->zoomLinearDest - renderOptions->zoomLinear) / 3;
-    rotation = rotation + (rotationDest - rotation) / 6;
-    if(qAbs(rotation.z() - rotationDest.z()) > 360)
-        rotation.setZ(rotationDest.z());
+    renderOptions->rotation = renderOptions->rotation + (renderOptions->rotationDest - renderOptions->rotation) / 6;
+    if(qAbs(renderOptions->rotation.z() - renderOptions->rotationDest.z()) > 360)
+        renderOptions->rotation.setZ(renderOptions->rotationDest.z());
     translation = translation + (translationDest - translation) / 3;
     scale = scale + (scaleDest - scale) / 3;
 
@@ -259,17 +260,17 @@ void UiRender::paintGL() {
         NxCursor *object = (NxCursor*)document->objects.value(followId);
         //rotationDest.setX(-object->getCurrentAngleRoll());
         //rotationDest.setY(-82 - object->getCurrentAnglePitch());
-        rotationDest.setZ(-object->getCurrentAngle() + 90);
+        renderOptions->rotationDest.setZ(-object->getCurrentAngle() + 90);
         translationDest = -object->getCurrentPos();
         scaleDest = 3 * 5;
     }
-    glRotatef(rotation.y(), 1, 0, 0);
-    glRotatef(rotation.x(), 0, 1, 0);
-    glRotatef(rotation.z(), 0, 0, 1);
+    glRotatef(renderOptions->rotation.y(), 1, 0, 0);
+    glRotatef(renderOptions->rotation.x(), 0, 1, 0);
+    glRotatef(renderOptions->rotation.z(), 0, 0, 1);
     glScalef(scale, scale, scale);
     glTranslatef(translation.x(), translation.y(), translation.z());
 
-    if((rotationDest.x() == 0) && (rotationDest.y() == 0) && (rotationDest.z() == 0))
+    if((renderOptions->rotationDest.x() == 0) && (renderOptions->rotationDest.y() == 0) && (renderOptions->rotationDest.z() == 0))
         renderOptions->allowSelection = true;
     else
         renderOptions->allowSelection = false;
@@ -472,7 +473,7 @@ void UiRender::mousePressEvent(QMouseEvent *event) {
     mousePressedAxisCenter = renderOptions->axisCenter;
     mouseCommand = (event->modifiers() & Qt::ControlModifier);
     mouseShift = (event->modifiers() & Qt::ShiftModifier);
-    rotationDrag = rotation;
+    rotationDrag = renderOptions->rotation;
     translationDrag = translation;
 
     if(cursor().shape() == Qt::BlankCursor)
@@ -632,7 +633,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                 if(mouseShift)
                     translationDest = translationDrag + 10 * NxPoint(deltaMouseRaw.x() / (qreal)size().width(), deltaMouseRaw.y() / (qreal)size().height());
                 else
-                    rotationDest = rotationDrag + 360 * NxPoint(0, deltaMouseRaw.y() / (qreal)size().height(), deltaMouseRaw.x() / (qreal)size().width());
+                    renderOptions->rotationDest = rotationDrag + 360 * NxPoint(0, deltaMouseRaw.y() / (qreal)size().height(), deltaMouseRaw.x() / (qreal)size().width());
             }
             else if((mouseShift) && (renderOptions->allowSelection) && (cursor().shape() != Qt::BlankCursor)) {
                 renderOptions->selectionArea.setBottomRight(mousePos);
@@ -765,7 +766,7 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
 
     if(mouse3D) {
         scaleDest = 3;
-        rotationDest = NxPoint();
+        renderOptions->rotationDest = NxPoint();
         translationDest = NxPoint();
         //refresh();
     }

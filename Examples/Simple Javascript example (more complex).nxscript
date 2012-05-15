@@ -26,8 +26,8 @@ function onCreate() {
 		run("setCurve current lastCurve");
 		//Cursor width
 		run("setWidth current 1.5");
-		//Play curve ONE time (speed = 1 then speed = 0)
-		run("setPattern current 0 0 1 0");
+		//Play curve ONE time (speed = 1 then speed = -1)
+		run("setPattern current 0 0 1 -1");
 		//Mapping
 		run("setBoundsSource current " + (-number_of_lines) + " " + (number_of_lines / vertical_grid_dilatation) + " 0 0");
 		//Cursor speed

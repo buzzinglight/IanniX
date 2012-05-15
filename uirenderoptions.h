@@ -57,6 +57,7 @@ public:
     QRect axisAreaSearch;
     qreal zoomValue, zoomLinear, zoomLinearDest, axisGrid;
     NxPoint axisCenter, axisCenterDest;
+    NxPoint rotation, rotationDest;
     QGLWidget *render;
     QFont renderFont;
     qreal timeFactor;

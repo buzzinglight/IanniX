@@ -132,7 +132,7 @@ void NxCurve::paint() {
             }
             glDisable(GL_LINE_STIPPLE);
             glEndList();
-            glListCurveRecreate = true;
+            glListCurveRecreate = false;
         }
         glCallList(glListCurve);
 
@@ -514,7 +514,7 @@ void NxCurve::calcBoundingRect() {
         boundingRect = NxRect(-ellipseSize.width(), -ellipseSize.height(), 2*ellipseSize.width(), 2*ellipseSize.height());
     }
     else {
-        qreal step = 0.05;
+        qreal step = 0.1;
         NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
         for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count()-1 ; indexPoint++) {
             NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);

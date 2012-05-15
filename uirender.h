@@ -52,8 +52,8 @@ private:
     QList<NxObject*> selectionRect;
     NxObject *selectedHover;
     QList<NxObject*> selection;
-    NxPoint rotation, translation;
-    NxPoint rotationDest, translationDest;
+    NxPoint translation;
+    NxPoint translationDest;
     NxPoint rotationDrag, translationDrag;
     qreal scale, scaleDest;
     bool colorTheme;
@@ -102,7 +102,7 @@ public:
     }
 
     inline void setRotation(NxPoint _rotation) {  ///CG///
-        rotationDest = _rotation;
+        renderOptions->rotationDest = _rotation;
     }
 
 signals:

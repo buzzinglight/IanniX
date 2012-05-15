@@ -66,7 +66,7 @@ private:
     NxRect boundsSource, boundsTarget;
     bool boundsSourceIsBoundingRect;
     NxLine previousCursor;
-    bool previousCursorReliable;
+    bool previousCursorReliable, previousPreviousCursorReliable;
     QRect boundingRectSearch;
     QVector<qreal> start;
     NxLine cursor, cursorOld;
@@ -151,23 +151,97 @@ public:
                         ((_pos.y() - _boundsSource.bottom()) / _boundsSource.height()) * boundsTarget.height() + boundsTarget.bottom() );
     }
 
-    inline void setBoundsSource(const QString & _bounds) {
+    inline void setBoundsRect(quint16 index, qreal val, bool source) {
+        NxRect *boundsRect;
+        if(source)
+            boundsRect = &boundsSource;
+        else
+            boundsRect = &boundsTarget;
+        if(index == 0)      boundsRect->setTopLeft(NxPoint(val, boundsRect->topLeft().y(), boundsRect->topLeft().z()));
+        else if(index == 1) boundsRect->setTopLeft(NxPoint(boundsRect->topLeft().x(), val, boundsRect->topLeft().z()));
+        else if(index == 2) boundsRect->setTopLeft(NxPoint(boundsRect->topLeft().x(), boundsRect->topLeft().y(), val));
+        else if(index == 3) boundsRect->setBottomRight(NxPoint(val, boundsRect->bottomRight().y(), boundsRect->bottomRight().z()));
+        else if(index == 4) boundsRect->setBottomRight(NxPoint(boundsRect->bottomRight().x(), val, boundsRect->bottomRight().z()));
+        else if(index == 5) boundsRect->setBottomRight(NxPoint(boundsRect->bottomRight().x(), boundsRect->bottomRight().y(), val));
+    }
+    inline qreal getBoundsRect(quint16 index, bool source) {
+        NxRect *boundsRect;
+        if(source)
+            boundsRect = &boundsSource;
+        else
+            boundsRect = &boundsTarget;
+        if(index == 0)      return boundsRect->topLeft().x();
+        else if(index == 1) return boundsRect->topLeft().y();
+        else if(index == 2) return boundsRect->topLeft().z();
+        else if(index == 3) return boundsRect->bottomRight().x();
+        else if(index == 4) return boundsRect->bottomRight().y();
+        else if(index == 5) return boundsRect->bottomRight().z();
+        return 0;
+    }
+
+    inline void setBoundsRectStr(const QString & _bounds, bool source, quint16 part = 2) {
         QStringList bounds = _bounds.split(" ", QString::SkipEmptyParts);
-        if(bounds.count() == 4) {
-            boundsSource = NxRect(NxPoint(bounds[0].toDouble(), bounds[1].toDouble()), NxPoint(bounds[2].toDouble(), bounds[3].toDouble()));
-            boundsSourceIsBoundingRect = false;
+        if(part == 0) {
+            if(bounds.count() == 2) {
+                setBoundsRect(0, bounds[0].toDouble(), source);
+                setBoundsRect(1, bounds[1].toDouble(), source);
+            }
+            else if(bounds.count() == 3) {
+                setBoundsRect(0, bounds[0].toDouble(), source);
+                setBoundsRect(1, bounds[1].toDouble(), source);
+                setBoundsRect(2, bounds[2].toDouble(), source);
+            }
+        }
+        else if(part == 1) {
+            if(bounds.count() == 2) {
+                setBoundsRect(3, bounds[0].toDouble(), source);
+                setBoundsRect(4, bounds[1].toDouble(), source);
+            }
+            else if(bounds.count() == 3) {
+                setBoundsRect(3, bounds[0].toDouble(), source);
+                setBoundsRect(4, bounds[1].toDouble(), source);
+                setBoundsRect(5, bounds[2].toDouble(), source);
+            }
+        }
+        else {
+            if(bounds.count() == 4) {
+                setBoundsRect(0, bounds[0].toDouble(), source);
+                setBoundsRect(1, bounds[1].toDouble(), source);
+                setBoundsRect(3, bounds[2].toDouble(), source);
+                setBoundsRect(4, bounds[3].toDouble(), source);
+            }
+            else if(bounds.count() == 6) {
+                setBoundsRect(0, bounds[0].toDouble(), source);
+                setBoundsRect(1, bounds[1].toDouble(), source);
+                setBoundsRect(2, bounds[2].toDouble(), source);
+                setBoundsRect(3, bounds[3].toDouble(), source);
+                setBoundsRect(4, bounds[4].toDouble(), source);
+                setBoundsRect(5, bounds[5].toDouble(), source);
+            }
         }
     }
-    inline const QString getBoundsSource() {
-        return QString("%1 %2 %3 %4").arg(boundsSource.topLeft().x()).arg(boundsSource.topLeft().y()).arg(boundsSource.bottomRight().x()).arg(boundsSource.bottomRight().y());
+    inline const QString getBoundsRectStr(bool source, quint16 part = 2) {
+        if(part == 0)
+            return QString("%1 %2").arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3);
+        else if(part == 1)
+            return QString("%1 %2").arg(getBoundsRect(3, source), 0, 'f', 3).arg(getBoundsRect(4, source), 0, 'f', 3);
+        else
+            return QString("%1 %2 %3 %4").arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3).arg(getBoundsRect(3, source), 0, 'f', 3).arg(getBoundsRect(4, source), 0, 'f', 3);
     }
-    inline void setBoundsTarget(const QString & _bounds) {
-        QStringList bounds = _bounds.split(" ", QString::SkipEmptyParts);
-        if(bounds.count() == 4)
-            boundsTarget = NxRect(NxPoint(bounds[0].toDouble(), bounds[1].toDouble()), NxPoint(bounds[2].toDouble(), bounds[3].toDouble()));
+
+
+    inline void setBoundsSource(const QString & bounds, quint16 part = 2) {
+        setBoundsRectStr(bounds, true, part);
+        boundsSourceIsBoundingRect = false;
     }
-    inline const QString getBoundsTarget() {
-        return QString("%1 %2 %3 %4").arg(boundsTarget.topLeft().x()).arg(boundsTarget.topLeft().y()).arg(boundsTarget.bottomRight().x()).arg(boundsTarget.bottomRight().y());
+    inline void setBoundsTarget(const QString & bounds, quint16 part = 2) {
+        setBoundsRectStr(bounds, false, part);
+    }
+    inline const QString getBoundsSource(quint16 part = 2) {
+        return getBoundsRectStr(true, part);
+    }
+    inline const QString getBoundsTarget(quint16 part = 2) {
+        return getBoundsRectStr(false, part);
     }
 
 

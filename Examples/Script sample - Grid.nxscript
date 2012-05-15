@@ -32,7 +32,6 @@ function addCurve(index) {
 	run("setPointAt      current 1 " + index + " " + ((indexMax - index) / 2));
 
 	run("add cursor      " + index);
-	run("setPattern      current 0 0 1 0");
 	run("setGroup        current cursors");
 	run("setCurve        current lastCurve");
 	run("setWidth        current 2");

@@ -37,7 +37,7 @@ QString NxDocument::serialize(UiRenderOptions *renderOptions) {
         retour += QString(COMMAND_ZOOM + " %1").arg(renderOptions->zoomValue) + COMMAND_END;
         retour += QString(COMMAND_SPEED + " %1").arg(renderOptions->timeFactor) + COMMAND_END;
         retour += QString(COMMAND_CENTER + " %1 %2").arg(-renderOptions->axisCenter.x()).arg(-renderOptions->axisCenter.y()) + COMMAND_END;
-        ///CG/// Need to serialize rotation here?
+        retour += QString(COMMAND_ROTATE + " %1 %2 %3").arg(renderOptions->rotationDest.x()).arg(renderOptions->rotationDest.y()).arg(renderOptions->rotationDest.z()) + COMMAND_END;
     }
 
     //Browse documents
@@ -51,16 +51,14 @@ QString NxDocument::serialize(UiRenderOptions *renderOptions) {
 
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-                //Cursors are serialized with curves
-                if(typeIterator != ObjectsTypeCursor) {
-                    //Browse objects
-                    QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
-                    while (objectIterator.hasNext()) {
-                        objectIterator.next();
-                        NxObject *object = objectIterator.value();
+                //Browse objects
+                QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
+                while (objectIterator.hasNext()) {
+                    objectIterator.next();
+                    NxObject *object = objectIterator.value();
 
+                    if(((typeIterator == ObjectsTypeCursor) && (((NxCursor*)object)->getCurve() == 0)) || (typeIterator == ObjectsTypeCurve) || (typeIterator == ObjectsTypeTrigger))
                         retour += object->serialize() + COMMAND_END;
-                    }
                 }
             }
         }

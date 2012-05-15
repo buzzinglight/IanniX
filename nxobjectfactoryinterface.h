@@ -55,6 +55,8 @@ public slots:
     virtual void logOscReceive(const QString & message) = 0;
     virtual void pushSnapshot() = 0;
     virtual qreal getTimeLocal() const = 0;
+    virtual void readyToStart() = 0;
+    virtual void setMidiOutNewDevice(const QString &midi) = 0;
 };
 
 #endif // NXOBJECTFACTORYINTERFACE_H

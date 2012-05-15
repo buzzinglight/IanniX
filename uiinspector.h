@@ -127,6 +127,8 @@ public slots:
     void setUDPPort(quint16 port);
     void setHttpPort(quint16 port);
     void setIpOut(const QString & ip);
+    void setMidiOut(const QString & midi);
+    void setMidiOutNewDevice(const QString & midi);
     void setSerialPort(const QString & port);
     void setTransportMessage(const QString & message);
     void setSyncMessage(const QString & message);
@@ -179,6 +181,7 @@ signals:
     void httpPortChange(quint16);
     void bundleMessageChange(const QString &, quint16);
     void ipOutChange(const QString &);
+    void midiOutChange(const QString &);
     void serialPortChange(const QString &);
     void transportMessageChange(const QString &);
     void syncMessageChange(const QString &);

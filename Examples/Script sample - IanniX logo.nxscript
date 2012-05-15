@@ -28,6 +28,7 @@ function onCreate() {
 		run("setSpeed         current auto 10");
 		run("setBoundsSource  current -7.2 5 7.2 -5");
 		run("setBoundsTarget  current 0 1 1 0");
+		run("setPattern       current 0 0 1 -1");
 	}
 }
 
