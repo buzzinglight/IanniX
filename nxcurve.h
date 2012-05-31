@@ -95,8 +95,10 @@ public:
                 pathPoints[selectedPathPointControl1-1].smooth = false;
             setPointAt(selectedPathPointControl1, pathPoints.value(selectedPathPointControl1), posDrag + translation, pathPoints.value(selectedPathPointControl1).c2, pathPoints.value(selectedPathPointControl1).smooth);
         }
-        else if(selectedPathPointControl2 >= 0)
+        else if(selectedPathPointControl2 >= 0) {
+            pathPoints[selectedPathPointControl2].smooth = false;
             setPointAt(selectedPathPointControl2, pathPoints.value(selectedPathPointControl2), pathPoints.value(selectedPathPointControl2).c1, posDrag + translation, pathPoints.value(selectedPathPointControl2).smooth);
+        }
         else
             setPos(posDrag + translation);
 

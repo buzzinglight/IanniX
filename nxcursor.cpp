@@ -77,7 +77,7 @@ void NxCursor::setTime(qreal delta) {
         else
             timeLocal = 0;
 
-        qreal timeInitialOffsetReal = timeInitialOffset;// * qAbs(factors);
+        qreal timeInitialOffsetReal = timeInitialOffset * qAbs(factors);
         qreal timeStartOffsetReal   = timeStartOffset  ;// * qAbs(factors);
         qreal timeEndOffsetReal     = timeEndOffset    ;// * qAbs(factors);
         qreal timeLocalAbsoluteCopy = timeLocalAbsolute + timeInitialOffsetReal;

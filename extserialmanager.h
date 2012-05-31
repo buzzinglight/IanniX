@@ -38,6 +38,7 @@ private:
     QMap<QString, ParityType> parityEnum;
     QMap<QString, StopBitsType> stopbitsEnum;
     QMap<QString, FlowType> flowEnum;
+    QByteArray reception;
 
 public:
     ExtSerialManager(NxObjectFactoryInterface *_factory);

@@ -125,8 +125,8 @@ void NxCurve::paint() {
                             glDisable(GL_MAP1_VERTEX_3);
                         }
 
-                        if((selected) && (indexPoint == selectedPathPointPoint))
-                            renderOptions->render->renderText(p1.x(), p1.y(), p1.z(), QString::number(indexPoint), renderOptions->renderFont);
+                        //if((selected) && (indexPoint == selectedPathPointPoint))
+                        //    renderOptions->render->renderText(p1.x(), p1.y(), p1.z(), QString::number(indexPoint), renderOptions->renderFont);
                     }
                 }
             }
@@ -156,6 +156,8 @@ void NxCurve::paint() {
 
                 if((indexPoint+1) < pathPoints.count()) {
                     NxPoint c1 = p1 + getPathPointsAt(indexPoint+1).c1;
+                    /*if(selectedPathPointControl1 >= 0)
+                        qDebug("%d", selectedPathPointControl1);*/
                     if(selectedPathPointControl1 == indexPoint+1)
                         glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
                     else
@@ -239,6 +241,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
 }
 
 void NxCurve::removePointAt(quint16 index) {
+    glListCurveRecreate = true;
     if((pathPoints.count() > 2) && (index < pathPoints.count()))
         pathPoints.remove(index);
 

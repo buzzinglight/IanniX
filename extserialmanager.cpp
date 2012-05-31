@@ -94,10 +94,11 @@ void ExtSerialManager::openPort(const QString & _port) {
 }
 
 void ExtSerialManager::parse() {
-    QByteArray reception;
+    QByteArray receptionTmp;
     int a = port->bytesAvailable();
     reception.resize(a);
     port->read(reception.data(), reception.size());
+    reception.append(receptionTmp);
 
     bool nextMessage = true;
     while(nextMessage) {

@@ -64,8 +64,8 @@
 					"numinlets" : 5,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 574.0, 185.0, 124.0, 20.0 ],
-					"text" : "zmap -10 10 100 200"
+					"patching_rect" : [ 574.0, 185.0, 131.0, 20.0 ],
+					"text" : "zmap -10 10 500 5000"
 				}
 
 			}
