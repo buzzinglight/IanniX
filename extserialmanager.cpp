@@ -72,9 +72,9 @@ void ExtSerialManager::openPort(const QString & _port) {
         portname = ports.at(0);
         baudrate = baudrateEnum[ports.at(1)];
         databits = databitsEnum[ports.at(2)];
-        parity = parityEnum[ports.at(3)];
+        parity   = parityEnum[ports.at(3)];
         stopbits = stopbitsEnum[ports.at(4)];
-        flow = flowEnum[ports.at(5)];
+        flow     = flowEnum[ports.at(5)];
 
         port = new QextSerialPort(portname, QextSerialPort::EventDriven);
         if(port) {
@@ -96,8 +96,8 @@ void ExtSerialManager::openPort(const QString & _port) {
 void ExtSerialManager::parse() {
     QByteArray receptionTmp;
     int a = port->bytesAvailable();
-    reception.resize(a);
-    port->read(reception.data(), reception.size());
+    receptionTmp.resize(a);
+    port->read(receptionTmp.data(), receptionTmp.size());
     reception.append(receptionTmp);
 
     bool nextMessage = true;
@@ -107,16 +107,18 @@ void ExtSerialManager::parse() {
         QString command;
         while((index < reception.size()) && (!nextMessage)) {
             if(reception.at(index) == COMMAND_END_BYTE) {
-                reception.remove(0, index+1);
+                reception = reception.remove(0, index);
                 index = 0;
+                command = command.remove('\n');
+                command = command.remove('\r');
 
-                command = command.replace('\n', "");
-                command = command.replace('\r', "");
-
-                //Fire events (log, message and script mapping)
-                factory->logOscReceive("serial://" + portname + "/ " + command);
-                factory->execute(command);
-                factory->onOscReceive("serial", portname, "", "", command.split(" ", QString::SkipEmptyParts));
+                if(command != "") {
+                    //Fire events (log, message and script mapping)
+                    factory->logOscReceive("serial://" + portname + "/ " + command);
+                    factory->execute(command);
+                    factory->onOscReceive("serial", portname, "", "", command.split(" ", QString::SkipEmptyParts));
+                }
+                command = "";
             }
             else
                 command += reception.at(index);
