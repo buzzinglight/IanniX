@@ -73,6 +73,7 @@ public slots:
     void actionProjectScripts()       { emit(actionRouteProjectScripts()); }
     void actionProjectScriptsContext(const QPoint & point)  { emit(actionRouteProjectScriptsContext(point)); }
     void actionProjectFilesContext(const QPoint & point)  { emit(actionRouteProjectFilesContext(point)); }
+    void actionCCButton();
     void actionInfo();
     void actionInfoID();
     void actionColor();
@@ -186,6 +187,11 @@ signals:
     void transportMessageChange(const QString &);
     void syncMessageChange(const QString &);
     void actionIDchange();
+    void actionUnsoloGroups();
+    void actionUnsoloObjects();
+    void actionUnmuteGroups();
+    void actionUnmuteObjects();
+    void actionFollowID(quint16);
 
 private:
     UiRender *render;

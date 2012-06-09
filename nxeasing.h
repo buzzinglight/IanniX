@@ -19,16 +19,11 @@
 #ifndef NXEASING_H
 #define NXEASING_H
 
-#include <QObject>
 #include <QEasingCurve>
 #include <QPixmap>
 #include <QPainter>
 
-class NxEasing : public QObject {
-    Q_OBJECT
-public:
-    explicit NxEasing(QObject *parent = 0);
-
+class NxEasing {
 private:
     QEasingCurve easing;
 
@@ -39,11 +34,7 @@ public:
 
 public:
     QPixmap getPixmap() const;
-    
-signals:
-    
-public slots:
-    
+
 };
 
 #endif // NXEASING_H

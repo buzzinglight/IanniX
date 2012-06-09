@@ -61,12 +61,8 @@ public:
     void readyToStart();
     inline void dispatchProperty(const QString & property, const QVariant & value) {
         //Browse documents
-        QHashIterator<QString, NxDocument*> documentIterator(documents);
-        while (documentIterator.hasNext()) {
-            documentIterator.next();
-            NxDocument *document = documentIterator.value();
+        foreach(NxDocument *document, documents)
             document->dispatchProperty(property, value);
-        }
     }
     inline const QVariant getProperty(const QString &) const {
         return 0;
@@ -272,6 +268,10 @@ public slots:
     void transportMessageChange(const QString & );
     void syncMessageChange(const QString & );
     void bundleMessageChange(const QString &, quint16);
+    void actionUnmuteGroups();
+    void actionUnmuteObjects();
+    void actionUnsoloGroups();
+    void actionUnsoloObjects();
 public slots:
     void logOscSend(const QString & message);
     void logOscReceive(const QString & message);

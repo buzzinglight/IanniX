@@ -141,6 +141,7 @@ void UiView::actionFullscreen() {
         ui->toolBar->setVisible(true);
         ui->inspector->parentWidget()->setVisible(wasInspectorVisible);
         ui->transport->parentWidget()->setVisible(wasTransportVisible);
+        ui->statusBar->setVisible(true);
         ui->menubar->setVisible(true);
     }
     else {
@@ -149,6 +150,7 @@ void UiView::actionFullscreen() {
         ui->toolBar->setVisible(false);
         wasInspectorVisible = ui->inspecteurDock->isVisible();
         wasTransportVisible = ui->transportDock->isVisible();
+        ui->statusBar->setVisible(false);
         ui->menubar->setVisible(false);
         ui->inspector->parentWidget()->hide();
         ui->transport->parentWidget()->hide();

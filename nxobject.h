@@ -101,6 +101,7 @@ protected:
     quint16 messageTimeInterval;
     NxObject *parentObject;
     bool isDrag, performCollision;
+    bool glListRecreate;
 public slots:
     inline void setPosOffset(const NxPoint & _posOffset) {
         posOffset = _posOffset;
@@ -131,7 +132,7 @@ public slots:
 
     inline void setId(quint16 _id) {
         id = _id;
-        setText(0, QString::number(id));
+        setText(3, QString::number(id));
     }
     inline quint16 getId() const {
         return id;
@@ -139,7 +140,7 @@ public slots:
     inline void setGroupId(const QString & _groupId) {
         QString groupIdOld = groupId;
         groupId = _groupId;
-        setText(1, groupId);
+        setText(4, groupId);
         factory->setObjectGroupId(this, groupIdOld);
     }
     inline const QString & getGroupId() const {
@@ -207,6 +208,7 @@ public slots:
 
     inline void setSize(qreal _size) {
         size = _size;
+        glListRecreate = true;
         calcBoundingRect();
     }
     inline qreal getSize() const {
@@ -247,10 +249,12 @@ public slots:
             quint8 activeOld = active;
             active = _active;
             factory->setObjectActivity(this, activeOld);
+            /*
             if(active)
-                setText(2, tr("active"));
+                setCheckState(0, Qt::Checked);
             else
-                setText(2, tr("inactive"));
+                setCheckState(0, Qt::Unchecked);
+            */
         }
     }
     inline quint8 getActive() const {

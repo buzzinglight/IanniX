@@ -44,7 +44,7 @@ public:
     virtual void setObjectActivity(void *_object, quint8 activeOld) = 0;
     virtual void setObjectGroupId(void *_object, const QString & groupIdOld) = 0;
     virtual QImage takeScreenshot() = 0;
-
+    bool isGroupSoloActive, isObjectSoloActive;
 public slots:
     virtual void askNxObject() = 0;
     virtual void sendMessage(void *_object = 0, void *_trigger = 0, void *_cursor = 0, void *_collisionCurve = 0, const NxPoint & collisionPoint = NxPoint(), const NxPoint & collisionValue = NxPoint(), const QString & status = QString()) = 0;

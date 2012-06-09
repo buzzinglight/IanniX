@@ -36,12 +36,8 @@ public:
     explicit NxDocument(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile, QTreeWidgetItem *parentList);
     inline void dispatchProperty(const QString & property, const QVariant & value) {
         //Browse groups
-        QMapIterator<QString, NxGroup*> groupIterator(groups);
-        while (groupIterator.hasNext()) {
-            groupIterator.next();
-            NxGroup *group = groupIterator.value();
+        foreach(NxGroup *group, groups)
             group->dispatchProperty(property, value);
-        }
     }
     inline const QVariant getProperty(const QString &) const {
         return id;
@@ -56,12 +52,8 @@ public:
         NxRect boundingRect;
 
         //Browse groups
-        QMapIterator<QString, NxGroup*> groupIterator(groups);
-        while (groupIterator.hasNext()) {
-            groupIterator.next();
-            NxGroup *group = groupIterator.value();
+        foreach(NxGroup *group, groups)
             boundingRect = boundingRect.united(group->getBoundingRect());
-        }
 
         return boundingRect;
     }

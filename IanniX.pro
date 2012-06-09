@@ -144,3 +144,10 @@ macx {
 }
 unix:SOURCES            += qextserialport/posix_qextserialport.cpp
 unix:!macx:SOURCES      += qextserialport/qextserialenumerator_unix.cpp
+
+
+false {
+    DEFINES             += SYPHON_ENABLE
+    OBJECTIVE_SOURCES   += uirendersyphon.mm
+    LIBS                += -framework Syphon
+}

@@ -169,6 +169,9 @@ QLabel#lastMessage {
            <property name="toolTip">
             <string>Fast rewind</string>
            </property>
+           <property name="statusTip">
+            <string>Press this button to fast rewind the playback</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -200,6 +203,9 @@ QLabel#lastMessage {
            </property>
            <property name="toolTip">
             <string>Play/pause</string>
+           </property>
+           <property name="statusTip">
+            <string>Press this button to start or pause the playback</string>
            </property>
            <property name="text">
             <string/>
@@ -270,6 +276,9 @@ QLabel#lastMessage {
            <property name="toolTip">
             <string>Elapsed time</string>
            </property>
+           <property name="statusTip">
+            <string>This area display the elapsed time from the beginning of the playback</string>
+           </property>
            <property name="inputMask">
             <string notr="true">999:99.999; </string>
            </property>
@@ -325,6 +334,12 @@ QLabel#lastMessage {
              <height>35</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Sent messages</string>
+           </property>
+           <property name="statusTip">
+            <string>This area displays the sent messages by IanniX</string>
+           </property>
            <property name="text">
             <string>No message</string>
            </property>
@@ -343,6 +358,12 @@ QLabel#lastMessage {
            </property>
            <item>
             <widget class="QSlider" name="speedSlider">
+             <property name="toolTip">
+              <string>Playback speed</string>
+             </property>
+             <property name="statusTip">
+              <string>Move this slider to adjust the global playback speed</string>
+             </property>
              <property name="minimum">
               <number>-500</number>
              </property>
@@ -373,6 +394,9 @@ QLabel#lastMessage {
              </property>
              <property name="toolTip">
               <string>Playback speed</string>
+             </property>
+             <property name="statusTip">
+              <string>Change this spinbox to adjust the global playback speed</string>
              </property>
              <property name="decimals">
               <number>3</number>
@@ -445,7 +469,10 @@ color: rgba(255,255,255,128);</string>
             </size>
            </property>
            <property name="toolTip">
-            <string>Scheduler accuracy</string>
+            <string>Scheduler period</string>
+           </property>
+           <property name="statusTip">
+            <string>Report of the time between two calculations or type directly in this box to change it manually </string>
            </property>
            <property name="inputMask">
             <string notr="true">009 ms; </string>
@@ -473,7 +500,10 @@ color: rgba(255,255,255,128);</string>
             </size>
            </property>
            <property name="toolTip">
-            <string>Graphism accuracy</string>
+            <string>Frames per seconds</string>
+           </property>
+           <property name="statusTip">
+            <string>Displays of the number of frames per seconds or type directly in this box to change it manually </string>
            </property>
            <property name="inputMask">
             <string notr="true">009 fps; </string>
@@ -502,6 +532,9 @@ color: rgba(255,255,255,128);</string>
            </property>
            <property name="toolTip">
             <string>CPU usage</string>
+           </property>
+           <property name="statusTip">
+            <string>Report of the CPU usage</string>
            </property>
            <property name="inputMask">
             <string notr="true">009 %; </string>
@@ -577,6 +610,9 @@ QPushButton:hover {
            </property>
            <property name="toolTip">
             <string>About IanniX</string>
+           </property>
+           <property name="statusTip">
+            <string>Click here to display information about IanniX</string>
            </property>
            <property name="text">
             <string/>

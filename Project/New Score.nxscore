@@ -2,3 +2,37 @@ zoom 100
 speed 1
 center 0 0
 rotate 0 0 0
+add curve 1
+setpos current -2.20517 -2.80291 0
+setactive current 1
+setgroup current 
+setcoloractive current curve_active
+setcolorinactive current curve_inactive
+setsize current 1.2
+setmessage current 20, 
+setlabel current 
+setsmoothpointat current  0  0 0 0  1 1 1
+setsmoothpointat current  1  1.74475 3.71567 0  5 5 5
+setsmoothpointat current  2  2.56866 1.14701 0  5 5 5
+setsmoothpointat current  3  5.0727 4.15186 0  5 5 5
+setline current 65535 1
+add cursor 2
+setpos current 0 0 0
+setactive current 1
+setgroup current 
+setcoloractive current cursor_active
+setcolorinactive current cursor_inactive
+setsize current 2
+setmessage current 20, osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos ,
+setlabel current 
+setcurve current lastCurve
+setline current 65535 1
+setoffset current 0 0 -1
+setboundssource current -2.205 1.349 2.868 -2.803
+setboundstarget current 0.000 1.000 1.000 0.000
+setspeed current 1
+setspeedf current 1
+setwidth current 1
+setpattern current 0 0 1 0
+settime current 0
+

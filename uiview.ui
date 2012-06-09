@@ -49,6 +49,13 @@ QToolButton {
 QToolButton:pressed, QToolButton:checked {
 	border: 0px solid transparent;
     background-color: rgba(0, 0, 0, 24);
+}
+
+QStatusBar {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
+	color: rgb(220, 220, 220);
+	font: 10px;
+	font: &quot;Arial&quot;;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -244,9 +251,13 @@ QToolButton:pressed, QToolButton:checked {
    <addaction name="actionPatchesFolder"/>
    <addaction name="actionHelp"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionUndo">
    <property name="text">
     <string>Undo</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to undo last action</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
@@ -256,6 +267,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Redo</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to redo last action</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
    </property>
@@ -263,6 +277,9 @@ QToolButton:pressed, QToolButton:checked {
   <action name="actionCopy">
    <property name="text">
     <string>Copy</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to copy selected objects in clipboard</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -272,6 +289,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Paste</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to paste copied objects from clipboard</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
    </property>
@@ -279,6 +299,9 @@ QToolButton:pressed, QToolButton:checked {
   <action name="actionCut">
    <property name="text">
     <string>Cut</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to copy and remove selected objects</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
@@ -288,6 +311,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Select all</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to select all the selectable objects in the score</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
    </property>
@@ -295,6 +321,9 @@ QToolButton:pressed, QToolButton:checked {
   <action name="actionDelete">
    <property name="text">
     <string>Delete</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to remove selected objects</string>
    </property>
    <property name="shortcut">
     <string>Backspace</string>
@@ -304,13 +333,22 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>New score</string>
    </property>
+   <property name="toolTip">
+    <string>Create a new score</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to create a new empty score</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionOpen">
    <property name="text">
-    <string>Open project folder</string>
+    <string>Open project folder…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to open a folder of scores</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -320,6 +358,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Save current score</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to save the current score</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
@@ -327,6 +368,9 @@ QToolButton:pressed, QToolButton:checked {
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to quit IanniX</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -346,6 +390,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Fullscreen</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to switch to fullscreen</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
    </property>
@@ -362,7 +409,10 @@ QToolButton:pressed, QToolButton:checked {
      <normaloff>:/actions/res_icon_inspector.png</normaloff>:/actions/res_icon_inspector.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle Inspector</string>
+    <string>Inspector panel</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to hide/show inspector panel</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
@@ -380,7 +430,10 @@ QToolButton:pressed, QToolButton:checked {
      <normaloff>:/actions/res_icon_transport.png</normaloff>:/actions/res_icon_transport.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle Transport</string>
+    <string>Transport panel</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to hide/show transport panel</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
@@ -390,6 +443,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Play/pause</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to play or pause the playback</string>
+   </property>
    <property name="shortcut">
     <string>Space</string>
    </property>
@@ -397,6 +453,9 @@ QToolButton:pressed, QToolButton:checked {
   <action name="actionFast_rewind">
    <property name="text">
     <string>Fast rewind</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to fast rewind the playback</string>
    </property>
    <property name="shortcut">
     <string>F</string>
@@ -416,6 +475,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Grid &amp;&amp; axis</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to show/hide score grid and axis</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
    </property>
@@ -423,6 +485,9 @@ QToolButton:pressed, QToolButton:checked {
   <action name="actionDuplicate">
    <property name="text">
     <string>Duplicate</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to duplicate selected objects</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
@@ -433,15 +498,21 @@ QToolButton:pressed, QToolButton:checked {
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Autoresize object</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to rescale objects according to zoom</string>
    </property>
   </action>
   <action name="actionZoom_in">
    <property name="text">
     <string>Zoom in</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to zoom in</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+=</string>
@@ -451,6 +522,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Zoom out</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to zoom out</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+-</string>
    </property>
@@ -458,6 +532,9 @@ QToolButton:pressed, QToolButton:checked {
   <action name="actionZoom_initial">
    <property name="text">
     <string>Initial zoom</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to restore initial zoom</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+À</string>
@@ -472,7 +549,10 @@ QToolButton:pressed, QToolButton:checked {
      <normaloff>:/actions/res_icon_curveFree.png</normaloff>:/actions/res_icon_curveFree.png</iconset>
    </property>
    <property name="text">
-    <string>Draw freehand curve</string>
+    <string>Draw a smooth curve</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add and draw a smooth curve in your score. Press ESC or click again to end your curve.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+F</string>
@@ -487,7 +567,10 @@ QToolButton:pressed, QToolButton:checked {
      <normaloff>:/actions/res_icon_curvePoint.png</normaloff>:/actions/res_icon_curvePoint.png</iconset>
    </property>
    <property name="text">
-    <string>Draw point-by-point curve</string>
+    <string>Draw straight curve</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add and draw a straight curve in your score. Press ESC or click again to end your curve.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
@@ -502,7 +585,10 @@ QToolButton:pressed, QToolButton:checked {
      <normaloff>:/actions/res_icon_trigger.png</normaloff>:/actions/res_icon_trigger.png</iconset>
    </property>
    <property name="text">
-    <string>Draw triggers</string>
+    <string>Add triggers</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add triggers in your score. Press ESC or click again to stop adding triggers.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+T</string>
@@ -515,6 +601,9 @@ QToolButton:pressed, QToolButton:checked {
    </property>
    <property name="text">
     <string>Add a cursor</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add cursors on the selected curve. If no curve is selected, cursor will be free (controlled by an external source)</string>
    </property>
   </action>
   <action name="action10Seconds">
@@ -620,7 +709,10 @@ QToolButton:pressed, QToolButton:checked {
      <normaloff>:/actions/res_icon_curveCircle.png</normaloff>:/actions/res_icon_curveCircle.png</iconset>
    </property>
    <property name="text">
-    <string>Draw circle curves</string>
+    <string>Add circular curves</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add circular curves in your score. Press ESC or click again to stop adding circular cuvers.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+R</string>
@@ -634,6 +726,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Help</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to display IanniX help in your browser</string>
+   </property>
   </action>
   <action name="actionSnapGrid">
    <property name="checkable">
@@ -646,13 +741,25 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Snap to grid</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to snap actions (objects position, curve points…) to grid</string>
+   </property>
    <property name="shortcut">
     <string>Shift+G</string>
    </property>
   </action>
   <action name="actionSave_all">
    <property name="text">
-    <string>Save all</string>
+    <string>Save all scores</string>
+   </property>
+   <property name="iconText">
+    <string>Save all scores</string>
+   </property>
+   <property name="toolTip">
+    <string>Save all scores</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to save all the opened scores</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+Shift+S</string>
@@ -660,7 +767,10 @@ QToolButton:pressed, QToolButton:checked {
   </action>
   <action name="actionRename">
    <property name="text">
-    <string>Rename score</string>
+    <string>Rename score…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to rename your score</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+Shift+R</string>
@@ -668,12 +778,18 @@ QToolButton:pressed, QToolButton:checked {
   </action>
   <action name="actionRemove">
    <property name="text">
-    <string>Remove score</string>
+    <string>Remove score from project folder…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to remove this score from your project folder</string>
    </property>
   </action>
   <action name="actionDuplicateScore">
    <property name="text">
-    <string>Duplicate score</string>
+    <string>Duplicate score in project folder</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to duplicate your score in your project folder</string>
    </property>
   </action>
   <action name="actionLockPos">
@@ -686,6 +802,9 @@ QToolButton:pressed, QToolButton:checked {
    </property>
    <property name="text">
     <string>Lock objects position</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to lock/unlock the position of objects (to avoid moving objects while navigating in the score)</string>
    </property>
   </action>
   <action name="actionToggleLabel">
@@ -700,17 +819,26 @@ QToolButton:pressed, QToolButton:checked {
      <normaloff>:/actions/res_icon_label.png</normaloff>:/actions/res_icon_label.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle objects labels</string>
+    <string>Objects labels</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to show/hide labels on objects</string>
    </property>
   </action>
   <action name="actionPatchesFolder">
    <property name="text">
     <string>Open patches folder</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to open the patches folder (external objects for hosts software) provided with IanniX</string>
+   </property>
   </action>
   <action name="actionAbout">
    <property name="text">
     <string>About IanniX</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to display information about IanniX</string>
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>
@@ -718,27 +846,42 @@ QToolButton:pressed, QToolButton:checked {
   </action>
   <action name="actionSync">
    <property name="text">
-    <string>Send a snapshot of score to sync output</string>
+    <string>Send score through default sync output</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to send your score through the default sync output</string>
    </property>
   </action>
   <action name="actionImoprt_SVG">
    <property name="text">
-    <string>Import SVG…</string>
+    <string>Import SVG as a curve…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to import a SVG file as a curve in your score</string>
    </property>
   </action>
   <action name="actionImoprt_Image">
    <property name="text">
-    <string>Import image…</string>
+    <string>Import image to be vectorized…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to import image to be vectorized in your score</string>
    </property>
   </action>
   <action name="actionImoprt_Text">
    <property name="text">
-    <string>Import glyph…</string>
+    <string>Import glyph as a curve…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to import a glyph as a curve in your score</string>
    </property>
   </action>
   <action name="actionShowEditor">
    <property name="text">
     <string>Show script editor</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to show the script editor window (if you're working on a script)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
@@ -746,7 +889,10 @@ QToolButton:pressed, QToolButton:checked {
   </action>
   <action name="actionReloadScript">
    <property name="text">
-    <string>Reload last script</string>
+    <string>Reload current script</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to reload the current script</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
@@ -763,10 +909,16 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Lighter color theme</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to change the color theme of IanniX</string>
+   </property>
   </action>
   <action name="actionImoprt_Background">
    <property name="text">
-    <string>Import background image…</string>
+    <string>Import a background image…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to import a background image in your score</string>
    </property>
   </action>
   <action name="actionAllow_triggers_selection">
@@ -783,6 +935,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Allow triggers selection</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to allow/forbid the selection of triggers (on hover, on marquee selection, on select all actions)</string>
+   </property>
   </action>
   <action name="actionAllow_curves_selection">
    <property name="checkable">
@@ -798,6 +953,9 @@ QToolButton:pressed, QToolButton:checked {
    <property name="text">
     <string>Allow curves selection</string>
    </property>
+   <property name="statusTip">
+    <string>Click here to allow/forbid the selection of curves (on hover, on marquee selection, on select all actions)</string>
+   </property>
   </action>
   <action name="actionAllow_cursors_selection">
    <property name="checkable">
@@ -812,6 +970,9 @@ QToolButton:pressed, QToolButton:checked {
    </property>
    <property name="text">
     <string>Allow cursors selection</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to allow/forbid the selection of cursors (on hover, on marquee selection, on select all actions)</string>
    </property>
   </action>
  </widget>

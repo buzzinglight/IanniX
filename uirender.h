@@ -75,6 +75,11 @@ public:
         editingFirstPoint = true;
         if(editing)
             setCursor(Qt::CrossCursor);
+#ifdef Q_OS_MAC
+        setStatusTip(tr("Click on score to add points. Double-click or press ESC to end your curve. After, Double-click on a curve to add a point, Command+click to remove it, Double-click on a point to enable/disable smoothing."));
+#else
+        setStatusTip(tr("Click on score to add points. Double-click or press ESC to end your curve. After, Double-click on a curve to add a point, Control+click to remove it, Double-click on a point to enable/disable smoothing."));
+#endif
     }
     inline EditingMode getEditingMode() const {
         return editingMode;
@@ -84,6 +89,7 @@ public:
     }
     inline void unsetEditing() {
         editing = false;
+        setStatusTip(tr("Click+move and mouse wheel to navigate/zoom in score. Alt+move, Alt+mouse wheel and Alt+double-click to change camera position in 3D."));
     }
 
     bool getColorTheme() const { return colorTheme; }
@@ -206,8 +212,8 @@ public slots:
     void actionCut();
     void actionSelect_all();
     void actionDelete();
-
     void actionSnapGrid();
+    void actionFollowID(quint16);
 
 signals:
     void actionRouteNew();

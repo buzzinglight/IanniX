@@ -1,30 +1,31 @@
 //If a message is received
 function onMessage(protocol, host, port, destination, values) {
 	//Message reception
-/*
-	console("Received on '" + protocol + "' (" + host + ":" + port + ") to '" + destination + "', " + values.length + " values : ");
-	for(var valueIndex = 0 ; valueIndex < values.length ; valueIndex++)
-		console("- arg " + valueIndex + " = " + values[valueIndex]);
-*/
-	if(protocol == "midi") {
-		if((0 < values[1]) && (values[1] < points.length-1))
-			points[values[1]].y = map(values[2], 0, 127, -8, 8);
-		else if(values[1] == 31)
-			rotate.x = map(values[2], 0, 127, -180, 180);
-		else if(values[1] == 32)
-			rotate.y = map(values[2], 0, 127, -180, 180);
-		else if(values[1] == 33)
-			rotate.z = map(values[2], 0, 127, -180, 180);
-		else if(values[1] == 34)
-			run("zoom " + map(values[2], 0, 127, 50, 250));
-		else if(values[1] == 5)
-			options.factor = map(values[2], 0, 127, 0, 5);
-		else if(values[1] == 6)
-			options.finefactor = map(values[2], 0, 127, -1, 1);
-		else if(values[1] == 9)
-			run("setSpeedF values " + map(values[2], 0, 127, -0.4, 0.4));
+	if((protocol == "midi") && (destination == "cc") && (values.length > 2)) {
+		//Control Change ID
+		var cc    = values[1];
+		//Control Change Value
+		var ccVal = values[2];
+
+		if((0 < cc) && (cc < points.length-1))
+			points[cc].y            = map(ccVal, 0, 127, -8, 8);
+		else if(cc == 31)
+			rotate.x                = map(ccVal, 0, 127, -180, 180);
+		else if(cc == 32)
+			rotate.y                = map(ccVal, 0, 127, -180, 180);
+		else if(cc == 33) 
+			rotate.z                = map(ccVal, 0, 127, -180, 180);
+		else if(cc == 34) 
+			run("zoom "             + map(ccVal, 0, 127, 50, 250));
+		else if(cc == 5)
+			options.factor          = map(ccVal, 0, 127, 0, 5);
+		else if(cc == 6)
+			options.finefactor      = map(ccVal, 0, 127, -1, 1);
+		else if(cc == 9)
+			run("setSpeedF values " + map(ccVal, 0, 127, -0.4, 0.4));
+
+		update(points, options);
 	}
-	update(points, options);
 }
 
 var points = [

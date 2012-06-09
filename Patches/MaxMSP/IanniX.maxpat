@@ -7,7 +7,7 @@
 			"revision" : 5
 		}
 ,
-		"rect" : [ 584.0, 48.0, 808.0, 708.0 ],
+		"rect" : [ 609.0, 74.0, 808.0, 708.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -605,7 +605,7 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "signal", "signal", "" ],
 					"patching_rect" : [ 544.0, 328.0, 126.0, 20.0 ],
-					"text" : "poly~ synthTrigger 10"
+					"text" : "poly~ synthTrigger 20"
 				}
 
 			}
@@ -821,7 +821,7 @@
 					"numinlets" : 5,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 107.0, 222.0, 107.0, 20.0 ],
+					"patching_rect" : [ 107.0, 222.0, 80.0, 20.0 ],
 					"text" : "zmap 0 1 0 1"
 				}
 
@@ -889,7 +889,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 3,
 					"outlettype" : [ "signal", "signal", "" ],
-					"patching_rect" : [ 7.0, 328.0, 151.0, 20.0 ],
+					"patching_rect" : [ 7.0, 328.0, 124.0, 20.0 ],
 					"text" : "poly~ synthCursor 60"
 				}
 

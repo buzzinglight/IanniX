@@ -34,10 +34,13 @@ NxObject::NxObject(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     selected = false;
     hasActivity = false;
     hasActivityOld = false;
+    glListRecreate = true;
     setMessageTimeInterval(1);
     isDrag = false;
     performCollision = false;
     setMessageId(0);
+    setCheckState(1, Qt::Checked);
+    setCheckState(2, Qt::Unchecked);
 }
 
 void NxObject::setMessagePatterns(const QString & messagePatternsStr) {

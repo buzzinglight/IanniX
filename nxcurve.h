@@ -58,7 +58,6 @@ private:
     CurveType curveType;
     NxSize ellipseSize;
     GLuint glListCurve;
-    bool glListCurveRecreate;
 public:
     inline NxCurvePoint getPathPointsAt(quint16 index) const {
 #ifdef KINECT_INSTALLED
@@ -70,6 +69,7 @@ public:
         return pathPoints.at(index);
 #endif
     }
+    inline quint16 getPathPointsCount() { return pathPoints.count(); }
 
     void isOnPathPoint(const NxRect & point);
     inline CurveType getCurveType() const {
@@ -136,6 +136,7 @@ public:
     void resize(const NxSize & size);
     void resize(qreal sizeFactorW, qreal sizeFactorH);
     void translate(const NxPoint & point);
+    void translatePoint(quint16 pointIndex, const NxPoint & point);
     NxPoint getPointAt(qreal percent);
     inline NxPoint getPointAt(quint16 index, qreal t);
     qreal getAngleAt(qreal percent);

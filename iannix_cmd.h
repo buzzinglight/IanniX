@@ -42,7 +42,11 @@
 
 #define COMMAND_CURVE_POINT_SHIFT           QString("shiftpoints")
 #define COMMAND_CURVE_POINT_TRANSLATE       QString("translatepoints")
+#define COMMAND_CURVE_POINT_TRANSLATE2      QString("translatepoint")
 #define COMMAND_CURVE_POINT                 QString("setpointat")
+#define COMMAND_CURVE_POINT_X               QString("setpointxat")
+#define COMMAND_CURVE_POINT_Y               QString("setpointyat")
+#define COMMAND_CURVE_POINT_Z               QString("setpointzat")
 #define COMMAND_CURVE_POINT_SMOOTH          QString("setsmoothpointat")
 #define COMMAND_CURVE_POINT_RMV             QString("removepointat")
 #define COMMAND_CURVE_TXT                   QString("setpointstxt")

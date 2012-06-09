@@ -20,7 +20,6 @@
 
 NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
     NxObject(parent, ccParentItem, _renderOptions) {
-    glListCursorRecreate = true;
     glListCursor = glGenLists(1);
     curve = 0;
     setTimeLocal(0);
@@ -50,7 +49,7 @@ NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     setColorActive("cursor_active");
     setColorInactive("cursor_inactive");
     setTimeStartOffset(0);
-    setTimeEndOffset(-1);
+    setTimeEndOffset(0);
     setTimeInitialOffset(0);
     setEasing(0);
     setBoundsSource("-10 10 -10 10 -10 10");
@@ -231,11 +230,11 @@ void NxCursor::calculate() {
 
     cursorOld = cursor;
     previousCursor = cursor;
+    if((cursorPos.sx() != cursorPosOld.sx()) || (cursorPos.sy() != cursorPosOld.sy()) || (cursorPos.sz() != cursorPosOld.sz()))
+        glListRecreate = true;
     if((curve) && (curve->getPathLength() > 0)) {
     }
     else {
-        if((cursorPos.sx() != cursorPosOld.sx()) || (cursorPos.sy() != cursorPosOld.sy()) || (cursorPos.sz() != cursorPosOld.sz()))
-            glListCursorRecreate = true;
         cursorPosOld = cursorPos;
         cursorAngleOld = cursorAngle;
     }
@@ -307,13 +306,13 @@ void NxCursor::paint() {
             glPopMatrix();
 
             //Special feature YEOSU
-            if(true && ((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz()))) {
+            if((true) && ((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz()))) {
                 glPushMatrix();
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
-                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 16.F);
+                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 8.F);
 
-                if(glListCursorRecreate) {
-                    glNewList(glListCursor, GL_COMPILE);
+                if(glListRecreate) {
+                    glNewList(glListCursor, GL_COMPILE_AND_EXECUTE);
                     qreal lats = 20, longs = 20;
                     qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
                     glBegin(GL_LINE_STRIP);
@@ -335,9 +334,10 @@ void NxCursor::paint() {
                     }
                     glEnd();
                     glEndList();
-                    glListCursorRecreate = false;
+                    glListRecreate = false;
                 }
-                glCallList(glListCursor);
+                else
+                    glCallList(glListCursor);
                 glPopMatrix();
             }
         }

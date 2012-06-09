@@ -71,7 +71,6 @@ private:
     QVector<qreal> start;
     NxLine cursor, cursorOld;
     GLuint glListCursor;
-    bool glListCursorRecreate;
 public:
     inline quint8 getType() const {
         return ObjectsTypeCursor;

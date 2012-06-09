@@ -48,6 +48,7 @@ function addLine() {
 			run("setWidth         current 0.2");
 			run("setSize          current 2");
 			run("setPattern       current 0 0 1");
+			run("setMessage       current 1000,");
 		}
 		
 		id++

@@ -36,10 +36,7 @@ public:
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
                 //Browse objects
-                QHashIterator<quint16, NxObject*> objectIterator(objects[activityIterator][typeIterator]);
-                while (objectIterator.hasNext()) {
-                    objectIterator.next();
-                    NxObject *object = objectIterator.value();
+                foreach(NxObject *object, objects[activityIterator][typeIterator]) {
                     object->dispatchProperty(property, value);
                 }
             }
@@ -64,10 +61,7 @@ public:
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
 
                 //Browse objects
-                QHashIterator<quint16, NxObject*> objectIterator(objects[activityIterator][typeIterator]);
-                while (objectIterator.hasNext()) {
-                    objectIterator.next();
-                    NxObject *object = objectIterator.value();
+                foreach(NxObject *object, objects[activityIterator][typeIterator]) {
                     boundingRect = boundingRect.united(object->getBoundingRect());
                 }
             }
@@ -80,12 +74,8 @@ public:
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-                //Browse objects
-                QHashIterator<quint16, NxObject*> objectIterator(objects[activityIterator][typeIterator]);
-                while (objectIterator.hasNext()) {
-                    objectIterator.next();
-                    counter++;
-                }
+                //Count objects
+                counter += objects[activityIterator][typeIterator].count();
             }
         }
         return counter;
@@ -100,7 +90,7 @@ protected:
 public slots:
     inline void setId(const QString & _id) {
         id = _id;
-        setText(0, tr("Group") + " " + id);
+        setText(2, tr("Group") + " " + id);
     }
     inline const QString & getId() const {
         return id;

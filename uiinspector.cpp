@@ -27,6 +27,13 @@ UiInspector::UiInspector(QWidget *parent) :
     ui->splitter_2->setStretchFactor(0, 1);
     ui->splitter_2->setStretchFactor(1, 2);
 
+    ui->ccView->setColumnWidth(0, 85);
+    ui->ccView->setColumnWidth(1, 45);
+    ui->ccView->setColumnWidth(2, 45);
+    ui->ccView->setColumnWidth(3, 40);
+    ui->cc2View->setColumnWidth(0, 45);
+    ui->cc2View->setColumnWidth(1, 45);
+
     render = 0;
     factory = 0;
     triggerItem = new QTreeWidgetItem(ui->ccView, QStringList() << "");
@@ -35,6 +42,8 @@ UiInspector::UiInspector(QWidget *parent) :
     curveItem->setFlags(Qt::ItemIsEnabled);
     cursorItem = new QTreeWidgetItem(ui->ccView, QStringList() << "");
     cursorItem->setFlags(Qt::ItemIsEnabled);
+
+    ui->followId->setValue(9999);
 
     ui->ccView->expandAll();
     ui->ccView->sortByColumn(0, Qt::AscendingOrder);
@@ -100,6 +109,19 @@ void UiInspector::changeID_success(bool result, quint16 newId) {  ////CG////
             object->setId(newId);
     else
         QMessageBox::information(0, tr("Can't change ID."), tr("Another object has this ID.\nTry deleting that object, or change its ID."), QMessageBox::Ok);
+}
+
+void UiInspector::actionCCButton() {
+    if(sender() == ui->unmuteGroups)
+        emit(actionUnmuteGroups());
+    else if(sender() == ui->unmuteObjects)
+        emit(actionUnmuteObjects());
+    else if(sender() == ui->unsoloGroups)
+        emit(actionUnsoloGroups());
+    else if(sender() == ui->unsoloObjects)
+        emit(actionUnsoloObjects());
+    else if(sender() == ui->followId)
+        emit(actionFollowID(ui->followId->value()));
 }
 
 void UiInspector::actionInfo() {

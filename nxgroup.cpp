@@ -22,4 +22,5 @@ NxGroup::NxGroup(NxObjectFactoryInterface *parent, QTreeWidget *parentList, Qt::
     QObject(parent), QTreeWidgetItem(parentList) {
     setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable);
     setCheckState(0, state);
+    setCheckState(1, Qt::Unchecked);
 }

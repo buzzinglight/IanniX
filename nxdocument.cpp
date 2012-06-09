@@ -41,22 +41,14 @@ QString NxDocument::serialize(UiRenderOptions *renderOptions) {
     }
 
     //Browse documents
-    QMapIterator<QString, NxGroup*> groupIterator(groups);
-    while (groupIterator.hasNext()) {
-        groupIterator.next();
-        NxGroup *group = groupIterator.value();
-
+    foreach(NxGroup *group, groups) {
         //Browse active/inactive objects
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
 
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
                 //Browse objects
-                QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
-                while (objectIterator.hasNext()) {
-                    objectIterator.next();
-                    NxObject *object = objectIterator.value();
-
+                foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                     if(((typeIterator == ObjectsTypeCursor) && (((NxCursor*)object)->getCurve() == 0)) || (typeIterator == ObjectsTypeCurve) || (typeIterator == ObjectsTypeTrigger))
                         retour += object->serialize() + COMMAND_END;
                 }

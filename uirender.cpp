@@ -31,7 +31,7 @@ UiRender::UiRender(QWidget *parent) :
     setAcceptDrops(true);
 
     //FollowId
-    followId = 5678;
+    followId = 9999;
 
     //Initialisations
     factory = 0;
@@ -54,7 +54,7 @@ UiRender::UiRender(QWidget *parent) :
     renderOptions->render = this;
     renderOptions->renderFont = QFont("Arial");
     renderOptions->renderFont.setPixelSize(11);
-    setTriggerAutosize(true);
+    setTriggerAutosize(false);
     renderOptions->paintAxisGrid = true;
     renderOptions->paintAxisMain = true;
     renderOptions->paintBackground = true;
@@ -210,8 +210,8 @@ void UiRender::paintGL() {
     renderOptions->axisCenter = renderOptions->axisCenter + (renderOptions->axisCenterDest - renderOptions->axisCenter) / 3;
     renderOptions->zoomLinear = renderOptions->zoomLinear + (renderOptions->zoomLinearDest - renderOptions->zoomLinear) / 3;
     renderOptions->rotation = renderOptions->rotation + (renderOptions->rotationDest - renderOptions->rotation) / 6;
-    if(qAbs(renderOptions->rotation.z() - renderOptions->rotationDest.z()) > 360)
-        renderOptions->rotation.setZ(renderOptions->rotationDest.z());
+    //if(qAbs(renderOptions->rotation.z() - renderOptions->rotationDest.z()) > 360)
+    //    renderOptions->rotation.setZ(renderOptions->rotationDest.z());
     translation = translation + (translationDest - translation) / 3;
     scale = scale + (scaleDest - scale) / 3;
 
@@ -261,8 +261,9 @@ void UiRender::paintGL() {
         //rotationDest.setX(-object->getCurrentAngleRoll());
         //rotationDest.setY(-82 - object->getCurrentAnglePitch());
         renderOptions->rotationDest.setZ(-object->getCurrentAngle() + 90);
+        renderOptions->rotation.setZ(renderOptions->rotationDest.z());
         translationDest = -object->getCurrentPos();
-        scaleDest = 3 * 5;
+        //scaleDest = 1 * 5;
     }
     glRotatef(renderOptions->rotation.y(), 1, 0, 0);
     glRotatef(renderOptions->rotation.x(), 0, 1, 0);
@@ -296,11 +297,8 @@ void UiRender::paintGL() {
 
         //Draw objects
         //Browse documents
-        QMapIterator<QString, NxGroup*> groupIterator(document->groups);
-        while (groupIterator.hasNext()) {
-            groupIterator.next();
-            NxGroup *group = groupIterator.value();
-            if(group->checkState(0) == Qt::Checked)
+        foreach(NxGroup *group, document->groups) {
+            if(((!factory->isGroupSoloActive) && (group->checkState(0) == Qt::Checked)) || ((factory->isGroupSoloActive) && (group->checkState(1) == Qt::Checked)))
                 renderOptions->paintThisGroup = true;
             else
                 renderOptions->paintThisGroup = false;
@@ -310,14 +308,15 @@ void UiRender::paintGL() {
                 //Browse all types of objects
                 for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
                     //Browse objects
-                    QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
-                    while (objectIterator.hasNext()) {
-                        objectIterator.next();
-                        NxObject *object = objectIterator.value();
-
+                    foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                         //Draw the object
-                        if(!isRemoving)
+                        if(!isRemoving) {
+                            bool oldPaintThisGroup = renderOptions->paintThisGroup;
+                            if(!(((!factory->isObjectSoloActive) && (object->checkState(1) == Qt::Checked)) || ((factory->isObjectSoloActive) && (object->checkState(2) == Qt::Checked))))
+                                renderOptions->paintThisGroup = false;
                             object->paint();
+                            renderOptions->paintThisGroup = oldPaintThisGroup;
+                        }
                         else
                             break;
                     }
@@ -674,13 +673,9 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
             QList<NxObject*> eligibleSelection;
 
             //Browse documents
-            QMapIterator<QString, NxGroup*> groupIterator(document->groups);
-            while (groupIterator.hasNext()) {
-                groupIterator.next();
-                NxGroup *group = groupIterator.value();
-
+            foreach(NxGroup *group, document->groups) {
                 //Is groups visible ?
-                if(group->checkState(0) == Qt::Checked) {
+                if((((!factory->isGroupSoloActive) && (group->checkState(0) == Qt::Checked)) || ((factory->isGroupSoloActive) && (group->checkState(1) == Qt::Checked)))) {
                     //Browse active/inactive objects
                     for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
                         //Browse all types of objects
@@ -688,13 +683,9 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                             //Are objects visible ?
                             if((((typeIterator == ObjectsTypeCursor) && (renderOptions->allowSelectionCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->allowSelectionCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->allowSelectionTriggers))) && (((typeIterator == ObjectsTypeCursor) && (renderOptions->paintCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->paintCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->paintTriggers)))) {
                                 //Browse objects
-                                QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
-                                while (objectIterator.hasNext()) {
-                                    objectIterator.next();
-                                    NxObject *object = objectIterator.value();
-
+                                foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                                     //Is Z visible ?
-                                    if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd)) {
+                                    if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd) && (((!factory->isObjectSoloActive) && (object->checkState(1) == Qt::Checked)) || ((factory->isObjectSoloActive) && (object->checkState(2) == Qt::Checked)))) {
                                         //Check selection
                                         if(object->isMouseHover(mousePos)) {
                                             if(object->getType() == ObjectsTypeCurve)
@@ -975,13 +966,9 @@ void UiRender::actionSelect_all() {
         selectionClear();
 
         //Browse documents
-        QMapIterator<QString, NxGroup*> groupIterator(document->groups);
-        while (groupIterator.hasNext()) {
-            groupIterator.next();
-            NxGroup *group = groupIterator.value();
-
+        foreach(NxGroup *group, document->groups) {
             //Is groups visible ?
-            if(group->checkState(0) == Qt::Checked) {
+            if((((!factory->isGroupSoloActive) && (group->checkState(0) == Qt::Checked)) || ((factory->isGroupSoloActive) && (group->checkState(1) == Qt::Checked)))) {
 
                 //Browse active/inactive objects
                 for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
@@ -992,13 +979,9 @@ void UiRender::actionSelect_all() {
                         //Are objects visible ?
                         if((((typeIterator == ObjectsTypeCursor) && (renderOptions->allowSelectionCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->allowSelectionCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->allowSelectionTriggers))) && (((typeIterator == ObjectsTypeCursor) && (renderOptions->paintCursors)) || ((typeIterator == ObjectsTypeCurve) && (renderOptions->paintCurves)) || ((typeIterator == ObjectsTypeTrigger) && (renderOptions->paintTriggers)))) {
                             //Browse objects
-                            QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
-                            while (objectIterator.hasNext()) {
-                                objectIterator.next();
-                                NxObject *object = objectIterator.value();
-
+                            foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                                 //Is Z visible ?
-                                if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd)) {
+                                if((renderOptions->paintZStart <= object->getPos().z()) && (object->getPos().z() <= renderOptions->paintZEnd) && (((!factory->isObjectSoloActive) && (object->checkState(1) == Qt::Checked)) || ((factory->isObjectSoloActive) && (object->checkState(2) == Qt::Checked)))) {
 
                                     //Add the object to selection
                                     selectionAdd(object);
@@ -1024,4 +1007,8 @@ void UiRender::actionDelete() {
 
 void UiRender::actionSnapGrid() {
     mouseSnap = !mouseSnap;
+}
+
+void UiRender::actionFollowID(quint16 _followId) {
+    followId = _followId;
 }

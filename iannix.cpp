@@ -24,6 +24,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     currentDocument = 0;
     currentScript = 0;
     projectScore = 0;
+    isGroupSoloActive = false;
+    isObjectSoloActive = false;
     freehandCurveId = 0;
     lastMessageAllow = true;
     oscBundleHost = QHostAddress("127.0.0.1");
@@ -94,6 +96,10 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(inspector, SIGNAL(transportMessageChange(QString)), SLOT(transportMessageChange(QString)));
     connect(inspector, SIGNAL(syncMessageChange(QString)), SLOT(syncMessageChange(QString)));
     connect(inspector, SIGNAL(bundleMessageChange(QString,quint16)), SLOT(bundleMessageChange(QString,quint16)));
+    connect(inspector, SIGNAL(actionUnmuteGroups()), SLOT(actionUnmuteGroups()));
+    connect(inspector, SIGNAL(actionUnmuteObjects()), SLOT(actionUnmuteObjects()));
+    connect(inspector, SIGNAL(actionUnsoloGroups()), SLOT(actionUnsoloGroups()));
+    connect(inspector, SIGNAL(actionUnsoloObjects()), SLOT(actionUnsoloObjects()));
 
     //Render
     render = view->getRender();
@@ -121,6 +127,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(render, SIGNAL(editingStart(NxPoint)), SLOT(editingStart(NxPoint)));
     connect(render, SIGNAL(editingMove(NxPoint,bool)), SLOT(editingMove(NxPoint,bool)));
     connect(render, SIGNAL(escFullscreen()), view, SLOT(escFullscreen()));
+    connect(inspector, SIGNAL(actionFollowID(quint16)), render, SLOT(actionFollowID(quint16)));
     render->zoom();
 
     //Message script engine
@@ -573,19 +580,13 @@ void IanniX::timerTick() {
 
         //Browse groups
         if(document) {
-            QMapIterator<QString, NxGroup*> groupIterator(document->groups);
-            while (groupIterator.hasNext()) {
-                groupIterator.next();
-                NxGroup *group = groupIterator.value();
-
+            foreach(NxGroup *group, document->groups) {
                 //Browse active/inactive objects
                 for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
 
                     //Browse cursors
-                    QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][ObjectsTypeCursor]);
-                    while (objectIterator.hasNext()) {
-                        objectIterator.next();
-                        NxCursor *cursor = (NxCursor*)objectIterator.value();
+                    foreach(NxObject *objectCursor, group->objects[activityIterator][ObjectsTypeCursor]) {
+                        NxCursor *cursor = (NxCursor*)objectCursor;
 
                         //Cursor reset
                         if(forceTimeLocal) {
@@ -597,7 +598,7 @@ void IanniX::timerTick() {
                         cursor->setTime(delta * render->getRenderOptions()->timeFactor);
 
                         //Is cursor active ?
-                        if((!forceTimeLocal) && (cursor->getActive()) && (group->checkState(0) == Qt::Checked)) {
+                        if((!forceTimeLocal) && (cursor->getActive()) && (((!isGroupSoloActive) && (group->checkState(0) == Qt::Checked)) || ((isGroupSoloActive) && (group->checkState(1) == Qt::Checked))) && (((!isObjectSoloActive) && (cursor->checkState(1) == Qt::Checked)) || ((isObjectSoloActive) && (cursor->checkState(2) == Qt::Checked)))) {
                             //Messages
                             cursor->trig();
 
@@ -605,17 +606,10 @@ void IanniX::timerTick() {
                             cursorBoundingRectSearch = cursor->getBoundingRectSearch();
 
                             //Browse groups
-                            QMapIterator<QString, NxGroup*> groupIteratorTrigger(document->groups);
-                            while (groupIteratorTrigger.hasNext()) {
-                                groupIteratorTrigger.next();
-                                NxGroup *group = groupIteratorTrigger.value();
-
+                            foreach(NxGroup *group, document->groups) {
                                 //Browse active triggers
-                                QHashIterator<quint16, NxObject*> objectIteratorTrigger(group->objects[ObjectsActivityActive][ObjectsTypeTrigger]);
-                                while (objectIteratorTrigger.hasNext()) {
-                                    objectIteratorTrigger.next();
-
-                                    NxTrigger *trigger = (NxTrigger*)objectIteratorTrigger.value();
+                                foreach(NxObject *objectTrigger, group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
+                                    NxTrigger *trigger = (NxTrigger*)objectTrigger;
 
                                     //Check the collision
                                     if(cursor->contains(trigger))
@@ -623,11 +617,8 @@ void IanniX::timerTick() {
                                 }
 
                                 //Browse active triggers
-                                QHashIterator<quint16, NxObject*> objectIteratorCurve(group->objects[ObjectsActivityActive][ObjectsTypeCurve]);
-                                while (objectIteratorCurve.hasNext()) {
-                                    objectIteratorCurve.next();
-
-                                    NxCurve *curve = (NxCurve*)objectIteratorCurve.value();
+                                foreach(NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
+                                    NxCurve *curve = (NxCurve*)objectCurve;
 
                                     //Check the collision
                                     cursor->trig(curve);
@@ -823,6 +814,26 @@ void IanniX::actionCC() {
     }
     center /= centerCounter;
     render->centerOn(center);
+
+    //Is solo active ?
+    isObjectSoloActive = false;
+    if(currentDocument) {
+        foreach(NxGroup* group, currentDocument->groups) {
+            //Browse active/inactive objects
+            for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
+                //Browse all types of objects
+                for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
+                    //Browse objects
+                    foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
+                        if(object->checkState(2) == Qt::Checked) {
+                            isObjectSoloActive = true;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 void IanniX::actionCC2() {
     QList<NxGroup*> groups = inspector->getSelectedCC2Object();
@@ -836,10 +847,7 @@ void IanniX::actionCC2() {
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
                 //Browse objects
-                QHashIterator<quint16, NxObject*> objectIterator(group->objects[activityIterator][typeIterator]);
-                while (objectIterator.hasNext()) {
-                    objectIterator.next();
-                    NxObject *object = objectIterator.value();
+                foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                     render->selectionAdd(object);
                     center += object->getPos();
                     centerCounter++;
@@ -849,6 +857,16 @@ void IanniX::actionCC2() {
     }
     center /= centerCounter;
     render->centerOn(center);
+
+    //Is solo active ?
+    isGroupSoloActive = false;
+    if(currentDocument) {
+        foreach(NxGroup *group, currentDocument->groups)
+            if(group->checkState(1) == Qt::Checked) {
+                isGroupSoloActive = true;
+                return;
+            }
+    }
 }
 
 void IanniX::actionChangeID(quint16 idOld, quint16 idNew) {   ////CG////
@@ -970,12 +988,8 @@ void IanniX::actionDuplicateScore() {
 }
 
 void IanniX::actionSave_all() {
-    QHashIterator<QString, NxDocument*> documentIterator(documents);
-    while (documentIterator.hasNext()) {
-        documentIterator.next();
-        NxDocument *document = documentIterator.value();
+    foreach(NxDocument *document, documents)
         document->save(render->getRenderOptions());
-    }
 }
 void IanniX::actionProjectFiles() {
     if(inspector->getProjectFiles()->currentItem()->type() == 1024) {
@@ -1542,7 +1556,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                         object->dispatchProperty("timeInitialOffset", arguments.at(2).toDouble());
                         object->dispatchProperty("timeStartOffset", arguments.at(3).toDouble());
                         if(arguments.at(4).toLower() == "end")
-                            object->dispatchProperty("timeEndOffset", -1);
+                            object->dispatchProperty("timeEndOffset", 0);
                         else
                             object->dispatchProperty("timeEndOffset", arguments.at(4).toDouble());
                     }
@@ -1575,6 +1589,30 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                             curve->translate(NxPoint(arguments.at(2).toDouble(), arguments.at(3).toDouble(), arguments.at(4).toDouble()));
                         }
                     }
+                    else if((commande == COMMAND_CURVE_POINT_TRANSLATE2) && (arguments.count() >= 6)) {
+                        if(object->getType() == ObjectsTypeCurve) {
+                            NxCurve *curve = (NxCurve*)object;
+                            quint16 indexPoint = arguments.at(2).toUInt();
+                            if(indexPoint < curve->getPathPointsCount())
+                                curve->translatePoint(indexPoint, NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()));
+                        }
+                    }
+                    else if(((commande == COMMAND_CURVE_POINT_X) || (commande == COMMAND_CURVE_POINT_Y) || (commande == COMMAND_CURVE_POINT_Z)) && (arguments.count() >= 4)) {
+                        if(object->getType() == ObjectsTypeCurve) {
+                            NxCurve *curve = (NxCurve*)object;
+                            quint16 indexPoint = arguments.at(2).toUInt();
+                            if(indexPoint < curve->getPathPointsCount()) {
+                                NxCurvePoint ptAt = curve->getPathPointsAt(indexPoint);
+                                if(commande == COMMAND_CURVE_POINT_X)
+                                    curve->setPointAt(indexPoint, NxPoint(arguments.at(3).toDouble(), ptAt.y(), ptAt.z()), ptAt.c1, ptAt.c2, ptAt.smooth);
+                                if(commande == COMMAND_CURVE_POINT_Y)
+                                    curve->setPointAt(indexPoint, NxPoint(ptAt.x(), arguments.at(3).toDouble(), ptAt.z()), ptAt.c1, ptAt.c2, ptAt.smooth);
+                                if(commande == COMMAND_CURVE_POINT_Z)
+                                    curve->setPointAt(indexPoint, NxPoint(ptAt.x(), ptAt.y(), arguments.at(3).toDouble()), ptAt.c1, ptAt.c2, ptAt.smooth);
+                            }
+                        }
+                    }
+
                     else if((commande == COMMAND_CURVE_POINT) && (arguments.count() >= 5)) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
@@ -1979,6 +2017,59 @@ void IanniX::bundleMessageChange(const QString &host, quint16 port) {
     oscBundlePort = port;
 }
 
+void IanniX::actionUnmuteGroups() {
+    if(currentDocument) {
+        foreach(NxGroup *group, currentDocument->groups) {
+            if(group->checkState(0) == Qt::Unchecked)
+                group->setCheckState(0, Qt::Checked);
+        }
+    }
+}
+void IanniX::actionUnmuteObjects() {
+    if(currentDocument) {
+        //Browse documents
+        foreach(NxGroup *group, currentDocument->groups) {
+            //Browse active/inactive objects
+            for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
+                //Browse all types of objects
+                for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
+                    //Browse objects
+                    foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
+                        if(object->checkState(1) == Qt::Unchecked)
+                            object->setCheckState(1, Qt::Checked);
+                    }
+                }
+            }
+        }
+    }
+}
+void IanniX::actionUnsoloGroups() {
+    if(currentDocument) {
+        foreach(NxGroup *group, currentDocument->groups) {
+            if(group->checkState(1) == Qt::Checked)
+                group->setCheckState(1, Qt::Unchecked);
+        }
+    }
+}
+void IanniX::actionUnsoloObjects() {
+    if(currentDocument) {
+        //Browse documents
+        foreach(NxGroup *group, currentDocument->groups) {
+            //Browse active/inactive objects
+            for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
+                //Browse all types of objects
+                for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
+                    //Browse objects
+                    foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
+                        if(object->checkState(2) == Qt::Checked)
+                            object->setCheckState(2, Qt::Unchecked);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void IanniX::setIpOut(const QString & ip) {
     ipOut = ip;
     messagesCache.clear();
@@ -2008,10 +2099,7 @@ void IanniX::setMidiOutNewDevice(const QString &midi) {
 
 void IanniX::actionCloseEvent(QCloseEvent *event) {
     quint16 nbFileNoSave = 0;
-    QHashIterator<QString, NxDocument*> documentIterator(documents);
-    while (documentIterator.hasNext()) {
-        documentIterator.next();
-        NxDocument *document = documentIterator.value();
+    foreach(NxDocument *document, documents) {
         if(document->getHasChanged())
             nbFileNoSave++;
     }

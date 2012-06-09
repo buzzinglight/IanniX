@@ -18,10 +18,6 @@
 
 #include "nxeasing.h"
 
-NxEasing::NxEasing(QObject *parent) :
-    QObject(parent) {
-}
-
 QPixmap NxEasing::getPixmap() const {
     QPixmap pixmap(128, 128);
     pixmap.fill(Qt::transparent);

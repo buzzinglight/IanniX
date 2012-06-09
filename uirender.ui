@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>IanniX — Render</string>
   </property>
+  <property name="statusTip">
+   <string>Click+move and mouse wheel to navigate/zoom in score. Alt+move, Alt+mouse wheel and Alt+double-click to change camera position in 3D.</string>
+  </property>
  </widget>
  <resources/>
  <connections/>

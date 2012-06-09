@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>366</width>
-    <height>618</height>
+    <width>371</width>
+    <height>623</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -269,6 +269,12 @@ QSplitter::handle:vertical     		{	height: 4px; }
                 <property name="contextMenuPolicy">
                  <enum>Qt::CustomContextMenu</enum>
                 </property>
+                <property name="toolTip">
+                 <string>Scores list</string>
+                </property>
+                <property name="statusTip">
+                 <string>List of available scores (from your project folder and from IanniX folders). Double-click to open a score. Right-click to show contextual menu.</string>
+                </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
                 </property>
@@ -300,6 +306,12 @@ QSplitter::handle:vertical     		{	height: 4px; }
                <widget class="QTreeWidget" name="projectScripts">
                 <property name="contextMenuPolicy">
                  <enum>Qt::CustomContextMenu</enum>
+                </property>
+                <property name="toolTip">
+                 <string>Scripts list</string>
+                </property>
+                <property name="statusTip">
+                 <string>List of available scripts (from your project folder and from IanniX folders). Double-click to launch a script. Right-click to show contextual menu.</string>
                 </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
@@ -366,7 +378,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
           <item>
            <layout class="QGridLayout" name="gridLayout_2">
             <property name="horizontalSpacing">
-             <number>5</number>
+             <number>10</number>
             </property>
             <property name="verticalSpacing">
              <number>6</number>
@@ -436,6 +448,9 @@ QSplitter::handle:vertical     		{	height: 4px; }
                 <height>16777215</height>
                </size>
               </property>
+              <property name="statusTip">
+               <string>Change here the absolute coordinates of selected objects</string>
+              </property>
               <property name="suffix">
                <string notr="true">s</string>
               </property>
@@ -467,6 +482,9 @@ QSplitter::handle:vertical     		{	height: 4px; }
                 <height>16777215</height>
                </size>
               </property>
+              <property name="statusTip">
+               <string>Change here the absolute coordinates of selected objects</string>
+              </property>
               <property name="suffix">
                <string notr="true">s</string>
               </property>
@@ -497,6 +515,9 @@ QSplitter::handle:vertical     		{	height: 4px; }
                 <width>60</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="statusTip">
+               <string>Change here the absolute coordinates of selected objects</string>
               </property>
               <property name="suffix">
                <string notr="true">s</string>
@@ -555,6 +576,9 @@ QSplitter::handle:vertical     		{	height: 4px; }
                 <height>16777215</height>
                </size>
               </property>
+              <property name="statusTip">
+               <string>Change here the size of selected objects</string>
+              </property>
               <property name="suffix">
                <string notr="true">s</string>
               </property>
@@ -585,6 +609,9 @@ QSplitter::handle:vertical     		{	height: 4px; }
                 <width>60</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="statusTip">
+               <string>Change here the size of selected objects</string>
               </property>
               <property name="suffix">
                <string notr="true">s</string>
@@ -643,6 +670,9 @@ WIDTH</string>
                 <height>16777215</height>
                </size>
               </property>
+              <property name="statusTip">
+               <string>Change here the cursor width</string>
+              </property>
               <property name="suffix">
                <string notr="true">s</string>
               </property>
@@ -673,7 +703,7 @@ WIDTH</string>
               </property>
               <property name="text">
                <string>CURSOR
-LOOP PATTERN</string>
+SPEED PATTERN</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -686,7 +716,10 @@ LOOP PATTERN</string>
             <item row="13" column="1" colspan="2">
              <widget class="QLineEdit" name="patternLine">
               <property name="toolTip">
-               <string>Type values separated by spaces</string>
+               <string/>
+              </property>
+              <property name="statusTip">
+               <string>Type here the speed pattern separated by spaces (&quot;1 2 0&quot; means running one time at normal speed, then again at double speed then stopping)</string>
               </property>
               <property name="text">
                <string/>
@@ -755,6 +788,9 @@ OFFSETS</string>
                     <width>60</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="statusTip">
+                   <string>Change here the initial offset (first iteration of a cursor on a curve). Positive initial offset means that cursor will start from a position on the curve whereas negative initial offset means that cursor start will be delayed.</string>
                   </property>
                   <property name="suffix">
                    <string notr="true">s</string>
@@ -832,6 +868,9 @@ OFFSETS</string>
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="statusTip">
+                   <string>Change here the start offset of a cursor defining the loop start point on a curve</string>
+                  </property>
                   <property name="suffix">
                    <string notr="true">s</string>
                   </property>
@@ -879,6 +918,12 @@ OFFSETS</string>
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="statusTip">
+                   <string>Change here the start offset of a cursor defining the loop end point on a curve</string>
+                  </property>
+                  <property name="specialValueText">
+                   <string>the end</string>
+                  </property>
                   <property name="suffix">
                    <string notr="true">s</string>
                   </property>
@@ -886,10 +931,10 @@ OFFSETS</string>
                    <number>2</number>
                   </property>
                   <property name="minimum">
-                   <double>-999999.000000000000000</double>
+                   <double>0.000000000000000</double>
                   </property>
                   <property name="maximum">
-                   <double>999999.000000000000000</double>
+                   <double>9999999.000000000000000</double>
                   </property>
                   <property name="singleStep">
                    <double>0.100000000000000</double>
@@ -953,6 +998,9 @@ MANUAL POS.</string>
                 <height>16777215</height>
                </size>
               </property>
+              <property name="statusTip">
+               <string>DIsplays the cursor position</string>
+              </property>
               <property name="suffix">
                <string notr="true">s</string>
               </property>
@@ -1012,6 +1060,9 @@ or LENGTH</string>
                   <height>16777215</height>
                  </size>
                 </property>
+                <property name="statusTip">
+                 <string>Change here the cursor speed factor (1.00 = nominal speed)</string>
+                </property>
                 <property name="suffix">
                  <string notr="true"/>
                 </property>
@@ -1049,6 +1100,9 @@ or LENGTH</string>
                   <width>60</width>
                   <height>16777215</height>
                  </size>
+                </property>
+                <property name="statusTip">
+                 <string>Change here the cursor run duration on the curve</string>
                 </property>
                 <property name="suffix">
                  <string notr="true">s</string>
@@ -1121,6 +1175,9 @@ MASTER SPEED</string>
                 <width>60</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="statusTip">
+               <string>Change here the cursor master speed factor (1.00 = nominal speed) (total speed = master speed x speed)</string>
               </property>
               <property name="suffix">
                <string notr="true"/>
@@ -1195,7 +1252,10 @@ MAPPING</string>
               <item row="0" column="1">
                <widget class="QLineEdit" name="cursorBoundsLineSource1">
                 <property name="toolTip">
-                 <string>Top-left point</string>
+                 <string/>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the top-left point in IanniX coordinates system for mapping</string>
                 </property>
                 <property name="text">
                  <string/>
@@ -1224,7 +1284,10 @@ MAPPING</string>
               <item row="1" column="1">
                <widget class="QLineEdit" name="cursorBoundsLineTarget1">
                 <property name="toolTip">
-                 <string>Top-left values</string>
+                 <string/>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the top-left mapped values</string>
                 </property>
                 <property name="text">
                  <string/>
@@ -1234,7 +1297,10 @@ MAPPING</string>
               <item row="0" column="2">
                <widget class="QLineEdit" name="cursorBoundsLineSource2">
                 <property name="toolTip">
-                 <string>Bottom-right point</string>
+                 <string/>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the bottom-right point in IanniX coordinates system for mapping</string>
                 </property>
                 <property name="text">
                  <string/>
@@ -1244,7 +1310,10 @@ MAPPING</string>
               <item row="1" column="2">
                <widget class="QLineEdit" name="cursorBoundsLineTarget2">
                 <property name="toolTip">
-                 <string>Bottom-right values</string>
+                 <string/>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the bottom-right mapped values</string>
                 </property>
                 <property name="text">
                  <string/>
@@ -1272,7 +1341,10 @@ MAPPING</string>
                </size>
               </property>
               <property name="toolTip">
-               <string>Click to change group</string>
+               <string/>
+              </property>
+              <property name="statusTip">
+               <string>Click here to change the group ID of the object</string>
               </property>
               <property name="styleSheet">
                <string notr="true">font: bold;</string>
@@ -1319,7 +1391,8 @@ MAPPING</string>
                </size>
               </property>
               <property name="text">
-               <string>TRIGGER OFF-TIME</string>
+               <string>TRIGGER
+OFF-TIME</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1342,6 +1415,9 @@ MAPPING</string>
                 <width>60</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="statusTip">
+               <string>Change here the duration of a MIDI note</string>
               </property>
               <property name="suffix">
                <string notr="true">s</string>
@@ -1384,6 +1460,9 @@ MAPPING</string>
             </item>
             <item row="5" column="1" colspan="3">
              <widget class="QLineEdit" name="labelLine">
+              <property name="statusTip">
+               <string>Type here a label for selected objects</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -1416,6 +1495,9 @@ MAPPING</string>
             </item>
             <item row="6" column="1">
              <widget class="QCheckBox" name="activityCheck">
+              <property name="statusTip">
+               <string>Click here to enable/disable the object on the score</string>
+              </property>
               <property name="styleSheet">
                <string notr="true">padding-left: 2px;</string>
               </property>
@@ -1431,6 +1513,12 @@ MAPPING</string>
                 <width>0</width>
                 <height>20</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="statusTip">
+               <string>Click here to edit the message send by the selected objects</string>
               </property>
               <property name="styleSheet">
                <string notr="true">font: bold;</string>
@@ -1510,7 +1598,10 @@ MAPPING</string>
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Active color</string>
+                 <string/>
+                </property>
+                <property name="statusTip">
+                 <string>Change here the color of objects that are ACTIVE and that DOESN'T SEND messages</string>
                 </property>
                </widget>
               </item>
@@ -1529,7 +1620,10 @@ MAPPING</string>
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Inactive color</string>
+                 <string/>
+                </property>
+                <property name="statusTip">
+                 <string>Change here the color of objects that are INACTIVE and that DOESN'T SEND messages</string>
                 </property>
                </widget>
               </item>
@@ -1548,7 +1642,10 @@ MAPPING</string>
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Active color with messages</string>
+                 <string/>
+                </property>
+                <property name="statusTip">
+                 <string>Change here the color of objects that are ACTIVE and that SEND messages</string>
                 </property>
                </widget>
               </item>
@@ -1567,7 +1664,10 @@ MAPPING</string>
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Inactive color with messages</string>
+                 <string/>
+                </property>
+                <property name="statusTip">
+                 <string>Change here the color of objects that are INACTIVE and that SEND messages</string>
                 </property>
                </widget>
               </item>
@@ -1601,7 +1701,7 @@ MAPPING</string>
                </size>
               </property>
               <property name="text">
-               <string>TICKNESS</string>
+               <string>THICKNESS</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1624,6 +1724,9 @@ MAPPING</string>
                 <width>60</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="statusTip">
+               <string>Change here the tickness of selected objects</string>
               </property>
               <property name="suffix">
                <string notr="true"/>
@@ -1655,6 +1758,9 @@ MAPPING</string>
                 <width>60</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="statusTip">
+               <string>Change here the periodicity of emitted messages</string>
               </property>
               <property name="suffix">
                <string notr="true">ms</string>
@@ -1695,7 +1801,10 @@ MAPPING</string>
                </size>
               </property>
               <property name="toolTip">
-               <string>Click to change ID</string>
+               <string/>
+              </property>
+              <property name="statusTip">
+               <string>Click here to change the unique ID of the object</string>
               </property>
               <property name="styleSheet">
                <string notr="true">font: bold;</string>
@@ -1720,7 +1829,10 @@ MAPPING</string>
                </size>
               </property>
               <property name="toolTip">
-               <string>Active color</string>
+               <string/>
+              </property>
+              <property name="statusTip">
+               <string>Select here the cursor acceleration on a curve</string>
               </property>
              </widget>
             </item>
@@ -1764,7 +1876,7 @@ MAPPING</string>
 </string>
             </property>
             <property name="text">
-             <string>OBJECT SELECTION</string>
+             <string>OBJECTS</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1772,52 +1884,65 @@ MAPPING</string>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="viewTriggerCheck">
-            <property name="toolTip">
-             <string>Display/hide triggers</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font: 10px;</string>
-            </property>
-            <property name="text">
-             <string>TRIGGERS</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="viewCurveCheck">
-            <property name="toolTip">
-             <string>Display/hide curves</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font: 10px;</string>
-            </property>
-            <property name="text">
-             <string>CURVES</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="viewCursorCheck">
-            <property name="toolTip">
-             <string>Display/hide cursors</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font: 10px;</string>
-            </property>
-            <property name="text">
-             <string>CURSORS</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QCheckBox" name="viewTriggerCheck">
+              <property name="toolTip">
+               <string>Display/hide triggers</string>
+              </property>
+              <property name="statusTip">
+               <string>Click here to show/hide triggers of the current score</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font: 10px;</string>
+              </property>
+              <property name="text">
+               <string>TRIGGERS</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="viewCursorCheck">
+              <property name="toolTip">
+               <string>Display/hide cursors</string>
+              </property>
+              <property name="statusTip">
+               <string>Click here to show/hide cursors of the current score</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font: 10px;</string>
+              </property>
+              <property name="text">
+               <string>CURSORS</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="viewCurveCheck">
+              <property name="toolTip">
+               <string>Display/hide curves</string>
+              </property>
+              <property name="statusTip">
+               <string>Click here to show/hide curves of the current score</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font: 10px;</string>
+              </property>
+              <property name="text">
+               <string>CURVES</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="QSplitter" name="splitter_3">
@@ -1827,7 +1952,10 @@ MAPPING</string>
             <widget class="QWidget" name="layoutWidget4">
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <property name="spacing">
-               <number>3</number>
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>10</number>
               </property>
               <item>
                <widget class="QLabel" name="viewGroupLabel_2">
@@ -1841,6 +1969,9 @@ MAPPING</string>
                 <property name="toolTip">
                  <string>List of objects</string>
                 </property>
+                <property name="statusTip">
+                 <string>Click on a row to highlight and select object in score. Click on checkboxes to switch on/off and solo objects of the current score</string>
+                </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
                 </property>
@@ -1853,6 +1984,24 @@ MAPPING</string>
                 <property name="animated">
                  <bool>true</bool>
                 </property>
+                <attribute name="headerShowSortIndicator" stdset="0">
+                 <bool>false</bool>
+                </attribute>
+                <column>
+                 <property name="text">
+                  <string>TYPE</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>ON/OFF</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>SOLO</string>
+                 </property>
+                </column>
                 <column>
                  <property name="text">
                   <string>ID</string>
@@ -1863,19 +2012,74 @@ MAPPING</string>
                   <string>GROUP ID</string>
                  </property>
                 </column>
-                <column>
-                 <property name="text">
-                  <string>ACTIVE</string>
-                 </property>
-                </column>
                </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_6">
+                <property name="spacing">
+                 <number>15</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="unmuteObjects">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Switch on all objects</string>
+                  </property>
+                  <property name="statusTip">
+                   <string>Click here to switch on all objects of the current score</string>
+                  </property>
+                  <property name="text">
+                   <string>Switch on all objects</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="unsoloObjects">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Disable solo for all objects</string>
+                  </property>
+                  <property name="statusTip">
+                   <string>Click here to disable solo of all objects of the current score</string>
+                  </property>
+                  <property name="text">
+                   <string>Disable solo for all objects</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="layoutWidget5">
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <property name="spacing">
-               <number>3</number>
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>10</number>
               </property>
               <item>
                <widget class="QLabel" name="viewGroupLabel">
@@ -1887,7 +2091,10 @@ MAPPING</string>
               <item>
                <widget class="QTreeWidget" name="cc2View">
                 <property name="toolTip">
-                 <string>List of objects groups</string>
+                 <string>List of objects group name</string>
+                </property>
+                <property name="statusTip">
+                 <string>Click on a row to highlight and select groups in score. Click on checkboxes to switch on/off and solo groups of the current score</string>
                 </property>
                 <property name="alternatingRowColors">
                  <bool>true</bool>
@@ -1898,15 +2105,82 @@ MAPPING</string>
                 <property name="sortingEnabled">
                  <bool>true</bool>
                 </property>
-                <attribute name="headerVisible">
+                <attribute name="headerShowSortIndicator" stdset="0">
                  <bool>false</bool>
                 </attribute>
+                <column>
+                 <property name="text">
+                  <string>ON/OFF</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>SOLO</string>
+                 </property>
+                </column>
                 <column>
                  <property name="text">
                   <string>GROUPS</string>
                  </property>
                 </column>
                </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <property name="spacing">
+                 <number>15</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="unmuteGroups">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Switch on all groups</string>
+                  </property>
+                  <property name="statusTip">
+                   <string>Click here to switch on of all objects of the current score</string>
+                  </property>
+                  <property name="text">
+                   <string>Switch on all groups</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="unsoloGroups">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Disable solo for all groups</string>
+                  </property>
+                  <property name="statusTip">
+                   <string>Click here to disable solo of all groups of the current score</string>
+                  </property>
+                  <property name="text">
+                   <string>Disable solo for all groups</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
@@ -1923,14 +2197,17 @@ MAPPING</string>
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Z-LAYERS FROM</string>
+               <string>Z-RANGE FROM</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="viewZStartSpin">
               <property name="toolTip">
-               <string>Only display objects where Z-value is included in range</string>
+               <string>Z-range values</string>
+              </property>
+              <property name="statusTip">
+               <string>Change here the minimum displayable Z-value. Objects with a lower Z values will not be displayed.</string>
               </property>
               <property name="minimum">
                <double>-9999.000000000000000</double>
@@ -1959,7 +2236,10 @@ MAPPING</string>
             <item>
              <widget class="QDoubleSpinBox" name="viewZEndSpin">
               <property name="toolTip">
-               <string>Only display objects where Z-value is included in range</string>
+               <string>Z-range values</string>
+              </property>
+              <property name="statusTip">
+               <string>Change here the maximum displayable Z-value. Objects with a higher Z values will not be displayed.</string>
               </property>
               <property name="minimum">
                <double>-9999.000000000000000</double>
@@ -1975,9 +2255,67 @@ MAPPING</string>
            </layout>
           </item>
           <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QLabel" name="followIdLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>CAMERA FOLLOWS OBJECT ID</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="followId">
+              <property name="minimumSize">
+               <size>
+                <width>60</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>60</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Camera Follow ID</string>
+              </property>
+              <property name="statusTip">
+               <string>Type here the ID of the object that the camera will follow</string>
+              </property>
+              <property name="maximum">
+               <number>999999</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
            <widget class="QCheckBox" name="viewCurveOpacityCheck">
             <property name="toolTip">
-             <string>Display/hide curves where cursors are steady or invisible</string>
+             <string>Light off unused curves</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to light on/off curves on which no cursor are running</string>
             </property>
             <property name="styleSheet">
              <string notr="true">font: 10px;</string>
@@ -2051,6 +2389,12 @@ MAPPING</string>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="toolTip">
+                 <string>Sent messages</string>
+                </property>
+                <property name="statusTip">
+                 <string>Logs all the sent messages (will slow down IanniX if kept on-screen)</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">font: 11px &quot;Lucida Console&quot;, &quot;Monaco&quot;;</string>
                 </property>
@@ -2084,6 +2428,12 @@ MAPPING</string>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="toolTip">
+                 <string>Received messages</string>
+                </property>
+                <property name="statusTip">
+                 <string>Logs all the received messages (will slow down IanniX if kept on-screen)</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">font: 11px &quot;Lucida Console&quot;, &quot;Monaco&quot;;</string>
                 </property>
@@ -2112,7 +2462,7 @@ MAPPING</string>
              </widget>
             </item>
             <item>
-             <layout class="QGridLayout" name="gridLayout" columnstretch="1,1,1">
+             <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0">
               <property name="topMargin">
                <number>5</number>
               </property>
@@ -2121,6 +2471,18 @@ MAPPING</string>
               </property>
               <item row="2" column="0">
                <widget class="QLabel" name="oscInPortLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>OSC IN PORT</string>
                 </property>
@@ -2138,7 +2500,10 @@ MAPPING</string>
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string/>
+                 <string>OSC in port</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the OSC in port number</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2153,18 +2518,20 @@ MAPPING</string>
               </item>
               <item row="3" column="0">
                <widget class="QLabel" name="udpInPortLabel">
-                <property name="text">
-                 <string>RAW UDP PORT</string>
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
                 </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
                 </property>
-               </widget>
-              </item>
-              <item row="9" column="0">
-               <widget class="QLabel" name="serialInPortLabel">
                 <property name="text">
-                 <string>SERIAL PORT</string>
+                 <string>RAW UDP IN PORT</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2173,6 +2540,18 @@ MAPPING</string>
               </item>
               <item row="7" column="0">
                <widget class="QLabel" name="transportMessageLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>TRANSPORT
 MESSAGE</string>
@@ -2190,6 +2569,12 @@ MESSAGE</string>
                   <height>16777215</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Raw UDP in port</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the raw UDP in port number</string>
+                </property>
                 <property name="minimum">
                  <number>1024</number>
                 </property>
@@ -2198,15 +2583,20 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="9" column="1" colspan="2">
-               <widget class="QLineEdit" name="serialInPortEdit">
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-               </widget>
-              </item>
               <item row="8" column="0">
                <widget class="QLabel" name="syncMessageLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>SYNC
 MESSAGE</string>
@@ -2218,6 +2608,12 @@ MESSAGE</string>
               </item>
               <item row="8" column="1" colspan="2">
                <widget class="QLineEdit" name="syncMessageEdit">
+                <property name="toolTip">
+                 <string>Sync message</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the message that will be sent when clicking on &quot;Sync&quot;</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
@@ -2228,6 +2624,18 @@ MESSAGE</string>
               </item>
               <item row="6" column="0">
                <widget class="QLabel" name="bundleMessageLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>MAKE OSC
 BUNDLE ON</string>
@@ -2239,6 +2647,12 @@ BUNDLE ON</string>
               </item>
               <item row="6" column="1">
                <widget class="QLineEdit" name="bundleMessageEdit">
+                <property name="toolTip">
+                 <string>OSC bundle address</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the IP address number associated to bundled messages. All OSC messages using this IP/port will be bundled.</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
@@ -2258,6 +2672,12 @@ BUNDLE ON</string>
                   <height>16777215</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>OSC bundle port</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the port number associated to bundled messages. All OSC messages using this IP/port will be bundled.</string>
+                </property>
                 <property name="minimum">
                  <number>1024</number>
                 </property>
@@ -2268,6 +2688,18 @@ BUNDLE ON</string>
               </item>
               <item row="4" column="0">
                <widget class="QLabel" name="httpInPortLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>HTTP IN PORT</string>
                 </property>
@@ -2284,6 +2716,12 @@ BUNDLE ON</string>
                   <height>16777215</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>HTTP in port</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the HTTP in port number</string>
+                </property>
                 <property name="minimum">
                  <number>1024</number>
                 </property>
@@ -2294,6 +2732,12 @@ BUNDLE ON</string>
               </item>
               <item row="7" column="1" colspan="2">
                <widget class="QLineEdit" name="transportMessageEdit">
+                <property name="toolTip">
+                 <string>Transport message</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the message that will be sent when playback status changed (play, pause, fast rewind)</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
@@ -2304,9 +2748,21 @@ BUNDLE ON</string>
               </item>
               <item row="5" column="0">
                <widget class="QLabel" name="tcpInPortLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>TCP/XML
-SERVER PORT</string>
+SERVER IN PORT</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2320,6 +2776,12 @@ SERVER PORT</string>
                   <width>60</width>
                   <height>16777215</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>TCP/XML Server in port</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the TCP/XML Server in port number</string>
                 </property>
                 <property name="minimum">
                  <number>1024</number>
@@ -2344,6 +2806,18 @@ SERVER PORT</string>
               </item>
               <item row="0" column="0">
                <widget class="QLabel" name="ipOutLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>DEFAULT IP
 (ALIAS IP_OUT)</string>
@@ -2355,6 +2829,12 @@ SERVER PORT</string>
               </item>
               <item row="0" column="1">
                <widget class="QLineEdit" name="ipOutEdit">
+                <property name="toolTip">
+                 <string>Default IP address</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the default IP address used by messages containing the keyword ip_out</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
@@ -2368,6 +2848,18 @@ SERVER PORT</string>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="midiOutLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>DEFAULT MIDI OUT
 (ALIAS MIDI_OUT)</string>
@@ -2378,7 +2870,49 @@ SERVER PORT</string>
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QComboBox" name="midiOutCombo"/>
+               <widget class="QComboBox" name="midiOutCombo">
+                <property name="toolTip">
+                 <string>Default MIDI device</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the default MIDI device used by messages containing the keyword midi_out</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLabel" name="serialInPortLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>SERIAL PORT</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1" colspan="2">
+               <widget class="QLineEdit" name="serialInPortEdit">
+                <property name="toolTip">
+                 <string>Serial port address</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the configuration of your serial port (syntax : port name:baud rate:data bits:parity:stop bits:flow control)</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -2392,6 +2926,12 @@ SERVER PORT</string>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <widget class="QLabel" name="mouseLabel">
+          <property name="toolTip">
+           <string>Mouse position</string>
+          </property>
+          <property name="statusTip">
+           <string>Mouse current position on score</string>
+          </property>
           <property name="styleSheet">
            <string notr="true">font: 10px &quot;Arial&quot;;
 </string>
@@ -2403,6 +2943,12 @@ SERVER PORT</string>
         </item>
         <item>
          <widget class="QLabel" name="zoomLabel">
+          <property name="toolTip">
+           <string>Zoom</string>
+          </property>
+          <property name="statusTip">
+           <string>Score current zoom</string>
+          </property>
           <property name="styleSheet">
            <string notr="true">font: 10px &quot;Arial&quot;;
 </string>
@@ -2462,7 +3008,6 @@ SERVER PORT</string>
   <tabstop>cc2View</tabstop>
   <tabstop>viewZStartSpin</tabstop>
   <tabstop>viewZEndSpin</tabstop>
-  <tabstop>viewCurveOpacityCheck</tabstop>
   <tabstop>oscSendText</tabstop>
   <tabstop>oscReceiveText</tabstop>
   <tabstop>ipOutEdit</tabstop>
@@ -2519,8 +3064,8 @@ SERVER PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>110</x>
-     <y>86</y>
+     <x>336</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>72</x>
@@ -2535,8 +3080,8 @@ SERVER PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>110</x>
-     <y>100</y>
+     <x>227</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2552,7 +3097,7 @@ SERVER PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>211</x>
-     <y>567</y>
+     <y>535</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>
@@ -2568,7 +3113,7 @@ SERVER PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>345</x>
-     <y>567</y>
+     <y>535</y>
     </hint>
     <hint type="destinationlabel">
      <x>237</x>
@@ -2903,7 +3448,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
+     <x>259</x>
      <y>582</y>
     </hint>
     <hint type="destinationlabel">
@@ -3095,7 +3640,7 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
+     <x>259</x>
      <y>582</y>
     </hint>
     <hint type="destinationlabel">
@@ -3191,7 +3736,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
+     <x>259</x>
      <y>582</y>
     </hint>
     <hint type="destinationlabel">
@@ -3271,7 +3816,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
+     <x>259</x>
      <y>549</y>
     </hint>
     <hint type="destinationlabel">
@@ -3287,7 +3832,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
+     <x>259</x>
      <y>549</y>
     </hint>
     <hint type="destinationlabel">
@@ -3367,7 +3912,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>274</x>
+     <x>259</x>
      <y>479</y>
     </hint>
     <hint type="destinationlabel">
@@ -3383,7 +3928,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>274</x>
+     <x>259</x>
      <y>479</y>
     </hint>
     <hint type="destinationlabel">
@@ -3399,8 +3944,8 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>326</x>
-     <y>475</y>
+     <x>344</x>
+     <y>479</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
@@ -3431,7 +3976,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
+     <x>259</x>
      <y>514</y>
     </hint>
     <hint type="destinationlabel">
@@ -3447,7 +3992,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
+     <x>259</x>
      <y>514</y>
     </hint>
     <hint type="destinationlabel">
@@ -3463,8 +4008,8 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>172</x>
-     <y>439</y>
+     <x>212</x>
+     <y>444</y>
     </hint>
     <hint type="destinationlabel">
      <x>-243</x>
@@ -3479,7 +4024,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>274</x>
+     <x>259</x>
      <y>284</y>
     </hint>
     <hint type="destinationlabel">
@@ -3495,7 +4040,7 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>274</x>
+     <x>259</x>
      <y>284</y>
     </hint>
     <hint type="destinationlabel">
@@ -3511,8 +4056,8 @@ SERVER PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>173</x>
-     <y>318</y>
+     <x>256</x>
+     <y>323</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -3527,8 +4072,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>295</x>
-     <y>531</y>
+     <x>337</x>
+     <y>537</y>
     </hint>
     <hint type="destinationlabel">
      <x>83</x>
@@ -3543,8 +4088,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>280</x>
-     <y>526</y>
+     <x>337</x>
+     <y>537</y>
     </hint>
     <hint type="destinationlabel">
      <x>75</x>
@@ -3559,8 +4104,8 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>283</x>
-     <y>550</y>
+     <x>337</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
      <x>261</x>
@@ -3575,12 +4120,92 @@ SERVER PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>324</x>
-     <y>549</y>
+     <x>337</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
      <x>570</x>
      <y>657</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unmuteObjects</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>283</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>55</x>
+     <y>640</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unsoloObjects</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>345</x>
+     <y>283</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>647</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unsoloGroups</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>345</x>
+     <y>494</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>649</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unmuteGroups</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>494</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>78</x>
+     <y>-62</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>followId</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>553</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>34</x>
+     <y>-87</y>
     </hint>
    </hints>
   </connection>
@@ -3602,5 +4227,6 @@ SERVER PORT</string>
   <slot>actionColor()</slot>
   <slot>actionCC2()</slot>
   <slot>actionInfoID()</slot>
+  <slot>actionCCButton()</slot>
  </slots>
 </ui>

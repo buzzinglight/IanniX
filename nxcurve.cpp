@@ -24,7 +24,6 @@ Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
 NxCurve::NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
     NxObject(parent, ccParentItem, _renderOptions) {
     calcBoundingRect();
-    glListCurveRecreate = true;
     glListCurve = glGenLists(1);
     setSize(1.2);
     setLineFactor(1);
@@ -89,8 +88,8 @@ void NxCurve::paint() {
         }
 
         //Draw
-        if(glListCurveRecreate) {
-            glNewList(glListCurve, GL_COMPILE);
+        if(glListRecreate) {
+            glNewList(glListCurve, GL_COMPILE_AND_EXECUTE);
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
             glLineStipple(lineFactor, lineStipple);
@@ -132,9 +131,10 @@ void NxCurve::paint() {
             }
             glDisable(GL_LINE_STIPPLE);
             glEndList();
-            glListCurveRecreate = false;
+            glListRecreate = false;
         }
-        glCallList(glListCurve);
+        else
+            glCallList(glListCurve);
 
         //Selection
         if(selected) {
@@ -241,7 +241,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
 }
 
 void NxCurve::removePointAt(quint16 index) {
-    glListCurveRecreate = true;
+    glListRecreate = true;
     if((pathPoints.count() > 2) && (index < pathPoints.count()))
         pathPoints.remove(index);
 
@@ -272,7 +272,7 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, bool s
     return setPointAt(index, point, NxPoint(), NxPoint(), smooth, boundingRectCalculation);
 }
 const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation) {
-    glListCurveRecreate = true;
+    glListRecreate = true;
     NxCurvePoint pointStruct;
     pointStruct.setX(point.x());
     pointStruct.setY(point.y());
@@ -440,6 +440,10 @@ void NxCurve::translate(const NxPoint & point) {
     for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++)
         setPointAt(indexPoint, getPathPointsAt(indexPoint) + point, getPathPointsAt(indexPoint).c1, getPathPointsAt(indexPoint).c2, getPathPointsAt(indexPoint).smooth, false);
     calcBoundingRect();
+}
+
+void NxCurve::translatePoint(quint16 indexPoint, const NxPoint &point) {
+    setPointAt(indexPoint, getPathPointsAt(indexPoint) + point, getPathPointsAt(indexPoint).c1, getPathPointsAt(indexPoint).c2, getPathPointsAt(indexPoint).smooth, false);
 }
 
 
