@@ -191,7 +191,7 @@ signals:
     void actionUnsoloObjects();
     void actionUnmuteGroups();
     void actionUnmuteObjects();
-    void actionFollowID(quint16);
+    void actionFollowID(qint16);
 
 private:
     UiRender *render;

@@ -43,6 +43,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionRedo, SIGNAL(triggered()), ui->render, SLOT(actionRedo()));
     connect(ui->actionUndo, SIGNAL(triggered()), ui->render, SLOT(actionUndo()));
     connect(ui->actionCopy, SIGNAL(triggered()), ui->render, SLOT(actionCopy()));
+    connect(ui->actionCopyScript, SIGNAL(triggered()), ui->render, SLOT(actionCopyScript()));
     connect(ui->actionPaste, SIGNAL(triggered()), ui->render, SLOT(actionPaste()));
     connect(ui->actionDuplicate, SIGNAL(triggered()), ui->render, SLOT(actionDuplicate()));
     connect(ui->actionCut, SIGNAL(triggered()), ui->render, SLOT(actionCut()));
@@ -74,7 +75,9 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionDrawTriggers, SIGNAL(triggered()), SLOT(actionDrawTriggers()));
     connect(ui->actionAddFreeCursor, SIGNAL(triggered()), SLOT(actionAddFreeCursor()));
     connect(ui->actionAddCircleCurve, SIGNAL(triggered()), SLOT(actionCircleCurve()));
-    connect(ui->actionSnapGrid, SIGNAL(triggered()), SLOT(actionSnapGrid()));
+    connect(ui->actionSnapXGrid, SIGNAL(triggered()), SLOT(actionSnapXGrid()));
+    connect(ui->actionSnapYGrid, SIGNAL(triggered()), SLOT(actionSnapYGrid()));
+    connect(ui->actionSnapZGrid, SIGNAL(triggered()), SLOT(actionSnapZGrid()));
     connect(ui->actionShowEditor, SIGNAL(triggered()), SLOT(actionShowEditor()));
     connect(ui->actionReloadScript, SIGNAL(triggered()), SLOT(actionReloadScript()));
 

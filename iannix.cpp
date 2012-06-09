@@ -32,6 +32,18 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     oscBundlePort = 0;
     scriptDir = QDir::current();
     cpu = new NxCpu(this);
+    baseDocumentDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QString(QDir::separator()) + "IanniX" + QString(QDir::separator());
+
+    QFileInfo newScriptDestination = QFileInfo(baseDocumentDir + "New Script.nxscript");
+    if(!newScriptDestination.exists()) {
+        QDir().mkpath(newScriptDestination.absolutePath());
+        QFile::copy(QFileInfo("./Project/New Script Template.nxscript").absoluteFilePath(), newScriptDestination.absoluteFilePath());
+    }
+    QFileInfo newScoreDestination  = QFileInfo(baseDocumentDir + "New Score.nxscore");
+    if(!newScoreDestination.exists()) {
+        QFile::copy(QFileInfo("./Project/New Score Template.nxscore").absoluteFilePath(),  newScoreDestination.absoluteFilePath());
+        QDir().mkpath(newScoreDestination.absolutePath());
+    }
 
     splash = new UiSplash(0);
     splash->show();
@@ -59,7 +71,6 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteCircleCurve()), SLOT(actionCircleCurve()));
     connect(view, SIGNAL(actionRouteGridChange(qreal)), SLOT(actionGridChange(qreal)));
     connect(view, SIGNAL(actionRouteGridOpacityChange(qreal)), SLOT(actionGridOpacityChange(qreal)));
-    connect(view, SIGNAL(actionRouteSnapGrid()), SLOT(actionSnapGrid()));
     connect(view, SIGNAL(actionRouteShowEditor()), SLOT(actionShowEditor()));
     connect(view, SIGNAL(actionRouteReloadScript()), SLOT(actionReloadScript()));
     connect(view, SIGNAL(actionRouteCloseEvent(QCloseEvent*)), SLOT(actionCloseEvent(QCloseEvent*)));
@@ -127,7 +138,10 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(render, SIGNAL(editingStart(NxPoint)), SLOT(editingStart(NxPoint)));
     connect(render, SIGNAL(editingMove(NxPoint,bool)), SLOT(editingMove(NxPoint,bool)));
     connect(render, SIGNAL(escFullscreen()), view, SLOT(escFullscreen()));
-    connect(inspector, SIGNAL(actionFollowID(quint16)), render, SLOT(actionFollowID(quint16)));
+    connect(view, SIGNAL(actionRouteSnapXGrid()), render, SLOT(actionSnapXGrid()));
+    connect(view, SIGNAL(actionRouteSnapYGrid()), render, SLOT(actionSnapYGrid()));
+    connect(view, SIGNAL(actionRouteSnapZGrid()), render, SLOT(actionSnapZGrid()));
+    connect(inspector, SIGNAL(actionFollowID(qint16)), render, SLOT(actionFollowID(qint16)));
     render->zoom();
 
     //Message script engine
@@ -243,7 +257,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("updatePeriod", 1);
 
     if((forceSettings) || (!settings.childKeys().contains("bundleHost")))
-        settings.setValue("bundleHost", "127.0.0.1");
+        settings.setValue("bundleHost", "127.000.000.001");
     if((forceSettings) || (!settings.childKeys().contains("bundlePort")))
         settings.setValue("bundlePort", "57121");
 
@@ -377,7 +391,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 void IanniX::readyToStart() {
     qDebug("Ready to start!");
     //Projet par défault
-    loadProject("Project/root.root");
+    loadProject(baseDocumentDir + "root.root");
     actionFast_rewind();
 
     startTimer(1000);
@@ -1072,7 +1086,7 @@ void IanniX::actionProjectFilesContext(const QPoint & point) {   ///CG///
                 }
                 QDir examplesDir("./Examples/");
                 QDir libDir("./Tools/");
-                QDir projectDir("./Project/");
+                QDir projectDir(baseDocumentDir);
                 fileWatcherFolder(QStringList() << "*.nxscript" << "*.nxstyle", libDir, libScript, false);
                 fileWatcherFolder(QStringList() << "*.nxscript" << "*.nxstyle", examplesDir, exampleScript, false);
                 fileWatcherFolder(QStringList() << "*.nxscript" << "*.nxstyle", projectDir, projectScript, false);
@@ -1161,7 +1175,7 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
                 }
                 QDir examplesDir("./Examples/");
                 QDir libDir("./Tools/");
-                QDir projectDir("./Project/");
+                QDir projectDir(baseDocumentDir);
                 fileWatcherFolder(QStringList() << "*.nxscript" << "*.nxstyle", libDir, libScript, false);
                 fileWatcherFolder(QStringList() << "*.nxscript" << "*.nxstyle", examplesDir, exampleScript, false);
                 fileWatcherFolder(QStringList() << "*.nxscript" << "*.nxstyle", projectDir, projectScript, false);
@@ -1996,9 +2010,6 @@ void IanniX::actionGridOpacityChange(qreal val) {
         render->getRenderOptions()->colors["axis"] = QColor(  0,   0,   0,  13*val);
     }
 }
-void IanniX::actionSnapGrid() {
-    render->actionSnapGrid();
-}
 void IanniX::actionShowEditor() {
     editor->show();
 }
@@ -2149,7 +2160,6 @@ void IanniX::actionRedo() {
     currentDocument->popSnapshot(true);
 }
 void IanniX::actionSync() {
-    qDebug("ICI");
     QStringList commands = currentDocument->serialize(render->getRenderOptions()).split(COMMAND_END);
     foreach(const QString & command, commands)
         sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), command);

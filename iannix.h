@@ -56,6 +56,7 @@ class IanniX : public NxObjectFactoryInterface, public NxObjectDispatchProperty 
 
 private:
     QDir scriptDir;
+    QString baseDocumentDir;
 public:
     explicit IanniX(QObject *parent, bool forceSettings);
     void readyToStart();
@@ -261,7 +262,6 @@ public slots:
     void editingMove(const NxPoint &, bool add);
     void actionGridChange(qreal val);
     void actionGridOpacityChange(qreal val);
-    void actionSnapGrid();
     void actionShowEditor();
     void actionReloadScript();
     void actionCloseEvent(QCloseEvent *event);

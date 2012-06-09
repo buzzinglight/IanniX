@@ -58,7 +58,9 @@ public slots:
     void actionDrawTriggers()     { emit(actionRouteDrawTriggers()); }
     void actionAddFreeCursor()    { emit(actionRouteAddFreeCursor()); }
     void actionCircleCurve()      { emit(actionRouteCircleCurve()); }
-    void actionSnapGrid()         { emit(actionRouteSnapGrid()); }
+    void actionSnapXGrid()        { emit(actionRouteSnapXGrid()); }
+    void actionSnapYGrid()        { emit(actionRouteSnapYGrid()); }
+    void actionSnapZGrid()        { emit(actionRouteSnapZGrid()); }
     void actionShowEditor()       { emit(actionRouteShowEditor()); }
     void actionReloadScript()     { emit(actionRouteReloadScript()); }
     void actionSelectionModeChange();
@@ -99,7 +101,9 @@ signals:
     void actionRouteGridChange(qreal);
     void actionRouteGridOpacityChange(qreal);
     void actionRouteSelectionModeChange(bool,bool,bool);
-    void actionRouteSnapGrid();
+    void actionRouteSnapXGrid();
+    void actionRouteSnapYGrid();
+    void actionRouteSnapZGrid();
     void actionRouteShowEditor();
     void actionRouteReloadScript();
     void actionRouteAbout();

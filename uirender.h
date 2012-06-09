@@ -57,11 +57,11 @@ private:
     NxPoint rotationDrag, translationDrag;
     qreal scale, scaleDest;
     bool colorTheme;
-    quint16 followId;
+    qint16 followId;
     bool firstLaunch;
 public:
-    inline void setFollowId(quint16 _followId) { followId = _followId; }
-    inline quint16 getFollowId() { return followId; }
+    inline void setFollowId(qint16 _followId) { followId = _followId; }
+    inline qint16 getFollowId() { return followId; }
 
     inline QList<NxObject*> *getSelection() {
         return &selection;
@@ -76,9 +76,9 @@ public:
         if(editing)
             setCursor(Qt::CrossCursor);
 #ifdef Q_OS_MAC
-        setStatusTip(tr("Click on score to add points. Double-click or press ESC to end your curve. After, Double-click on a curve to add a point, Command+click to remove it, Double-click on a point to enable/disable smoothing."));
+        setStatusTip(tr("Click on score to add points. Double-click or press ESC to end your curve. After, Double-click on a curve to add a point, Command+click to remove it, Double-click on a point to enable/disable smoothing. Shift+double-click to resample curve."));
 #else
-        setStatusTip(tr("Click on score to add points. Double-click or press ESC to end your curve. After, Double-click on a curve to add a point, Control+click to remove it, Double-click on a point to enable/disable smoothing."));
+        setStatusTip(tr("Click on score to add points. Double-click or press ESC to end your curve. After, Double-click on a curve to add a point, Control+click to remove it, Double-click on a point to enable/disable smoothing. Shift+double-click to resample curve."));
 #endif
     }
     inline EditingMode getEditingMode() const {
@@ -148,7 +148,7 @@ public:
 
 private:
     NxPoint mousePressedRawPos, mousePressedAreaPos, mousePressedAreaPosNoCenter, mousePressedAxisCenter;
-    bool mousePressed, mouseCommand, mouseShift, mouseObjectDrag, mouseSnap;
+    bool mousePressed, mouseCommand, mouseShift, mouseObjectDrag, mouseSnapX, mouseSnapY, mouseSnapZ;
     bool canObjectDrag;
     qreal pinchValue;
 protected:
@@ -207,13 +207,16 @@ public slots:
     void actionImportBackground(QString val)            { emit(actionRouteImportBackground(val)); }
     void actionImportText(QString val, QString val2)    { emit(actionRouteImportText(val, val2)); }
     void actionCopy();
+    void actionCopyScript();
     void actionPaste();
     void actionDuplicate();
     void actionCut();
     void actionSelect_all();
     void actionDelete();
-    void actionSnapGrid();
-    void actionFollowID(quint16);
+    void actionSnapXGrid();
+    void actionSnapYGrid();
+    void actionSnapZGrid();
+    void actionFollowID(qint16);
 
 signals:
     void actionRouteNew();

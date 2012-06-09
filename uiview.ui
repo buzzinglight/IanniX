@@ -53,7 +53,7 @@ QToolButton:pressed, QToolButton:checked {
 
 QStatusBar {
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
-	color: rgb(220, 220, 220);
+	color:rgb(0, 187, 255);
 	font: 10px;
 	font: &quot;Arial&quot;;
 }</string>
@@ -85,6 +85,7 @@ QStatusBar {
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
     <addaction name="actionCopy"/>
+    <addaction name="actionCopyScript"/>
     <addaction name="actionPaste"/>
     <addaction name="actionDuplicate"/>
     <addaction name="actionCut"/>
@@ -151,7 +152,8 @@ QStatusBar {
     <addaction name="actionToggle_Transport"/>
     <addaction name="separator"/>
     <addaction name="actionGrid"/>
-    <addaction name="actionSnapGrid"/>
+    <addaction name="actionSnapXGrid"/>
+    <addaction name="actionSnapYGrid"/>
     <addaction name="menuGrid_size"/>
     <addaction name="separator"/>
     <addaction name="actionZoom_in"/>
@@ -236,7 +238,8 @@ QStatusBar {
    <addaction name="actionToggleLabel"/>
    <addaction name="separator"/>
    <addaction name="actionGrid"/>
-   <addaction name="actionSnapGrid"/>
+   <addaction name="actionSnapXGrid"/>
+   <addaction name="actionSnapYGrid"/>
    <addaction name="separator"/>
    <addaction name="actionAllow_triggers_selection"/>
    <addaction name="actionAllow_curves_selection"/>
@@ -730,16 +733,16 @@ QStatusBar {
     <string>Click here to display IanniX help in your browser</string>
    </property>
   </action>
-  <action name="actionSnapGrid">
+  <action name="actionSnapXGrid">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="IanniX.qrc">
-     <normaloff>:/actions/res_icon_grid_snap.png</normaloff>:/actions/res_icon_grid_snap.png</iconset>
+     <normaloff>:/actions/res_icon_grid_snapX.png</normaloff>:/actions/res_icon_grid_snapX.png</iconset>
    </property>
    <property name="text">
-    <string>Snap to grid</string>
+    <string>Snap to X-grid</string>
    </property>
    <property name="statusTip">
     <string>Click here to snap actions (objects position, curve points…) to grid</string>
@@ -973,6 +976,53 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to allow/forbid the selection of cursors (on hover, on marquee selection, on select all actions)</string>
+   </property>
+  </action>
+  <action name="actionSnapYGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_grid_snapY.png</normaloff>:/actions/res_icon_grid_snapY.png</iconset>
+   </property>
+   <property name="text">
+    <string>Snap to Y-grid</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to snap actions (objects position, curve points…) to grid</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+H</string>
+   </property>
+  </action>
+  <action name="actionSnapZGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/actions/res_icon_grid_snap.png</normaloff>:/actions/res_icon_grid_snap.png</iconset>
+   </property>
+   <property name="text">
+    <string>Snap to grid</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to snap actions (objects position, curve points…) to grid</string>
+   </property>
+  </action>
+  <action name="actionCopyScript">
+   <property name="text">
+    <string>Copy as a script</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy as a script</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to copy selected objects in clipboard as script commands</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+C</string>
    </property>
   </action>
  </widget>

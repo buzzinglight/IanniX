@@ -43,7 +43,9 @@ UiRender::UiRender(QWidget *parent) :
     mousePressed = false;
     mouseShift = false;
     mouseObjectDrag = false;
-    mouseSnap = false;
+    mouseSnapX = false;
+    mouseSnapY = false;
+    mouseSnapZ = false;
     selectedHover = 0;
     scale = 1;
     scaleDest = 3;
@@ -463,9 +465,13 @@ void UiRender::mousePressEvent(QMouseEvent *event) {
     //Mouse position
     mousePressedAreaPosNoCenter = NxPoint((event->posF().x() - (qreal)size().width()/2) / (qreal)size().width() * renderOptions->axisArea.width(), (event->posF().y() - (qreal)size().height()/2) / (qreal)size().height() * renderOptions->axisArea.height());
     mousePressedAreaPos = mousePressedAreaPosNoCenter - renderOptions->axisCenter;
-    if(mouseSnap) {
-        mousePressedAreaPosNoCenter = NxPoint(qRound(mousePressedAreaPosNoCenter.x() / renderOptions->axisGrid) * renderOptions->axisGrid, qRound(mousePressedAreaPosNoCenter.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
-        mousePressedAreaPos = NxPoint(qRound(mousePressedAreaPos.x() / renderOptions->axisGrid) * renderOptions->axisGrid, qRound(mousePressedAreaPos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
+    if(mouseSnapX) {
+        mousePressedAreaPosNoCenter.setX(qRound(mousePressedAreaPosNoCenter.x() / renderOptions->axisGrid) * renderOptions->axisGrid);
+        mousePressedAreaPos.setX(qRound(mousePressedAreaPos.x() / renderOptions->axisGrid) * renderOptions->axisGrid);
+    }
+    if(mouseSnapY) {
+        mousePressedAreaPosNoCenter.setY(qRound(mousePressedAreaPosNoCenter.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
+        mousePressedAreaPos.setY(qRound(mousePressedAreaPos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
     }
 
     mousePressed = true;
@@ -601,8 +607,10 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
     NxPoint mousePos = mousePosNoCenter - renderOptions->axisCenter, mousePosBackup = mousePos;
     NxPoint deltaMouseRaw = NxPoint(event->posF().x(), event->posF().y()) - mousePressedRawPos;
 
-    if(mouseSnap)
-        mousePos = NxPoint(qRound(mousePos.x() / renderOptions->axisGrid) * renderOptions->axisGrid, qRound(mousePos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
+    if(mouseSnapX)
+        mousePos.setX(qRound(mousePos.x() / renderOptions->axisGrid) * renderOptions->axisGrid);
+    if(mouseSnapY)
+        mousePos.setY(qRound(mousePos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
     bool noSelection = true;
     emit(mousePosChanged(mousePos));
 
@@ -765,6 +773,16 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
         emit(editingStop());
         editing = false;
     }
+    else if((selectedHover) && (event->modifiers() & Qt::ShiftModifier) && (selectedHover->getType() == ObjectsTypeCurve)) {
+        bool ok = false;
+        NxCurve *curve = (NxCurve*)selectedHover;
+        quint16 nbPoints = QInputDialog::getInt(0, tr("IanniX Curve Resample"), tr("Number of points:"), 50, 0, 32767 , 1, &ok);
+        if(ok) {
+            selectedHover = 0;
+            factory->pushSnapshot();
+            curve->resample(nbPoints);
+        }
+    }
     else if((selectedHover) && (renderOptions->allowSelection) && (selectedHover->getType() == ObjectsTypeCurve)) {
         NxCurve *curve = (NxCurve*)selectedHover;
         curve->addMousePointAt(mousePressedAreaPos, mouseControl);
@@ -909,7 +927,7 @@ void UiRender::selectionAdd(NxObject *object) {
 }
 
 void UiRender::zoom() {
-    renderOptions->zoomLinearDest = qMax((qreal)0.05, renderOptions->zoomValue / 100.F);
+    renderOptions->zoomLinearDest = qMax((qreal)0.01, renderOptions->zoomValue / 100.F);
     emit(mouseZoomChanged(100.0F / renderOptions->zoomLinearDest));
 }
 void UiRender::zoom(qreal axisZoom) {
@@ -934,6 +952,19 @@ void UiRender::actionCopy() {
         if(object->getType() != ObjectsTypeCursor)
             copy += object->serialize() + COMMAND_END;
 
+    QApplication::clipboard()->setText(copy);
+}
+void UiRender::actionCopyScript() {
+    QStringList commands;
+    foreach(NxObject *object, selection)
+        if(object->getType() != ObjectsTypeCursor) {
+            QStringList commandsStr = object->serialize().split(COMMAND_END);
+            commands << commandsStr;
+        }
+
+    QString copy = "";
+    foreach(const QString &command, commands)
+        copy += "run(\"" + command + "\");\n";
     QApplication::clipboard()->setText(copy);
 }
 void UiRender::actionPaste() {
@@ -1005,10 +1036,16 @@ void UiRender::actionDelete() {
         factory->execute(command);
 }
 
-void UiRender::actionSnapGrid() {
-    mouseSnap = !mouseSnap;
+void UiRender::actionSnapXGrid() {
+    mouseSnapX = !mouseSnapX;
+}
+void UiRender::actionSnapYGrid() {
+    mouseSnapY = !mouseSnapY;
+}
+void UiRender::actionSnapZGrid() {
+    mouseSnapZ = !mouseSnapZ;
 }
 
-void UiRender::actionFollowID(quint16 _followId) {
+void UiRender::actionFollowID(qint16 _followId) {
     followId = _followId;
 }

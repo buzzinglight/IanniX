@@ -23,7 +23,6 @@
         <file>res_appicon_play.png</file>
     </qresource>
     <qresource prefix="/actions">
-        <file>res_icon_grid_snap.png</file>
         <file>res_icon_curveCircle.png</file>
         <file>res_icon_label.png</file>
         <file>res_icon_lock.png</file>
@@ -37,5 +36,7 @@
         <file>res_icon_curveFree.png</file>
         <file>res_icon_curvePoint.png</file>
         <file>res_icon_trigger.png</file>
+        <file>res_icon_grid_snapX.png</file>
+        <file>res_icon_grid_snapY.png</file>
     </qresource>
 </RCC>

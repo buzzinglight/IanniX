@@ -51,11 +51,11 @@ public:
     ~NxCurve();
 
 private:
-    qreal pathLength;
-    QVector<NxObject*> cursors;
-    QVector<NxCurvePoint> pathPoints;
-    qint16 selectedPathPointPoint, selectedPathPointControl1, selectedPathPointControl2;
     CurveType curveType;
+    qreal pathLength;
+    QList<NxObject*> cursors;
+    QList<NxCurvePoint> pathPoints;
+    qint16 selectedPathPointPoint, selectedPathPointControl1, selectedPathPointControl2;
     NxSize ellipseSize;
     GLuint glListCurve;
 public:
@@ -70,6 +70,8 @@ public:
 #endif
     }
     inline quint16 getPathPointsCount() { return pathPoints.count(); }
+
+    void resample(quint16 nbPoints);
 
     void isOnPathPoint(const NxRect & point);
     inline CurveType getCurveType() const {
@@ -113,7 +115,7 @@ public:
     inline const QString getTypeStr() const {
         return "curve";
     }
-    inline const QVector<NxObject*> & getCursors() const {
+    inline const QList<NxObject*> & getCursors() const {
         return cursors;
     }
     inline qreal getMaxOffset() const {
@@ -183,7 +185,7 @@ public:
     inline void removeCursor(NxObject *cursor) {
         qint16 index = cursors.lastIndexOf(cursor);
         if(index >= 0)
-            cursors.remove(index);
+            cursors.removeAt(index);
     }
 
     QString serializeCustom() {

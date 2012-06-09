@@ -28,11 +28,11 @@ UiInspector::UiInspector(QWidget *parent) :
     ui->splitter_2->setStretchFactor(1, 2);
 
     ui->ccView->setColumnWidth(0, 85);
-    ui->ccView->setColumnWidth(1, 45);
-    ui->ccView->setColumnWidth(2, 45);
+    ui->ccView->setColumnWidth(1, 25);
+    ui->ccView->setColumnWidth(2, 25);
     ui->ccView->setColumnWidth(3, 40);
     ui->cc2View->setColumnWidth(0, 45);
-    ui->cc2View->setColumnWidth(1, 45);
+    ui->cc2View->setColumnWidth(1, 25);
 
     render = 0;
     factory = 0;
@@ -43,7 +43,7 @@ UiInspector::UiInspector(QWidget *parent) :
     cursorItem = new QTreeWidgetItem(ui->ccView, QStringList() << "");
     cursorItem->setFlags(Qt::ItemIsEnabled);
 
-    ui->followId->setValue(9999);
+    ui->followId->setValue(-1);
 
     ui->ccView->expandAll();
     ui->ccView->sortByColumn(0, Qt::AscendingOrder);

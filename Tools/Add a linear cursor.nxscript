@@ -9,7 +9,7 @@ function onCreate() {
 	run("setCurve        current lastCurve");
 	run("setSpeed        current 1");
 	run("setPattern      current 0 0 1 0");
-	run("setMessage      current 20, osc://127.0.0.1:57120/cursor collision_curve_id collision_value_x collision_value_y");
+	run("setMessage      current 20, osc://ip_out:57120/cursor collision_curve_id collision_value_x collision_value_y");
 	run("setBoundsSource current -7 7 7 -7");
 	run("setBoundsTarget current 0 1 1 0");
 }

@@ -243,7 +243,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
 void NxCurve::removePointAt(quint16 index) {
     glListRecreate = true;
     if((pathPoints.count() > 2) && (index < pathPoints.count()))
-        pathPoints.remove(index);
+        pathPoints.removeAt(index);
 
     //Length
     calcBoundingRect();
@@ -254,13 +254,13 @@ void NxCurve::shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalc
         qint16 indexPoint;
         if((direction < 0) && (index > 1)) {
             NxPoint ptDelta = pathPoints[index] - pathPoints[index-1];
-            pathPoints.remove(index);
+            pathPoints.removeAt(index);
             for(indexPoint = (index-1) ; indexPoint >= 0 ; indexPoint--)
                 setPointAt(indexPoint, pathPoints[indexPoint] + ptDelta, pathPoints[indexPoint].c1, pathPoints[indexPoint].c2, pathPoints[indexPoint].smooth, false);
         }
         else if((direction >= 0) && (index < pathPoints.count()-1)) {
             NxPoint ptDelta = pathPoints[index] - pathPoints[index+1];
-            pathPoints.remove(index);
+            pathPoints.removeAt(index);
             for(indexPoint = index ; indexPoint < pathPoints.count() ; indexPoint++)
                 setPointAt(indexPoint, pathPoints[indexPoint] + ptDelta, pathPoints[indexPoint].c1, pathPoints[indexPoint].c2, pathPoints[indexPoint].smooth, false);
         }
@@ -623,6 +623,24 @@ qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) {
         }
     }
     return -1;
+}
+
+void NxCurve::resample(quint16 nbPoints) {
+    qreal percentStep = 1.0 / (qreal)nbPoints;
+    QList<NxPoint> pts;
+    for(qreal percent = 0 ; percent <= 1 ; percent += percentStep)
+        pts.append(getPointAt(percent));
+    pathPoints.clear();
+    foreach(const NxPoint &pt, pts) {
+        NxCurvePoint cPt;
+        cPt.setX(pt.x());
+        cPt.setY(pt.y());
+        cPt.setZ(pt.z());
+        pathPoints.append(cPt);
+    }
+    curveType = CurveTypePoints;
+    calcBoundingRect();
+    glListRecreate = true;
 }
 
 void NxCurve::isOnPathPoint(const NxRect & point) {
