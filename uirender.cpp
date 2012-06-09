@@ -778,7 +778,6 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
         NxCurve *curve = (NxCurve*)selectedHover;
         quint16 nbPoints = QInputDialog::getInt(0, tr("IanniX Curve Resample"), tr("Number of points:"), 50, 0, 32767 , 1, &ok);
         if(ok) {
-            selectedHover = 0;
             factory->pushSnapshot();
             curve->resample(nbPoints);
         }
