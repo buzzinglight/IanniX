@@ -66,6 +66,7 @@ UiRender::UiRender(QWidget *parent) :
     renderOptions->paintLabel = true;
     renderOptions->axisGrid = 1;
 
+    defaultStatusTip = tr("Click+move and mouse wheel to navigate/zoom in score. In 3D, Alt+move, Alt+mouse wheel and Alt+double-click to change camera position.");
 
     zoom(100);
 
@@ -97,6 +98,8 @@ void UiRender::setColorTheme(bool _colorTheme) {
         renderOptions->colors["background"]         = QColor(255, 255, 255, 255);
         renderOptions->colors["grid"]               = QColor(255, 255, 255,  23);
         renderOptions->colors["axis"]               = QColor(255, 255, 255,  18);
+        renderOptions->colors["gridSnap"]           = QColor( 90,  25,  15, 255);
+        renderOptions->colors["axisSnap"]           = QColor( 90,  25,  15, 255);
         renderOptions->colors["selection"]          = QColor(255, 255, 255,  40);
         renderOptions->colors["object_selection"]   = QColor(255, 240,  35, 255);
         renderOptions->colors["object_hover"]       = QColor( 35, 255, 165, 255);
@@ -117,6 +120,8 @@ void UiRender::setColorTheme(bool _colorTheme) {
         renderOptions->colors["background"]         = QColor(255, 255, 255, 255);
         renderOptions->colors["grid"]               = QColor(  0,   0,   0,  20);
         renderOptions->colors["axis"]               = QColor(  0,   0,   0,  13);
+        renderOptions->colors["gridSnap"]           = QColor(255, 190, 190, 255);
+        renderOptions->colors["axisSnap"]           = QColor(255, 190, 190, 255);
         renderOptions->colors["selection"]          = QColor(  0,   0,   0,  40);
         renderOptions->colors["object_selection"]   = QColor(  0,  15, 220, 255);
         renderOptions->colors["object_hover"]       = QColor(220,   0,  90, 255);
@@ -243,12 +248,18 @@ void UiRender::paintGL() {
     //With other parameters
     renderOptions->axisAreaSearch.setTopLeft(QPoint(floor(renderOptions->axisArea.topLeft().x() / 10.0F) * 10 - 1, ceil(renderOptions->axisArea.topLeft().y() / 10.0F) * 10 + 1));
     renderOptions->axisAreaSearch.setBottomRight(QPoint(ceil(renderOptions->axisArea.bottomRight().x() / 10.0F) * 10 + 1, floor(renderOptions->axisArea.bottomRight().y() / 10.0F) * 10 - 1));
+
     //Set axis
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(renderOptions->axisArea.left(), renderOptions->axisArea.right(), renderOptions->axisArea.bottom(), renderOptions->axisArea.top(), 50, 650.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    //Clear
+    glClearColor(renderOptions->colors["empty"].redF(), renderOptions->colors["empty"].greenF(), renderOptions->colors["empty"].blueF(), renderOptions->colors["empty"].alphaF());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     //Translation
     renderOptions->axisArea.translate(renderOptions->axisCenter);
 
@@ -282,10 +293,6 @@ void UiRender::paintGL() {
     timePerfRefresh += renderMeasure.elapsed() / 1000.0F;
     timePerfCounter++;
     renderMeasure.start();
-
-    //Clear
-    glClearColor(renderOptions->colors["empty"].redF(), renderOptions->colors["empty"].greenF(), renderOptions->colors["empty"].blueF(), renderOptions->colors["empty"].alphaF());
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if((factory) && (document)) {
         //Background
@@ -368,11 +375,17 @@ void UiRender::paintAxisGrid() {
 
         for(qreal x = 0 ; x < ceil(renderOptions->axisArea.right()) ; x += renderOptions->axisGrid) {
             if((x == 0) && (renderOptions->paintAxisMain)) {
-                glColor4f(renderOptions->colors.value("axis").redF(), renderOptions->colors.value("axis").greenF(), renderOptions->colors.value("axis").blueF(), renderOptions->colors.value("axis").alphaF());
+                if(mouseSnapX)
+                    glColor4f(renderOptions->colors.value("axisSnap").redF(), renderOptions->colors.value("axisSnap").greenF(), renderOptions->colors.value("axisSnap").blueF(), renderOptions->colors.value("axisSnap").alphaF());
+                else
+                    glColor4f(renderOptions->colors.value("axis").redF(), renderOptions->colors.value("axis").greenF(), renderOptions->colors.value("axis").blueF(), renderOptions->colors.value("axis").alphaF());
                 glLineWidth(2);
             }
             else {
-                glColor4f(renderOptions->colors.value("grid").redF(), renderOptions->colors.value("grid").greenF(), renderOptions->colors.value("grid").blueF(), renderOptions->colors.value("grid").alphaF());
+                if(mouseSnapX)
+                    glColor4f(renderOptions->colors.value("gridSnap").redF(), renderOptions->colors.value("gridSnap").greenF(), renderOptions->colors.value("gridSnap").blueF(), renderOptions->colors.value("gridSnap").alphaF());
+                else
+                    glColor4f(renderOptions->colors.value("grid").redF(), renderOptions->colors.value("grid").greenF(), renderOptions->colors.value("grid").blueF(), renderOptions->colors.value("grid").alphaF());
                 glLineWidth(1);
             }
             glBegin(GL_LINES);
@@ -382,11 +395,17 @@ void UiRender::paintAxisGrid() {
         }
         for(qreal x = 0 ; x > floor(renderOptions->axisArea.left()) ; x -= renderOptions->axisGrid) {
             if((x == 0) && (renderOptions->paintAxisMain)) {
-                glColor4f(renderOptions->colors.value("axis").redF(), renderOptions->colors.value("axis").greenF(), renderOptions->colors.value("axis").blueF(), renderOptions->colors.value("axis").alphaF());
+                if(mouseSnapX)
+                    glColor4f(renderOptions->colors.value("axisSnap").redF(), renderOptions->colors.value("axisSnap").greenF(), renderOptions->colors.value("axisSnap").blueF(), renderOptions->colors.value("axisSnap").alphaF());
+                else
+                    glColor4f(renderOptions->colors.value("axis").redF(), renderOptions->colors.value("axis").greenF(), renderOptions->colors.value("axis").blueF(), renderOptions->colors.value("axis").alphaF());
                 glLineWidth(2);
             }
             else {
-                glColor4f(renderOptions->colors.value("grid").redF(), renderOptions->colors.value("grid").greenF(), renderOptions->colors.value("grid").blueF(), renderOptions->colors.value("grid").alphaF());
+                if(mouseSnapX)
+                    glColor4f(renderOptions->colors.value("gridSnap").redF(), renderOptions->colors.value("gridSnap").greenF(), renderOptions->colors.value("gridSnap").blueF(), renderOptions->colors.value("gridSnap").alphaF());
+                else
+                    glColor4f(renderOptions->colors.value("grid").redF(), renderOptions->colors.value("grid").greenF(), renderOptions->colors.value("grid").blueF(), renderOptions->colors.value("grid").alphaF());
                 glLineWidth(1);
             }
             glBegin(GL_LINES);
@@ -396,11 +415,17 @@ void UiRender::paintAxisGrid() {
         }
         for(qreal y = 0 ; y < ceil(renderOptions->axisArea.top()) ; y += renderOptions->axisGrid) {
             if((y == 0) && (renderOptions->paintAxisMain)) {
-                glColor4f(renderOptions->colors.value("axis").redF(), renderOptions->colors.value("axis").greenF(), renderOptions->colors.value("axis").blueF(), renderOptions->colors.value("axis").alphaF());
+                if(mouseSnapY)
+                    glColor4f(renderOptions->colors.value("axisSnap").redF(), renderOptions->colors.value("axisSnap").greenF(), renderOptions->colors.value("axisSnap").blueF(), renderOptions->colors.value("axisSnap").alphaF());
+                else
+                    glColor4f(renderOptions->colors.value("axis").redF(), renderOptions->colors.value("axis").greenF(), renderOptions->colors.value("axis").blueF(), renderOptions->colors.value("axis").alphaF());
                 glLineWidth(2);
             }
             else {
-                glColor4f(renderOptions->colors.value("grid").redF(), renderOptions->colors.value("grid").greenF(), renderOptions->colors.value("grid").blueF(), renderOptions->colors.value("grid").alphaF());
+                if(mouseSnapY)
+                    glColor4f(renderOptions->colors.value("gridSnap").redF(), renderOptions->colors.value("gridSnap").greenF(), renderOptions->colors.value("gridSnap").blueF(), renderOptions->colors.value("gridSnap").alphaF());
+                else
+                    glColor4f(renderOptions->colors.value("grid").redF(), renderOptions->colors.value("grid").greenF(), renderOptions->colors.value("grid").blueF(), renderOptions->colors.value("grid").alphaF());
                 glLineWidth(1);
             }
             glBegin(GL_LINES);
@@ -410,11 +435,17 @@ void UiRender::paintAxisGrid() {
         }
         for(qreal y = 0 ; y > floor(renderOptions->axisArea.bottom()) ; y -= renderOptions->axisGrid) {
             if((y == 0) && (renderOptions->paintAxisMain)) {
-                glColor4f(renderOptions->colors.value("axis").redF(), renderOptions->colors.value("axis").greenF(), renderOptions->colors.value("axis").blueF(), renderOptions->colors.value("axis").alphaF());
+                if(mouseSnapY)
+                    glColor4f(renderOptions->colors.value("axisSnap").redF(), renderOptions->colors.value("axisSnap").greenF(), renderOptions->colors.value("axisSnap").blueF(), renderOptions->colors.value("axisSnap").alphaF());
+                else
+                    glColor4f(renderOptions->colors.value("axis").redF(), renderOptions->colors.value("axis").greenF(), renderOptions->colors.value("axis").blueF(), renderOptions->colors.value("axis").alphaF());
                 glLineWidth(2);
             }
             else {
-                glColor4f(renderOptions->colors.value("grid").redF(), renderOptions->colors.value("grid").greenF(), renderOptions->colors.value("grid").blueF(), renderOptions->colors.value("grid").alphaF());
+                if(mouseSnapY)
+                    glColor4f(renderOptions->colors.value("gridSnap").redF(), renderOptions->colors.value("gridSnap").greenF(), renderOptions->colors.value("gridSnap").blueF(), renderOptions->colors.value("gridSnap").alphaF());
+                else
+                    glColor4f(renderOptions->colors.value("grid").redF(), renderOptions->colors.value("grid").greenF(), renderOptions->colors.value("grid").blueF(), renderOptions->colors.value("grid").alphaF());
                 glLineWidth(1);
             }
             glBegin(GL_LINES);
@@ -607,10 +638,8 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
     NxPoint mousePos = mousePosNoCenter - renderOptions->axisCenter, mousePosBackup = mousePos;
     NxPoint deltaMouseRaw = NxPoint(event->posF().x(), event->posF().y()) - mousePressedRawPos;
 
-    if(mouseSnapX)
-        mousePos.setX(qRound(mousePos.x() / renderOptions->axisGrid) * renderOptions->axisGrid);
-    if(mouseSnapY)
-        mousePos.setY(qRound(mousePos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
+    if(mouseSnapX)  mousePos.setX(qRound(mousePos.x() / renderOptions->axisGrid) * renderOptions->axisGrid);
+    if(mouseSnapY)  mousePos.setY(qRound(mousePos.y() / renderOptions->axisGrid) * renderOptions->axisGrid);
     bool noSelection = true;
     emit(mousePosChanged(mousePos));
 
@@ -624,23 +653,17 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
     else {
         //Cursor
         if((cursor().shape() != Qt::BlankCursor) && (renderOptions->allowSelection)) {
-            if((mouseShift) && (mousePressed))
-                setCursor(Qt::CrossCursor);
-            else if((selectedHover) && (!mousePressed))
-                setCursor(Qt::PointingHandCursor);
-            else if((!selectedHover) && (mousePressed))
-                setCursor(Qt::ClosedHandCursor);
-            else
-                setCursor(Qt::OpenHandCursor);
+            if((mouseShift) && (mousePressed))              setCursor(Qt::CrossCursor);
+            else if((selectedHover) && (!mousePressed))     setCursor(Qt::PointingHandCursor);
+            else if((!selectedHover) && (mousePressed))     setCursor(Qt::ClosedHandCursor);
+            else                                            setCursor(Qt::OpenHandCursor);
         }
 
         //Mouse pressed
         if(mousePressed) {
             if(mouse3D) {
-                if(mouseShift)
-                    translationDest = translationDrag + 10 * NxPoint(deltaMouseRaw.x() / (qreal)size().width(), deltaMouseRaw.y() / (qreal)size().height());
-                else
-                    renderOptions->rotationDest = rotationDrag + 360 * NxPoint(0, deltaMouseRaw.y() / (qreal)size().height(), deltaMouseRaw.x() / (qreal)size().width());
+                if(mouseShift)  translationDest = translationDrag + 10 * NxPoint(deltaMouseRaw.x() / (qreal)size().width(), deltaMouseRaw.y() / (qreal)size().height());
+                else            renderOptions->rotationDest = rotationDrag + 360 * NxPoint(0, deltaMouseRaw.y() / (qreal)size().height(), deltaMouseRaw.x() / (qreal)size().width());
             }
             else if((mouseShift) && (renderOptions->allowSelection) && (cursor().shape() != Qt::BlankCursor)) {
                 renderOptions->selectionArea.setBottomRight(mousePos);
@@ -662,10 +685,15 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                     if(selectedHover)
                         selectedHover->dragStart();
                 }
+                NxPoint dragTranslation = mousePos - mousePressedAreaPos;
+                if(selectedHover) {
+                    if(mouseSnapX)  dragTranslation.setX(qRound(selectedHover->getPosDrag().x() + dragTranslation.x()) - selectedHover->getPosDrag().x());
+                    if(mouseSnapY)  dragTranslation.setY(qRound(selectedHover->getPosDrag().y() + dragTranslation.y()) - selectedHover->getPosDrag().y());
+                }
                 foreach(NxObject* object, selection)
-                    object->drag(mousePos - mousePressedAreaPos);
+                    object->drag(dragTranslation);
                 if(selectedHover)
-                    selectedHover->drag(mousePos - mousePressedAreaPos);
+                    selectedHover->drag(dragTranslation);
             }
             else if(!mouseObjectDrag) {
                 //New center
@@ -802,14 +830,15 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
 
     NxPoint translation;
     if(event->key() == Qt::Key_Left)
-        renderOptions->axisCenterDest += NxPoint(translationUnit, 0);
+        translation += NxPoint(translationUnit, 0);
     else if(event->key() == Qt::Key_Right)
-        renderOptions->axisCenterDest += NxPoint(-translationUnit, 0);
+        translation += NxPoint(-translationUnit, 0);
     else if(event->key() == Qt::Key_Up)
-        renderOptions->axisCenterDest += NxPoint(0, -translationUnit);
+        translation += NxPoint(0, -translationUnit);
     else if(event->key() == Qt::Key_Down)
-        renderOptions->axisCenterDest += NxPoint(0, translationUnit);
-    else if(event->key() == Qt::Key_Escape) {
+        translation += NxPoint(0, translationUnit);
+
+    if(event->key() == Qt::Key_Escape) {
         emit(escFullscreen());
         emit(editingStop());
     }
@@ -829,7 +858,7 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
         emit(selectionChanged());
     }
     else {
-        renderOptions->axisCenter += translation;
+        renderOptions->axisCenterDest += translation;
         zoom();
     }
 }
@@ -928,6 +957,7 @@ void UiRender::selectionAdd(NxObject *object) {
 void UiRender::zoom() {
     renderOptions->zoomLinearDest = qMax((qreal)0.01, renderOptions->zoomValue / 100.F);
     emit(mouseZoomChanged(100.0F / renderOptions->zoomLinearDest));
+    renderOptions->zoomLinearDest *= 1.3;
 }
 void UiRender::zoom(qreal axisZoom) {
     renderOptions->zoomValue = qMax((qreal)0, axisZoom);
@@ -971,8 +1001,11 @@ void UiRender::actionPaste() {
     if(factory) {
         selectionClear();
         QStringList paste = QApplication::clipboard()->text().split(COMMAND_END, QString::SkipEmptyParts);
-        foreach(const QString & command, paste)
-            factory->execute(command, true);
+        foreach(const QString & command, paste) {
+            quint16 id = factory->execute(command, true).toUInt();
+            if((document) && (command.contains("add ")))
+                selectionAdd(document->getObject(id));
+        }
     }
 }
 void UiRender::actionDuplicate() {
@@ -1047,4 +1080,147 @@ void UiRender::actionSnapZGrid() {
 
 void UiRender::actionFollowID(qint16 _followId) {
     followId = _followId;
+}
+
+void UiRender::actionArrange(quint16 type) {
+    qreal top = -99999999, left = 99999999, bottom = 99999999, right = -99999999;
+    qreal dtop = -99999999, dleft = 99999999, dbottom = 99999999, dright = -99999999;
+    qreal nbObj = 0;
+
+    factory->pushSnapshot();
+
+    //Browse objects
+    foreach(NxObject *object, selection) {
+        if(object->getType() == ObjectsTypeCurve) {
+            top    = qMax(top,    qMax(object->getBoundingRect().top(),  object->getBoundingRect().bottom()));
+            left   = qMin(left,   qMin(object->getBoundingRect().left(), object->getBoundingRect().right()));
+            bottom = qMin(bottom, qMin(object->getBoundingRect().top(),  object->getBoundingRect().bottom()));
+            right  = qMax(right,  qMax(object->getBoundingRect().left(), object->getBoundingRect().right()));
+            dtop    = qMax(dtop,    object->getBoundingRect().center().y());
+            dleft   = qMin(dleft,   object->getBoundingRect().center().x());
+            dbottom = qMin(dbottom, object->getBoundingRect().center().y());
+            dright  = qMax(dright,  object->getBoundingRect().center().x());
+            nbObj++;
+        }
+        else if(object->getType() == ObjectsTypeTrigger) {
+            top    = qMax(top,    object->getPos().y());
+            left   = qMin(left,   object->getPos().x());
+            bottom = qMin(bottom, object->getPos().y());
+            right  = qMax(right,  object->getPos().x());
+            dtop    = qMax(dtop,    object->getPos().y());
+            dleft   = qMin(dleft,   object->getPos().x());
+            dbottom = qMin(dbottom, object->getPos().y());
+            dright  = qMax(dright,  object->getPos().x());
+            nbObj++;
+        }
+    }
+    qreal width = (right-left)/2;
+    qreal center = left + width;
+    qreal height = (top-bottom)/2;
+    qreal middle = bottom + height;
+
+    if(type == 0) {
+        //Top
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve)
+                object->setPos(NxPoint(object->getPos().x(), object->getPos().y() + top-qMax(object->getBoundingRect().top(), object->getBoundingRect().bottom()), object->getPos().z()));
+            else if(object->getType() == ObjectsTypeTrigger)
+                object->setPos(NxPoint(object->getPos().x(), top, object->getPos().z()));
+    }
+    else if(type == 1) {
+        //Left
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve)
+                object->setPos(NxPoint(object->getPos().x() + left-qMin(object->getBoundingRect().left(), object->getBoundingRect().right()), object->getPos().y(), object->getPos().z()));
+            else if(object->getType() == ObjectsTypeTrigger)
+                object->setPos(NxPoint(left, object->getPos().y(), object->getPos().z()));
+    }
+    else if(type == 2) {
+        //Bottom
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve)
+                object->setPos(NxPoint(object->getPos().x(), object->getPos().y() + bottom-qMin(object->getBoundingRect().top(), object->getBoundingRect().bottom()), object->getPos().z()));
+            else if(object->getType() == ObjectsTypeTrigger)
+                object->setPos(NxPoint(object->getPos().x(), bottom, object->getPos().z()));
+    }
+    else if(type == 3) {
+        //Right
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve)
+                object->setPos(NxPoint(object->getPos().x() + right-qMax(object->getBoundingRect().left(), object->getBoundingRect().right()), object->getPos().y(), object->getPos().z()));
+            else if(object->getType() == ObjectsTypeTrigger)
+                object->setPos(NxPoint(right, object->getPos().y(), object->getPos().z()));
+    }
+    else if(type == 4) {
+        //Middle
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve)
+                object->setPos(NxPoint(object->getPos().x(), object->getPos().y() + middle-object->getBoundingRect().center().y(), object->getPos().z()));
+            else if(object->getType() == ObjectsTypeTrigger)
+                object->setPos(NxPoint(object->getPos().x(), middle, object->getPos().z()));
+    }
+    else if(type == 5) {
+        //Center
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve)
+                object->setPos(NxPoint(object->getPos().x() + middle-object->getBoundingRect().center().x(), object->getPos().y(), object->getPos().z()));
+            else if(object->getType() == ObjectsTypeTrigger)
+                object->setPos(NxPoint(center, object->getPos().y(), object->getPos().z()));
+    }
+    else if((type == 6) && (nbObj > 1)) {
+        //Distrib H
+        qreal dHStep = qAbs(dright-dleft) / (nbObj-1);
+        nbObj = 0;
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve) {
+                object->setPos(NxPoint(object->getPos().x() + (dleft + nbObj * dHStep)-object->getBoundingRect().center().x(), object->getPos().y(), object->getPos().z()));
+                nbObj++;
+            }
+            else if(object->getType() == ObjectsTypeTrigger) {
+                object->setPos(NxPoint(dleft + nbObj * dHStep, object->getPos().y(), object->getPos().z()));
+                nbObj++;
+            }
+    }
+    else if((type == 7) && (nbObj > 1)) {
+        //Distrib V
+        qreal dVStep = qAbs(dtop-dbottom) / (nbObj-1);
+        nbObj = 0;
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve) {
+                object->setPos(NxPoint(object->getPos().x(), object->getPos().y() + (dbottom + nbObj * dVStep)-object->getBoundingRect().center().y(), object->getPos().z()));
+                nbObj++;
+            }
+            else if(object->getType() == ObjectsTypeTrigger) {
+                object->setPos(NxPoint(object->getPos().x(), dbottom + nbObj * dVStep, object->getPos().z()));
+                nbObj++;
+            }
+    }
+    else if(type == 8) {
+        //Distrib Circle
+        qreal dAngle = 2 * M_PI / nbObj;
+        nbObj = 0;
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve) {
+                object->setPos(NxPoint(object->getPos().x() + (center + qMax(width,height)*qCos(dAngle * nbObj))-object->getBoundingRect().center().x(), object->getPos().y() + (middle + qMax(width,height)*qSin(dAngle * nbObj))-object->getBoundingRect().center().y(), object->getPos().z()));
+                nbObj++;
+            }
+            else if(object->getType() == ObjectsTypeTrigger) {
+                object->setPos(NxPoint(center + qMax(width,height)*qCos(dAngle * nbObj), middle + qMax(width,height)*qSin(dAngle * nbObj), object->getPos().z()));
+                nbObj++;
+            }
+    }
+    else if(type == 9) {
+        //Distrib Ellipse
+        qreal dAngle = 2 * M_PI / nbObj;
+        nbObj = 0;
+        foreach(NxObject *object, selection)
+            if(object->getType() == ObjectsTypeCurve) {
+                object->setPos(NxPoint(object->getPos().x() + (center + width*qCos(dAngle * nbObj))-object->getBoundingRect().center().x(), object->getPos().y() + (middle + height*qSin(dAngle * nbObj))-object->getBoundingRect().center().y(), object->getPos().z()));
+                nbObj++;
+            }
+            else if(object->getType() == ObjectsTypeTrigger) {
+                object->setPos(NxPoint(center + width*qCos(dAngle * nbObj), middle + height*qSin(dAngle * nbObj), object->getPos().z()));
+                nbObj++;
+            }
+    }
 }

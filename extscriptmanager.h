@@ -36,12 +36,13 @@ class ExtScriptManager : public QObject, public QTreeWidgetItem {
 public:
     explicit ExtScriptManager(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile = QFileInfo(), QTreeWidgetItem *parentList = 0, QDir _scriptDir = QDir::current());
 
+public:
+    QScriptEngine scriptEngine;
 protected:
     NxObjectFactoryInterface *factory;
     ExtScriptVariableAsk *variable;
     QFileSystemWatcher fileWatcher;
     QScriptValue script, scriptOnOSC, scriptOnDraw, scriptOnLoad, scriptCreate, scriptConfigure;
-    QScriptEngine scriptEngine;
     QFileInfo scriptFile;
     NxPoint mousePos;
     QString scriptContent;

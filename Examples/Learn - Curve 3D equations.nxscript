@@ -29,6 +29,7 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");
 	run("setPattern current 0 0 1 -1");
+    run("setDepth   current 0.5");
 	id++;
 
 
@@ -60,6 +61,7 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
+    run("setDepth   current 0.5");
 	id++;
 
 
@@ -82,6 +84,7 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
+    run("setDepth   current 0.5");
 	id++;
 
 
@@ -107,6 +110,7 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
+    run("setDepth   current 0.5");
 	id++;
 
 
@@ -138,6 +142,7 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
+    run("setDepth   current 0.5");
 	id++;
 
 
@@ -169,6 +174,7 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
+    run("setDepth   current 0.5");
 	id++;
 
 
@@ -194,6 +200,7 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
+    run("setDepth   current 0.5");
 	id++;
 
 
@@ -216,6 +223,7 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
+    run("setDepth   current 0.5");
 	id++;
 
 
@@ -238,6 +246,7 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
+    run("setDepth   current 0.5");
 	id++;
 }
 

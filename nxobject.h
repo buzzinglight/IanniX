@@ -238,6 +238,7 @@ public slots:
         posDrag = pos;
         isDrag = false;
     }
+    inline const NxPoint getPosDrag() { return posDrag; }
     virtual void calculate() {}
 
     inline const NxRect & getBoundingRect() const {

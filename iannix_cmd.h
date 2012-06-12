@@ -32,6 +32,7 @@
 
 #define COMMAND_CURSOR_CURVE                QString("setcurve")
 #define COMMAND_CURSOR_WIDTH                QString("setwidth")
+#define COMMAND_CURSOR_DEPTH                QString("setdepth")
 #define COMMAND_CURSOR_START                QString("setpattern")
 #define COMMAND_CURSOR_SPEED                QString("setspeed")
 #define COMMAND_CURSOR_SPEEDF               QString("setspeedf")

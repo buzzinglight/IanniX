@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>975</width>
-    <height>700</height>
+    <width>1250</width>
+    <height>750</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@ QStatusBar {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>975</width>
+     <width>1250</width>
      <height>22</height>
     </rect>
    </property>
@@ -87,6 +87,7 @@ QStatusBar {
     <addaction name="actionCopy"/>
     <addaction name="actionCopyScript"/>
     <addaction name="actionPaste"/>
+    <addaction name="actionPasteScript"/>
     <addaction name="actionDuplicate"/>
     <addaction name="actionCut"/>
     <addaction name="separator"/>
@@ -171,10 +172,39 @@ QStatusBar {
     <addaction name="actionPlay_pause"/>
     <addaction name="actionFast_rewind"/>
    </widget>
+   <widget class="QMenu" name="menuAlignment">
+    <property name="title">
+     <string>Arrange objects</string>
+    </property>
+    <widget class="QMenu" name="menuAlignH">
+     <property name="title">
+      <string>Align horizontally</string>
+     </property>
+     <addaction name="actionAlign_left"/>
+     <addaction name="actionAlign_center"/>
+     <addaction name="actionAlign_right"/>
+    </widget>
+    <widget class="QMenu" name="menuAlignV">
+     <property name="title">
+      <string>Align vertically</string>
+     </property>
+     <addaction name="actionAlign_top"/>
+     <addaction name="actionAlign_middle"/>
+     <addaction name="actionAlign_bottom"/>
+    </widget>
+    <addaction name="menuAlignH"/>
+    <addaction name="menuAlignV"/>
+    <addaction name="separator"/>
+    <addaction name="actionDistributeH"/>
+    <addaction name="actionDistributeV"/>
+    <addaction name="actionAlign_circle"/>
+    <addaction name="actionAlign_ellipse"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuPlayback"/>
+   <addaction name="menuAlignment"/>
   </widget>
   <widget class="QDockWidget" name="transportDock">
    <property name="minimumSize">
@@ -1023,6 +1053,100 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
+   </property>
+  </action>
+  <action name="actionPasteScript">
+   <property name="text">
+    <string>Paste as a script</string>
+   </property>
+   <property name="toolTip">
+    <string>Paste as a script</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to paste scripts commands from clipboard (a script must be loaded before)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+V</string>
+   </property>
+  </action>
+  <action name="actionDistributeH">
+   <property name="text">
+    <string>Distribute horizontally</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to distribute objects horizontally from the leftmost object to the rightmost object</string>
+   </property>
+  </action>
+  <action name="actionDistributeV">
+   <property name="text">
+    <string>Distribute vertically</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to distribute objects vertically from the topmost object to the bottommost object</string>
+   </property>
+  </action>
+  <action name="actionAlign_left">
+   <property name="text">
+    <string>Align left</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the leftmost object</string>
+   </property>
+  </action>
+  <action name="actionAlign_center">
+   <property name="text">
+    <string>Align center</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the horizontal center of the selection</string>
+   </property>
+  </action>
+  <action name="actionAlign_right">
+   <property name="text">
+    <string>Align right</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the rightmost object</string>
+   </property>
+  </action>
+  <action name="actionAlign_top">
+   <property name="text">
+    <string>Align top</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the topmost object</string>
+   </property>
+  </action>
+  <action name="actionAlign_middle">
+   <property name="text">
+    <string>Align middle</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the vertical center of the selection</string>
+   </property>
+  </action>
+  <action name="actionAlign_bottom">
+   <property name="text">
+    <string>Align bottom</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the bottommost object</string>
+   </property>
+  </action>
+  <action name="actionAlign_circle">
+   <property name="text">
+    <string>Distribute circulary</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects as a circle</string>
+   </property>
+  </action>
+  <action name="actionAlign_ellipse">
+   <property name="text">
+    <string>Distribute on ellipse</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects as an ellipse</string>
    </property>
   </action>
  </widget>

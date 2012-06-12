@@ -7,7 +7,7 @@
 			"revision" : 5
 		}
 ,
-		"rect" : [ 609.0, 74.0, 808.0, 708.0 ],
+		"rect" : [ 595.0, 44.0, 808.0, 708.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -64,8 +64,8 @@
 					"numinlets" : 5,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 574.0, 185.0, 131.0, 20.0 ],
-					"text" : "zmap -10 10 500 5000"
+					"patching_rect" : [ 574.0, 185.0, 137.0, 20.0 ],
+					"text" : "zmap -10 10 1000 3000"
 				}
 
 			}
@@ -605,7 +605,7 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "signal", "signal", "" ],
 					"patching_rect" : [ 544.0, 328.0, 126.0, 20.0 ],
-					"text" : "poly~ synthTrigger 20"
+					"text" : "poly~ synthTrigger 60"
 				}
 
 			}
@@ -1439,14 +1439,14 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "synthCursor.maxpat",
-				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/MaxMSP",
+				"bootpath" : "/Applications/IanniX/Patches/MaxMSP",
 				"patcherrelativepath" : "",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "synthTrigger.maxpat",
-				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/MaxMSP",
+				"bootpath" : "/Applications/IanniX/Patches/MaxMSP",
 				"patcherrelativepath" : "",
 				"type" : "JSON",
 				"implicit" : 1

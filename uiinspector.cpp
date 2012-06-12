@@ -122,6 +122,8 @@ void UiInspector::actionCCButton() {
         emit(actionUnsoloObjects());
     else if(sender() == ui->followId)
         emit(actionFollowID(ui->followId->value()));
+    actionCC();
+    actionCC2();
 }
 
 void UiInspector::actionInfo() {
@@ -152,6 +154,8 @@ void UiInspector::actionInfo() {
                 NxCursor *cursor = (NxCursor*)object;
                 if(ui->widthSpin == sender())
                     cursor->setWidth(ui->widthSpin->value());
+                else if(ui->depthSpin == sender())
+                    cursor->setDepth(ui->depthSpin->value());
                 else if(ui->speedFSpin == sender())
                     cursor->setTimeFactorF(ui->speedFSpin->value());
                 else if(ui->posSpin == sender())
@@ -328,12 +332,14 @@ void UiInspector::timerEvent(QTimerEvent *) {
         refresh();
 }
 void UiInspector::refresh() {
+    needRefresh = false;
+
     nbTriggers = triggerItem->childCount();
     nbCursors = cursorItem->childCount();
     nbCurves = curveItem->childCount();
     QString triggerStr = tr("TRIGGERS") + QString(" (%1)").arg(nbTriggers);
-    QString cursorStr = tr("CURSORS") + QString(" (%1)").arg(nbCursors);
-    QString curveStr = tr("CURVES") + QString(" (%1)").arg(nbCurves);
+    QString cursorStr  = tr("CURSORS")  + QString(" (%1)").arg(nbCursors);
+    QString curveStr   = tr("CURVES")   + QString(" (%1)").arg(nbCurves);
     triggerItem->setText(0, triggerStr);
     cursorItem->setText(0, cursorStr);
     curveItem->setText(0, curveStr);
@@ -417,6 +423,7 @@ void UiInspector::refresh() {
                     prevCursor = cursor;
 
                 change(indexObject, ui->widthSpin, cursor->getWidth(), prevCursor->getWidth());
+                change(indexObject, ui->depthSpin, cursor->getDepth(), prevCursor->getDepth());
                 change(indexObject, ui->patternLine, cursor->getStart(), prevCursor->getStart());
                 change(indexObject, ui->easingCombo, cursor->getEasing(), prevCursor->getEasing());
                 change(indexObject, ui->speedSpin, cursor->getTimeFactor(), prevCursor->getTimeFactor());
@@ -454,7 +461,7 @@ void UiInspector::refresh() {
                 change(indexObject, ui->triggerOffSpin, trigger->getTriggerOff(), prevTrigger->getTriggerOff());
                 change(indexObject, ui->colorCombo3, trigger->getColorActiveMessageVerbose(), prevTrigger->getColorActiveMessageVerbose());
                 change(indexObject, ui->colorCombo4, trigger->getColorInactiveMessageVerbose(), prevTrigger->getColorInactiveMessageVerbose());
-                change(indexObject, ui->messagesSpin, object->getMessageTimeInterval(), prevObject->getMessageTimeInterval());
+                //change(indexObject, ui->messagesSpin, object->getMessageTimeInterval(), prevObject->getMessageTimeInterval());
                 prevTrigger = trigger;
             }
             prevObject = object;
@@ -511,6 +518,7 @@ void UiInspector::refresh() {
     ui->colorCombo2->setVisible(showGenericInfo);
 
     ui->widthSpin->setVisible(showCursorInfo);
+    ui->depthSpin->setVisible(showCursorInfo);
     ui->widthLabel->setVisible(showCursorInfo);
     ui->patternLine->setVisible(showCursorInfo);
     ui->easingCombo->setVisible(showCursorInfo);
@@ -550,7 +558,6 @@ void UiInspector::refresh() {
     ui->messagesButton->setVisible(showCursorInfo | showTriggerInfo);
     ui->messagesLabel->setVisible(showCursorInfo | showTriggerInfo);
 
-    needRefresh = false;
     actionInfoLock = false;
 }
 void UiInspector::change(quint16 indexObject, QDoubleSpinBox *spin, qreal val, qreal prevVal) {

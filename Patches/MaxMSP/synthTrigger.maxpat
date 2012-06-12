@@ -7,7 +7,7 @@
 			"revision" : 5
 		}
 ,
-		"rect" : [ 1173.0, 489.0, 221.0, 306.0 ],
+		"rect" : [ 823.0, 488.0, 221.0, 306.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -229,11 +229,11 @@
 					"fontsize" : 12.0,
 					"id" : "obj-11",
 					"maxclass" : "newobj",
-					"numinlets" : 2,
+					"numinlets" : 3,
 					"numoutlets" : 1,
 					"outlettype" : [ "signal" ],
-					"patching_rect" : [ 50.0, 98.0, 45.0, 20.0 ],
-					"text" : "cycle~"
+					"patching_rect" : [ 50.0, 98.0, 46.0, 20.0 ],
+					"text" : "tri~"
 				}
 
 			}

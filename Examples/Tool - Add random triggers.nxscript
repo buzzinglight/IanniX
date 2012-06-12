@@ -6,15 +6,17 @@ function onConfigure() {
 	ask("Triggers", "Quantity", "nbTriggers", 200);
 	ask("Top left", "x", "boundLeft", -5);
 	ask("Top left", "y", "boundTop", 5);
-	ask("Bottom right", "x", "boundRight", 5);
 	ask("Bottom right", "y", "boundBottom", -5);
+	ask("Bottom right", "x", "boundRight", 5);
+	ask("Depth", "depth min", "depthMin", -1);
+	ask("Depth", "depth max", "depthMax", 1);
 }
 
 //Creation of the score
 function onCreate() {
 	for(var i = 0 ; i < nbTriggers ; i++) {
 		run("add trigger auto");
-		run("setPos      current " + random(boundLeft, boundRight) + " " + random(boundBottom, boundTop) + " 0");
+		run("setPos      current " + random(boundLeft, boundRight) + " " + random(boundBottom, boundTop) + " " + random(depthMin, depthMax));
 	}
 }
 

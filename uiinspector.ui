@@ -646,7 +646,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
               </property>
               <property name="text">
                <string>CURSOR
-WIDTH</string>
+WIDTH / DEPTH</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -719,7 +719,7 @@ SPEED PATTERN</string>
                <string/>
               </property>
               <property name="statusTip">
-               <string>Type here the speed pattern separated by spaces (&quot;1 2 0&quot; means running one time at normal speed, then again at double speed then stopping)</string>
+               <string>Type here the speed pattern separated by spaces (&quot;1 2 -1 0&quot; means running one time at normal speed, then again at double speed, then reverse run and finally stopping)</string>
               </property>
               <property name="text">
                <string/>
@@ -1836,6 +1836,37 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
+            <item row="12" column="2">
+             <widget class="QDoubleSpinBox" name="depthSpin">
+              <property name="minimumSize">
+               <size>
+                <width>60</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>60</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="statusTip">
+               <string>Change here the cursor depth</string>
+              </property>
+              <property name="suffix">
+               <string notr="true">s</string>
+              </property>
+              <property name="decimals">
+               <number>2</number>
+              </property>
+              <property name="maximum">
+               <double>999999.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -1999,7 +2030,7 @@ OFF-TIME</string>
                 </column>
                 <column>
                  <property name="text">
-                  <string>SOLO</string>
+                  <string>S</string>
                  </property>
                 </column>
                 <column>
@@ -2115,7 +2146,7 @@ OFF-TIME</string>
                 </column>
                 <column>
                  <property name="text">
-                  <string>SOLO</string>
+                  <string>S</string>
                  </property>
                 </column>
                 <column>
@@ -3329,7 +3360,7 @@ SERVER IN PORT</string>
    <slot>actionMessages()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>190</x>
+     <x>189</x>
      <y>266</y>
     </hint>
     <hint type="destinationlabel">
@@ -3345,7 +3376,7 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>193</x>
+     <x>192</x>
      <y>207</y>
     </hint>
     <hint type="destinationlabel">
@@ -3425,8 +3456,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>212</x>
-     <y>352</y>
+     <x>190</x>
+     <y>371</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3441,8 +3472,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>212</x>
-     <y>382</y>
+     <x>190</x>
+     <y>401</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3905,8 +3936,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>44</x>
-     <y>588</y>
+     <x>51</x>
+     <y>607</y>
     </hint>
     <hint type="destinationlabel">
      <x>-226</x>
@@ -3969,8 +4000,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>212</x>
-     <y>412</y>
+     <x>190</x>
+     <y>431</y>
     </hint>
     <hint type="destinationlabel">
      <x>-242</x>
@@ -4017,8 +4048,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>212</x>
-     <y>444</y>
+     <x>190</x>
+     <y>463</y>
     </hint>
     <hint type="destinationlabel">
      <x>-243</x>
@@ -4209,12 +4240,28 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>553</y>
+     <x>262</x>
+     <y>586</y>
     </hint>
     <hint type="destinationlabel">
      <x>34</x>
      <y>-87</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>depthSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-159</x>
+     <y>611</y>
     </hint>
    </hints>
   </connection>

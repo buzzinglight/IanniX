@@ -50,6 +50,10 @@ function onCreate() {
 	//Create your own curve!!
 	addCurve(points, options);
 	update(points, options);
+
+	//Add triggers
+	run("add trigger 2000");
+	run("setPos current 0 0 2");
 }
 
 //Curve creation
@@ -70,6 +74,7 @@ function addCurve(pts, thick) {
 		run("setCurve         current lastCurve");
 		run("setBoundsSource  current -10 10 10 -10");
 		run("setBoundsTarget  current 0 1 1 0");
+		run("setDepth         current 0.2");
 			
 		//Increment ID
 		id++

@@ -73,6 +73,10 @@ void NxCurve::paint() {
 
         //Start
         bool opacityCheck = (renderOptions->paintCurves) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd));
+
+        if(!renderOptions->allowSelectionCurves)
+            color.setAlphaF(color.alphaF()/3);
+
         if(opacityCheck)
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
         else
@@ -471,13 +475,14 @@ inline NxPoint NxCurve::getPointAt(quint16 index, qreal t) {
     }
 }
 
-NxPoint NxCurve::getPointAt(qreal percent) {
+NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
     if(curveType == CurveTypeEllipse) {
-        qreal angle = 2 * percent * M_PI;
+        qreal angle = 2 * val * M_PI;
         return NxPoint(boundingRect.width() * qCos(angle) / 2, boundingRect.height() * qSin(angle) / 2, 0);
     }
     else {
-        qreal length = 0, lengthOld = 0, lengthTarget = pathLength * percent;
+        qreal length = 0, lengthOld = 0;
+        qreal lengthTarget = (absoluteTime)?(val):(pathLength * val);
         quint16 index = 0;
         for(quint16 indexPoint = 1 ; indexPoint < pathPoints.count() ; indexPoint++) {
             length = getPathPointsAt(indexPoint).currentLength;
@@ -490,12 +495,12 @@ NxPoint NxCurve::getPointAt(qreal percent) {
         return getPointAt(index, (lengthTarget - lengthOld) / (length - lengthOld));
     }
 }
-qreal NxCurve::getAngleAt(qreal percent) {
+qreal NxCurve::getAngleAt(qreal val, bool absoluteTime) {
     qreal angle = 0;
     if(curveType == CurveTypeEllipse)
-        angle = -((2 * percent * M_PI) + M_PI_2) * 180.0F / M_PI;
+        angle = -((2 * val * M_PI) + M_PI_2) * 180.0F / M_PI;
     else {
-        NxPoint deltaPos = getPointAt(percent+0.001) - getPointAt(percent);
+        NxPoint deltaPos = getPointAt(val - 0.001, absoluteTime) - getPointAt(val, absoluteTime);
         if((deltaPos.x() > 0) && (deltaPos.y() >= 0))
             angle = qAtan(deltaPos.y() / deltaPos.x());
         else if((deltaPos.x() <= 0) && (deltaPos.y() > 0))
@@ -505,7 +510,7 @@ qreal NxCurve::getAngleAt(qreal percent) {
         else if((deltaPos.x() >= 0) && (deltaPos.y() < 0))
             angle = -qAtan(deltaPos.x() / deltaPos.y()) + 3 * M_PI_2;
 
-        angle = -angle * 180.0F / M_PI;
+        angle = -angle * 180.0F / M_PI + 180;
     }
     return angle;
 }

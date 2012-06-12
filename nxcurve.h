@@ -139,14 +139,15 @@ public:
     void resize(qreal sizeFactorW, qreal sizeFactorH);
     void translate(const NxPoint & point);
     void translatePoint(quint16 pointIndex, const NxPoint & point);
-    NxPoint getPointAt(qreal percent);
     inline NxPoint getPointAt(quint16 index, qreal t);
-    qreal getAngleAt(qreal percent);
+    NxPoint getPointAt(qreal val, bool absoluteTime = false);
+    qreal getAngleAt(qreal val, bool absoluteTime = false);
     qreal intersects(NxRect rect, NxPoint* collisionPoint = 0);
 
     inline void setResize(const NxSize & size) {
         resize(size);
         calculate();
+        glListRecreate = true;
     }
     inline void setResizeStr(const QString & size) {
         QStringList sizeItems = size.split(" ", QString::SkipEmptyParts);

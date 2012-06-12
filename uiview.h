@@ -35,7 +35,9 @@ public:
     ~UiView();
 
 private:
-    bool wasInspectorVisible, wasTransportVisible;
+    bool wasInspectorVisible, wasTransportVisible, isFullScreen;
+    QPoint previousPos;
+    QSize previousSize;
 
 public:
     UiRender* getRender() const;
@@ -63,6 +65,7 @@ public slots:
     void actionSnapZGrid()        { emit(actionRouteSnapZGrid()); }
     void actionShowEditor()       { emit(actionRouteShowEditor()); }
     void actionReloadScript()     { emit(actionRouteReloadScript()); }
+    void actionPasteScript()      { emit(actionRoutePasteScript()); }
     void actionSelectionModeChange();
     void actionImportSVG();
     void actionImportImage();
@@ -72,6 +75,17 @@ public slots:
     void actionToggleLabel();
     void actionAbout()            { emit(actionRouteAbout()); }
     void setColorTheme(bool);
+
+    void actionAlign_top()        { emit(actionRouteArrange(0)); }
+    void actionAlign_left()       { emit(actionRouteArrange(1)); }
+    void actionAlign_bottom()     { emit(actionRouteArrange(2)); }
+    void actionAlign_right()      { emit(actionRouteArrange(3)); }
+    void actionAlign_middle()     { emit(actionRouteArrange(4)); }
+    void actionAlign_center()     { emit(actionRouteArrange(5)); }
+    void actionDistributeH()      { emit(actionRouteArrange(6)); }
+    void actionDistributeV()      { emit(actionRouteArrange(7)); }
+    void actionAlign_circle()     { emit(actionRouteArrange(8)); }
+    void actionAlign_ellipse()    { emit(actionRouteArrange(9)); }
 
     void unToogleDraw(quint16 id);
     void gridChange();
@@ -113,6 +127,8 @@ signals:
     void actionRouteImportBackground(QString);
     void actionRouteImportText(QString,QString);
     void actionRouteCloseEvent(QCloseEvent*);
+    void actionRouteArrange(quint16 type);
+    void actionRoutePasteScript();
 
 protected:
     void changeEvent(QEvent *e);

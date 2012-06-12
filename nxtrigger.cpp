@@ -65,12 +65,21 @@ void NxTrigger::paint() {
 
         //Start
         bool opacityCheck = ((renderOptions->paintTriggers) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)));
+
+        if(!renderOptions->allowSelectionTriggers)
+            color.setAlphaF(color.alphaF()/3);
+
         if(opacityCheck)
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
+
+
         glPushMatrix();
         glTranslatef(pos.x(), pos.y(), pos.z());
+        glRotatef(renderOptions->rotation.z(), 0, 0, -1);
+        glRotatef(renderOptions->rotation.x(), 0, -1, 0);
+        glRotatef(renderOptions->rotation.y(), -1, 0, 0);
 
         //Draw
         Texture texture;
@@ -116,13 +125,13 @@ void NxTrigger::paint() {
 }
 
 void NxTrigger::trig(NxObject *cursor) {
-    if((!cursor) || (!cursorTrigged)) {
+    /*if((!cursor) || (!cursorTrigged)) {*/
         if(cursor)
             colorTrigged = cursor->getCurrentColor();
         cursorTrigged = cursor;
         QTimer::singleShot(qMax(triggerOff*1000, (qreal)80), this, SLOT(trigEnd()));
         factory->sendMessage(this, this, cursorTrigged);
-    }
+    //}
 }
 void NxTrigger::trigEnd() {
     NxObject *cursorTriggedTmp = cursorTrigged;

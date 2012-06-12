@@ -276,6 +276,7 @@ public slots:
     void logOscSend(const QString & message);
     void logOscReceive(const QString & message);
     void pushSnapshot();
+    void actionPasteScript();
 
 
     //FAST IMPORT

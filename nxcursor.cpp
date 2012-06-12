@@ -117,10 +117,9 @@ void NxCursor::setTime(qreal delta) {
         previousCursorReliable = true;
 
         //Time calculation
-        time = timeLocalAbsoluteCopy / fakeCurveLength;
         if(loopFactor >= 0)
             time = timeLocalAbsoluteCopy / fakeCurveLength;
-        else if(loopFactor < 0)
+        else
             time = (fakeCurveLength - timeLocalAbsoluteCopy) / fakeCurveLength;
 
         if((time < 0) || (time > 1))
@@ -132,8 +131,9 @@ void NxCursor::setTime(qreal delta) {
             nextTimeOld = qRound(time)    / curve->getPathLength() * fakeCurveLength + timeStartOffsetReal / curve->getPathLength();
             time        = qRound(timeOld) / curve->getPathLength() * fakeCurveLength + timeStartOffsetReal / curve->getPathLength();
         }
-        else
+        else {
             time = time / curve->getPathLength() * fakeCurveLength + timeStartOffsetReal / curve->getPathLength();
+        }
 
         //Finaly
         nbLoopOld = nbLoop;
@@ -157,7 +157,6 @@ void NxCursor::calculate() {
     //Cursor line
     if((curve) && (curve->getPathLength() > 0)) {
         qreal timeReal = easing.getValue(time), timeOldReal = easing.getValue(timeOld);
-
         cursorPos = curve->getPointAt(timeReal) + curve->getPos();
 
         if(timeReal == 0)
@@ -168,6 +167,7 @@ void NxCursor::calculate() {
             cursorAngle = -curve->getAngleAt(timeReal);
 
         cursorPosOld = curve->getPointAt(timeOldReal) + curve->getPos();
+
         if(timeOldReal == 0)
             cursorAngleOld = -curve->getAngleAt(timeOldReal + 0.001);
         else if(timeOldReal == 1)
@@ -199,7 +199,7 @@ void NxCursor::calculate() {
     }
 
     if(cursorAngle != cursorAngle)
-          cursorAngle = 0;
+        cursorAngle = 0;
     cursorRelativePos = getCursorValue(cursorPos);
 
     //Calculate polygon (from previous cursor to actual cursor)
@@ -222,6 +222,9 @@ void NxCursor::calculate() {
     cursorPoly[1] = cursor.p1();
     cursorPoly[2] = cursor.p2();
     cursorPoly[3] = cursorOld.p2();
+
+    if(false)
+        qDebug("%d %d %f %f - %f %f  ==>  %f %f - %f %f", previousCursorReliable, previousPreviousCursorReliable, cursorOld.p1().x(), cursorOld.p1().y(), cursorOld.p2().x(), cursorOld.p2().y(), cursor.p1().x(), cursor.p1().y(), cursor.p2().x(), cursor.p2().y());
 
     if(false)
         qDebug("%d %d %f %f %d || %f %f => %f %f", id, nbLoop, timeLocalAbsolute, time, previousCursorReliable, cursorOld.p1().x(), cursorOld.p2().y(), cursor.p1().x(), cursor.p2().y());
@@ -262,6 +265,10 @@ void NxCursor::paint() {
         bool opacityCheck = ((renderOptions->paintCursors) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)));
         if(!opacityCheck)
             color.setAlphaF(0.1);
+
+        if(!renderOptions->allowSelectionCursors)
+            color.setAlphaF(color.alphaF()/3);
+
         glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 
         //Cursor chasse-neige
@@ -280,12 +287,20 @@ void NxCursor::paint() {
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
             glLineStipple(lineFactor, lineStipple);
-            glBegin(GL_LINE_STRIP);
-            glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
-            glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
-            //glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
-            //glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
-            glEnd();
+            if(depth == 0) {
+                glBegin(GL_LINE_STRIP);
+                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                glEnd();
+            }
+            else {
+                glBegin(GL_LINE_LOOP);
+                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z()+depth/2);
+                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z()+depth/2);
+                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z()-depth/2);
+                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z()-depth/2);
+                glEnd();
+            }
             glDisable(GL_LINE_STIPPLE);
             glLineWidth(1);
 
@@ -352,7 +367,7 @@ void NxCursor::trig() {
 }
 
 bool NxCursor::contains(NxTrigger *trigger) {
-    if((previousCursorReliable) && (trigger->getActive()) && (trigger->getPos().z() == cursorPoly[0].z()) && (cursorPoly.containsPoint(trigger->getPos(), Qt::OddEvenFill)))
+    if((previousCursorReliable) && (trigger->getActive()) && ((trigger->getPos().z()-depth/2 <= cursorPoly[0].z()) && (cursorPoly[0].z()) <= trigger->getPos().z()+depth/2) && (cursorPoly.containsPoint(trigger->getPos(), Qt::OddEvenFill)))
         return true;
     else
         return false;

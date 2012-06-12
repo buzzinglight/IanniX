@@ -59,6 +59,7 @@ private:
     bool colorTheme;
     qint16 followId;
     bool firstLaunch;
+    QString defaultStatusTip;
 public:
     inline void setFollowId(qint16 _followId) { followId = _followId; }
     inline qint16 getFollowId() { return followId; }
@@ -89,7 +90,7 @@ public:
     }
     inline void unsetEditing() {
         editing = false;
-        setStatusTip(tr("Click+move and mouse wheel to navigate/zoom in score. Alt+move, Alt+mouse wheel and Alt+double-click to change camera position in 3D."));
+        setStatusTip(defaultStatusTip);
     }
 
     bool getColorTheme() const { return colorTheme; }
@@ -217,6 +218,7 @@ public slots:
     void actionSnapYGrid();
     void actionSnapZGrid();
     void actionFollowID(qint16);
+    void actionArrange(quint16 type);
 
 signals:
     void actionRouteNew();

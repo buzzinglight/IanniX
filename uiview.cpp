@@ -24,6 +24,7 @@ UiView::UiView(QWidget *parent) :
     ui(new Ui::UiView) {
     ui->setupUi(this);
     ui->render->setFocus();
+    isFullScreen = false;
 
     QRect screen = QApplication::desktop()->geometry();
     move(screen.center() - rect().center());
@@ -43,6 +44,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionRedo, SIGNAL(triggered()), ui->render, SLOT(actionRedo()));
     connect(ui->actionUndo, SIGNAL(triggered()), ui->render, SLOT(actionUndo()));
     connect(ui->actionCopy, SIGNAL(triggered()), ui->render, SLOT(actionCopy()));
+    connect(ui->actionPasteScript, SIGNAL(triggered()), SLOT(actionPasteScript()));
     connect(ui->actionCopyScript, SIGNAL(triggered()), ui->render, SLOT(actionCopyScript()));
     connect(ui->actionPaste, SIGNAL(triggered()), ui->render, SLOT(actionPaste()));
     connect(ui->actionDuplicate, SIGNAL(triggered()), ui->render, SLOT(actionDuplicate()));
@@ -98,6 +100,17 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionAllow_curves_selection,   SIGNAL(changed()), SLOT(actionSelectionModeChange()));
     connect(ui->actionAllow_triggers_selection, SIGNAL(changed()), SLOT(actionSelectionModeChange()));
 
+    connect(ui->actionAlign_bottom, SIGNAL(triggered()), SLOT(actionAlign_bottom()));
+    connect(ui->actionAlign_center, SIGNAL(triggered()), SLOT(actionAlign_center()));
+    connect(ui->actionAlign_left, SIGNAL(triggered()),   SLOT(actionAlign_left()));
+    connect(ui->actionAlign_middle, SIGNAL(triggered()), SLOT(actionAlign_middle()));
+    connect(ui->actionAlign_right, SIGNAL(triggered()),  SLOT(actionAlign_right()));
+    connect(ui->actionAlign_top, SIGNAL(triggered()),    SLOT(actionAlign_top()));
+    connect(ui->actionDistributeH, SIGNAL(triggered()),  SLOT(actionDistributeH()));
+    connect(ui->actionDistributeV, SIGNAL(triggered()),  SLOT(actionDistributeV()));
+    connect(ui->actionAlign_circle, SIGNAL(triggered()), SLOT(actionAlign_circle()));
+    connect(ui->actionAlign_ellipse, SIGNAL(triggered()), SLOT(actionAlign_ellipse()));
+
     connect(ui->actionHelp, SIGNAL(triggered()), SLOT(help()));
 }
 
@@ -138,17 +151,27 @@ void UiView::tabletEvent(QTabletEvent *) {
 }
 
 void UiView::actionFullscreen() {
-    if(isFullScreen()) {
+    if(isFullScreen) {
         setWindowState(windowState() & ~Qt::WindowFullScreen);
+        //setWindowFlags(windowFlags() & ~Qt::WindowStaysOnTopHint);
+        //resize(previousSize);
+        //move(previousPos);
         ui->render->setCursor(Qt::ArrowCursor);
         ui->toolBar->setVisible(true);
         ui->inspector->parentWidget()->setVisible(wasInspectorVisible);
         ui->transport->parentWidget()->setVisible(wasTransportVisible);
         ui->statusBar->setVisible(true);
         ui->menubar->setVisible(true);
+        isFullScreen = false;
     }
     else {
+        previousPos = pos();
+        previousSize = size();
         setWindowState(windowState() | Qt::WindowFullScreen);
+        //setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+        //setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+        //move(QApplication::desktop()->screenGeometry(pos()).topLeft());
+        //resize(QApplication::desktop()->screenGeometry(pos()).size());
         ui->render->setCursor(Qt::BlankCursor);
         ui->toolBar->setVisible(false);
         wasInspectorVisible = ui->inspecteurDock->isVisible();
@@ -157,11 +180,13 @@ void UiView::actionFullscreen() {
         ui->menubar->setVisible(false);
         ui->inspector->parentWidget()->hide();
         ui->transport->parentWidget()->hide();
+        isFullScreen = true;
     }
+    activateWindow();
     ui->render->selectionClear(true);
 }
 void UiView::escFullscreen() {
-    if(isFullScreen())
+    if(isFullScreen)
         actionFullscreen();
 }
 

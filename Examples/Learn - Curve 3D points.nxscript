@@ -38,6 +38,7 @@ function onCreate() {
     run("add cursor 1");
     run("setCurve   current lastCurve");        
     run("setSpeed   current auto 10");
+    run("setDepth   current 1");
 }
 
 /*

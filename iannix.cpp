@@ -80,6 +80,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteImportBackground(QString)),     SLOT(actionImportBackground(QString)));
     connect(view, SIGNAL(actionRouteImportText(QString,QString)),   SLOT(actionImportText(QString,QString)));
     connect(view, SIGNAL(actionRouteSelectionModeChange(bool,bool,bool)), SLOT(actionSelectionModeChange(bool,bool,bool)));
+    connect(view, SIGNAL(actionRoutePasteScript()), SLOT(actionPasteScript()));
 
     //Transport
     transport = view->getTransport();
@@ -142,6 +143,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteSnapYGrid()), render, SLOT(actionSnapYGrid()));
     connect(view, SIGNAL(actionRouteSnapZGrid()), render, SLOT(actionSnapZGrid()));
     connect(inspector, SIGNAL(actionFollowID(qint16)), render, SLOT(actionFollowID(qint16)));
+    connect(view, SIGNAL(actionRouteArrange(quint16)), render, SLOT(actionArrange(quint16)));
     render->zoom();
 
     //Message script engine
@@ -940,7 +942,7 @@ void IanniX::actionNew_script() {  ///CG///
 */
 
 void IanniX::actionOpen() {
-    QString fileName = QFileDialog::getExistingDirectory(0, tr("Open IanniX Project Folder"), QString("./scores/"));
+    QString fileName = QFileDialog::getExistingDirectory(0, tr("Open IanniX Project Folder"), baseDocumentDir);
     if(!fileName.isEmpty())
         loadProject(fileName + QString(QDir::separator()));
 }
@@ -1541,6 +1543,9 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
 
                     else if((commande == COMMAND_CURSOR_WIDTH) && (arguments.count() >= 3)) {
                         object->dispatchProperty("cursorWidth", arguments.at(2).toDouble());
+                    }
+                    else if((commande == COMMAND_CURSOR_DEPTH) && (arguments.count() >= 3)) {
+                        object->dispatchProperty("cursorDepth", arguments.at(2).toDouble());
                     }
 
                     else if((commande == COMMAND_LINE) && (arguments.count() >= 4)) {
@@ -2262,5 +2267,12 @@ void IanniX::logOscReceive(const QString & message) {
 void IanniX::pushSnapshot() {
     if(currentDocument)
         currentDocument->pushSnapshot();
+}
+
+void IanniX::actionPasteScript() {
+    pushSnapshot();
+    QString paste = QApplication::clipboard()->text();
+    if(currentScript)
+        currentScript->scriptEngine.evaluate(paste);
 }
 
