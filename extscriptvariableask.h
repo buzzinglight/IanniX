@@ -71,7 +71,7 @@ private:
     QString title;
 public:
     const QList<ExtScriptVariable*> & ask();
-    inline const QString & getTitle() {
+    inline const QString & getTitle() const {
         return title;
     }
     void clear();

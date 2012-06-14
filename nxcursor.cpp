@@ -366,7 +366,7 @@ void NxCursor::trig() {
     }
 }
 
-bool NxCursor::contains(NxTrigger *trigger) {
+bool NxCursor::contains(NxTrigger *trigger) const {
     if((previousCursorReliable) && (trigger->getActive()) && ((trigger->getPos().z()-depth/2 <= cursorPoly[0].z()) && (cursorPoly[0].z()) <= trigger->getPos().z()+depth/2) && (cursorPoly.containsPoint(trigger->getPos(), Qt::OddEvenFill)))
         return true;
     else

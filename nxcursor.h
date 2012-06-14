@@ -99,9 +99,9 @@ public:
         foreach(const QString & startItem, startItems)
             start.append(startItem.toDouble());
     }
-    inline const QString getStart() {
+    inline const QString getStart() const {
         QString retour;
-        foreach(qreal startItem, start)
+        foreach(const qreal startItem, start)
             retour += QString::number(startItem) + " ";
         return retour.trimmed();
     }
@@ -109,13 +109,13 @@ public:
     inline void setNbLoop(quint16 _nbLoop) {
         nbLoop = _nbLoop;
     }
-    inline quint16 getNbLoop() {
+    inline quint16 getNbLoop() const {
         return nbLoop;
     }
     inline void setEasing(quint16 _easing) {
         easing.setType(_easing);
     }
-    inline quint16 getEasing() {
+    inline quint16 getEasing() const {
         return easing.getType();
     }
 
@@ -123,21 +123,21 @@ public:
         timeStartOffset = _timeStartOffset;
         setTime(0);
     }
-    inline qreal getTimeStartOffset() {
+    inline qreal getTimeStartOffset() const {
         return timeStartOffset;
     }
     inline void setTimeEndOffset(qreal _timeEndOffset) {
         timeEndOffset = _timeEndOffset;
         setTime(0);
     }
-    inline qreal getTimeEndOffset() {
+    inline qreal getTimeEndOffset() const {
         return timeEndOffset;
     }
     inline void setTimeInitialOffset(qreal _timeInitialOffset) {
         timeInitialOffset = _timeInitialOffset;
         setTime(0);
     }
-    inline qreal getTimeInitialOffset() {
+    inline qreal getTimeInitialOffset() const {
         return timeInitialOffset;
     }
 
@@ -163,18 +163,18 @@ public:
         else if(index == 4) boundsRect->setBottomRight(NxPoint(boundsRect->bottomRight().x(), val, boundsRect->bottomRight().z()));
         else if(index == 5) boundsRect->setBottomRight(NxPoint(boundsRect->bottomRight().x(), boundsRect->bottomRight().y(), val));
     }
-    inline qreal getBoundsRect(quint16 index, bool source) {
-        NxRect *boundsRect;
+    inline qreal getBoundsRect(quint16 index, bool source) const {
+        NxRect boundsRect;
         if(source)
-            boundsRect = &boundsSource;
+            boundsRect = boundsSource;
         else
-            boundsRect = &boundsTarget;
-        if(index == 0)      return boundsRect->topLeft().x();
-        else if(index == 1) return boundsRect->topLeft().y();
-        else if(index == 2) return boundsRect->topLeft().z();
-        else if(index == 3) return boundsRect->bottomRight().x();
-        else if(index == 4) return boundsRect->bottomRight().y();
-        else if(index == 5) return boundsRect->bottomRight().z();
+            boundsRect = boundsTarget;
+        if(index == 0)      return boundsRect.topLeft().x();
+        else if(index == 1) return boundsRect.topLeft().y();
+        else if(index == 2) return boundsRect.topLeft().z();
+        else if(index == 3) return boundsRect.bottomRight().x();
+        else if(index == 4) return boundsRect.bottomRight().y();
+        else if(index == 5) return boundsRect.bottomRight().z();
         return 0;
     }
 
@@ -219,7 +219,7 @@ public:
             }
         }
     }
-    inline const QString getBoundsRectStr(bool source, quint16 part = 2) {
+    inline const QString getBoundsRectStr(bool source, quint16 part = 2) const {
         if(part == 0)
             return QString("%1 %2").arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3);
         else if(part == 1)
@@ -236,10 +236,10 @@ public:
     inline void setBoundsTarget(const QString & bounds, quint16 part = 2) {
         setBoundsRectStr(bounds, false, part);
     }
-    inline const QString getBoundsSource(quint16 part = 2) {
+    inline const QString getBoundsSource(quint16 part = 2) const {
         return getBoundsRectStr(true, part);
     }
-    inline const QString getBoundsTarget(quint16 part = 2) {
+    inline const QString getBoundsTarget(quint16 part = 2) const {
         return getBoundsRectStr(false, part);
     }
 
@@ -247,14 +247,14 @@ public:
     inline void setTimeFactor(qreal _timeFactor) {
         timeFactor = _timeFactor;
     }
-    inline qreal getTimeFactor() {
+    inline qreal getTimeFactor() const {
         return timeFactor;
     }
     inline void setTimeFactorAuto(qreal _timeFactorAuto) {
         if((curve) && (_timeFactorAuto))
             timeFactor = curve->getPathLength() / _timeFactorAuto;
     }
-    inline qreal getTimeFactorAuto() {
+    inline qreal getTimeFactorAuto() const {
         if((curve) && (timeFactor))
             return curve->getPathLength() / timeFactor;
         else
@@ -263,7 +263,7 @@ public:
     inline void setTimeFactorF(qreal _timeFactorF) {
         timeFactorF = _timeFactorF;
     }
-    inline qreal getTimeFactorF() {
+    inline qreal getTimeFactorF() const {
         return timeFactorF;
     }
 
@@ -271,7 +271,7 @@ public:
         width = _width;
         calculate();
     }
-    inline qreal getWidth() {
+    inline qreal getWidth() const {
         return width;
     }
 
@@ -279,11 +279,11 @@ public:
         depth = _depth;
         calculate();
     }
-    inline qreal getDepth() {
+    inline qreal getDepth() const {
         return depth;
     }
 
-    inline NxCurve* getCurve() {
+    inline NxCurve* getCurve() const {
         return curve;
     }
     inline void setCurve(NxCurve *_curve) {
@@ -295,7 +295,7 @@ public:
         calculate();
     }
 
-    bool contains(NxTrigger *trigger);
+    bool contains(NxTrigger *trigger) const;
     bool trig(NxCurve *collisionCurve);
 
     inline void calcBoundingRect() {
@@ -316,11 +316,11 @@ public:
         else
             return false;
     }
-    inline QRect getBoundingRectSearch()  { return boundingRectSearch; }
+    inline QRect getBoundingRectSearch() const  { return boundingRectSearch; }
 
 
 public:
-    QString serializeCustom() {
+    QString serializeCustom() const {
         QString retour = "";
         if(curve) {
             retour += QString(COMMAND_CURSOR_CURVE + " %1 %2").arg("current").arg("lastCurve") + COMMAND_END;
@@ -345,31 +345,31 @@ private:
     qreal cursorAngleRoll, cursorAnglePitch;
 public:
     void calculate();
-    inline const NxPolygon & getCurrentPolygon() {
+    inline const NxPolygon & getCurrentPolygon() const {
         return cursorPoly;
     }
-    inline qreal getCurrentPositionPercent() {
+    inline qreal getCurrentPositionPercent() const {
         return time;
     }
-    inline qreal getCurrentPosition() {
+    inline qreal getCurrentPosition() const {
         if(curve)
             return time * curve->getPathLength() / qAbs(factors);
         else
             return 0;
     }
-    inline const NxPoint & getCurrentValue() {
+    inline const NxPoint & getCurrentValue() const {
         return cursorRelativePos;
     }
-    inline qreal getCurrentAngle() {
+    inline qreal getCurrentAngle() const {
         return cursorAngle;
     }
-    inline qreal getCurrentAngleRoll() {
+    inline qreal getCurrentAngleRoll() const {
         return cursorAngleRoll;
     }
-    inline qreal getCurrentAnglePitch() {
+    inline qreal getCurrentAnglePitch() const {
         return cursorAnglePitch;
     }
-    inline const NxPoint & getCurrentPos() {
+    inline const NxPoint & getCurrentPos() const {
         return cursorPos;
     }
 

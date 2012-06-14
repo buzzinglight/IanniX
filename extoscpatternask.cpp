@@ -26,7 +26,7 @@ ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject*> *_objects) 
     objects = _objects;
     QStringList messagePatterns;
     onlyCurves = true;
-    foreach(NxObject *object, *objects) {
+    foreach(const NxObject *object, *objects) {
         if(object->getType() != ObjectsTypeCurve)
             onlyCurves = false;
         foreach(const QVector<QByteArray> & messagePatternItems, object->getMessagePatterns()) {
@@ -69,7 +69,7 @@ void ExtOscPatternAsk::mousePressEvent(QMouseEvent *) {
 
 const QString ExtOscPatternAsk::getMessagePatterns() const {
     QString messagePattern = "";
-    foreach(ExtOscPatternEditor *patternList, patternLists)
+    foreach(const ExtOscPatternEditor *patternList, patternLists)
         messagePattern += ", " + patternList->getPattern();
     if(messagePattern.count() > 0)
         messagePattern = "0" + messagePattern;
@@ -80,7 +80,7 @@ void ExtOscPatternAsk::actionAddMessage() {
     QSettings settings;
     bool isTrigger = false;
     bool isCursor = false;
-    foreach(NxObject *object, *objects) {
+    foreach(const NxObject *object, *objects) {
         if(object->getType() == ObjectsTypeCursor)
             isCursor = true;
         else if(object->getType() == ObjectsTypeTrigger)

@@ -1090,7 +1090,7 @@ void UiRender::actionArrange(quint16 type) {
     factory->pushSnapshot();
 
     //Browse objects
-    foreach(NxObject *object, selection) {
+    foreach(const NxObject *object, selection) {
         if(object->getType() == ObjectsTypeCurve) {
             top    = qMax(top,    qMax(object->getBoundingRect().top(),  object->getBoundingRect().bottom()));
             left   = qMin(left,   qMin(object->getBoundingRect().left(), object->getBoundingRect().right()));

@@ -60,6 +60,9 @@ QStatusBar {
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <property name="margin">
      <number>0</number>
     </property>
@@ -539,6 +542,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to rescale objects according to zoom</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
   </action>
   <action name="actionZoom_in">
    <property name="text">
@@ -570,7 +576,7 @@ QStatusBar {
     <string>Click here to restore initial zoom</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+À</string>
+    <string>Ctrl+Shift+0</string>
    </property>
   </action>
   <action name="actionDrawFreeCurve">
@@ -606,7 +612,7 @@ QStatusBar {
     <string>Click here to add and draw a straight curve in your score. Press ESC or click again to end your curve.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+C</string>
+    <string>Ctrl+Shift+G</string>
    </property>
   </action>
   <action name="actionDrawTriggers">

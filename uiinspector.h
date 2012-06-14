@@ -47,7 +47,7 @@ private:
     bool idConflict;   ////CG//// Indicates the id in the inspector spinbox conflicts with an existing id
 public:
     quint16 nbTriggers, nbCurves, nbCursors;
-    inline Qt::CheckState getWasGroupChecked(const QString & groupId) {
+    inline Qt::CheckState getWasGroupChecked(const QString & groupId) const {
         if(wasGroupChecked.contains(groupId))
             return Qt::Unchecked;
         else
@@ -134,16 +134,16 @@ public slots:
     void setTransportMessage(const QString & message);
     void setSyncMessage(const QString & message);
     void setBundleMessage(const QString & message, quint16 port);
-    quint16 getOSCPort();
-    quint16 getUDPPort();
-    quint16 getHttpPort();
-    quint16 getTCPPort();
-    const QString getIpOut();
-    const QString getSerialPort();
-    const QString getTransportMessage();
-    const QString getSyncMessage();
-    const QString getBundleHost();
-    quint16 getBundlePort();
+    quint16 getOSCPort() const;
+    quint16 getUDPPort() const;
+    quint16 getHttpPort() const;
+    quint16 getTCPPort() const;
+    const QString getIpOut() const;
+    const QString getSerialPort() const;
+    const QString getTransportMessage() const;
+    const QString getSyncMessage() const;
+    const QString getBundleHost() const;
+    quint16 getBundlePort() const;
 
 private:
     void timerEvent(QTimerEvent *);

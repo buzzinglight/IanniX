@@ -335,18 +335,18 @@ void UiInspector::refresh() {
     needRefresh = false;
 
     nbTriggers = triggerItem->childCount();
-    nbCursors = cursorItem->childCount();
-    nbCurves = curveItem->childCount();
+    nbCursors  = cursorItem->childCount();
+    nbCurves   = curveItem->childCount();
     QString triggerStr = tr("TRIGGERS") + QString(" (%1)").arg(nbTriggers);
     QString cursorStr  = tr("CURSORS")  + QString(" (%1)").arg(nbCursors);
     QString curveStr   = tr("CURVES")   + QString(" (%1)").arg(nbCurves);
     triggerItem->setText(0, triggerStr);
-    cursorItem->setText(0, cursorStr);
-    curveItem->setText(0, curveStr);
+    cursorItem ->setText(0, cursorStr);
+    curveItem  ->setText(0, curveStr);
     ui->viewTriggerCheck->setText(triggerStr);
-    ui->viewCursorCheck->setText(cursorStr);
-    ui->viewCurveCheck->setText(curveStr);
-    ui->viewGroupLabel->setText(tr("GROUPS") + QString(" (%1)").arg(ui->cc2View->topLevelItemCount()));
+    ui->viewCursorCheck ->setText(cursorStr);
+    ui->viewCurveCheck  ->setText(curveStr);
+    ui->viewGroupLabel  ->setText(tr("GROUPS") + QString(" (%1)").arg(ui->cc2View->topLevelItemCount()));
 
     actionInfoLock = true;
 
@@ -357,10 +357,10 @@ void UiInspector::refresh() {
         NxObject *objectsHover = 0;
         if((objects->count() == 0) && (render->getSelectedHover()))
             objectsHover = render->getSelectedHover();
-        NxCursor *prevCursor = 0;
+        NxCursor  *prevCursor = 0;
         NxTrigger *prevTrigger = 0;
-        NxObject *prevObject = 0;
-        NxCurve *prevCurve = 0;
+        NxObject  *prevObject = 0;
+        NxCurve   *prevCurve = 0;
 
         ui->colorCombo1->clear();
         ui->colorCombo2->clear();
@@ -793,33 +793,33 @@ void UiInspector::setBundleMessage(const QString &message, quint16 port) {
     bundleMessageChange(message, port);
 }
 
-quint16 UiInspector::getOSCPort() {
+quint16 UiInspector::getOSCPort() const {
     return ui->oscInPortSpin->value();
 }
-quint16 UiInspector::getUDPPort() {
+quint16 UiInspector::getUDPPort() const {
     return ui->udpInPortSpin->value();
 }
-quint16 UiInspector::getHttpPort() {
+quint16 UiInspector::getHttpPort() const {
     return ui->httpInPortSpin->value();
 }
-quint16 UiInspector::getTCPPort() {
+quint16 UiInspector::getTCPPort() const {
     return ui->tcpInPortSpin->value();
 }
-const QString UiInspector::getIpOut() {
+const QString UiInspector::getIpOut() const {
     return ui->ipOutEdit->text();
 }
-const QString UiInspector::getSerialPort() {
+const QString UiInspector::getSerialPort() const {
     return ui->serialInPortEdit->text();
 }
-const QString UiInspector::getTransportMessage() {
+const QString UiInspector::getTransportMessage() const {
     return ui->transportMessageEdit->text();
 }
-const QString UiInspector::getSyncMessage() {
+const QString UiInspector::getSyncMessage() const {
     return ui->syncMessageEdit->text();
 }
-const QString UiInspector::getBundleHost() {
+const QString UiInspector::getBundleHost() const {
     return ui->bundleMessageEdit->text();
 }
-quint16 UiInspector::getBundlePort() {
+quint16 UiInspector::getBundlePort() const {
     return ui->bundleMessagePort->value();
 }

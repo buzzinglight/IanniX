@@ -596,12 +596,12 @@ void IanniX::timerTick() {
 
         //Browse groups
         if(document) {
-            foreach(NxGroup *group, document->groups) {
+            foreach(const NxGroup *group, document->groups) {
                 //Browse active/inactive objects
                 for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
 
                     //Browse cursors
-                    foreach(NxObject *objectCursor, group->objects[activityIterator][ObjectsTypeCursor]) {
+                    foreach(const NxObject *objectCursor, group->objects[activityIterator][ObjectsTypeCursor]) {
                         NxCursor *cursor = (NxCursor*)objectCursor;
 
                         //Cursor reset
@@ -622,9 +622,9 @@ void IanniX::timerTick() {
                             cursorBoundingRectSearch = cursor->getBoundingRectSearch();
 
                             //Browse groups
-                            foreach(NxGroup *group, document->groups) {
+                            foreach(const NxGroup *group, document->groups) {
                                 //Browse active triggers
-                                foreach(NxObject *objectTrigger, group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
+                                foreach(const NxObject *objectTrigger, group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
                                     NxTrigger *trigger = (NxTrigger*)objectTrigger;
 
                                     //Check the collision
@@ -633,11 +633,11 @@ void IanniX::timerTick() {
                                 }
 
                                 //Browse active triggers
-                                foreach(NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
-                                    NxCurve *curve = (NxCurve*)objectCurve;
-
-                                    //Check the collision
-                                    cursor->trig(curve);
+                                if(cursor->getPerformCollision()) {
+                                    foreach(const NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
+                                        //Check the collision
+                                        cursor->trig((NxCurve*)objectCurve);
+                                    }
                                 }
                             }
                         }
@@ -834,13 +834,13 @@ void IanniX::actionCC() {
     //Is solo active ?
     isObjectSoloActive = false;
     if(currentDocument) {
-        foreach(NxGroup* group, currentDocument->groups) {
+        foreach(const NxGroup* group, currentDocument->groups) {
             //Browse active/inactive objects
             for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
                 //Browse all types of objects
                 for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
                     //Browse objects
-                    foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
+                    foreach(const NxObject *object, group->objects[activityIterator][typeIterator]) {
                         if(object->checkState(2) == Qt::Checked) {
                             isObjectSoloActive = true;
                             return;
@@ -857,7 +857,7 @@ void IanniX::actionCC2() {
     quint16 centerCounter = 0;
 
     render->selectionClear(true);
-    foreach(NxGroup* group, groups) {
+    foreach(const NxGroup* group, groups) {
         //Browse active/inactive objects
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
             //Browse all types of objects
@@ -877,7 +877,7 @@ void IanniX::actionCC2() {
     //Is solo active ?
     isGroupSoloActive = false;
     if(currentDocument) {
-        foreach(NxGroup *group, currentDocument->groups)
+        foreach(const NxGroup *group, currentDocument->groups)
             if(group->checkState(1) == Qt::Checked) {
                 isGroupSoloActive = true;
                 return;
@@ -1241,7 +1241,7 @@ void IanniX::removeObject(NxObject *object) {
         if(object->getType() == ObjectsTypeCurve) {
             NxCurve *curve = (NxCurve*)object;
             QStringList commands;
-            foreach(NxObject *object, curve->getCursors())
+            foreach(const NxObject *object, curve->getCursors())
                 commands << COMMAND_REMOVE + " " + QString::number(object->getId()) + COMMAND_END;
             foreach(const QString & command, commands) {
                 execute(command);
@@ -1918,7 +1918,7 @@ void IanniX::actionAddFreeCursor() {
     view->unToogleDraw(4);
     editingStop();
     pushSnapshot();
-    foreach(NxObject *object, *(render->getSelection())) {
+    foreach(const NxObject *object, *(render->getSelection())) {
         if(object->getType() == ObjectsTypeCurve) {
             freeCursor = false;
             NxCurve *curve = (NxCurve*)object;
@@ -2115,7 +2115,7 @@ void IanniX::setMidiOutNewDevice(const QString &midi) {
 
 void IanniX::actionCloseEvent(QCloseEvent *event) {
     quint16 nbFileNoSave = 0;
-    foreach(NxDocument *document, documents) {
+    foreach(const NxDocument *document, documents) {
         if(document->getHasChanged())
             nbFileNoSave++;
     }

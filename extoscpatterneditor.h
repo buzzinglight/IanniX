@@ -51,7 +51,7 @@ public:
 
 public:
     void addVariable(const QString & variable);
-    const QString getPattern();
+    const QString getPattern() const;
 
 signals:
     void actionRouteRemove(ExtOscPatternEditor*);

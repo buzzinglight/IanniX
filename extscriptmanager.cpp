@@ -102,7 +102,7 @@ bool ExtScriptManager::parseScript(bool configure) {
             //Ask variables to user and sets the variable in the script
             QList<ExtScriptVariable*> variables = variable->ask();
             if(variable->result()) {
-                foreach(ExtScriptVariable *variable, variables) {
+                foreach(const ExtScriptVariable *variable, variables) {
                     if(variable->isDefFloat())
                         script.setProperty(variable->getValue(), variable->getDefFloat());
                     else

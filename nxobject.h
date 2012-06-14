@@ -113,6 +113,10 @@ public slots:
         return parentObject;
     }
 
+    inline bool getPerformCollision() const {
+        return performCollision;
+    }
+
     inline void setSelectedHover(bool _selectedHover) {
         selectedHover = _selectedHover;
     }
@@ -171,7 +175,7 @@ public slots:
     inline void setMessageId(quint64 _messageId) {
         messageId = _messageId;
     }
-    inline quint64 getMessageId() {
+    inline quint64 getMessageId() const {
         return messageId;
     }
     inline void incMessageId() {
@@ -238,7 +242,7 @@ public slots:
         posDrag = pos;
         isDrag = false;
     }
-    inline const NxPoint getPosDrag() { return posDrag; }
+    inline const NxPoint getPosDrag() const { return posDrag; }
     virtual void calculate() {}
 
     inline const NxRect & getBoundingRect() const {
@@ -360,13 +364,13 @@ public slots:
     inline void setMessageTimeInterval(quint16 _messageTimeInterval) {
         messageTimeInterval = _messageTimeInterval;
     }
-    inline quint16 getMessageTimeInterval() {
+    inline quint16 getMessageTimeInterval() const {
         return messageTimeInterval;
     }
 
 
-    virtual QString serializeCustom() { return ""; }
-    inline QString serialize() {
+    virtual QString serializeCustom() const { return ""; }
+    inline QString serialize() const {
         QString retour;
         retour += QString(COMMAND_ADD + " %1 %2").arg(getTypeStr()).arg(getId()) + COMMAND_END;
         retour += QString(COMMAND_POS + " %1 %2 %3 %4").arg("current").arg(getPos().x()).arg(getPos().y()).arg(getPos().z()) + COMMAND_END;

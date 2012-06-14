@@ -56,6 +56,9 @@ public slots:
     void actionSpeedSlider();
     void actionSpeed();
 
+private:
+    bool speedLock;
+
 signals:
     void actionRoutePlay_pause();
     void actionRouteFast_rewind();

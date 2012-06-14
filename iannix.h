@@ -87,7 +87,7 @@ public:
     void setObjectGroupId(void *_object, const QString & groupIdOld);
     void removeObject(NxObject *object);
 public:
-    inline NxObjectDispatchProperty* getObject(const QString & objectIdStr, bool saveObject = true) {
+    inline NxObjectDispatchProperty* getObject(const QString & objectIdStr, bool saveObject = true) const {
         if(currentDocument) {
             bool ok = false;
             quint16 objectId = objectIdStr.toUInt(&ok);

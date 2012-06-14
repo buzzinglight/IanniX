@@ -62,7 +62,7 @@ private:
     QString defaultStatusTip;
 public:
     inline void setFollowId(qint16 _followId) { followId = _followId; }
-    inline qint16 getFollowId() { return followId; }
+    inline qint16 getFollowId() const { return followId; }
 
     inline QList<NxObject*> *getSelection() {
         return &selection;
@@ -140,7 +140,7 @@ private:
     void paintAxisGrid();
     void paintSelection();
 public:
-    inline UiRenderOptions* getRenderOptions() {
+    inline UiRenderOptions* getRenderOptions() const {
         return renderOptions;
     }
     void flagIsRemoving() { isRemoving = true; }

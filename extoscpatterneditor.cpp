@@ -37,7 +37,7 @@ void ExtOscPatternEditor::addVariable(const QString &variable) {
     item->setFlags(Qt::ItemIsSelectable | /*Qt::ItemIsEditable | */Qt::ItemIsEnabled);
 }
 
-const QString ExtOscPatternEditor::getPattern() {
+const QString ExtOscPatternEditor::getPattern() const {
     QString messagePattern = "";
     for(quint16 index = 0 ; index < ui->patternList->count() ; index++)
         messagePattern += ui->patternList->item(index)->text() + " ";

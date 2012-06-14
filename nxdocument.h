@@ -52,7 +52,7 @@ public:
         NxRect boundingRect;
 
         //Browse groups
-        foreach(NxGroup *group, groups)
+        foreach(const NxGroup *group, groups)
             boundingRect = boundingRect.united(group->getBoundingRect());
 
         return boundingRect;
@@ -60,7 +60,7 @@ public:
 
     inline void clear() {
         QStringList commands;
-        foreach(NxObject *object, objects)
+        foreach(const NxObject *object, objects)
             commands << COMMAND_REMOVE + " " + QString::number(object->getId());
         foreach(const QString & command, commands)
             execute(command);

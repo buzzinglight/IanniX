@@ -172,7 +172,7 @@ public:
             return false;
     }
 
-    QString serializeCustom() {
+    QString serializeCustom() const {
         QString retour = "";
         retour += QString(COMMAND_TRIGGER_OFF + " %1 %2").arg("current").arg(getTriggerOff()) + COMMAND_END;
         retour += QString(COMMAND_TEXTURE_ACTIVE + " %1 %2").arg("current").arg(getTextureActive()) + COMMAND_END;

@@ -23,6 +23,7 @@ UiTransport::UiTransport(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UiTransport) {
     ui->setupUi(this);
+    speedLock = false;
 }
 
 UiTransport::~UiTransport() {
@@ -59,9 +60,9 @@ void UiTransport::setPerfCpu(quint16 cpu) {
         ui->perfCpuEdit->setVisible(false);
     else {
         ui->perfCpuEdit->setVisible(true);
-        if(cpu < 60)
+        if(cpu < 70)
             ui->perfCpuEdit->setStyleSheet("");
-        else if((60 <= cpu) && (cpu < 85))
+        else if((70 <= cpu) && (cpu < 90))
             ui->perfCpuEdit->setStyleSheet("color: #FF8600;");
         else
             ui->perfCpuEdit->setStyleSheet("color: #FF2C00;");
@@ -86,10 +87,13 @@ void UiTransport::setPlay_pause(bool state) {
 }
 
 void UiTransport::actionSpeedSlider() {
-    ui->speedSpin->setValue((qreal)ui->speedSlider->value()/100.0F);
+    if(!speedLock)
+        ui->speedSpin->setValue((qreal)ui->speedSlider->value()/100.0F);
 }
 void UiTransport::actionSpeed() {
+    speedLock = true;
     ui->speedSlider->setValue(getSpeed()*100.0F);
+    speedLock = false;
     emit(actionRouteSpeed());
 }
 

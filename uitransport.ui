@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1004</width>
+    <width>1245</width>
     <height>67</height>
    </rect>
   </property>
@@ -324,13 +324,13 @@ QLabel#lastMessage {
            </property>
            <property name="minimumSize">
             <size>
-             <width>450</width>
+             <width>650</width>
              <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>450</width>
+             <width>650</width>
              <height>35</height>
             </size>
            </property>

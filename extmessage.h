@@ -428,7 +428,7 @@ public:
     }
     
 private:
-    inline qint64 getTimeTag() {
+    inline qint64 getTimeTag() const {
         const qint64 january_1_1900 = -2208988800000ll;
         qint64 ntpMSecs = QDateTime::currentMSecsSinceEpoch() - january_1_1900;
         union { quint32 i[2]; qint64 t; } u;

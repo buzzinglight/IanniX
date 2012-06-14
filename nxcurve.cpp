@@ -62,7 +62,7 @@ void NxCurve::paint() {
         //Hide curve if a cursor is present but inactive
         if((renderOptions->paintCurvesOpacity) && (cursors.count() > 0)) {
             bool display = false;
-            foreach(NxObject *cursor, cursors)
+            foreach(const NxObject *cursor, cursors)
                 if(cursor->getHasActivity()) {
                     display = true;
                     break;
@@ -107,9 +107,10 @@ void NxCurve::paint() {
                 for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
                     if(indexPoint < pathPoints.count()-1) {
                         NxPoint p1 = getPathPointsAt(indexPoint), p2 = getPathPointsAt(indexPoint+1);
-                        NxPoint c1 = p1 + getPathPointsAt(indexPoint+1).c1, c2 = p2 + getPathPointsAt(indexPoint+1).c2;
+                        NxPoint _c1 = getPathPointsAt(indexPoint+1).c1, _c2 = getPathPointsAt(indexPoint+1).c2;
+                        NxPoint c1 = p1 + _c1, c2 = p2 + _c2;
 
-                        if((c1 == NxPoint()) && (c2 == NxPoint())) {
+                        if((_c1 == NxPoint()) && (_c2 == NxPoint())) {
                             glBegin(GL_LINES);
                             glVertex3f(p1.x(), p1.y(), p1.z());
                             glVertex3f(p2.x(), p2.y(), p2.z());
@@ -277,20 +278,30 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, bool s
 }
 const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation) {
     glListRecreate = true;
-    NxCurvePoint pointStruct;
-    pointStruct.setX(point.x());
-    pointStruct.setY(point.y());
-    pointStruct.setZ(point.z());
-    pointStruct.setSx(point.sx());
-    pointStruct.setSy(point.sy());
-    pointStruct.setSz(point.sz());
-    pointStruct.c1 = c1;
-    pointStruct.c2 = c2;
-    pointStruct.smooth = smooth;
-    if(index >= pathPoints.count())
+    if(index >= pathPoints.count()) {
+        NxCurvePoint pointStruct;
+        pointStruct.setX(point.x());
+        pointStruct.setY(point.y());
+        pointStruct.setZ(point.z());
+        pointStruct.setSx(point.sx());
+        pointStruct.setSy(point.sy());
+        pointStruct.setSz(point.sz());
+        pointStruct.c1 = c1;
+        pointStruct.c2 = c2;
+        pointStruct.smooth = smooth;
         pathPoints.append(pointStruct);
-    else
-        pathPoints[index] = pointStruct;
+    }
+    else {
+        pathPoints[index].setX(point.x());
+        pathPoints[index].setY(point.y());
+        pathPoints[index].setZ(point.z());
+        pathPoints[index].setSx(point.sx());
+        pathPoints[index].setSy(point.sy());
+        pathPoints[index].setSz(point.sz());
+        pathPoints[index].c1 = c1;
+        pathPoints[index].c2 = c2;
+        pathPoints[index].smooth = smooth;
+    }
 
 
     //NxPoint ptBefore;
@@ -338,7 +349,6 @@ void NxCurve::setSVG2(const QString & polylineData) {
 
     //Scale
     resize(1, 1);
-    calcBoundingRect();
 }
 
 void NxCurve::setImage(const QString & filename) {
@@ -362,7 +372,6 @@ void NxCurve::setImage(const QString & filename) {
 
     //Scale
     resize(1, -1);
-    calcBoundingRect();
 }
 void NxCurve::setEllipse(const NxSize & size) {
     curveType = CurveTypeEllipse;
@@ -373,7 +382,6 @@ void NxCurve::setEllipse(const NxSize & size) {
 
     //Calculations
     resize(1, 1);
-    calcBoundingRect();
 }
 
 void NxCurve::setText(const QString & text, const QString & family) {
@@ -420,7 +428,6 @@ void NxCurve::setPath(const QPainterPath &path) {
 
     //Calculations
     resize(1, -1);
-    calcBoundingRect();
 }
 
 void NxCurve::resize(qreal sizeFactorW, qreal sizeFactorH) {
@@ -436,7 +443,7 @@ void NxCurve::resize(qreal sizeFactorW, qreal sizeFactorH) {
     calcBoundingRect();
 }
 void NxCurve::resize(const NxSize & size) {
-    calcBoundingRect();
+    //calcBoundingRect();
     NxSize sizeFactor(size.width() / boundingRect.width(), size.height() / boundingRect.height());
     resize(sizeFactor.width(), sizeFactor.height());
 }
@@ -451,7 +458,7 @@ void NxCurve::translatePoint(quint16 indexPoint, const NxPoint &point) {
 }
 
 
-inline NxPoint NxCurve::getPointAt(quint16 index, qreal t) {
+inline NxPoint NxCurve::getPointAt(quint16 index, qreal t) const {
     NxPoint p1 = getPathPointsAt(index), p2 = getPathPointsAt(index+1);
     NxPoint c1 = getPathPointsAt(index+1).c1, c2 = getPathPointsAt(index+1).c2;
     qreal mt = 1 - t;
@@ -475,7 +482,7 @@ inline NxPoint NxCurve::getPointAt(quint16 index, qreal t) {
     }
 }
 
-NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
+NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) const {
     if(curveType == CurveTypeEllipse) {
         qreal angle = 2 * val * M_PI;
         return NxPoint(boundingRect.width() * qCos(angle) / 2, boundingRect.height() * qSin(angle) / 2, 0);
@@ -495,7 +502,7 @@ NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
         return getPointAt(index, (lengthTarget - lengthOld) / (length - lengthOld));
     }
 }
-qreal NxCurve::getAngleAt(qreal val, bool absoluteTime) {
+qreal NxCurve::getAngleAt(qreal val, bool absoluteTime) const {
     qreal angle = 0;
     if(curveType == CurveTypeEllipse)
         angle = -((2 * val * M_PI) + M_PI_2) * 180.0F / M_PI;
@@ -530,9 +537,11 @@ void NxCurve::calcBoundingRect() {
         NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
         for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count()-1 ; indexPoint++) {
             NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);
+            NxPoint pt = getPointAt(indexPoint, 0);
             for(qreal t = 0 ; t <= 1+step ; t += step) {
                 //Longueur
-                NxPoint pt = getPointAt(indexPoint, t), delta = getPointAt(indexPoint, t + step) - pt;
+                NxPoint ptNext = getPointAt(indexPoint, t + step);
+                NxPoint delta  = ptNext - pt;
                 if(t <= 1)
                     pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
 
@@ -543,6 +552,7 @@ void NxCurve::calcBoundingRect() {
                 if(pt.x() > max.x())  max.setX(pt.x());
                 if(pt.y() > max.y())  max.setY(pt.y());
                 if(pt.z() > max.z())  max.setZ(pt.z());
+                pt = ptNext;
             }
             pathPoints[indexPoint+1].currentLength = pathLength;
             if(min.x() == max.x())  max.setX(max.x() + 0.001);
@@ -589,12 +599,13 @@ bool NxCurve::isMouseHover(const NxPoint &mouse) {
     return false;
 }
 
-qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) {
+qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) const {
     qreal step = 0.001;
     if(curveType == CurveTypeEllipse) {
         if(boundingRect.intersects(rect)) {
+            NxPoint pt1 = getPointAt(0);
             for(qreal t = 0 ; t <= 1+step ; t += step) {
-                NxPoint pt1 = getPointAt(t), pt2 = getPointAt(t+step);
+                NxPoint pt2 = getPointAt(t+step);
                 NxRect rectCurve = NxRect(pt1, pt2).translated(pos);
                 if(rectCurve.width()  == 0)  rectCurve.setWidth(0.001);
                 if(rectCurve.height() == 0)  rectCurve.setHeight(0.001);
@@ -604,6 +615,7 @@ qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) {
                         *collisionPoint = (pt1+pt2)/2 + pos;
                     return t;
                 }
+                pt1 = pt2;
             }
         }
     }
@@ -611,8 +623,9 @@ qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) {
         if(boundingRect.intersects(rect)) {
             for(quint16 indexPathPoint = 1 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
                 if(getPathPointsAt(indexPathPoint).boundingRect.intersects(rect)) {
+                    NxPoint pt1 = getPointAt(indexPathPoint-1, (qreal)0);
                     for(qreal t = 0 ; t <= 1+step ; t += step) {
-                        NxPoint pt1 = getPointAt(indexPathPoint-1, t), pt2 = getPointAt(indexPathPoint-1, t+step);
+                        NxPoint pt2 = getPointAt(indexPathPoint-1, t+step);
                         NxRect rectCurve = NxRect(pt1, pt2).translated(pos);
                         if(rectCurve.width()  == 0)  rectCurve.setWidth(0.001);
                         if(rectCurve.height() == 0)  rectCurve.setHeight(0.001);
@@ -622,6 +635,7 @@ qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) {
                                 *collisionPoint = (pt1+pt2)/2 + pos;
                             return (getPathPointsAt(indexPathPoint-1).currentLength + (getPathPointsAt(indexPathPoint).currentLength - getPathPointsAt(indexPathPoint-1).currentLength) * t) / pathLength;
                         }
+                        pt1 = pt2;
                     }
                 }
             }

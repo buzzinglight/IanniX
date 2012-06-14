@@ -27,6 +27,7 @@ public:
     NxPoint(qreal xpos, qreal ypos);
     NxPoint(qreal xpos, qreal ypos, qreal zpos);
     NxPoint(qreal xpos, qreal ypos, qreal zpos, qreal sx, qreal sy, qreal sz);
+    NxPoint(qreal xpos, qreal ypos, qreal zpos, qreal sx, qreal sy, qreal sz, qreal angleZ);
     NxPoint(float xpos, float ypos, float zpos, int dummy);
 
     bool isNull() const;
@@ -37,6 +38,8 @@ public:
     qreal sx() const;
     qreal sy() const;
     qreal sz() const;
+
+    qreal angleZ() const;
 
     void setX(qreal x);
     void setY(qreal y);
@@ -77,6 +80,7 @@ public:
 private:
     float xp, yp, zp;
     float sxp, syp, szp;
+    float angleZp;
 };
 Q_DECLARE_TYPEINFO(NxPoint, Q_MOVABLE_TYPE);
 
@@ -85,6 +89,7 @@ inline NxPoint::NxPoint(qreal xpos, qreal ypos)                  : xp(xpos), yp(
 inline NxPoint::NxPoint(qreal xpos, qreal ypos, qreal zpos)      : xp(xpos), yp(ypos), zp(zpos), sxp(0.0f), syp(0.0f), szp(0.0f) {}
 inline NxPoint::NxPoint(float xpos, float ypos, float zpos, int) : xp(xpos), yp(ypos), zp(zpos), sxp(0.0f), syp(0.0f), szp(0.0f) {}
 inline NxPoint::NxPoint(qreal xpos, qreal ypos, qreal zpos, qreal sx, qreal sy, qreal sz) : xp(xpos), yp(ypos), zp(zpos), sxp(sx), syp(sy), szp(sz) {}
+inline NxPoint::NxPoint(qreal xpos, qreal ypos, qreal zpos, qreal sx, qreal sy, qreal sz, qreal angleZ) : xp(xpos), yp(ypos), zp(zpos), sxp(sx), syp(sy), szp(sz), angleZp(angleZ) {}
 
 inline bool NxPoint::isNull() const {
     return qIsNull(xp) && qIsNull(yp) && qIsNull(zp);
@@ -96,6 +101,7 @@ inline qreal NxPoint::z() const  { return qreal(zp); }
 inline qreal NxPoint::sx() const { return qreal(sxp); }
 inline qreal NxPoint::sy() const { return qreal(syp); }
 inline qreal NxPoint::sz() const { return qreal(szp); }
+inline qreal NxPoint::angleZ() const { return qreal(angleZp); }
 
 inline void NxPoint::setX(qreal aX)   { xp = aX; }
 inline void NxPoint::setY(qreal aY)   { yp = aY; }

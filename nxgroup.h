@@ -61,7 +61,7 @@ public:
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
 
                 //Browse objects
-                foreach(NxObject *object, objects[activityIterator][typeIterator]) {
+                foreach(const NxObject *object, objects[activityIterator][typeIterator]) {
                     boundingRect = boundingRect.united(object->getBoundingRect());
                 }
             }

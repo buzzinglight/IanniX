@@ -59,7 +59,7 @@ private:
     NxSize ellipseSize;
     GLuint glListCurve;
 public:
-    inline NxCurvePoint getPathPointsAt(quint16 index) const {
+    inline const NxCurvePoint & getPathPointsAt(quint16 index) const {
 #ifdef KINECT_INSTALLED
         NxCurvePoint pt = pathPoints.at(index);
         if((factory) && (factory->kinect))
@@ -69,7 +69,7 @@ public:
         return pathPoints.at(index);
 #endif
     }
-    inline quint16 getPathPointsCount() { return pathPoints.count(); }
+    inline quint16 getPathPointsCount() const { return pathPoints.count(); }
 
     void resample(quint16 nbPoints);
 
@@ -139,10 +139,10 @@ public:
     void resize(qreal sizeFactorW, qreal sizeFactorH);
     void translate(const NxPoint & point);
     void translatePoint(quint16 pointIndex, const NxPoint & point);
-    inline NxPoint getPointAt(quint16 index, qreal t);
-    NxPoint getPointAt(qreal val, bool absoluteTime = false);
-    qreal getAngleAt(qreal val, bool absoluteTime = false);
-    qreal intersects(NxRect rect, NxPoint* collisionPoint = 0);
+    inline NxPoint getPointAt(quint16 index, qreal t) const;
+    NxPoint getPointAt(qreal val, bool absoluteTime = false) const;
+    qreal getAngleAt(qreal val, bool absoluteTime = false) const;
+    qreal intersects(NxRect rect, NxPoint* collisionPoint = 0) const;
 
     inline void setResize(const NxSize & size) {
         resize(size);
@@ -189,7 +189,7 @@ public:
             cursors.removeAt(index);
     }
 
-    QString serializeCustom() {
+    QString serializeCustom() const {
         QString retour = "";
         if(curveType == CurveTypeEllipse) {
             retour += QString(COMMAND_CURVE_ELL + " %1 %2 %3").arg("current").arg(getResize().width()).arg(getResize().height()) + COMMAND_END;
@@ -203,7 +203,7 @@ public:
             }
             retour += QString(COMMAND_LINE + " %1 %2 %3").arg("current").arg(getLineStipple()).arg(getLineFactor()) + COMMAND_END;
         }
-        foreach(NxObject *cursor, cursors)
+        foreach(const NxObject *cursor, cursors)
             retour += cursor->serialize();
         return retour;
     }
