@@ -6,19 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>820</width>
-    <height>165</height>
+    <width>1000</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>IanniX — Message editor</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	font: 12px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
-}
-
-QWidget#ExtOscPatternAsk {
+   <string notr="true">QWidget#ExtOscPatternAsk {
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
 }
 
@@ -28,16 +24,35 @@ QTextEdit#help {
 }
 
 
-QPushButton {
-	color: white;
+QWidget {
+	font: 10px &quot;Arial&quot;;
+}
+QLabel {
 	font: bold;
+}
+
+QTabWidget::pane {
+	border: 1px solid rgba(255, 255, 255, 32);
+}
+
+QLabel {
+	color: rgb(220, 220, 220);
+}
+
+QLineEdit {
+	background: transparent;
+	border: 0px solid transparent;
+}
+
+QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit {
 	border: 1px solid rgb(60, 60, 60);
 	border-radius: 4px;
-	min-height: 20px;
-	color: rgb(192, 192, 192);
-padding: 10px;
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 255), stop:1 rgba(61, 61, 61, 255));
-
+}
+QPushButton {
+	margin-left: 5px;
+	color: white;
+	padding: 10px;
 }
 QPushButton:hover {
 	border: 1px solid rgb(0, 187, 255);
@@ -47,6 +62,82 @@ QPushButton::checked, QPushButton:pressed {
 	background-color: rgb(0, 187, 255);
 	color: white;
 }
+
+
+QCheckBox {
+	spacing: 5px;
+}
+QCheckBox::indicator {
+	width: 11px;
+	height: 11px;
+	border: 1px solid rgb(60, 60, 60);
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
+}
+QCheckBox::indicator:checked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+}
+
+QDoubleSpinBox, QSpinBox, QLineEdit  {
+	padding: 2px;
+	padding-top: 0px;
+	color: white;
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+	width: 5px;
+    image: url(:/icons/res_icon_plus.png);
+	padding: 2px;
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 64);
+}
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+	width: 5px;
+    image: url(:/icons/res_icon_minus.png);
+	padding: 2px;
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 64);
+}
+
+
+
+QTreeWidget {
+	alternate-background-color: rgb(79, 79, 81);
+	color: white;
+	border: 0px solid transparent;
+	gridline-color: rgb(150, 152, 137);
+	selection-background-color: rgb(0, 187, 255);
+	background: transparent;
+	background-color: rgb(63, 64, 64);
+}
+QTreeWidget::item {
+}
+QHeaderView {
+	background: transparent;
+	border: 0px solid transparent;
+	color: rgb(203, 203, 203);
+	min-height: 12px;
+}
+QHeaderView::section {
+	background: rgba(255, 255, 255, 64);
+	padding-left: 4px;
+	border: 0px solid transparent;
+	border-top-left-radius:  6px;
+	border-top-right-radius: 6px;
+	font: bold;
+}
+
+QTreeView::indicator {
+	border: 1px solid rgb(60, 60, 60);
+	width: 11px;
+	height: 11px;
+}
+QTreeView::indicator:unchecked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
+}
+QTreeView::indicator:checked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+}
+
+
 
 QScrollBar:vertical, QScrollBar:horizontal {
 	border: 0px solid transparent;
@@ -70,18 +161,26 @@ QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
 	background: none;
 }
+
+
+QSplitter::handle {
+	background: rgb(255, 255, 255, 30);
+}
+QSplitter::handle:pressed {
+	background: rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 4px; }
+QSplitter::handle:vertical     		{	height: 4px; }
+
 </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
    <item>
-    <layout class="QVBoxLayout" name="patternListsLayout">
-     <property name="spacing">
-      <number>0</number>
+    <widget class="QTabWidget" name="tabs">
+     <property name="currentIndex">
+      <number>-1</number>
      </property>
-    </layout>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -90,7 +189,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
        <property name="minimumSize">
         <size>
          <width>150</width>
-         <height>42</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -119,7 +218,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
        <property name="minimumSize">
         <size>
          <width>40</width>
-         <height>42</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">

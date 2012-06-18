@@ -30,14 +30,19 @@ NxDocument::NxDocument(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile
     setHasChanged(false);
 }
 
-QString NxDocument::serialize(UiRenderOptions *renderOptions) {
+QString NxDocument::serialize(UiRenderOptions *renderOptions, bool hasAScript) {
     QString retour = "";
+    QString prefix = "", postfix = COMMAND_END;
+    if(hasAScript) {
+        prefix = "run(\"";
+        postfix =  "\");" + COMMAND_END;
+    }
 
     if(renderOptions) {
-        retour += QString(COMMAND_ZOOM + " %1").arg(renderOptions->zoomValue) + COMMAND_END;
-        retour += QString(COMMAND_SPEED + " %1").arg(renderOptions->timeFactor) + COMMAND_END;
-        retour += QString(COMMAND_CENTER + " %1 %2").arg(-renderOptions->axisCenter.x()).arg(-renderOptions->axisCenter.y()) + COMMAND_END;
-        retour += QString(COMMAND_ROTATE + " %1 %2 %3").arg(renderOptions->rotationDest.x()).arg(renderOptions->rotationDest.y()).arg(renderOptions->rotationDest.z()) + COMMAND_END;
+        retour += prefix + QString(COMMAND_ZOOM + " %1").arg(renderOptions->zoomValue) + postfix;
+        retour += prefix + QString(COMMAND_SPEED + " %1").arg(renderOptions->timeFactor) + postfix;
+        retour += prefix + QString(COMMAND_CENTER + " %1 %2").arg(-renderOptions->axisCenter.x()).arg(-renderOptions->axisCenter.y()) + postfix;
+        retour += prefix + QString(COMMAND_ROTATE + " %1 %2 %3").arg(renderOptions->rotationDest.x()).arg(renderOptions->rotationDest.y()).arg(renderOptions->rotationDest.z()) + postfix;
     }
 
     //Browse documents
@@ -50,7 +55,7 @@ QString NxDocument::serialize(UiRenderOptions *renderOptions) {
                 //Browse objects
                 foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                     if(((typeIterator == ObjectsTypeCursor) && (((NxCursor*)object)->getCurve() == 0)) || (typeIterator == ObjectsTypeCurve) || (typeIterator == ObjectsTypeTrigger))
-                        retour += object->serialize() + COMMAND_END;
+                        retour += object->serialize(hasAScript) + COMMAND_END;
                 }
             }
         }
@@ -61,9 +66,9 @@ QString NxDocument::serialize(UiRenderOptions *renderOptions) {
 void NxDocument::pushSnapshot() {
     setHasChanged(true);
     if(snapshotsIndex < snapshots.count())
-        snapshots.replace(snapshotsIndex, serialize(0));
+        snapshots.replace(snapshotsIndex, serialize(0, false));
     else
-        snapshots.append(serialize(0));
+        snapshots.append(serialize(0, false));
     //qDebug("PUSH snapshot %d", snapshotsIndex);
     snapshotsIndex++;
 }
@@ -95,7 +100,7 @@ void NxDocument::popSnapshot(bool revert) {
 }
 
 void NxDocument::pushSnapshot(const QString & snapshotId) {
-    snapshotsSpecial[snapshotId] = serialize(0);
+    snapshotsSpecial[snapshotId] = serialize(0, false);
     qDebug("Pushing snapshot %s", qPrintable(snapshotId));
 }
 void NxDocument::popSnapshot(const QString & snapshotId) {
@@ -122,7 +127,7 @@ bool NxDocument::save(UiRenderOptions *options) {
     QFile scriptFileContent(getScriptFile().absoluteFilePath());
     if(scriptFileContent.open(QIODevice::WriteOnly | QIODevice::Text)) {
         //Write file
-        scriptFileContent.write(serialize(options).toLatin1());
+        scriptFileContent.write(serialize(options, false).toLatin1());
         scriptFileContent.close();
         setHasChanged(false);
         return true;

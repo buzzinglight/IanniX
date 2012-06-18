@@ -49,16 +49,23 @@ public:
     explicit ExtOscPatternEditor(QWidget *parent = 0);
     ~ExtOscPatternEditor();
 
+private:
+    bool textLock, itemLock;
+    QList< QPair<QTreeWidget*,QLabel*> > trees;
+    quint16 patternNbValues;
+
 public:
-    void addVariable(const QString & variable);
     const QString getPattern() const;
+    void setPattern(const QString &pattern, bool refreshText);
+    void setPattern(const QVector<QByteArray> &messagePatternItems, bool refreshText);
+    void setCurrentItem(QTreeWidget *tree, QLabel *label, const QString &value, bool forceVisible = true);
 
 signals:
     void actionRouteRemove(ExtOscPatternEditor*);
 
 public slots:
-    void listDoubleClick();
-    void editFocusOut();
+    void currentItemChanged();
+    void textPatternChanged();
     void actionRemove();
 
 private:

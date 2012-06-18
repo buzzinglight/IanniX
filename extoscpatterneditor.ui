@@ -6,115 +6,3532 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>760</width>
-    <height>62</height>
+    <width>846</width>
+    <height>672</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>IanniX</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	font: 12px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
+   <string notr="true">QFrame#global {
+	background-color: rgb(242, 241, 237);
 }
-QListWidget {
+
+QTextEdit#help {
 	color: white;
-	max-height: 40px;
+	background-color: transparent;
 }
 
-QListWidget::item {
-	background-color: rgb(44, 167, 218);
-	margin: 2px;
-	border-radius: 8px;
+
+QWidget {
+	font: 10px &quot;Arial&quot;;
+}
+QLabel {
+	font: bold;
 }
 
-QPlainTextEdit {
+QTabWidget::pane {
+	border: 1px solid rgba(255, 255, 255, 32);
+}
+
+QLabel {
+	color: rgb(20, 20, 20);
+}
+
+QLineEdit {
+	background: transparent;
+	border: 0px solid transparent;
+}
+
+QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit {
+	border: 1px solid rgb(60, 60, 60);
+	border-radius: 4px;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 255), stop:1 rgba(61, 61, 61, 255));
+}
+QPushButton {
+	margin-left: 5px;
+	color: white;
+	padding: 10px;
+}
+QPushButton:hover {
+	border: 1px solid rgb(0, 187, 255);
+	background-color: rgb(0, 137, 241, 128);
+}
+QPushButton::checked, QPushButton:pressed {
+	background-color: rgb(0, 187, 255);
+	color: white;
+}
+
+QTreeWidget {
+	color: black;
+	border: 0px solid transparent;
+	gridline-color: rgb(150, 152, 137);
+	selection-background-color: rgb(82, 146, 218);
+	background: transparent;
+	background-color: rgb(0, 0, 0, 32);
+	alternate-background-color: rgb(0, 0, 0, 32);
+}
+QTreeWidget::item {
+}
+QHeaderView {
+	background: transparent;
+	border: 0px solid transparent;
+	color: rgb(203, 203, 203);
+	min-height: 12px;
+}
+QHeaderView::section {
+	background: rgba(255, 255, 255, 64);
+	padding-left: 4px;
+	border: 0px solid transparent;
+	border-top-left-radius:  6px;
+	border-top-right-radius: 6px;
+	font: bold;
+}
+
+QTreeView::indicator {
+	border: 1px solid rgb(60, 60, 60);
+	width: 11px;
+	height: 11px;
+}
+QTreeView::indicator:unchecked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
+}
+QTreeView::indicator:checked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+}
+
+
+
+QScrollBar:vertical, QScrollBar:horizontal {
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 32);
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+	border: 0px solid transparent;
+	background: rgb(161, 161, 161);
+	border-radius: 3px;
+}
+QScrollBar:vertical {						width: 8px;					}
+QScrollBar:horizontal {					height: 8px;				}
+QScrollBar::handle:vertical {			min-height: 8px;		}
+QScrollBar::handle:horizontal {	min-width: 8px;			}
+QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
+	border: 0px solid transparent;
+	background: transparent;
+	width: 1px;
+	height: 1px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: none;
+}
+
+
+QSplitter::handle {
+	background: rgb(0,0,0, 30);
+}
+QSplitter::handle:pressed {
+	background: rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 4px; }
+QSplitter::handle:vertical     		{	height: 4px; }
+
+QWidget#patternEdit {
 	font: 11px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
-}</string>
+}
+
+</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
    <property name="spacing">
-    <number>10</number>
+    <number>0</number>
    </property>
    <property name="margin">
     <number>0</number>
    </property>
    <item>
-    <widget class="QStackedWidget" name="stackedWidget">
-     <property name="currentIndex">
-      <number>0</number>
+    <widget class="QFrame" name="global">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <widget class="QWidget" name="pageList">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QListWidget" name="patternList">
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOn</enum>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::NoSelection</enum>
-         </property>
-         <property name="verticalScrollMode">
-          <enum>QAbstractItemView::ScrollPerPixel</enum>
-         </property>
-         <property name="horizontalScrollMode">
-          <enum>QAbstractItemView::ScrollPerPixel</enum>
-         </property>
-         <property name="flow">
-          <enum>QListView::LeftToRight</enum>
-         </property>
-         <property name="isWrapping" stdset="0">
-          <bool>false</bool>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="margin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QSplitter" name="splitter_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <widget class="QWidget" name="layoutWidget">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>5</number>
+          </property>
+          <item>
+           <widget class="QPlainTextEditWithFocus" name="patternEdit">
+            <property name="plainText">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="removeButton">
+            <property name="text">
+             <string notr="true">Remove message</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="pageEdit">
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QPlainTextEditWithFocus" name="patternEdit">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>50</height>
-          </size>
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
+         <widget class="QWidget" name="layoutWidget">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="spacing">
+            <number>5</number>
+           </property>
+           <property name="rightMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="protocolLabel">
+             <property name="text">
+              <string>PROTOCOL</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="protocol">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>115</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>115</height>
+              </size>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>osc</string>
+              </property>
+              <property name="text">
+               <string>OpenSoundControl message</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>direct</string>
+              </property>
+              <property name="text">
+               <string>Recursive/loopback message (sent directly to IanniX)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>midi</string>
+              </property>
+              <property name="text">
+               <string>MIDI message (control change, note on/off or program change)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>serial</string>
+              </property>
+              <property name="text">
+               <string>Serial message (UART/RS232)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>http</string>
+              </property>
+              <property name="text">
+               <string>HTTP request to a webpage/webservice (GET)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>udp</string>
+              </property>
+              <property name="text">
+               <string>Raw UDP message (compatible with PureData)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>tcp</string>
+              </property>
+              <property name="text">
+               <string>XML over TCP message (compatible with Flash/Director)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>________</string>
+              </property>
+              <property name="text">
+               <string>Custom protocol (for debug purposes only)</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="hostOSCLabel">
+             <property name="text">
+              <string>HOST</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="hostOSC">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>45</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>45</height>
+              </size>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>ip_out</string>
+              </property>
+              <property name="text">
+               <string>Destination is the default IP set in &quot;Network&quot; tab</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>127.0.0.1</string>
+              </property>
+              <property name="text">
+               <string>Destination is your own computer</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>________</string>
+              </property>
+              <property name="text">
+               <string>Custom IP or hostname</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="hostMIDILabel">
+             <property name="text">
+              <string>MIDI DEVICE</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="hostMIDI">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>45</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>45</height>
+              </size>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>midi_out</string>
+              </property>
+              <property name="text">
+               <string>Destination is the default MIDI device set in &quot;Network&quot; tab</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IanniX_Out</string>
+              </property>
+              <property name="text">
+               <string>MIDI device created by IanniX (Mac &amp; Linux only)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>________</string>
+              </property>
+              <property name="text">
+               <string>Custom MIDI device</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="portLabel">
+             <property name="text">
+              <string>PORT</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="port">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>57120</string>
+              </property>
+              <property name="text">
+               <string>Default port used by IanniX</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>________</string>
+              </property>
+              <property name="text">
+               <string>Custom port</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="addressOSCLabel">
+             <property name="text">
+              <string>OSC ADDRESS</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="addressOSC">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>75</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>75</height>
+              </size>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>/trigger</string>
+              </property>
+              <property name="text">
+               <string>Default address used for triggers</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>/cursor</string>
+              </property>
+              <property name="text">
+               <string>Default address used for cursors</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>/transport</string>
+              </property>
+              <property name="text">
+               <string>Default address used for transport messages</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>/iannix</string>
+              </property>
+              <property name="text">
+               <string>Default address used to reach IanniX</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>________</string>
+              </property>
+              <property name="text">
+               <string>Custom OSC address</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="addressMIDILabel">
+             <property name="text">
+              <string>MIDI CONTROL</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="addressMIDI">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>75</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>75</height>
+              </size>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>/cc</string>
+              </property>
+              <property name="text">
+               <string>Send a control change</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>/bend</string>
+              </property>
+              <property name="text">
+               <string>Send a bend</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>/pgm</string>
+              </property>
+              <property name="text">
+               <string>Send a program change</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>/note</string>
+              </property>
+              <property name="text">
+               <string>Send a note</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>________</string>
+              </property>
+              <property name="text">
+               <string>Custom control (for debug purposes only)</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="layoutWidget">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>5</number>
+           </property>
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="value1Label">
+             <property name="text">
+              <string>VALUE 1</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="value1">
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>Triggers</string>
+              </property>
+              <property name="text">
+               <string>Variables related to triggers trigged by a cursor</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>trigger_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_label</string>
+               </property>
+               <property name="text">
+                <string>Returns the label of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value</string>
+               </property>
+               <property name="text">
+                <string>When trigger off-time is set, returns 127 when the trigger is trigged and 0 when the trigger is released</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the triggered trigger and the cursor that triggers the trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_side</string>
+               </property>
+               <property name="text">
+                <string>Returns the 0 if trigger is triggered from left to right and 1 for the other side</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cursors</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors running on a curve</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>cursor_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_label</string>
+               </property>
+               <property name="text">
+                <string>Returns the label of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in seconds)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time_percent</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_angle</string>
+               </property>
+               <property name="text">
+                <string>Returne the angle of the cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_nb_loop</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of loops done by the cursor on the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Curves</string>
+              </property>
+              <property name="text">
+               <string>Variables related to curves where a cursor runs on</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_label</string>
+               </property>
+               <property name="text">
+                <string>Returns the label of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Collisions</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors intersecting curves</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>collision_curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_curve_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_curve_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_curve_label</string>
+               </property>
+               <property name="text">
+                <string>Returns the label of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_curve_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_curve_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_curve_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the collision and the cursor</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Score</string>
+              </property>
+              <property name="text">
+               <string>Variables related to current score</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>timetag</string>
+               </property>
+               <property name="text">
+                <string>Set an OSC Timetag (compliant with Internet NTP timestamps) to message</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>status</string>
+               </property>
+               <property name="text">
+                <string>Returns the playback status of score (&quot;play&quot;, &quot;stop&quot; or &quot;fastrewind&quot;)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_triggers</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of triggers in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_cursors</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of cursors in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_curves</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of curves in the current score</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>________</string>
+              </property>
+              <property name="text">
+               <string>Custom value or Javascripted variable</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="value2Label">
+             <property name="text">
+              <string>VALUE 2</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="value2">
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>Triggers</string>
+              </property>
+              <property name="text">
+               <string>Variables related to triggers trigged by a cursor</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>trigger_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value</string>
+               </property>
+               <property name="text">
+                <string>When trigger off-time is set, returns 127 when the trigger is trigged and 0 when the trigger is released</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the triggered trigger and the cursor that triggers the trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_side</string>
+               </property>
+               <property name="text">
+                <string>Returns the 0 if trigger is triggered from left to right and 1 for the other side</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cursors</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors running on a curve</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>cursor_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in seconds)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time_percent</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_angle</string>
+               </property>
+               <property name="text">
+                <string>Returne the angle of the cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_nb_loop</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of loops done by the cursor on the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Curves</string>
+              </property>
+              <property name="text">
+               <string>Variables related to curves where a cursor runs on</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Collisions</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors intersecting curves</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>collision_curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the collision and the cursor</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Score</string>
+              </property>
+              <property name="text">
+               <string>Variables related to current score</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>timetag</string>
+               </property>
+               <property name="text">
+                <string>Set an OSC Timetag (compliant with Internet NTP timestamps) to message</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>status</string>
+               </property>
+               <property name="text">
+                <string>Returns the playback status of score (&quot;play&quot;, &quot;stop&quot; or &quot;fastrewind&quot;)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_triggers</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of triggers in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_cursors</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of cursors in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_curves</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of curves in the current score</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="text">
+               <string>Custom value or Javascripted variable</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_7">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="value3Label">
+             <property name="text">
+              <string>VALUE 3</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="value3">
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>Triggers</string>
+              </property>
+              <property name="text">
+               <string>Variables related to triggers trigged by a cursor</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>trigger_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value</string>
+               </property>
+               <property name="text">
+                <string>When trigger off-time is set, returns 127 when the trigger is trigged and 0 when the trigger is released</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the triggered trigger and the cursor that triggers the trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_side</string>
+               </property>
+               <property name="text">
+                <string>Returns the 0 if trigger is triggered from left to right and 1 for the other side</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cursors</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors running on a curve</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>cursor_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in seconds)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time_percent</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_angle</string>
+               </property>
+               <property name="text">
+                <string>Returne the angle of the cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_nb_loop</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of loops done by the cursor on the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Curves</string>
+              </property>
+              <property name="text">
+               <string>Variables related to curves where a cursor runs on</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Collisions</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors intersecting curves</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>collision_curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the collision and the cursor</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Score</string>
+              </property>
+              <property name="text">
+               <string>Variables related to current score</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>timetag</string>
+               </property>
+               <property name="text">
+                <string>Set an OSC Timetag (compliant with Internet NTP timestamps) to message</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>status</string>
+               </property>
+               <property name="text">
+                <string>Returns the playback status of score (&quot;play&quot;, &quot;stop&quot; or &quot;fastrewind&quot;)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_triggers</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of triggers in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_cursors</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of cursors in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_curves</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of curves in the current score</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="text">
+               <string>Custom value or Javascripted variable</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="value4Label">
+             <property name="text">
+              <string>VALUE 4</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="value4">
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>Triggers</string>
+              </property>
+              <property name="text">
+               <string>Variables related to triggers trigged by a cursor</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>trigger_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value</string>
+               </property>
+               <property name="text">
+                <string>When trigger off-time is set, returns 127 when the trigger is trigged and 0 when the trigger is released</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the triggered trigger and the cursor that triggers the trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_side</string>
+               </property>
+               <property name="text">
+                <string>Returns the 0 if trigger is triggered from left to right and 1 for the other side</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cursors</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors running on a curve</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>cursor_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in seconds)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time_percent</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_angle</string>
+               </property>
+               <property name="text">
+                <string>Returne the angle of the cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_nb_loop</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of loops done by the cursor on the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Curves</string>
+              </property>
+              <property name="text">
+               <string>Variables related to curves where a cursor runs on</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Collisions</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors intersecting curves</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>collision_curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the collision and the cursor</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Score</string>
+              </property>
+              <property name="text">
+               <string>Variables related to current score</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>timetag</string>
+               </property>
+               <property name="text">
+                <string>Set an OSC Timetag (compliant with Internet NTP timestamps) to message</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>status</string>
+               </property>
+               <property name="text">
+                <string>Returns the playback status of score (&quot;play&quot;, &quot;stop&quot; or &quot;fastrewind&quot;)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_triggers</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of triggers in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_cursors</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of cursors in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_curves</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of curves in the current score</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="text">
+               <string>Custom value or Javascripted variable</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="value5Label">
+             <property name="text">
+              <string>VALUE 5</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="value5">
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>Triggers</string>
+              </property>
+              <property name="text">
+               <string>Variables related to triggers trigged by a cursor</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>trigger_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value</string>
+               </property>
+               <property name="text">
+                <string>When trigger off-time is set, returns 127 when the trigger is trigged and 0 when the trigger is released</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the triggered trigger and the cursor that triggers the trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_side</string>
+               </property>
+               <property name="text">
+                <string>Returns the 0 if trigger is triggered from left to right and 1 for the other side</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cursors</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors running on a curve</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>cursor_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in seconds)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time_percent</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_angle</string>
+               </property>
+               <property name="text">
+                <string>Returne the angle of the cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_nb_loop</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of loops done by the cursor on the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Curves</string>
+              </property>
+              <property name="text">
+               <string>Variables related to curves where a cursor runs on</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Collisions</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors intersecting curves</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>collision_curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the collision and the cursor</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Score</string>
+              </property>
+              <property name="text">
+               <string>Variables related to current score</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>timetag</string>
+               </property>
+               <property name="text">
+                <string>Set an OSC Timetag (compliant with Internet NTP timestamps) to message</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>status</string>
+               </property>
+               <property name="text">
+                <string>Returns the playback status of score (&quot;play&quot;, &quot;stop&quot; or &quot;fastrewind&quot;)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_triggers</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of triggers in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_cursors</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of cursors in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_curves</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of curves in the current score</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="text">
+               <string>Custom value or Javascripted variable</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="value6Label">
+             <property name="text">
+              <string>VALUE 6</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="value6">
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>true</bool>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Help</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>Triggers</string>
+              </property>
+              <property name="text">
+               <string>Variables related to triggers trigged by a cursor</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>trigger_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the triggered trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_value</string>
+               </property>
+               <property name="text">
+                <string>When trigger off-time is set, returns 127 when the trigger is trigged and 0 when the trigger is released</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the triggered trigger and the cursor that triggers the trigger</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_side</string>
+               </property>
+               <property name="text">
+                <string>Returns the 0 if trigger is triggered from left to right and 1 for the other side</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>trigger_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cursors</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors running on a curve</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>cursor_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_value_z</string>
+               </property>
+               <property name="text">
+                <string>Returns the z mapped coordinate of the running cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in seconds)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_time_percent</string>
+               </property>
+               <property name="text">
+                <string>Returns the current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_angle</string>
+               </property>
+               <property name="text">
+                <string>Returne the angle of the cursor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_nb_loop</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of loops done by the cursor on the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>cursor_message_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the message (each message generates an ascending ID)</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Curves</string>
+              </property>
+              <property name="text">
+               <string>Variables related to curves where a cursor runs on</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_group_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the group name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_document_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the document name of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>curve_zPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the z coordinate of curve where the cursor runs on</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Collisions</string>
+              </property>
+              <property name="text">
+               <string>Variables related to cursors intersecting curves</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>collision_curve_id</string>
+               </property>
+               <property name="text">
+                <string>Returns the ID of the collided curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_xPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the x coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_yPos</string>
+               </property>
+               <property name="text">
+                <string>Returns the y coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_x</string>
+               </property>
+               <property name="text">
+                <string>Returns the x mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_value_y</string>
+               </property>
+               <property name="text">
+                <string>Returns the y mapped coordinate of the collision between the cursor and the curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>collision_distance</string>
+               </property>
+               <property name="text">
+                <string>Returns the distance between the collision and the cursor</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Score</string>
+              </property>
+              <property name="text">
+               <string>Variables related to current score</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>timetag</string>
+               </property>
+               <property name="text">
+                <string>Set an OSC Timetag (compliant with Internet NTP timestamps) to message</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>status</string>
+               </property>
+               <property name="text">
+                <string>Returns the playback status of score (&quot;play&quot;, &quot;stop&quot; or &quot;fastrewind&quot;)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_triggers</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of triggers in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_cursors</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of cursors in the current score</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>nb_curves</string>
+               </property>
+               <property name="text">
+                <string>Returns the number of curves in the current score</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="text">
+               <string>Custom value or Javascripted variable</string>
+              </property>
+              <property name="flags">
+               <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="removeButton">
-     <property name="minimumSize">
-      <size>
-       <width>30</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>30</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="text">
-      <string notr="true">-</string>
-     </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
@@ -131,44 +3548,10 @@ QPlainTextEdit {
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>patternList</tabstop>
   <tabstop>removeButton</tabstop>
-  <tabstop>patternEdit</tabstop>
  </tabstops>
  <resources/>
  <connections>
-  <connection>
-   <sender>patternList</sender>
-   <signal>doubleClicked(QModelIndex)</signal>
-   <receiver>ExtOscPatternEditor</receiver>
-   <slot>listDoubleClick()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>45</x>
-     <y>57</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>0</x>
-     <y>80</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>patternEdit</sender>
-   <signal>focusOut()</signal>
-   <receiver>ExtOscPatternEditor</receiver>
-   <slot>editFocusOut()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>41</x>
-     <y>33</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>0</x>
-     <y>27</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>removeButton</sender>
    <signal>released()</signal>
@@ -176,8 +3559,8 @@ QPlainTextEdit {
    <slot>actionRemove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>793</x>
-     <y>54</y>
+     <x>839</x>
+     <y>61</y>
     </hint>
     <hint type="destinationlabel">
      <x>432</x>
@@ -185,10 +3568,410 @@ QPlainTextEdit {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>protocol</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>77</x>
+     <y>195</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>44</x>
+     <y>783</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hostOSC</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>32</x>
+     <y>292</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>795</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hostMIDI</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>76</x>
+     <y>378</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>79</x>
+     <y>795</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>port</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>182</x>
+     <y>446</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>164</x>
+     <y>770</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addressOSC</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>555</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>108</x>
+     <y>795</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addressMIDI</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>330</x>
+     <y>664</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>313</x>
+     <y>795</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value1</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>665</x>
+     <y>152</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>960</x>
+     <y>795</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value2</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>838</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>597</x>
+     <y>771</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value3</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>838</x>
+     <y>371</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>392</x>
+     <y>776</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value4</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>838</x>
+     <y>469</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1097</x>
+     <y>790</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value5</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>838</x>
+     <y>566</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>965</x>
+     <y>795</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value6</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>838</x>
+     <y>664</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1098</x>
+     <y>795</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternEdit</sender>
+   <signal>textChanged()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>textPatternChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>100</x>
+     <y>36</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1122</x>
+     <y>837</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>protocol</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>262</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>288</x>
+     <y>724</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addressMIDI</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>627</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addressOSC</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>518</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hostMIDI</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>356</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hostOSC</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>277</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>port</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>429</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value1</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>636</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value2</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>636</x>
+     <y>238</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value3</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>636</x>
+     <y>336</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value4</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>636</x>
+     <y>434</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value5</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>636</x>
+     <y>531</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>value6</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>636</x>
+     <y>629</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>listDoubleClick()</slot>
-  <slot>editFocusOut()</slot>
   <slot>actionRemove()</slot>
+  <slot>currentItemChanged()</slot>
+  <slot>textPatternChanged()</slot>
  </slots>
 </ui>

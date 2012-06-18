@@ -189,22 +189,57 @@ public:
             cursors.removeAt(index);
     }
 
-    QString serializeCustom() const {
+    QString serializeCustom(bool hasAScript) const {
         QString retour = "";
+        QString prefix = "", postfix = COMMAND_END;
+        if(hasAScript) {
+            prefix = "run(\"";
+            postfix =  "\");" + COMMAND_END;
+        }
         if(curveType == CurveTypeEllipse) {
-            retour += QString(COMMAND_CURVE_ELL + " %1 %2 %3").arg("current").arg(getResize().width()).arg(getResize().height()) + COMMAND_END;
-            retour += QString(COMMAND_RESIZE + " %1 %2 %3").arg("current").arg(getResize().width()).arg(getResize().height()) + COMMAND_END;
+            retour += prefix + QString(COMMAND_CURVE_ELL + " %1 %2 %3").arg("current").arg(getResize().width()/2).arg(getResize().height()/2) + postfix;
+            //retour += QString(COMMAND_RESIZE + " %1 %2 %3").arg("current").arg(getResize().width()).arg(getResize().height()) + postfix;
         }
         else {
-            for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
-                retour += QString(COMMAND_CURVE_POINT + " %1  %2  %3 %4 %5  ").arg("current").arg(indexPathPoint).arg(getPathPointsAt(indexPathPoint).x()).arg(getPathPointsAt(indexPathPoint).y()).arg(getPathPointsAt(indexPathPoint).z());
-                retour += QString("%1 %2 %3  ").arg(getPathPointsAt(indexPathPoint).c1.x()).arg(getPathPointsAt(indexPathPoint).c1.y()).arg(getPathPointsAt(indexPathPoint).c1.z());
-                retour += QString("%1 %2 %3").arg(getPathPointsAt(indexPathPoint).c2.x()).arg(getPathPointsAt(indexPathPoint).c2.y()).arg(getPathPointsAt(indexPathPoint).c2.z()) + COMMAND_END;
+            if(hasAScript) {
+                QString idStr = QString::number(id);
+                retour += "var points" + idStr + " = [\n";
+                for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
+                    retour += QString("\t{x: %1, y: %2, z: %3, ").arg(getPathPointsAt(indexPathPoint).x()).arg(getPathPointsAt(indexPathPoint).y()).arg(getPathPointsAt(indexPathPoint).z());
+                    retour += QString("c1x: %1, c1y: %2, c1z: %3, ").arg(getPathPointsAt(indexPathPoint).c1.x()).arg(getPathPointsAt(indexPathPoint).c1.y()).arg(getPathPointsAt(indexPathPoint).c1.z());
+                    retour += QString("c2x: %1, c2y: %2, c2z: %3},\n").arg(getPathPointsAt(indexPathPoint).c2.x()).arg(getPathPointsAt(indexPathPoint).c2.y()).arg(getPathPointsAt(indexPathPoint).c2.z());
+                }
+                retour += "];" + COMMAND_END;
+                retour += "for(var i = 0 ; i < points" + idStr + ".length ; i++)" + COMMAND_END;
+                retour += "\trun(\"setPointAt current \" + i + \" \" + points" + idStr + "[i].x + \" \" + points" + idStr + "[i].y + \" \" + points" + idStr + "[i].z + \" \" + points" + idStr + "[i].c1x + \" \" + points" + idStr + "[i].c1y + \" \" + points" + idStr + "[i].c1z + \" \" + points" + idStr + "[i].c2x + \" \" + points" + idStr + "[i].c2y + \" \" + points" + idStr + "[i].c2z);" + COMMAND_END;
             }
-            retour += QString(COMMAND_LINE + " %1 %2 %3").arg("current").arg(getLineStipple()).arg(getLineFactor()) + COMMAND_END;
+            else {
+                for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
+                    retour += prefix + QString(COMMAND_CURVE_POINT + " %1  %2  %3 %4 %5  ").arg("current").arg(indexPathPoint).arg(getPathPointsAt(indexPathPoint).x()).arg(getPathPointsAt(indexPathPoint).y()).arg(getPathPointsAt(indexPathPoint).z());
+                    retour += prefix + QString("%1 %2 %3  ").arg(getPathPointsAt(indexPathPoint).c1.x()).arg(getPathPointsAt(indexPathPoint).c1.y()).arg(getPathPointsAt(indexPathPoint).c1.z());
+                    retour += prefix + QString("%1 %2 %3").arg(getPathPointsAt(indexPathPoint).c2.x()).arg(getPathPointsAt(indexPathPoint).c2.y()).arg(getPathPointsAt(indexPathPoint).c2.z()) + postfix;
+                }
+            }
+            if((getLineStipple() != 0xFFFF) || (getLineFactor() != 1))
+                retour += prefix + QString(COMMAND_LINE + " %1 %2 %3").arg("current").arg(getLineStipple()).arg(getLineFactor()) + postfix;
         }
+        if(!colorActive.isEmpty()) {
+            if(getColorActive() != "curve_active")
+                retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2").arg("current").arg(getColorActive()) + postfix;
+        }
+        else
+            retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColor().red()).arg(getColorActiveColor().green()).arg(getColorActiveColor().blue()).arg(getColorActiveColor().alpha()) + postfix;
+        if(!colorInactive.isEmpty()) {
+            if(getColorInactive() != "curve_inactive")
+                retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2").arg("current").arg(getColorInactive()) + postfix;
+        }
+        else
+            retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColor().red()).arg(getColorInactiveColor().green()).arg(getColorInactiveColor().blue()).arg(getColorInactiveColor().alpha()) + postfix;
+        if(getSize() != 1.2)
+            retour += prefix + QString(COMMAND_SIZE + " %1 %2").arg("current").arg(getSize()) + postfix;
+
         foreach(const NxObject *cursor, cursors)
-            retour += cursor->serialize();
+            retour += cursor->serialize(hasAScript);
         return retour;
     }
 
@@ -214,18 +249,18 @@ public:
 };
 
 void pathArcSegment(QPainterPath &path,
-                           qreal xc, qreal yc,
-                           qreal th0, qreal th1,
-                           qreal rx, qreal ry, qreal xAxisRotation);
+                    qreal xc, qreal yc,
+                    qreal th0, qreal th1,
+                    qreal rx, qreal ry, qreal xAxisRotation);
 void pathArc(QPainterPath &path,
-                    qreal               rx,
-                    qreal               ry,
-                    qreal               x_axis_rotation,
-                    int         large_arc_flag,
-                    int         sweep_flag,
-                    qreal               x,
-                    qreal               y,
-                    qreal curx, qreal cury);
+             qreal               rx,
+             qreal               ry,
+             qreal               x_axis_rotation,
+             int         large_arc_flag,
+             int         sweep_flag,
+             qreal               x,
+             qreal               y,
+             qreal curx, qreal cury);
 bool parsePathDataFast(const QString &dataStr, QPainterPath &path);
 void parseNumbersArray(const QChar *&str, QVarLengthArray<qreal, 8> &points);
 

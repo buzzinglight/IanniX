@@ -369,27 +369,26 @@ public slots:
     }
 
 
-    virtual QString serializeCustom() const { return ""; }
-    inline QString serialize() const {
+    virtual QString serializeCustom(bool) const { return ""; }
+    inline QString serialize(bool hasAScript) const {
         QString retour;
-        retour += QString(COMMAND_ADD + " %1 %2").arg(getTypeStr()).arg(getId()) + COMMAND_END;
-        retour += QString(COMMAND_POS + " %1 %2 %3 %4").arg("current").arg(getPos().x()).arg(getPos().y()).arg(getPos().z()) + COMMAND_END;
-        retour += QString(COMMAND_ACTIVE + " %1 %2").arg("current").arg(getActive()) + COMMAND_END;
-        retour += QString(COMMAND_GROUP + " %1 %2").arg("current").arg(getGroupId()) + COMMAND_END;
+        QString prefix = "", postfix = COMMAND_END;
+        if(hasAScript) {
+            prefix = "run(\"";
+            postfix =  "\");" + COMMAND_END;
+        }
 
-        if(!colorActive.isEmpty())
-            retour += QString(COMMAND_COLOR_ACTIVE + " %1 %2").arg("current").arg(getColorActive()) + COMMAND_END;
-        else
-            retour += QString(COMMAND_COLOR_ACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColor().red()).arg(getColorActiveColor().green()).arg(getColorActiveColor().blue()).arg(getColorActiveColor().alpha()) + COMMAND_END;
-        if(!colorInactive.isEmpty())
-            retour += QString(COMMAND_COLOR_INACTIVE + " %1 %2").arg("current").arg(getColorInactive()) + COMMAND_END;
-        else
-            retour += QString(COMMAND_COLOR_INACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColor().red()).arg(getColorInactiveColor().green()).arg(getColorInactiveColor().blue()).arg(getColorInactiveColor().alpha()) + COMMAND_END;
+        retour += prefix + QString(COMMAND_ADD + " %1 %2").arg(getTypeStr()).arg(getId()) + postfix;
+        if((getPos().x() != 0) || (getPos().y() != 0) || (getPos().z() != 0))
+            retour += prefix + QString(COMMAND_POS + " %1 %2 %3 %4").arg("current").arg(getPos().x()).arg(getPos().y()).arg(getPos().z()) + postfix;
+        if(getActive() != 1)
+            retour += prefix + QString(COMMAND_ACTIVE + " %1 %2").arg("current").arg(getActive()) + postfix;
+        if(getGroupId() != "")
+            retour += prefix + QString(COMMAND_GROUP + " %1 %2").arg("current").arg(getGroupId()) + postfix;
 
-        retour += QString(COMMAND_SIZE + " %1 %2").arg("current").arg(getSize()) + COMMAND_END;
-        retour += QString(COMMAND_MESSAGE + " %1 %2, %3").arg("current").arg(QString::number(messageTimeInterval)).arg(getMessagePatternsStr()) + COMMAND_END;
-        retour += QString(COMMAND_LABEL + " %1 %2").arg("current").arg(getLabel()) + COMMAND_END;
-        retour += serializeCustom();
+        if(getLabel() != "")
+            retour += prefix + QString(COMMAND_LABEL + " %1 %2").arg("current").arg(getLabel()) + postfix;
+        retour += serializeCustom(hasAScript);
         return retour;
     }
 

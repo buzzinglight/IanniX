@@ -172,21 +172,55 @@ public:
             return false;
     }
 
-    QString serializeCustom() const {
+    QString serializeCustom(bool hasAScript) const {
         QString retour = "";
-        retour += QString(COMMAND_TRIGGER_OFF + " %1 %2").arg("current").arg(getTriggerOff()) + COMMAND_END;
-        retour += QString(COMMAND_TEXTURE_ACTIVE + " %1 %2").arg("current").arg(getTextureActive()) + COMMAND_END;
-        retour += QString(COMMAND_TEXTURE_INACTIVE + " %1 %2").arg("current").arg(getTextureInactive()) + COMMAND_END;
-        retour += QString(COMMAND_TEXTURE_ACTIVE_MESSAGE + " %1 %2").arg("current").arg(getTextureActiveMessage()) + COMMAND_END;
-        retour += QString(COMMAND_TEXTURE_INACTIVE_MESSAGE + " %1 %2").arg("current").arg(getTextureInactiveMessage()) + COMMAND_END;
-        if(!colorActiveMessage.isEmpty())
-            retour += QString(COMMAND_COLOR_ACTIVE_MESSAGE + " %1 %2").arg("current").arg(getColorActiveMessage()) + COMMAND_END;
+        QString prefix = "", postfix = COMMAND_END;
+        if(hasAScript) {
+            prefix = "run(\"";
+            postfix =  "\");" + COMMAND_END;
+        }
+        if(getTriggerOff() != 0)
+            retour += prefix + QString(COMMAND_TRIGGER_OFF + " %1 %2").arg("current").arg(getTriggerOff()) + postfix;
+
+        if(getTextureActive() != "trigger_active")
+            retour += prefix + QString(COMMAND_TEXTURE_ACTIVE + " %1 %2").arg("current").arg(getTextureActive()) + postfix;
+        if(getTextureInactive() != "trigger_inactive")
+            retour += prefix + QString(COMMAND_TEXTURE_INACTIVE + " %1 %2").arg("current").arg(getTextureInactive()) + postfix;
+        if(getTextureActiveMessage() != "trigger_active_message")
+            retour += prefix + QString(COMMAND_TEXTURE_ACTIVE_MESSAGE + " %1 %2").arg("current").arg(getTextureActiveMessage()) + postfix;
+        if(getTextureInactiveMessage() != "trigger_inactive_message")
+            retour += prefix + QString(COMMAND_TEXTURE_INACTIVE_MESSAGE + " %1 %2").arg("current").arg(getTextureInactiveMessage()) + postfix;
+
+        if(!colorActive.isEmpty()) {
+            if(getColorActive() != "trigger_active")
+                retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2").arg("current").arg(getColorActive()) + postfix;
+        }
         else
-            retour += QString(COMMAND_COLOR_ACTIVE_MESSAGE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColorMessage().red()).arg(getColorActiveColorMessage().green()).arg(getColorActiveColorMessage().blue()).arg(getColorActiveColorMessage().alpha()) + COMMAND_END;
-        if(!colorInactiveMessage.isEmpty())
-            retour += QString(COMMAND_COLOR_INACTIVE_MESSAGE + " %1 %2").arg("current").arg(getColorInactiveMessage()) + COMMAND_END;
+            retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColor().red()).arg(getColorActiveColor().green()).arg(getColorActiveColor().blue()).arg(getColorActiveColor().alpha()) + postfix;
+        if(!colorInactive.isEmpty()) {
+            if(getColorInactive() != "trigger_inactive")
+                retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2").arg("current").arg(getColorInactive()) + postfix;
+        }
         else
-            retour += QString(COMMAND_COLOR_INACTIVE_MESSAGE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColorMessage().red()).arg(getColorInactiveColorMessage().green()).arg(getColorInactiveColorMessage().blue()).arg(getColorInactiveColorMessage().alpha()) + COMMAND_END;
+            retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColor().red()).arg(getColorInactiveColor().green()).arg(getColorInactiveColor().blue()).arg(getColorInactiveColor().alpha()) + postfix;
+        if(!colorActiveMessage.isEmpty()) {
+            if(getColorActiveMessage() != "trigger_active_message")
+                retour += prefix + QString(COMMAND_COLOR_ACTIVE_MESSAGE + " %1 %2").arg("current").arg(getColorActiveMessage()) + postfix;
+        }
+        else
+            retour += prefix + QString(COMMAND_COLOR_ACTIVE_MESSAGE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColorMessage().red()).arg(getColorActiveColorMessage().green()).arg(getColorActiveColorMessage().blue()).arg(getColorActiveColorMessage().alpha()) + postfix;
+
+        if(!colorInactiveMessage.isEmpty()) {
+            if(getColorInactiveMessage() != "trigger_inactive_message")
+                retour += prefix + QString(COMMAND_COLOR_INACTIVE_MESSAGE + " %1 %2").arg("current").arg(getColorInactiveMessage()) + postfix;
+        }
+        else
+            retour += prefix + QString(COMMAND_COLOR_INACTIVE_MESSAGE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColorMessage().red()).arg(getColorInactiveColorMessage().green()).arg(getColorInactiveColorMessage().blue()).arg(getColorInactiveColorMessage().alpha()) + postfix;
+        if(getSize() != 1)
+            retour += prefix + QString(COMMAND_SIZE + " %1 %2").arg("current").arg(getSize()) + postfix;
+
+        if(getMessagePatternsStr() != QSettings().value("defaultMessageTrigger").toString()+" ,")
+            retour += prefix + QString(COMMAND_MESSAGE + " %1 %2, %3").arg("current").arg(QString::number(messageTimeInterval)).arg(getMessagePatternsStr()) + postfix;
         return retour;
     }
 

@@ -979,21 +979,16 @@ void UiRender::actionCopy() {
     QString copy = "";
     foreach(NxObject *object, selection)
         if(object->getType() != ObjectsTypeCursor)
-            copy += object->serialize() + COMMAND_END;
+            copy += object->serialize(false) + COMMAND_END;
 
     QApplication::clipboard()->setText(copy);
 }
 void UiRender::actionCopyScript() {
-    QStringList commands;
-    foreach(NxObject *object, selection)
-        if(object->getType() != ObjectsTypeCursor) {
-            QStringList commandsStr = object->serialize().split(COMMAND_END);
-            commands << commandsStr;
-        }
-
     QString copy = "";
-    foreach(const QString &command, commands)
-        copy += "run(\"" + command + "\");\n";
+    foreach(NxObject *object, selection)
+        if(object->getType() != ObjectsTypeCursor)
+            copy += object->serialize(true) + COMMAND_END;
+
     QApplication::clipboard()->setText(copy);
 }
 void UiRender::actionPaste() {

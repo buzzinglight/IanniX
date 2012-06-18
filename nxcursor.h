@@ -320,19 +320,50 @@ public:
 
 
 public:
-    QString serializeCustom() const {
+    QString serializeCustom(bool hasAScript) const {
         QString retour = "";
+        QString prefix = "", postfix = COMMAND_END;
+        if(hasAScript) {
+            prefix = "run(\"";
+            postfix =  "\");" + COMMAND_END;
+        }
         if(curve) {
-            retour += QString(COMMAND_CURSOR_CURVE + " %1 %2").arg("current").arg("lastCurve") + COMMAND_END;
-            retour += QString(COMMAND_LINE + " %1 %2 %3").arg("current").arg(getLineStipple()).arg(getLineFactor()) + COMMAND_END;
-            retour += QString(COMMAND_CURSOR_OFFSET + " %1 %2 %3 %4").arg("current").arg(getTimeInitialOffset()).arg(getTimeStartOffset()).arg(getTimeEndOffset()) + COMMAND_END;
-            retour += QString(COMMAND_CURSOR_BOUNDS_SOURCE + " %1 %2").arg("current").arg(getBoundsSource()) + COMMAND_END;
-            retour += QString(COMMAND_CURSOR_BOUNDS_TARGET + " %1 %2").arg("current").arg(getBoundsTarget()) + COMMAND_END;
-            retour += QString(COMMAND_CURSOR_SPEED + " %1 %2").arg("current").arg(getTimeFactor()) + COMMAND_END;
-            retour += QString(COMMAND_CURSOR_SPEEDF + " %1 %2").arg("current").arg(getTimeFactorF()) + COMMAND_END;
-            retour += QString(COMMAND_CURSOR_WIDTH + " %1 %2").arg("current").arg(getWidth()) + COMMAND_END;
-            retour += QString(COMMAND_CURSOR_START + " %1 %2 %3 %4").arg("current").arg(getEasing()).arg(0).arg(getStart()) + COMMAND_END;
-            retour += QString(COMMAND_CURSOR_TIME + " %1 %2").arg("current").arg(getTimeLocal()) + COMMAND_END;
+            retour += prefix + QString(COMMAND_CURSOR_CURVE + " %1 %2").arg("current").arg("lastCurve") + postfix;
+            if((getLineStipple() != 0xFFFF) || (getLineFactor() != 1))
+                retour += prefix + QString(COMMAND_LINE + " %1 %2 %3").arg("current").arg(getLineStipple()).arg(getLineFactor()) + postfix;
+            if((getTimeInitialOffset() != 0) || (getTimeStartOffset() != 0) || (getTimeEndOffset() != 0))
+                retour += prefix + QString(COMMAND_CURSOR_OFFSET + " %1 %2 %3 %4").arg("current").arg(getTimeInitialOffset()).arg(getTimeStartOffset()).arg(getTimeEndOffset()) + postfix;
+            if(!boundsSourceIsBoundingRect)
+                retour += prefix + QString(COMMAND_CURSOR_BOUNDS_SOURCE + " %1 %2").arg("current").arg(getBoundsSource()) + postfix;
+            if((getBoundsTarget() != "0.000 1.000 0.000 1.000 0.000 1.000") && (getBoundsTarget() != "0.000 1.000 1.000 0.000"))
+                retour += prefix + QString(COMMAND_CURSOR_BOUNDS_TARGET + " %1 %2").arg("current").arg(getBoundsTarget()) + postfix;
+            if(getTimeFactor() != 1)
+                retour += prefix + QString(COMMAND_CURSOR_SPEED + " %1 %2").arg("current").arg(getTimeFactor()) + postfix;
+            if(getTimeFactorF() != 1)
+                retour += prefix + QString(COMMAND_CURSOR_SPEEDF + " %1 %2").arg("current").arg(getTimeFactorF()) + postfix;
+            if(getWidth() != 1)
+                retour += prefix + QString(COMMAND_CURSOR_WIDTH + " %1 %2").arg("current").arg(getWidth()) + postfix;
+            if((getEasing() != 0) || (getStart() != "1 0"))
+                retour += prefix + QString(COMMAND_CURSOR_START + " %1 %2 %3 %4").arg("current").arg(getEasing()).arg(0).arg(getStart()) + postfix;
+            if(getTimeLocal() != 0)
+                retour += prefix + QString(COMMAND_CURSOR_TIME + " %1 %2").arg("current").arg(getTimeLocal()) + postfix;
+
+            if(!colorActive.isEmpty()) {
+                if(getColorActive() != "cursor_active")
+                    retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2").arg("current").arg(getColorActive()) + postfix;
+            }
+            else
+                retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColor().red()).arg(getColorActiveColor().green()).arg(getColorActiveColor().blue()).arg(getColorActiveColor().alpha()) + postfix;
+            if(!colorInactive.isEmpty()) {
+                if(getColorInactive() != "cursor_inactive")
+                    retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2").arg("current").arg(getColorInactive()) + postfix;
+            }
+            else
+                retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColor().red()).arg(getColorInactiveColor().green()).arg(getColorInactiveColor().blue()).arg(getColorInactiveColor().alpha()) + postfix;
+            if(getSize() != 2)
+                retour += prefix + QString(COMMAND_SIZE + " %1 %2").arg("current").arg(getSize()) + postfix;
+            if((messageTimeInterval != 20) || (getMessagePatternsStr() != QSettings().value("defaultMessageCursor").toString()+" ,"))
+                retour += prefix + QString(COMMAND_MESSAGE + " %1 %2, %3").arg("current").arg(QString::number(messageTimeInterval)).arg(getMessagePatternsStr()) + postfix;
         }
         return retour;
     }

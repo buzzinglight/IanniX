@@ -189,7 +189,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(inspector, SIGNAL(ipOutChange(QString)), SLOT(setIpOut(QString)));
     connect(this, SIGNAL(ipOutStatus(bool)), inspector, SLOT(setIpOutOk(bool)));
     connect(inspector, SIGNAL(midiOutChange(QString)), SLOT(setMidiOut(QString)));
-    connect(this, SIGNAL(midiOutStatus(bool)), inspector, SLOT(setMidiOutOk(bool)));
+    //connect(this, SIGNAL(midiOutStatus(bool)), inspector, SLOT(setMidiOutOk(bool)));
 
 
 #ifdef KINECT_INSTALLED
@@ -2165,7 +2165,7 @@ void IanniX::actionRedo() {
     currentDocument->popSnapshot(true);
 }
 void IanniX::actionSync() {
-    QStringList commands = currentDocument->serialize(render->getRenderOptions()).split(COMMAND_END);
+    QStringList commands = currentDocument->serialize(render->getRenderOptions(), false).split(COMMAND_END);
     foreach(const QString & command, commands)
         sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), command);
 }

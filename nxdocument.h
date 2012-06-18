@@ -66,7 +66,7 @@ public:
             execute(command);
         groups.clear();
     }
-    QString serialize(UiRenderOptions *options);
+    QString serialize(UiRenderOptions *options, bool hasAScript);
     void pushSnapshot();
     void popSnapshot(bool revert=false);
     void pushSnapshot(const QString & snapshotId);

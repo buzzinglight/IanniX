@@ -133,6 +133,8 @@ public:
                             messageScriptValue.setProperty("trigger_group_id", trigger->getGroupId());
                         if(patternArgument.contains("trigger_document_id"))
                             messageScriptValue.setProperty("trigger_document_id", trigger->getDocumentId());
+                        if(patternArgument.contains("trigger_label"))
+                            messageScriptValue.setProperty("trigger_label", trigger->getLabel());
                         if(patternArgument.contains("trigger_xPos"))
                             messageScriptValue.setProperty("trigger_xPos", trigger->getPos().x());
                         if(patternArgument.contains("trigger_yPos"))
@@ -176,6 +178,8 @@ public:
                             messageScriptValue.setProperty("cursor_group_id", cursor->getGroupId());
                         if(patternArgument.contains("cursor_document_id"))
                             messageScriptValue.setProperty("cursor_document_id", cursor->getDocumentId());
+                        if(patternArgument.contains("cursor_label"))
+                            messageScriptValue.setProperty("cursor_label", cursor->getLabel());
                         if(patternArgument.contains("cursor_xPos"))
                             messageScriptValue.setProperty("cursor_xPos", cursor->getCurrentPos().x());
                         if(patternArgument.contains("cursor_yPos"))
@@ -218,6 +222,8 @@ public:
                             messageScriptValue.setProperty("curve_group_id", curve->getGroupId());
                         if(patternArgument.contains("curve_document_id"))
                             messageScriptValue.setProperty("curve_document_id", curve->getDocumentId());
+                        if(patternArgument.contains("curve_label"))
+                            messageScriptValue.setProperty("curve_label", curve->getLabel());
                         if(patternArgument.contains("curve_xPos"))
                             messageScriptValue.setProperty("curve_xPos", curve->getPos().x());
                         if(patternArgument.contains("curve_yPos"))
@@ -228,6 +234,18 @@ public:
                     if(collisionCurve) {
                         if(patternArgument.contains("collision_curve_id"))
                             messageScriptValue.setProperty("collision_curve_id", collisionCurve->getId());
+                        if(patternArgument.contains("collision_curve_group_id"))
+                            messageScriptValue.setProperty("collision_curve_group_id", collisionCurve->getGroupId());
+                        if(patternArgument.contains("collision_curve_document_id"))
+                            messageScriptValue.setProperty("collision_curve_document_id", collisionCurve->getDocumentId());
+                        if(patternArgument.contains("collision_curve_label"))
+                            messageScriptValue.setProperty("collision_curve_label", collisionCurve->getLabel());
+                        if(patternArgument.contains("collision_curve_xPos"))
+                            messageScriptValue.setProperty("collision_curve_xPos", collisionCurve->getPos().x());
+                        if(patternArgument.contains("collision_curve_yPos"))
+                            messageScriptValue.setProperty("collision_curve_yPos", collisionCurve->getPos().y());
+                        if(patternArgument.contains("collision_curve_zPos"))
+                            messageScriptValue.setProperty("collision_curve_zPos", collisionCurve->getPos().z());
                         if(patternArgument.contains("collision_xPos"))
                             messageScriptValue.setProperty("collision_xPos", collisionPoint.x());
                         if(patternArgument.contains("collision_yPos"))
@@ -274,6 +292,8 @@ public:
                             found = addString(trigger->getGroupId(), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_document_id")
                             found = addString(trigger->getDocumentId(), patternArgument, patternIndex);
+                        else if(patternArgument == "trigger_label")
+                            found = addString(trigger->getLabel(), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_xPos")
                             found = addFloat(trigger->getPos().x(), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_yPos")
@@ -315,6 +335,8 @@ public:
                             found = addString(cursor->getGroupId(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_document_id")
                             found = addString(cursor->getDocumentId(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_label")
+                            found = addString(cursor->getLabel(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_xPos")
                             found = addFloat(cursor->getCurrentPos().x(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_yPos")
@@ -357,6 +379,8 @@ public:
                             found = addString(curve->getGroupId(), patternArgument, patternIndex);
                         else if(patternArgument == "curve_document_id")
                             found = addString(curve->getDocumentId(), patternArgument, patternIndex);
+                        else if(patternArgument == "curve_label")
+                            found = addString(curve->getLabel(), patternArgument, patternIndex);
                         else if(patternArgument == "curve_xPos")
                             found = addFloat(curve->getPos().x(), patternArgument, patternIndex);
                         else if(patternArgument == "curve_yPos")
@@ -367,6 +391,18 @@ public:
                     if(collisionCurve) {
                         if(patternArgument == "collision_curve_id")
                             found = addFloat(collisionCurve->getId(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_curve_group_id")
+                            found = addString(collisionCurve->getGroupId(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_curve_document_id")
+                            found = addString(collisionCurve->getDocumentId(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_curve_label")
+                            found = addString(collisionCurve->getLabel(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_curve_xPos")
+                            found = addFloat(collisionCurve->getPos().x(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_curve_yPos")
+                            found = addFloat(collisionCurve->getPos().y(), patternArgument, patternIndex);
+                        else if(patternArgument == "collision_curve_zPos")
+                            found = addFloat(collisionCurve->getPos().z(), patternArgument, patternIndex);
                         else if(patternArgument == "collision_xPos")
                             found = addFloat(collisionPoint.x(), patternArgument, patternIndex);
                         else if(patternArgument == "collision_yPos")

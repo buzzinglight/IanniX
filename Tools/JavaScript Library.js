@@ -89,7 +89,10 @@ function dist(x1, y1, z1, x2, y2, z2) {
 	return Math.sqrt(sq(x1-x2) + sq(y1-y2) + sq(z1-z2));
 }
 function norm(value, low, high) {
-	return (value - low) / (high - low);
+	if((high - low) == 0)
+		return low;
+	else
+		return (value - low) / (high - low);
 }
 function range(value, low, high) {
 	return value * (high - low) + low; 
