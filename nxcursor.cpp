@@ -326,7 +326,7 @@ void NxCursor::paint() {
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
                 glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 8.F);
 
-                if(glListRecreate) {
+                if((glListRecreate) || (renderOptions->forceLists)) {
                     glNewList(glListCursor, GL_COMPILE_AND_EXECUTE);
                     qreal lats = 20, longs = 20;
                     qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();

@@ -167,6 +167,9 @@ QStatusBar {
     <addaction name="separator"/>
     <addaction name="actionShowEditor"/>
     <addaction name="actionLight"/>
+    <addaction name="separator"/>
+    <addaction name="actionResize"/>
+    <addaction name="actionSnapshot"/>
    </widget>
    <widget class="QMenu" name="menuPlayback">
     <property name="title">
@@ -1153,6 +1156,25 @@ QStatusBar {
    </property>
    <property name="toolTip">
     <string>Click here to align objects as an ellipse</string>
+   </property>
+  </action>
+  <action name="actionSnapshot">
+   <property name="text">
+    <string>Make a high resolution snapshot</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to save the current view in a high resolution PNG file (file will be placed on your desktop)</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+S</string>
+   </property>
+  </action>
+  <action name="actionResize">
+   <property name="text">
+    <string>Resize viewport</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to resize the viewport (the rendering area). Note that it is recommended to hide Transport bar and Inspector bar to get the exact desired size.</string>
    </property>
   </action>
  </widget>

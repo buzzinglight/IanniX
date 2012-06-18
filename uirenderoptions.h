@@ -50,11 +50,13 @@ public:
         paintZStart = 0;
         paintZEnd = 0;
         objectSize = 1;
+        forceLists = false;
+        forceTexture = false;
+        forceFrustumInInit = false;
     }
 
 public:
     NxRect axisArea;
-    QRect axisAreaSearch;
     qreal zoomValue, zoomLinear, zoomLinearDest, axisGrid;
     NxPoint axisCenter, axisCenterDest;
     NxPoint rotation, rotationDest;
@@ -63,6 +65,7 @@ public:
     qreal timeFactor;
     bool allowSelection;
     bool allowSelectionCursors, allowSelectionCurves, allowSelectionTriggers;
+    bool forceLists, forceTexture, forceFrustumInInit;
 
 public:
     QMap<QString, Texture> textures;

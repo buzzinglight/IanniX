@@ -92,7 +92,7 @@ void NxCurve::paint() {
         }
 
         //Draw
-        if(glListRecreate) {
+        if((glListRecreate) || (renderOptions->forceLists)) {
             glNewList(glListCurve, GL_COMPILE_AND_EXECUTE);
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
@@ -123,7 +123,7 @@ void NxCurve::paint() {
                             glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
                             glEnable(GL_MAP1_VERTEX_3);
                             glBegin(GL_LINE_STRIP);
-                            for(GLfloat t = 0.0f ; t <= 1.05f ; t += 0.05f)
+                            for(GLfloat t = 0.0f ; t <= 1.0f ; t += 0.02f)
                                 glEvalCoord1f(t);
                             glEnd();
                             glDisable(GL_MAP1_VERTEX_3);

@@ -29,12 +29,27 @@
 #include "nxdocument.h"
 #include "nxobjectfactoryinterface.h"
 #include "uirenderoptions.h"
+#ifdef FFMPEG_INSTALLED
+#include "qffmpeg/QVideoEncoder.h"
+#endif
 
 enum EditingMode { EditingModeFree, EditingModePoint, EditingModeTriggers, EditingModeCircle };
 
 namespace Ui {
     class UiRender;
 }
+
+class UiRenderTexture {
+public:
+    UiRenderTexture() { }
+    UiRenderTexture(const QString & _name, const QString & _filename, const NxRect & _mapping) {
+        name     = _name;
+        filename = _filename;
+        mapping  = _mapping;
+    }
+    QString name, filename;
+    NxRect mapping;
+};
 
 class UiRender : public QGLWidget {
     Q_OBJECT
@@ -60,7 +75,10 @@ private:
     qint16 followId;
     bool firstLaunch;
     QString defaultStatusTip;
+    QList<UiRenderTexture> textures;
+    bool texturesLoaded;
 public:
+    inline void startRenderTimer() { timer->start(20); }
     inline void setFollowId(qint16 _followId) { followId = _followId; }
     inline qint16 getFollowId() const { return followId; }
 
@@ -121,12 +139,15 @@ signals:
 
 private:
     QTimer *timer;
+    QSize renderSize;
 protected:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+    void setFrustum();
 public:
     inline void resizeGL() { resizeGL(width(), height()); }
+    void loadTexture(const UiRenderTexture &texture);
     void loadTexture(const QString & name, const QString & filename, const NxRect & mapping);
     inline void setInterval(quint16 ms) {
         timer->setInterval(ms);
@@ -219,6 +240,7 @@ public slots:
     void actionSnapZGrid();
     void actionFollowID(qint16);
     void actionArrange(quint16 type);
+    void capture(qreal scaleFactor);
 
 signals:
     void actionRouteNew();
@@ -240,6 +262,12 @@ signals:
     void actionRouteUndo();
     void actionRouteRedo();
     void selectionChanged();
+
+public:
+#ifdef FFMPEG_INSTALLED
+    QVideoEncoder videoEncoder;
+#endif
+
 
 };
 

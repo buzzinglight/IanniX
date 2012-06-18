@@ -1,0 +1,4 @@
+//Creation of the score
+function onCreate() {
+	run("registerColor empty 255 255 255 255");
+}

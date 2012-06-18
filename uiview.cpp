@@ -52,6 +52,8 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionSelect_all, SIGNAL(triggered()), ui->render, SLOT(actionSelect_all()));
     connect(ui->actionDelete, SIGNAL(triggered()), ui->render, SLOT(actionDelete()));
     connect(ui->actionSync, SIGNAL(triggered()), ui->render, SLOT(actionSync()));
+    connect(ui->actionSnapshot, SIGNAL(triggered()), SLOT(actionSnapshot()));
+    connect(ui->actionResize, SIGNAL(triggered()), SLOT(actionResize()));
 
     connect(ui->actionFullscreen, SIGNAL(triggered()), SLOT(actionFullscreen()));
     connect(ui->actionToggle_Inspector, SIGNAL(triggered()), SLOT(actionToggle_Inspector()));
@@ -239,6 +241,13 @@ void UiView::actionImportText() {
         emit(actionRouteImportText(font, text));
 }
 
+void UiView::actionSnapshot() {
+    bool ok = false;
+    qreal scaleFactor = QInputDialog::getDouble(0, tr("Snaptshot"), tr("Snapshot will be saved on your desktop.\nEntrer a scale factor (1=current size, 2=double size...)"), 5, 0.1, 100, 1, &ok);
+    if(ok)
+        emit(actionRouteSnaphot(scaleFactor));
+}
+
 void UiView::actionLockPos() {
     if(ui->actionDrawTriggers->isChecked()) {
         ui->actionDrawTriggers->setChecked(false);
@@ -326,5 +335,15 @@ void UiView::gridOpacityChange() {
         ui->action25_opaque->setChecked(false);
         ui->action10_opaque->setChecked(false);
         action->setChecked(true);
+    }
+}
+
+void UiView::actionResize() {
+    QSize currentSize = ui->render->size();
+    QStringList newSizes = QInputDialog::getText(0, tr("Resize viewport"), tr("New viewport size"), QLineEdit::Normal, tr("%1 x %2").arg(currentSize.width()).arg(currentSize.height())).split("x", QString::SkipEmptyParts);
+    if(newSizes.count() == 2) {
+        QSize newSize(newSizes.at(0).toUInt(), newSizes.at(1).toUInt());
+        if((newSize.width() > 0) && (newSize.height() > 0))
+            resize(size() + newSize - ui->render->size());
     }
 }

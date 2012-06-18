@@ -57,6 +57,7 @@ class IanniX : public NxObjectFactoryInterface, public NxObjectDispatchProperty 
 private:
     QDir scriptDir;
     QString baseDocumentDir;
+    bool hasStarted;
 public:
     explicit IanniX(QObject *parent, bool forceSettings);
     void readyToStart();

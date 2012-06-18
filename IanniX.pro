@@ -11,12 +11,25 @@ TEMPLATE                 =  app
 CONFIG                  +=  x86 x86_64
 
 false {
+    DEFINES             += KINECT_INSTALLED
     CONFIG              -= x86
-    unix:DEFINES        += KINECT_INSTALLED
     unix:SOURCES        += qkinect/QKinect.cpp extkinectmanager.cpp
     unix:HEADERS        += qkinect/QKinect.h extkinectmanager.h
     unix:LIBS           += -lfreenect
     unix:INCLUDEPATH    += /usr/local/include/libfreenect
+}
+
+false {
+    DEFINES             += FFMPEG_INSTALLED
+    CONFIG              -= x86
+    INCLUDEPATH         += qffmpeg
+    SOURCES             += qffmpeg/QVideoEncoder.cpp   qffmpeg/QVideoDecoder.cpp
+    HEADERS             += qffmpeg/QVideoEncoder.h     qffmpeg/QVideoDecoder.h
+    unix:LIBS           +=-L/opt/local/lib -lavutil
+    unix:LIBS           +=-L/opt/local/lib -lavcodec
+    unix:LIBS           +=-L/opt/local/lib -lavformat
+    unix:LIBS           +=-L/opt/local/lib -lswscale
+    win32:DEFINES       += __STDC_CONSTANT_MACROS
 }
 
 debug:DEFINES           += __RTMIDI_DEBUG__

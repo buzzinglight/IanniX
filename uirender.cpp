@@ -23,6 +23,7 @@ UiRender::UiRender(QWidget *parent) :
     QGLWidget(parent),
     ui(new Ui::UiRender) {
     firstLaunch = true;
+    texturesLoaded = true;
 
     //Initialize view
     ui->setupUi(this);
@@ -65,6 +66,14 @@ UiRender::UiRender(QWidget *parent) :
     renderOptions->paintTriggers = true;
     renderOptions->paintLabel = true;
     renderOptions->axisGrid = 1;
+    renderOptions->forceLists = false;
+
+    loadTexture(UiRenderTexture("background", "Tools/background.jpg", NxRect(NxPoint(), NxPoint())));
+    loadTexture(UiRenderTexture("trigger_active", "Tools/trigger.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1))));
+    loadTexture(UiRenderTexture("trigger_inactive", "Tools/trigger.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1))));
+    loadTexture(UiRenderTexture("trigger_active_message", "Tools/trigger_message.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1))));
+    loadTexture(UiRenderTexture("trigger_inactive_message", "Tools/trigger_message.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1))));
+
 
     defaultStatusTip = tr("Click+move and mouse wheel to navigate/zoom in score. In 3D, Alt+move, Alt+mouse wheel and Alt+double-click to change camera position.");
 
@@ -145,6 +154,10 @@ void UiRender::setDocument(NxDocument *_document) {
     document = _document;
 }
 
+void UiRender::loadTexture(const UiRenderTexture &texture) {
+    textures.append(texture);
+    texturesLoaded = false;
+}
 void UiRender::loadTexture(const QString & name, const QString & filename, const NxRect & mapping) {
     if(QFile::exists(filename)) {
         GLuint texture = 0;
@@ -162,7 +175,37 @@ void UiRender::loadTexture(const QString & name, const QString & filename, const
         renderOptions->textures[name].mapping = mapping;
     }
     else
-        qDebug("Can't load %s", qPrintable(filename));
+        qDebug("Can't load %s - %s", qPrintable(name), qPrintable(filename));
+}
+
+void UiRender::capture(qreal scaleFactor) {
+#ifndef FFMPEG_INSTALLED
+    renderSize = size() * scaleFactor;
+    renderOptions->forceLists         = true;
+    renderOptions->forceTexture       = true;
+    renderOptions->forceFrustumInInit = true;
+    renderPixmap(renderSize.width(), renderSize.height()).save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString(QDir::separator()) + "IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
+    renderOptions->forceLists         = false;
+    renderOptions->forceTexture       = false;
+    renderOptions->forceFrustumInInit = false;
+    texturesLoaded = false;
+#endif
+#ifdef FFMPEG_INSTALLED
+    //Encoder
+    renderSize = QSize(800, 600);
+    resize(renderSize);
+
+    if(videoEncoder.isOk()) {
+        timer->stop();
+        qDebug("Fermeture de la video : %d", videoEncoder.close());
+        timer->start(1000./50.);
+    }
+    else {
+        setInterval(1000./25.);
+        qDebug("Creation de la video : %d", videoEncoder.createFile("_test.avi", renderSize.width(), renderSize.height(), 5000000, 20, 25));
+    }
+#endif
+
 }
 
 void UiRender::centerOn(const NxPoint & center) {
@@ -191,26 +234,55 @@ void UiRender::initializeGL() {
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
     //Force resize
-    resizeGL();
+    //resizeGL();
     factory->readyToStart();
 }
 
 //Resize event
-void UiRender::resizeGL(int, int) {
+void UiRender::resizeGL(int width, int height) {
     //Set viewport
-    glViewport(0, 0, (GLint)width(), (GLint)height());
-    timer->start(20);
+    glViewport(0, 0, (GLint)width, (GLint)height);
+
+    if(renderOptions->forceFrustumInInit)
+        setFrustum();
+}
+
+void UiRender::setFrustum() {
+    qreal width  = renderSize.width();
+    qreal height = renderSize.height();
+    //Calculate area
+    renderOptions->axisArea = NxRect(NxPoint(), NxSize(10, 10));
+    if(width > height) {
+        if(renderOptions->axisArea.width() > -renderOptions->axisArea.height())
+            renderOptions->axisArea.setHeight(-renderOptions->axisArea.width() * height/width);
+        else
+            renderOptions->axisArea.setWidth(-renderOptions->axisArea.height() * width/height);
+    }
+    else {
+        if(renderOptions->axisArea.width() > -renderOptions->axisArea.height())
+            renderOptions->axisArea.setHeight(-renderOptions->axisArea.width() * height/width);
+        else
+            renderOptions->axisArea.setWidth(-renderOptions->axisArea.height() * width/height);
+    }
+    renderOptions->axisArea.setWidth(renderOptions->axisArea.width()   * renderOptions->zoomLinear);
+    renderOptions->axisArea.setHeight(renderOptions->axisArea.height() * renderOptions->zoomLinear);
+    renderOptions->axisArea.translate(-NxPoint(renderOptions->axisArea.size().width()/2, renderOptions->axisArea.size().height()/2));
+    renderOptions->axisArea.translate(-renderOptions->axisCenter);
+
+    //Set axis
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(renderOptions->axisArea.left(), renderOptions->axisArea.right(), renderOptions->axisArea.bottom(), renderOptions->axisArea.top(), 50, 650.0);
+    glMatrixMode(GL_MODELVIEW);
+    //glLoadIdentity();
 }
 
 //Paint event
 void UiRender::paintGL() {
-    if(firstLaunch) {
-        loadTexture("background", "Tools/background.jpg", NxRect(NxPoint(), NxPoint()));
-        loadTexture("trigger_active", "Tools/trigger.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
-        loadTexture("trigger_inactive", "Tools/trigger.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
-        loadTexture("trigger_active_message", "Tools/trigger_message.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
-        loadTexture("trigger_inactive_message", "Tools/trigger_message.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1)));
-        firstLaunch = false;
+    if((!texturesLoaded) || (renderOptions->forceTexture)) {
+        foreach(const UiRenderTexture &texture, textures)
+            loadTexture(texture.name, texture.filename, texture.mapping);
+        texturesLoaded = true;
     }
 
     //Intertial system
@@ -227,34 +299,10 @@ void UiRender::paintGL() {
     if(triggerAutosize)
         renderOptions->objectSize *= renderOptions->zoomLinear;
 
-    //Calculate area
-    renderOptions->axisArea = NxRect(NxPoint(), NxSize(10, 10));
-    if(width() > height()) {
-        if(renderOptions->axisArea.width() > -renderOptions->axisArea.height())
-            renderOptions->axisArea.setHeight(-renderOptions->axisArea.width() * (qreal)height()/(qreal)width());
-        else
-            renderOptions->axisArea.setWidth(-renderOptions->axisArea.height() * (qreal)width()/(qreal)height());
+    if(!renderOptions->forceFrustumInInit) {
+        renderSize = size();
+        setFrustum();
     }
-    else {
-        if(renderOptions->axisArea.width() > -renderOptions->axisArea.height())
-            renderOptions->axisArea.setHeight(-renderOptions->axisArea.width() * (qreal)height()/(qreal)width());
-        else
-            renderOptions->axisArea.setWidth(-renderOptions->axisArea.height() * (qreal)width()/(qreal)height());
-    }
-    renderOptions->axisArea.setWidth(renderOptions->axisArea.width()   * renderOptions->zoomLinear);
-    renderOptions->axisArea.setHeight(renderOptions->axisArea.height() * renderOptions->zoomLinear);
-    renderOptions->axisArea.translate(-NxPoint(renderOptions->axisArea.size().width()/2, renderOptions->axisArea.size().height()/2));
-    renderOptions->axisArea.translate(-renderOptions->axisCenter);
-    //With other parameters
-    renderOptions->axisAreaSearch.setTopLeft(QPoint(floor(renderOptions->axisArea.topLeft().x() / 10.0F) * 10 - 1, ceil(renderOptions->axisArea.topLeft().y() / 10.0F) * 10 + 1));
-    renderOptions->axisAreaSearch.setBottomRight(QPoint(ceil(renderOptions->axisArea.bottomRight().x() / 10.0F) * 10 + 1, floor(renderOptions->axisArea.bottomRight().y() / 10.0F) * 10 - 1));
-
-    //Set axis
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(renderOptions->axisArea.left(), renderOptions->axisArea.right(), renderOptions->axisArea.bottom(), renderOptions->axisArea.top(), 50, 650.0);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 
     //Clear
     glClearColor(renderOptions->colors["empty"].redF(), renderOptions->colors["empty"].greenF(), renderOptions->colors["empty"].blueF(), renderOptions->colors["empty"].alphaF());
@@ -345,6 +393,11 @@ void UiRender::paintGL() {
 #endif
     }
     glPopMatrix();
+
+#ifdef FFMPEG_INSTALLED
+    if(videoEncoder.isOk())
+        qDebug("%d encode", videoEncoder.encodeImage(grabFrameBuffer()));
+#endif
 }
 
 
@@ -841,10 +894,6 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
     if(event->key() == Qt::Key_Escape) {
         emit(escFullscreen());
         emit(editingStop());
-    }
-    else if(event->key() == Qt::Key_S) {
-        QImage snapshot = grabFrameBuffer(false);
-        snapshot.save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString(QDir::separator()) + "IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
     }
     else if(event->key() == Qt::Key_Escape) {
         emit(editingStop());

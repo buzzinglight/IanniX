@@ -86,7 +86,8 @@ public slots:
     void actionDistributeV()      { emit(actionRouteArrange(7)); }
     void actionAlign_circle()     { emit(actionRouteArrange(8)); }
     void actionAlign_ellipse()    { emit(actionRouteArrange(9)); }
-
+    void actionSnapshot();
+    void actionResize();
     void unToogleDraw(quint16 id);
     void gridChange();
     void gridOpacityChange();
@@ -129,6 +130,7 @@ signals:
     void actionRouteCloseEvent(QCloseEvent*);
     void actionRouteArrange(quint16 type);
     void actionRoutePasteScript();
+    void actionRouteSnaphot(qreal);
 
 protected:
     void changeEvent(QEvent *e);

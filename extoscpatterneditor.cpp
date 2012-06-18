@@ -112,7 +112,6 @@ void ExtOscPatternEditor::setPattern(const QString &pattern, bool refreshText) {
 
 void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePatternItems, bool refreshText) {
     itemLock = true;
-    QString pattern = "";
     bool first = true;
     quint16 valueIndex = 0;
     patternNbValues = 6;
@@ -250,9 +249,10 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
             }
             valueIndex++;
         }
-        if(valueIndex < patternNbValues)
-            pattern += messagePatternItem + " ";
     }
+    for(; valueIndex < patternNbValues ; valueIndex++)
+        setCurrentItem(trees.at(valueIndex).first, trees.at(valueIndex).second, "", false);
+
     itemLock = false;
     if(refreshText)
         currentItemChanged();
@@ -298,13 +298,13 @@ void ExtOscPatternEditor::currentItemChanged() {
     if(!itemLock) {
         textLock = true;
         ui->patternEdit->setPlainText(getPattern());
-        setPattern(ui->patternEdit->toPlainText(), false);
+        setPattern(ui->patternEdit->toPlainText().replace("\t", " "), false);
         textLock = false;
     }
 }
 void ExtOscPatternEditor::textPatternChanged() {
     if(!textLock)
-        setPattern(ui->patternEdit->toPlainText(), false);
+        setPattern(ui->patternEdit->toPlainText().replace("\t", " "), false);
 }
 
 

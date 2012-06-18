@@ -21,6 +21,7 @@
 
 IanniX::IanniX(QObject *parent, bool forceSettings) :
     NxObjectFactoryInterface(parent) {
+    hasStarted = false;
     currentDocument = 0;
     currentScript = 0;
     projectScore = 0;
@@ -144,6 +145,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteSnapZGrid()), render, SLOT(actionSnapZGrid()));
     connect(inspector, SIGNAL(actionFollowID(qint16)), render, SLOT(actionFollowID(qint16)));
     connect(view, SIGNAL(actionRouteArrange(quint16)), render, SLOT(actionArrange(quint16)));
+    connect(view, SIGNAL(actionRouteSnaphot(qreal)), render, SLOT(capture(qreal)));
     render->zoom();
 
     //Message script engine
@@ -391,12 +393,16 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 }
 
 void IanniX::readyToStart() {
-    qDebug("Ready to start!");
-    //Projet par défault
-    loadProject(baseDocumentDir + "root.root");
-    actionFast_rewind();
+    if(!hasStarted) {
+        hasStarted = true;
+        qDebug("Ready to start!");
+        //Projet par défault
+        loadProject(baseDocumentDir + "root.root");
+        actionFast_rewind();
 
-    startTimer(1000);
+        startTimer(1000);
+        render->startRenderTimer();
+    }
 }
 
 void IanniX::actionImportSVG(const QString &filename) {
@@ -1349,7 +1355,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 QString filename = command.mid(command.indexOf(arguments.at(6), command.indexOf(arguments.at(5))+arguments.at(5).length())).trimmed();
                 if(!QFile().exists(filename))
                     filename = scriptDir.absoluteFilePath(filename);
-                render->loadTexture(arguments.at(1).trimmed(), filename, NxRect(NxPoint(arguments.at(2).toDouble(), arguments.at(3).toDouble()), NxPoint(arguments.at(4).toDouble(), arguments.at(5).toDouble())));
+                render->loadTexture(UiRenderTexture(arguments.at(1).trimmed(), filename, NxRect(NxPoint(arguments.at(2).toDouble(), arguments.at(3).toDouble()), NxPoint(arguments.at(4).toDouble(), arguments.at(5).toDouble()))));
             }
             else if((commande == COMMAND_GLOBAL_COLOR) && (arguments.count() >= 6)) {
                 render->getRenderOptions()->colors[arguments.at(1)] = QColor(arguments.at(2).toDouble(), arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble());
