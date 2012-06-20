@@ -38,7 +38,6 @@ ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject*> *_objects) 
                 messagePatterns.append(messagePattern);
 
                 ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(this);
-                connect(patternEditor, SIGNAL(actionRouteRemove(ExtOscPatternEditor*)), SLOT(actionRemoveMessage(ExtOscPatternEditor*)));
                 ui->tabs->addTab(patternEditor, tr("Message %1").arg(ui->tabs->count()+1));
                 ui->tabs->setCurrentIndex(ui->tabs->count()-1);
                 patternLists.append(patternEditor);
@@ -46,6 +45,11 @@ ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject*> *_objects) 
             }
         }
     }
+    if(ui->tabs->count() > 0)
+        ui->removeButton->setVisible(true);
+    else
+        ui->removeButton->setVisible(false);
+
     QRect screen = QApplication::desktop()->geometry();
     move(screen.center() - rect().center());
 }
@@ -102,17 +106,27 @@ void ExtOscPatternAsk::actionAddMessage() {
     QVector< QVector<QByteArray > > messagePatternItemsList = NxObject::parseMessagesPattern(messagePatternItem);
     foreach(const QVector<QByteArray > & messagePatternItems, messagePatternItemsList) {
         ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(this);
-        connect(patternEditor, SIGNAL(actionRouteRemove(ExtOscPatternEditor*)), SLOT(actionRemoveMessage(ExtOscPatternEditor*)));
         ui->tabs->addTab(patternEditor, tr("Message %1").arg(ui->tabs->count()+1));
         ui->tabs->setCurrentIndex(ui->tabs->count()-1);
         patternLists.append(patternEditor);
         patternEditor->setPattern(messagePatternItems, true);
     }
+    if(ui->tabs->count() > 0)
+        ui->removeButton->setVisible(true);
+    else
+        ui->removeButton->setVisible(false);
+
 }
 
-void ExtOscPatternAsk::actionRemoveMessage(ExtOscPatternEditor *editor) {
+void ExtOscPatternAsk::actionRemoveMessage() {
+    ExtOscPatternEditor *editor = (ExtOscPatternEditor*)ui->tabs->currentWidget();
     if(editor) {
+        patternLists.removeOne(editor);
         ui->tabs->removeTab(ui->tabs->currentIndex());
         delete editor;
+        if(ui->tabs->count() > 0)
+            ui->removeButton->setVisible(true);
+        else
+            ui->removeButton->setVisible(false);
     }
 }

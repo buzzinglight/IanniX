@@ -152,10 +152,11 @@ void NxCurve::paint() {
                 else
                     glColor4f(color.redF(), color.greenF(), color.blueF(), 0.5);
                 glBegin(GL_QUADS);
-                glVertex3f(p1.x() - renderOptions->objectSize/4, p1.y() - renderOptions->objectSize/4, p1.z());
-                glVertex3f(p1.x() + renderOptions->objectSize/4, p1.y() - renderOptions->objectSize/4, p1.z());
-                glVertex3f(p1.x() + renderOptions->objectSize/4, p1.y() + renderOptions->objectSize/4, p1.z());
-                glVertex3f(p1.x() - renderOptions->objectSize/4, p1.y() + renderOptions->objectSize/4, p1.z());
+                qreal squareSize = (0.15 * renderOptions->zoomLinear) / 4;
+                glVertex3f(p1.x() - squareSize, p1.y() - squareSize, p1.z());
+                glVertex3f(p1.x() + squareSize, p1.y() - squareSize, p1.z());
+                glVertex3f(p1.x() + squareSize, p1.y() + squareSize, p1.z());
+                glVertex3f(p1.x() - squareSize, p1.y() + squareSize, p1.z());
                 glEnd();
 
 
@@ -381,6 +382,7 @@ void NxCurve::setEllipse(const NxSize & size) {
     pathPoints.clear();
 
     //Calculations
+    calcBoundingRect();
     resize(1, 1);
 }
 

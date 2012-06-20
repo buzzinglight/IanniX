@@ -28,37 +28,127 @@ ExtOscPatternEditor::ExtOscPatternEditor(QWidget *parent) :
     patternNbValues = 0;
 
     trees.clear();
-    trees << qMakePair(ui->value1, ui->value1Label);
-    trees << qMakePair(ui->value2, ui->value2Label);
-    trees << qMakePair(ui->value3, ui->value3Label);
-    trees << qMakePair(ui->value4, ui->value4Label);
-    trees << qMakePair(ui->value5, ui->value5Label);
-    trees << qMakePair(ui->value6, ui->value6Label);
+    trees << qMakePair(ui->argument1Combo, ui->argument1Label);
+    trees << qMakePair(ui->argument2Combo, ui->argument2Label);
+    trees << qMakePair(ui->argument3Combo, ui->argument3Label);
+    trees << qMakePair(ui->argument4Combo, ui->argument4Label);
+    trees << qMakePair(ui->argument5Combo, ui->argument5Label);
+    trees << qMakePair(ui->argument6Combo, ui->argument6Label);
 
-    for(quint16 treeIndex = 0 ; treeIndex < trees.count() ; treeIndex++)
-        trees.at(treeIndex).first->setColumnWidth(0, 150);
+    /*
+    QCompleter *completer = new QCompleter(this);
+    completer->setModel(ui->completerArguments->model());
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setCompletionMode(QCompleter::PopupCompletion);
+    completer->setPopup(ui->completerArguments);
+    ui->lineEdit->setCompleter(completer);
+    */
 
-    QTreeWidget* tree = trees.first().first;
-    for(quint16 treeIndex = 1 ; treeIndex < trees.count() ; treeIndex++) {
-        trees.at(treeIndex).first->clear();
-        for(quint16 i = 0 ; i < tree->topLevelItemCount() ; i++) {
-            QTreeWidgetItem *topLevelItem = tree->topLevelItem(i);
-            QTreeWidgetItem *newTopLevelItem = new QTreeWidgetItem(QStringList() << topLevelItem->text(0) << topLevelItem->text(1));
-            trees.at(treeIndex).first->addTopLevelItem(newTopLevelItem);
+    QList< QPair<QString, QString> > protocolList;
+    protocolList << qMakePair(QString("osc"),                   tr("OpenSoundControl message"));
+    protocolList << qMakePair(QString("direct"),                tr("Recursive/loopback message (sent directly to IanniX)"));
+    protocolList << qMakePair(QString("midi"),                  tr("MIDI message (control change, note on/off or program change)"));
+    protocolList << qMakePair(QString("serial"),                tr("Serial message (UART/RS232)"));
+    protocolList << qMakePair(QString("http"),                  tr("HTTP request to a webpage/webservice (GET)"));
+    protocolList << qMakePair(QString("udp"),                   tr("Raw UDP message (compatible with PureData)"));
+    protocolList << qMakePair(QString("tcp"),                   tr("XML over TCP message (compatible with Flash/Director)"));
+    for(quint16 i = 0 ; i < protocolList.count() ; i++)
+        ui->protocolCombo->addItem(protocolList.at(i).first + QString(" - ") + protocolList.at(i).second);
 
-            for(quint16 j = 0 ; j < topLevelItem->childCount() ; j++) {
-                QTreeWidgetItem *item = topLevelItem->child(j);
-                newTopLevelItem->addChild(new QTreeWidgetItem(QStringList() << item->text(0) << item->text(1)));
-            }
-        }
+    QList< QPair<QString, QString> > hostIpList;
+    hostIpList << qMakePair(QString("ip_out"),                  tr("Destination is the default IP set in \"Network\" tab"));
+    hostIpList << qMakePair(QString("127.0.0.1"),               tr("Destination is your own computer"));
+    for(quint16 i = 0 ; i < hostIpList.count() ; i++)
+        ui->hostIpCombo->addItem(hostIpList.at(i).first + QString(" - ") + hostIpList.at(i).second);
+
+    QList< QPair<QString, QString> > hostMidiList;
+    hostMidiList << qMakePair(QString("midi_out"),              tr("Destination is the default MIDI device set in \"Network\" tab"));
+    hostMidiList << qMakePair(QString("IanniX_Out"),            tr("MIDI device created by IanniX (Mac & Linux only)"));
+    for(quint16 i = 0 ; i < hostMidiList.count() ; i++)
+        ui->hostMidiCombo->addItem(hostMidiList.at(i).first + QString(" - ") + hostMidiList.at(i).second);
+
+    QList< QPair<QString, QString> > portList;
+    portList << qMakePair(QString("57120"),                     tr("Default port used by IanniX"));
+    portList << qMakePair(QString("1234"),                      tr("IanniX OSC default input"));
+    for(quint16 i = 0 ; i < portList.count() ; i++)
+        ui->portCombo->addItem(portList.at(i).first + QString(" - ") + portList.at(i).second);
+
+    QList< QPair<QString, QString> > addressOscList;
+    addressOscList << qMakePair(QString("/trigger"),            tr("Default address used for triggers"));
+    addressOscList << qMakePair(QString("/cursor"),             tr("Default address used for cursors"));
+    addressOscList << qMakePair(QString("/transport"),          tr("Default address used for transport messages"));
+    addressOscList << qMakePair(QString("/iannix"),             tr("Default address used to reach IanniX"));
+    for(quint16 i = 0 ; i < addressOscList.count() ; i++)
+        ui->addressOscCombo->addItem(addressOscList.at(i).first + QString(" - ") + addressOscList.at(i).second);
+
+    QList< QPair<QString, QString> > addressMidiList;
+    addressMidiList << qMakePair(QString("/cc"),                tr("Send a control change"));
+    addressMidiList << qMakePair(QString("/bend"),              tr("Send a bend"));
+    addressMidiList << qMakePair(QString("/pgm"),               tr("Send a program change"));
+    addressMidiList << qMakePair(QString("/note"),              tr("Send a note"));
+    for(quint16 i = 0 ; i < addressMidiList.count() ; i++)
+        ui->addressMidiCombo->addItem(addressMidiList.at(i).first + QString(" - ") + addressMidiList.at(i).second);
+
+    QList< QPair<QString, QString> > argumentList;
+    argumentList << qMakePair(QString("trigger_id"),            tr("Returns the ID of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_group_id"),		tr("Returns the group name of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_document_id"),	tr("Returns the document name of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_label"),         tr("Returns the label of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_xPos"),          tr("Returns the x coordinate of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_yPos"),          tr("Returns the y coordinate of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_zPos"),          tr("Returns the z coordinate of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_value_x"),		tr("Returns the x mapped coordinate of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_value_y"),		tr("Returns the y mapped coordinate of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_value_z"),		tr("Returns the z mapped coordinate of the triggered trigger"));
+    argumentList << qMakePair(QString("trigger_value"),         tr("When trigger off-time is set, returns 127 when the trigger is trigged and 0 when the trigger is released"));
+    argumentList << qMakePair(QString("trigger_distance"),		tr("Returns the distance between the triggered trigger and the cursor that triggers the trigger"));
+    argumentList << qMakePair(QString("trigger_side"),          tr("Returns the 0 if trigger is triggered from left to right and 1 for the other side"));
+    argumentList << qMakePair(QString("trigger_message_id"),	tr("Returns the ID of the message (each message generates an ascending ID)"));
+    argumentList << qMakePair(QString("cursor_id"),             tr("Returns the ID of the running cursor"));
+    argumentList << qMakePair(QString("cursor_group_id"),		tr("Returns the group name of the running cursor"));
+    argumentList << qMakePair(QString("cursor_document_id"),	tr("Returns the document name of the running cursor"));
+    argumentList << qMakePair(QString("cursor_label"),          tr("Returns the label of the running cursor"));
+    argumentList << qMakePair(QString("cursor_xPos"),           tr("Returns the x coordinate of the running cursor"));
+    argumentList << qMakePair(QString("cursor_yPos"),           tr("Returns the y coordinate of the running cursor"));
+    argumentList << qMakePair(QString("cursor_zPos"),           tr("Returns the z coordinate of the running cursor"));
+    argumentList << qMakePair(QString("cursor_value_x"),        tr("Returns the x mapped coordinate of the running cursor"));
+    argumentList << qMakePair(QString("cursor_value_y"),        tr("Returns the y mapped coordinate of the running cursor"));
+    argumentList << qMakePair(QString("cursor_value_z"),        tr("Returns the z mapped coordinate of the running cursor"));
+    argumentList << qMakePair(QString("cursor_time"),           tr("Returns the current progression of the cursor on the curve (in seconds)"));
+    argumentList << qMakePair(QString("cursor_time_percent"),	tr("Returns the current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)"));
+    argumentList << qMakePair(QString("cursor_angle"),          tr("Returne the angle of the cursor"));
+    argumentList << qMakePair(QString("cursor_nb_loop"),        tr("Returns the number of loops done by the cursor on the curve"));
+    argumentList << qMakePair(QString("cursor_message_id"),		tr("Returns the ID of the message (each message generates an ascending ID)"));
+    argumentList << qMakePair(QString("curve_id"),              tr("Returns the ID of curve where the cursor runs on"));
+    argumentList << qMakePair(QString("curve_group_id"),        tr("Returns the group name of curve where the cursor runs on"));
+    argumentList << qMakePair(QString("curve_document_id"),		tr("Returns the document name of curve where the cursor runs on"));
+    argumentList << qMakePair(QString("curve_label"),           tr("Returns the label of curve where the cursor runs on"));
+    argumentList << qMakePair(QString("curve_xPos"),            tr("Returns the x coordinate of curve where the cursor runs on"));
+    argumentList << qMakePair(QString("curve_yPos"),            tr("Returns the y coordinate of curve where the cursor runs on"));
+    argumentList << qMakePair(QString("curve_zPos"),            tr("Returns the z coordinate of curve where the cursor runs on"));
+    argumentList << qMakePair(QString("collision_curve_id"),            tr("Returns the ID of the collided curve"));
+    argumentList << qMakePair(QString("collision_curve_group_id"),		tr("Returns the group name of the collided curve"));
+    argumentList << qMakePair(QString("collision_curve_document_id"),	tr("Returns the document name of the collided curve"));
+    argumentList << qMakePair(QString("collision_curve_label"),         tr("Returns the label of the collided curve"));
+    argumentList << qMakePair(QString("collision_curve_xPos"),          tr("Returns the x coordinate of the collided curve"));
+    argumentList << qMakePair(QString("collision_curve_yPos"),          tr("Returns the y coordinate of the collided curve"));
+    argumentList << qMakePair(QString("collision_curve_zPos"),          tr("Returns the z coordinate of the collided curve"));
+    argumentList << qMakePair(QString("collision_xPos"),        tr("Returns the x coordinate of the collision between the cursor and the curve"));
+    argumentList << qMakePair(QString("collision_yPos"),        tr("Returns the y coordinate of the collision between the cursor and the curve"));
+    argumentList << qMakePair(QString("collision_value_x"),		tr("Returns the x mapped coordinate of the collision between the cursor and the curve"));
+    argumentList << qMakePair(QString("collision_value_y"),		tr("Returns the y mapped coordinate of the collision between the cursor and the curve"));
+    argumentList << qMakePair(QString("collision_distance"),	tr("Returns the distance between the collision and the cursor"));
+    argumentList << qMakePair(QString("timetag"),               tr("Set an OSC Timetag (compliant with Internet NTP timestamps) to message"));
+    argumentList << qMakePair(QString("status"),                tr("Returns the playback status of score (\"play\"), \"stop\" or \"fastrewind\")"));
+    argumentList << qMakePair(QString("nb_triggers"),           tr("Returns the number of triggers in the current score"));
+    argumentList << qMakePair(QString("nb_cursors"),            tr("Returns the number of cursors in the current score"));
+    argumentList << qMakePair(QString("nb_curves"),             tr("Returns the number of curves in the current score"));
+    argumentList << qMakePair(QString("global_time"),           tr("Returns the elapsed time in seconds"));
+    argumentList << qMakePair(QString("global_time_verbose"),	tr("Returns the elapsed time as displayed in Transport bar"));
+    for(quint16 i = 0 ; i < argumentList.count() ; i++) {
+        for(quint16 treeIndex = 0 ; treeIndex < trees.count() ; treeIndex++)
+            trees.at(treeIndex).first->addItem(argumentList.at(i).first + QString(" - ") + argumentList.at(i).second);
     }
-
-    ui->protocol->setColumnWidth(0, 150);
-    ui->hostMIDI->setColumnWidth(0, 150);
-    ui->addressMIDI->setColumnWidth(0, 150);
-    ui->hostOSC->setColumnWidth(0, 150);
-    ui->addressOSC->setColumnWidth(0, 150);
-    ui->port->setColumnWidth(0, 150);
 }
 
 ExtOscPatternEditor::~ExtOscPatternEditor() {
@@ -67,47 +157,28 @@ ExtOscPatternEditor::~ExtOscPatternEditor() {
 
 const QString ExtOscPatternEditor::getPattern() const {
     QString messagePattern = "";
-    if(ui->protocol->currentItem()) {
-        QString protocol = ui->protocol->currentItem()->text(0);
-        messagePattern += protocol + "://";
-        if(((protocol == "osc") || (protocol == "http")) && (ui->hostOSC->currentItem()) && (ui->port->currentItem()) && (ui->addressOSC->currentItem())) {
-            QString ip = ui->hostOSC->currentItem()->text(0);
-            quint16 port = ui->port->currentItem()->text(0).toUInt();
-            if(ip == "")  ip = "ip_out";
-            if(port > 0)  messagePattern += ip + ":" + QString::number(port );
-            else          messagePattern += ip;
+    QString protocol = getItem(ui->protocolCombo, "osc");
+    messagePattern += protocol + "://";
+    if((protocol == "osc") || (protocol == "http"))
+        messagePattern += getItem(ui->hostIpCombo, "ip_out") + ":" + getItem(ui->portCombo, 57120) + getItem(ui->addressOscCombo, "/iannix", "/");
+    else if((protocol == "udp") || (protocol == "tcp"))
+        messagePattern += getItem(ui->hostIpCombo, "ip_out") + ":" + getItem(ui->portCombo, 57120);
+    else if(protocol == "midi")
+        messagePattern += getItem(ui->hostMidiCombo, "midi_out") + getItem(ui->addressMidiCombo, "/cc", "/");
 
-            QString address = ui->addressOSC->currentItem()->text(0);
-            if(address.startsWith("/")) messagePattern += address;
-            else                        messagePattern += "/" + address;
-        }
-        else if(((protocol == "udp") || (protocol == "tcp")) && (ui->hostOSC->currentItem()) && (ui->port->currentItem())) {
-            QString ip = ui->hostOSC->currentItem()->text(0);
-            quint16 port = ui->port->currentItem()->text(0).toUInt();
-            if(ip == "")  ip = "ip_out";
-            if(port > 0)  messagePattern += ip + ":" + QString::number(port );
-            else          messagePattern += ip;
-        }
-        else if((protocol == "midi") && (ui->hostMIDI->currentItem()) && (ui->hostMIDI->currentItem())) {
-            QString host = ui->hostMIDI->currentItem()->text(0);
-            QString address = ui->addressMIDI->currentItem()->text(0);
-            if(host == "")  host = "midi_out";
-            if(address.startsWith("/")) messagePattern += host + address;
-            else                        messagePattern += host + "/" + address;
-        }
-
-        if((patternNbValues >= 1) && (ui->value1->currentItem()) && (ui->value1->currentItem()->text(0) != ""))  messagePattern += " " + ui->value1->currentItem()->text(0);
-        if((patternNbValues >= 2) && (ui->value2->currentItem()) && (ui->value2->currentItem()->text(0) != ""))  messagePattern += " " + ui->value2->currentItem()->text(0);
-        if((patternNbValues >= 3) && (ui->value3->currentItem()) && (ui->value3->currentItem()->text(0) != ""))  messagePattern += " " + ui->value3->currentItem()->text(0);
-        if((patternNbValues >= 4) && (ui->value4->currentItem()) && (ui->value4->currentItem()->text(0) != ""))  messagePattern += " " + ui->value4->currentItem()->text(0);
-        if((patternNbValues >= 5) && (ui->value5->currentItem()) && (ui->value5->currentItem()->text(0) != ""))  messagePattern += " " + ui->value5->currentItem()->text(0);
-        if((patternNbValues >= 6) && (ui->value6->currentItem()) && (ui->value6->currentItem()->text(0) != ""))  messagePattern += " " + ui->value6->currentItem()->text(0);
+    for(quint16 treeIndex = 0 ; treeIndex < trees.count() ; treeIndex++) {
+        QString value = getItem(trees.at(treeIndex).first, "");
+        if((!value.isEmpty()) && (patternNbValues > treeIndex))
+            messagePattern += " " + value;
     }
+
     return messagePattern;
 }
 
 void ExtOscPatternEditor::setPattern(const QString &pattern, bool refreshText) {
-    setPattern(NxObject::parseMessagesPattern(pattern).first(), refreshText);
+    QVector< QVector<QByteArray> > messagePatternItems = NxObject::parseMessagesPattern(pattern);
+    if(messagePatternItems.count() > 0)
+        setPattern(messagePatternItems.first(), refreshText);
 }
 
 void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePatternItems, bool refreshText) {
@@ -118,134 +189,108 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
     foreach(const QByteArray & messagePatternItem, messagePatternItems) {
         if(first) {
             QUrl urlMessage = QUrl(messagePatternItem, QUrl::TolerantMode);
-            if(urlMessage.isValid())
-                ui->patternEdit->setStyleSheet("");
-            else
-                ui->patternEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
+            if(urlMessage.isValid())    ui->patternEdit->setStyleSheet("");
+            else                        ui->patternEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
 
-            setCurrentItem(ui->protocol, ui->protocolLabel, urlMessage.scheme());
-            if((urlMessage.scheme() == "osc") || (urlMessage.scheme() == "http")) {
-                setCurrentItem(ui->hostOSC, ui->hostOSCLabel, urlMessage.host());
-                setCurrentItem(ui->port, ui->portLabel, QString::number(urlMessage.port()));
-                setCurrentItem(ui->addressOSC, ui->addressOSCLabel, urlMessage.path());
+            setCurrentItem(ui->protocolCombo, ui->protocolLabel, urlMessage.scheme().toLower());
 
-                ui->hostMIDI->setVisible(false);
+            if((urlMessage.scheme().toLower() == "osc") || (urlMessage.scheme().toLower() == "http")) {
+                setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    urlMessage.host());
+                setCurrentItem(ui->portCombo,       ui->portLabel,       QString::number(urlMessage.port()));
+                setCurrentItem(ui->addressOscCombo, ui->addressOSCLabel, urlMessage.path());
+
+                ui->hostMidiCombo->setVisible(false);
                 ui->hostMIDILabel->setVisible(false);
-                ui->addressMIDI->setVisible(false);
+                ui->addressMidiCombo->setVisible(false);
                 ui->addressMIDILabel->setVisible(false);
-                ui->value1Label->setText(tr("VALUE 1"));
-                ui->value2Label->setText(tr("VALUE 2"));
-                ui->value3Label->setText(tr("VALUE 3"));
-                ui->value3->setVisible(true);
-                ui->value3Label->setVisible(true);
-                ui->value4->setVisible(true);
-                ui->value4Label->setVisible(true);
-                ui->value5->setVisible(true);
-                ui->value5Label->setVisible(true);
-                ui->value6->setVisible(true);
-                ui->value6Label->setVisible(true);
+                for(quint16 i = 0 ; i < trees.count() ; i++) {
+                    trees.at(i).first ->setVisible(true);
+                    trees.at(i).second->setVisible(true);
+                    trees.at(i).second->setText(tr("VALUE %1").arg(i+1));
+                }
             }
             else if((urlMessage.scheme() == "udp") || (urlMessage.scheme() == "tcp")) {
-                setCurrentItem(ui->hostOSC, ui->hostOSCLabel, urlMessage.host());
-                setCurrentItem(ui->port, ui->portLabel, QString::number(urlMessage.port()));
-                ui->addressOSC->setVisible(false);
+                setCurrentItem(ui->hostIpCombo, ui->hostOSCLabel, urlMessage.host());
+                setCurrentItem(ui->portCombo,   ui->portLabel, QString::number(urlMessage.port()));
+                ui->addressOscCombo->setVisible(false);
                 ui->addressOSCLabel->setVisible(false);
-                ui->hostMIDI->setVisible(false);
+                ui->hostMidiCombo->setVisible(false);
                 ui->hostMIDILabel->setVisible(false);
-                ui->addressMIDI->setVisible(false);
+                ui->addressMidiCombo->setVisible(false);
                 ui->addressMIDILabel->setVisible(false);
-                ui->value1Label->setText(tr("VALUE 1"));
-                ui->value2Label->setText(tr("VALUE 2"));
-                ui->value3Label->setText(tr("VALUE 3"));
-                ui->value3->setVisible(true);
-                ui->value3Label->setVisible(true);
-                ui->value4->setVisible(true);
-                ui->value4Label->setVisible(true);
-                ui->value5->setVisible(true);
-                ui->value5Label->setVisible(true);
-                ui->value6->setVisible(true);
-                ui->value6Label->setVisible(true);
+                for(quint16 i = 0 ; i < trees.count() ; i++) {
+                    trees.at(i).first ->setVisible(true);
+                    trees.at(i).second->setVisible(true);
+                    trees.at(i).second->setText(tr("VALUE %1").arg(i+1));
+                }
             }
             else if(urlMessage.scheme() == "midi") {
-                setCurrentItem(ui->hostMIDI, ui->hostMIDILabel, urlMessage.host());
-                setCurrentItem(ui->addressMIDI, ui->addressMIDILabel, urlMessage.path());
-                ui->hostOSC->setVisible(false);
+                setCurrentItem(ui->hostMidiCombo,    ui->hostMIDILabel,    urlMessage.host());
+                setCurrentItem(ui->addressMidiCombo, ui->addressMIDILabel, urlMessage.path());
+                ui->hostIpCombo->setVisible(false);
                 ui->hostOSCLabel->setVisible(false);
-                ui->port->setVisible(false);
+                ui->portCombo->setVisible(false);
                 ui->portLabel->setVisible(false);
-                ui->addressOSC->setVisible(false);
+                ui->addressOscCombo->setVisible(false);
                 ui->addressOSCLabel->setVisible(false);
 
-                ui->value1Label->setText(tr("MIDI CHANNEL"));
+                trees.at(0).second->setText(tr("MIDI CHANNEL"));
                 if(urlMessage.path().toLower() == "/note") {
-                    ui->value2Label->setText(tr("NOTE NUMBER"));
-                    ui->value3Label->setText(tr("NOTE VELOCITY"));
-                    ui->value3->setVisible(true);
-                    ui->value3Label->setVisible(true);
+                    trees.at(1).second->setText(tr("NOTE NUMBER"));
+                    trees.at(2).second->setText(tr("VELOCITY"));
+                    trees.at(2).first->setVisible(true);
+                    trees.at(2).second->setVisible(true);
                     patternNbValues = 3;
                 }
                 else if(urlMessage.path().toLower() == "/pgm") {
-                    ui->value2Label->setText(tr("PROGRAM ID"));
-                    ui->value3->setVisible(false);
-                    ui->value3Label->setVisible(false);
+                    trees.at(1).second->setText(tr("PROGRAM ID"));
+                    trees.at(2).first->setVisible(false);
+                    trees.at(2).second->setVisible(false);
                     patternNbValues = 2;
                 }
                 else if(urlMessage.path().toLower() == "/cc") {
-                    ui->value2Label->setText(tr("CONTROLLER ID"));
-                    ui->value3Label->setText(tr("CONTROLLER VALUE"));
-                    ui->value3->setVisible(true);
-                    ui->value3Label->setVisible(true);
+                    trees.at(1).second->setText(tr("CONTROLLER ID"));
+                    trees.at(2).second->setText(tr("VALUE"));
+                    trees.at(2).first->setVisible(true);
+                    trees.at(2).second->setVisible(true);
                     patternNbValues = 3;
                 }
                 else if(urlMessage.path().toLower() == "/bend") {
-                    ui->value2Label->setText(tr("BEND VALUE"));
-                    ui->value3->setVisible(false);
-                    ui->value3Label->setVisible(false);
+                    trees.at(1).second->setText(tr("VALUE"));
+                    trees.at(2).first->setVisible(true);
+                    trees.at(2).second->setVisible(true);
                     patternNbValues = 2;
                 }
                 else
                     patternNbValues = 3;
-                ui->value4->setVisible(false);
-                ui->value4Label->setVisible(false);
-                ui->value5->setVisible(false);
-                ui->value5Label->setVisible(false);
-                ui->value6->setVisible(false);
-                ui->value6Label->setVisible(false);
+                for(quint16 i = 3 ; i < trees.count() ; i++) {
+                    trees.at(i).first ->setVisible(false);
+                    trees.at(i).second->setVisible(false);
+                }
             }
             else {
-                ui->hostOSC->setVisible(false);
+                ui->hostIpCombo->setVisible(false);
                 ui->hostOSCLabel->setVisible(false);
-                ui->port->setVisible(false);
+                ui->portCombo->setVisible(false);
                 ui->portLabel->setVisible(false);
-                ui->addressOSC->setVisible(false);
+                ui->addressOscCombo->setVisible(false);
                 ui->addressOSCLabel->setVisible(false);
-                ui->hostMIDI->setVisible(false);
+                ui->hostMidiCombo->setVisible(false);
                 ui->hostMIDILabel->setVisible(false);
-                ui->addressMIDI->setVisible(false);
+                ui->addressMidiCombo->setVisible(false);
                 ui->addressMIDILabel->setVisible(false);
-                ui->value1Label->setText(tr("VALUE 1"));
-                ui->value2Label->setText(tr("VALUE 2"));
-                ui->value3Label->setText(tr("VALUE 3"));
-                ui->value2->setVisible(true);
-                ui->value2Label->setVisible(true);
-                ui->value3->setVisible(true);
-                ui->value3Label->setVisible(true);
-                ui->value4->setVisible(true);
-                ui->value4Label->setVisible(true);
-                ui->value5->setVisible(true);
-                ui->value5Label->setVisible(true);
-                ui->value6->setVisible(true);
-                ui->value6Label->setVisible(true);
+                for(quint16 i = 0 ; i < trees.count() ; i++) {
+                    trees.at(i).first ->setVisible(true);
+                    trees.at(i).second->setVisible(true);
+                    trees.at(i).second->setText(tr("VALUE %1").arg(i+1));
+                }
             }
-
             first = false;
         }
         else {
             if(valueIndex < trees.count()) {
-                if(valueIndex < patternNbValues)
-                    setCurrentItem(trees.at(valueIndex).first, trees.at(valueIndex).second, messagePatternItem, false);
-                else
-                    setCurrentItem(trees.at(valueIndex).first, trees.at(valueIndex).second, "", false);
+                if(valueIndex < patternNbValues)    setCurrentItem(trees.at(valueIndex).first, trees.at(valueIndex).second, messagePatternItem, false);
+                else                                setCurrentItem(trees.at(valueIndex).first, trees.at(valueIndex).second, "",                 false);
             }
             valueIndex++;
         }
@@ -258,40 +303,41 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
         currentItemChanged();
 }
 
-void ExtOscPatternEditor::setCurrentItem(QTreeWidget *tree, QLabel *label, const QString &value, bool forceVisible) {
-    QTreeWidgetItem *itemCustom = tree->topLevelItem(tree->topLevelItemCount()-1), *itemChanged = 0;
-    for(quint16 i = 0 ; i < tree->topLevelItemCount() ; i++) {
-        QTreeWidgetItem *topLevelItem = tree->topLevelItem(i);
-        if(topLevelItem->text(0).toLower() == value.toLower()) {
-            tree->setCurrentItem(topLevelItem);
-            tree->scrollToItem(topLevelItem);
-            itemChanged = topLevelItem;
+void ExtOscPatternEditor::setCurrentItem(QComboBox *combo, QLabel *label, const QString &value, bool forceVisible) {
+    bool ok = false;
+    for(quint16 i = 0 ; i < combo->count() ; i++) {
+        QString val = combo->itemText(i).split(QString(" - "), QString::KeepEmptyParts).at(0);
+        if(val == value) {
+            combo->setCurrentIndex(i);
+            ok = true;
             break;
         }
-        for(quint16 j = 0 ; j < topLevelItem->childCount() ; j++) {
-            QTreeWidgetItem *item = topLevelItem->child(j);
-            if(item->text(0).toLower() == value.toLower()) {
-                tree->setCurrentItem(item);
-                tree->scrollToItem(item);
-                itemChanged = item;
-                break;
-            }
-        }
     }
-    if(itemCustom) {
-        if(!itemChanged) {
-            itemCustom->setText(0, value);
-            tree->setCurrentItem(itemCustom);
-            tree->scrollToItem(itemCustom);
-        }
-        else if(itemChanged != itemCustom)
-            itemCustom->setText(0, "________");
-
+    if(!ok) {
+        combo->setEditText(value);
     }
     if(forceVisible) {
-        tree->setVisible(true);
+        combo->setVisible(true);
         label->setVisible(true);
     }
+}
+
+QString ExtOscPatternEditor::getItem(QComboBox *combo, const QString &valDefault, const QString &prefix) const {
+    QString val = combo->currentText().split(QString(" - "), QString::KeepEmptyParts).at(0);
+    if(!val.isEmpty()) {
+        if(!prefix.isEmpty()) {
+            if(val.startsWith(prefix))  return val;
+            else                        return prefix + val;
+        }
+        return val;
+    }
+    else
+        return valDefault;
+}
+QString ExtOscPatternEditor::getItem(QComboBox *combo, qint32 valDefault) const {
+    qint32 val = getItem(combo, "0").toInt();
+    if(val > 0) return QString::number(val);
+    else        return QString::number(valDefault);
 }
 
 void ExtOscPatternEditor::currentItemChanged() {
@@ -305,9 +351,4 @@ void ExtOscPatternEditor::currentItemChanged() {
 void ExtOscPatternEditor::textPatternChanged() {
     if(!textLock)
         setPattern(ui->patternEdit->toPlainText().replace("\t", " "), false);
-}
-
-
-void ExtOscPatternEditor::actionRemove() {
-    emit(actionRouteRemove(this));
 }

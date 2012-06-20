@@ -173,6 +173,7 @@ private:
     NxCpu *cpu;
 private:
     qreal timeLocal, timeTransportRefresh, timePerfRefresh, timePerfCounter;
+    QString timeLocalStr;
     QTimer *timer;
     bool forceTimeLocal;
 protected:

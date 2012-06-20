@@ -50,7 +50,7 @@ public:
 
 public slots:
     void actionAddMessage();
-    void actionRemoveMessage(ExtOscPatternEditor *editor);
+    void actionRemoveMessage();
     void help() {
         QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Documentation/index.html").absoluteFilePath().replace("\\", "/") + "#messages", QUrl::TolerantMode));
     }

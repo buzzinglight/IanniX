@@ -269,6 +269,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("colorTheme", false);
     if((forceSettings) || (!settings.childKeys().contains("opacityCurve")))
         settings.setValue("opacityCurve", false);
+    if((forceSettings) || (!settings.childKeys().contains("autoresize")))
+        settings.setValue("autoresize", false);
 
     inspector->setOSCPort(settings.value("oscPort").toUInt());
     inspector->setUDPPort(settings.value("udpPort").toUInt());
@@ -285,6 +287,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     render->setColorTheme(settings.value("colorTheme").toBool());
     view->setColorTheme(render->getColorTheme());
     inspector->setViewCurveOpacityCheck(settings.value("opacityCurve").toBool());
+    render->setTriggerAutosize(settings.value("autoresize").toBool());
+    view->setAutosize(settings.value("autoresize").toBool());
 
     bool settingsOk = settings.childKeys().contains("lastUpdate") && settings.childKeys().contains("updatePeriod") && settings.childKeys().contains("id");
     if(settingsOk) {
@@ -661,23 +665,23 @@ void IanniX::timerTick() {
 
     if(timeTransportRefresh >= 0.03) {
         timeTransportRefresh = 0;
-        QString timeStr = "";
+        timeLocalStr = "";
 
         quint16 min = timeLocal / 60;
-        if(min < 10) timeStr += "00";
-        else if(min < 100) timeStr += "0";
-        timeStr += QString::number(min) + ":";
+        if(min < 10) timeLocalStr += "00";
+        else if(min < 100) timeLocalStr += "0";
+        timeLocalStr += QString::number(min) + ":";
 
         quint8 sec = (int)floor(timeLocal) % 60;
-        if(sec < 10) timeStr += "0";
-        timeStr += QString::number(sec) + ":";
+        if(sec < 10) timeLocalStr += "0";
+        timeLocalStr += QString::number(sec) + ":";
 
         quint16 milli = (timeLocal - floor(timeLocal)) * 1000;
-        if(milli < 10)       timeStr += "00";
-        else if(milli < 100) timeStr += "0";
-        timeStr += QString::number(milli);
+        if(milli < 10)       timeLocalStr += "00";
+        else if(milli < 100) timeLocalStr += "0";
+        timeLocalStr += QString::number(milli);
 
-        emit(updateTransport(timeStr, lastMessage));
+        emit(updateTransport(timeLocalStr, lastMessage));
         lastMessageAllow = true;
     }
     if(timePerfRefresh >= 1) {
@@ -732,10 +736,14 @@ void IanniX::actionToggle_Transport() {
     view->activateWindow();
 }
 void IanniX::actionToggle_Autosize() {
-    if(render->getTriggerAutosize())
+    if(render->getTriggerAutosize()) {
         render->setTriggerAutosize(false);
-    else
+        view->setAutosize(false);
+    }
+    else {
         render->setTriggerAutosize(true);
+        view->setAutosize(false);
+    }
 }
 
 void IanniX::actionPlay_pause() {
@@ -916,6 +924,9 @@ void IanniX::actionNew() {
                 if(newFile.open(QIODevice::WriteOnly)) {
                     newFile.write("");
                     newFile.close();
+                    fileWatcherChanged(scriptDir.path());
+                    inspector->setProjectFiles(text);
+                    actionProjectFiles();
                 }
             }
             else {
@@ -1498,6 +1509,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if((commande == COMMAND_AUTOSIZE) && (arguments.count() >= 2)) {
                 render->setTriggerAutosize(arguments.at(1).toDouble());
+                view->setAutosize(arguments.at(1).toDouble());
             }
 
             else if(arguments.count() >= 2) {
@@ -1834,7 +1846,7 @@ void IanniX::sendMessage(void *_object, void *_trigger, void *_cursor, void *_co
                 message.setUrl(QUrl(messagePattern.at(0), QUrl::TolerantMode), &messageScriptEngine, ipOut, midiOut);
                 messagesCache.insert(messagePattern.at(0), message);
             }
-            if(message.parse(messagePattern, trigger, cursor, curve, collisionCurve, collisionPoint, collisionValue, status, inspector->nbTriggers, inspector->nbCursors, inspector->nbCurves)) {
+            if(message.parse(messagePattern, trigger, cursor, curve, collisionCurve, collisionPoint, collisionValue, status, inspector->nbTriggers, inspector->nbCursors, inspector->nbCurves, timeLocal, timeLocalStr)) {
                 if(message.getType() == MessagesTypeDirect)
                     send(message);
                 else if((message.getType() == MessagesTypeOsc) && (osc))
@@ -2157,6 +2169,7 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     settings.setValue("bundlePort", inspector->getBundlePort());
     settings.setValue("colorTheme", render->getColorTheme());
     settings.setValue("opacityCurve", inspector->getViewCurveOpacityCheck());
+    settings.setValue("autoresize", render->getTriggerAutosize());
 
     event->accept();
 }
@@ -2255,7 +2268,7 @@ void IanniX::fileWatcherFolder(QStringList extension, QDir dir, QTreeWidgetItem 
             documents.remove(destroyKey);
         parentList->removeChild(document);
     }
-    parentList->sortChildren(0, Qt::AscendingOrder);
+    //parentList->sortChildren(0, Qt::AscendingOrder);
 }
 
 void IanniX::logOscSend(const QString & message) {

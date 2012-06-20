@@ -100,6 +100,7 @@ public slots:
     void actionQuit()  {
         close();
     }
+    void setAutosize(bool val);
 
 signals:
     void actionRouteToggle_Inspector();

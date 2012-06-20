@@ -108,7 +108,7 @@ public:
         }
     }
     
-    bool parse(const QVector<QByteArray> & patternItems, NxTrigger *trigger, NxCursor *cursor, NxCurve *curve, NxCurve *collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status, const quint16 nbTriggers, const quint16 nbCursors, const quint16 nbCurves) {
+    bool parse(const QVector<QByteArray> & patternItems, NxTrigger *trigger, NxCursor *cursor, NxCurve *curve, NxCurve *collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status, const quint16 nbTriggers, const quint16 nbCursors, const quint16 nbCurves, qreal globalTime, const QString &globalTimeVerbose) {
         bool suppressSend = false;
         verboseMessage = urlMessageString;
         midiValues.clear();
@@ -268,6 +268,10 @@ public:
                             messageScriptValue.setProperty("nb_cursors", nbCursors);
                         if(patternArgument.contains("nb_curves"))
                             messageScriptValue.setProperty("nb_curves", nbCurves);
+                        if(patternArgument.contains("global_time"))
+                            messageScriptValue.setProperty("global_time", globalTime);
+                        if(patternArgument.contains("global_time_verbose"))
+                            messageScriptValue.setProperty("global_time_verbose", globalTimeVerbose);
                     }
 
                     messageScriptResult = messageScriptEngine->evaluate(patternArgument);
@@ -427,6 +431,10 @@ public:
                             found = addFloat(nbCursors, patternArgument, patternIndex);
                         else if(patternArgument == "nb_curves")
                             found = addFloat(nbCurves, patternArgument, patternIndex);
+                        else if(patternArgument == "global_time")
+                            found = addFloat(globalTime, patternArgument, patternIndex);
+                        else if(patternArgument == "global_time_verbose")
+                            found = addString(globalTimeVerbose, patternArgument, patternIndex);
                     }
                 }
                 

@@ -102,6 +102,9 @@ public slots:
     inline void setFactory(NxObjectFactoryInterface *_factory) {
         factory = _factory;
     }
+    void setProjectFiles(QString filename);
+    void setProjectScripts(QString filename);
+
 
 public:
     void clearCCselections(); ////CG////

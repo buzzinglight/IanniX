@@ -338,6 +338,10 @@ void UiView::gridOpacityChange() {
     }
 }
 
+void UiView::setAutosize(bool val) {
+    ui->actionToggle_Autosize->setChecked(val);
+}
+
 void UiView::actionResize() {
     QSize currentSize = ui->render->size();
     QStringList newSizes = QInputDialog::getText(0, tr("Resize viewport"), tr("New viewport size"), QLineEdit::Normal, tr("%1 x %2").arg(currentSize.width()).arg(currentSize.height())).split("x", QString::SkipEmptyParts);

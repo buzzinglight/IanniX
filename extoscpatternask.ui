@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>700</height>
+    <width>814</width>
+    <height>505</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -198,6 +198,19 @@ QSplitter::handle:vertical     		{	height: 4px; }
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="removeButton">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>REMOVE CURRENT MESSAGE</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -285,8 +298,8 @@ QSplitter::handle:vertical     		{	height: 4px; }
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>795</x>
-     <y>171</y>
+     <x>987</x>
+     <y>684</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -301,8 +314,8 @@ QSplitter::handle:vertical     		{	height: 4px; }
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>795</x>
-     <y>171</y>
+     <x>987</x>
+     <y>684</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -317,8 +330,8 @@ QSplitter::handle:vertical     		{	height: 4px; }
    <slot>help()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>304</x>
-     <y>167</y>
+     <x>423</x>
+     <y>687</y>
     </hint>
     <hint type="destinationlabel">
      <x>267</x>
@@ -333,12 +346,28 @@ QSplitter::handle:vertical     		{	height: 4px; }
    <slot>actionAddMessage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>30</x>
-     <y>145</y>
+     <x>42</x>
+     <y>684</y>
     </hint>
     <hint type="destinationlabel">
      <x>-87</x>
      <y>58</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>removeButton</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternAsk</receiver>
+   <slot>actionRemoveMessage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>218</x>
+     <y>675</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>453</x>
+     <y>744</y>
     </hint>
    </hints>
   </connection>

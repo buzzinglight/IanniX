@@ -51,14 +51,16 @@ public:
 
 private:
     bool textLock, itemLock;
-    QList< QPair<QTreeWidget*,QLabel*> > trees;
+    QList< QPair<QComboBox*,QLabel*> > trees;
     quint16 patternNbValues;
 
 public:
     const QString getPattern() const;
     void setPattern(const QString &pattern, bool refreshText);
     void setPattern(const QVector<QByteArray> &messagePatternItems, bool refreshText);
-    void setCurrentItem(QTreeWidget *tree, QLabel *label, const QString &value, bool forceVisible = true);
+    void setCurrentItem(QComboBox *combo, QLabel *label, const QString &value, bool forceVisible = true);
+    QString getItem(QComboBox *combo, const QString &valDefault, const QString &prefix = "") const;
+    QString getItem(QComboBox *combo, qint32 valDefault) const;
 
 signals:
     void actionRouteRemove(ExtOscPatternEditor*);
@@ -66,7 +68,6 @@ signals:
 public slots:
     void currentItemChanged();
     void textPatternChanged();
-    void actionRemove();
 
 private:
     Ui::ExtOscPatternEditor *ui;

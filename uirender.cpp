@@ -24,6 +24,7 @@ UiRender::UiRender(QWidget *parent) :
     ui(new Ui::UiRender) {
     firstLaunch = true;
     texturesLoaded = true;
+    capturedFramesStart = false;
 
     //Initialize view
     ui->setupUi(this);
@@ -179,33 +180,49 @@ void UiRender::loadTexture(const QString & name, const QString & filename, const
 }
 
 void UiRender::capture(qreal scaleFactor) {
-#ifndef FFMPEG_INSTALLED
-    renderSize = size() * scaleFactor;
-    renderOptions->forceLists         = true;
-    renderOptions->forceTexture       = true;
-    renderOptions->forceFrustumInInit = true;
-    renderPixmap(renderSize.width(), renderSize.height()).save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString(QDir::separator()) + "IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
-    renderOptions->forceLists         = false;
-    renderOptions->forceTexture       = false;
-    renderOptions->forceFrustumInInit = false;
-    texturesLoaded = false;
-#endif
+    if(scaleFactor <= 0) {
 #ifdef FFMPEG_INSTALLED
-    //Encoder
-    renderSize = QSize(800, 600);
-    resize(renderSize);
+        //Encoder
+        renderSize = QSize(800, 600);
+        resize(renderSize);
 
-    if(videoEncoder.isOk()) {
-        timer->stop();
-        qDebug("Fermeture de la video : %d", videoEncoder.close());
-        timer->start(1000./50.);
+        if(videoEncoder.isOk()) {
+            timer->stop();
+            qDebug("Fermeture de la video : %d", videoEncoder.close());
+            timer->start(1000./50.);
+        }
+        else {
+            setInterval(1000./25.);
+            qDebug("Creation de la video : %d", videoEncoder.createFile("_test.avi", renderSize.width(), renderSize.height(), 5000000, 20, 25));
+        }
+#else
+        if(capturedFramesStart) {
+            capturedFramesStart = false;
+            //Sauvegarde
+            QString basePath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString(QDir::separator()) + "IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + QString(QDir::separator());
+            QDir().mkpath(basePath);
+            quint16 index = 0;
+            foreach(const QImage &capturedFrame, capturedFrames)
+                capturedFrame.save(basePath + tr("Image_%1.png").arg(index++, 5, 10, QChar('0')));
+            capturedFrames.clear();
+        }
+        else {
+            capturedFrames.clear();
+            capturedFramesStart = true;
+        }
+#endif
     }
     else {
-        setInterval(1000./25.);
-        qDebug("Creation de la video : %d", videoEncoder.createFile("_test.avi", renderSize.width(), renderSize.height(), 5000000, 20, 25));
+        renderSize = size() * scaleFactor;
+        renderOptions->forceLists         = true;
+        renderOptions->forceTexture       = true;
+        renderOptions->forceFrustumInInit = true;
+        renderPixmap(renderSize.width(), renderSize.height()).save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString(QDir::separator()) + "IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
+        renderOptions->forceLists         = false;
+        renderOptions->forceTexture       = false;
+        renderOptions->forceFrustumInInit = false;
+        texturesLoaded = false;
     }
-#endif
-
 }
 
 void UiRender::centerOn(const NxPoint & center) {
@@ -398,6 +415,8 @@ void UiRender::paintGL() {
     if(videoEncoder.isOk())
         qDebug("%d encode", videoEncoder.encodeImage(grabFrameBuffer()));
 #endif
+    if(capturedFramesStart)
+        capturedFrames << grabFrameBuffer();
 }
 
 
@@ -811,8 +830,10 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                     NxCurve *curve = (NxCurve*)object;
                     if(curve->isMouseHover(mousePos)) {
                         selected = true;
-                        if(curve->getSelected())
-                            curve->isOnPathPoint(NxRect(mousePos - NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2) - curve->getPos(), mousePos + NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2) - curve->getPos()));
+                        if(curve->getSelected()) {
+                            qreal squareSize = (0.15 * renderOptions->zoomLinear) / 2;
+                            curve->isOnPathPoint(NxRect(mousePos - NxPoint(squareSize, squareSize, squareSize) - curve->getPos(), mousePos + NxPoint(squareSize, squareSize, squareSize) - curve->getPos()));
+                        }
                     }
 
                 }

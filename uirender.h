@@ -77,6 +77,8 @@ private:
     QString defaultStatusTip;
     QList<UiRenderTexture> textures;
     bool texturesLoaded;
+    QList<QImage> capturedFrames;
+    bool capturedFramesStart;
 public:
     inline void startRenderTimer() { timer->start(20); }
     inline void setFollowId(qint16 _followId) { followId = _followId; }
