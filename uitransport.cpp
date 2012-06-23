@@ -98,8 +98,10 @@ void UiTransport::actionSpeed() {
 }
 
 void UiTransport::updateTransport(QString time, QString lastMessage) {
-    ui->timeEdit->setText(time);
-    ui->lastMessage->setText(lastMessage);
+    if(isVisible()) {
+        ui->timeEdit->setText(time);
+        ui->lastMessage->setText(lastMessage);
+    }
 }
 
 qreal UiTransport::getSpeed() const {

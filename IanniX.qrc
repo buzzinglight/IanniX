@@ -38,5 +38,7 @@
         <file>res_icon_trigger.png</file>
         <file>res_icon_grid_snapX.png</file>
         <file>res_icon_grid_snapY.png</file>
+        <file>res_icon_editor.png</file>
+        <file>res_icon_timer.png</file>
     </qresource>
 </RCC>

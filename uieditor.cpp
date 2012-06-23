@@ -63,6 +63,8 @@ UiEditor::UiEditor(NxObjectFactoryInterface *_factory, QWidget *parent) :
 
     ui->splitter_2->setStretchFactor(0, 5);
     ui->splitter_2->setStretchFactor(1, 1);
+
+    ui->statusBar->setVisible(false);
 }
 
 UiEditor::~UiEditor() {

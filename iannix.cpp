@@ -75,6 +75,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteGridChange(qreal)), SLOT(actionGridChange(qreal)));
     connect(view, SIGNAL(actionRouteGridOpacityChange(qreal)), SLOT(actionGridOpacityChange(qreal)));
     connect(view, SIGNAL(actionRouteShowEditor()), SLOT(actionShowEditor()));
+    connect(view, SIGNAL(actionRouteShowTimer()), SLOT(actionShowTimer()));
     connect(view, SIGNAL(actionRouteReloadScript()), SLOT(actionReloadScript()));
     connect(view, SIGNAL(actionRouteCloseEvent(QCloseEvent*)), SLOT(actionCloseEvent(QCloseEvent*)));
     connect(view, SIGNAL(actionRouteAbout()), SLOT(actionLogo()));
@@ -95,6 +96,9 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(transport, SIGNAL(actionRouteSetScheduler()), SLOT(actionSetScheduler()));
     connect(transport, SIGNAL(actionRouteSpeed()), SLOT(actionSpeed()));
     connect(this, SIGNAL(updateTransport(QString,QString)), transport, SLOT(updateTransport(QString,QString)));
+    //Timer
+    uitimer = new UiTimer(0);
+    connect(this, SIGNAL(updateTransport(QString,QString)), uitimer, SLOT(updateTransport(QString,QString)));
 
     //Inspector
     inspector = view->getInspector();
@@ -2070,7 +2074,21 @@ void IanniX::actionGridOpacityChange(qreal val) {
     }
 }
 void IanniX::actionShowEditor() {
-    editor->show();
+    if(editor->isVisible())
+        editor->close();
+    else {
+        editor->show();
+        editor->raise();
+    }
+}
+void IanniX::actionShowTimer() {
+    if(uitimer->isVisible())
+        uitimer->close();
+    else {
+        uitimer->show();
+        view->raise();
+        //uitimer->raise();
+    }
 }
 void IanniX::actionReloadScript() {
     actionProjectScript();
@@ -2198,6 +2216,8 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
         editor->close();
     if(about)
         about->close();
+    if(uitimer)
+        uitimer->close();
 
     QSettings settings;
     settings.setValue("oscPort", inspector->getOSCPort());

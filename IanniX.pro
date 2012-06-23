@@ -70,7 +70,8 @@ SOURCES                 += iannix.cpp \
                            nxeasing.cpp \
                            nxcpu.cpp \
     help.cpp \
-    uihelp.cpp
+    uihelp.cpp \
+    uitimer.cpp
 
 HEADERS                 += iannix.h \
                            uitransport.h \
@@ -116,7 +117,8 @@ HEADERS                 += iannix.h \
                            nxeasing.h \
                            nxcpu.h \
     help.h \
-    uihelp.h
+    uihelp.h \
+    uitimer.h
 
 FORMS                   += uitransport.ui \
                            uirender.ui \
@@ -128,7 +130,8 @@ FORMS                   += uitransport.ui \
                            extoscpatternask.ui \
                            uieditor.ui \
                            extoscpatterneditor.ui \
-    uihelp.ui
+    uihelp.ui \
+    uitimer.ui
 
 TRANSLATIONS             = iannix_fr.ts
 

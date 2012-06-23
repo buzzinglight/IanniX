@@ -64,6 +64,7 @@ public slots:
     void actionSnapYGrid()        { emit(actionRouteSnapYGrid()); }
     void actionSnapZGrid()        { emit(actionRouteSnapZGrid()); }
     void actionShowEditor()       { emit(actionRouteShowEditor()); }
+    void actionShowTimer()        { emit(actionRouteShowTimer()); }
     void actionReloadScript()     { emit(actionRouteReloadScript()); }
     void actionPasteScript()      { emit(actionRoutePasteScript()); }
     void actionSelectionModeChange();
@@ -131,6 +132,7 @@ signals:
     void actionRouteCloseEvent(QCloseEvent*);
     void actionRouteArrange(quint16 type);
     void actionRoutePasteScript();
+    void actionRouteShowTimer();
     void actionRouteSnaphot(qreal);
 
 protected:

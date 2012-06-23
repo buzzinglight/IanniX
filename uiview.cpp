@@ -83,6 +83,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionSnapYGrid, SIGNAL(triggered()), SLOT(actionSnapYGrid()));
     connect(ui->actionSnapZGrid, SIGNAL(triggered()), SLOT(actionSnapZGrid()));
     connect(ui->actionShowEditor, SIGNAL(triggered()), SLOT(actionShowEditor()));
+    connect(ui->actionShowTimer, SIGNAL(triggered()), SLOT(actionShowTimer()));
     connect(ui->actionReloadScript, SIGNAL(triggered()), SLOT(actionReloadScript()));
 
     connect(ui->action10Seconds, SIGNAL(triggered()), SLOT(gridChange()));

@@ -44,6 +44,7 @@
 #include "extmidimanager.h"
 #include "uiabout.h"
 #include "uisplash.h"
+#include "uitimer.h"
 #include "uitransport.h"
 #include "uiview.h"
 #include "uiinspector.h"
@@ -235,6 +236,7 @@ private:
     UiTransport *transport;
     UiInspector *inspector;
     UiView *view;
+    UiTimer *uitimer;
     UiSplash *splash;
     UiAbout *about;
     UiEditor *editor;
@@ -301,6 +303,7 @@ public slots:
     void actionGridChange(qreal val);
     void actionGridOpacityChange(qreal val);
     void actionShowEditor();
+    void actionShowTimer();
     void actionReloadScript();
     void actionCloseEvent(QCloseEvent *event);
     void transportMessageChange(const QString & );

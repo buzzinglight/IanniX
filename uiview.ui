@@ -153,6 +153,8 @@ QStatusBar {
     <addaction name="separator"/>
     <addaction name="actionToggle_Inspector"/>
     <addaction name="actionToggle_Transport"/>
+    <addaction name="actionShowEditor"/>
+    <addaction name="actionShowTimer"/>
     <addaction name="separator"/>
     <addaction name="actionGrid"/>
     <addaction name="actionSnapXGrid"/>
@@ -164,11 +166,10 @@ QStatusBar {
     <addaction name="actionZoom_out"/>
     <addaction name="actionToggle_Autosize"/>
     <addaction name="separator"/>
-    <addaction name="actionShowEditor"/>
-    <addaction name="actionLight"/>
-    <addaction name="separator"/>
     <addaction name="actionResize"/>
     <addaction name="actionSnapshot"/>
+    <addaction name="separator"/>
+    <addaction name="actionLight"/>
    </widget>
    <widget class="QMenu" name="menuPlayback">
     <property name="title">
@@ -283,6 +284,8 @@ QStatusBar {
    <addaction name="actionToggle_Inspector"/>
    <addaction name="actionToggle_Transport"/>
    <addaction name="actionFullscreen"/>
+   <addaction name="actionShowEditor"/>
+   <addaction name="actionShowTimer"/>
    <addaction name="separator"/>
    <addaction name="actionLight"/>
    <addaction name="separator"/>
@@ -453,7 +456,7 @@ QStatusBar {
     <string>Click here to hide/show inspector panel</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+I</string>
+    <string>Ctrl+Alt+I</string>
    </property>
   </action>
   <action name="actionToggle_Transport">
@@ -474,7 +477,7 @@ QStatusBar {
     <string>Click here to hide/show transport panel</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+T</string>
+    <string>Ctrl+Alt+T</string>
    </property>
   </action>
   <action name="actionPlay_pause">
@@ -918,6 +921,10 @@ QStatusBar {
    </property>
   </action>
   <action name="actionShowEditor">
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_editor.png</normaloff>:/actions/res_icon_editor.png</iconset>
+   </property>
    <property name="text">
     <string>Show script editor</string>
    </property>
@@ -1165,7 +1172,7 @@ QStatusBar {
     <string>Click here to save the current view in a high resolution PNG file (file will be placed on your desktop)</string>
    </property>
    <property name="shortcut">
-    <string>Shift+S</string>
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionResize">
@@ -1174,6 +1181,18 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to resize the viewport (the rendering area). Note that it is recommended to hide Transport bar and Inspector bar to get the exact desired size.</string>
+   </property>
+  </action>
+  <action name="actionShowTimer">
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_timer.png</normaloff>:/actions/res_icon_timer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show timer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>
