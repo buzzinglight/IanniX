@@ -2087,7 +2087,6 @@ void IanniX::actionShowTimer() {
     else {
         uitimer->show();
         view->raise();
-        //uitimer->raise();
     }
 }
 void IanniX::actionReloadScript() {
