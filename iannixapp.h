@@ -30,6 +30,7 @@ private:
 
 public:
     explicit IanniXApp(int &argc, char **argv);
+    void setHelp();
 
 protected:
     bool event(QEvent *);

@@ -19,10 +19,11 @@
 #include "extoscpatternask.h"
 #include "ui_extoscpatternask.h"
 
-ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject*> *_objects) :
+ExtOscPatternAsk::ExtOscPatternAsk(NxObjectFactoryInterface *_factory, QWidget *parent, QList<NxObject*> *_objects) :
     QDialog(parent),
     ui(new Ui::ExtOscPatternAsk) {
     ui->setupUi(this);
+    factory = _factory;
     objects = _objects;
     QStringList messagePatterns;
     onlyCurves = true;
@@ -37,7 +38,8 @@ ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject*> *_objects) 
             if(!messagePatterns.contains(messagePattern)) {
                 messagePatterns.append(messagePattern);
 
-                ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(this);
+                ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(factory, this);
+                connect(patternEditor, SIGNAL(actionRouteFocus(QComboBox*,QPlainTextEdit*)), SLOT(actionFieldFocus(QComboBox*,QPlainTextEdit*)));
                 ui->tabs->addTab(patternEditor, tr("Message %1").arg(ui->tabs->count()+1));
                 ui->tabs->setCurrentIndex(ui->tabs->count()-1);
                 patternLists.append(patternEditor);
@@ -105,7 +107,8 @@ void ExtOscPatternAsk::actionAddMessage() {
 
     QVector< QVector<QByteArray > > messagePatternItemsList = NxObject::parseMessagesPattern(messagePatternItem);
     foreach(const QVector<QByteArray > & messagePatternItems, messagePatternItemsList) {
-        ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(this);
+        ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(factory, this);
+        connect(patternEditor, SIGNAL(actionRouteFocus(QComboBox*,QPlainTextEdit*)), SLOT(actionFieldFocus(QComboBox*,QPlainTextEdit*)));
         ui->tabs->addTab(patternEditor, tr("Message %1").arg(ui->tabs->count()+1));
         ui->tabs->setCurrentIndex(ui->tabs->count()-1);
         patternLists.append(patternEditor);
@@ -129,4 +132,11 @@ void ExtOscPatternAsk::actionRemoveMessage() {
         else
             ui->removeButton->setVisible(false);
     }
+}
+
+void ExtOscPatternAsk::actionFieldFocus(QComboBox *combo, QPlainTextEdit *plaintext) {
+    if(plaintext)
+        ui->help->display(plaintext, QStringList() << "commands" << "values" << "javascript");
+    if(combo)
+        ui->help->display(combo, QStringList() << "commands" << "values" << "javascript");
 }

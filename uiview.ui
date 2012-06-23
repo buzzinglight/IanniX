@@ -23,9 +23,8 @@ QDockWidget {
 	font: 10px;
 }
 QDockWidget::title {
-     text-align: center;
-     background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
-     padding-left: 5px;
+    text-align: center;
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
 }
 
 QSplitter::handle {
@@ -52,8 +51,8 @@ QToolButton:pressed, QToolButton:checked {
 }
 
 QStatusBar {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
-	color:rgb(0, 187, 255);
+	background-color: rgb(66, 66, 66);
+	color: white;
 	font: 10px;
 	font: &quot;Arial&quot;;
 }</string>

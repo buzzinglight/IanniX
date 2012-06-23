@@ -16,7 +16,7 @@ function onCreate() {
 	run("zoom 100");
 	
 	//Generate circle curves, cursors and triggers
-	for(var circleIndex = 0 ; circleIndex < circleMax ; circleIndex++)
+	for(var circleIndex = 1 ; circleIndex < circleMax ; circleIndex++)
 		addCircle(circleIndex);
 
 	//Control Curve (MIDI CC)
@@ -34,12 +34,12 @@ function onCreate() {
 	run("setColorHue      current 0 255 255 255");
 	run("setBoundsSource  current 0 " + (circleMax / 2.5) + " " + (circleMax / 2) + " 0 0");
 	run("setBoundsTarget  current 0 127 127 0");
-	run("setMessage       current 100, midi://midi_out/cc 0 0 cursor_value_y");
+	run("setMessage       current 100, midi://midi_out/cc 0 1 cursor_value_y");
 
 	run("add trigger      " + (2000 + circleIndex));
 	run("setGroup         current triggers");
 	run("setPos           current " + (circleIndex / 2.5) + " 0 0");
-	run("setMessage       current 1, midi://midi_out/note 1 42 trigger_value");
+	run("setMessage       current 1, midi://midi_out/note 1 42 trigger_value 3");
 	run("setSize          current 0.8");
 	run("setColorHue      current 90 255 192 255");
 }
@@ -64,8 +64,8 @@ function addCircle(circleIndex) {
 	run("setPos           current " + (circleIndex/5) + " " + (circleIndex/5) + " 0 ");
 	run("setSize          current 0.8");
 	run("setColor         current 170 180 190 255");
-	//Syntax : midi://device/note <channel> <note> <noteOn/noteOff>
-	run("setMessage       current 1, midi://midi_out/note 0 " + (circleIndex * 3 + 42) + " trigger_value");
+	//Syntax : midi://device/note <channel> <note> <noteOn/noteOff> <duration>
+	run("setMessage       current 1, midi://midi_out/note 0 " + (circleIndex * 3 + 42) + " trigger_value 3");
 }
 
 

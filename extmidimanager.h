@@ -36,7 +36,31 @@
 #define STATUS_PROGRAM    0xC0
 #define STATUS_BEND       0xE0
 
+#define MIDI_CLOCK        0xF8
+#define MIDI_TICK         0xF9
+#define MIDI_START        0xFA
+#define MIDI_STOP         0xFC
+#define MIDI_CONTINUE     0xFB
+#define MIDI_SPP          0xF2
+#define MIDI_TIMECODE     0xF1
+
+#define kMTCFrames      0
+#define kMTCSeconds     1
+#define kMTCMinutes     2
+#define kMTCHours       3
+
 void midiCallback(double deltatime, std::vector< unsigned char > *receivedMessage, void *userData);
+
+
+class ExtMidiMTC : public QObject {
+    Q_OBJECT
+public:
+    qreal decode(quint16);
+
+private:
+    int     port, channel, status, byteOne, byteTwo;
+    double  timestamp;
+};
 
 
 class ExtMidiManager : public QObject, public ExtMessageManager {
@@ -48,6 +72,9 @@ private:
 
 public:
     ExtMidiManager(NxObjectFactoryInterface *_factory);
+    void refreshList();
+    qreal midiTempo;
+    ExtMidiMTC midiMtc;
 
 public:
     void send(const ExtMessage & message);
@@ -55,9 +82,14 @@ public:
     void sendCC(const QString & portname, quint8 channel, quint16 controller, quint16 value);
     void sendPGM(const QString & portname, quint8 channel, quint16 program);
     void sendBend(const QString & portname, quint8 channel, quint16 bendvalue);
+    void sendSPPStart();
+    void sendSPPStop();
+    void sendSPPTime(qreal time);
 
 public slots:
     void receivedMessage(const QString & destination, const QStringList &arguments);
+    void receivedMidiRealtime(quint8 type, quint8 val1, quint8 val2);
+    void setMidiTempo(qreal);
 };
 
 
@@ -85,5 +117,7 @@ protected:
         delete this;
     }
 };
+
+
 
 #endif // EXTMIDIMANAGER_H

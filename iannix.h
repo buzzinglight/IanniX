@@ -48,6 +48,7 @@
 #include "uiview.h"
 #include "uiinspector.h"
 #include "uieditor.h"
+#include "uihelp.h"
 
 enum SchedulerActivity { SchedulerOff, SchedulerOn, SchedulerOneShot };
 
@@ -122,6 +123,7 @@ private:
     ExtMessage message;
     QHash<QByteArray, ExtMessage> messagesCache;
     QScriptEngine messageScriptEngine;
+    bool acceptMidiSyncClock, acceptMidiSyncSong;
 private slots:
     void fileWatcherChanged(const QString &);
 private:
@@ -134,6 +136,33 @@ public slots:
     void send(const ExtMessage & message);
     void sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status);
     QImage takeScreenshot();
+    QMainWindow* getMainWindow() { return view; }
+    void syncStop() {
+        if((acceptMidiSyncSong) && (schedulerActivity != SchedulerOff)) {
+            setScheduler(SchedulerOff);
+            sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
+        }
+    }
+    void syncStart() {
+        if((acceptMidiSyncSong) && (schedulerActivity != SchedulerOn)) {
+            setScheduler(SchedulerOn);
+            sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
+        }
+    }
+    void syncGoto(qreal time) {
+        if(acceptMidiSyncSong)
+            actionGoto(time, false);
+    }
+    void syncTimer(qreal delta) {
+        if(acceptMidiSyncClock) {
+            timer->stop();
+            timerTick(delta);
+        }
+    }
+
+    void scriptError(const QStringList &error, qint16 line) const {
+        editor->scriptError(error, line);
+    }
 public:
     qreal getTimeLocal() const { return timeLocal; }
 
@@ -159,7 +188,12 @@ public slots:
     void setIpOut(const QString &);
     void setMidiOut(const QString &);
     void ipOutStatusFound(const QHostInfo &);
+    void setMidiSyncSong(bool);
+    void setMidiSyncClock(bool);
     void setMidiOutNewDevice(const QString &midi);
+    void refreshMidiOutDevice() const {
+        midi->refreshList();
+    }
 signals:
     void ipOutStatus(bool);
     void midiOutStatus(bool);
@@ -180,6 +214,7 @@ protected:
     void timerEvent(QTimerEvent *);
 private slots:
     void timerTick();
+    void timerTick(qreal delta);
     void closeSplash();
 signals:
     void updateTransport(QString, QString);
@@ -223,7 +258,7 @@ public slots:
     void actionFast_rewind();
     void actionLogo();
     void actionGoto();
-    void actionGoto(qreal);
+    void actionGoto(qreal, bool midiSync = true);
     void actionSetScheduler();
     void actionSetOpenGL();
     void actionSpeed();
@@ -233,6 +268,7 @@ public slots:
     void actionCC2();
     void actionChangeID(quint16, quint16); ////CG////
     void actionNew();
+    void actionNewScript();
     void actionOpen();
     void actionSave();
     void actionSave_as();

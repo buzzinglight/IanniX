@@ -49,7 +49,6 @@ function addCircle(circleIndex, center) {
 	run("setColorHue      current " + range(percent, 0, 200) + " 100 192 255");
 	run("setWidth         current 2");
 	run("setPattern       current 0 0 1");
-	
 	run("add              trigger " + (2000 + circleIndex));
 	run("setGroup         current triggers");
 	run("setPos           current " + (center.x*1.7) + " " + (center.y*1.7) + " 0");

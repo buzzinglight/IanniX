@@ -22,37 +22,50 @@
 #include <QWidget>
 #include <QPlainTextEdit>
 #include "nxobject.h"
+#include "help.h"
+#include "nxobjectfactoryinterface.h"
 
 namespace Ui {
     class ExtOscPatternEditor;
 }
-
 class QPlainTextEditWithFocus : public QPlainTextEdit {
     Q_OBJECT
-
 public:
     QPlainTextEditWithFocus(QWidget *parent = 0):
         QPlainTextEdit(parent) {}
-
 signals:
     void focusOut();
     void focusIn();
 protected:
-    void focusOutEvent(QFocusEvent *) {    emit(focusOut());   }
-    void focusInEvent(QFocusEvent *)  {    emit(focusIn());    }
+    void focusOutEvent(QFocusEvent *e) {  QPlainTextEdit::focusOutEvent(e);  emit(focusOut());   }
+    void focusInEvent(QFocusEvent *e)  {  QPlainTextEdit::focusInEvent(e);   emit(focusIn());    }
+};
+class QComboBoxWithFocus : public QComboBox {
+    Q_OBJECT
+public:
+    QComboBoxWithFocus(QWidget *parent = 0):
+        QComboBox(parent) {}
+signals:
+    void focusOut();
+    void focusIn();
+protected:
+    void focusOutEvent(QFocusEvent *e) {  QComboBox::focusOutEvent(e);  emit(focusOut());   }
+    void focusInEvent(QFocusEvent *e)  {  QComboBox::focusInEvent(e);   emit(focusIn());    }
 };
 
 class ExtOscPatternEditor : public QWidget{
     Q_OBJECT
 
 public:
-    explicit ExtOscPatternEditor(QWidget *parent = 0);
+    explicit ExtOscPatternEditor(NxObjectFactoryInterface *_factory, QWidget *parent = 0);
     ~ExtOscPatternEditor();
 
 private:
     bool textLock, itemLock;
-    QList< QPair<QComboBox*,QLabel*> > trees;
+    QList< QPair<QComboBoxWithFocus*, QPair<QLabel*, QPushButton* > > > trees;
+    QList< QPushButton > treesButton;
     quint16 patternNbValues;
+    NxObjectFactoryInterface *factory;
 
 public:
     const QString getPattern() const;
@@ -64,10 +77,14 @@ public:
 
 signals:
     void actionRouteRemove(ExtOscPatternEditor*);
+    void actionRouteFocus(QComboBox*,QPlainTextEdit*);
 
 public slots:
     void currentItemChanged();
     void textPatternChanged();
+    void clearApattern();
+    void fieldFocusIn();
+
 
 private:
     Ui::ExtOscPatternEditor *ui;

@@ -48,7 +48,7 @@ bool ExtScriptManager::parseScript(bool configure) {
         }
         else {
             //GUI to ask the user variables
-            variable = new ExtScriptVariableAsk(0);
+            variable = new ExtScriptVariableAsk(factory->getMainWindow());
 
             //Open the script
             QScriptValue scriptFunctions = scriptEngine.newQObject(this);
@@ -76,19 +76,12 @@ bool ExtScriptManager::parseScript(bool configure) {
 
             //Extract errors
             QStringList errors = scriptEngine.uncaughtExceptionBacktrace();
-            QString errorsMessage = "";
             if(scriptReturn.isError())
                 errors << scriptReturn.property("message").toString();
-            foreach(const QString & error, errors)
-                errorsMessage += error + "\r\n";
-            if(errors.count()) {
-                QMessageBox message;
-                message.setText(tr("Error found"));
-                message.setInformativeText(errorsMessage);
-                message.setWindowTitle(tr("IanniX") + QString(" - ") + tr("Script Error"));
-                message.setStandardButtons(QMessageBox::Ok);
-                message.exec();
-            }
+            if(errors.count())
+                factory->scriptError(errors, scriptEngine.uncaughtExceptionLineNumber());
+            else
+                factory->scriptError(QStringList(), -1);
 
             //Call the "configure()" function
             QString scriptId = scriptFile.baseName().replace(" ", "");

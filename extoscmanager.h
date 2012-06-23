@@ -20,6 +20,7 @@
 #define OSCMANAGER_H
 
 #include <QByteArray>
+#include <QNetworkInterface>
 #include "extmessage.h"
 
 class ExtOscManager : public QObject, public ExtMessageManager {

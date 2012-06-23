@@ -22,7 +22,11 @@
 #include <QMainWindow>
 #include <QFileInfo>
 #include <QDesktopWidget>
+#include <QMessageBox>
 #include <QFile>
+#include <QTextCursor>
+#include "help.h"
+#include "nxobjectfactoryinterface.h"
 
 
 namespace Ui {
@@ -33,7 +37,7 @@ class UiEditor : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit UiEditor(QWidget *parent = 0);
+    explicit UiEditor(NxObjectFactoryInterface *_factory, QWidget *parent = 0);
     ~UiEditor();
 
 protected:
@@ -41,10 +45,13 @@ protected:
 
 private:
     QFileInfo scriptFile;
+    NxObjectFactoryInterface *factory;
 public:
     void openFile(const QFileInfo &  _scriptFile);
 public slots:
     void save();
+    void cursorChanged();
+    void scriptError(const QStringList &errors, qint16 line);
 
 private:
     Ui::UiEditor *ui;

@@ -39,7 +39,7 @@ private:
     QHostAddress host;
     quint16 port;
     MessagesType type;
-    QList<quint16> midiValues;
+    QList<qreal> midiValues;
     QScriptEngine *messageScriptEngine;
     QScriptValue messageScriptValue, messageScriptResult;
     bool hasAdd;
@@ -573,7 +573,6 @@ private:
             return true;
         }
         else if(type == MessagesTypeMidi) {
-            midiValues.append(t);
             return true;
         }
         else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect) || (type == MessagesTypeMouse) || (type == MessagesTypeTablet)) {
@@ -609,7 +608,7 @@ public:
     inline const QString & getMidiPort() const {
         return midiPort;
     }
-    inline quint16 getMidiValue(quint8 index) const {
+    inline qreal getMidiValue(quint8 index) const {
         if(index < midiValues.count())
             return midiValues.at(index);
         else

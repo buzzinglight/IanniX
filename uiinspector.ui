@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>371</width>
-    <height>637</height>
+    <width>382</width>
+    <height>685</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,7 +41,7 @@ QTabWidget::pane {
 	border: 1px solid rgba(255, 255, 255, 32);
 }
 
-QLabel, QCheckBox#viewTriggerCheck, QCheckBox#viewCurveCheck, QCheckBox#viewCurveOpacityCheck, QCheckBox#viewCursorCheck {
+QLabel, QCheckBox {
 	color: rgb(220, 220, 220);
 }
 
@@ -178,6 +178,63 @@ QSplitter::handle:pressed {
  }
 QSplitter::handle:horizontal	 	{	width: 4px; }
 QSplitter::handle:vertical     		{	height: 4px; }
+
+
+QComboBox {
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 200);
+	color: black;
+	margin-left: 4px;
+	padding-top: -4px;
+	border-radius: 4px;
+}
+QComboBox {
+	selection-color: black;
+	padding-top: 0px;
+	padding-left: 4px;
+}
+QComboBox::drop-down {
+	width: 10px;
+	padding: 4px;
+	border: 0px solid transparent;
+	background: rgb(0, 187, 255);
+    image: url(:/icons/res_icon_down.png);
+}
+
+QPlainTextEdit {
+	background-color: rgb(242, 241, 237);
+}
+
+
+QTabWidget::tab-bar {
+	left: 5px;
+}
+QTabWidget {
+	border: 0px transparent;
+}
+QTabBar::tab {
+	background-color: rgba(255, 255, 255, 100);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+	font: bold;
+	min-height: 25px;
+	margin-left: 2px;
+	padding-left: 5px;
+	padding-right: 5px;
+	color: rgb(220, 220, 220);
+}
+QTabBar::tab:selected {
+	background-color: rgb(242, 241, 237);
+	color: black;
+}
+QTabBar::tab:hover {
+	color: black;
+}
+QTabBar::tab:!selected {
+     margin-top: 2px;
+}
+
+
 </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -219,9 +276,9 @@ QSplitter::handle:vertical     		{	height: 4px; }
            <normaloff>:/general/res_icon_inspector_project.png</normaloff>:/general/res_icon_inspector_project.png</iconset>
          </attribute>
          <attribute name="title">
-          <string/>
+          <string>FILES</string>
          </attribute>
-         <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0,0">
+         <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0">
           <property name="leftMargin">
            <number>12</number>
           </property>
@@ -234,19 +291,6 @@ QSplitter::handle:vertical     		{	height: 4px; }
           <property name="bottomMargin">
            <number>12</number>
           </property>
-          <item>
-           <widget class="QLabel" name="scoreLabel">
-            <property name="styleSheet">
-             <string notr="true">	color: white;
-	font: 12px;
-	font: bold;
-</string>
-            </property>
-            <property name="text">
-             <string>SCORE CENTER</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QSplitter" name="splitter_2">
             <property name="orientation">
@@ -341,7 +385,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
            <normaloff>:/general/res_icon_inspector_info.png</normaloff>:/general/res_icon_inspector_info.png</iconset>
          </attribute>
          <attribute name="title">
-          <string/>
+          <string>INFOS</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <property name="leftMargin">
@@ -630,7 +674,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
               </property>
              </widget>
             </item>
-            <item row="12" column="0">
+            <item row="14" column="0">
              <widget class="QLabel" name="widthLabel">
               <property name="minimumSize">
                <size>
@@ -656,7 +700,7 @@ WIDTH / DEPTH</string>
               </property>
              </widget>
             </item>
-            <item row="12" column="1">
+            <item row="14" column="1">
              <widget class="QDoubleSpinBox" name="widthSpin">
               <property name="minimumSize">
                <size>
@@ -687,7 +731,7 @@ WIDTH / DEPTH</string>
               </property>
              </widget>
             </item>
-            <item row="13" column="0">
+            <item row="15" column="0">
              <widget class="QLabel" name="patternLabel">
               <property name="minimumSize">
                <size>
@@ -713,7 +757,7 @@ SPEED PATTERN</string>
               </property>
              </widget>
             </item>
-            <item row="13" column="1" colspan="2">
+            <item row="15" column="1" colspan="2">
              <widget class="QLineEdit" name="patternLine">
               <property name="toolTip">
                <string/>
@@ -726,7 +770,7 @@ SPEED PATTERN</string>
               </property>
              </widget>
             </item>
-            <item row="14" column="0">
+            <item row="16" column="0">
              <widget class="QLabel" name="offsetLabel">
               <property name="minimumSize">
                <size>
@@ -752,7 +796,7 @@ OFFSETS</string>
               </property>
              </widget>
             </item>
-            <item row="14" column="1" colspan="3">
+            <item row="16" column="1" colspan="3">
              <layout class="QVBoxLayout" name="offsetLayout">
               <property name="spacing">
                <number>3</number>
@@ -958,7 +1002,7 @@ OFFSETS</string>
               </item>
              </layout>
             </item>
-            <item row="15" column="0">
+            <item row="17" column="0">
              <widget class="QLabel" name="posLabel">
               <property name="minimumSize">
                <size>
@@ -984,7 +1028,7 @@ MANUAL POS.</string>
               </property>
              </widget>
             </item>
-            <item row="15" column="1">
+            <item row="17" column="1">
              <widget class="QDoubleSpinBox" name="posSpin">
               <property name="minimumSize">
                <size>
@@ -1018,7 +1062,7 @@ MANUAL POS.</string>
               </property>
              </widget>
             </item>
-            <item row="16" column="0">
+            <item row="18" column="0">
              <widget class="QLabel" name="cursorSpeedLabel">
               <property name="minimumSize">
                <size>
@@ -1044,7 +1088,7 @@ or LENGTH</string>
               </property>
              </widget>
             </item>
-            <item row="16" column="1" colspan="3">
+            <item row="18" column="1" colspan="3">
              <layout class="QHBoxLayout" name="cursorSpeedLayout">
               <item>
                <widget class="QDoubleSpinBox" name="speedSpin">
@@ -1136,7 +1180,7 @@ or LENGTH</string>
               </item>
              </layout>
             </item>
-            <item row="17" column="0">
+            <item row="19" column="0">
              <widget class="QLabel" name="speedFLabel">
               <property name="minimumSize">
                <size>
@@ -1162,7 +1206,7 @@ MASTER SPEED</string>
               </property>
              </widget>
             </item>
-            <item row="17" column="1">
+            <item row="19" column="1">
              <widget class="QDoubleSpinBox" name="speedFSpin">
               <property name="minimumSize">
                <size>
@@ -1196,7 +1240,7 @@ MASTER SPEED</string>
               </property>
              </widget>
             </item>
-            <item row="18" column="0">
+            <item row="20" column="0">
              <widget class="QLabel" name="cursorBoundsLabel">
               <property name="minimumSize">
                <size>
@@ -1222,7 +1266,7 @@ MAPPING</string>
               </property>
              </widget>
             </item>
-            <item row="18" column="1" colspan="3">
+            <item row="20" column="1" colspan="3">
              <layout class="QGridLayout" name="cursorBoundsLayout">
               <property name="horizontalSpacing">
                <number>0</number>
@@ -1322,7 +1366,7 @@ MAPPING</string>
               </item>
              </layout>
             </item>
-            <item row="23" column="0" colspan="4">
+            <item row="25" column="0" colspan="4">
              <widget class="QLabel" name="labelSelection">
               <property name="text">
                <string>NO ITEMS SELECTED</string>
@@ -1354,7 +1398,7 @@ MAPPING</string>
               </property>
              </widget>
             </item>
-            <item row="9" column="0" colspan="4">
+            <item row="11" column="0" colspan="4">
              <widget class="QLabel" name="separator1">
               <property name="minimumSize">
                <size>
@@ -1376,7 +1420,7 @@ MAPPING</string>
               </property>
              </widget>
             </item>
-            <item row="11" column="0">
+            <item row="13" column="0">
              <widget class="QLabel" name="triggerOffLabel">
               <property name="minimumSize">
                <size>
@@ -1402,7 +1446,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="11" column="1">
+            <item row="13" column="1">
              <widget class="QDoubleSpinBox" name="triggerOffSpin">
               <property name="minimumSize">
                <size>
@@ -1433,7 +1477,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
+            <item row="6" column="0">
              <widget class="QLabel" name="labelLabel">
               <property name="minimumSize">
                <size>
@@ -1458,7 +1502,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1" colspan="3">
+            <item row="6" column="1" colspan="3">
              <widget class="QLineEdit" name="labelLine">
               <property name="statusTip">
                <string>Type here a label for selected objects</string>
@@ -1468,7 +1512,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="7" column="0">
              <widget class="QLabel" name="activityLabel">
               <property name="minimumSize">
                <size>
@@ -1493,7 +1537,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
+            <item row="7" column="1">
              <widget class="QCheckBox" name="activityCheck">
               <property name="statusTip">
                <string>Click here to enable/disable the object on the score</string>
@@ -1506,7 +1550,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="8" column="1">
+            <item row="9" column="1">
              <widget class="QPushButton" name="messagesButton">
               <property name="minimumSize">
                <size>
@@ -1528,7 +1572,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="8" column="0">
+            <item row="9" column="0">
              <widget class="QLabel" name="messagesLabel">
               <property name="minimumSize">
                <size>
@@ -1553,7 +1597,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
+            <item row="8" column="0">
              <widget class="QLabel" name="colorLabel">
               <property name="minimumSize">
                <size>
@@ -1578,7 +1622,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="7" column="1" colspan="3">
+            <item row="8" column="1" colspan="3">
              <layout class="QHBoxLayout" name="horizontalLayout_5">
               <property name="spacing">
                <number>-1</number>
@@ -1588,13 +1632,13 @@ OFF-TIME</string>
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
-                  <height>0</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>80</width>
-                  <height>16777215</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="toolTip">
@@ -1610,13 +1654,13 @@ OFF-TIME</string>
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
-                  <height>0</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>80</width>
-                  <height>16777215</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="toolTip">
@@ -1632,13 +1676,13 @@ OFF-TIME</string>
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
-                  <height>0</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>80</width>
-                  <height>16777215</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="toolTip">
@@ -1654,13 +1698,13 @@ OFF-TIME</string>
                 <property name="minimumSize">
                  <size>
                   <width>40</width>
-                  <height>0</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
                   <width>80</width>
-                  <height>16777215</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="toolTip">
@@ -1673,7 +1717,7 @@ OFF-TIME</string>
               </item>
              </layout>
             </item>
-            <item row="24" column="0">
+            <item row="26" column="0">
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -1745,7 +1789,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="8" column="3">
+            <item row="9" column="3">
              <widget class="QDoubleSpinBox" name="messagesSpin">
               <property name="minimumSize">
                <size>
@@ -1779,7 +1823,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="8" column="2">
+            <item row="9" column="2">
              <widget class="QLabel" name="messagesLabel2">
               <property name="text">
                <string>SENT EACH</string>
@@ -1814,18 +1858,18 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="13" column="3">
+            <item row="15" column="3">
              <widget class="QComboBox" name="easingCombo">
               <property name="minimumSize">
                <size>
                 <width>40</width>
-                <height>0</height>
+                <height>20</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>80</width>
-                <height>16777215</height>
+                <height>20</height>
                </size>
               </property>
               <property name="toolTip">
@@ -1836,7 +1880,7 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
-            <item row="12" column="2">
+            <item row="14" column="2">
              <widget class="QDoubleSpinBox" name="depthSpin">
               <property name="minimumSize">
                <size>
@@ -1867,6 +1911,103 @@ OFF-TIME</string>
               </property>
              </widget>
             </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="pointsLabel">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>CURVE
+POINTS</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1" colspan="3">
+             <widget class="QTreeWidget" name="pointsList">
+              <property name="statusTip">
+               <string>Type here the points coordinates (x, y, z) and the Bezier control points (c1x, c1y, c1z, c2x, c2y, c2z). Checkboxes allow you to activate automatic smoothing or not.</string>
+              </property>
+              <property name="showDropIndicator" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::NoSelection</enum>
+              </property>
+              <column>
+               <property name="text">
+                <string>Index</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>x</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>y</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>z</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Smooth</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>c1x</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>c1y</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>c1z</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>c2x</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>c2y</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>c2z</string>
+               </property>
+              </column>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -1877,7 +2018,7 @@ OFF-TIME</string>
            <normaloff>:/general/res_icon_inspector_view.png</normaloff>:/general/res_icon_inspector_view.png</iconset>
          </attribute>
          <attribute name="title">
-          <string/>
+          <string>OBJECTS</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_10">
           <property name="leftMargin">
@@ -1892,28 +2033,6 @@ OFF-TIME</string>
           <property name="bottomMargin">
            <number>12</number>
           </property>
-          <item>
-           <widget class="QLabel" name="viewLabel">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">	color: white;
-	font: 12px;
-	font: bold;
-</string>
-            </property>
-            <property name="text">
-             <string>OBJECTS</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-          </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
@@ -2376,7 +2495,7 @@ OFF-TIME</string>
            <normaloff>:/general/res_icon_inspector_osc.png</normaloff>:/general/res_icon_inspector_osc.png</iconset>
          </attribute>
          <attribute name="title">
-          <string/>
+          <string>NETWORK</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <property name="leftMargin">
@@ -2391,19 +2510,6 @@ OFF-TIME</string>
           <property name="bottomMargin">
            <number>12</number>
           </property>
-          <item>
-           <widget class="QLabel" name="oscLabel">
-            <property name="styleSheet">
-             <string notr="true">	color: white;
-	font: 12px;
-	font: bold;
-</string>
-            </property>
-            <property name="text">
-             <string>MESSAGES</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QSplitter" name="splitter">
             <property name="orientation">
@@ -2429,6 +2535,9 @@ OFF-TIME</string>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="toolTip">
                  <string>Sent messages</string>
                 </property>
@@ -2440,6 +2549,9 @@ OFF-TIME</string>
                 </property>
                 <property name="lineWrapMode">
                  <enum>QPlainTextEdit::NoWrap</enum>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
                 </property>
                 <property name="plainText">
                  <string/>
@@ -2468,6 +2580,9 @@ OFF-TIME</string>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="toolTip">
                  <string>Received messages</string>
                 </property>
@@ -2479,6 +2594,9 @@ OFF-TIME</string>
                 </property>
                 <property name="lineWrapMode">
                  <enum>QPlainTextEdit::NoWrap</enum>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
                 </property>
                 <property name="plainText">
                  <string/>
@@ -2509,7 +2627,7 @@ OFF-TIME</string>
               <property name="horizontalSpacing">
                <number>10</number>
               </property>
-              <item row="2" column="0">
+              <item row="6" column="0">
                <widget class="QLabel" name="oscInPortLabel">
                 <property name="minimumSize">
                  <size>
@@ -2531,7 +2649,7 @@ OFF-TIME</string>
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
+              <item row="6" column="1">
                <widget class="QSpinBox" name="oscInPortSpin">
                 <property name="maximumSize">
                  <size>
@@ -2556,7 +2674,7 @@ OFF-TIME</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
+              <item row="7" column="0">
                <widget class="QLabel" name="udpInPortLabel">
                 <property name="minimumSize">
                  <size>
@@ -2578,7 +2696,7 @@ OFF-TIME</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="0">
+              <item row="11" column="0">
                <widget class="QLabel" name="transportMessageLabel">
                 <property name="minimumSize">
                  <size>
@@ -2601,7 +2719,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
+              <item row="7" column="1">
                <widget class="QSpinBox" name="udpInPortSpin">
                 <property name="maximumSize">
                  <size>
@@ -2623,7 +2741,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="8" column="0">
+              <item row="12" column="0">
                <widget class="QLabel" name="syncMessageLabel">
                 <property name="minimumSize">
                  <size>
@@ -2646,7 +2764,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="8" column="1" colspan="2">
+              <item row="12" column="1" colspan="2">
                <widget class="QLineEdit" name="syncMessageEdit">
                 <property name="toolTip">
                  <string>Sync message</string>
@@ -2662,7 +2780,7 @@ MESSAGE</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="0">
+              <item row="10" column="0">
                <widget class="QLabel" name="bundleMessageLabel">
                 <property name="minimumSize">
                  <size>
@@ -2685,8 +2803,20 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="1">
+              <item row="10" column="1">
                <widget class="QLineEdit" name="bundleMessageEdit">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="toolTip">
                  <string>OSC bundle address</string>
                 </property>
@@ -2704,7 +2834,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="2">
+              <item row="10" column="2">
                <widget class="QSpinBox" name="bundleMessagePort">
                 <property name="maximumSize">
                  <size>
@@ -2726,7 +2856,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
+              <item row="8" column="0">
                <widget class="QLabel" name="httpInPortLabel">
                 <property name="minimumSize">
                  <size>
@@ -2748,7 +2878,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1">
+              <item row="8" column="1">
                <widget class="QSpinBox" name="httpInPortSpin">
                 <property name="maximumSize">
                  <size>
@@ -2770,7 +2900,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="1" colspan="2">
+              <item row="11" column="1" colspan="2">
                <widget class="QLineEdit" name="transportMessageEdit">
                 <property name="toolTip">
                  <string>Transport message</string>
@@ -2786,7 +2916,7 @@ BUNDLE ON</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="0">
+              <item row="9" column="0">
                <widget class="QLabel" name="tcpInPortLabel">
                 <property name="minimumSize">
                  <size>
@@ -2809,7 +2939,7 @@ SERVER IN PORT</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1">
+              <item row="9" column="1">
                <widget class="QSpinBox" name="tcpInPortSpin">
                 <property name="maximumSize">
                  <size>
@@ -2831,7 +2961,7 @@ SERVER IN PORT</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="2">
+              <item row="9" column="2">
                <widget class="QLabel" name="tcpInClientLabel">
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -2867,7 +2997,7 @@ SERVER IN PORT</string>
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
+              <item row="0" column="1" colspan="2">
                <widget class="QLineEdit" name="ipOutEdit">
                 <property name="toolTip">
                  <string>Default IP address</string>
@@ -2886,7 +3016,7 @@ SERVER IN PORT</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="0">
+              <item row="2" column="0">
                <widget class="QLabel" name="midiOutLabel">
                 <property name="minimumSize">
                  <size>
@@ -2909,8 +3039,20 @@ SERVER IN PORT</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
+              <item row="2" column="1">
                <widget class="QComboBox" name="midiOutCombo">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="toolTip">
                  <string>Default MIDI device</string>
                 </property>
@@ -2919,7 +3061,7 @@ SERVER IN PORT</string>
                 </property>
                </widget>
               </item>
-              <item row="9" column="0">
+              <item row="14" column="0">
                <widget class="QLabel" name="serialInPortLabel">
                 <property name="minimumSize">
                  <size>
@@ -2941,7 +3083,7 @@ SERVER IN PORT</string>
                 </property>
                </widget>
               </item>
-              <item row="9" column="1" colspan="2">
+              <item row="14" column="1" colspan="2">
                <widget class="QLineEdit" name="serialInPortEdit">
                 <property name="toolTip">
                  <string>Serial port address</string>
@@ -2951,6 +3093,157 @@ SERVER IN PORT</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true"/>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QPushButton" name="midiOutRefresh">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="statusTip">
+                 <string>Click here to refresh the MIDI in/out available devices</string>
+                </property>
+                <property name="text">
+                 <string>Refresh MIDI devices</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="midiTempoLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>MIDI TEMPO
+(FOR CLOCK SYNC.)</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QSpinBox" name="midiTempoSpin">
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Score BPM</string>
+                </property>
+                <property name="statusTip">
+                 <string>Type here the BPM (used by MIDI clock for sync)</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2">
+               <layout class="QVBoxLayout" name="verticalLayout_12">
+                <item>
+                 <widget class="QCheckBox" name="midiSyncSong">
+                  <property name="statusTip">
+                   <string>Check this option if you want to sync transport (play, pause, stop, fast rewind, song position) from another sequencer</string>
+                  </property>
+                  <property name="text">
+                   <string>SYNC TRANSPORT</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="midiSyncClock">
+                  <property name="statusTip">
+                   <string>Check this option if you want to sync clock from another sequencer</string>
+                  </property>
+                  <property name="text">
+                   <string>SYNC CLOCK</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="1" column="0" colspan="3">
+               <widget class="QLabel" name="separator2">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>2</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>2</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0" colspan="3">
+               <widget class="QLabel" name="separator3">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>2</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>2</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="0" colspan="3">
+               <widget class="QLabel" name="separator4">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>2</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>2</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -3088,8 +3381,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>110</x>
-     <y>72</y>
+     <x>117</x>
+     <y>46</y>
     </hint>
     <hint type="destinationlabel">
      <x>45</x>
@@ -3104,8 +3397,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>336</x>
-     <y>75</y>
+     <x>118</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
      <x>72</x>
@@ -3120,8 +3413,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>227</x>
-     <y>75</y>
+     <x>118</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3136,8 +3429,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>211</x>
-     <y>535</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>
@@ -3152,8 +3445,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>345</x>
-     <y>535</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>237</x>
@@ -3168,8 +3461,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>102</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3184,8 +3477,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>249</x>
-     <y>102</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>43</x>
@@ -3200,8 +3493,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>319</x>
-     <y>102</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3216,8 +3509,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>175</x>
-     <y>476</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3232,8 +3525,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>331</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3248,8 +3541,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>241</x>
-     <y>415</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3264,8 +3557,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>331</x>
-     <y>415</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3280,8 +3573,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>476</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3296,8 +3589,8 @@ SERVER IN PORT</string>
    <slot>actionProjectFiles()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>71</x>
-     <y>74</y>
+     <x>78</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
      <x>66</x>
@@ -3313,7 +3606,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>126</x>
-     <y>400</y>
+     <y>418</y>
     </hint>
     <hint type="destinationlabel">
      <x>143</x>
@@ -3328,8 +3621,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>252</x>
-     <y>392</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>181</x>
@@ -3344,8 +3637,8 @@ SERVER IN PORT</string>
    <slot>actionInfoGroup()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>290</x>
-     <y>80</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3360,8 +3653,8 @@ SERVER IN PORT</string>
    <slot>actionMessages()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>189</x>
-     <y>266</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>319</x>
@@ -3376,8 +3669,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>192</x>
-     <y>207</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3392,8 +3685,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>445</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3408,8 +3701,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>507</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3424,8 +3717,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>221</x>
-     <y>362</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3440,8 +3733,8 @@ SERVER IN PORT</string>
    <slot>actionProjectScriptsContext(QPoint)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>102</x>
-     <y>400</y>
+     <x>117</x>
+     <y>418</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3457,7 +3750,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
-     <y>371</y>
+     <y>419</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3473,7 +3766,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
-     <y>401</y>
+     <y>449</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3488,8 +3781,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>582</y>
+     <x>237</x>
+     <y>649</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3504,8 +3797,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>300</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3520,8 +3813,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>133</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3536,8 +3829,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>249</x>
-     <y>133</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3552,8 +3845,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>221</x>
-     <y>188</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3568,8 +3861,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>537</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3584,8 +3877,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>558</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3600,8 +3893,8 @@ SERVER IN PORT</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>181</y>
+     <x>118</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3616,8 +3909,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>221</x>
-     <y>188</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3632,8 +3925,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>221</x>
-     <y>362</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3648,8 +3941,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>537</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3664,8 +3957,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>558</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3680,8 +3973,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>582</y>
+     <x>237</x>
+     <y>649</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3696,8 +3989,8 @@ SERVER IN PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>167</x>
-     <y>238</y>
+     <x>98</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3712,8 +4005,8 @@ SERVER IN PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>238</y>
+     <x>98</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3728,8 +4021,8 @@ SERVER IN PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>281</x>
-     <y>238</y>
+     <x>98</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3744,8 +4037,8 @@ SERVER IN PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>338</x>
-     <y>238</y>
+     <x>98</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3760,8 +4053,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>162</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3776,8 +4069,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>582</y>
+     <x>237</x>
+     <y>649</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3792,8 +4085,8 @@ SERVER IN PORT</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>401</y>
+     <x>118</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3808,8 +4101,8 @@ SERVER IN PORT</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>181</y>
+     <x>118</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3824,8 +4117,8 @@ SERVER IN PORT</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>401</y>
+     <x>118</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3840,11 +4133,11 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>319</x>
-     <y>264</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-229</x>
+     <x>0</x>
      <y>227</y>
     </hint>
    </hints>
@@ -3856,11 +4149,11 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>549</y>
+     <x>237</x>
+     <y>616</y>
     </hint>
     <hint type="destinationlabel">
-     <x>530</x>
+     <x>381</x>
      <y>451</y>
     </hint>
    </hints>
@@ -3872,11 +4165,11 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>549</y>
+     <x>237</x>
+     <y>616</y>
     </hint>
     <hint type="destinationlabel">
-     <x>510</x>
+     <x>381</x>
      <y>468</y>
     </hint>
    </hints>
@@ -3889,7 +4182,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>118</x>
-     <y>74</y>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
      <x>234</x>
@@ -3905,10 +4198,10 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>118</x>
-     <y>75</y>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>537</x>
+     <x>381</x>
      <y>109</y>
     </hint>
    </hints>
@@ -3920,11 +4213,11 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>336</x>
-     <y>366</y>
+     <x>98</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
-     <x>525</x>
+     <x>381</x>
      <y>139</y>
     </hint>
    </hints>
@@ -3936,11 +4229,11 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>607</y>
+     <x>79</x>
+     <y>54</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-226</x>
+     <x>0</x>
      <y>545</y>
     </hint>
    </hints>
@@ -3952,11 +4245,11 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>479</y>
+     <x>235</x>
+     <y>546</y>
     </hint>
     <hint type="destinationlabel">
-     <x>522</x>
+     <x>381</x>
      <y>287</y>
     </hint>
    </hints>
@@ -3968,12 +4261,12 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>479</y>
+     <x>235</x>
+     <y>546</y>
     </hint>
     <hint type="destinationlabel">
-     <x>496</x>
-     <y>695</y>
+     <x>381</x>
+     <y>653</y>
     </hint>
    </hints>
   </connection>
@@ -3984,11 +4277,11 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
-     <y>479</y>
+     <x>305</x>
+     <y>546</y>
     </hint>
     <hint type="destinationlabel">
-     <x>543</x>
+     <x>381</x>
      <y>340</y>
     </hint>
    </hints>
@@ -4001,10 +4294,10 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
-     <y>431</y>
+     <y>479</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-242</x>
+     <x>0</x>
      <y>364</y>
     </hint>
    </hints>
@@ -4016,8 +4309,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>514</y>
+     <x>237</x>
+     <y>581</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -4032,8 +4325,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>514</y>
+     <x>237</x>
+     <y>581</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -4049,10 +4342,10 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
-     <y>463</y>
+     <y>511</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-243</x>
+     <x>0</x>
      <y>409</y>
     </hint>
    </hints>
@@ -4064,11 +4357,11 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>284</y>
+     <x>297</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-537</x>
+     <x>0</x>
      <y>135</y>
     </hint>
    </hints>
@@ -4080,11 +4373,11 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>259</x>
-     <y>284</y>
+     <x>297</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-537</x>
+     <x>0</x>
      <y>450</y>
     </hint>
    </hints>
@@ -4096,12 +4389,12 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>256</x>
-     <y>323</y>
+     <x>238</x>
+     <y>346</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
-     <y>686</y>
+     <y>653</y>
     </hint>
    </hints>
   </connection>
@@ -4112,12 +4405,12 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>537</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>83</x>
-     <y>655</y>
+     <y>653</y>
     </hint>
    </hints>
   </connection>
@@ -4128,12 +4421,12 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>537</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>75</x>
-     <y>700</y>
+     <y>653</y>
     </hint>
    </hints>
   </connection>
@@ -4144,12 +4437,12 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>558</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>261</x>
-     <y>683</y>
+     <y>653</y>
     </hint>
    </hints>
   </connection>
@@ -4160,12 +4453,12 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>558</y>
+     <x>118</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>570</x>
-     <y>657</y>
+     <x>381</x>
+     <y>653</y>
     </hint>
    </hints>
   </connection>
@@ -4176,8 +4469,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>283</y>
+     <x>118</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
@@ -4192,8 +4485,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>345</x>
-     <y>283</y>
+     <x>118</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
@@ -4208,8 +4501,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>345</x>
-     <y>494</y>
+     <x>118</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>282</x>
@@ -4224,12 +4517,12 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>159</x>
-     <y>494</y>
+     <x>118</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>78</x>
-     <y>-62</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -4240,12 +4533,12 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>262</x>
-     <y>586</y>
+     <x>98</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>34</x>
-     <y>-87</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -4256,12 +4549,92 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>210</x>
-     <y>321</y>
+     <x>78</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-159</x>
+     <x>0</x>
      <y>611</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pointsList</sender>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>118</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>154</x>
+     <y>717</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>midiOutRefresh</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>361</x>
+     <y>347</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>183</x>
+     <y>713</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>midiTempoSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>153</x>
+     <y>373</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>528</x>
+     <y>767</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>midiSyncSong</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>270</x>
+     <y>372</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>48</x>
+     <y>732</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>midiSyncClock</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionNetwork()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>258</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-288</x>
+     <y>731</y>
     </hint>
    </hints>
   </connection>

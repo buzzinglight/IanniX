@@ -78,6 +78,16 @@ public:
         return curveType;
     }
 
+    inline const QList<NxCurvePoint> & getPathPoints() const {
+        return pathPoints;
+    }
+    inline void setPathPoints(const QList<NxCurvePoint> &_pathPoints) {
+        pathPoints = _pathPoints;
+        glListRecreate = true;
+        calculate();
+        calcBoundingRect();
+    }
+
     inline void dragStart() {
         isDrag = true;
         if(selectedPathPointPoint >= 0)

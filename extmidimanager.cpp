@@ -27,6 +27,23 @@ void midiCallback(double, std::vector< unsigned char > *receivedMessage, void *u
         quint8 channel = receivedMessage->at(0) & MASK_CHANNEL;
 
         switch(status) {
+        case MASK_STATUS: {
+            quint8 msg1 = receivedMessage->at(0);
+            if(msg1 == MIDI_SPP) {
+                quint8 msg2 = receivedMessage->at(1);
+                quint8 msg3 = receivedMessage->at(2);
+                midi->receivedMidiRealtime(msg1, msg2, msg3);
+            }
+            else if (msg1 == MIDI_CLOCK)
+                midi->receivedMidiRealtime(msg1, 0 ,0);
+            else if (msg1 == MIDI_TIMECODE){
+                quint8 msg2 = receivedMessage->at(1);
+                midi->receivedMidiRealtime(msg1, msg2 ,0);
+            }
+            else
+                midi->receivedMidiRealtime(msg1, 0, 0);
+            break;
+        }
         case STATUS_NOTEOFF:
         case STATUS_NOTEON: {
             quint8 velocity = receivedMessage->at(2);
@@ -51,45 +68,12 @@ ExtMidiManager::ExtMidiManager(NxObjectFactoryInterface *_factory)
     //Initialization
     factory = _factory;
 
+    midiTempo = 120;
+
     QString portOutName = "IanniX_Out";
     QString portInName = "IanniX_In";
 
-    RtMidiIn *portListIn = new RtMidiIn();
-    quint8 portListInCount = portListIn->getPortCount();
-    for(quint8 portListInIndex = 0; portListInIndex < portListInCount ; portListInIndex++) {
-        try {
-            QString portName = QString::fromStdString(portListIn->getPortName(portListInIndex));
-            portName = portName.replace(" ", "");
-            portName = portName.replace("/", "");
-            portName = portName.toLower();
-            portIn.insert(portName, new RtMidiIn());
-            portIn.value(portName)->openPort(portListInIndex);
-            portIn.value(portName)->setCallback(&midiCallback, this);
-            portIn.value(portName)->ignoreTypes(true, true, true);
-        }
-        catch(RtError &err) {
-            factory->logOscSend(QString::fromStdString(err.getMessage()));
-        }
-    }
-    delete portListIn;
-
-    RtMidiOut *portListOut = new RtMidiOut();
-    quint8 portListOutCount = portListOut->getPortCount();
-    for(quint8 portListOutIndex = 0; portListOutIndex < portListOutCount ; portListOutIndex++) {
-        try {
-            QString portName = QString::fromStdString(portListOut->getPortName(portListOutIndex));
-            portName = portName.replace(" ", "");
-            portName = portName.replace("/", "");
-            factory->setMidiOutNewDevice(portName);
-            portName = portName.toLower();
-            portOut.insert(portName, new RtMidiOut());
-            portOut.value(portName)->openPort(portListOutIndex);
-        }
-        catch(RtError &err) {
-            factory->logOscSend(QString::fromStdString(err.getMessage()));
-        }
-    }
-    delete portListOut;
+    refreshList();
 
     try {
         portOutName = portOutName.toLower();
@@ -114,8 +98,52 @@ ExtMidiManager::ExtMidiManager(NxObjectFactoryInterface *_factory)
     }
     if(portIn.value(portInName)) {
         portIn.value(portInName)->setCallback(&midiCallback, this);
-        portIn.value(portInName)->ignoreTypes(true, true, true);
+        portIn.value(portInName)->ignoreTypes(true, false, true);
     }
+}
+
+void ExtMidiManager::refreshList() {
+
+    RtMidiIn *portListIn = new RtMidiIn();
+    quint8 portListInCount = portListIn->getPortCount();
+    for(quint8 portListInIndex = 0; portListInIndex < portListInCount ; portListInIndex++) {
+        try {
+            QString portName = QString::fromStdString(portListIn->getPortName(portListInIndex));
+            portName = portName.replace(" ", "");
+            portName = portName.replace("/", "");
+            portName = portName.toLower();
+            if(!portIn.contains(portName)) {
+                portIn.insert(portName, new RtMidiIn());
+                portIn.value(portName)->openPort(portListInIndex);
+                portIn.value(portName)->setCallback(&midiCallback, this);
+                portIn.value(portName)->ignoreTypes(true, true, true);
+            }
+        }
+        catch(RtError &err) {
+            factory->logOscSend(QString::fromStdString(err.getMessage()));
+        }
+    }
+    delete portListIn;
+
+    RtMidiOut *portListOut = new RtMidiOut();
+    quint8 portListOutCount = portListOut->getPortCount();
+    for(quint8 portListOutIndex = 0; portListOutIndex < portListOutCount ; portListOutIndex++) {
+        try {
+            QString portName = QString::fromStdString(portListOut->getPortName(portListOutIndex));
+            portName = portName.replace(" ", "");
+            portName = portName.replace("/", "");
+            portName = portName.toLower();
+            if(!portOut.contains(portName)) {
+                factory->setMidiOutNewDevice(portName);
+                portOut.insert(portName, new RtMidiOut());
+                portOut.value(portName)->openPort(portListOutIndex);
+            }
+        }
+        catch(RtError &err) {
+            factory->logOscSend(QString::fromStdString(err.getMessage()));
+        }
+    }
+    delete portListOut;
 }
 
 void ExtMidiManager::send(const ExtMessage & _message) {
@@ -126,7 +154,7 @@ void ExtMidiManager::send(const ExtMessage & _message) {
     //Send request
     if(command == "/note") {
         sendNote(portname, channel, _message.getMidiValue(1), _message.getMidiValue(2));
-        quint16 duration = _message.getMidiValue(3);
+        qreal duration = _message.getMidiValue(3) * 1000.;
         if(duration > 0)
             new ExtMidiNoteOff(this, portname, channel, _message.getMidiValue(1), duration);
     }
@@ -222,7 +250,47 @@ void ExtMidiManager::sendBend(const QString & portname, quint8 channel, quint16 
         }
     }
 }
+void ExtMidiManager::sendSPPStart() {
+    std::vector<unsigned char> message;
+    message.push_back(MIDI_CONTINUE);
+    if(message.size() > 0) {
+        foreach(RtMidiOut *port, portOut) {
+            try {
+                port->sendMessage(&message);
+            } catch (RtError& err) {
+            }
+        }
+    }
+}
+void ExtMidiManager::sendSPPStop() {
+    std::vector<unsigned char> message;
+    message.push_back(MIDI_STOP);
+    if(message.size() > 0) {
+        foreach(RtMidiOut *port, portOut) {
+            try {
+                port->sendMessage(&message);
+            } catch (RtError& err) {
+            }
+        }
+    }
+}
+void ExtMidiManager::sendSPPTime(qreal time) {
+    quint16 slaveTime = (time / ((60. / midiTempo) / 16.)) / 4.;
+    qint8 val2 = slaveTime / 128, val1 = slaveTime % 128;
 
+    std::vector<unsigned char> message;
+    message.push_back(MIDI_SPP);
+    message.push_back(val1);
+    message.push_back(val2);
+    if(message.size() > 0) {
+        foreach(RtMidiOut *port, portOut) {
+            try {
+                port->sendMessage(&message);
+            } catch (RtError& err) {
+            }
+        }
+    }
+}
 
 void ExtMidiManager::receivedMessage(const QString & destination, const QStringList & arguments) {
     //Fire events (log, message and script mapping)
@@ -231,5 +299,80 @@ void ExtMidiManager::receivedMessage(const QString & destination, const QStringL
         verbose += " " + argument;
     factory->logOscReceive(verbose);
     factory->onOscReceive("midi", "midiin", "", destination, arguments);
+}
+void ExtMidiManager::receivedMidiRealtime(quint8 type, quint8 val1, quint8 val2) {
+    if(type == MIDI_SPP)
+        factory->syncGoto((128*val2 + val1) * 4 * ((60. / midiTempo) / 16));
+    else if(type == MIDI_CLOCK)
+        factory->syncTimer((60. / midiTempo) / 24.);
+    else if(type == MIDI_TIMECODE){
+        qreal slaveTime = midiMtc.decode(val1);
+        qDebug("TIMECODE %f", slaveTime);
+    }
+    else if(type == MIDI_TICK)
+        qDebug("TICK");
+    else if(type == MIDI_CONTINUE)
+        factory->syncStart();
+    else if(type == MIDI_STOP)
+        factory->syncStop();
+    else if(type == MIDI_START)
+        factory->syncStart();
+    else
+        qDebug("MIDI Sync Error");
+}
+
+void ExtMidiManager::setMidiTempo(qreal _midiTempo) {
+    midiTempo = _midiTempo;
+}
+
+
+
+
+
+qreal ExtMidiMTC::decode(quint16 msg) {
+    int times[4]   = {0, 0, 0, 0};
+    QString szType = "";
+    int numFrames  = 100;
+    qreal smpteTime = 0;
+
+    int messageIndex        = msg >> 4;
+    int value               = msg & 0x0F;
+    int timeIndex           = messageIndex>>1;
+    bool bNewFrame          = messageIndex % 4 == 0;
+
+    if(bNewFrame) {
+        times[kMTCFrames]++;
+        if(times[kMTCFrames] >= numFrames) {
+            times[kMTCFrames] %= numFrames;
+            times[kMTCSeconds]++;
+            if(times[kMTCSeconds] >= 60) {
+                times[kMTCSeconds] %= 60;
+                times[kMTCMinutes]++;
+                if(times[kMTCMinutes] >= 60) {
+                    times[kMTCMinutes] %= 60;
+                    times[kMTCHours]++;
+                }
+            }
+        }
+        Q_ASSERT_X(numFrames > 0, "MTCDecoder", "Error in received MIDI Time Code");
+        smpteTime = (qreal)(3600*times[kMTCHours] + 60*times[kMTCMinutes] + times[kMTCSeconds] + times[kMTCFrames]) / (qreal)numFrames;
+    }
+
+
+    if(messageIndex % 2 == 0)   times[timeIndex]  = value;
+    else                        times[timeIndex] |= value<<4;
+
+    if(messageIndex == 7) {
+        times[kMTCHours] &= 0x1F;
+        int smpteType = value >> 1;
+        switch(smpteType) {
+        case 0: numFrames = 24; szType = "24 fps"; break;
+        case 1: numFrames = 25; szType = "25 fps"; break;
+        case 2: numFrames = 30; szType = "30 fps (drop-frame)"; break;
+        case 3: numFrames = 30; szType = "30 fps"; break;
+        default: numFrames = 100; szType = " **** unknown SMPTE type ****";
+        }
+    }
+    return smpteTime;
 }
 

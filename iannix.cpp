@@ -27,6 +27,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     projectScore = 0;
     isGroupSoloActive = false;
     isObjectSoloActive = false;
+    acceptMidiSyncClock = false;
+    acceptMidiSyncSong = false;
     freehandCurveId = 0;
     lastMessageAllow = true;
     oscBundleHost = QHostAddress("127.0.0.1");
@@ -51,8 +53,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     QTimer::singleShot(1500, this, SLOT(closeSplash()));
     QCoreApplication::processEvents();
 
-    iconAppPlay  = QIcon(QPixmap(":icons/res_appicon_play.png"));
-    iconAppPause = QIcon(QPixmap(":icons/res_appicon_pause.png"));
+    iconAppPlay  = QIcon(":icons/res_appicon_play.png");
+    iconAppPause = QIcon(":icons/res_appicon_pause.png");
 
     //Update management
     updateManager = new QNetworkAccessManager(this);
@@ -113,6 +115,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(inspector, SIGNAL(actionUnmuteObjects()), SLOT(actionUnmuteObjects()));
     connect(inspector, SIGNAL(actionUnsoloGroups()), SLOT(actionUnsoloGroups()));
     connect(inspector, SIGNAL(actionUnsoloObjects()), SLOT(actionUnsoloObjects()));
+    connect(inspector, SIGNAL(midiSyncClockChanged(bool)), SLOT(setMidiSyncClock(bool)));
+    connect(inspector, SIGNAL(midiSyncSongChanged(bool)), SLOT(setMidiSyncSong(bool)));
 
     //Render
     render = view->getRender();
@@ -157,7 +161,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     syncObject = new NxTrigger(this, 0, render->getRenderOptions());
 
     //Editor
-    editor = new UiEditor(0);
+    editor = new UiEditor(this, 0);
 
     //Other connections
     actionViewChange();
@@ -191,6 +195,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(inspector, SIGNAL(ipOutChange(QString)), SLOT(setIpOut(QString)));
     connect(this, SIGNAL(ipOutStatus(bool)), inspector, SLOT(setIpOutOk(bool)));
     connect(inspector, SIGNAL(midiOutChange(QString)), SLOT(setMidiOut(QString)));
+    connect(inspector, SIGNAL(midiTempoChange(qreal)), midi, SLOT(setMidiTempo(qreal)));
     //connect(this, SIGNAL(midiOutStatus(bool)), inspector, SLOT(setMidiOutOk(bool)));
 
 
@@ -234,6 +239,13 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("ipOut", "127.0.0.1");
     if((forceSettings) || (!settings.childKeys().contains("midiOut")))
         settings.setValue("midiOut", "iannix_out");
+    if((forceSettings) || (!settings.childKeys().contains("midiTempo")))
+        settings.setValue("midiTempo", 120);
+    if((forceSettings) || (!settings.childKeys().contains("acceptMidiSyncClock")))
+        settings.setValue("acceptMidiSyncClock", 0);
+    if((forceSettings) || (!settings.childKeys().contains("acceptMidiSyncSong")))
+        settings.setValue("acceptMidiSyncSong", 1);
+
 #ifdef Q_OS_MAC
     if((forceSettings) || (!settings.childKeys().contains("serialPort")))
         settings.setValue("serialPort", "/dev/tty.usbserial-A600afc5:BAUD115200:DATA_8:PAR_NONE:STOP_1:FLOW_OFF");
@@ -278,6 +290,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     inspector->setHttpPort(settings.value("httpPort").toUInt());
     inspector->setIpOut(settings.value("ipOut").toString());
     inspector->setMidiOut(settings.value("midiOut").toString());
+    inspector->setMidiTempo(settings.value("midiTempo").toDouble());
     inspector->setSerialPort(settings.value("serialPort").toString());
     inspector->setTransportMessage(settings.value("defaultMessageTransport").toString());
     inspector->setSyncMessage(settings.value("defaultMessageSync").toString());
@@ -289,6 +302,13 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     inspector->setViewCurveOpacityCheck(settings.value("opacityCurve").toBool());
     render->setTriggerAutosize(settings.value("autoresize").toBool());
     view->setAutosize(settings.value("autoresize").toBool());
+
+    acceptMidiSyncClock = settings.value("acceptMidiSyncClock").toBool();
+    inspector->setMidiSyncClock(settings.value("acceptMidiSyncClock").toBool());
+    acceptMidiSyncSong = settings.value("acceptMidiSyncSong").toBool();
+    inspector->setMidiSyncSong(settings.value("acceptMidiSyncSong").toBool());
+    //acceptMidiSyncClock = settings.value("acceptMidiSyncClock").toBool();
+    //acceptMidiSyncSong = settings.value("acceptMidiSyncSong").toBool();
 
     bool settingsOk = settings.childKeys().contains("lastUpdate") && settings.childKeys().contains("updatePeriod") && settings.childKeys().contains("id");
     if(settingsOk) {
@@ -575,6 +595,10 @@ void IanniX::timerTick() {
     qreal renderMeasureAbsoluteVal = renderMeasureAbsolute.elapsed() / 1000.0F;
     qreal delta = renderMeasureAbsoluteVal - renderMeasureAbsoluteValOld;
     renderMeasureAbsoluteValOld = renderMeasureAbsoluteVal;
+    timerTick(delta);
+}
+
+void IanniX::timerTick(qreal delta) {
     if(forceTimeLocal) {
         delta = 0;
         timeTransportRefresh = 9999;
@@ -742,7 +766,7 @@ void IanniX::actionToggle_Autosize() {
     }
     else {
         render->setTriggerAutosize(true);
-        view->setAutosize(false);
+        view->setAutosize(true);
     }
 }
 
@@ -750,19 +774,25 @@ void IanniX::actionPlay_pause() {
     if(getScheduler()) {
         setScheduler(SchedulerOff);
         sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
+        midi->sendSPPStop();
     }
     else {
         setScheduler(SchedulerOn);
         sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
+        midi->sendSPPStart();
     }
     view->activateWindow();
 }
 void IanniX::actionFast_rewind() {
-    forceTimeLocal = true;
-    timeLocal = 0;
-    setScheduler(SchedulerOneShot);
-    sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "fastrewind");
-    view->activateWindow();
+    if(timeLocal != 0) {
+        forceTimeLocal = true;
+        timeLocal = 0;
+        setScheduler(SchedulerOneShot);
+        sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "fastrewind");
+        midi->sendSPPStop();
+        midi->sendSPPTime(0);
+        view->activateWindow();
+    }
 }
 
 void IanniX::actionLogo() {
@@ -781,11 +811,13 @@ void IanniX::actionGoto() {
         }
     }
 }
-void IanniX::actionGoto(qreal gotoTime) {
+void IanniX::actionGoto(qreal gotoTime, bool midiSync) {
     timeLocal = gotoTime;
     forceTimeLocal = true;
     if(schedulerActivity == SchedulerOff)
         setScheduler(SchedulerOneShot);
+    if(midiSync)
+        midi->sendSPPTime(timeLocal);
 }
 
 void IanniX::actionSetScheduler() {
@@ -919,44 +951,37 @@ void IanniX::actionNew() {
         bool ok;
         QString text = QInputDialog::getText(0, tr("New score"), tr("Enter the name of your new score:"), QLineEdit::Normal, "New Document " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
         if((ok) && (!text.isEmpty())) {
-            if(!QFile::exists(scriptDir.absoluteFilePath(text +  ".nxscore"))) {
-                QFile newFile(scriptDir.absoluteFilePath(text +  ".nxscore"));
-                if(newFile.open(QIODevice::WriteOnly)) {
-                    newFile.write("");
-                    newFile.close();
-                    fileWatcherChanged(scriptDir.path());
-                    inspector->setProjectFiles(text);
-                    actionProjectFiles();
-                }
+            QFileInfo newScoreDestination = QFileInfo(scriptDir.absoluteFilePath(text +  ".nxscore"));
+            if(!newScoreDestination.exists()) {
+                QFile::copy(QFileInfo("./Project/New Score Template.nxscore").absoluteFilePath(),  newScoreDestination.absoluteFilePath());
+                fileWatcherChanged(scriptDir.path());
+                inspector->setProjectFiles(text);
+                actionProjectFiles();
             }
-            else {
+            else
                 QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QMessageBox::Ok);
-            }
         }
     }
 }
 
-/*
-void IanniX::actionNew_script() {  ///CG///
+void IanniX::actionNewScript() {
     if(projectScore) {
         bool ok;
-        QString text = QInputDialog::getText(0, tr("New score"), tr("Enter the name of your new score:"), QLineEdit::Normal, "New Document " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
+        QString text = QInputDialog::getText(0, tr("New script"), tr("Enter the name of your new script:"), QLineEdit::Normal, "New Script " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
         if((ok) && (!text.isEmpty())) {
-            if(!QFile::exists(scriptDir.absoluteFilePath(text +  ".nxscore"))) {
-                QFile newFile(scriptDir.absoluteFilePath(text +  ".nxscore"));
-                if(newFile.open(QIODevice::WriteOnly)) {
-                    newFile.write("");
-                    newFile.close();
-                }
+            QFileInfo newScriptDestination = QFileInfo(scriptDir.absoluteFilePath(text +  ".nxscript"));
+            if(!newScriptDestination.exists()) {
+                QFile::copy(QFileInfo("./Project/New Script Template.nxscript").absoluteFilePath(), newScriptDestination.absoluteFilePath());
+                fileWatcherChanged(scriptDir.path());
+                inspector->setProjectScripts(text);
+                actionProjectScripts();
             }
-            else {
+            else
                 QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QMessageBox::Ok);
-            }
         }
     }
-
 }
-*/
+
 
 void IanniX::actionOpen() {
     QString fileName = QFileDialog::getExistingDirectory(0, tr("Open IanniX Project Folder"), baseDocumentDir);
@@ -1071,38 +1096,41 @@ void IanniX::actionProjectFilesContext(const QPoint & point) {   ///CG///
     if((inspector->getProjectFiles()->currentItem()->type() == 1024) && (currentDocument)) {
         ExtScriptManager *fileList = (ExtScriptManager*)inspector->getProjectFiles()->currentItem();
         if(fileList) {
-            QMenu menu(inspector);
-            QAction *openProject = menu.addAction(tr("Open Project Folder"));
-            QAction *newFile = menu.addAction(tr("New"));
+            QMenu menu(view);
+            QAction *openProject   = menu.addAction(tr("Open a project"));
+            QAction *newFile       = menu.addAction(tr("New"));
             QAction *duplicateFile = menu.addAction(tr("Duplicate"));
-            QAction *renameFile = menu.addAction(tr("Rename"));
-            QAction *removeFile = menu.addAction(tr("Remove"));
+            QAction *renameFile    = menu.addAction(tr("Rename"));
+            QAction *removeFile    = menu.addAction(tr("Remove"));
             QAction *ret = menu.exec(inspector->getProjectFiles()->mapToGlobal(point));
+            openProject->setStatusTip  (tr("Click here to open a project folder"));
+            newFile->setStatusTip      (tr("Click here to create a new score"));
+            duplicateFile->setStatusTip(tr("Click here to duplicate the score to a new one"));
+            renameFile->setStatusTip   (tr("Click here to rename the score"));
+            removeFile->setStatusTip   (tr("Click here to remove the score from project folder"));
 
-            if (ret == openProject) {
+            if (ret == openProject)
                 actionOpen();
-            } else {
-                if (ret == newFile) {
+            else {
+                if (ret == newFile)
                     actionNew();
-                } else if (ret == duplicateFile) {
+                else if (ret == duplicateFile) {
                     if(currentDocument) {
                         bool ok;
                         QString text = QInputDialog::getText(0, tr("File duplication"), tr("Name of duplicate script:"), QLineEdit::Normal, fileList->getScriptFile().baseName(), &ok);
                         QString f = fileList->getScriptFile().absoluteFilePath().replace(fileList->getScriptFile().baseName()+".", text+".");
                         if((ok) && (!f.isEmpty())) {
-                            if(!QFile::exists(f)) {
+                            if(!QFile::exists(f))
                                 QFile::copy(fileList->getScriptFile().absoluteFilePath(), f);
-                            }
-                            else {
+                            else
                                 QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QMessageBox::Ok);
-                            }
                         }
                     }
-                } else if (ret == renameFile) {
-                    actionRename();
-                } else if (ret == removeFile) {
-                    actionRemove();
                 }
+                else if (ret == renameFile)
+                    actionRename();
+                else if (ret == removeFile)
+                    actionRemove();
                 QDir examplesDir("./Examples/");
                 QDir libDir("./Tools/");
                 QDir projectDir(baseDocumentDir);
@@ -1118,45 +1146,36 @@ void IanniX::actionProjectFilesContext(const QPoint & point) {   ///CG///
 void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
     if((inspector->getProjectScripts()->currentItem()->type() == 1024) && (currentDocument)) {
         ExtScriptManager *scriptList = (ExtScriptManager*)inspector->getProjectScripts()->currentItem();
-        if(scriptList) {
-            QMenu menu(inspector);
-            QAction *runFile = menu.addAction(tr("Run"));
-            QAction *openFile = menu.addAction(tr("Open"));
+        if(view) {
+            QMenu menu(view);
+            QAction *runFile          = menu.addAction(tr("Run"));
+            QAction *openFile         = menu.addAction(tr("Open"));
             QAction *externalOpenFile = menu.addAction(tr("Open with default external editor"));
-            QAction *newFile = menu.addAction(tr("New"));
-            QAction *duplicateFile = menu.addAction(tr("Duplicate"));
-            QAction *renameFile = menu.addAction(tr("Rename"));
-            QAction *removeFile = menu.addAction(tr("Remove"));
+            QAction *newFile          = menu.addAction(tr("New"));
+            QAction *duplicateFile    = menu.addAction(tr("Duplicate"));
+            QAction *renameFile       = menu.addAction(tr("Rename"));
+            QAction *removeFile       = menu.addAction(tr("Remove"));
+            runFile->setStatusTip      (tr("Click here to run this script"));
+            runFile->setStatusTip      (tr("Click here to open a project folder"));
+            newFile->setStatusTip      (tr("Click here to create a new script"));
+            duplicateFile->setStatusTip(tr("Click here to duplicate the script to a new one"));
+            renameFile->setStatusTip   (tr("Click here to rename the script"));
+            removeFile->setStatusTip   (tr("Click here to remove the script from project folder"));
+
             QAction *ret = menu.exec(inspector->getProjectScripts()->mapToGlobal(point));
 
-            if(ret == runFile) {
+            if(ret == runFile)
                 actionProjectScripts();
-            } else if (ret == openFile) {
+            else if (ret == openFile)
                 editor->openFile(scriptList->getScriptFile());
-            } else if (ret == externalOpenFile) {
+            else if (ret == externalOpenFile) {
                 fileWatcher.addPath(scriptList->getScriptFile().absoluteFilePath());
                 QDesktopServices::openUrl(QUrl("file:///" + scriptList->getScriptFile().absoluteFilePath().replace("\\", "/"), QUrl::TolerantMode));
-            } else {
-                if (ret == newFile) {
-                    if(currentDocument) {
-                        bool ok;
-                        QString text = QInputDialog::getText(0, tr("New script"), tr("Name of new script:"), QLineEdit::Normal, "New Document " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
-                        QString f = scriptList->getScriptFile().absoluteFilePath().replace(scriptList->getScriptFile().baseName()+".", text+".");
-                        if((ok) && (!text.isEmpty())) {
-                            if(!QFile::exists(f)) {
-                                QFile newFile(f);
-                                if(newFile.open(QIODevice::WriteOnly)) {
-                                    QTextStream out(&newFile);
-                                    out << "//Script \"" << text << "\"\n//Insert requests for global variables:\nfunction onConfigure() {\n    //title(\"enter title here\");\n    //ask(\"prompt\", \"groupName\", \"variableName\", defaultValue);\n};\n//Insert code to create score:\nfunction onCreate() {\n\n\n};\n";
-                                    newFile.close();
-                                }
-                            }
-                            else {
-                                QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QMessageBox::Ok);
-                            }
-                        }
-                    }
-                } else if (ret == duplicateFile) {
+            }
+            else {
+                if (ret == newFile)
+                    actionNewScript();
+                else if (ret == duplicateFile) {
                     if(currentDocument) {
                         bool ok;
                         QString text = QInputDialog::getText(0, tr("File duplication"), tr("Name of duplicate script:"), QLineEdit::Normal, scriptList->getScriptFile().baseName(), &ok);
@@ -1170,7 +1189,8 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
                             }
                         }
                     }
-                } else if (ret == renameFile) {
+                }
+                else if (ret == renameFile) {
                     if(currentDocument) {
                         bool ok;
                         QString text = QInputDialog::getText(0, tr("File rename"), tr("New name of script:"), QLineEdit::Normal, scriptList->getScriptFile().baseName(), &ok);
@@ -1184,7 +1204,8 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
                             }
                         }
                     }
-                } else if (ret == removeFile) {
+                }
+                else if (ret == removeFile) {
                     if(currentDocument) {
                         int rep = QMessageBox::question(0, tr("File remove"), tr("The file will be removed from your disk. Are you sure?"), QMessageBox::Yes | QMessageBox::No);
                         if(rep == QMessageBox::Yes) {
@@ -1390,22 +1411,37 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             else if((commande == COMMAND_PLAY) && (arguments.count() >= 2)) {
                 if(arguments.at(1).toDouble() != 0) {
                     transport->setSpeed(arguments.at(1).toDouble());
-                    setScheduler(SchedulerOn);
-                    sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
+                    if(schedulerActivity != SchedulerOn) {
+                        setScheduler(SchedulerOn);
+                        sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
+                        midi->sendSPPStart();
+                    }
                 }
                 else {
-                    setScheduler(SchedulerOff);
-                    sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
+                    if(schedulerActivity != SchedulerOff) {
+                        setScheduler(SchedulerOff);
+                        sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
+                        midi->sendSPPStop();
+                    }
                 }
                 actionSpeed();
+            }
+            else if((commande == COMMAND_PLAY) && (arguments.count() >= 1)) {
+                if(schedulerActivity != SchedulerOn) {
+                    setScheduler(SchedulerOn);
+                    sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
+                    midi->sendSPPStart();
+                }
             }
             else if((commande == COMMAND_TITLE) && (arguments.count() >= 1)) {
                 return view->windowTitle();
             }
             else if((commande == COMMAND_STOP) && (arguments.count() >= 1)) {
-                setScheduler(SchedulerOff);
-                sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
-                actionSpeed();
+                if(schedulerActivity != SchedulerOff) {
+                    setScheduler(SchedulerOff);
+                    sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
+                    midi->sendSPPStop();
+                }
             }
             else if((commande == COMMAND_GOTO) && (arguments.count() >= 2)) {
                 actionGoto(arguments.at(1).toDouble());
@@ -1508,8 +1544,8 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 delete obj;
             }
             else if((commande == COMMAND_AUTOSIZE) && (arguments.count() >= 2)) {
-                render->setTriggerAutosize(arguments.at(1).toDouble());
-                view->setAutosize(arguments.at(1).toDouble());
+                render->setTriggerAutosize(arguments.at(1).toUInt());
+                view->setAutosize(arguments.at(1).toUInt());
             }
 
             else if(arguments.count() >= 2) {
@@ -2123,6 +2159,13 @@ void IanniX::ipOutStatusFound(const QHostInfo &hostInfo) {
     else
         emit(ipOutStatus(false));
 }
+void IanniX::setMidiSyncClock(bool val) {
+    acceptMidiSyncClock = val;
+}
+void IanniX::setMidiSyncSong(bool val) {
+    acceptMidiSyncSong = val;
+}
+
 void IanniX::setMidiOut(const QString & midi) {
     midiOut = midi;
     messagesCache.clear();
@@ -2162,6 +2205,10 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     settings.setValue("httpPort", inspector->getHttpPort());
     settings.setValue("tcpPort", inspector->getTCPPort());
     settings.setValue("ipOut", inspector->getIpOut());
+    settings.setValue("midiOut", inspector->getMidiOut());
+    settings.setValue("midiTempo", inspector->getMidiTempo());
+    settings.setValue("acceptMidiSyncSong", inspector->getMidiSyncSong());
+    settings.setValue("acceptMidiSyncClock", inspector->getMidiSyncClock());
     settings.setValue("serialPort", inspector->getSerialPort());
     settings.setValue("defaultMessageTransport", inspector->getTransportMessage());
     settings.setValue("defaultMessageSync", inspector->getSyncMessage());
@@ -2294,4 +2341,3 @@ void IanniX::actionPasteScript() {
     if(currentScript)
         currentScript->scriptEngine.evaluate(paste);
 }
-

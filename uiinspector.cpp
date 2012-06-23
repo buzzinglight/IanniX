@@ -34,6 +34,19 @@ UiInspector::UiInspector(QWidget *parent) :
     ui->cc2View->setColumnWidth(0, 45);
     ui->cc2View->setColumnWidth(1, 25);
 
+    quint16 colWidth = 45;
+    ui->pointsList->setColumnWidth(0, colWidth);
+    ui->pointsList->setColumnWidth(1, colWidth);
+    ui->pointsList->setColumnWidth(2, colWidth);
+    ui->pointsList->setColumnWidth(3, colWidth);
+    ui->pointsList->setColumnWidth(4, colWidth);
+    ui->pointsList->setColumnWidth(5, colWidth);
+    ui->pointsList->setColumnWidth(6, colWidth);
+    ui->pointsList->setColumnWidth(7, colWidth);
+    ui->pointsList->setColumnWidth(8, colWidth);
+    ui->pointsList->setColumnWidth(9, colWidth);
+    ui->pointsList->setColumnWidth(10, colWidth);
+
     render = 0;
     factory = 0;
     triggerItem = new QTreeWidgetItem(ui->ccView, QStringList() << "");
@@ -209,6 +222,17 @@ void UiInspector::actionInfo() {
                     curve->setResize(NxSize(ui->sizeWSpin->value(), curve->getResize().height()));
                 else if(ui->sizeHSpin == sender())
                     curve->setResize(NxSize(curve->getResize().width(), ui->sizeHSpin->value()));
+                if(ui->pointsList == sender()) {
+                    if(curve->getCurveType() == CurveTypePoints) {
+                        ui->pointsList->sortItems(0, Qt::AscendingOrder);
+                        for(quint16 itemIndex = 0 ; itemIndex < ui->pointsList->topLevelItemCount() ; itemIndex++) {
+                            QTreeWidgetItem *item = ui->pointsList->topLevelItem(itemIndex);
+                            curve->setPointAt(itemIndex, NxPoint(item->text(1).toDouble(), item->text(2).toDouble(), item->text(3).toDouble()), NxPoint(item->text(5).toDouble(), item->text(6).toDouble(), item->text(7).toDouble()), NxPoint(item->text(8).toDouble(), item->text(9).toDouble(), item->text(10).toDouble()), (item->checkState(4)==Qt::Checked)?(true):(false), false);
+                        }
+                        curve->calcBoundingRect();
+                        curve->calculate();
+                    }
+                }
             }
             else if(object->getType() == ObjectsTypeTrigger) {
                 NxTrigger *trigger = (NxTrigger*)object;
@@ -280,6 +304,19 @@ void UiInspector::actionNetwork() {
         ui->midiOutCombo->setStyleSheet("");
         emit(midiOutChange(ui->midiOutCombo->currentText()));
     }
+    else if(ui->midiTempoSpin == sender()) {
+        factory->pushSnapshot();
+        ui->midiTempoSpin->setStyleSheet("");
+        emit(midiTempoChange(ui->midiTempoSpin->value()));
+    }
+    else if(ui->midiSyncClock == sender()) {
+        factory->pushSnapshot();;
+        emit(midiSyncClockChanged(ui->midiSyncClock->isChecked()));
+    }
+    else if(ui->midiSyncSong == sender()) {
+        factory->pushSnapshot();;
+        emit(midiSyncSongChanged(ui->midiSyncSong->isChecked()));
+    }
     else if(ui->serialInPortEdit == sender()) {
         factory->pushSnapshot();
         ui->serialInPortEdit->setStyleSheet("");
@@ -296,6 +333,9 @@ void UiInspector::actionNetwork() {
     else if((sender() == ui->bundleMessageEdit) || (sender() == ui->bundleMessagePort)) {
         factory->pushSnapshot();
         emit(bundleMessageChange(ui->bundleMessageEdit->text(), ui->bundleMessagePort->value()));
+    }
+    else if(sender() == ui->midiOutRefresh) {
+        factory->refreshMidiOutDevice();
     }
 }
 
@@ -324,7 +364,7 @@ void UiInspector::actionInfoGroup() {
 void UiInspector::actionMessages() {
     if(render->getSelection()->count()) {
         factory->pushSnapshot();
-        ExtOscPatternAsk *ask = new ExtOscPatternAsk(0, render->getSelection());
+        ExtOscPatternAsk *ask = new ExtOscPatternAsk(factory, 0, render->getSelection());
         if(!ask->onlyCurves) {
             if(ask->exec()) {
                 foreach(NxObject *object, *(render->getSelection()))
@@ -370,7 +410,7 @@ void UiInspector::refresh() {
 
     actionInfoLock = true;
 
-    quint16 counterTriggers = 0, counterCurves = 0, counterCursors = 0, counterCursorsCurve = 0;
+    quint16 counterTriggers = 0, counterCurves = 0, counterCurvePoints = 0, counterCursors = 0, counterCursorsCurve = 0;
 
     if(render) {
         QList<NxObject*> *objects = render->getSelection();
@@ -416,11 +456,13 @@ void UiInspector::refresh() {
 
             if((object->getType() == ObjectsTypeCursor) && (((NxCursor*)object)->getCurve()))
                 counterCursorsCurve++;
+            if((object->getType() == ObjectsTypeCurve) && (((NxCurve*)object)->getCurveType() == CurveTypePoints))
+                counterCurvePoints++;
 
             if (objects->count() > 1)  ////CG//// Don't allow ID change if more than one object selected
                 ui->newIdButton->setDisabled(true);
             else
-                 ui->newIdButton->setDisabled(false);
+                ui->newIdButton->setDisabled(false);
 
             QString thisID = QString::number(object->getId());
             QString prevID = QString::number(prevObject->getId());
@@ -469,8 +511,9 @@ void UiInspector::refresh() {
                 if(prevCurve == 0)
                     prevCurve = curve;
 
-                change(indexObject, ui->sizeWSpin, curve->getResize().width(), prevCurve->getResize().width());
-                change(indexObject, ui->sizeHSpin, curve->getResize().height(), prevCurve->getResize().height());
+                change(indexObject, ui->sizeWSpin,  curve->getResize().width(), prevCurve->getResize().width());
+                change(indexObject, ui->sizeHSpin,  curve->getResize().height(), prevCurve->getResize().height());
+                change(indexObject, ui->pointsList, curve->getPathPoints(), prevCurve->getPathPoints());
                 prevCurve = curve;
             }
             else if(object->getType() == ObjectsTypeTrigger) {
@@ -501,7 +544,7 @@ void UiInspector::refresh() {
     else if(counterCursors > 1)
         ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCursors) + " " + tr("CURSORS"));
 
-    bool showCursorInfo = false, showTriggerInfo = false, showCurveInfo = false, showCursorCurveInfo = false, showGenericInfo = false;
+    bool showCursorInfo = false, showTriggerInfo = false, showCurveInfo = false, showCurvePointsInfo = false, showCursorCurveInfo = false, showGenericInfo = false;
     if(counterCurves > 0)
         showCurveInfo = true;
     if(counterCursors > 0)
@@ -510,6 +553,8 @@ void UiInspector::refresh() {
         showTriggerInfo = true;
     if(counterCursorsCurve > 0)
         showCursorCurveInfo = true;
+    if(counterCurvePoints > 0)
+        showCurvePointsInfo = true;
     if((counterCursors + counterCurves + counterTriggers) > 0)
         showGenericInfo = true;
 
@@ -525,10 +570,10 @@ void UiInspector::refresh() {
     ui->positionLabel->setVisible(showCurveInfo | showTriggerInfo);
     ui->activityCheck->setVisible(showGenericInfo);
     ui->activityLabel->setVisible(showGenericInfo);
-    ui->messagesButton->setVisible(showGenericInfo);
-    ui->messagesLabel->setVisible(showGenericInfo);
-    ui->messagesSpin->setVisible(showCursorCurveInfo | showTriggerInfo);
-    ui->messagesLabel2->setVisible(showCursorCurveInfo | showTriggerInfo);
+    ui->messagesButton->setVisible(showCursorInfo | showTriggerInfo);
+    ui->messagesLabel->setVisible(showCursorInfo | showTriggerInfo);
+    ui->messagesSpin->setVisible(showCursorInfo | showTriggerInfo);
+    ui->messagesLabel2->setVisible(showCursorInfo | showTriggerInfo);
     ui->sizeSpin->setVisible(showGenericInfo);
     ui->sizeLabel2->setVisible(showGenericInfo);
     ui->labelLabel->setVisible(showGenericInfo);
@@ -574,9 +619,9 @@ void UiInspector::refresh() {
     ui->sizeHSpin->setVisible(showCurveInfo);
     ui->sizeWSpin->setVisible(showCurveInfo);
     ui->sizeLabel->setVisible(showCurveInfo);
+    ui->pointsLabel->setVisible(showCurvePointsInfo);
+    ui->pointsList->setVisible(showCurvePointsInfo);
 
-    ui->messagesButton->setVisible(showCursorInfo | showTriggerInfo);
-    ui->messagesLabel->setVisible(showCursorInfo | showTriggerInfo);
 
     actionInfoLock = false;
 }
@@ -647,6 +692,37 @@ void UiInspector::change(quint16 indexObject, QComboBox *spin, quint16 val, quin
     else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
         spin->setStyleSheet("");
         spin->setCurrentIndex(-1);
+    }
+}
+void UiInspector::change(quint16 indexObject, QTreeWidget *spin, const QList<NxCurvePoint> &val, const QList<NxCurvePoint> &prevVal) {
+    if(indexObject == 0) {
+        spin->setStyleSheet("");
+        quint16 ptIndex = 0;
+        if(val.count() != spin->topLevelItemCount())
+            spin->clear();
+        foreach(const NxCurvePoint &pt, val) {
+            QTreeWidgetItem *item;
+            if(ptIndex < spin->topLevelItemCount()) item = spin->topLevelItem(ptIndex);
+            else                                    item = new QTreeWidgetItem();
+            item->setText(0, QString::number(ptIndex++));
+            item->setText(1, QString::number(pt.x()));
+            item->setText(2, QString::number(pt.y()));
+            item->setText(3, QString::number(pt.z()));
+            item->setText(4, "");
+            item->setText(5, QString::number(pt.c1.x()));
+            item->setText(6, QString::number(pt.c1.y()));
+            item->setText(7, QString::number(pt.c1.z()));
+            item->setText(8, QString::number(pt.c2.x()));
+            item->setText(9, QString::number(pt.c2.y()));
+            item->setText(10, QString::number(pt.c2.z()));
+            item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+            if(pt.smooth)   item->setCheckState(4, Qt::Checked);
+            else            item->setCheckState(4, Qt::Unchecked);
+            spin->addTopLevelItem(item);
+        }
+    }
+    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
+        spin->setStyleSheet("QCheckBox::indicator { background-color: rgba(50, 237, 255, 128); }");
     }
 }
 
@@ -791,8 +867,17 @@ void UiInspector::setMidiOut(const QString & midi) {
     ui->midiOutCombo->setCurrentIndex(ui->midiOutCombo->findText(midi, Qt::MatchFixedString));
     midiOutChange(ui->midiOutCombo->currentText());
 }
+void UiInspector::setMidiTempo(qreal tempo) {
+    ui->midiTempoSpin->setValue(tempo);
+}
 void UiInspector::setMidiOutNewDevice(const QString &midi) {
     ui->midiOutCombo->addItem(midi);
+}
+void UiInspector::setMidiSyncClock(bool val) {
+    ui->midiSyncClock->setChecked(val);
+}
+void UiInspector::setMidiSyncSong(bool val) {
+    ui->midiSyncSong->setChecked(val);
 }
 
 void UiInspector::setSerialPort(const QString & port) {
@@ -825,8 +910,20 @@ quint16 UiInspector::getHttpPort() const {
 quint16 UiInspector::getTCPPort() const {
     return ui->tcpInPortSpin->value();
 }
+qreal UiInspector::getMidiTempo() const {
+    return ui->midiTempoSpin->value();
+}
+bool UiInspector::getMidiSyncClock() const {
+    return ui->midiSyncClock->isChecked();
+}
+bool UiInspector::getMidiSyncSong() const {
+    return ui->midiSyncSong->isChecked();
+}
 const QString UiInspector::getIpOut() const {
     return ui->ipOutEdit->text();
+}
+const QString UiInspector::getMidiOut() const {
+    return ui->midiOutCombo->currentText();
 }
 const QString UiInspector::getSerialPort() const {
     return ui->serialInPortEdit->text();

@@ -28,6 +28,16 @@ ExtOscManager::ExtOscManager(NxObjectFactoryInterface *_factory)
     //Create a new UDP socket and bind signals
     socket = new QUdpSocket(this);
     connect(socket, SIGNAL(readyRead()), SLOT(parseOSC()));
+
+    //List IPs
+    /*
+    QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
+    foreach(const QNetworkInterface &interface, interfaces) {
+        QList<QNetworkAddressEntry> addresses = interface.addressEntries();
+        foreach(const QNetworkAddressEntry &address, addresses)
+            ips << address.ip().toString();
+    }
+    */
 }
 
 void ExtOscManager::openPort(quint16 _port) {
@@ -128,9 +138,15 @@ void ExtOscManager::parseOSC() {
                 }
 
                 //Fire events (log, message and script mapping)
-                factory->logOscReceive(QString("osc://%1:%2%3%4").arg(receivedHost.toString()).arg(receivedPort).arg(oscMatchAdress).arg(command));
+                factory->logOscReceive(QString("osc://%1:%2%3%4").arg(receivedHost.toString()).arg(receivedPort).arg(" ").arg(command));
                 factory->execute(command);
                 factory->onOscReceive("osc", receivedHost.toString(), QString::number(receivedPort), commandDestination, commandArguments);
+                if(command.toLower().startsWith("/transport play"))
+                    factory->execute("play");
+                else if(command.toLower().startsWith("/transport stop"))
+                    factory->execute("stop");
+                else if(command.toLower().startsWith("/transport fastrewind"))
+                    factory->execute("fastrewind");
             }
         }
     }

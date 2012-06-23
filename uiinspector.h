@@ -132,6 +132,10 @@ public slots:
     void setHttpPort(quint16 port);
     void setIpOut(const QString & ip);
     void setMidiOut(const QString & midi);
+    void setMidiTempo(qreal tempo);
+    void setMidiSyncClock(bool val);
+    void setMidiSyncSong(bool val);
+
     void setMidiOutNewDevice(const QString & midi);
     void setSerialPort(const QString & port);
     void setTransportMessage(const QString & message);
@@ -141,7 +145,11 @@ public slots:
     quint16 getUDPPort() const;
     quint16 getHttpPort() const;
     quint16 getTCPPort() const;
+    qreal   getMidiTempo() const;
+    bool getMidiSyncClock() const;
+    bool getMidiSyncSong() const;
     const QString getIpOut() const;
+    const QString getMidiOut() const;
     const QString getSerialPort() const;
     const QString getTransportMessage() const;
     const QString getSyncMessage() const;
@@ -163,6 +171,7 @@ public slots:
     void change(quint16 indexObject, QLineEdit      *spin, const QString & val, const QString & prevVal);
     void change(quint16 indexObject, QComboBox      *spin, const QString & val, const QString & prevVal);
     void change(quint16 indexObject, QComboBox      *spin, quint16         val, quint16         prevVal);
+    void change(quint16 indexObject, QTreeWidget    *spin, const QList<NxCurvePoint> &val, const QList<NxCurvePoint> &prevVal);
 
     void colorComboAdd(QComboBox *spin, QStringList values);
 
@@ -186,6 +195,9 @@ signals:
     void bundleMessageChange(const QString &, quint16);
     void ipOutChange(const QString &);
     void midiOutChange(const QString &);
+    void midiTempoChange(qreal);
+    void midiSyncClockChanged(bool);
+    void midiSyncSongChanged(bool);
     void serialPortChange(const QString &);
     void transportMessageChange(const QString &);
     void syncMessageChange(const QString &);

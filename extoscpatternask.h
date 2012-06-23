@@ -34,12 +34,13 @@ class ExtOscPatternAsk : public QDialog {
     Q_OBJECT
 
 public:
-    explicit ExtOscPatternAsk(QWidget *parent, QList<NxObject*> *_objects);
+    explicit ExtOscPatternAsk(NxObjectFactoryInterface *_factory, QWidget *parent, QList<NxObject *> *_objects);
     ~ExtOscPatternAsk();
 
 private:
     QList<NxObject*> *objects;
     QList<ExtOscPatternEditor*> patternLists;
+    NxObjectFactoryInterface *factory;
 protected:
     void changeEvent(QEvent *e);
     void mousePressEvent(QMouseEvent *);
@@ -54,6 +55,7 @@ public slots:
     void help() {
         QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Documentation/index.html").absoluteFilePath().replace("\\", "/") + "#messages", QUrl::TolerantMode));
     }
+    void actionFieldFocus(QComboBox*,QPlainTextEdit*);
 
 private:
     Ui::ExtOscPatternAsk *ui;

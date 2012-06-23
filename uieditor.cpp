@@ -19,10 +19,11 @@
 #include "uieditor.h"
 #include "ui_uieditor.h"
 
-UiEditor::UiEditor(QWidget *parent) :
+UiEditor::UiEditor(NxObjectFactoryInterface *_factory, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::UiEditor) {
     ui->setupUi(this);
+    factory = _factory;
 
     QRect screen = QApplication::desktop()->geometry();
     move(screen.bottomRight().x() - rect().width(), 20);
@@ -59,6 +60,9 @@ UiEditor::UiEditor(QWidget *parent) :
     ui->jsEditor->setColor(JSEdit::BracketError,  QColor("#A82224"));
     ui->jsEditor->setColor(JSEdit::FoldIndicator, QColor("#555555"));
     */
+
+    ui->splitter_2->setStretchFactor(0, 5);
+    ui->splitter_2->setStretchFactor(1, 1);
 }
 
 UiEditor::~UiEditor() {
@@ -77,7 +81,6 @@ void UiEditor::openFile(const QFileInfo & _scriptFile) {
         ui->jsEditor->setPlainText(contents);
         setWindowTitle(tr("IanniX") + QString(" - ") + tr("Script Editor") + QString(" - ") + scriptFile.baseName());
         show();
-        raise(); ///CG/// Move opened editor window in front of mail window.
     }
 }
 void UiEditor::save() {
@@ -87,6 +90,25 @@ void UiEditor::save() {
         //contents.replace("  ", "\t");
         file.write(contents.toLatin1());
         file.close();
+    }
+}
+void UiEditor::cursorChanged() {
+    ui->help->display(ui->jsEditor, QStringList() << "commands" << "javascript" << "values");
+}
+
+void UiEditor::scriptError(const QStringList &errors, qint16 line) {
+    if(line < 0)
+        ui->statusBar->setVisible(false);
+    else {
+        QString errorsMessage = "";
+        foreach(const QString & error, errors)
+            errorsMessage += error + " - ";
+
+        QTextCursor cursorLine = QTextCursor(ui->jsEditor->document()->findBlockByLineNumber(line-1));
+        ui->jsEditor->setTextCursor(cursorLine);
+        ui->statusBar->setVisible(true);
+        ui->statusBar->showMessage(errorsMessage);
+        raise();
     }
 }
 

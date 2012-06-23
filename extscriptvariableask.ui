@@ -111,6 +111,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
    </item>
    <item>
     <widget class="QTreeWidget" name="variablesList">
+     <property name="toolTip">
+      <string>List of script variables</string>
+     </property>
      <property name="statusTip">
       <string>Double-click on a column to change a value</string>
      </property>

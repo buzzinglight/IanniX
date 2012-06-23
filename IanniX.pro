@@ -68,7 +68,9 @@ SOURCES                 += iannix.cpp \
                            nxline.cpp \
                            extoscpatterneditor.cpp \
                            nxeasing.cpp \
-                           nxcpu.cpp
+                           nxcpu.cpp \
+    help.cpp \
+    uihelp.cpp
 
 HEADERS                 += iannix.h \
                            uitransport.h \
@@ -112,7 +114,9 @@ HEADERS                 += iannix.h \
                            nxpolygon.h \
                            extoscpatterneditor.h \
                            nxeasing.h \
-                           nxcpu.h
+                           nxcpu.h \
+    help.h \
+    uihelp.h
 
 FORMS                   += uitransport.ui \
                            uirender.ui \
@@ -123,7 +127,8 @@ FORMS                   += uitransport.ui \
                            uiabout.ui \
                            extoscpatternask.ui \
                            uieditor.ui \
-                           extoscpatterneditor.ui
+                           extoscpatterneditor.ui \
+    uihelp.ui
 
 TRANSLATIONS             = iannix_fr.ts
 

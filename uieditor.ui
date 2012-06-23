@@ -6,20 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
-    <height>282</height>
+    <width>650</width>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>IanniX — Script Editor</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QStatusBar {
+	background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));
+	color: white;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="JSEdit" name="jsEditor">
-      <property name="plainText">
-       <string/>
+     <widget class="QSplitter" name="splitter_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
+      <widget class="JSEdit" name="jsEditor">
+       <property name="plainText">
+        <string/>
+       </property>
+      </widget>
+      <widget class="UiHelp" name="help" native="true"/>
      </widget>
     </item>
    </layout>
@@ -37,6 +49,7 @@
    <addaction name="actionSave"/>
    <addaction name="actionClose"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSave">
    <property name="text">
     <string>Save</string>
@@ -56,6 +69,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>UiHelp</class>
+   <extends>QWidget</extends>
+   <header>uihelp.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>JSEdit</class>
    <extends>QPlainTextEdit</extends>
    <header>qjsedit/jsedit.h</header>
@@ -65,5 +84,25 @@
   <tabstop>jsEditor</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>jsEditor</sender>
+   <signal>cursorPositionChanged()</signal>
+   <receiver>UiEditor</receiver>
+   <slot>cursorChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>52</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-231</x>
+     <y>177</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>cursorChanged()</slot>
+ </slots>
 </ui>
