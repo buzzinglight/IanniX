@@ -141,7 +141,7 @@ void UiInspector::changeID_success(bool result, quint16 newId) {  ////CG////
         foreach(NxObject *object, *(render->getSelection())) //This should only loop once
             object->setId(newId);
     else
-        QMessageBox::information(0, tr("Can't change ID."), tr("Another object has this ID.\nTry deleting that object, or change its ID."), QMessageBox::Ok);
+        (new UiMessageBox())->display(tr("Can't change ID."), tr("Another object has this ID.\nTry deleting that object, or change its ID."), QDialogButtonBox::Ok);
 }
 
 void UiInspector::actionCCButton() {
@@ -342,7 +342,7 @@ void UiInspector::actionNetwork() {
 void UiInspector::actionInfoID() {
     bool ok = false;
     quint16 oldId = ui->newIdButton->text().toInt();
-    quint16 newId = QInputDialog::getInt(0, tr("IanniX Inspector"), tr("Enter the new ID:"), oldId ,0 ,32767 ,1 , &ok);
+    quint16 newId = (new UiMessageBox())->getDouble(tr("IanniX Inspector"), tr("Enter the new ID:"), oldId, 0, 32767, 1, 0, "", &ok);
     if(ok && (newId != oldId)) {
         factory->pushSnapshot();
         emit(actionChangeID(oldId, newId));
@@ -353,7 +353,7 @@ void UiInspector::actionInfoID() {
 
 void UiInspector::actionInfoGroup() {
     bool ok = false;
-    QString groupeId = QInputDialog::getText(0, tr("IanniX Inspector"), tr("Enter the name of the destination group:"), QLineEdit::Normal, ui->groupIdButton->text(), &ok);
+    QString groupeId = (new UiMessageBox())->getText(tr("IanniX Inspector"), tr("Enter the name of the destination group:"), ui->groupIdButton->text(), &ok);
     if(ok) {
         factory->pushSnapshot();
         foreach(NxObject *object, *(render->getSelection()))

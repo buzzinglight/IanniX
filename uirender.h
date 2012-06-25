@@ -32,6 +32,9 @@
 #ifdef FFMPEG_INSTALLED
 #include "qffmpeg/QVideoEncoder.h"
 #endif
+#ifdef SYPHON_INSTALLED
+#include "uirendersyphon.h"
+#endif
 
 enum EditingMode { EditingModeFree, EditingModePoint, EditingModeTriggers, EditingModeCircle };
 
@@ -79,6 +82,7 @@ private:
     bool texturesLoaded;
     QList<QImage> capturedFrames;
     bool capturedFramesStart;
+
 public:
     inline void startRenderTimer() { timer->start(20); }
     inline void setFollowId(qint16 _followId) { followId = _followId; }
@@ -269,6 +273,18 @@ public:
 #ifdef FFMPEG_INSTALLED
     QVideoEncoder videoEncoder;
 #endif
+
+
+#ifdef SYPHON_INSTALLED
+private:
+    bool renderSyphonTextureInit, renderSyphonInit;
+    GLuint renderSyphonTexture;
+    UiRenderSyphon renderSyphon;
+#endif
+public:
+    bool allowSyphon;
+public slots:
+    void allowSyphonServer(bool val);
 
 
 };

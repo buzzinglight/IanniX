@@ -121,6 +121,23 @@ UiView::~UiView() {
     delete ui;
 }
 
+void UiView::toggleInspector(bool val) {
+    ui->actionToggle_Inspector->setChecked(val);
+}
+void UiView::toggleTransport(bool val) {
+    ui->actionToggle_Transport->setChecked(val);
+}
+void UiView::toggleEditor(bool val) {
+    ui->actionShowEditor->setChecked(val);
+}
+void UiView::toggleTimer(bool val) {
+    ui->actionShowTimer->setChecked(val);
+}
+void UiView::toggleFullscreen(bool val) {
+    ui->actionFullscreen->setChecked(val);
+}
+
+
 void UiView::changeEvent(QEvent *e) {
     QMainWindow::changeEvent(e);
     switch (e->type()) {
@@ -166,6 +183,7 @@ void UiView::actionFullscreen() {
         ui->statusBar->setVisible(true);
         ui->menubar->setVisible(true);
         isFullScreen = false;
+        toggleFullscreen(isFullScreen);
     }
     else {
         previousPos = pos();
@@ -184,6 +202,7 @@ void UiView::actionFullscreen() {
         ui->inspector->parentWidget()->hide();
         ui->transport->parentWidget()->hide();
         isFullScreen = true;
+        toggleFullscreen(isFullScreen);
     }
     activateWindow();
     ui->render->selectionClear(true);
@@ -237,14 +256,14 @@ void UiView::actionImportBackground() {
 }
 void UiView::actionImportText() {
     QString font = "";
-    QString text = QInputDialog::getText(0, tr("Type a glyph or text…"), tr("Type a glyphe or a text to import in IanniX"), QLineEdit::Normal, "");
+    QString text = (new UiMessageBox())->getText(tr("Type a glyph or text…"), tr("Type a glyphe or a text to import in IanniX:"), "");
     if(!text.isEmpty())
         emit(actionRouteImportText(font, text));
 }
 
 void UiView::actionSnapshot() {
     bool ok = false;
-    qreal scaleFactor = QInputDialog::getDouble(0, tr("Snaptshot"), tr("Snapshot will be saved on your desktop.\nEntrer a scale factor (1=current size, 2=double size...)"), 5, 0.1, 100, 1, &ok);
+    qreal scaleFactor = (new UiMessageBox())->getDouble(tr("Snaptshot"), tr("Snapshot will be saved on your desktop.\nPlease enter a scale factor:"), QPixmap(":/infos/res_info_export.png"), 4, 0.1, 30, 0.25, 2, "times current screen size", &ok);
     if(ok)
         emit(actionRouteSnaphot(scaleFactor));
 }
@@ -300,7 +319,7 @@ void UiView::gridChange() {
     else if(action == ui->action10Milliseconds)
         actionRouteGridChange(0.01);
     else if(action == ui->actionCustomValue) {
-        qreal val = QInputDialog::getDouble(0, tr("Custom grid value"), tr("Enter the desired grid time value in seconds:"), 0.500, 0.00001, 9999999, 3, &ok);
+        qreal val = (new UiMessageBox())->getDouble(tr("Custom grid value"), tr("Enter the desired grid time value in seconds:"), 0.500, 0.001, 999, 0.1, 3, "seconds", &ok);
         if(ok) {
             ui->actionCustomValue->setText(tr("Custom value:") + QString(" %1 ").arg(val) + tr("sec"));
             actionRouteGridChange(val);
@@ -339,13 +358,13 @@ void UiView::gridOpacityChange() {
     }
 }
 
-void UiView::setAutosize(bool val) {
+void UiView::toggleAutosize(bool val) {
     ui->actionToggle_Autosize->setChecked(val);
 }
 
 void UiView::actionResize() {
     QSize currentSize = ui->render->size();
-    QStringList newSizes = QInputDialog::getText(0, tr("Resize viewport"), tr("New viewport size"), QLineEdit::Normal, tr("%1 x %2").arg(currentSize.width()).arg(currentSize.height())).split("x", QString::SkipEmptyParts);
+    QStringList newSizes = (new UiMessageBox())->getText(tr("Resize viewport"), tr("New viewport size"), tr("%1 x %2").arg(currentSize.width()).arg(currentSize.height())).split("x", QString::SkipEmptyParts);
     if(newSizes.count() == 2) {
         QSize newSize(newSizes.at(0).toUInt(), newSizes.at(1).toUInt());
         if((newSize.width() > 0) && (newSize.height() > 0))

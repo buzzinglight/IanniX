@@ -35,6 +35,12 @@ UiRender::UiRender(QWidget *parent) :
     //FollowId
     followId = 9999;
 
+#ifdef SYPHON_INSTALLED
+    renderSyphonTextureInit = false;
+    renderSyphonInit = false;
+    allowSyphon = false;
+#endif
+
     //Initialisations
     factory = 0;
     document = 0;
@@ -168,8 +174,8 @@ void UiRender::loadTexture(const QString & name, const QString & filename, const
         glBindTexture(GL_TEXTURE_2D, texture);
         QImage tex = QGLWidget::convertToGLFormat(QImage(filename));
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.width(), tex.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.bits());
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glDisable(GL_TEXTURE_2D);
 
         renderOptions->textures[name].texture = texture;
@@ -415,6 +421,26 @@ void UiRender::paintGL() {
     if(videoEncoder.isOk())
         qDebug("%d encode", videoEncoder.encodeImage(grabFrameBuffer()));
 #endif
+
+#ifdef SYPHON_INSTALLED
+    if(!renderSyphonInit) {
+        makeCurrent();
+        renderSyphon.openPort();
+        renderSyphonInit = true;
+    }
+    if(allowSyphon) {
+        glEnable(GL_TEXTURE_2D);
+        if(!renderSyphonTextureInit) {
+            glGenTextures(1, &renderSyphonTexture);
+            renderSyphonTextureInit = true;
+        }
+        glBindTexture(GL_TEXTURE_2D, renderSyphonTexture);
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
+        renderSyphon.publishTexture(renderSyphonTexture, GL_TEXTURE_2D, renderSize.width(), renderSize.height());
+        glDisable(GL_TEXTURE_2D);
+    }
+#endif
+
     if(capturedFramesStart)
         capturedFrames << grabFrameBuffer();
 }
@@ -878,7 +904,7 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
     else if((selectedHover) && (event->modifiers() & Qt::ShiftModifier) && (selectedHover->getType() == ObjectsTypeCurve)) {
         bool ok = false;
         NxCurve *curve = (NxCurve*)selectedHover;
-        quint16 nbPoints = QInputDialog::getInt(0, tr("IanniX Curve Resample"), tr("Number of points:"), 50, 0, 32767 , 1, &ok);
+        quint16 nbPoints = (new UiMessageBox())->getDouble(tr("IanniX Curve Resample"), tr("Number of points:"), QPixmap(":/infos/res_info_curve.png"), 50, 0, 32767, 1, 0, "", &ok);
         if(ok) {
             factory->pushSnapshot();
             curve->resample(nbPoints);
@@ -985,6 +1011,7 @@ void UiRender::dropEvent(QDropEvent *event) {
             else if((filename.toLower().endsWith("png")) || (filename.toLower().endsWith("jpg")) || (filename.toLower().endsWith("jpeg"))) {
                 QString item = QInputDialog::getItem(0, tr("Image drop…"), tr("Please select the desired action:"), QStringList() << tr("Use this image as a background") << tr("Try to vectorize this image automaticaly"), 0, false, &ok);
                 if(ok) {
+                    event->acceptProposedAction();
                     if(item == tr("Use this image as a background"))
                         actionImportBackground(filename);
                     else
@@ -1288,4 +1315,8 @@ void UiRender::actionArrange(quint16 type) {
                 nbObj++;
             }
     }
+}
+
+void UiRender::allowSyphonServer(bool val) {
+    allowSyphon = val;
 }

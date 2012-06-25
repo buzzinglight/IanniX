@@ -101,7 +101,12 @@ public slots:
     void actionQuit()  {
         close();
     }
-    void setAutosize(bool val);
+    void toggleAutosize(bool val);
+    void toggleInspector(bool);
+    void toggleTransport(bool);
+    void toggleEditor(bool);
+    void toggleTimer(bool);
+    void toggleFullscreen(bool);
 
 signals:
     void actionRouteToggle_Inspector();

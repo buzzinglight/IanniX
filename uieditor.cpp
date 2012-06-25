@@ -125,3 +125,7 @@ void UiEditor::changeEvent(QEvent *e) {
         break;
     }
 }
+void UiEditor::closeEvent(QCloseEvent *e) {
+    QMainWindow::closeEvent(e);
+    emit(closed(false));
+}

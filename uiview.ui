@@ -921,12 +921,18 @@ QStatusBar {
    </property>
   </action>
   <action name="actionShowEditor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="IanniX.qrc">
      <normaloff>:/actions/res_icon_editor.png</normaloff>:/actions/res_icon_editor.png</iconset>
    </property>
    <property name="text">
-    <string>Show script editor</string>
+    <string>Script editor window</string>
    </property>
    <property name="statusTip">
     <string>Click here to show the script editor window (if you're working on a script)</string>
@@ -1172,7 +1178,7 @@ QStatusBar {
     <string>Click here to save the current view in a high resolution PNG file (file will be placed on your desktop)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionResize">
@@ -1184,12 +1190,24 @@ QStatusBar {
    </property>
   </action>
   <action name="actionShowTimer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="IanniX.qrc">
      <normaloff>:/actions/res_icon_timer.png</normaloff>:/actions/res_icon_timer.png</iconset>
    </property>
    <property name="text">
-    <string>Show timer</string>
+    <string>Timer window</string>
+   </property>
+   <property name="toolTip">
+    <string>Timer window</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to show the timer window, displaying elapsed time</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>

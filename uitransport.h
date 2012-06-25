@@ -53,8 +53,10 @@ public slots:
     void actionGoto()             { emit(actionRouteGoto()); }
     void actionSetScheduler()     { emit(actionRouteSetScheduler()); }
     void actionSetOpenGL()        { emit(actionRouteSetOpenGL()); }
+    void actionSyphon(bool val)   { emit(actionRouteSyphon(val)); }
     void actionSpeedSlider();
     void actionSpeed();
+    void allowSyphonServer(bool);
 
 private:
     bool speedLock;
@@ -68,6 +70,7 @@ signals:
     void actionRouteSetOpenGL();
     void actionRouteSpeed();
     void actionRoutePresentation();
+    void actionRouteSyphon(bool);
 
 protected:
     void changeEvent(QEvent *e);

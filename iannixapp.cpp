@@ -31,7 +31,7 @@ IanniXApp::IanniXApp(int &argc, char **argv) :
     */
 
     QString appName = "IanniX ";
-    QString appVersion = "0.8.4";
+    QString appVersion = "0.8.41";
 
 #ifdef Q_OS_MAC
     appName += "Mac";

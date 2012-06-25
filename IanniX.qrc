@@ -41,4 +41,12 @@
         <file>res_icon_editor.png</file>
         <file>res_icon_timer.png</file>
     </qresource>
+    <qresource prefix="/infos">
+        <file>res_info_export.png</file>
+        <file>res_info_img.png</file>
+        <file>res_info_svg.png</file>
+        <file>res_info_txt.png</file>
+        <file>res_info_update.png</file>
+        <file>res_info_curve.png</file>
+    </qresource>
 </RCC>

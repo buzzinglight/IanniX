@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -209,10 +209,10 @@ QTabBar::tab:!selected {
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="margin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <item>
     <widget class="QSplitter" name="splitter">
@@ -226,6 +226,12 @@ QTabBar::tab:!selected {
        </property>
        <item>
         <widget class="QTabWidget" name="tabs">
+         <property name="minimumSize">
+          <size>
+           <width>775</width>
+           <height>340</height>
+          </size>
+         </property>
          <property name="currentIndex">
           <number>-1</number>
          </property>
@@ -344,12 +350,6 @@ QTabBar::tab:!selected {
       </layout>
      </widget>
      <widget class="UiHelp" name="help" native="true">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>300</height>
-       </size>
-      </property>
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
       </property>

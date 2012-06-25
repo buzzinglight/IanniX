@@ -29,6 +29,7 @@
 #include "extscriptvariableask.h"
 #include "nxobject.h"
 #include "uirenderoptions.h"
+#include "uimessagebox.h"
 
 class ExtScriptManager : public QObject, public QTreeWidgetItem {
     Q_OBJECT
@@ -82,9 +83,8 @@ public:
             setNewFilename(newFileName);
             QFile::rename(oldFileName, newFileName);
         }
-        else {
-            QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be renamed! A file with this name exists in your project."), QMessageBox::Ok);
-        }
+        else
+            (new UiMessageBox())->display(tr("Filename conflict"), tr("The file can't be renamed! A file with this name exists in your project."), QDialogButtonBox::Ok);
     }
     inline void remove() {
         QFile::remove(scriptFile.absoluteFilePath());

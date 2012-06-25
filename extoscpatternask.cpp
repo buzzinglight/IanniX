@@ -52,6 +52,8 @@ ExtOscPatternAsk::ExtOscPatternAsk(NxObjectFactoryInterface *_factory, QWidget *
     else
         ui->removeButton->setVisible(false);
 
+    ui->splitter->setSizes(QList<int>() << 350 << 0);
+
     QRect screen = QApplication::desktop()->geometry();
     move(screen.center() - rect().center());
 }

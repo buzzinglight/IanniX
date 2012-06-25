@@ -13,9 +13,14 @@ UiTimer::~UiTimer() {
     delete ui;
 }
 
-void UiTimer::resizeEvent(QResizeEvent *) {
+void UiTimer::resizeEvent(QResizeEvent *e) {
+    QWidget::resizeEvent(e);
     ui->time->setStyleSheet(QString("font-size: %1px").arg(width() / 6));
     ui->time->resize(width(), height());
+}
+void UiTimer::closeEvent(QCloseEvent *e) {
+    QWidget::closeEvent(e);
+    emit(closed(false));
 }
 
 void UiTimer::updateTransport(QString time, QString) {

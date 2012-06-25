@@ -20,6 +20,10 @@ private:
 
 protected:
     void resizeEvent(QResizeEvent *);
+    void closeEvent(QCloseEvent *);
+
+signals:
+    void closed(bool);
 
 public slots:
     void updateTransport(QString, QString);

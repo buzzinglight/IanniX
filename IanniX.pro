@@ -10,6 +10,7 @@ TARGET                   =  IanniX
 TEMPLATE                 =  app
 CONFIG                  +=  x86 x86_64
 
+#Kinect
 false {
     DEFINES             += KINECT_INSTALLED
     CONFIG              -= x86
@@ -19,6 +20,7 @@ false {
     unix:INCLUDEPATH    += /usr/local/include/libfreenect
 }
 
+#FFMPEG to record
 false {
     DEFINES             += FFMPEG_INSTALLED
     CONFIG              -= x86
@@ -31,6 +33,15 @@ false {
     unix:LIBS           +=-L/opt/local/lib -lswscale
     win32:DEFINES       += __STDC_CONSTANT_MACROS
 }
+
+#Syphon
+macx {
+    DEFINES             += SYPHON_INSTALLED
+    OBJECTIVE_SOURCES   += uirendersyphon.mm
+    HEADERS             += uirendersyphon.h
+    LIBS                += -framework Cocoa -framework Syphon
+}
+
 
 debug:DEFINES           += __RTMIDI_DEBUG__
 
@@ -69,9 +80,10 @@ SOURCES                 += iannix.cpp \
                            extoscpatterneditor.cpp \
                            nxeasing.cpp \
                            nxcpu.cpp \
-    help.cpp \
-    uihelp.cpp \
-    uitimer.cpp
+                           help.cpp \
+                           uihelp.cpp \
+                           uitimer.cpp \
+                           uimessagebox.cpp
 
 HEADERS                 += iannix.h \
                            uitransport.h \
@@ -116,9 +128,10 @@ HEADERS                 += iannix.h \
                            extoscpatterneditor.h \
                            nxeasing.h \
                            nxcpu.h \
-    help.h \
-    uihelp.h \
-    uitimer.h
+                           help.h \
+                           uihelp.h \
+                           uitimer.h \
+                           uimessagebox.h
 
 FORMS                   += uitransport.ui \
                            uirender.ui \
@@ -130,8 +143,9 @@ FORMS                   += uitransport.ui \
                            extoscpatternask.ui \
                            uieditor.ui \
                            extoscpatterneditor.ui \
-    uihelp.ui \
-    uitimer.ui
+                           uihelp.ui \
+                           uitimer.ui \
+                           uimessagebox.ui
 
 TRANSLATIONS             = iannix_fr.ts
 
@@ -166,9 +180,3 @@ macx {
 unix:SOURCES            += qextserialport/posix_qextserialport.cpp
 unix:!macx:SOURCES      += qextserialport/qextserialenumerator_unix.cpp
 
-
-false {
-    DEFINES             += SYPHON_ENABLE
-    OBJECTIVE_SOURCES   += uirendersyphon.mm
-    LIBS                += -framework Syphon
-}

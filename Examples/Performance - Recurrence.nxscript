@@ -4,6 +4,8 @@
 // A performance of Thierry Coduys
 // Performed the 8th of October 2011 in Databaz, Angouleme, France
 // ---------------------------------------------------------------
+// Linked with sound server on SuperCollider
+// ---------------------------------------------------------------
 
 //Creation of the score
 function onCreate() {

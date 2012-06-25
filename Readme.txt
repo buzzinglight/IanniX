@@ -5,6 +5,7 @@ Download Qt for your OS (http://qt.nokia.com/downloads/) and select Qt 4.7.4 for
 Linux, Mac OS X & Linux
 ------------------
 Open the project (.PRO) then build !
+Mac OS X users: download Syphon framework if you want Syphon features!
 
 Linux (if missing libraries)
 -----

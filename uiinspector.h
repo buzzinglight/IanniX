@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include "nxdocument.h"
+#include "uimessagebox.h"
 #include "uirender.h"
 #include "extoscpatternask.h"
 #include "nxobjectfactoryinterface.h"

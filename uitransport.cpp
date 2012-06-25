@@ -23,6 +23,9 @@ UiTransport::UiTransport(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UiTransport) {
     ui->setupUi(this);
+#ifndef SYPHON_INSTALLED
+    ui->syphon->setVisible(false);
+#endif
     speedLock = false;
 }
 
@@ -95,6 +98,9 @@ void UiTransport::actionSpeed() {
     ui->speedSlider->setValue(getSpeed()*100.0F);
     speedLock = false;
     emit(actionRouteSpeed());
+}
+void UiTransport::allowSyphonServer(bool val) {
+    ui->syphon->setChecked(val);
 }
 
 void UiTransport::updateTransport(QString time, QString lastMessage) {

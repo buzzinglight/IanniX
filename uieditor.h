@@ -42,6 +42,10 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
+    void closeEvent(QCloseEvent *);
+
+signals:
+    void closed(bool);
 
 private:
     QFileInfo scriptFile;

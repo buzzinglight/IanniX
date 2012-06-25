@@ -32,6 +32,7 @@
 #include <QHostInfo>
 #include <QDomDocument>
 #include <QFileOpenEvent>
+#include "uimessagebox.h"
 #include "nxcpu.h"
 #include <time.h>
 #include "nxobjectfactoryinterface.h"
@@ -313,6 +314,7 @@ public slots:
     void actionUnmuteObjects();
     void actionUnsoloGroups();
     void actionUnsoloObjects();
+    void allowSyphonServer(bool);
 public slots:
     void logOscSend(const QString & message);
     void logOscReceive(const QString & message);

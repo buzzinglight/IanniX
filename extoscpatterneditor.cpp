@@ -48,9 +48,16 @@ ExtOscPatternEditor::ExtOscPatternEditor(NxObjectFactoryInterface *_factory, QWi
         ui->addressOscCombo->addItem(info.keyword + QString(" - ") + info.title);
     foreach(const HelpInfo &info, Help::categories["addressMidi"].infos)
         ui->addressMidiCombo->addItem(info.keyword + QString(" - ") + info.title);
-    foreach(const HelpInfo &info, Help::categories["values"].infos)
-        for(quint16 treeIndex = 0 ; treeIndex < trees.count() ; treeIndex++)
+    for(quint16 treeIndex = 0 ; treeIndex < trees.count() ; treeIndex++) {
+        QStringList completerHelp;
+        foreach(const HelpInfo &info, Help::categories["values"].infos) {
             trees.at(treeIndex).first->addItem(info.keyword + QString(" - ") + info.title);
+            completerHelp << info.keyword + QString(" - ") + info.title;
+        }
+        QCompleter *completer = new QCompleter(completerHelp, this);
+        completer->setCaseSensitivity(Qt::CaseInsensitive);
+        trees.at(treeIndex).first->setCompleter(completer);
+    }
 }
 
 ExtOscPatternEditor::~ExtOscPatternEditor() {

@@ -81,7 +81,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteAbout()), SLOT(actionLogo()));
     connect(view, SIGNAL(actionRouteImportSVG(QString)),            SLOT(actionImportSVG(QString)));
     connect(view, SIGNAL(actionRouteImportImage(QString)),          SLOT(actionImportImage(QString)));
-    connect(view, SIGNAL(actionRouteImportBackground(QString)),     SLOT(actionImportBackground(QString)));
+    connect(view, SIGNAL(actionRouteImportBackground(QString)),     SLOT(actionImportBackground(QString)), Qt::QueuedConnection);
     connect(view, SIGNAL(actionRouteImportText(QString,QString)),   SLOT(actionImportText(QString,QString)));
     connect(view, SIGNAL(actionRouteSelectionModeChange(bool,bool,bool)), SLOT(actionSelectionModeChange(bool,bool,bool)));
     connect(view, SIGNAL(actionRoutePasteScript()), SLOT(actionPasteScript()));
@@ -95,10 +95,12 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(transport, SIGNAL(actionRouteSetOpenGL()), SLOT(actionSetOpenGL()));
     connect(transport, SIGNAL(actionRouteSetScheduler()), SLOT(actionSetScheduler()));
     connect(transport, SIGNAL(actionRouteSpeed()), SLOT(actionSpeed()));
+    connect(transport, SIGNAL(actionRouteSyphon(bool)), SLOT(allowSyphonServer(bool)));
     connect(this, SIGNAL(updateTransport(QString,QString)), transport, SLOT(updateTransport(QString,QString)));
     //Timer
     uitimer = new UiTimer(0);
     connect(this, SIGNAL(updateTransport(QString,QString)), uitimer, SLOT(updateTransport(QString,QString)));
+    connect(uitimer, SIGNAL(closed(bool)), view, SLOT(toggleTimer(bool)));
 
     //Inspector
     inspector = view->getInspector();
@@ -166,6 +168,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 
     //Editor
     editor = new UiEditor(this, 0);
+    connect(editor, SIGNAL(closed(bool)), view, SLOT(toggleEditor(bool)));
 
     //Other connections
     actionViewChange();
@@ -305,7 +308,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     view->setColorTheme(render->getColorTheme());
     inspector->setViewCurveOpacityCheck(settings.value("opacityCurve").toBool());
     render->setTriggerAutosize(settings.value("autoresize").toBool());
-    view->setAutosize(settings.value("autoresize").toBool());
+    view->toggleAutosize(settings.value("autoresize").toBool());
 
     acceptMidiSyncClock = settings.value("acceptMidiSyncClock").toBool();
     inspector->setMidiSyncClock(settings.value("acceptMidiSyncClock").toBool());
@@ -328,7 +331,6 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("id", qrand());
         checkForUpdates();
     }
-
 
     //Files
     inspector->getProjectFiles()->clear();
@@ -424,6 +426,8 @@ void IanniX::readyToStart() {
     if(!hasStarted) {
         hasStarted = true;
         qDebug("Ready to start!");
+        //allowSyphonServer(false);
+
         //Projet par défault
         loadProject(baseDocumentDir + "root.root");
         actionFast_rewind();
@@ -436,7 +440,7 @@ void IanniX::readyToStart() {
 void IanniX::actionImportSVG(const QString &filename) {
     qreal scale = 0.01;
     bool ok = false;
-    scale = QInputDialog::getDouble(0, tr("SVG Import"), tr("SVG coordinates system & IanniX coordinates system are differents.\nYou need to scale the SVG to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 3, &ok);
+    scale = (new UiMessageBox())->getDouble(tr("SVG Import"), tr("Coordinates systems are differents.\nPlease enter a scale factor: "), QPixmap(":/infos/res_info_svg.png"), scale, 0.001, 10., 0.1, 3, "hundred of pixels/second", &ok);
     if(ok) {
         QDomDocument xmlDoc;
         QFile svgFile(filename);
@@ -466,7 +470,7 @@ void IanniX::actionImportSVG(const QDomElement &xmlElement, qreal scale) {
 void IanniX::actionImportImage(const QString &filename) {
     qreal scale = 0.01;
     bool ok = false;
-    scale = QInputDialog::getDouble(0, tr("Image import"), tr("Image coordinates system & IanniX coordinates system are differents.\nYou need to scale the image to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 3, &ok);
+    scale = (new UiMessageBox())->getDouble(tr("Image import"), tr("Coordinates systems are differents.\nPlease enter a scale factor: "), QPixmap(":/infos/res_info_img.png"), scale, 0.001, 10., 0.1, 3, "hundred of pixels/second", &ok);
     if(ok) {
         execute(COMMAND_ADD + " curve auto");
         execute(COMMAND_CURVE_IMG + " current " + QString::number(scale) + " " + filename);
@@ -477,7 +481,7 @@ void IanniX::actionImportBackground(const QString &filename) {
     if(!pixmap.isNull()) {
         qreal scale = 100*qMin(8 / (qreal)pixmap.width(), 8 / (qreal)pixmap.height());
         bool ok = false;
-        scale = QInputDialog::getDouble(0, tr("Image import"), tr("Image coordinates system & IanniX coordinates system are differents.\nYou need to scale the image to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 3, &ok);
+        scale = (new UiMessageBox())->getDouble(tr("Image import"), tr("Coordinates systems are differents.\nPlease enter a scale factor: "), QPixmap(":/infos/res_info_img.png"), scale, 0.001, 10., 0.1, 3, "hundred of pixels/second", &ok);
         if(ok) {
             scale /= 100.;
             execute(COMMAND_TEXTURE + " background " + QString("%1 %2 %3 %4").arg(-scale * pixmap.width() / 2).arg(scale * pixmap.height() / 2).arg(scale * pixmap.width() / 2).arg(-scale * pixmap.height() / 2) + " " + filename);
@@ -507,7 +511,7 @@ void IanniX::actionImportText(const QString &font, const QString &text) {
 
     fontReal = fontReal.replace(" ", "_");
     ok = false;
-    scale = QInputDialog::getDouble(0, tr("Text import"), tr("Text coordinates system & IanniX coordinates system are differents.\nYou need to scale the text to fit in IanniX.\n\nPlease enter a scale value:"), scale, 0.001, 10., 3, &ok);
+    scale = (new UiMessageBox())->getDouble(tr("Text import"), tr("Coordinates systems are differents.\nPlease enter a scale factor: "), QPixmap(":/infos/res_info_txt.png"), scale, 0.001, 10., 0.1, 3, "hundred of pixels/second", &ok);
     if(ok) {
         execute(COMMAND_ADD + " curve auto");
         execute(COMMAND_CURVE_TXT + " current " + QString::number(scale) + " " + fontReal + " " + text);
@@ -728,49 +732,49 @@ void IanniX::checkForUpdates() {
     updateManager->get(QNetworkRequest(QUrl(url, QUrl::TolerantMode)));
 }
 void IanniX::checkForUpdatesFinished(QNetworkReply *reply) {
-    if(reply->error() != QNetworkReply::NoError) {
+    if(reply->error() != QNetworkReply::NoError)
         qDebug("Network error. %s", qPrintable(reply->errorString()));
-    }
     else {
         QSettings().setValue("lastUpdate", QDateTime::currentDateTime());
         QString info = reply->readAll().trimmed();
         if(info.length() > 0) {
-            QMessageBox message;
-            message.setWindowTitle(tr("IanniX Update Center"));
-            message.setText(tr("An update has been detected on the server."));
-            message.setInformativeText(tr("Would you like to update IanniX with the new version ?"));
-            message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-            message.setDefaultButton(QMessageBox::Yes);
-            message.setDetailedText(info);
-            int rep = message.exec();
-            if(rep == QMessageBox::Yes)
+            int rep = (new UiMessageBox())->display(tr("IanniX Update Center"), tr("A new version of IanniX is available"), info, tr("Would you like to update IanniX with the new version ?"), QPixmap(":/infos/res_info_update.png"), QDialogButtonBox::Yes | QDialogButtonBox::No);
+            if(rep)
                 QDesktopServices::openUrl(QUrl("http://www.iannix.org", QUrl::TolerantMode));
         }
     }
 }
 
 void IanniX::actionToggle_Inspector() {
-    if(inspector->isVisible())
+    if(inspector->isVisible()) {
         inspector->parentWidget()->hide();
-    else
+        view->toggleInspector(false);
+    }
+    else {
         inspector->parentWidget()->show();
+        view->toggleInspector(true);
+    }
     view->activateWindow();;
 }
 void IanniX::actionToggle_Transport() {
-    if(transport->isVisible())
+    if(transport->isVisible()) {
         transport->parentWidget()->hide();
-    else
+        view->toggleTransport(false);
+    }
+    else {
         transport->parentWidget()->show();
+        view->toggleTransport(true);
+    }
     view->activateWindow();
 }
 void IanniX::actionToggle_Autosize() {
     if(render->getTriggerAutosize()) {
         render->setTriggerAutosize(false);
-        view->setAutosize(false);
+        view->toggleAutosize(false);
     }
     else {
         render->setTriggerAutosize(true);
-        view->setAutosize(true);
+        view->toggleAutosize(true);
     }
 }
 
@@ -953,7 +957,7 @@ void IanniX::actionChangeID(quint16 idOld, quint16 idNew) {   ////CG////
 void IanniX::actionNew() {
     if(projectScore) {
         bool ok;
-        QString text = QInputDialog::getText(0, tr("New score"), tr("Enter the name of your new score:"), QLineEdit::Normal, "New Document " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
+        QString text = (new UiMessageBox())->getText(tr("New score"), tr("Enter the name of your new score:"), "New Document " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
         if((ok) && (!text.isEmpty())) {
             QFileInfo newScoreDestination = QFileInfo(scriptDir.absoluteFilePath(text +  ".nxscore"));
             if(!newScoreDestination.exists()) {
@@ -963,7 +967,7 @@ void IanniX::actionNew() {
                 actionProjectFiles();
             }
             else
-                QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QMessageBox::Ok);
+                (new UiMessageBox())->display(tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QDialogButtonBox::Ok);
         }
     }
 }
@@ -971,7 +975,7 @@ void IanniX::actionNew() {
 void IanniX::actionNewScript() {
     if(projectScore) {
         bool ok;
-        QString text = QInputDialog::getText(0, tr("New script"), tr("Enter the name of your new script:"), QLineEdit::Normal, "New Script " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
+        QString text = (new UiMessageBox())->getText(tr("New script"), tr("Enter the name of your new script:"), "New Script " + QDateTime::currentDateTime().toString("MMddhhmmss"), &ok);
         if((ok) && (!text.isEmpty())) {
             QFileInfo newScriptDestination = QFileInfo(scriptDir.absoluteFilePath(text +  ".nxscript"));
             if(!newScriptDestination.exists()) {
@@ -981,7 +985,7 @@ void IanniX::actionNewScript() {
                 actionProjectScripts();
             }
             else
-                QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QMessageBox::Ok);
+                (new UiMessageBox())->display(tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QDialogButtonBox::Ok);
         }
     }
 }
@@ -1002,46 +1006,33 @@ void IanniX::actionSave_as() {
 
 }
 void IanniX::actionRename() {
-    //if(currentDocument) {
-    //    bool ok;
-    //    QString text = QInputDialog::getText(0, tr("File rename"), tr("Enter the desired name of your score:"), QLineEdit::Normal, currentDocument->getScriptFile().baseName(), &ok);
-    //    if((ok) && (!text.isEmpty()))
-    //        currentDocument->rename(currentDocument->getScriptFile().absoluteFilePath().replace(currentDocument->getScriptFile().baseName()+".", text+"."));
-    //}
     if(currentDocument) {
         bool ok;
         ExtScriptManager *fileList = (ExtScriptManager*)inspector->getProjectFiles()->currentItem();
-        QString text = QInputDialog::getText(0, tr("File rename"), tr("New name of script:"), QLineEdit::Normal, fileList->getScriptFile().baseName(), &ok);
+        QString text = (new UiMessageBox())->getText(tr("File rename"), tr("New name of script:"), fileList->getScriptFile().baseName(), &ok);
         QString f = fileList->getScriptFile().absoluteFilePath().replace(fileList->getScriptFile().baseName()+".", text+".");
         if((ok) && (!f.isEmpty())) {
             if(!QFile::exists(f)) {
                 QFile::rename(fileList->getScriptFile().absoluteFilePath(), f);
             }
             else {
-                QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be renamed! A file with this name exists in your project."), QMessageBox::Ok);
+                (new UiMessageBox())->display(tr("Filename conflict"), tr("The file can't be renamed! A file with this name exists in your project."), QDialogButtonBox::Ok);
             }
         }
     }
 }
 void IanniX::actionRemove() {
-    //if(currentDocument) {
-    //   int rep = QMessageBox::question(0, tr("File remove"), tr("The file will be removed from your disk. Are you sure?"), QMessageBox::Yes | QMessageBox::No);
-    //   if(rep == QMessageBox::Yes)
-    //      currentDocument->remove();
-    //}
     ExtScriptManager *fileList = (ExtScriptManager*)inspector->getProjectFiles()->currentItem();
     if(currentDocument) {
-        int rep = QMessageBox::question(0, tr("File remove"), tr("The file will be removed from your disk. Are you sure?"), QMessageBox::Yes | QMessageBox::No);
-
-        if(rep == QMessageBox::Yes) {
+        int rep = (new UiMessageBox())->display(tr("File remove"), tr("The file will be removed from your disk. Are you sure?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
+        if(rep)
             QFile::remove(fileList->getScriptFile().absoluteFilePath());
-        }
     }
 }
 void IanniX::actionDuplicateScore() {
     if(currentDocument) {
         bool ok;
-        QString text = QInputDialog::getText(0, tr("File duplication"), tr("Enter the desired name of the duplicated score"), QLineEdit::Normal, currentDocument->getScriptFile().baseName(), &ok);
+        QString text = (new UiMessageBox())->getText(tr("File duplication"), tr("Enter the desired name of the duplicated score"), currentDocument->getScriptFile().baseName(), &ok);
         if((ok) && (!text.isEmpty())) {
             currentDocument->setNewFilename(currentDocument->getScriptFile().absoluteFilePath().replace(currentDocument->getScriptFile().baseName()+".", text+"."));
             currentDocument->save(render->getRenderOptions());
@@ -1121,13 +1112,13 @@ void IanniX::actionProjectFilesContext(const QPoint & point) {   ///CG///
                 else if (ret == duplicateFile) {
                     if(currentDocument) {
                         bool ok;
-                        QString text = QInputDialog::getText(0, tr("File duplication"), tr("Name of duplicate script:"), QLineEdit::Normal, fileList->getScriptFile().baseName(), &ok);
+                        QString text = (new UiMessageBox())->getText(tr("File duplication"), tr("Name of duplicate script:"), fileList->getScriptFile().baseName(), &ok);
                         QString f = fileList->getScriptFile().absoluteFilePath().replace(fileList->getScriptFile().baseName()+".", text+".");
                         if((ok) && (!f.isEmpty())) {
                             if(!QFile::exists(f))
                                 QFile::copy(fileList->getScriptFile().absoluteFilePath(), f);
                             else
-                                QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QMessageBox::Ok);
+                                (new UiMessageBox())->display(tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QDialogButtonBox::Ok);
                         }
                     }
                 }
@@ -1182,39 +1173,34 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
                 else if (ret == duplicateFile) {
                     if(currentDocument) {
                         bool ok;
-                        QString text = QInputDialog::getText(0, tr("File duplication"), tr("Name of duplicate script:"), QLineEdit::Normal, scriptList->getScriptFile().baseName(), &ok);
+                        QString text = (new UiMessageBox())->getText(tr("File duplication"), tr("Name of duplicate script:"), scriptList->getScriptFile().baseName(), &ok);
                         QString f = scriptList->getScriptFile().absoluteFilePath().replace(scriptList->getScriptFile().baseName()+".", text+".");
                         if((ok) && (!f.isEmpty())) {
-                            if(!QFile::exists(f)) {
+                            if(!QFile::exists(f))
                                 QFile::copy(scriptList->getScriptFile().absoluteFilePath(), f);
-                            }
-                            else {
-                                QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QMessageBox::Ok);
-                            }
+                            else
+                                (new UiMessageBox())->display(tr("Filename conflict"), tr("The file can't be created! A file with this name exists in your project."), QDialogButtonBox::Ok);
                         }
                     }
                 }
                 else if (ret == renameFile) {
                     if(currentDocument) {
                         bool ok;
-                        QString text = QInputDialog::getText(0, tr("File rename"), tr("New name of script:"), QLineEdit::Normal, scriptList->getScriptFile().baseName(), &ok);
+                        QString text = (new UiMessageBox())->getText(tr("File rename"), tr("New name of script:"), scriptList->getScriptFile().baseName(), &ok);
                         QString f = scriptList->getScriptFile().absoluteFilePath().replace(scriptList->getScriptFile().baseName()+".", text+".");
                         if((ok) && (!f.isEmpty())) {
-                            if(!QFile::exists(f)) {
+                            if(!QFile::exists(f))
                                 QFile::rename(scriptList->getScriptFile().absoluteFilePath(), f);
-                            }
-                            else {
-                                QMessageBox::information(0, tr("Filename conflict"), tr("The file can't be renamed! A file with this name exists in your project."), QMessageBox::Ok);
-                            }
+                            else
+                                (new UiMessageBox())->display(tr("Filename conflict"), tr("The file can't be renamed! A file with this name exists in your project."), QDialogButtonBox::Ok);
                         }
                     }
                 }
                 else if (ret == removeFile) {
                     if(currentDocument) {
-                        int rep = QMessageBox::question(0, tr("File remove"), tr("The file will be removed from your disk. Are you sure?"), QMessageBox::Yes | QMessageBox::No);
-                        if(rep == QMessageBox::Yes) {
+                        int rep = (new UiMessageBox())->display(tr("File remove"), tr("The file will be removed from your disk. Are you sure?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
+                        if(rep)
                             QFile::remove(scriptList->getScriptFile().absoluteFilePath());
-                        }
                     }
                 }
                 QDir examplesDir("./Examples/");
@@ -1549,7 +1535,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if((commande == COMMAND_AUTOSIZE) && (arguments.count() >= 2)) {
                 render->setTriggerAutosize(arguments.at(1).toUInt());
-                view->setAutosize(arguments.at(1).toUInt());
+                view->toggleAutosize(arguments.at(1).toUInt());
             }
 
             else if(arguments.count() >= 2) {
@@ -2074,19 +2060,25 @@ void IanniX::actionGridOpacityChange(qreal val) {
     }
 }
 void IanniX::actionShowEditor() {
-    if(editor->isVisible())
+    if(editor->isVisible()) {
         editor->close();
+        view->toggleEditor(false);
+    }
     else {
         editor->show();
         editor->raise();
+        view->toggleEditor(true);
     }
 }
 void IanniX::actionShowTimer() {
-    if(uitimer->isVisible())
+    if(uitimer->isVisible()) {
         uitimer->close();
+        view->toggleTimer(false);
+    }
     else {
         uitimer->show();
         view->raise();
+        view->toggleTimer(true);
     }
 }
 void IanniX::actionReloadScript() {
@@ -2155,6 +2147,13 @@ void IanniX::actionUnsoloObjects() {
             }
         }
     }
+}
+
+void IanniX::allowSyphonServer(bool val) {
+#ifdef SYPHON_INSTALLED
+        render->allowSyphonServer(val);
+        transport->allowSyphonServer(val);
+#endif
 }
 
 void IanniX::setIpOut(const QString & ip) {

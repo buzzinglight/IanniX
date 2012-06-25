@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UiMessageBox</class>
+ <widget class="QDialog" name="UiMessageBox">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>526</width>
+    <height>191</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>IanniX</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+	font: 12px &quot;Arial&quot;;
+}
+QLabel {
+	font: bold;
+}
+
+QLabel#separator1, QLabel#separator2, QLabel#separator3, QLabel#separator4 {
+	border-top: 1px solid rgb(44, 167, 218);
+}
+
+QFrame#globalFrame {
+	border: 0px solid transparent;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
+}
+QScrollArea#scrollArea, QWidget#scrollArea2 {
+	border: 0px solid transparent;
+	background: transparent;
+}
+
+QWidget#tabProject, QWidget#tabView, QWidget#tabInfo, QWidget#tabControlCenter, QWidget#tabOSC {
+	background-color: transparent;
+}
+QTabWidget::pane {
+	border: 1px solid rgba(255, 255, 255, 32);
+}
+
+QLabel, QCheckBox {
+	color: rgb(220, 220, 220);
+}
+
+
+
+QLineEdit {
+	background: transparent;
+	border: 0px solid transparent;
+}
+
+QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit {
+	border: 1px solid rgb(60, 60, 60);
+	border-radius: 4px;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 255), stop:1 rgba(61, 61, 61, 255));
+	min-width: 70px;
+	min-height: 30px;
+
+}
+QPushButton {
+	margin-left: 5px;
+	color: white;
+}
+QPushButton:hover {
+	border: 1px solid rgb(0, 187, 255);
+	background-color: rgb(0, 137, 241, 128);
+}
+QPushButton::checked, QPushButton:pressed {
+	background-color: rgb(0, 187, 255);
+	color: white;
+}
+
+
+QCheckBox {
+	spacing: 5px;
+}
+QCheckBox::indicator {
+	width: 11px;
+	height: 11px;
+	border: 1px solid rgb(60, 60, 60);
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
+}
+QCheckBox::indicator:checked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+}
+
+QDoubleSpinBox, QSpinBox, QLineEdit  {
+	padding: 2px;
+	padding-top: 0px;
+	color: white;
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+	width: 5px;
+    image: url(:/icons/res_icon_plus.png);
+	padding: 2px;
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 64);
+}
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+	width: 5px;
+    image: url(:/icons/res_icon_minus.png);
+	padding: 2px;
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 64);
+}
+
+
+
+QTreeWidget {
+	alternate-background-color: rgb(79, 79, 81);
+	color: white;
+	border: 0px solid transparent;
+	gridline-color: rgb(150, 152, 137);
+	selection-background-color: rgb(0, 187, 255);
+	background: transparent;
+	background-color: rgb(63, 64, 64);
+}
+QTreeWidget::item {
+}
+QHeaderView {
+	background: transparent;
+	border: 0px solid transparent;
+	color: rgb(203, 203, 203);
+	min-height: 12px;
+}
+QHeaderView::section {
+	background: rgba(255, 255, 255, 64);
+	padding-left: 4px;
+	border: 0px solid transparent;
+	border-top-left-radius:  6px;
+	border-top-right-radius: 6px;
+	font: bold;
+}
+
+QTreeView::indicator {
+	border: 1px solid rgb(60, 60, 60);
+	width: 11px;
+	height: 11px;
+}
+QTreeView::indicator:unchecked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
+}
+QTreeView::indicator:checked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+}
+
+
+
+QScrollBar:vertical, QScrollBar:horizontal {
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 32);
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+	border: 0px solid transparent;
+	background: rgb(161, 161, 161);
+	border-radius: 3px;
+}
+QScrollBar:vertical {						width: 8px;					}
+QScrollBar:horizontal {					height: 8px;				}
+QScrollBar::handle:vertical {			min-height: 8px;		}
+QScrollBar::handle:horizontal {	min-width: 8px;			}
+QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
+	border: 0px solid transparent;
+	background: transparent;
+	width: 1px;
+	height: 1px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: none;
+}
+
+
+QSplitter::handle {
+	background: rgb(255, 255, 255, 30);
+}
+QSplitter::handle:pressed {
+	background: rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 4px; }
+QSplitter::handle:vertical     		{	height: 4px; }
+
+
+QComboBox {
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 200);
+	color: black;
+	margin-left: 4px;
+	padding-top: -4px;
+	border-radius: 4px;
+}
+QComboBox {
+	selection-color: black;
+	padding-top: 0px;
+	padding-left: 4px;
+}
+QComboBox::drop-down {
+	width: 10px;
+	padding: 4px;
+	border: 0px solid transparent;
+	background: rgb(0, 187, 255);
+    image: url(:/icons/res_icon_down.png);
+}
+
+QPlainTextEdit {
+	background-color: rgb(242, 241, 237);
+}
+
+
+QTabWidget::tab-bar {
+	left: 5px;
+}
+QTabWidget {
+	border: 0px transparent;
+}
+QTabBar::tab {
+	background-color: rgba(255, 255, 255, 100);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+	font: bold;
+	min-height: 25px;
+	margin-left: 2px;
+	padding-left: 5px;
+	padding-right: 5px;
+	color: rgb(220, 220, 220);
+}
+QTabBar::tab:selected {
+	background-color: rgb(242, 241, 237);
+	color: black;
+}
+QTabBar::tab:hover {
+	color: black;
+}
+QTabBar::tab:!selected {
+     margin-top: 2px;
+}
+
+
+</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="globalFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <property name="spacing">
+       <number>15</number>
+      </property>
+      <property name="margin">
+       <number>15</number>
+      </property>
+      <item>
+       <widget class="QStackedWidget" name="choices">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="page">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="spinLabel">
+            <property name="text">
+             <string>ENTER A VALUE FOR</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spinSpin">
+            <property name="minimumSize">
+             <size>
+              <width>76</width>
+              <height>34</height>
+             </size>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_3">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="spinpPicture">
+            <property name="text">
+             <string>PICTURE</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <property name="spacing">
+             <number>15</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="spinpLabel">
+              <property name="text">
+               <string>ENTER A VALUE FOR</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="spinpSpin">
+              <property name="minimumSize">
+               <size>
+                <width>76</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_2">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="messageLabel">
+            <property name="text">
+             <string>ENTER A VALUE FOR</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_4">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="textLabel">
+            <property name="text">
+             <string>ENTER A VALUE FOR</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="textEdit">
+            <property name="minimumSize">
+             <size>
+              <width>76</width>
+              <height>34</height>
+             </size>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_5">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="updatePicture">
+            <property name="text">
+             <string>PICTURE</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="updateLabel">
+            <property name="text">
+             <string>ENTER A VALUE FOR</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPlainTextEdit" name="updatePlain">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="updateLabel2">
+            <property name="text">
+             <string>ENTER A VALUE FOR</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDialogButtonBox" name="messageButtons">
+        <property name="standardButtons">
+         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="IanniX.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>messageButtons</sender>
+   <signal>accepted()</signal>
+   <receiver>UiMessageBox</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>104</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-7</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>messageButtons</sender>
+   <signal>rejected()</signal>
+   <receiver>UiMessageBox</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>90</x>
+     <y>110</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>23</x>
+     <y>253</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
