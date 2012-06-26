@@ -1,0 +1,153 @@
+* {
+	font-weight:normal;	
+}
+
+/* BALISES STANDARD */
+body {
+	font-style: normal;
+	line-height: normal;
+	margin: 0px;
+	padding: 0px;
+	background-color: #484540;
+}
+a {
+	color:#FF5800;
+}
+
+a:hover{
+	text-decoration:underline;
+}
+
+/* HEADER & STRUCTURE */
+body {
+	font-family: 'Museo500', 'Helvetica', 'Arial';
+	font-size:10px;
+	background: #F5F5F5;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+}
+
+.transport {
+	position: fixed;
+	padding: 10px;
+
+	z-index: 100;
+
+	background-image: linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -o-linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -moz-linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -webkit-linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -ms-linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, #141414),
+		color-stop(1, #4A4A4A)
+	);
+}
+
+.transportTime {
+	font-family: "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", "Lucida";
+	font-size:40px;
+	color:#00BBFF;
+
+	float: left;
+	line-height: 40px;
+
+	height: 40px;
+
+	padding-left: 30px;
+	padding-right: 10px;
+
+	width: 236px;
+}
+
+.transportButton {
+	font-size:30px;
+	text-align: center;
+
+	cursor:pointer;
+
+	width: 40px;
+	height: 40px;
+
+	float: left;
+	line-height: 40px;
+
+	margin-right: 10px;
+
+	color: #FFFFFF;
+
+	border: 1px solid;
+	border-color: #3C3C3C;
+
+	-moz-border-radius: 20px; 
+	-webkit-border-radius: 20px;
+
+	background-image: linear-gradient(bottom, #3B3B3B 0%, #636466 100%);
+	background-image: -o-linear-gradient(bottom, #3B3B3B 0%, #636466 100%);
+	background-image: -moz-linear-gradient(bottom, #3B3B3B 0%, #636466 100%);
+	background-image: -webkit-linear-gradient(bottom, #3B3B3B 0%, #636466 100%);
+	background-image: -ms-linear-gradient(bottom, #3B3B3B 0%, #636466 100%);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, #3B3B3B),
+		color-stop(1, #636466)
+	);
+}
+.transportButton.checked {
+	background-image: linear-gradient(bottom, #00BBFF 0%, #00BBFF 100%);
+	background-image: -o-linear-gradient(bottom, #00BBFF 0%, #00BBFF 100%);
+	background-image: -moz-linear-gradient(bottom, #00BBFF 0%, #00BBFF 100%);
+	background-image: -webkit-linear-gradient(bottom, #00BBFF 0%, #00BBFF 100%);
+	background-image: -ms-linear-gradient(bottom, #00BBFF 0%, #00BBFF 100%);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, #00BBFF),
+		color-stop(1, #00BBFF)
+	);
+}
+
+.screenshot {
+	top: 0px;
+	left: 0px;
+	position: fixed;
+	border: 1px solid;
+	border-color: #3C3C3C;
+}
+
+.clock {
+	position: fixed;
+
+	font-family: "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", "Lucida";
+	font-size:40px;
+	text-align: center;
+	color:#FF7300;
+
+	padding: 11px;
+	left: 545px;
+	line-height: 40px;
+	width: 190px;
+	height: 40px;
+
+	background-image: linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -o-linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -moz-linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -webkit-linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -ms-linear-gradient(bottom, #141414 0%, #4A4A4A 100%);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, #141414),
+		color-stop(1, #4A4A4A)
+	);
+
+	z-index: 100;
+}

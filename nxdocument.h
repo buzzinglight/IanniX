@@ -77,6 +77,7 @@ public:
 public:
     QMap<QString, NxGroup*> groups;
     QHash<quint16, NxObject*> objects;
+    QHash<QString,QString> registredTextures, registredColors;
 
 private:
     NxObject *currentObject;

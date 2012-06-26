@@ -47,6 +47,7 @@ public:
         allowSelectionCursors = true;
         allowSelectionCurves = true;
         allowSelectionTriggers = true;
+        triggerAutosize = false;
         paintZStart = 0;
         paintZEnd = 0;
         objectSize = 1;
@@ -63,7 +64,7 @@ public:
     QGLWidget *render;
     QFont renderFont;
     qreal timeFactor;
-    bool allowSelection;
+    bool allowSelection, triggerAutosize;
     bool allowSelectionCursors, allowSelectionCurves, allowSelectionTriggers;
     bool forceLists, forceTexture, forceFrustumInInit;
 

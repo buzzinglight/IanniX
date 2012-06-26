@@ -194,7 +194,7 @@ void UiInspector::actionInfo() {
                 else if(ui->posSpin == sender())
                     cursor->setTimeLocal(ui->posSpin->value());
                 else if(ui->patternLine == sender())
-                    cursor->setStart(ui->patternLine->text());
+                    cursor->setStart(ui->patternLine->currentText().split(" - ").at(0));
                 else if(ui->easingCombo == sender())
                     cursor->setEasing(ui->easingCombo->currentIndex());
                 else if(ui->speedSpin == sender())
@@ -486,7 +486,7 @@ void UiInspector::refresh() {
 
                 change(indexObject, ui->widthSpin, cursor->getWidth(), prevCursor->getWidth());
                 change(indexObject, ui->depthSpin, cursor->getDepth(), prevCursor->getDepth());
-                change(indexObject, ui->patternLine, cursor->getStart(), prevCursor->getStart());
+                change(indexObject, ui->patternLine, cursor->getStart(), prevCursor->getStart(), false);
                 change(indexObject, ui->easingCombo, cursor->getEasing(), prevCursor->getEasing());
                 change(indexObject, ui->speedSpin, cursor->getTimeFactor(), prevCursor->getTimeFactor());
                 change(indexObject, ui->speedFSpin, cursor->getTimeFactorF(), prevCursor->getTimeFactorF());
@@ -670,18 +670,24 @@ void UiInspector::change(quint16 indexObject, QLineEdit *spin, const QString & v
         spin->setStyleSheet("QCheckBox::indicator { background-color: rgba(50, 237, 255, 128); }");
     }
 }
-void UiInspector::change(quint16 indexObject, QComboBox *spin, const QString & val, const QString & prevVal) {
+void UiInspector::change(quint16 indexObject, QComboBox *spin, const QString & val, const QString & prevVal, bool isColor) {
     qint16 indexVal = spin->findText(val);
-    if(indexVal < 0)
-        colorComboAdd(spin, QStringList() << val);
+    if(isColor) {
+        if(indexVal < 0)
+            colorComboAdd(spin, QStringList() << val);
+    }
+    else
+        spin->setEditText(val);
 
     if(indexObject == 0) {
         spin->setStyleSheet("");
-        spin->setCurrentIndex(spin->findText(val));
+        if(isColor) spin->setCurrentIndex(spin->findText(val));
+        else        spin->setEditText(val);
     }
     else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
         spin->setStyleSheet("");
-        spin->setCurrentIndex(-1);
+        if(isColor) spin->setCurrentIndex(-1);
+        //else        spin->setEditText("");
     }
 }
 void UiInspector::change(quint16 indexObject, QComboBox *spin, quint16 val, quint16 prevVal) {

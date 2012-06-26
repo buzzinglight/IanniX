@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
-    <height>685</height>
+    <width>376</width>
+    <height>645</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -254,7 +254,7 @@ QTabBar::tab:!selected {
        <number>0</number>
       </property>
       <property name="margin">
-       <number>6</number>
+       <number>3</number>
       </property>
       <item>
        <widget class="QTabWidget" name="tab">
@@ -279,17 +279,11 @@ QTabBar::tab:!selected {
           <string>FILES</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0">
-          <property name="leftMargin">
-           <number>12</number>
+          <property name="spacing">
+           <number>0</number>
           </property>
-          <property name="topMargin">
+          <property name="margin">
            <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>12</number>
-          </property>
-          <property name="bottomMargin">
-           <number>12</number>
           </property>
           <item>
            <widget class="QSplitter" name="splitter_2">
@@ -305,6 +299,9 @@ QTabBar::tab:!selected {
                <widget class="QLabel" name="viewGroupLabel_3">
                 <property name="text">
                  <string>SCORES</string>
+                </property>
+                <property name="buddy">
+                 <cstring>projectFiles</cstring>
                 </property>
                </widget>
               </item>
@@ -343,6 +340,9 @@ QTabBar::tab:!selected {
                <widget class="QLabel" name="viewGroupLabel_4">
                 <property name="text">
                  <string>SCRIPTS &amp; STYLES</string>
+                </property>
+                <property name="buddy">
+                 <cstring>projectScripts</cstring>
                 </property>
                </widget>
               </item>
@@ -388,17 +388,8 @@ QTabBar::tab:!selected {
           <string>INFOS</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_14">
-          <property name="leftMargin">
-           <number>12</number>
-          </property>
-          <property name="topMargin">
+          <property name="margin">
            <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>12</number>
-          </property>
-          <property name="bottomMargin">
-           <number>12</number>
           </property>
           <item>
            <widget class="QLabel" name="typeLabel">
@@ -431,13 +422,13 @@ QTabBar::tab:!selected {
              <widget class="QLabel" name="IDLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -450,19 +441,22 @@ QTabBar::tab:!selected {
               <property name="wordWrap">
                <bool>true</bool>
               </property>
+              <property name="buddy">
+               <cstring>newIdButton</cstring>
+              </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="positionLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -475,6 +469,9 @@ QTabBar::tab:!selected {
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>positionX</cstring>
               </property>
              </widget>
             </item>
@@ -584,13 +581,13 @@ QTabBar::tab:!selected {
              <widget class="QLabel" name="sizeLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -603,6 +600,9 @@ QTabBar::tab:!selected {
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>sizeWSpin</cstring>
               </property>
              </widget>
             </item>
@@ -678,13 +678,13 @@ QTabBar::tab:!selected {
              <widget class="QLabel" name="widthLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -697,6 +697,9 @@ WIDTH / DEPTH</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>widthSpin</cstring>
               </property>
              </widget>
             </item>
@@ -735,13 +738,13 @@ WIDTH / DEPTH</string>
              <widget class="QLabel" name="patternLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -755,18 +758,8 @@ SPEED PATTERN</string>
               <property name="wordWrap">
                <bool>true</bool>
               </property>
-             </widget>
-            </item>
-            <item row="15" column="1" colspan="2">
-             <widget class="QLineEdit" name="patternLine">
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="statusTip">
-               <string>Type here the speed pattern separated by spaces (&quot;1 2 -1 0&quot; means running one time at normal speed, then again at double speed, then reverse run and finally stopping)</string>
-              </property>
-              <property name="text">
-               <string/>
+              <property name="buddy">
+               <cstring>patternLine</cstring>
               </property>
              </widget>
             </item>
@@ -774,13 +767,13 @@ SPEED PATTERN</string>
              <widget class="QLabel" name="offsetLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -793,6 +786,9 @@ OFFSETS</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>offsetInitialSpin</cstring>
               </property>
              </widget>
             </item>
@@ -1006,13 +1002,13 @@ OFFSETS</string>
              <widget class="QLabel" name="posLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1025,6 +1021,9 @@ MANUAL POS.</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>posSpin</cstring>
               </property>
              </widget>
             </item>
@@ -1066,13 +1065,13 @@ MANUAL POS.</string>
              <widget class="QLabel" name="cursorSpeedLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1085,6 +1084,9 @@ or LENGTH</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>speedSpin</cstring>
               </property>
              </widget>
             </item>
@@ -1184,13 +1186,13 @@ or LENGTH</string>
              <widget class="QLabel" name="speedFLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1203,6 +1205,9 @@ MASTER SPEED</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>speedFSpin</cstring>
               </property>
              </widget>
             </item>
@@ -1244,13 +1249,13 @@ MASTER SPEED</string>
              <widget class="QLabel" name="cursorBoundsLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1263,6 +1268,9 @@ MAPPING</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>cursorBoundsLineSource1</cstring>
               </property>
              </widget>
             </item>
@@ -1290,6 +1298,9 @@ MAPPING</string>
                 </property>
                 <property name="text">
                  <string>FROM</string>
+                </property>
+                <property name="buddy">
+                 <cstring>cursorBoundsLineSource1</cstring>
                 </property>
                </widget>
               </item>
@@ -1322,6 +1333,9 @@ MAPPING</string>
                 </property>
                 <property name="text">
                  <string>TO</string>
+                </property>
+                <property name="buddy">
+                 <cstring>cursorBoundsLineTarget1</cstring>
                 </property>
                </widget>
               </item>
@@ -1424,13 +1438,13 @@ MAPPING</string>
              <widget class="QLabel" name="triggerOffLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1443,6 +1457,9 @@ OFF-TIME</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>triggerOffSpin</cstring>
               </property>
              </widget>
             </item>
@@ -1481,13 +1498,13 @@ OFF-TIME</string>
              <widget class="QLabel" name="labelLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1499,6 +1516,9 @@ OFF-TIME</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>labelLine</cstring>
               </property>
              </widget>
             </item>
@@ -1516,13 +1536,13 @@ OFF-TIME</string>
              <widget class="QLabel" name="activityLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1534,6 +1554,9 @@ OFF-TIME</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>activityCheck</cstring>
               </property>
              </widget>
             </item>
@@ -1576,13 +1599,13 @@ OFF-TIME</string>
              <widget class="QLabel" name="messagesLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1595,19 +1618,22 @@ OFF-TIME</string>
               <property name="wordWrap">
                <bool>true</bool>
               </property>
+              <property name="buddy">
+               <cstring>messagesButton</cstring>
+              </property>
              </widget>
             </item>
             <item row="8" column="0">
              <widget class="QLabel" name="colorLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1619,6 +1645,9 @@ OFF-TIME</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>colorCombo1</cstring>
               </property>
              </widget>
             </item>
@@ -1734,13 +1763,13 @@ OFF-TIME</string>
              <widget class="QLabel" name="sizeLabel2">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1752,6 +1781,9 @@ OFF-TIME</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>sizeSpin</cstring>
               </property>
              </widget>
             </item>
@@ -1834,6 +1866,9 @@ OFF-TIME</string>
               <property name="wordWrap">
                <bool>true</bool>
               </property>
+              <property name="buddy">
+               <cstring>messagesSpin</cstring>
+              </property>
              </widget>
             </item>
             <item row="0" column="1">
@@ -1915,13 +1950,13 @@ OFF-TIME</string>
              <widget class="QLabel" name="pointsLabel">
               <property name="minimumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>90</width>
+                <width>85</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1934,6 +1969,9 @@ POINTS</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="buddy">
+               <cstring>pointsList</cstring>
               </property>
              </widget>
             </item>
@@ -2008,6 +2046,56 @@ POINTS</string>
               </column>
              </widget>
             </item>
+            <item row="15" column="1" colspan="2">
+             <widget class="QComboBox" name="patternLine">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>180</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="statusTip">
+               <string>Type here the speed pattern separated by spaces</string>
+              </property>
+              <property name="editable">
+               <bool>true</bool>
+              </property>
+              <item>
+               <property name="text">
+                <string>1 0 - One run on curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1 - Loop on curve</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1 -1 0 - Single roundtrip on curve </string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1 -1 - Loop roundtrip on curve </string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1 2 0 - One normal run, another at double speed</string>
+               </property>
+              </item>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -2021,17 +2109,8 @@ POINTS</string>
           <string>OBJECTS</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_10">
-          <property name="leftMargin">
-           <number>12</number>
-          </property>
-          <property name="topMargin">
+          <property name="margin">
            <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>12</number>
-          </property>
-          <property name="bottomMargin">
-           <number>12</number>
           </property>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -2111,6 +2190,9 @@ POINTS</string>
                <widget class="QLabel" name="viewGroupLabel_2">
                 <property name="text">
                  <string>OBJECTS</string>
+                </property>
+                <property name="buddy">
+                 <cstring>ccView</cstring>
                 </property>
                </widget>
               </item>
@@ -2236,6 +2318,9 @@ POINTS</string>
                 <property name="text">
                  <string>GROUPS</string>
                 </property>
+                <property name="buddy">
+                 <cstring>cc2View</cstring>
+                </property>
                </widget>
               </item>
               <item>
@@ -2349,6 +2434,9 @@ POINTS</string>
               <property name="text">
                <string>Z-RANGE FROM</string>
               </property>
+              <property name="buddy">
+               <cstring>viewZStartSpin</cstring>
+              </property>
              </widget>
             </item>
             <item>
@@ -2416,6 +2504,9 @@ POINTS</string>
               </property>
               <property name="text">
                <string>CAMERA FOLLOWS OBJECT ID</string>
+              </property>
+              <property name="buddy">
+               <cstring>followId</cstring>
               </property>
              </widget>
             </item>
@@ -2498,17 +2589,11 @@ POINTS</string>
           <string>NETWORK</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_5">
-          <property name="leftMargin">
-           <number>12</number>
+          <property name="spacing">
+           <number>5</number>
           </property>
-          <property name="topMargin">
+          <property name="margin">
            <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>12</number>
-          </property>
-          <property name="bottomMargin">
-           <number>12</number>
           </property>
           <item>
            <widget class="QSplitter" name="splitter">
@@ -2647,6 +2732,9 @@ POINTS</string>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>oscInPortSpin</cstring>
+                </property>
                </widget>
               </item>
               <item row="6" column="1">
@@ -2694,6 +2782,9 @@ POINTS</string>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>udpInPortSpin</cstring>
+                </property>
                </widget>
               </item>
               <item row="11" column="0">
@@ -2716,6 +2807,9 @@ MESSAGE</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>transportMessageEdit</cstring>
                 </property>
                </widget>
               </item>
@@ -2762,6 +2856,9 @@ MESSAGE</string>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>syncMessageEdit</cstring>
+                </property>
                </widget>
               </item>
               <item row="12" column="1" colspan="2">
@@ -2800,6 +2897,9 @@ BUNDLE ON</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>bundleMessageEdit</cstring>
                 </property>
                </widget>
               </item>
@@ -2876,6 +2976,9 @@ BUNDLE ON</string>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>httpInPortSpin</cstring>
+                </property>
                </widget>
               </item>
               <item row="8" column="1">
@@ -2937,6 +3040,9 @@ SERVER IN PORT</string>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>tcpInPortSpin</cstring>
+                </property>
                </widget>
               </item>
               <item row="9" column="1">
@@ -2995,6 +3101,9 @@ SERVER IN PORT</string>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>ipOutEdit</cstring>
+                </property>
                </widget>
               </item>
               <item row="0" column="1" colspan="2">
@@ -3036,6 +3145,9 @@ SERVER IN PORT</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>midiOutCombo</cstring>
                 </property>
                </widget>
               </item>
@@ -3080,6 +3192,9 @@ SERVER IN PORT</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>serialInPortEdit</cstring>
                 </property>
                </widget>
               </item>
@@ -3138,6 +3253,9 @@ SERVER IN PORT</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>midiTempoSpin</cstring>
                 </property>
                </widget>
               </item>
@@ -3310,6 +3428,7 @@ SERVER IN PORT</string>
   <tabstop>sizeWSpin</tabstop>
   <tabstop>sizeHSpin</tabstop>
   <tabstop>sizeSpin</tabstop>
+  <tabstop>pointsList</tabstop>
   <tabstop>labelLine</tabstop>
   <tabstop>activityCheck</tabstop>
   <tabstop>colorCombo1</tabstop>
@@ -3320,6 +3439,7 @@ SERVER IN PORT</string>
   <tabstop>messagesSpin</tabstop>
   <tabstop>triggerOffSpin</tabstop>
   <tabstop>widthSpin</tabstop>
+  <tabstop>depthSpin</tabstop>
   <tabstop>patternLine</tabstop>
   <tabstop>easingCombo</tabstop>
   <tabstop>offsetInitialSpin</tabstop>
@@ -3333,18 +3453,25 @@ SERVER IN PORT</string>
   <tabstop>cursorBoundsLineSource2</tabstop>
   <tabstop>cursorBoundsLineTarget1</tabstop>
   <tabstop>cursorBoundsLineTarget2</tabstop>
-  <tabstop>serialInPortEdit</tabstop>
-  <tabstop>viewCurveCheck</tabstop>
-  <tabstop>viewCursorCheck</tabstop>
   <tabstop>viewTriggerCheck</tabstop>
+  <tabstop>viewCursorCheck</tabstop>
+  <tabstop>viewCurveCheck</tabstop>
   <tabstop>ccView</tabstop>
+  <tabstop>unmuteObjects</tabstop>
+  <tabstop>unsoloObjects</tabstop>
   <tabstop>cc2View</tabstop>
+  <tabstop>unmuteGroups</tabstop>
+  <tabstop>unsoloGroups</tabstop>
   <tabstop>viewZStartSpin</tabstop>
   <tabstop>viewZEndSpin</tabstop>
-  <tabstop>oscSendText</tabstop>
-  <tabstop>oscReceiveText</tabstop>
+  <tabstop>followId</tabstop>
+  <tabstop>viewCurveOpacityCheck</tabstop>
   <tabstop>ipOutEdit</tabstop>
   <tabstop>midiOutCombo</tabstop>
+  <tabstop>midiOutRefresh</tabstop>
+  <tabstop>midiTempoSpin</tabstop>
+  <tabstop>midiSyncSong</tabstop>
+  <tabstop>midiSyncClock</tabstop>
   <tabstop>oscInPortSpin</tabstop>
   <tabstop>udpInPortSpin</tabstop>
   <tabstop>httpInPortSpin</tabstop>
@@ -3353,6 +3480,7 @@ SERVER IN PORT</string>
   <tabstop>bundleMessagePort</tabstop>
   <tabstop>transportMessageEdit</tabstop>
   <tabstop>syncMessageEdit</tabstop>
+  <tabstop>serialInPortEdit</tabstop>
  </tabstops>
  <resources>
   <include location="IanniX.qrc"/>
@@ -3397,8 +3525,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>63</y>
+     <x>355</x>
+     <y>46</y>
     </hint>
     <hint type="destinationlabel">
      <x>72</x>
@@ -3413,8 +3541,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>63</y>
+     <x>240</x>
+     <y>46</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3429,8 +3557,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>214</x>
+     <y>602</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>
@@ -3445,8 +3573,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>358</x>
+     <y>602</y>
     </hint>
     <hint type="destinationlabel">
      <x>237</x>
@@ -3461,8 +3589,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>179</x>
+     <y>101</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3477,8 +3605,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>286</x>
+     <y>101</y>
     </hint>
     <hint type="destinationlabel">
      <x>43</x>
@@ -3493,8 +3621,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>356</x>
+     <y>101</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3509,8 +3637,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>180</x>
+     <y>543</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3525,8 +3653,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>179</x>
+     <y>395</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3541,8 +3669,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>246</x>
+     <y>482</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3557,8 +3685,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>336</x>
+     <y>482</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3573,8 +3701,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>264</x>
+     <y>543</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
@@ -3621,8 +3749,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>257</x>
+     <y>457</y>
     </hint>
     <hint type="destinationlabel">
      <x>181</x>
@@ -3637,8 +3765,8 @@ SERVER IN PORT</string>
    <slot>actionInfoGroup()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>327</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3653,8 +3781,8 @@ SERVER IN PORT</string>
    <slot>actionMessages()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>220</x>
+     <y>330</y>
     </hint>
     <hint type="destinationlabel">
      <x>319</x>
@@ -3669,8 +3797,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>224</x>
+     <y>277</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3685,8 +3813,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>179</x>
+     <y>512</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3701,28 +3829,12 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>179</x>
+     <y>574</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
      <y>388</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>patternLine</sender>
-   <signal>editingFinished()</signal>
-   <receiver>UiInspector</receiver>
-   <slot>actionInfo()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>0</x>
-     <y>196</y>
     </hint>
    </hints>
   </connection>
@@ -3750,7 +3862,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
-     <y>419</y>
+     <y>409</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3766,7 +3878,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
-     <y>449</y>
+     <y>439</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3797,8 +3909,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>179</x>
+     <y>364</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -3813,8 +3925,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>179</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3829,8 +3941,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>286</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3845,8 +3957,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>226</x>
+     <y>258</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3861,8 +3973,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>254</x>
+     <y>604</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3877,8 +3989,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>254</x>
+     <y>625</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3893,8 +4005,8 @@ SERVER IN PORT</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>69</y>
+     <x>126</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -3909,28 +4021,12 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>226</x>
+     <y>258</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
      <y>156</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>patternLine</sender>
-   <signal>returnPressed()</signal>
-   <receiver>UiInspector</receiver>
-   <slot>actionInfo()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>378</x>
-     <y>316</y>
     </hint>
    </hints>
   </connection>
@@ -3941,8 +4037,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>254</x>
+     <y>604</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3957,8 +4053,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>254</x>
+     <y>625</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -3989,8 +4085,8 @@ SERVER IN PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>64</y>
+     <x>175</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -4005,8 +4101,8 @@ SERVER IN PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>64</y>
+     <x>235</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4021,8 +4117,8 @@ SERVER IN PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>64</y>
+     <x>296</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4037,8 +4133,8 @@ SERVER IN PORT</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>64</y>
+     <x>356</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4053,8 +4149,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>179</x>
+     <y>161</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -4085,8 +4181,8 @@ SERVER IN PORT</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>69</y>
+     <x>126</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -4101,8 +4197,8 @@ SERVER IN PORT</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>69</y>
+     <x>126</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4117,8 +4213,8 @@ SERVER IN PORT</string>
    <slot>actionCC2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>69</y>
+     <x>126</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -4133,8 +4229,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>356</x>
+     <y>328</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4149,8 +4245,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>616</y>
+     <x>355</x>
+     <y>606</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -4165,8 +4261,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>616</y>
+     <x>355</x>
+     <y>606</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -4213,8 +4309,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>64</y>
+     <x>359</x>
+     <y>427</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -4229,8 +4325,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>54</y>
+     <x>86</x>
+     <y>655</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4246,7 +4342,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>235</x>
-     <y>546</y>
+     <y>536</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -4262,7 +4358,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>235</x>
-     <y>546</y>
+     <y>536</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -4278,7 +4374,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>305</x>
-     <y>546</y>
+     <y>536</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -4294,7 +4390,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
-     <y>479</y>
+     <y>469</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4309,8 +4405,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>581</y>
+     <x>355</x>
+     <y>571</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -4325,8 +4421,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>581</y>
+     <x>355</x>
+     <y>571</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -4342,7 +4438,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
-     <y>511</y>
+     <y>501</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4357,8 +4453,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>297</x>
-     <y>308</y>
+     <x>355</x>
+     <y>274</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4373,8 +4469,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>297</x>
-     <y>308</y>
+     <x>355</x>
+     <y>274</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4390,7 +4486,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>238</x>
-     <y>346</y>
+     <y>326</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -4405,8 +4501,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>355</x>
+     <y>604</y>
     </hint>
     <hint type="destinationlabel">
      <x>83</x>
@@ -4421,8 +4517,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>355</x>
+     <y>604</y>
     </hint>
     <hint type="destinationlabel">
      <x>75</x>
@@ -4437,8 +4533,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>355</x>
+     <y>625</y>
     </hint>
     <hint type="destinationlabel">
      <x>261</x>
@@ -4453,8 +4549,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>355</x>
+     <y>625</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -4469,8 +4565,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>59</y>
+     <x>126</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
@@ -4485,8 +4581,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>59</y>
+     <x>299</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
@@ -4501,8 +4597,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>59</y>
+     <x>299</x>
+     <y>561</y>
     </hint>
     <hint type="destinationlabel">
      <x>282</x>
@@ -4517,8 +4613,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>59</y>
+     <x>126</x>
+     <y>561</y>
     </hint>
     <hint type="destinationlabel">
      <x>78</x>
@@ -4533,8 +4629,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>79</y>
+     <x>262</x>
+     <y>634</y>
     </hint>
     <hint type="destinationlabel">
      <x>34</x>
@@ -4549,8 +4645,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>74</y>
+     <x>286</x>
+     <y>395</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4565,8 +4661,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>74</y>
+     <x>226</x>
+     <y>225</y>
     </hint>
     <hint type="destinationlabel">
      <x>154</x>
@@ -4582,7 +4678,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>361</x>
-     <y>347</y>
+     <y>327</y>
     </hint>
     <hint type="destinationlabel">
      <x>183</x>
@@ -4597,8 +4693,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>153</x>
-     <y>373</y>
+     <x>190</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
@@ -4613,8 +4709,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>270</x>
-     <y>372</y>
+     <x>355</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
      <x>48</x>
@@ -4629,12 +4725,44 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>258</x>
-     <y>384</y>
+     <x>355</x>
+     <y>369</y>
     </hint>
     <hint type="destinationlabel">
      <x>-288</x>
      <y>731</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternLine</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>415</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>59</x>
+     <y>714</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternLine</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>420</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-256</x>
+     <y>683</y>
     </hint>
    </hints>
   </connection>

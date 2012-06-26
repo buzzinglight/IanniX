@@ -368,10 +368,6 @@ QTabBar::tab:!selected {
  </customwidgets>
  <tabstops>
   <tabstop>tabs</tabstop>
-  <tabstop>removeButton</tabstop>
-  <tabstop>buttonBox</tabstop>
-  <tabstop>addButton</tabstop>
-  <tabstop>help_button</tabstop>
  </tabstops>
  <resources>
   <include location="IanniX.qrc"/>

@@ -14,6 +14,7 @@ function onCreate() {
 	run("rotate 0 0 0");
 	run("center 0 0");
 	run("zoom 110");
+	run("autosize 1");
 	
 	//Instrcutions
 	run("add trigger auto");

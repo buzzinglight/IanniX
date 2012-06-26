@@ -8,6 +8,7 @@ function onCreate() {
 	run("rotate 0 0 0");
 	run("center 2.4 -0.2");
 	run("zoom 216");
+	run("autosize 1");
 	
 	//Ellipse curves
 	var circleRadius  = -3;

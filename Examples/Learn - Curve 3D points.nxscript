@@ -6,6 +6,7 @@ function onCreate() {
 	run("rotate 0 -70 -10");
     run("center 0 0");
     run("zoom 100");
+	run("autosize 1");
  
     //Create a curve
     run("add curve  1000");

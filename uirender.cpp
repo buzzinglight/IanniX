@@ -319,7 +319,7 @@ void UiRender::paintGL() {
 
     //Object sizes
     renderOptions->objectSize = 0.15;
-    if(triggerAutosize)
+    if(renderOptions->triggerAutosize)
         renderOptions->objectSize *= renderOptions->zoomLinear;
 
     if(!renderOptions->forceFrustumInInit) {

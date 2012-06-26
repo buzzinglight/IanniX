@@ -107,6 +107,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
      <property name="text">
       <string>PLEASE ENTER VALUES TO LAUNCH SCRIPT:</string>
      </property>
+     <property name="buddy">
+      <cstring>variablesList</cstring>
+     </property>
     </widget>
    </item>
    <item>

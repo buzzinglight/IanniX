@@ -43,6 +43,11 @@ QString NxDocument::serialize(UiRenderOptions *renderOptions, bool hasAScript) {
         retour += prefix + QString(COMMAND_SPEED + " %1").arg(renderOptions->timeFactor) + postfix;
         retour += prefix + QString(COMMAND_CENTER + " %1 %2").arg(-renderOptions->axisCenter.x()).arg(-renderOptions->axisCenter.y()) + postfix;
         retour += prefix + QString(COMMAND_ROTATE + " %1 %2 %3").arg(renderOptions->rotationDest.x()).arg(renderOptions->rotationDest.y()).arg(renderOptions->rotationDest.z()) + postfix;
+        retour += prefix + QString(COMMAND_AUTOSIZE + " %1").arg(renderOptions->triggerAutosize) + postfix;
+        foreach(const QString &command, registredTextures)
+            retour += prefix + command + postfix;
+        foreach(const QString &command, registredColors)
+            retour += prefix + command + postfix;
     }
 
     //Browse documents

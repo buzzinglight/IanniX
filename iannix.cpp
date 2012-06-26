@@ -1378,14 +1378,17 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 if(!QFile().exists(filename))
                     filename = scriptDir.absoluteFilePath(filename);
                 render->loadTexture(UiRenderTexture(arguments.at(1).trimmed(), filename, NxRect(NxPoint(arguments.at(2).toDouble(), arguments.at(3).toDouble()), NxPoint(arguments.at(4).toDouble(), arguments.at(5).toDouble()))));
+                currentDocument->registredTextures[arguments.at(1)] = command.trimmed();
             }
             else if((commande == COMMAND_GLOBAL_COLOR) && (arguments.count() >= 6)) {
                 render->getRenderOptions()->colors[arguments.at(1)] = QColor(arguments.at(2).toDouble(), arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble());
+                currentDocument->registredColors[arguments.at(1)] = command.trimmed();
             }
             else if(((commande == COMMAND_GLOBAL_COLOR2) || (commande == COMMAND_GLOBAL_COLOR_HUE)) && (arguments.count() >= 6)) {
                 QColor color;
                 color.setHsv(arguments.at(2).toDouble(), arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble());
                 render->getRenderOptions()->colors[arguments.at(1)] = color;
+                currentDocument->registredColors[arguments.at(1)] = command.trimmed();
             }
             else if((commande == COMMAND_ZOOM) && (arguments.count() >= 2)) {
                 render->zoom(arguments.at(1).toDouble());
@@ -1897,7 +1900,7 @@ void IanniX::sendMessage(void *_object, void *_trigger, void *_cursor, void *_co
     }
 }
 QImage IanniX::takeScreenshot() {
-    return render->grabFrameBuffer(false);
+    return render->grabFrameBuffer();
 }
 
 void IanniX::send(const ExtMessage & message) {

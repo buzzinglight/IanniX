@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1175</width>
-    <height>67</height>
+    <width>1089</width>
+    <height>63</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -151,11 +151,14 @@ QPushButton#syphon {
          <property name="spacing">
           <number>15</number>
          </property>
+         <property name="leftMargin">
+          <number>12</number>
+         </property>
          <property name="topMargin">
-          <number>6</number>
+          <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>6</number>
+          <number>0</number>
          </property>
          <item>
           <widget class="QPushButton" name="ffButton">
@@ -252,11 +255,17 @@ QPushButton#syphon {
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="leftMargin">
+          <number>6</number>
+         </property>
          <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
           <number>6</number>
          </property>
          <property name="bottomMargin">
-          <number>6</number>
+          <number>0</number>
          </property>
          <item>
           <widget class="QLineEdit" name="timeEdit">
@@ -277,6 +286,9 @@ QPushButton#syphon {
              <width>240</width>
              <height>55</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
            </property>
            <property name="toolTip">
             <string>Elapsed time</string>
@@ -308,13 +320,13 @@ QPushButton#syphon {
           <number>0</number>
          </property>
          <property name="leftMargin">
-          <number>6</number>
+          <number>12</number>
          </property>
          <property name="topMargin">
           <number>0</number>
          </property>
          <property name="rightMargin">
-          <number>6</number>
+          <number>12</number>
          </property>
          <property name="bottomMargin">
           <number>0</number>
@@ -329,14 +341,14 @@ QPushButton#syphon {
            </property>
            <property name="minimumSize">
             <size>
-             <width>650</width>
-             <height>35</height>
+             <width>575</width>
+             <height>30</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>650</width>
-             <height>35</height>
+             <width>575</width>
+             <height>30</height>
             </size>
            </property>
            <property name="toolTip">
@@ -349,7 +361,7 @@ QPushButton#syphon {
             <string>No message</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignCenter</set>
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -387,14 +399,14 @@ QPushButton#syphon {
             <widget class="QDoubleSpinBox" name="speedSpin">
              <property name="minimumSize">
               <size>
-               <width>60</width>
-               <height>0</height>
+               <width>50</width>
+               <height>20</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>60</width>
-               <height>16777215</height>
+               <width>50</width>
+               <height>20</height>
               </size>
              </property>
              <property name="toolTip">
@@ -448,13 +460,13 @@ color: rgba(255,255,255,128);</string>
           <number>0</number>
          </property>
          <property name="leftMargin">
-          <number>10</number>
+          <number>6</number>
          </property>
          <property name="topMargin">
           <number>0</number>
          </property>
          <property name="rightMargin">
-          <number>10</number>
+          <number>6</number>
          </property>
          <property name="bottomMargin">
           <number>0</number>
@@ -586,10 +598,10 @@ QLineEdit {
           <number>6</number>
          </property>
          <property name="leftMargin">
-          <number>12</number>
+          <number>10</number>
          </property>
          <property name="topMargin">
-          <number>5</number>
+          <number>3</number>
          </property>
          <property name="rightMargin">
           <number>6</number>
@@ -646,6 +658,9 @@ QLineEdit {
              <height>15</height>
             </size>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="toolTip">
             <string>CPU usage</string>
            </property>
@@ -686,7 +701,9 @@ QLineEdit {
   <tabstop>speedSpin</tabstop>
   <tabstop>perfSchedulerEdit</tabstop>
   <tabstop>perfOpenGLEdit</tabstop>
+  <tabstop>syphon</tabstop>
   <tabstop>logoButton</tabstop>
+  <tabstop>perfCpuEdit</tabstop>
  </tabstops>
  <resources>
   <include location="IanniX.qrc"/>
@@ -704,7 +721,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>146</x>
-     <y>-59</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -720,7 +737,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>114</x>
-     <y>-138</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -736,7 +753,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>663</x>
-     <y>-88</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -752,7 +769,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>320</x>
-     <y>-68</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -768,7 +785,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>575</x>
-     <y>117</y>
+     <y>65</y>
     </hint>
    </hints>
   </connection>
@@ -784,7 +801,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>641</x>
-     <y>-105</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -800,7 +817,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>648</x>
-     <y>-127</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -816,7 +833,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>678</x>
-     <y>-109</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -832,7 +849,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>563</x>
-     <y>-74</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -848,7 +865,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>416</x>
-     <y>-125</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -864,7 +881,7 @@ QLineEdit {
     </hint>
     <hint type="destinationlabel">
      <x>1018</x>
-     <y>220</y>
+     <y>65</y>
     </hint>
    </hints>
   </connection>

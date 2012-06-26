@@ -33,6 +33,7 @@ function onCreate() {
 	//Viewport setup
 	run("clear");
 	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
+	run("autosize 1");
 
 	//Custom colors
 	run("registerColor curve_active       0   0   0 255");

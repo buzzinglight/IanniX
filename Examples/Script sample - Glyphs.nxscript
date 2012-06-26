@@ -5,6 +5,7 @@ function onCreate() {
 	run("rotate 0 0 0");
 	run("center 7 1.8");
 	run("zoom 182");
+	run("autosize 1");
 	
 	for(var i = 0 ; i < 200 ; i++)
 		addTrigger(i);

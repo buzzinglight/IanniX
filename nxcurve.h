@@ -206,10 +206,8 @@ public:
             prefix = "run(\"";
             postfix =  "\");" + COMMAND_END;
         }
-        if(curveType == CurveTypeEllipse) {
+        if(curveType == CurveTypeEllipse)
             retour += prefix + QString(COMMAND_CURVE_ELL + " %1 %2 %3").arg("current").arg(getResize().width()/2).arg(getResize().height()/2) + postfix;
-            //retour += QString(COMMAND_RESIZE + " %1 %2 %3").arg("current").arg(getResize().width()).arg(getResize().height()) + postfix;
-        }
         else {
             if(hasAScript) {
                 QString idStr = QString::number(id);

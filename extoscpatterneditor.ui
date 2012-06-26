@@ -216,6 +216,9 @@ QComboBox::drop-down {
               <height>20</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="toolTip">
              <string>Clear the message</string>
             </property>
@@ -274,6 +277,9 @@ QComboBox::drop-down {
             <property name="text">
              <string>SEND THROUGH</string>
             </property>
+            <property name="buddy">
+             <cstring>protocolCombo</cstring>
+            </property>
            </widget>
           </item>
           <item>
@@ -327,6 +333,9 @@ QComboBox::drop-down {
             </property>
             <property name="text">
              <string>TO HOST</string>
+            </property>
+            <property name="buddy">
+             <cstring>hostIpCombo</cstring>
             </property>
            </widget>
           </item>
@@ -391,6 +400,9 @@ QComboBox::drop-down {
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
+            <property name="buddy">
+             <cstring>portCombo</cstring>
+            </property>
            </widget>
           </item>
           <item>
@@ -445,6 +457,9 @@ QComboBox::drop-down {
             <property name="text">
              <string>TO ADDRESS</string>
             </property>
+            <property name="buddy">
+             <cstring>addressOscCombo</cstring>
+            </property>
            </widget>
           </item>
           <item>
@@ -498,6 +513,9 @@ QComboBox::drop-down {
             </property>
             <property name="text">
              <string>TO MIDI DEVICE</string>
+            </property>
+            <property name="buddy">
+             <cstring>hostMidiCombo</cstring>
             </property>
            </widget>
           </item>
@@ -562,6 +580,9 @@ QComboBox::drop-down {
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
+            <property name="buddy">
+             <cstring>addressMidiCombo</cstring>
+            </property>
            </widget>
           </item>
           <item>
@@ -616,6 +637,9 @@ QComboBox::drop-down {
             <property name="text">
              <string>VALUE 1</string>
             </property>
+            <property name="buddy">
+             <cstring>argument1Combo</cstring>
+            </property>
            </widget>
           </item>
           <item>
@@ -660,6 +684,9 @@ QComboBox::drop-down {
               <height>20</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="toolTip">
              <string>Clear the value</string>
             </property>
@@ -697,6 +724,9 @@ QComboBox::drop-down {
             </property>
             <property name="text">
              <string>VALUE 2</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument2Combo</cstring>
             </property>
            </widget>
           </item>
@@ -742,6 +772,9 @@ QComboBox::drop-down {
               <height>20</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="toolTip">
              <string>Clear the value</string>
             </property>
@@ -776,6 +809,9 @@ QComboBox::drop-down {
             </property>
             <property name="text">
              <string>VALUE 3</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument3Combo</cstring>
             </property>
            </widget>
           </item>
@@ -821,6 +857,9 @@ QComboBox::drop-down {
               <height>20</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="toolTip">
              <string>Clear the value</string>
             </property>
@@ -855,6 +894,9 @@ QComboBox::drop-down {
             </property>
             <property name="text">
              <string>VALUE 4</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument4Combo</cstring>
             </property>
            </widget>
           </item>
@@ -900,6 +942,9 @@ QComboBox::drop-down {
               <height>20</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="toolTip">
              <string>Clear the value</string>
             </property>
@@ -934,6 +979,9 @@ QComboBox::drop-down {
             </property>
             <property name="text">
              <string>VALUE 5</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument5Combo</cstring>
             </property>
            </widget>
           </item>
@@ -979,6 +1027,9 @@ QComboBox::drop-down {
               <height>20</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="toolTip">
              <string>Clear the value</string>
             </property>
@@ -1013,6 +1064,9 @@ QComboBox::drop-down {
             </property>
             <property name="text">
              <string>VALUE 6</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument6Combo</cstring>
             </property>
            </widget>
           </item>
@@ -1057,6 +1111,9 @@ QComboBox::drop-down {
               <width>20</width>
               <height>20</height>
              </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
              <string>Clear the value</string>

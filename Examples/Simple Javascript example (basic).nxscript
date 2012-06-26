@@ -4,6 +4,7 @@ function onCreate() {
 	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
 	run("rotate 0 0 0");
 	run("center -8 5");
+	run("autosize 1");
 
 	//Loop from 0 to 24 lines
 	for(var index = 0 ; index < 25 ; index++) {

@@ -343,6 +343,8 @@ public:
                 retour += prefix + QString(COMMAND_CURSOR_SPEEDF + " %1 %2").arg("current").arg(getTimeFactorF()) + postfix;
             if(getWidth() != 1)
                 retour += prefix + QString(COMMAND_CURSOR_WIDTH + " %1 %2").arg("current").arg(getWidth()) + postfix;
+            if(getDepth() != 0)
+                retour += prefix + QString(COMMAND_CURSOR_DEPTH + " %1 %2").arg("current").arg(getWidth()) + postfix;
             if((getEasing() != 0) || (getStart() != "1 0"))
                 retour += prefix + QString(COMMAND_CURSOR_START + " %1 %2 %3 %4").arg("current").arg(getEasing()).arg(0).arg(getStart()) + postfix;
             if(getTimeLocal() != 0)

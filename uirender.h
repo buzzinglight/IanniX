@@ -65,7 +65,7 @@ private:
     NxDocument *document;
     QTime renderMeasure;
     qreal timePerfRefresh, timePerfCounter;
-    bool triggerAutosize, editing, editingFirstPoint;
+    bool editing, editingFirstPoint;
     EditingMode editingMode;
     QList<NxObject*> selectionRect;
     NxObject *selectedHover;
@@ -125,11 +125,11 @@ public:
         factory = _factory;
     }
     inline void setTriggerAutosize(bool _triggerAutosize) {
-        triggerAutosize = _triggerAutosize;
+        renderOptions->triggerAutosize = _triggerAutosize;
         zoom();
     }
     inline bool getTriggerAutosize() const {
-        return triggerAutosize;
+        return renderOptions->triggerAutosize;
     }
 
     inline void setRotation(NxPoint _rotation) {  ///CG///

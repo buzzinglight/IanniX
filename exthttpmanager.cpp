@@ -82,7 +82,7 @@ void ExtHttpManager::readClient() {
             bool isPic = false;
             for(quint16 index = 0 ; index < url.queryItems().count() ; index++) {
                 QString first = url.queryItems()[index].first.toLower();
-                if((first != "png") && (first != "jpg"))
+                if((first != "png") && (first != "jpg") && (first != "mjpg"))
                     commands.append(url.queryItems()[index].second);
                 else {
                     isPic = true;
@@ -110,26 +110,52 @@ void ExtHttpManager::readClient() {
                 }
 
                 os << response;
+
+                socket->close();
+                if(socket->state() == QTcpSocket::UnconnectedState)
+                    delete socket;
             }
             else {
-                os << "HTTP/1.0 200 Ok\r\n"
-                      "Content-Type: image/jpeg\r\n"
-                      "Access-Control-Allow-Origin: *\r\n"
-                      "\r\n";
+                if((picFormat.first == "png") || (picFormat.first == "jpg")) {
+                    os << "HTTP/1.0 200 Ok\r\n"
+                          "Content-Type: image/jpeg\r\n"
+                          "Access-Control-Allow-Origin: *\r\n"
+                          "\r\n";
 
-                QByteArray byteArray;
-                QBuffer buffer(&byteArray);
-                if(picFormat.second == 0)
-                    picFormat.second = -1;
-                factory->takeScreenshot().save(&buffer, qPrintable(picFormat.first), picFormat.second);
-                os.flush();
-                socket->write(byteArray);
+                    QByteArray byteArray;
+                    QBuffer buffer(&byteArray);
+                    if(picFormat.second == 0)
+                        picFormat.second = -1;
+                    factory->takeScreenshot().save(&buffer, qPrintable(picFormat.first), picFormat.second);
+                    os.flush();
+                    socket->write(byteArray);
+
+                    socket->close();
+                    if(socket->state() == QTcpSocket::UnconnectedState)
+                        delete socket;
+                }
+                else if(picFormat.first == "mjpg") {
+                    /*
+                    os << "HTTP/1.0 200 Ok\r\n"
+                          "Content-Type: image/jpeg\r\n"
+                          "Access-Control-Allow-Origin: *\r\n"
+                          "\r\n";
+
+                    QByteArray byteArray;
+                    QBuffer buffer(&byteArray);
+                    if(picFormat.second == 0)
+                        picFormat.second = -1;
+                    factory->takeScreenshot().save(&buffer, "jpg", picFormat.second);
+                    os.flush();
+                    socket->write(byteArray);
+                    */
+                    /*
+                    socket->close();
+                    if(socket->state() == QTcpSocket::UnconnectedState)
+                        delete socket;
+                        */
+                }
             }
-
-            socket->close();
-
-            if(socket->state() == QTcpSocket::UnconnectedState)
-                delete socket;
         }
     }
 }

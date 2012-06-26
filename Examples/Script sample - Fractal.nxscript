@@ -15,6 +15,7 @@ function onCreate() {
 	run("center 0 0");
 	run("rotate 0 0 0");
 	run("zoom 1100");
+	run("autosize 1");
 	
 	//First recursion
 	addCurve(0, {x: -size, y: 0}, {x: size, y: 0});

@@ -31,6 +31,7 @@ function onCreate() {
 	run("rotate 0 0 0");
 	run("center 0 0");
 	run("zoom 100");
+	run("autosize 1");
 	
 	//Ellipse curves
 	for(var circleIndex = 0 ; circleIndex < circleMax ; circleIndex++) {

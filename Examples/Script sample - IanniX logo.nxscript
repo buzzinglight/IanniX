@@ -6,6 +6,7 @@ function onCreate() {
 	run("rotate 0 0 0");
 	run("center 0 0");
 	run("zoom 150");
+	run("autosize 1");
 	
 	//Browse lines
 	for(var curveIndex = 0 ; curveIndex < points.length ; curveIndex++) {
