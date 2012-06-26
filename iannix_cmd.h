@@ -102,6 +102,8 @@
 #define COMMAND_COLOR_ACTIVE_MESSAGE_HUE    QString("setcoloractivemessagehue")
 #define COMMAND_COLOR_INACTIVE_MESSAGE_HUE  QString("setcolorinactivemessagehue")
 
+#define COMMAND_TRIG                        QString("trig")
+
 #define COMMAND_AUTOSIZE                    QString("autosize")
 #define COMMAND_ZOOM                        QString("zoom")
 #define COMMAND_CENTER                      QString("center")

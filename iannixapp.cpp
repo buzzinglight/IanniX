@@ -227,6 +227,14 @@ void IanniXApp::setHelp() {
                                            QString("add trigger 1\nsetPos current 1 2 0\nremove 1"),
                                            QString(""));
 
+    Help::categories["commands"].infos << HelpInfo(QString("trig"),
+                                           tr("Force object to send its message(s)"),
+                                           tr("Force an object to send its messages."),
+                                           tr("trig <id>"),
+                                           QString("trig 1"),
+                                           QString("add trigger 1\ntrig 1"),
+                                           QString(""));
+
     Help::categories["commands"].infos << HelpInfo(QString("clear"),
                                            tr("Erasing a score"),
                                            tr("Erasing all objects into the score"),

@@ -142,28 +142,30 @@ public:
                         if(patternArgument.contains("trigger_zPos"))
                             messageScriptValue.setProperty("trigger_zPos", trigger->getPos().z());
                         if(patternArgument.contains("trigger_value_x"))
-                            messageScriptValue.setProperty("trigger_value_x", cursor->getCursorValue(trigger->getPos()).x());
+                            messageScriptValue.setProperty("trigger_value_x", (cursor)?(cursor->getCursorValue(trigger->getPos()).x()):(0));
                         if(patternArgument.contains("trigger_value_y"))
-                            messageScriptValue.setProperty("trigger_value_y", cursor->getCursorValue(trigger->getPos()).y());
+                            messageScriptValue.setProperty("trigger_value_y", (cursor)?(cursor->getCursorValue(trigger->getPos()).y()):(0));
                         if(patternArgument.contains("trigger_value_z"))
-                            messageScriptValue.setProperty("trigger_value_z", cursor->getCursorValue(trigger->getPos()).z());
+                            messageScriptValue.setProperty("trigger_value_z", (cursor)?(cursor->getCursorValue(trigger->getPos()).z()):(0));
                         if(patternArgument.contains("trigger_value"))
                             messageScriptValue.setProperty("trigger_value", trigger->getTrigged());
                         if(patternArgument.contains("trigger_distance")) {
-                            NxPoint cursorPosDelta = trigger->getPos() - cursor->getCurrentPos();
+                            NxPoint cursorPosDelta = (cursor)?(trigger->getPos() - cursor->getCurrentPos()):(NxPoint());
                             messageScriptValue.setProperty("trigger_distance", qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()));
                         }
                         if(patternArgument.contains("trigger_side")) {
-                            qreal cursorAngle = fmod(cursor->getCurrentAngle(),360);
+                            qreal cursorAngle = fmod((cursor)?(cursor->getCurrentAngle()):(0),360);
                             float side = 0;
-                            if (cursorAngle == 90 ) //cursor going straight up
-                                side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 1:0;
-                            else if (cursorAngle == 270) //cursor going straight down
-                                side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 0:1;
-                            else if(((0<cursorAngle) && (cursorAngle<90)) || ((270<cursorAngle) && (cursorAngle<360)) ) //cursor going to left
-                                side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 1:0;
-                            else //cursor going to right
-                                side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 0:1;
+                            if(cursor) {
+                                if(cursorAngle == 90) //cursor going straight up
+                                    side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 1:0;
+                                else if (cursorAngle == 270) //cursor going straight down
+                                    side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 0:1;
+                                else if(((0<cursorAngle) && (cursorAngle<90)) || ((270<cursorAngle) && (cursorAngle<360)) ) //cursor going to left
+                                    side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 1:0;
+                                else //cursor going to right
+                                    side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 0:1;
+                            }
                             messageScriptValue.setProperty("trigger_side", side);
                         }
                         if(patternArgument.contains("trigger_message_id"))
@@ -254,8 +256,8 @@ public:
                             messageScriptValue.setProperty("collision_value_x", collisionValue.x());
                         if(patternArgument.contains("collision_value_y"))
                             messageScriptValue.setProperty("collision_value_y", collisionValue.y());
-                        if(patternArgument.contains("collision_distance")) {
-                            NxPoint cursorPosDelta = collisionPoint - cursor->getCurrentPos();
+                        if((patternArgument.contains("collision_distance")) && (cursor)) {
+                            NxPoint cursorPosDelta = (cursor)?(collisionPoint - cursor->getCurrentPos()):(NxPoint());
                             messageScriptValue.setProperty("collision_distance", qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()));
                         }
                     }
@@ -305,30 +307,32 @@ public:
                         else if(patternArgument == "trigger_zPos")
                             found = addFloat(trigger->getPos().z(), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_value_x")
-                            found = addFloat(cursor->getCursorValue(trigger->getPos()).x(), patternArgument, patternIndex);
+                            found = addFloat((cursor)?(cursor->getCursorValue(trigger->getPos()).x()):(0), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_value_y")
-                            found = addFloat(cursor->getCursorValue(trigger->getPos()).y(), patternArgument, patternIndex);
+                            found = addFloat((cursor)?(cursor->getCursorValue(trigger->getPos()).y()):(0), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_value_z")
-                            found = addFloat(cursor->getCursorValue(trigger->getPos()).z(), patternArgument, patternIndex);
+                            found = addFloat((cursor)?(cursor->getCursorValue(trigger->getPos()).z()):(0), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_value")
                             found = addFloat(trigger->getTrigged(), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_distance") {
-                            NxPoint cursorPosDelta = trigger->getPos() - cursor->getCurrentPos();
+                            NxPoint cursorPosDelta = (cursor)?(trigger->getPos() - cursor->getCurrentPos()):(NxPoint());
                             found = addFloat(qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()), patternArgument, patternIndex);
                         }
                         else if(patternArgument == "trigger_message_id")
                             found = addFloat(trigger->getMessageId(), patternArgument, patternIndex);
                         else if(patternArgument == "trigger_side") {
-                            qreal cursorAngle = fmod(cursor->getCurrentAngle(),360);
+                            qreal cursorAngle = fmod((cursor)?(cursor->getCurrentAngle()):(0),360);
                             float side = 0;
-                            if (cursorAngle == 90 ) //cursor going straight up
-                                side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 1:0;
-                            else if (cursorAngle == 270) //cursor going straight down
-                                side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 0:1;
-                            else if(((0<cursorAngle) && (cursorAngle<90)) || ((270<cursorAngle) && (cursorAngle<360)) ) //cursor going to left
-                                side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 1:0;
-                            else //cursor going to right
-                                side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 0:1;
+                            if(cursor) {
+                                if(cursorAngle == 90 ) //cursor going straight up
+                                    side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 1:0;
+                                else if (cursorAngle == 270) //cursor going straight down
+                                    side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 0:1;
+                                else if(((0<cursorAngle) && (cursorAngle<90)) || ((270<cursorAngle) && (cursorAngle<360)) ) //cursor going to left
+                                    side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 1:0;
+                                else //cursor going to right
+                                    side = (trigger->getPos().y() > cursor->getCurrentPos().y()) ? 0:1;
+                            }
                             found = addFloat(side, patternArgument, patternIndex);
                         }
                     }
@@ -415,8 +419,8 @@ public:
                             found = addFloat(collisionValue.x(), patternArgument, patternIndex);
                         else if(patternArgument == "collision_value_y")
                             found = addFloat(collisionValue.y(), patternArgument, patternIndex);
-                        else if((patternArgument == "collision_distance") && (cursor)) {
-                            NxPoint cursorPosDelta = collisionPoint - cursor->getCurrentPos();
+                        else if(patternArgument == "collision_distance") {
+                            NxPoint cursorPosDelta = (cursor)?(collisionPoint - cursor->getCurrentPos()):(NxPoint());
                             found = addFloat(qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()), patternArgument, patternIndex);
                         }
                     }

@@ -82,7 +82,7 @@ UiRender::UiRender(QWidget *parent) :
     loadTexture(UiRenderTexture("trigger_inactive_message", "Tools/trigger_message.png", NxRect(NxPoint(-1, 1), NxPoint(1, -1))));
 
 
-    defaultStatusTip = tr("Click+move and mouse wheel to navigate/zoom in score. In 3D, Alt+move, Alt+mouse wheel and Alt+double-click to change camera position.");
+    defaultStatusTip = tr("Click+move and mouse wheel to navigate/zoom in score. In 3D, Alt+move, Alt+mouse wheel and Alt+double-click to change camera position. Double-clic on an object to edit messages. Shift+double-clic on an object to force its messages to be sent.");
 
     zoom(100);
 
@@ -888,8 +888,9 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
     if(cursor().shape() == Qt::BlankCursor)
         return;
 
-    bool mouse3D = event->modifiers() & Qt::AltModifier;
+    bool mouse3D      = event->modifiers() & Qt::AltModifier;
     bool mouseControl = event->modifiers() & Qt::ControlModifier;
+    bool mouseShift   = event->modifiers() & Qt::ShiftModifier;
 
     if(mouse3D) {
         scaleDest = 3;
@@ -914,10 +915,8 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
         NxCurve *curve = (NxCurve*)selectedHover;
         curve->addMousePointAt(mousePressedAreaPos, mouseControl);
     }
-    else {
-        factory->askNxObject();
-    }
-
+    else
+        factory->askNxObject(selectedHover, mouseShift);
 }
 
 void UiRender::keyPressEvent(QKeyEvent *event) {

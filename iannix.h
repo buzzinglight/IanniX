@@ -134,7 +134,7 @@ public slots:
     const QVariant execute(const QString & command, bool createNewObjectIfExists = false, bool dump = false);
     QString onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments);
     QString onDraw();
-    void askNxObject();
+    void askNxObject(void *_object, bool shift);
     void send(const ExtMessage & message);
     void sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status);
     QImage takeScreenshot();

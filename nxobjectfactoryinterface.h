@@ -48,7 +48,7 @@ public:
     virtual QImage takeScreenshot() = 0;
     bool isGroupSoloActive, isObjectSoloActive;
 public slots:
-    virtual void askNxObject() = 0;
+    virtual void askNxObject(void *_object, bool shift) = 0;
     virtual void sendMessage(void *_object = 0, void *_trigger = 0, void *_cursor = 0, void *_collisionCurve = 0, const NxPoint & collisionPoint = NxPoint(), const NxPoint & collisionValue = NxPoint(), const QString & status = QString()) = 0;
     virtual const QVariant execute(const QString & command, bool createNewObjectIfExists = false, bool dump = false) = 0;
     virtual QString onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments) = 0;

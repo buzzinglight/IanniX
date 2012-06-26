@@ -359,8 +359,8 @@ void NxCursor::paint() {
     }
 }
 
-void NxCursor::trig() {
-    if((((previousCursorReliable) && (hasActivity)) || (!curve)) && (canSendOsc())) {
+void NxCursor::trig(bool force) {
+    if((force) || ((((previousCursorReliable) && (hasActivity)) || (!curve)) && (canSendOsc()))) {
         factory->sendMessage(this, 0, this);
         incMessageId();
     }

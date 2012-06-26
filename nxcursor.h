@@ -35,19 +35,20 @@
 class NxCursor : public NxObject {
     Q_OBJECT
     Q_PROPERTY(QString start READ getStart WRITE setStart)
-    Q_PROPERTY(qreal timeStartOffset READ getTimeStartOffset WRITE setTimeStartOffset)
-    Q_PROPERTY(qreal timeInitialOffset READ getTimeInitialOffset WRITE setTimeInitialOffset)
-    Q_PROPERTY(qreal timeEndOffset READ getTimeEndOffset WRITE setTimeEndOffset)
+    Q_PROPERTY(qreal   timeStartOffset READ getTimeStartOffset WRITE setTimeStartOffset)
+    Q_PROPERTY(qreal   timeInitialOffset READ getTimeInitialOffset WRITE setTimeInitialOffset)
+    Q_PROPERTY(qreal   timeEndOffset READ getTimeEndOffset WRITE setTimeEndOffset)
     Q_PROPERTY(QString boundsSource READ getBoundsSource WRITE setBoundsSource)
     Q_PROPERTY(QString boundsTarget READ getBoundsTarget WRITE setBoundsTarget)
-    Q_PROPERTY(qreal timeFactor READ getTimeFactor WRITE setTimeFactor)
-    Q_PROPERTY(qreal timeFactorAuto READ getTimeFactorAuto WRITE setTimeFactorAuto)
-    Q_PROPERTY(qreal timeFactorF READ getTimeFactorF WRITE setTimeFactorF)
-    Q_PROPERTY(qreal cursorWidth READ getWidth WRITE setWidth)
-    Q_PROPERTY(qreal cursorDepth READ getDepth WRITE setDepth)
+    Q_PROPERTY(qreal   timeFactor READ getTimeFactor WRITE setTimeFactor)
+    Q_PROPERTY(qreal   timeFactorAuto READ getTimeFactorAuto WRITE setTimeFactorAuto)
+    Q_PROPERTY(qreal   timeFactorF READ getTimeFactorF WRITE setTimeFactorF)
+    Q_PROPERTY(qreal   cursorWidth READ getWidth WRITE setWidth)
+    Q_PROPERTY(qreal   cursorDepth READ getDepth WRITE setDepth)
     Q_PROPERTY(quint16 easingStart READ getEasing WRITE setEasing)
     Q_PROPERTY(quint16 nbLoop READ getNbLoop WRITE setNbLoop)
-    Q_PROPERTY(qreal timeLocal READ getTimeLocal WRITE setTimeLocal)
+    Q_PROPERTY(qreal   timeLocal READ getTimeLocal WRITE setTimeLocal)
+    Q_PROPERTY(bool    forceTrig   READ getForceTrig   WRITE setForceTrig)
 
 
 public:
@@ -409,7 +410,11 @@ public:
 
 public:
     void paint();
-    void trig();
+    void trig(bool force = false);
+    bool getForceTrig() { return false;}
+    void setForceTrig(bool val) {
+        trig(val);
+    }
 
 
 private:

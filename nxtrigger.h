@@ -32,6 +32,7 @@ class NxTrigger : public NxObject {
     Q_PROPERTY(QString colorActiveMessageHue   READ getColorActiveMessage     WRITE setColorActiveMessageHue)
     Q_PROPERTY(QString colorInactiveMessageHue READ getColorInactiveMessage   WRITE setColorInactiveMessageHue)
     Q_PROPERTY(qreal   triggerOff              READ getTriggerOff             WRITE setTriggerOff)
+    Q_PROPERTY(bool    forceTrig               READ getForceTrig              WRITE setForceTrig)
 
 public:
     explicit NxTrigger(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
@@ -226,6 +227,11 @@ public:
 
 public:
     void trig(NxObject *cursor);
+    bool getForceTrig() { return false;}
+    void setForceTrig(bool) {
+        trig(0);
+    }
+
 private slots:
     void trigEnd();
 

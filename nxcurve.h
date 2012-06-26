@@ -41,10 +41,10 @@ enum CurveType       { CurveTypePoints, CurveTypeEllipse };
 
 class NxCurve : public NxObject {
     Q_OBJECT
-    Q_PROPERTY(qreal pathLength READ getPathLength)
-    Q_PROPERTY(CurveType curveType READ getCurveType)
-    Q_PROPERTY(QString resizeStr READ getResizeStr WRITE setResizeStr)
-    Q_PROPERTY(qreal resizeF READ getResizeF WRITE setResizeF)
+    Q_PROPERTY(qreal     pathLength  READ getPathLength)
+    Q_PROPERTY(CurveType curveType   READ getCurveType)
+    Q_PROPERTY(QString   resizeStr   READ getResizeStr   WRITE setResizeStr)
+    Q_PROPERTY(qreal     resizeF     READ getResizeF     WRITE setResizeF)
 
 public:
     explicit NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);

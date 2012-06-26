@@ -29,6 +29,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     isObjectSoloActive = false;
     acceptMidiSyncClock = false;
     acceptMidiSyncSong = false;
+    timeLocalStr = "000:00.000";
     freehandCurveId = 0;
     lastMessageAllow = true;
     oscBundleHost = QHostAddress("127.0.0.1");
@@ -1785,6 +1786,12 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                         object->dispatchProperty("active", arguments.at(2).toDouble());
                     }
 
+                    else if((commande == COMMAND_TRIG) && (arguments.count() >= 0)) {
+                        object->dispatchProperty("forceTrig", true);
+                        lastMessageAllow = true;
+                        emit(updateTransport(timeLocalStr, lastMessage));
+                    }
+
                     else if((commande == COMMAND_COLOR_GLOBAL) && (arguments.count() >= 3)) {
                         object->dispatchProperty("colorActive", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
                         object->dispatchProperty("colorInactive", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
@@ -1860,10 +1867,10 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
 void IanniX::sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status) {
     NxObject *object = (NxObject*)_object;
     if(object) {
-        NxTrigger *trigger = (NxTrigger*)_trigger;
-        NxCursor *cursor = (NxCursor*)_cursor;
-        NxCurve* collisionCurve = (NxCurve*)_collisionCurve;
-        NxCurve *curve = 0;
+        NxTrigger *trigger        = (NxTrigger*)_trigger;
+        NxCursor  *cursor         = (NxCursor*)_cursor;
+        NxCurve   *collisionCurve = (NxCurve*)_collisionCurve;
+        NxCurve   *curve = 0;
         if(cursor)
             curve = cursor->getCurve();
 
@@ -1924,8 +1931,22 @@ QString IanniX::onDraw() {
     return retour;
 }
 
-void IanniX::askNxObject() {
-    inspector->actionMessages();
+void IanniX::askNxObject(void *_object, bool shift) {
+    NxObject *object = (NxObject*)_object;
+    if((object) && ((object->getType() == ObjectsTypeTrigger) || (object->getType() == ObjectsTypeCursor))) {
+        if((shift) && (object->getType() == ObjectsTypeTrigger)) {
+            ((NxTrigger*)object)->trig(0);
+            lastMessageAllow = true;
+            emit(updateTransport(timeLocalStr, lastMessage));
+        }
+        else if((shift) && (object->getType() == ObjectsTypeCursor)) {
+            ((NxCursor*)object)->trig(true);
+            lastMessageAllow = true;
+            emit(updateTransport(timeLocalStr, lastMessage));
+        }
+        else
+            inspector->actionMessages();
+    }
 }
 void IanniX::actionDrawFreeCurve() {
     if((render->getEditingMode() == EditingModeFree) && (render->getEditing()))
@@ -2154,8 +2175,8 @@ void IanniX::actionUnsoloObjects() {
 
 void IanniX::allowSyphonServer(bool val) {
 #ifdef SYPHON_INSTALLED
-        render->allowSyphonServer(val);
-        transport->allowSyphonServer(val);
+    render->allowSyphonServer(val);
+    transport->allowSyphonServer(val);
 #endif
 }
 
