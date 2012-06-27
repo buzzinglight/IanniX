@@ -16,13 +16,9 @@ UiRenderSyphon::~UiRenderSyphon() {
 
 void UiRenderSyphon::openPort() {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-
-    NSString *title = @"IanniX";
-
+    
     if(!mSyphon)
-        mSyphon = [[SyphonServer alloc] initWithName:title context:CGLGetCurrentContext() options:nil];
-    else
-        [(SyphonServer *)mSyphon setName:title];
+        mSyphon = [[SyphonServer alloc] initWithName:nil context:CGLGetCurrentContext() options:nil];
 
     [pool drain];
 }
