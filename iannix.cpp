@@ -894,7 +894,7 @@ void IanniX::actionCC() {
         centerCounter++;
     }
     center /= centerCounter;
-    render->centerOn(center);
+    //render->centerOn(center);
 
     //Is solo active ?
     isObjectSoloActive = false;
@@ -937,7 +937,7 @@ void IanniX::actionCC2() {
         }
     }
     center /= centerCounter;
-    render->centerOn(center);
+    //render->centerOn(center);
 
     //Is solo active ?
     isGroupSoloActive = false;
