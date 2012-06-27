@@ -25,7 +25,7 @@ UiEditor::UiEditor(NxObjectFactoryInterface *_factory, QWidget *parent) :
     ui->setupUi(this);
     factory = _factory;
 
-    QRect screen = QApplication::desktop()->geometry();
+    QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.bottomRight().x() - rect().width(), 20);
 
     connect(ui->actionSave, SIGNAL(triggered()), SLOT(save()));

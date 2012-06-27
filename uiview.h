@@ -74,6 +74,8 @@ public slots:
     void actionImportText();
     void actionLockPos();
     void actionToggleLabel();
+    void setToggleLabel(bool val);
+    bool getToggleLabel();
     void actionAbout()            { emit(actionRouteAbout()); }
     void setColorTheme(bool);
 
@@ -89,6 +91,7 @@ public slots:
     void actionAlign_ellipse()    { emit(actionRouteArrange(9)); }
     void actionSnapshot();
     void actionResize();
+    void actionResize(QSize size);
     void unToogleDraw(quint16 id);
     void gridChange();
     void gridOpacityChange();

@@ -116,6 +116,9 @@
 #define COMMAND_GOTO                        QString("goto")
 #define COMMAND_TITLE                       QString("title")
 #define COMMAND_SLEEP                       QString("sleep")
+#define COMMAND_VIEWPORT                    QString("viewport")
+#define COMMAND_SNAPSHOT                    QString("snapshot")
+#define COMMAND_LOAD                        QString("load")
 
 #define COMMAND_SNAP_PUSH                   QString("pushsnapshot")
 #define COMMAND_SNAP_POP                    QString("popsnapshot")

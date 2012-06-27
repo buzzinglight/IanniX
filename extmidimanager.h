@@ -69,6 +69,8 @@ class ExtMidiManager : public QObject, public ExtMessageManager {
 private:
     QHash<QString, RtMidiIn*> portIn;
     QHash<QString, RtMidiOut*> portOut;
+    QList<QPair<QString, QStringList> > receivedMessages;
+    QMutex mutex;
 
 public:
     ExtMidiManager(NxObjectFactoryInterface *_factory);
@@ -90,6 +92,7 @@ public slots:
     void receivedMessage(const QString & destination, const QStringList &arguments);
     void receivedMidiRealtime(quint8 type, quint8 val1, quint8 val2);
     void setMidiTempo(qreal);
+    void parseReceivedMessage();
 };
 
 

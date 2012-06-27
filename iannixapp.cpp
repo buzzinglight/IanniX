@@ -22,6 +22,8 @@
 IanniXApp::IanniXApp(int &argc, char **argv) :
     QApplication(argc, argv) {
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
     setHelp();
     /*
@@ -194,6 +196,7 @@ void IanniXApp::setHelp() {
     Help::categories["javascript"].infos << HelpInfo(QString("random(low, high)"),               tr("Random number between low and high"));
     Help::categories["javascript"].infos << HelpInfo(QString("constrain(x, min, max)"),          tr("Values of x below min and above max are discarded"));
     Help::categories["javascript"].infos << HelpInfo(QString("dist(x1, y1, z1, x2, y2, z2)"), 	 tr("Distance between the points (x1, y1, z1) and (x2, y2, z2)"));
+    Help::categories["javascript"].infos << HelpInfo(QString("angle(x1, y1, x2, y2)"),           tr("Angle between the points (x1, y1) and (x2, y2)"));
     Help::categories["javascript"].infos << HelpInfo(QString("norm(x, low, high)"),              tr("Scale x to cover the range from low to high, assuming x ranges between 0.0 and 1.0:"));
     Help::categories["javascript"].infos << HelpInfo(QString("rangeMid(x, low, mid, high)"), 	 tr("Scale x to cover the range from low to high, assuming x ranges between 0.0 and 1.0, with mid being returned as the value for x=0.5"));
     Help::categories["javascript"].infos << HelpInfo(QString("map(x, low1, high1, low2, high2)"),tr("Scale x to cover the range from low2 to high2, assuming x ranges between low1 and high1"));
@@ -736,6 +739,31 @@ void IanniXApp::setHelp() {
                                            QString("add trigger 1\nzoom 200\ncenter 2 2"),
                                            QString(""));
 
+    Help::categories["commands"].infos << HelpInfo(QString("viewport"),
+                                           tr("Resize the viewport"),
+                                           tr("Resize the viewport"),
+                                           tr("viewport <width> <height>"),
+                                           QString("viewport 400 400"),
+                                           QString(""),
+                                           QString(""));
+
+
+    Help::categories["commands"].infos << HelpInfo(QString("snapshot"),
+                                           tr("Export as an image snapshot"),
+                                           tr("Make a snapshot of current score"),
+                                           tr("snapshot <scale> <filename,optional>"),
+                                           QString("snapshot 4"),
+                                           QString(""),
+                                           QString(""));
+
+    Help::categories["commands"].infos << HelpInfo(QString("rotate"),
+                                           tr("Rotate score"),
+                                           tr("Rotate the view about the x, y and z axes"),
+                                           tr("rotate <x-axis> <y-axis> <z-axis>"),
+                                           QString("rotate 45 0 0"),
+                                           QString(""),
+                                           QString(""));
+
     Help::categories["commands"].infos << HelpInfo(QString("rotate"),
                                            tr("Rotate score"),
                                            tr("Rotate the view about the x, y and z axes"),
@@ -774,6 +802,14 @@ void IanniXApp::setHelp() {
                                            tr("speed <speed>"),
                                            QString("speed 5"),
                                            QString("add curve auto\nsetPointsEllipse current 1 1\nsetPos current 1 0 0\nadd cursor auto\nsetCurve current lastCurve\nspeed 5"),
+                                           QString(""));
+
+    Help::categories["commands"].infos << HelpInfo(QString("load"),
+                                           tr("Load a score or a script"),
+                                           tr("Load a score or a script of the current project folder"),
+                                           tr("load <score name>"),
+                                           QString("load Script sample - IanniX logo"),
+                                           QString(""),
                                            QString(""));
 
     Help::categories["commands"].infos << HelpInfo(QString("log"),
@@ -835,6 +871,8 @@ void IanniXApp::setHelp() {
                                            QString(""),
                                            QString(""));
     */
+    foreach(const HelpInfo &info, Help::categories["values"].infos)
+        Help::keywords.append(qPrintable(info.keyword));
 }
 
 

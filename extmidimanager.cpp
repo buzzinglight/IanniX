@@ -293,12 +293,22 @@ void ExtMidiManager::sendSPPTime(qreal time) {
 }
 
 void ExtMidiManager::receivedMessage(const QString & destination, const QStringList & arguments) {
-    //Fire events (log, message and script mapping)
-    QString verbose = "midi://midiin/" + destination;
-    foreach(const QString &argument, arguments)
-        verbose += " " + argument;
-    factory->logOscReceive(verbose);
-    factory->onOscReceive("midi", "midiin", "", destination, arguments);
+    mutex.lock();
+    receivedMessages << qMakePair(destination, arguments);
+    mutex.unlock();
+}
+void ExtMidiManager::parseReceivedMessage() {
+    mutex.lock();
+    while(receivedMessages.count()) {
+        //Fire events (log, message and script mapping)
+        QString verbose = "midi://midiin/" + receivedMessages.at(0).first;
+        foreach(const QString &argument, receivedMessages.at(0).second)
+            verbose += " " + argument;
+        factory->logOscReceive(verbose);
+        factory->onOscReceive("midi", "midiin", "", receivedMessages.at(0).first, receivedMessages.at(0).second);
+        receivedMessages.removeFirst();
+    }
+    mutex.unlock();
 }
 void ExtMidiManager::receivedMidiRealtime(quint8 type, quint8 val1, quint8 val2) {
     if(type == MIDI_SPP)

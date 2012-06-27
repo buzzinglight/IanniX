@@ -26,7 +26,7 @@ UiView::UiView(QWidget *parent) :
     ui->render->setFocus();
     isFullScreen = false;
 
-    QRect screen = QApplication::desktop()->geometry();
+    QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.center() - rect().center());
 
     connect(ui->actionNew, SIGNAL(triggered()), ui->render, SLOT(actionNew()));
@@ -235,6 +235,14 @@ void UiView::actionZoom_initial() {
 void UiView::actionToggleLabel() {
     ui->render->getRenderOptions()->paintLabel = ui->actionToggleLabel->isChecked();
 }
+void UiView::setToggleLabel(bool val) {
+    ui->actionToggleLabel->setChecked(val);
+    actionToggleLabel();
+}
+bool UiView::getToggleLabel() {
+    return ui->actionToggleLabel->isChecked();
+}
+
 void UiView::actionSelectionModeChange() {
     emit(actionRouteSelectionModeChange(ui->actionAllow_cursors_selection->isChecked(), ui->actionAllow_curves_selection->isChecked(), ui->actionAllow_triggers_selection->isChecked()));
 }
@@ -368,6 +376,10 @@ void UiView::actionResize() {
     if(newSizes.count() == 2) {
         QSize newSize(newSizes.at(0).toUInt(), newSizes.at(1).toUInt());
         if((newSize.width() > 0) && (newSize.height() > 0))
-            resize(size() + newSize - ui->render->size());
+            actionResize(newSize);
     }
 }
+void UiView::actionResize(QSize newSize) {
+    resize(size() + newSize - ui->render->size());
+}
+

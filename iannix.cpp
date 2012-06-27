@@ -82,7 +82,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteAbout()), SLOT(actionLogo()));
     connect(view, SIGNAL(actionRouteImportSVG(QString)),            SLOT(actionImportSVG(QString)));
     connect(view, SIGNAL(actionRouteImportImage(QString)),          SLOT(actionImportImage(QString)));
-    connect(view, SIGNAL(actionRouteImportBackground(QString)),     SLOT(actionImportBackground(QString)), Qt::QueuedConnection);
+    connect(view, SIGNAL(actionRouteImportBackground(QString)),     SLOT(actionImportBackground(QString)));
     connect(view, SIGNAL(actionRouteImportText(QString,QString)),   SLOT(actionImportText(QString,QString)));
     connect(view, SIGNAL(actionRouteSelectionModeChange(bool,bool,bool)), SLOT(actionSelectionModeChange(bool,bool,bool)));
     connect(view, SIGNAL(actionRoutePasteScript()), SLOT(actionPasteScript()));
@@ -208,7 +208,6 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
 
 
 #ifdef KINECT_INSTALLED
-    kinect = 0;
     kinect = new ExtKinectManager();
 #endif
 
@@ -228,7 +227,9 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     timePerfCounter = 0;
     timer = new QTimer(this);
     timer->setInterval(5);
+    timerOk = false;
     connect(timer, SIGNAL(timeout()), this, SLOT(timerTick()));
+    timer->start();
     actionFast_rewind();
     actionTabChange(0);
 
@@ -291,6 +292,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("opacityCurve", false);
     if((forceSettings) || (!settings.childKeys().contains("autoresize")))
         settings.setValue("autoresize", false);
+    if((forceSettings) || (!settings.childKeys().contains("objectLabel")))
+        settings.setValue("objectLabel", true);
 
     inspector->setOSCPort(settings.value("oscPort").toUInt());
     inspector->setUDPPort(settings.value("udpPort").toUInt());
@@ -310,6 +313,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     inspector->setViewCurveOpacityCheck(settings.value("opacityCurve").toBool());
     render->setTriggerAutosize(settings.value("autoresize").toBool());
     view->toggleAutosize(settings.value("autoresize").toBool());
+    view->setToggleLabel(settings.value("objectLabel").toBool());
 
     acceptMidiSyncClock = settings.value("acceptMidiSyncClock").toBool();
     inspector->setMidiSyncClock(settings.value("acceptMidiSyncClock").toBool());
@@ -573,12 +577,12 @@ void IanniX::actionImportOldIanniXScore(const QString &filename) {
 void IanniX::setScheduler(SchedulerActivity _schedulerActivity) {
     schedulerActivity = _schedulerActivity;
     if(schedulerActivity != SchedulerOff) {
-        timer->start();
+        timerOk = true;
         renderMeasureAbsoluteValOld = 0;
         renderMeasureAbsolute.start();
     }
     else
-        timer->stop();
+        timerOk = false;
     transport->setPlay_pause(getScheduler());
     timeTransportRefresh = 9999;
     if(getScheduler())
@@ -601,10 +605,20 @@ void IanniX::timerEvent(QTimerEvent *) {
     transport->setPerfCpu((quint16)qRound(cpu->cpu));
 }
 void IanniX::timerTick() {
+    timerTick(false);
+}
+void IanniX::timerTick(bool force) {
     qreal renderMeasureAbsoluteVal = renderMeasureAbsolute.elapsed() / 1000.0F;
     qreal delta = renderMeasureAbsoluteVal - renderMeasureAbsoluteValOld;
     renderMeasureAbsoluteValOld = renderMeasureAbsoluteVal;
-    timerTick(delta);
+
+    //Parse MIDI
+    if((midi) && (!force))
+        midi->parseReceivedMessage();
+
+    //Tick !
+    if((force) || (timerOk))
+        timerTick(delta);
 }
 
 void IanniX::timerTick(qreal delta) {
@@ -631,7 +645,6 @@ void IanniX::timerTick(qreal delta) {
         osc->openBundle(oscBundleHost, oscBundlePort);
 
     //Browse documents
-    QRect cursorBoundingRectSearch;
     //QHashIterator<QString, NxDocument*> documentIterator(documents);
     /*while (documentIterator.hasNext())*/ {
         //documentIterator.next();
@@ -660,9 +673,6 @@ void IanniX::timerTick(qreal delta) {
                         if((!forceTimeLocal) && (cursor->getActive()) && (((!isGroupSoloActive) && (group->checkState(0) == Qt::Checked)) || ((isGroupSoloActive) && (group->checkState(1) == Qt::Checked))) && (((!isObjectSoloActive) && (cursor->checkState(1) == Qt::Checked)) || ((isObjectSoloActive) && (cursor->checkState(2) == Qt::Checked)))) {
                             //Messages
                             cursor->trig();
-
-                            //Bounding search
-                            cursorBoundingRectSearch = cursor->getBoundingRectSearch();
 
                             //Browse groups
                             foreach(const NxGroup *group, document->groups) {
@@ -741,7 +751,7 @@ void IanniX::checkForUpdatesFinished(QNetworkReply *reply) {
         if(info.length() > 0) {
             int rep = (new UiMessageBox())->display(tr("IanniX Update Center"), tr("A new version of IanniX is available"), info, tr("Would you like to update IanniX with the new version ?"), QPixmap(":/infos/res_info_update.png"), QDialogButtonBox::Yes | QDialogButtonBox::No);
             if(rep)
-                QDesktopServices::openUrl(QUrl("http://www.iannix.org", QUrl::TolerantMode));
+                QDesktopServices::openUrl(QUrl("http://www.iannix.org/en/download.php", QUrl::TolerantMode));
         }
     }
 }
@@ -1394,13 +1404,36 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             else if((commande == COMMAND_ZOOM) && (arguments.count() >= 2)) {
                 render->zoom(arguments.at(1).toDouble());
             }
+            else if((commande == COMMAND_LOAD) && (arguments.count() >= 1)) {
+                QString filename = command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+1)).trimmed();
+                bool ok = false;
+                ok = inspector->setProjectFiles(filename);
+                if(inspector->setProjectFiles(filename))
+                    actionProjectFiles();
+                else if(inspector->setProjectScripts(filename))
+                    actionProjectScripts();
+            }
+            else if((commande == COMMAND_SNAPSHOT) && (arguments.count() >= 3)) {
+                QString filename = command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+1)).trimmed();
+                render->captureFrame(arguments.at(1).toDouble(), filename);
+            }
+            else if((commande == COMMAND_SNAPSHOT) && (arguments.count() >= 2)) {
+                render->captureFrame(arguments.at(1).toDouble());
+            }
+            else if((commande == COMMAND_VIEWPORT) && (arguments.count() >= 3)) {
+                view->actionResize(QSize(arguments.at(1).toDouble(), arguments.at(2).toDouble()));
+            }
+            else if((commande == COMMAND_ROTATE) && (arguments.count() >= 5)) { ///CG/// Add command to set rotationX, rotationY, rotationZ;
+                render->rotateTo(NxPoint(arguments.at(1).toDouble(),arguments.at(2).toDouble(),arguments.at(3).toDouble()), true);
+            }
             else if((commande == COMMAND_ROTATE) && (arguments.count() >= 4)) { ///CG/// Add command to set rotationX, rotationY, rotationZ;
-                NxPoint _rotation(arguments.at(1).toDouble(),arguments.at(2).toDouble(),arguments.at(3).toDouble());
-                render->rotateTo(_rotation);
+                render->rotateTo(NxPoint(arguments.at(1).toDouble(),arguments.at(2).toDouble(),arguments.at(3).toDouble()));
+            }
+            else if((commande == COMMAND_CENTER) && (arguments.count() >= 4)) {
+                render->centerOn(NxPoint(arguments.at(1).toDouble(), arguments.at(2).toDouble()), true);
             }
             else if((commande == COMMAND_CENTER) && (arguments.count() >= 3)) {
-                render->getRenderOptions()->axisCenterDest = NxPoint(-arguments.at(1).toDouble(), -arguments.at(2).toDouble());
-                render->zoom();
+                render->centerOn(NxPoint(arguments.at(1).toDouble(), arguments.at(2).toDouble()));
             }
             else if((commande == COMMAND_PLAY) && (arguments.count() >= 2)) {
                 if(arguments.at(1).toDouble() != 0) {
@@ -1439,6 +1472,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if((commande == COMMAND_GOTO) && (arguments.count() >= 2)) {
                 actionGoto(arguments.at(1).toDouble());
+                timerTick(true);
             }
             else if((commande == COMMAND_GOTO) && (arguments.count() >= 1)) {
                 return timeLocal;
@@ -2259,6 +2293,7 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     settings.setValue("colorTheme", render->getColorTheme());
     settings.setValue("opacityCurve", inspector->getViewCurveOpacityCheck());
     settings.setValue("autoresize", render->getTriggerAutosize());
+    settings.setValue("objectLabel", view->getToggleLabel());
 
     event->accept();
 }

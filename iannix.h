@@ -157,7 +157,7 @@ public slots:
     }
     void syncTimer(qreal delta) {
         if(acceptMidiSyncClock) {
-            timer->stop();
+            timerOk = false;
             timerTick(delta);
         }
     }
@@ -211,11 +211,13 @@ private:
     qreal timeLocal, timeTransportRefresh, timePerfRefresh, timePerfCounter;
     QString timeLocalStr;
     QTimer *timer;
+    bool timerOk;
     bool forceTimeLocal;
 protected:
     void timerEvent(QTimerEvent *);
 private slots:
     void timerTick();
+    void timerTick(bool force);
     void timerTick(qreal delta);
     void closeSplash();
 signals:
@@ -225,10 +227,7 @@ private:
 public:
     void setScheduler(SchedulerActivity _schedulerActivity);
     inline bool getScheduler() const {
-        if(timer)
-            return timer->isActive();
-        else
-            return false;
+        return timerOk;
     }
 
 

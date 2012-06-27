@@ -750,7 +750,7 @@ WIDTH / DEPTH</string>
               </property>
               <property name="text">
                <string>CURSOR
-SPEED PATTERN</string>
+LOOP PATTERN</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

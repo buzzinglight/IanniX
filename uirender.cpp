@@ -218,28 +218,37 @@ void UiRender::capture(qreal scaleFactor) {
         }
 #endif
     }
-    else {
-        renderSize = size() * scaleFactor;
-        renderOptions->forceLists         = true;
-        renderOptions->forceTexture       = true;
-        renderOptions->forceFrustumInInit = true;
+    else
+        captureFrame(scaleFactor);
+}
+void UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
+    renderSize = size() * scaleFactor;
+    renderOptions->forceLists         = true;
+    renderOptions->forceTexture       = true;
+    renderOptions->forceFrustumInInit = true;
+    if(filename.isEmpty())
         renderPixmap(renderSize.width(), renderSize.height()).save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString(QDir::separator()) + "IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
-        renderOptions->forceLists         = false;
-        renderOptions->forceTexture       = false;
-        renderOptions->forceFrustumInInit = false;
-        texturesLoaded = false;
+    else {
+        QDir().mkpath(QFileInfo(filename).absoluteDir().absolutePath());
+        renderPixmap(renderSize.width(), renderSize.height()).save(filename);
     }
+    renderOptions->forceLists         = false;
+    renderOptions->forceTexture       = false;
+    renderOptions->forceFrustumInInit = false;
+    texturesLoaded = false;
 }
 
-void UiRender::centerOn(const NxPoint & center) {
-    if(!renderOptions->axisArea.contains(center)) {
-        renderOptions->axisCenterDest = -center;
-        zoom();
-    }
+void UiRender::centerOn(const NxPoint & center, bool force) {
+    renderOptions->axisCenterDest = -center;
+    if(force)
+        renderOptions->axisCenter = renderOptions->axisCenterDest;
+    zoom();
 }
 
-void UiRender::rotateTo(const NxPoint & rotation) {
-    setRotation(rotation);
+void UiRender::rotateTo(const NxPoint & rotation, bool force) {
+    renderOptions->rotationDest = rotation;
+    if(force)
+        renderOptions->rotation = renderOptions->rotationDest;
     zoom();
 }
 

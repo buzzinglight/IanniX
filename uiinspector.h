@@ -103,8 +103,8 @@ public slots:
     inline void setFactory(NxObjectFactoryInterface *_factory) {
         factory = _factory;
     }
-    void setProjectFiles(QString filename);
-    void setProjectScripts(QString filename);
+    bool setProjectFiles(QString filename);
+    bool setProjectScripts(QString filename);
 
 
 public:

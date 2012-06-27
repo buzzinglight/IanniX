@@ -54,7 +54,7 @@ ExtOscPatternAsk::ExtOscPatternAsk(NxObjectFactoryInterface *_factory, QWidget *
 
     ui->splitter->setSizes(QList<int>() << 350 << 0);
 
-    QRect screen = QApplication::desktop()->geometry();
+    QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.center() - rect().center());
 }
 

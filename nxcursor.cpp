@@ -325,10 +325,14 @@ void NxCursor::paint() {
                 glPushMatrix();
                 glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
                 glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 8.F);
+                if(curve)
+                    glLineWidth(curve->getSize());
+                else
+                    glLineWidth(1);
 
                 if((glListRecreate) || (renderOptions->forceLists)) {
                     glNewList(glListCursor, GL_COMPILE_AND_EXECUTE);
-                    qreal lats = 20, longs = 20;
+                    qreal lats = 40, longs = 40;
                     qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
                     glBegin(GL_LINE_STRIP);
                     for(quint16 i = 0; i <= lats; i++) {

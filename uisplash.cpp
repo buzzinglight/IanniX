@@ -29,7 +29,7 @@ UiSplash::UiSplash(QWidget *parent) :
 #endif
     setWindowFlags(Qt::FramelessWindowHint);
     ui->version->setText(tr("version") + " " + QString(QCoreApplication::applicationVersion()) + " " + tr("beta"));
-    QRect screen = QApplication::desktop()->geometry();
+    QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.center() - rect().center());
 }
 

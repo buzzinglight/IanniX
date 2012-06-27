@@ -115,25 +115,27 @@ QTreeWidget* UiInspector::getProjectFiles() const {
 QTreeWidget* UiInspector::getProjectScripts() const {
     return ui->projectScripts;
 }
-void UiInspector::setProjectFiles(QString filename) {
+bool UiInspector::setProjectFiles(QString filename) {
     for(quint16 i = 0 ; i < ui->projectFiles->topLevelItemCount() ; i++) {
         for(quint16 j = 0 ; j < ui->projectFiles->topLevelItem(i)->childCount() ; j++) {
             if(ui->projectFiles->topLevelItem(i)->child(j)->text(0) == filename) {
                 ui->projectFiles->setCurrentItem(ui->projectFiles->topLevelItem(i)->child(j));
-                return;
+                return true;
             }
         }
     }
+    return false;
 }
-void UiInspector::setProjectScripts(QString filename) {
+bool UiInspector::setProjectScripts(QString filename) {
     for(quint16 i = 0 ; i < ui->projectScripts->topLevelItemCount() ; i++) {
         for(quint16 j = 0 ; j < ui->projectScripts->topLevelItem(i)->childCount() ; j++) {
             if(ui->projectScripts->topLevelItem(i)->child(j)->text(0) == filename) {
                 ui->projectScripts->setCurrentItem(ui->projectScripts->topLevelItem(i)->child(j));
-                return;
+                return true;
             }
         }
     }
+    return false;
 }
 
 void UiInspector::changeID_success(bool result, quint16 newId) {  ////CG////

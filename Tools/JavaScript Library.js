@@ -86,7 +86,20 @@ function constrain(value, min, max) {
 	return Math.min(max, Math.max(min, value));
 }
 function dist(x1, y1, z1, x2, y2, z2) {
-	return Math.sqrt(sq(x1-x2) + sq(y1-y2) + sq(z1-z2));
+	var dx = x2 - x1, dy = y2 - y1, dz = z2 - z1;
+	return Math.sqrt(sq(dx) + sq(dy) + sq(dz));
+}
+function angle(x1, y1, x2, y2) {
+	var dx = x2 - x1, dy = y2 - y1, angle = 0;
+	if((dx > 0) && (dy >= 0))
+	    angle = (Math.atan(dy / dx)) * 180.0 / PI;
+	else if((dx <= 0) && (dy > 0))
+	    angle = (-Math.atan(dx / dy) + HALF_PI) * 180.0 / PI;
+	else if((dx < 0) && (dy <= 0))
+	    angle = (Math.atan(dy / dx) + PI) * 180.0 / PI;
+	else if((dx >= 0) && (dy < 0))
+	    angle = (-Math.atan(dx / dy) + 3 * HALF_PI) * 180.0 / PI;
+	return angle;
 }
 function norm(value, low, high) {
 	if((high - low) == 0)

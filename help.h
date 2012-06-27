@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QByteArray>
 
 class HelpInfo {
 public:
@@ -32,6 +33,7 @@ public:
 class Help {
 public:
     static QHash<QString, HelpCategory> categories;
+    static QList<QByteArray> keywords;
 };
 
 #endif // HELP_H

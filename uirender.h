@@ -25,6 +25,7 @@
 #include <QTime>
 #include <QWheelEvent>
 #include <QtCore/qmath.h>
+#include <QDir>
 #include <QClipboard>
 #include "nxdocument.h"
 #include "nxobjectfactoryinterface.h"
@@ -132,10 +133,6 @@ public:
         return renderOptions->triggerAutosize;
     }
 
-    inline void setRotation(NxPoint _rotation) {  ///CG///
-        renderOptions->rotationDest = _rotation;
-    }
-
 signals:
     void setPerfOpenGL(const QString & val);
     void editingStart(const NxPoint &);
@@ -171,8 +168,8 @@ public:
         return renderOptions;
     }
     void flagIsRemoving() { isRemoving = true; }
-    void centerOn(const NxPoint & center);
-    void rotateTo(const NxPoint & rotation);
+    void centerOn(const NxPoint & center, bool force = false);
+    void rotateTo(const NxPoint & rotation, bool force = false);
 
 private:
     NxPoint mousePressedRawPos, mousePressedAreaPos, mousePressedAreaPosNoCenter, mousePressedAxisCenter;
@@ -247,6 +244,7 @@ public slots:
     void actionFollowID(qint16);
     void actionArrange(quint16 type);
     void capture(qreal scaleFactor);
+    void captureFrame(qreal scaleFactor, const QString &filename = "");
 
 signals:
     void actionRouteNew();

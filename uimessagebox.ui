@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>526</width>
+    <width>245</width>
     <height>201</height>
    </rect>
   </property>
@@ -289,8 +289,14 @@ QTabBar::tab:!selected {
            <widget class="QDoubleSpinBox" name="spinSpin">
             <property name="minimumSize">
              <size>
-              <width>76</width>
-              <height>34</height>
+              <width>0</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>24</height>
              </size>
             </property>
             <property name="alignment">
@@ -367,8 +373,14 @@ QTabBar::tab:!selected {
              <widget class="QDoubleSpinBox" name="spinpSpin">
               <property name="minimumSize">
                <size>
-                <width>76</width>
-                <height>34</height>
+                <width>0</width>
+                <height>24</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>24</height>
                </size>
               </property>
               <property name="alignment">
@@ -419,8 +431,14 @@ QTabBar::tab:!selected {
            <widget class="QLineEdit" name="textEdit">
             <property name="minimumSize">
              <size>
-              <width>76</width>
-              <height>34</height>
+              <width>0</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>24</height>
              </size>
             </property>
             <property name="alignment">
