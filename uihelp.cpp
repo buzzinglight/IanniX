@@ -62,11 +62,11 @@ void UiHelp::display(const QString &looking, const QStringList &lookCategories) 
                             if(!description.isEmpty())
                                 htmlCategory += QString("<span class='sstitre'>%1</span>     <table width='100%'><tr><td></td><td width='97%' class='description'><span             >%2</span></td></tr></table><br/><br/>").arg(title).arg(description);
                             if(!syntax.isEmpty())
-                                htmlCategory += QString("<span class='sstitre'>SYNTAX</span> <table width='100%'><tr><td></td><td width='97%' class='syntax'     ><span class='code'>%1</span></td></tr><tr><td></td><td align='right'><a class='action' href='%2'>IMPLEMENT IN SCRIPT</a></td></tr></table><br/><br/>").arg(syntax).arg(info.syntax);
+                                htmlCategory += QString("<span class='sstitre'>%3</span> <table width='100%'><tr><td></td><td width='97%' class='syntax'     ><span class='code'>%1</span></td></tr><tr><td></td><td align='right'><a class='action' href='%2'>%4</a></td></tr></table><br/><br/>").arg(syntax).arg(info.syntax).arg(tr("SYNTAX")).arg(tr("IMPLEMENT IN SCRIPT"));
                             if(!example.isEmpty())
-                                htmlCategory += QString("<span class='sstitre'>EXAMPLE</span><table width='100%'><tr><td></td><td width='97%' class='example'    ><span class='code'>%1</span></td></tr><tr><td></td><td align='right'><a class='action' href='%2'>IMPLEMENT IN SCRIPT</a></td></tr></table><br/><br/>").arg(example).arg(info.example);
+                                htmlCategory += QString("<span class='sstitre'>%3</span><table width='100%'><tr><td></td><td width='97%' class='example'    ><span class='code'>%1</span></td></tr><tr><td></td><td align='right'><a class='action' href='%2'>%4</a></td></tr></table><br/><br/>").arg(example).arg(info.example).arg(tr("EXAMPLE")).arg(tr("IMPLEMENT IN SCRIPT"));
                             if(!snippet.isEmpty())
-                                htmlCategory += QString("<span class='sstitre'>SNIPPET</span><table width='100%'><tr><td></td><td width='97%' class='snippet'    ><span class='code'>%1</span></td></tr><tr><td></td><td align='right'><a class='action' href='%2'>IMPLEMENT IN SCRIPT</a></td></tr></table><br/><br/>").arg(snippet).arg(info.snippet);
+                                htmlCategory += QString("<span class='sstitre'>%3</span><table width='100%'><tr><td></td><td width='97%' class='snippet'    ><span class='code'>%1</span></td></tr><tr><td></td><td align='right'><a class='action' href='%2'>%4</a></td></tr></table><br/><br/>").arg(snippet).arg(info.snippet).arg(tr("SNIPPET")).arg(tr("IMPLEMENT IN SCRIPT"));
                             htmlCategory += QString("<hr/>");
                         }
                         else {

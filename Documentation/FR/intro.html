@@ -1,106 +1,72 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Language" content="fr" />
-  <meta name="language" content="fr" />
-  <meta name="designer" content="buzzing light" />
-  <meta name="description" content="IanniX documentation" />
-  <link href="../Common/css/reset.css" rel="stylesheet" type="text/css" />
-  <link href="../Common/font/stylesheet.css" rel="stylesheet" type="text/css" />
-  <link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
-  <script type="text/javascript" src="../Common/jquery.js">
-</script>
-
-  <title>IanniX — Installation</title>
-  <style type="text/css">
-/*<![CDATA[*/
-  a.c1 {color:#aaa; text-decoration:none;}
-  /*]]>*/
-  </style>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="en" />
+	<meta name="generator"   content="IanniX" />
+	<meta name="language"    content="en" />
+	<meta name="designer"    content="buzzing light" />
+	<meta name="description" content="IanniX documentation" />
+	<link href="../Common/css/reset.css"              rel="stylesheet" type="text/css" />
+	<link href="../Common/font/stylesheet.css"        rel="stylesheet" type="text/css" />
+	<link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../Common/jquery.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("h3").next().hide();
+			$("h3").click(function() {
+				$(this).next().toggle(500);
+			});
+			
+			var anchors = document.location.href.split("#");
+			if(anchors.length > 1)
+				$("#" + anchors[1] + " h3").next().toggle(500);
+		});
+	</script>
+	<title>IanniX — Commands &amp; messages</title>
+	<style type="text/css">
+		li.c2 {list-style: none}
+		a.c1 {color:#aaa; text-decoration:none;}
+	</style>
 </head>
 
 <body>
-  <div class='main container'>
-    <table class="onglets" summary="">
-      <tr>
-        <td class="onglet" id='actif'><a href="intro.html">Introduction</a></td>
-
-        <td class="onglet"><a href="objets.html">Objets<br />
-        fondamentaux</a></td>
-
-        <td class="onglet"><a href="messages.html">Messages émis<br />
-        et reçus</a></td>
-
-        <td class="onglet"><a href="overview.html">Interface<br />
-        graphique</a></td>
-
-        <td class="onglet"><a href="script.html">Scripts</a></td>
-
-        <td class="onglet"><a href="reference.html">Référence</a></td>
-
-        <td class="onglet"><a href="listing.html">Index<br />
-        des fonctions</a></td>
-      </tr>
-    </table>
-
-    <div class="langue">
-      <a class="c1" href="../EN/intro.html">English version</a>
+	<div class='main container'>
+		<table class="onglets" summary="">
+			<tr>
+				<td class="onglet" id='onglet_intro'><a href="intro.html">Introduction</a></td>
+				<td class="onglet" id='onglet_objets'><a href="objets.html">Éléments<br/>principaux</a></td>
+				<td class="onglet" id='onglet_script'><a href="script.html">Scripts</a></td>
+				<td class="onglet" id='onglet_reference'><a href="reference.html">Référence</a></td>
+			</tr>
+		</table>
+	<div class="langue">
+		<a class="c1" href="../FR/index.html">Version française</a>
     </div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#onglet_intro").addClass("actif");
+		});
+	</script>
 
     <h2>Installation</h2>
-
-    <p>IanniX est compatible avec Linux, Mac OS X 10.6+ et Windows et ne nécessite pas
-    d’installation particulière.<br />
-    Pour les utilisateurs de IanniX sous Linux qui ne souhaitent pas compiler depuis les
-    sources, nous avons inclus une version compilée que vous pourrez exécuter en lançant
-    le fichier <code>IanniX.sh</code>.</p>
+    <p>IanniX est compatible avec Linux, Mac OS X 10.6+ et Windows et ne nécessite pas d’installation particulière.<br /> Pour les utilisateurs de IanniX sous Linux qui ne souhaitent pas compiler depuis les sources, nous avons inclus une version compilée que vous pourrez exécuter en lançant le fichier <code>IanniX.sh</code>.</p>
 
     <h2>Open Sound Control</h2>
-
-    <p>L’Open Sound Control est un protocole de communication qui fonctionne sur le
-    réseau IP (donc sur Ethernet, Wi-Fi, sur Internet…). Il est reconnu par tous les
-    systèmes d’exploitation et ne nécessite pas de drivers ou de configuration réseau.
-    Quelques connaissances en réseau sont toutefois nécessaires pour des usages plus
-    poussés.<br />
-    <br />
-    La règle d'or pour l'OSC est de faire correspondre les adresses IP et les ports : un
-    message envoyé par IanniX au <code>127.0.0.1:57120</code> signifie qu'il est envoyé à
-    la machine local sur le port&nbsp;57120. L'application qui veut recevoir ce message
-    devra donc ouvrir le port 57120.</p>
+    <p>L’Open Sound Control est un protocole de communication qui fonctionne sur le réseau IP (donc sur Ethernet, Wi-Fi, sur Internet…). Il est reconnu par tous les systèmes d’exploitation et ne nécessite pas de drivers ou de configuration réseau. Quelques connaissances en réseau sont toutefois nécessaires pour des usages plus poussés.<br/><br/> La règle d'or pour l'OSC est de faire correspondre les adresses IP et les ports : un message envoyé par IanniX au <code>127.0.0.1:57120</code> signifie qu'il est envoyé à la machine local sur le port&nbsp;57120. L'application qui veut recevoir ce message devra donc ouvrir le port 57120.</p>
 
     <h2>MIDI</h2>
-
-    <p>Afin de rester compatible avec les stations MIDI, nous avons intégré nativement le
-    protocole MIDI.<br />
-    Pour les utilisateurs de Windows qui ne possèdent pas de périphériques MIDI
-    matériels, vous devez installer un périphérique MIDI virtuel tel que <a href=
-    "http://www.nerds.de/data/setuploopbe1.exe">LoopBe</a>.</p>
+    <p>Afin de rester compatible avec les stations MIDI, nous avons intégré nativement le protocole MIDI.<br /> Pour les utilisateurs de Windows qui ne possèdent pas de périphériques MIDI matériels, vous devez installer un périphérique MIDI virtuel tel que <a href='http://www.nerds.de/data/setuploopbe1.exe'>LoopBe</a>.</p>
 
     <h2>Interfaces &amp; logiciels</h2>
-
-    <p>Nous avons mis à votre disposition des patches/interfaces pour les logiciels
-    couramment utilisés que nous avons testés. Cliquez sur le bouton <a href=
-    "overview.html">"Open Patches Folder"</a> de la barre d'outils depuis IanniX pour les
-    découvrir.<br />
-    Il s'agit d'exemples très simples qui illustrent le principe de communication entre
-    IanniX et les logiciels ; nous vous invitons à les modifier et à vous en inspirer
-    pour vos projets.</p>
+    <p>Nous avons mis à votre disposition des patches/interfaces pour les logiciels couramment utilisés que nous avons testés. Cliquez sur le bouton 'Open Patches Folder' de la barre d'outils depuis IanniX pour les découvrir.<br/> Il s'agit d'exemples très simples qui illustrent le principe de communication entre IanniX et les logiciels ; nous vous invitons à les modifier et à vous en inspirer pour vos projets.</p>
 
     <h2>Bugs</h2>
+    <p>IanniX est toujours en beta-testing, quelques bugs sont donc encore présents mais la plupart des fonctionnalités peuvent être employées correctement. Vous pouvez signaler les erreurs dans la section « Bugs » de notre <a href='http://iannix.org/fr/community.php'>forum</a>.</p>
 
-    <p>IanniX est toujours en beta-testing, quelques bugs sont donc encore présents mais
-    la plupart des fonctionnalités peuvent être employées correctement. Vous pouvez
-    signaler les erreurs dans la section « Bugs » de notre <a href=
-    "http://iannix.org/en/community.php">forum</a>.</p>
+    <h2>Suivi de versions</h2>
 
-    <h2>Version tracking</h2>
-
-	<p>Known bugs</p>
+	<p>Bugs connus</p>
 	<ul>
 		<li>on Linux, you need to press on <code>ALT</code>+<code>CONTROL</code> to control IanniX in 3D</li>
 		<li><code>Snap to grid</code> option can make the object selection difficult to use</li>
@@ -309,7 +275,6 @@
       <li>minor bugs with keyboard shortcuts (arrows) fix</li>
 
       <li>compilation warnings fix</li>
-    </ul>
-  </div>
+    </ul>	</div>
 </body>
 </html>

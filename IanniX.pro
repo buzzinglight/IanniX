@@ -154,7 +154,7 @@ FORMS                   += uitransport.ui \
                            uitimer.ui \
                            uimessagebox.ui
 
-TRANSLATIONS             = iannix_fr.ts
+TRANSLATIONS             = Tools/Translation_fr_FR.ts
 
 RESOURCES               += IanniX.qrc
 

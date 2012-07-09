@@ -1,0 +1,63 @@
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#onglet_objets").addClass("actif");
+		});
+	</script>
+	
+	<h2>%1</h2>
+	<p>%2</p>
+	<ul>%3</ul>
+	
+	<h2>%4</h2>
+	<p>%5</p>
+	<ul>%6</ul>
+	
+	<h2>%7</h2>
+	<p>%8</p>
+	<ul>%9</ul>
+
+    <h2>%10</h2>
+    <p>%11<br/></p>
+    <p>%12<br/></p>
+    <p>%13</p>
+    <p>%14</p>
+    <p>%15</p>
+
+	
+	<h2>%16</h2>
+	<p>%17<span class="message"><code>osc://127.0.0.1:1234/iannix/<span class="api">setTime</span><span class="target">11</span> <span class="time">0</span></code></span> &nbsp;or&nbsp;<span class="message"><code>direct:// <span class="api">setTime</span><span class="target">11</span> <span class="time">0</span></code>.</span><br/><br/></p>
+	<table class="exemple">
+		<tr>
+			<td>
+				<object type="application/x-shockwave-flash" data="../Common/vid/settime.swf" width="195" height="195">
+				<param name="movie" value="../Common/vid/settime.swf" />
+				<param name="quality" value="high" />
+				<param name="bgcolor" value="#000000" />
+				<param name="play" value="true" />
+				<param name="loop" value="true" />
+				<param name="wmode" value="window" />
+				<param name="scale" value="showall" />
+				<param name="menu" value="false" />
+				<param name="allowScriptAccess" value="sameDomain" />
+				<param name="allowFullScreen" value="true" />
+				</object>
+			</td>
+			<td>
+				<div class='copypaste'>%18</div>
+				<div class="code">
+					<code>add curve 1<br />
+					setPointsEllipse current 2 2<br />
+					setPos current 0 0 0 0 <br />
+					<br />
+					add cursor 11<br />
+					setCurve 11 1<br />
+					<br />
+					add trigger 21<br />
+					setPos current -2 0 0<br />
+					setMessage current 10,
+					direct:// <span class="api">setTime</span> <span class="target">11</span>
+					<span class="time">0<br /></code>
+				</div>
+			</td>
+		</tr>
+	</table>

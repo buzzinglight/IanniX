@@ -97,7 +97,7 @@ public slots:
     void gridChange();
     void gridOpacityChange();
     void help() {
-        QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Documentation/index.html").absoluteFilePath().replace("\\", "/"), QUrl::TolerantMode));
+        QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Documentation/" + tr("EN") + "/index.html").absoluteFilePath().replace("\\", "/"), QUrl::TolerantMode));
     }
     void actionPatchesFolder() {
         QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Patches/").absoluteFilePath().replace("\\", "/"), QUrl::TolerantMode));

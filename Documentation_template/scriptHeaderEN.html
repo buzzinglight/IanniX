@@ -1,48 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Language" content="en" />
-	<meta name="generator"   content="IanniX" />
-	<meta name="language"    content="en" />
-	<meta name="designer"    content="buzzing light" />
-	<meta name="description" content="IanniX documentation" />
-	<link href="../Common/css/reset.css"              rel="stylesheet" type="text/css" />
-	<link href="../Common/font/stylesheet.css"        rel="stylesheet" type="text/css" />
-	<link href="../Common/css/styleDocumentation.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="../Common/jquery.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("h3").next().hide();
-			$("h3").click(function() {
-				$(this).next().toggle(500);
-			});
-			
-			var anchors = document.location.href.split("#");
-			if(anchors.length > 1)
-				$("#" + anchors[1] + " h3").next().toggle(500);
-		});
-	</script>
-	<title>IanniX — Commands &amp; messages</title>
-	<style type="text/css">
-		li.c2 {list-style: none}
-		a.c1 {color:#aaa; text-decoration:none;}
-	</style>
-</head>
-
-<body>
-	<div class='main container'>
-		<table class="onglets" summary="">
-			<tr>
-				<td class="onglet" id='onglet_intro'><a href="intro.html">Introduction</a></td>
-				<td class="onglet" id='onglet_objets'><a href="objets.html">Main<br/>elements</a></td>
-				<td class="onglet" id='onglet_script'><a href="script.html">Scripts</a></td>
-				<td class="onglet" id='onglet_reference'><a href="reference.html">Reference</a></td>
-			</tr>
-		</table>
-	<div class="langue">
-		<a class="c1" href="../FR/index.html">Version française</a>
-    </div>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#onglet_script").addClass("actif");
@@ -487,6 +442,4 @@
               run("setCurve   current lastCurve");        
               run("setSpeed   current auto 10");
           }    
-	</pre>	</div>
-</body>
-</html>
+	</pre>

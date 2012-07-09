@@ -53,7 +53,7 @@ public slots:
     void actionAddMessage();
     void actionRemoveMessage();
     void help() {
-        QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Documentation/index.html").absoluteFilePath().replace("\\", "/") + "#messages", QUrl::TolerantMode));
+        QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Documentation/" + tr("EN") + "/index.html").absoluteFilePath().replace("\\", "/") + "#messages", QUrl::TolerantMode));
     }
     void actionFieldFocus(QComboBox*,QPlainTextEdit*);
 
