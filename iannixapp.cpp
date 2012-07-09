@@ -330,9 +330,17 @@ void IanniXApp::setHelp() {
                                            QString(""));
 
     Help::categories["commands"].infos << HelpInfo(QString("setTime"),
-                                           tr("Instantaneous position"),
+                                           tr("Instantaneous position (in seconds)"),
                                            tr("The position of a cursor can be modified in real time. This instruction does not work if you include it directly in your script, because at each execution, IanniX does a fastrewind."),
                                            tr("setTime <target> <time>"),
+                                           QString("setTime 11 0"),
+                                           QString("add curve 1\nsetPointsEllipse current 2 2\nsetPos current 0 0 0\n\nadd cursor 11\nsetCurve 11 1\n\nadd trigger 21\nsetPos current -2 0 0\nsetMessage current 10, direct:// setTime 11 0"),
+                                           QString(""));
+
+    Help::categories["commands"].infos << HelpInfo(QString("setTimePercent"),
+                                           tr("Instantaneous position (in percentages)"),
+                                           tr("The position of a cursor can be modified in real time. This instruction does not work if you include it directly in your script, because at each execution, IanniX does a fastrewind."),
+                                           tr("setTimePercent <target> <time>"),
                                            QString("setTime 11 0"),
                                            QString("add curve 1\nsetPointsEllipse current 2 2\nsetPos current 0 0 0\n\nadd cursor 11\nsetCurve 11 1\n\nadd trigger 21\nsetPos current -2 0 0\nsetMessage current 10, direct:// setTime 11 0"),
                                            QString(""));
@@ -542,6 +550,25 @@ void IanniXApp::setHelp() {
                                            QString(""));
 
 
+    Help::categories["commands"].infos << HelpInfo(QString("solo"),
+                                           tr("Solo/un-solo"),
+                                           tr("Solo/un-solo an object or a group (exactly like in Objects of inspector tab)"),
+                                           tr("solo <target> <0|1>\n") +
+                                           QString("solo myGroup 1"),
+                                           QString(""),
+                                           QString(""));
+
+
+    Help::categories["commands"].infos << HelpInfo(QString("mute"),
+                                           tr("Mute/un-mute"),
+                                           tr("Mute/un-mute an object or a group (exactly like in Objects of inspector tab)"),
+                                           tr("mute <target> <1|0>\n") +
+                                           QString("mute myGroup 0"),
+                                           QString(""),
+                                           QString(""));
+
+
+/*
     Help::categories["commands"].infos << HelpInfo(QString("toggleGroup"),
                                            tr("Toggle/untoogle a group (like in Objects of inspector tab)"),
                                            tr("Description"),
@@ -550,7 +577,7 @@ void IanniXApp::setHelp() {
                                            QString("toggleGroup myGroup 1"),
                                            QString(""),
                                            QString(""));
-
+*/
 
 
 

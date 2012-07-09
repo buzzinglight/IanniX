@@ -39,8 +39,10 @@ public:
         foreach(NxGroup *group, groups)
             group->dispatchProperty(property, value);
     }
-    inline const QVariant getProperty(const QString &) const {
-        return id;
+    inline const QVariant getProperty(const QString &_property) const {
+        foreach(NxGroup *group, groups)
+            return group->getProperty(_property);
+        return QVariant();
     }
     inline quint8 getType() const {
         return ObjectsTypeDocument;
@@ -115,6 +117,12 @@ public:
     inline NxObject* getObject(quint16 id) const {
         if(objects.contains(id))
             return objects.value(id);
+        else
+            return 0;
+    }
+    inline NxGroup* getGroup(QString id) const {
+        if(groups.contains(id))
+            return groups.value(id);
         else
             return 0;
     }

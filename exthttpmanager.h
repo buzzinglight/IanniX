@@ -31,6 +31,7 @@ class ExtHttpManager : public QTcpServer, public ExtMessageManager {
 
 private:
     QNetworkAccessManager *http;
+    QString htmlTemplate;
 
 public:
     ExtHttpManager(NxObjectFactoryInterface *_factory);

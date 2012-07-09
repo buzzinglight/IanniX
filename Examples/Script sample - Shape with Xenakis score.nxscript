@@ -34,7 +34,7 @@ function addLine(lineIndex, start, end) {
 	run("setPointAt      current 1 " + end.x   + " " + end.y);
 	
 	run("add cursor      " + lineIndex);
-	run("setGroup        current cursors");
+	run("setGroup        current values");
 	run("setCurve        current lastCurve");
 	run("setSpeed        current " + (2 + lineIndex / lineMax * 2));
 	run("setBoundsSource current -5 5 10 -5");

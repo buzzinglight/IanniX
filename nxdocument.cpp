@@ -65,6 +65,19 @@ QString NxDocument::serialize(UiRenderOptions *renderOptions, bool hasAScript) {
             }
         }
     }
+
+    foreach(NxGroup *group, groups) {
+        if(group->checkState(0) == Qt::Unchecked)
+            retour += COMMAND_MUTE + QString(" %1 0").arg(group->getId()) + COMMAND_END;
+        if(group->checkState(1) == Qt::Checked)
+            retour += COMMAND_SOLO + QString(" %1 1").arg(group->getId()) + COMMAND_END;
+    }
+    foreach(NxObject *object, objects) {
+        if(object->checkState(1) == Qt::Unchecked)
+            retour += COMMAND_MUTE + QString(" %1 0").arg(object->getId()) + COMMAND_END;
+        if(object->checkState(2) == Qt::Checked)
+            retour += COMMAND_SOLO + QString(" %1 1").arg(object->getId()) + COMMAND_END;
+    }
     return retour;
 }
 

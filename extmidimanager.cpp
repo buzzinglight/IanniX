@@ -53,6 +53,9 @@ void midiCallback(double, std::vector< unsigned char > *receivedMessage, void *u
                 midi->receivedMessage("note", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)) << QString::number(velocity));
         }
             break;
+        case STATUS_BEND:
+            midi->receivedMessage("bend", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)));
+            break;
         case STATUS_CTLCHG:
             midi->receivedMessage("cc", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)) << QString::number(receivedMessage->at(2)));
             break;
@@ -70,8 +73,8 @@ ExtMidiManager::ExtMidiManager(NxObjectFactoryInterface *_factory)
 
     midiTempo = 120;
 
-    QString portOutName = "IanniX_Out";
-    QString portInName = "IanniX_In";
+    portOutName = "IanniX_Out";
+    portInName = "IanniX_In";
 
     refreshList();
 
@@ -112,7 +115,7 @@ void ExtMidiManager::refreshList() {
             portName = portName.replace(" ", "");
             portName = portName.replace("/", "");
             portName = portName.toLower();
-            if(!portIn.contains(portName)) {
+            if((!portIn.contains(portName)) && (portName != portInName)) {
                 portIn.insert(portName, new RtMidiIn());
                 portIn.value(portName)->openPort(portListInIndex);
                 portIn.value(portName)->setCallback(&midiCallback, this);

@@ -203,9 +203,9 @@ public:
                         if(patternArgument.contains("cursor_value_sz"))
                             messageScriptValue.setProperty("cursor_value_sz", cursor->getCurrentValue().sz());
                         if(patternArgument.contains("cursor_time"))
-                            messageScriptValue.setProperty("cursor_time", cursor->getCurrentPosition());
+                            messageScriptValue.setProperty("cursor_time", cursor->getTimeLocal());
                         if(patternArgument.contains("cursor_time_percent"))
-                            messageScriptValue.setProperty("cursor_time_percent", cursor->getCurrentPositionPercent());
+                            messageScriptValue.setProperty("cursor_time_percent", cursor->getTimeLocalPercent());
                         if(patternArgument.contains("cursor_angle"))
                             messageScriptValue.setProperty("cursor_angle", fmod(cursor->getCurrentAngle(),360));
                         if(patternArgument.contains("cursor_nb_loop"))
@@ -364,9 +364,9 @@ public:
                         else if(patternArgument == "cursor_value_sz")
                             found = addFloat(cursor->getCurrentValue().sz(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_time")
-                            found = addFloat(cursor->getCurrentPosition(), patternArgument, patternIndex);
+                            found = addFloat(cursor->getTimeLocal(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_time_percent")
-                            found = addFloat(cursor->getCurrentPositionPercent(), patternArgument, patternIndex);
+                            found = addFloat(cursor->getTimeLocalPercent(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_angle")
                             found = addFloat(fmod(cursor->getCurrentAngle(),360), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_nb_loop")

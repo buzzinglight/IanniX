@@ -199,14 +199,10 @@ public slots:
     inline const NxPoint & getPos() const {
         return pos;
     }
-    inline QString getPosStr() const {
+    inline virtual QString getPosStr() const {
         return QString("%1 %2 %3").arg(pos.x()).arg(pos.y()).arg(pos.z());
     }
-    /*
-    inline const NxPoint getPosTransform() const {
-        return renderOptions->transform(pos);
-    }
-    */
+
     virtual void calcBoundingRect() = 0;
     virtual bool isMouseHover(const NxPoint & mouse) = 0;
 
@@ -231,11 +227,11 @@ public slots:
         return lineFactor;
     }
 
-    inline virtual void dragStart() {
+    inline virtual void dragStart(const NxPoint &) {
         posDrag = pos;
         isDrag = true;
     }
-    inline virtual void drag(const NxPoint & translation) {
+    inline virtual void drag(const NxPoint & translation, const NxPoint &) {
         setPos(posDrag + translation);
     }
     inline virtual void dragStop() {
@@ -348,7 +344,7 @@ public slots:
         foreach(const QVector<QByteArray> & messagePattern, messagePatterns) {
             foreach(const QByteArray & messagePatternItem, messagePattern)
                 messagePatternsStr += messagePatternItem + " ";
-            messagePatternsStr += ",";
+            messagePatternsStr += ", ";
         }
         return messagePatternsStr.trimmed();
     }

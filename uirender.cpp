@@ -788,9 +788,9 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                     //}
 
                     foreach(NxObject* object, selection)
-                        object->dragStart();
+                        object->dragStart(mousePos);
                     if(selectedHover)
-                        selectedHover->dragStart();
+                        selectedHover->dragStart(mousePos);
                 }
                 NxPoint dragTranslation = mousePos - mousePressedAreaPos;
                 if(selectedHover) {
@@ -798,9 +798,9 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                     if(mouseSnapY)  dragTranslation.setY(qRound(selectedHover->getPosDrag().y() + dragTranslation.y()) - selectedHover->getPosDrag().y());
                 }
                 foreach(NxObject* object, selection)
-                    object->drag(dragTranslation);
+                    object->drag(dragTranslation, mousePos);
                 if(selectedHover)
-                    selectedHover->drag(dragTranslation);
+                    selectedHover->drag(dragTranslation, mousePos);
             }
             else if(!mouseObjectDrag) {
                 //New center
@@ -1097,7 +1097,7 @@ void UiRender::actionCopyScript() {
     QApplication::clipboard()->setText(copy);
 }
 void UiRender::actionPaste() {
-    factory->execute("pushSnapthot");
+    factory->execute("pushSnapshot");
     if(factory) {
         selectionClear();
         QStringList paste = QApplication::clipboard()->text().split(COMMAND_END, QString::SkipEmptyParts);
@@ -1109,13 +1109,13 @@ void UiRender::actionPaste() {
     }
 }
 void UiRender::actionDuplicate() {
-    factory->execute("pushSnapthot");
+    factory->execute("pushSnapshot");
     actionCopy();
     actionPaste();
 }
 
 void UiRender::actionCut() {
-    factory->execute("pushSnapthot");
+    factory->execute("pushSnapshot");
     actionCopy();
     QStringList commands;
     foreach(NxObject *object, selection)

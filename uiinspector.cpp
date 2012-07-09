@@ -193,8 +193,6 @@ void UiInspector::actionInfo() {
                     cursor->setDepth(ui->depthSpin->value());
                 else if(ui->speedFSpin == sender())
                     cursor->setTimeFactorF(ui->speedFSpin->value());
-                else if(ui->posSpin == sender())
-                    cursor->setTimeLocal(ui->posSpin->value());
                 else if(ui->patternLine == sender())
                     cursor->setStart(ui->patternLine->currentText().split(" - ").at(0));
                 else if(ui->easingCombo == sender())
@@ -209,14 +207,22 @@ void UiInspector::actionInfo() {
                     cursor->setTimeStartOffset(ui->offsetStartSpin->value());
                 else if(ui->offsetEndSpin == sender())
                     cursor->setTimeEndOffset(ui->offsetEndSpin->value());
-                else if(ui->cursorBoundsLineSource1 == sender())
-                    cursor->setBoundsSource(ui->cursorBoundsLineSource1->text(), 0);
-                else if(ui->cursorBoundsLineSource2 == sender())
-                    cursor->setBoundsSource(ui->cursorBoundsLineSource2->text(), 1);
-                else if(ui->cursorBoundsLineTarget1 == sender())
-                    cursor->setBoundsTarget(ui->cursorBoundsLineTarget1->text(), 0);
-                else if(ui->cursorBoundsLineTarget2 == sender())
-                    cursor->setBoundsTarget(ui->cursorBoundsLineTarget2->text(), 1);
+                else if(ui->cursorSourceX1 == sender())
+                    cursor->setBoundsRect(0, ui->cursorSourceX1->value(), true);
+                else if(ui->cursorSourceY1 == sender())
+                    cursor->setBoundsRect(1, ui->cursorSourceY1->value(), true);
+                else if(ui->cursorSourceX2 == sender())
+                    cursor->setBoundsRect(3, ui->cursorSourceX2->value(), true);
+                else if(ui->cursorSourceY2 == sender())
+                    cursor->setBoundsRect(4, ui->cursorSourceY2->value(), true);
+                else if(ui->cursorTargetX1 == sender())
+                    cursor->setBoundsRect(0, ui->cursorTargetX1->value(), false);
+                else if(ui->cursorTargetY1 == sender())
+                    cursor->setBoundsRect(1, ui->cursorTargetY1->value(), false);
+                else if(ui->cursorTargetX2 == sender())
+                    cursor->setBoundsRect(3, ui->cursorTargetX2->value(), false);
+                else if(ui->cursorTargetY2 == sender())
+                    cursor->setBoundsRect(4, ui->cursorTargetY2->value(), false);
             }
             else if(object->getType() == ObjectsTypeCurve) {
                 NxCurve *curve = (NxCurve*)object;
@@ -495,14 +501,17 @@ void UiInspector::refresh() {
                 change(indexObject, ui->offsetInitialSpin, cursor->getTimeInitialOffset(), prevCursor->getTimeInitialOffset());
                 change(indexObject, ui->offsetStartSpin, cursor->getTimeStartOffset(), prevCursor->getTimeStartOffset());
                 change(indexObject, ui->offsetEndSpin, cursor->getTimeEndOffset(), prevCursor->getTimeEndOffset());
-                change(indexObject, ui->cursorBoundsLineSource1, cursor->getBoundsSource(0), prevCursor->getBoundsSource(0));
-                change(indexObject, ui->cursorBoundsLineSource2, cursor->getBoundsSource(1), prevCursor->getBoundsSource(1));
-                change(indexObject, ui->cursorBoundsLineTarget1, cursor->getBoundsTarget(0), prevCursor->getBoundsTarget(0));
-                change(indexObject, ui->cursorBoundsLineTarget2, cursor->getBoundsTarget(1), prevCursor->getBoundsTarget(1));
+                change(indexObject, ui->cursorSourceX1, cursor->getBoundsRect(0, true), prevCursor->getBoundsRect(0, true));
+                change(indexObject, ui->cursorSourceY1, cursor->getBoundsRect(1, true), prevCursor->getBoundsRect(1, true));
+                change(indexObject, ui->cursorSourceX2, cursor->getBoundsRect(3, true), prevCursor->getBoundsRect(3, true));
+                change(indexObject, ui->cursorSourceY2, cursor->getBoundsRect(4, true), prevCursor->getBoundsRect(4, true));
+                change(indexObject, ui->cursorTargetX1, cursor->getBoundsRect(0, false), prevCursor->getBoundsRect(0, false));
+                change(indexObject, ui->cursorTargetY1, cursor->getBoundsRect(1, false), prevCursor->getBoundsRect(1, false));
+                change(indexObject, ui->cursorTargetX2, cursor->getBoundsRect(3, false), prevCursor->getBoundsRect(3, false));
+                change(indexObject, ui->cursorTargetY2, cursor->getBoundsRect(4, false), prevCursor->getBoundsRect(4, false));
                 change(indexObject, ui->messagesSpin, object->getMessageTimeInterval(), prevObject->getMessageTimeInterval());
 
                 if(cursor->getCurve()) {
-                    ui->posSpin->setValue(cursor->getCurrentPosition());
                     change(indexObject, ui->speedSpin, cursor->getTimeFactor(), prevCursor->getTimeFactor());
                     change(indexObject, ui->cursorLengthSpin, cursor->getCurve()->getPathLength() / cursor->getTimeFactor(), prevCursor->getCurve()->getPathLength() / prevCursor->getTimeFactor());
                 }
@@ -600,18 +609,27 @@ void UiInspector::refresh() {
     ui->offsetLabel3->setVisible(showCursorCurveInfo);
     ui->cursorLengthSpin->setVisible(showCursorCurveInfo);
     ui->cursorSpeedLabel->setVisible(showCursorCurveInfo);
-    ui->posLabel->setVisible(showCursorCurveInfo);
-    ui->posSpin->setVisible(showCursorCurveInfo);
     ui->cursorPosLabel2->setVisible(showCursorCurveInfo);
     ui->cursorBoundsLabel->setVisible(showCursorCurveInfo);
-    ui->cursorBoundsLabel1->setVisible(showCursorCurveInfo);
-    ui->cursorBoundsLabel2->setVisible(showCursorCurveInfo);
+    ui->cursorSourceX1->setVisible(showCursorCurveInfo);
+    ui->cursorSourceX2->setVisible(showCursorCurveInfo);
+    ui->cursorSourceY1->setVisible(showCursorCurveInfo);
+    ui->cursorSourceY2->setVisible(showCursorCurveInfo);
+    ui->cursorTargetX1->setVisible(showCursorCurveInfo);
+    ui->cursorTargetX2->setVisible(showCursorCurveInfo);
+    ui->cursorTargetY1->setVisible(showCursorCurveInfo);
+    ui->cursorTargetY2->setVisible(showCursorCurveInfo);
+    ui->cursorTargetLabel1->setVisible(showCursorCurveInfo);
+    ui->cursorTargetLabel2->setVisible(showCursorCurveInfo);
+    ui->cursorTargetLabel3->setVisible(showCursorCurveInfo);
+    ui->cursorTargetLabel4->setVisible(showCursorCurveInfo);
+    ui->cursorTargetLabel5->setVisible(showCursorCurveInfo);
+    ui->cursorTargetLabel6->setVisible(showCursorCurveInfo);
+    ui->cursorTargetLabel7->setVisible(showCursorCurveInfo);
+    ui->cursorTargetLabel8->setVisible(showCursorCurveInfo);
+    ui->cursorTargetLabel9->setVisible(showCursorCurveInfo);
     ui->speedFLabel->setVisible(showCursorCurveInfo);
     ui->speedFSpin->setVisible(showCursorCurveInfo);
-    ui->cursorBoundsLineSource1->setVisible(showCursorCurveInfo);
-    ui->cursorBoundsLineSource2->setVisible(showCursorCurveInfo);
-    ui->cursorBoundsLineTarget1->setVisible(showCursorCurveInfo);
-    ui->cursorBoundsLineTarget2->setVisible(showCursorCurveInfo);
 
     ui->triggerOffLabel->setVisible(showTriggerInfo);
     ui->triggerOffSpin->setVisible(showTriggerInfo);

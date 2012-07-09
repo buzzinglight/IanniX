@@ -51,6 +51,9 @@
 #include "uiinspector.h"
 #include "uieditor.h"
 #include "uihelp.h"
+#ifdef WACOM_INSTALLED
+#include "extwacommanager.h"
+#endif
 
 enum SchedulerActivity { SchedulerOff, SchedulerOn, SchedulerOneShot };
 
@@ -69,8 +72,11 @@ public:
         foreach(NxDocument *document, documents)
             document->dispatchProperty(property, value);
     }
-    inline const QVariant getProperty(const QString &) const {
-        return 0;
+    inline const QVariant getProperty(const QString &_property) const {
+        //Browse documents
+        foreach(NxDocument *document, documents)
+            return document->getProperty(_property);
+        return QVariant();
     }
     inline quint8 getType() const {
         return ObjectsTypeScheduler;
@@ -132,6 +138,15 @@ private:
     void fileWatcherFolder(QStringList extension, QDir dir, QTreeWidgetItem *parentList, bool isDocument);
 public slots:
     const QVariant execute(const QString & command, bool createNewObjectIfExists = false, bool dump = false);
+    inline QString argvFullString(const QString &command, const QStringList &argv, quint16 index) const {
+        if(index > 1)   return command.mid(command.indexOf(argv.at(index), command.indexOf(argv.at(index-1))+argv.at(index-1).length())).trimmed();
+        else            return command;
+    }
+    inline qreal argvDouble(const QStringList &argv, quint16 index) const {
+        if(index < argv.count())    return argv.at(index).toDouble();
+        else                        return 0;
+    }
+
     QString onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments);
     QString onDraw();
     void askNxObject(void *_object, bool shift);
@@ -171,12 +186,15 @@ public:
 
     //EXTERNAL INTERFACES
 private:
-    ExtOscManager *osc;
-    ExtTcpManager *tcp;
-    ExtUdpManager *udp;
-    ExtHttpManager *http;
+    ExtOscManager    *osc;
+    ExtTcpManager    *tcp;
+    ExtUdpManager    *udp;
+    ExtHttpManager   *http;
     ExtSerialManager *serial;
-    ExtMidiManager *midi;
+    ExtMidiManager   *midi;
+#ifdef WACOM_INSTALLED
+    ExtWacomManager  *wacom;
+#endif
     bool oscConsoleActive;
     QHostAddress oscBundleHost;
     quint16 oscBundlePort;
@@ -219,6 +237,7 @@ private slots:
     void timerTick();
     void timerTick(bool force);
     void timerTick(qreal delta);
+    void timerTrig(void *object, bool force = false);
     void closeSplash();
 signals:
     void updateTransport(QString, QString);
@@ -245,13 +264,14 @@ private:
     void checkForUpdates();
     QTreeWidgetItem *projectScore, *projectScript, *exampleScript, *libScript;
     NxPoint editingStartPoint;
-    bool lastMessageAllow;
-    QString lastMessage;
+    bool lastMessageAllow, lastMessageReceivedAllow;
+    QString lastMessage, lastMessageReceived;
     QIcon iconAppPlay, iconAppPause;
 private slots:
     void checkForUpdatesFinished(QNetworkReply*);
 public:
     void show();
+    QString serialize();
 public slots:
     void actionToggle_Inspector();
     void actionToggle_Transport();
@@ -317,8 +337,11 @@ public slots:
 public slots:
     void logOscSend(const QString & message);
     void logOscReceive(const QString & message);
+    QString waitForMessage();
     void pushSnapshot();
     void actionPasteScript();
+signals:
+    void newMessageArrived();
 
 
     //FAST IMPORT

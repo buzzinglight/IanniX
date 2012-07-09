@@ -40,6 +40,7 @@
 #define COMMAND_CURSOR_BOUNDS_SOURCE        QString("setboundssource")
 #define COMMAND_CURSOR_BOUNDS_TARGET        QString("setboundstarget")
 #define COMMAND_CURSOR_TIME                 QString("settime")
+#define COMMAND_CURSOR_TIME_PERCENT         QString("settimepercent")
 
 #define COMMAND_CURVE_POINT_SHIFT           QString("shiftpoints")
 #define COMMAND_CURVE_POINT_TRANSLATE       QString("translatepoints")
@@ -68,8 +69,9 @@
 #define COMMAND_MESSAGE                     QString("setmessage")
 #define COMMAND_MESSAGE_SEND                QString("sendosc")
 
-#define COMMAND_TOGGLE_GROUP                QString("togglegroup")
 #define COMMAND_MOUSE                       QString("mouse")
+#define COMMAND_SOLO                        QString("solo")
+#define COMMAND_MUTE                        QString("mute")
 
 #define COMMAND_TEXTURE                     QString("registertexture")
 

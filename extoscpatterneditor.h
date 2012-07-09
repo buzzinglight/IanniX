@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <QPlainTextEdit>
+#include <uimessagebox.h>
 #include "nxobject.h"
 #include "help.h"
 #include "nxobjectfactoryinterface.h"
@@ -66,6 +67,7 @@ private:
     QList< QPushButton > treesButton;
     quint16 patternNbValues;
     NxObjectFactoryInterface *factory;
+    bool wasLearning;
 
 public:
     const QString getPattern() const;
@@ -84,6 +86,7 @@ public slots:
     void textPatternChanged();
     void clearApattern();
     void fieldFocusIn();
+    void learn();
 
 
 private:

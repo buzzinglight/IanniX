@@ -56,6 +56,7 @@ public slots:
     virtual void logOscSend(const QString & message) = 0;
     virtual void logOscReceive(const QString & message) = 0;
     virtual void pushSnapshot() = 0;
+    virtual QString serialize() = 0;
     virtual qreal getTimeLocal() const = 0;
     virtual void readyToStart() = 0;
     virtual void setMidiOutNewDevice(const QString &midi) = 0;
@@ -66,6 +67,8 @@ public slots:
     virtual void syncStart() = 0;
     virtual void syncGoto(qreal time) = 0;
     virtual void syncTimer(qreal delta) = 0;
+    virtual void timerTrig(void *object, bool force = false) = 0;
+    virtual QString waitForMessage() = 0;
 };
 
 #endif // NXOBJECTFACTORYINTERFACE_H

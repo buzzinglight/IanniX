@@ -58,7 +58,7 @@ function addCurve(recursion, start, end) {
 		run("setPattern      current 0 0 1 -1");
 		run("setBoundsSource current " + (-size) + " " + size + " " + size + " 0");
 		run("setBoundsTarget current 0 1 1 0");
-		run("setGroup        current cursors");
+		run("setGroup        current values");
 		run("setWidth        current 0");
 		
 		//Récursivity on segments

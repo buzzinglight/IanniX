@@ -71,7 +71,7 @@ private:
     QHash<QString, RtMidiOut*> portOut;
     QList<QPair<QString, QStringList> > receivedMessages;
     QMutex mutex;
-
+    QString portOutName, portInName;
 public:
     ExtMidiManager(NxObjectFactoryInterface *_factory);
     void refreshList();

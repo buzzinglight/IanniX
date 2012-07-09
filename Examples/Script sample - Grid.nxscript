@@ -33,7 +33,7 @@ function addCurve(index) {
 	run("setPointAt      current 1 " + index + " " + ((indexMax - index) / 2));
 
 	run("add cursor      " + index);
-	run("setGroup        current cursors");
+	run("setGroup        current values");
 	run("setCurve        current lastCurve");
 	run("setWidth        current 2");
 	run("setBoundsSource current -" + indexMax + " " + (indexMax / 2) + " 0 0");

@@ -42,6 +42,13 @@ macx {
     LIBS                += -framework Cocoa -framework Syphon
 }
 
+#Wacom & trackpads
+false {
+    DEFINES             += WACOM_INSTALLED
+    OBJECTIVE_SOURCES   += extwacommanager.mm qwacom/WacomTabletDriver.h  qwacom/WacomTabletDriver.m
+    HEADERS             += extwacommanager.h
+    LIBS                += -framework Cocoa
+}
 
 debug:DEFINES           += __RTMIDI_DEBUG__
 

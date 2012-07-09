@@ -32,6 +32,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     timeLocalStr = "000:00.000";
     freehandCurveId = 0;
     lastMessageAllow = true;
+    lastMessageReceivedAllow = false;
     oscBundleHost = QHostAddress("127.0.0.1");
     oscBundlePort = 0;
     scriptDir = QDir::current();
@@ -86,6 +87,9 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(view, SIGNAL(actionRouteImportText(QString,QString)),   SLOT(actionImportText(QString,QString)));
     connect(view, SIGNAL(actionRouteSelectionModeChange(bool,bool,bool)), SLOT(actionSelectionModeChange(bool,bool,bool)));
     connect(view, SIGNAL(actionRoutePasteScript()), SLOT(actionPasteScript()));
+    connect(view, SIGNAL(editingStop()), SLOT(editingStop()));
+    connect(view, SIGNAL(editingStart(NxPoint)), SLOT(editingStart(NxPoint)));
+    connect(view, SIGNAL(editingMove(NxPoint,bool)), SLOT(editingMove(NxPoint,bool)));
 
     //Transport
     transport = view->getTransport();
@@ -198,6 +202,10 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(serial, SIGNAL(openPortStatus(bool)), inspector, SLOT(setSerialOk(bool)));
 
     midi = new ExtMidiManager(this);
+
+#ifdef WACOM_INSTALLED
+    wacom = new ExtWacomManager();
+#endif
 
     ipOutId = -1;
     connect(inspector, SIGNAL(ipOutChange(QString)), SLOT(setIpOut(QString)));
@@ -601,6 +609,10 @@ void IanniX::show() {
     view->activateWindow();
 }
 
+QString IanniX::serialize() {
+    return currentDocument->serialize(render->getRenderOptions(), false);
+}
+
 void IanniX::timerEvent(QTimerEvent *) {
     transport->setPerfCpu((quint16)qRound(cpu->cpu));
 }
@@ -670,30 +682,8 @@ void IanniX::timerTick(qreal delta) {
                         cursor->setTime(delta * render->getRenderOptions()->timeFactor);
 
                         //Is cursor active ?
-                        if((!forceTimeLocal) && (cursor->getActive()) && (((!isGroupSoloActive) && (group->checkState(0) == Qt::Checked)) || ((isGroupSoloActive) && (group->checkState(1) == Qt::Checked))) && (((!isObjectSoloActive) && (cursor->checkState(1) == Qt::Checked)) || ((isObjectSoloActive) && (cursor->checkState(2) == Qt::Checked)))) {
-                            //Messages
-                            cursor->trig();
-
-                            //Browse groups
-                            foreach(const NxGroup *group, document->groups) {
-                                //Browse active triggers
-                                foreach(const NxObject *objectTrigger, group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
-                                    NxTrigger *trigger = (NxTrigger*)objectTrigger;
-
-                                    //Check the collision
-                                    if(cursor->contains(trigger))
-                                        trigger->trig(cursor);
-                                }
-
-                                //Browse active triggers
-                                if(cursor->getPerformCollision()) {
-                                    foreach(const NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
-                                        //Check the collision
-                                        cursor->trig((NxCurve*)objectCurve);
-                                    }
-                                }
-                            }
-                        }
+                        if((!forceTimeLocal) && (cursor->getActive()) && (((!isGroupSoloActive) && (group->checkState(0) == Qt::Checked)) || ((isGroupSoloActive) && (group->checkState(1) == Qt::Checked))) && (((!isObjectSoloActive) && (cursor->checkState(1) == Qt::Checked)) || ((isObjectSoloActive) && (cursor->checkState(2) == Qt::Checked))))
+                            timerTrig(cursor);
                     }
                 }
             }
@@ -735,6 +725,33 @@ void IanniX::timerTick(qreal delta) {
 
     if(forceTimeLocal)
         forceTimeLocal = false;
+}
+
+void IanniX::timerTrig(void *object, bool force) {
+    NxCursor *cursor = (NxCursor*)object;
+
+    //Messages
+    cursor->trig(force);
+
+    //Browse groups
+    foreach(const NxGroup *group, currentDocument->groups) {
+        //Browse active triggers
+        foreach(const NxObject *objectTrigger, group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
+            NxTrigger *trigger = (NxTrigger*)objectTrigger;
+
+            //Check the collision
+            if((cursor->contains(trigger)) && (((!isObjectSoloActive) && (trigger->checkState(1) == Qt::Checked)) || ((isObjectSoloActive) && (trigger->checkState(2) == Qt::Checked))))
+                trigger->trig(cursor);
+        }
+
+        //Browse active triggers
+        if(cursor->getPerformCollision()) {
+            foreach(const NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
+                //Check the collision
+                cursor->trig((NxCurve*)objectCurve);
+            }
+        }
+    }
 }
 
 void IanniX::checkForUpdates() {
@@ -1229,7 +1246,7 @@ void IanniX::actionProjectScriptsContext(const QPoint & point) {   ///CG///
 
 
 NxGroup* IanniX::addGroup(const QString & documentId, const QString & groupId) {
-    NxGroup *group = new NxGroup(this, inspector->getViewGroup(), inspector->getWasGroupChecked(groupId));
+    NxGroup *group = new NxGroup(this, inspector->getViewGroup(), Qt::Checked);
     inspector->getViewGroup()->sortItems(0, Qt::AscendingOrder);
     group->setId(groupId);
     documents.value(documentId)->groups[group->getId()] = group;
@@ -1305,7 +1322,6 @@ void IanniX::removeObject(NxObject *object) {
         if(documents.value(object->getDocumentId())->groups.value(object->getGroupId())->getCount() == 0) {
             NxGroup *group = documents.value(object->getDocumentId())->groups.value(object->getGroupId());
             documents.value(object->getDocumentId())->groups.remove(object->getGroupId());
-            inspector->updateWasGroupChecked(group);
             delete group;
         }
 
@@ -1317,12 +1333,13 @@ void IanniX::removeObject(NxObject *object) {
 
 
 const QVariant IanniX::execute(const QString & command, bool createNewObjectIfExists, bool) {
-    QStringList arguments = command.split(" ", QString::SkipEmptyParts);
-    if((arguments.count() > 0) && (currentDocument)) {
-        QString commande = arguments.at(0).toLower();
-        if((commande == COMMAND_ADD) && (arguments.count() >= 3)) {
+    QStringList argv = command.split(" ", QString::SkipEmptyParts);
+    quint16 argc = argv.count();
+    if((argc > 0) && (currentDocument)) {
+        QString commande = argv.at(0).toLower();
+        if((argc > 2) && (commande == COMMAND_ADD)) {
             bool ok = false;
-            qint16 id = arguments.at(2).toUInt(&ok);
+            qint16 id = argv.at(2).toUInt(&ok);
             NxObject *parentObject = 0;
             if(ok) {
                 parentObject = currentDocument->getObject(id);
@@ -1345,13 +1362,10 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             //sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), commandReplace.replace("auto", QString::number(id)));
 
             NxObject *object = 0;
-            QString type = arguments.at(1).toLower();
-            if(type == "curve")
-                object = new NxCurve(this, inspector->getCurveItem(), render->getRenderOptions());
-            else if(type == "cursor")
-                object = new NxCursor(this, inspector->getCursorItem(), render->getRenderOptions());
-            else
-                object = new NxTrigger(this, inspector->getTriggerItem(), render->getRenderOptions());
+            QString type = argv.at(1).toLower();
+            if(type == "curve")         object = new NxCurve(this,   inspector->getCurveItem(),   render->getRenderOptions());
+            else if(type == "cursor")   object = new NxCursor(this,  inspector->getCursorItem(),  render->getRenderOptions());
+            else                        object = new NxTrigger(this, inspector->getTriggerItem(), render->getRenderOptions());
 
             if(object) {
                 object->dispatchProperty("documentId", currentDocument->getId());
@@ -1359,538 +1373,658 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 object->dispatchProperty("id", id);
                 object->dispatchProperty("active", ObjectsActivityActive);
                 object->dispatchProperty("posStr", "0 0");
-                if(object->getType() == ObjectsTypeTrigger)
-                    object->dispatchProperty("messagePatterns", "1,"+defaultMessageTrigger);
-                else if(object->getType() == ObjectsTypeCursor)
-                    object->dispatchProperty("messagePatterns", "20,"+defaultMessageCursor);
+                if(object->getType() == ObjectsTypeTrigger)     object->dispatchProperty("messagePatterns",  "1," + defaultMessageTrigger);
+                else if(object->getType() == ObjectsTypeCursor) object->dispatchProperty("messagePatterns", "20," + defaultMessageCursor);
                 object->setParentObject(parentObject);
 
                 if(parentObject) {
                     NxPoint posOffset(0.5, -0.5);
-                    /*
-                    if(parentObject->getParentObject())
-                        posOffset = parentObject->getPos() - parentObject->getParentObject()->getPos();
-                    */
                     object->setPosOffset(posOffset);
                 }
                 currentDocument->objects[id] = object;
                 currentDocument->setCurrentObject(object);
-
                 return object->getId();
             }
             else
                 return 0;
         }
         else {
-            //sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), command);
-
-            if((commande == COMMAND_TEXTURE) && (arguments.count() >= 7)) {
-                QString filename = command.mid(command.indexOf(arguments.at(6), command.indexOf(arguments.at(5))+arguments.at(5).length())).trimmed();
-                if(!QFile().exists(filename))
-                    filename = scriptDir.absoluteFilePath(filename);
-                render->loadTexture(UiRenderTexture(arguments.at(1).trimmed(), filename, NxRect(NxPoint(arguments.at(2).toDouble(), arguments.at(3).toDouble()), NxPoint(arguments.at(4).toDouble(), arguments.at(5).toDouble()))));
-                currentDocument->registredTextures[arguments.at(1)] = command.trimmed();
-            }
-            else if((commande == COMMAND_GLOBAL_COLOR) && (arguments.count() >= 6)) {
-                render->getRenderOptions()->colors[arguments.at(1)] = QColor(arguments.at(2).toDouble(), arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble());
-                currentDocument->registredColors[arguments.at(1)] = command.trimmed();
-            }
-            else if(((commande == COMMAND_GLOBAL_COLOR2) || (commande == COMMAND_GLOBAL_COLOR_HUE)) && (arguments.count() >= 6)) {
-                QColor color;
-                color.setHsv(arguments.at(2).toDouble(), arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble());
-                render->getRenderOptions()->colors[arguments.at(1)] = color;
-                currentDocument->registredColors[arguments.at(1)] = command.trimmed();
-            }
-            else if((commande == COMMAND_ZOOM) && (arguments.count() >= 2)) {
-                render->zoom(arguments.at(1).toDouble());
-            }
-            else if((commande == COMMAND_LOAD) && (arguments.count() >= 1)) {
-                QString filename = command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+1)).trimmed();
-                bool ok = false;
-                ok = inspector->setProjectFiles(filename);
-                if(inspector->setProjectFiles(filename))
-                    actionProjectFiles();
-                else if(inspector->setProjectScripts(filename))
-                    actionProjectScripts();
-            }
-            else if((commande == COMMAND_SNAPSHOT) && (arguments.count() >= 3)) {
-                QString filename = command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+1)).trimmed();
-                render->captureFrame(arguments.at(1).toDouble(), filename);
-            }
-            else if((commande == COMMAND_SNAPSHOT) && (arguments.count() >= 2)) {
-                render->captureFrame(arguments.at(1).toDouble());
-            }
-            else if((commande == COMMAND_VIEWPORT) && (arguments.count() >= 3)) {
-                view->actionResize(QSize(arguments.at(1).toDouble(), arguments.at(2).toDouble()));
-            }
-            else if((commande == COMMAND_ROTATE) && (arguments.count() >= 5)) { ///CG/// Add command to set rotationX, rotationY, rotationZ;
-                render->rotateTo(NxPoint(arguments.at(1).toDouble(),arguments.at(2).toDouble(),arguments.at(3).toDouble()), true);
-            }
-            else if((commande == COMMAND_ROTATE) && (arguments.count() >= 4)) { ///CG/// Add command to set rotationX, rotationY, rotationZ;
-                render->rotateTo(NxPoint(arguments.at(1).toDouble(),arguments.at(2).toDouble(),arguments.at(3).toDouble()));
-            }
-            else if((commande == COMMAND_CENTER) && (arguments.count() >= 4)) {
-                render->centerOn(NxPoint(arguments.at(1).toDouble(), arguments.at(2).toDouble()), true);
-            }
-            else if((commande == COMMAND_CENTER) && (arguments.count() >= 3)) {
-                render->centerOn(NxPoint(arguments.at(1).toDouble(), arguments.at(2).toDouble()));
-            }
-            else if((commande == COMMAND_PLAY) && (arguments.count() >= 2)) {
-                if(arguments.at(1).toDouble() != 0) {
-                    transport->setSpeed(arguments.at(1).toDouble());
-                    if(schedulerActivity != SchedulerOn) {
-                        setScheduler(SchedulerOn);
-                        sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
-                        midi->sendSPPStart();
-                    }
+            if(commande == COMMAND_TEXTURE) {
+                if(argc > 6) {
+                    QString filename = argvFullString(command, argv, 6);
+                    if(!QFile().exists(filename))
+                        filename = scriptDir.absoluteFilePath(filename);
+                    render->loadTexture(UiRenderTexture(argv.at(1).trimmed(), filename, NxRect(NxPoint(argvDouble(argv, 2), argvDouble(argv, 3)), NxPoint(argvDouble(argv, 4), argvDouble(argv, 5)))));
+                    currentDocument->registredTextures[argv.at(1)] = command.trimmed();
+                    return true;
                 }
-                else {
-                    if(schedulerActivity != SchedulerOff) {
-                        setScheduler(SchedulerOff);
-                        sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
-                        midi->sendSPPStop();
-                    }
-                }
-                actionSpeed();
+                return false;
             }
-            else if((commande == COMMAND_PLAY) && (arguments.count() >= 1)) {
-                if(schedulerActivity != SchedulerOn) {
+            else if(commande == COMMAND_GLOBAL_COLOR) {
+                if(argc > 5) {
+                    render->getRenderOptions()->colors[argv.at(1)] = QColor(argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5));
+                    currentDocument->registredColors[argv.at(1)] = command.trimmed();
+                    return true;
+                }
+                return false;
+            }
+            else if((commande == COMMAND_GLOBAL_COLOR2) || (commande == COMMAND_GLOBAL_COLOR_HUE)) {
+                if(argc > 5) {
+                    QColor color;
+                    color.setHsv(argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5));
+                    render->getRenderOptions()->colors[argv.at(1)] = color;
+                    currentDocument->registredColors[argv.at(1)] = command.trimmed();
+                    return true;
+                }
+                return false;
+            }
+            else if(commande == COMMAND_ZOOM) {
+                if(argc > 1)
+                    render->zoom(argvDouble(argv, 1));
+                return render->getRenderOptions()->zoomValue;
+            }
+            else if(commande == COMMAND_LOAD) {
+                if(argc > 1) {
+                    QString filename = argvFullString(command, argv, 1);
+                    bool ok = false;
+                    ok = inspector->setProjectFiles(filename);
+                    if(inspector->setProjectFiles(filename))
+                        actionProjectFiles();
+                    else if(inspector->setProjectScripts(filename))
+                        actionProjectScripts();
+                }
+                return view->windowTitle();
+            }
+            else if(commande == COMMAND_SNAPSHOT) {
+                if(argc > 2) {
+                    render->captureFrame(argvDouble(argv, 1), argvFullString(command, argv, 2));
+                    return true;
+                }
+                else if(argc > 1) {
+                    render->captureFrame(argvDouble(argv, 1));
+                    return true;
+                }
+                return false;
+            }
+            else if(commande == COMMAND_VIEWPORT) {
+                if(argc > 2)
+                    view->actionResize(QSize(argvDouble(argv, 1), argvDouble(argv, 2)));
+                return QString("%1 %2").arg(render->size().width()).arg(render->size().height());
+            }
+            else if(commande == COMMAND_ROTATE){
+                if(argc > 4)
+                    render->rotateTo(NxPoint(argvDouble(argv, 1),argvDouble(argv, 2),argvDouble(argv, 3)), true);
+                else if(argc > 1)
+                    render->rotateTo(NxPoint(argvDouble(argv, 1),argvDouble(argv, 2),argvDouble(argv, 3)));
+                return QString("%1 %2 %3").arg(render->getRenderOptions()->rotation.x()).arg(render->getRenderOptions()->rotation.y()).arg(render->getRenderOptions()->rotation.z());
+            }
+            else if(commande == COMMAND_CENTER) {
+                if(argc > 3)
+                    render->centerOn(NxPoint(argvDouble(argv, 1), argvDouble(argv, 2)), true);
+                else if(argc > 1)
+                    render->centerOn(NxPoint(argvDouble(argv, 1), argvDouble(argv, 2)));
+                return QString("%1 %2").arg(render->getRenderOptions()->axisCenter.x()).arg(render->getRenderOptions()->axisCenter.y());
+            }
+            else if(commande == COMMAND_PLAY) {
+                if(argc > 1) {
+                    qreal speed = argvDouble(argv, 1);
+                    if(speed != 0) {
+                        transport->setSpeed(speed);
+                        if(schedulerActivity != SchedulerOn) {
+                            setScheduler(SchedulerOn);
+                            sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
+                            midi->sendSPPStart();
+                        }
+                    }
+                    else {
+                        if(schedulerActivity != SchedulerOff) {
+                            setScheduler(SchedulerOff);
+                            sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
+                            midi->sendSPPStop();
+                        }
+                    }
+                    actionSpeed();
+                    return true;
+                }
+                else if(schedulerActivity != SchedulerOn) {
                     setScheduler(SchedulerOn);
                     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
                     midi->sendSPPStart();
+                    return true;
                 }
+                return false;
             }
-            else if((commande == COMMAND_TITLE) && (arguments.count() >= 1)) {
+            else if(commande == COMMAND_TITLE) {
                 return view->windowTitle();
             }
-            else if((commande == COMMAND_STOP) && (arguments.count() >= 1)) {
+            else if(commande == COMMAND_STOP) {
                 if(schedulerActivity != SchedulerOff) {
                     setScheduler(SchedulerOff);
                     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
                     midi->sendSPPStop();
+                    return true;
                 }
+                return false;
             }
-            else if((commande == COMMAND_GOTO) && (arguments.count() >= 2)) {
-                actionGoto(arguments.at(1).toDouble());
-                timerTick(true);
-            }
-            else if((commande == COMMAND_GOTO) && (arguments.count() >= 1)) {
+            else if(commande == COMMAND_GOTO) {
+                if(argc > 1) {
+                    actionGoto(argvDouble(argv, 1));
+                    timerTick(true);
+                }
                 return timeLocal;
             }
-            else if((commande == COMMAND_SLEEP) && (arguments.count() >= 2)) {
-                QMutex mutex;
-                QWaitCondition sleep;
-                sleep.wait(&mutex, arguments.at(1).toDouble());
+            else if(commande == COMMAND_SLEEP) {
+                if(argc > 1) {
+                    QMutex mutex;
+                    QWaitCondition sleep;
+                    sleep.wait(&mutex, argvDouble(argv, 1));
+                    return true;
+                }
+                return false;
             }
-            else if((commande == COMMAND_FF) && (arguments.count() >= 1)) {
+            else if(commande == COMMAND_FF) {
                 actionFast_rewind();
+                return true;
             }
-            else if((commande == COMMAND_LOG) && (arguments.count() >= 2)) {
-                lastMessage = command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+1)).trimmed();
-                this->logOscReceive(tr("Script:") + QString(" %1").arg(lastMessage));
-            }
-            else if((commande == COMMAND_CLEAR) && (arguments.count() >= 1)) {
-                if(currentDocument) {
-                    pushSnapshot();
-                    currentDocument->clear();
+            else if(commande == COMMAND_LOG) {
+                if(argc > 1) {
+                    lastMessage = argvFullString(command, argv, 1);
+                    logOscReceive(tr("Script:") + QString(" %1").arg(lastMessage));
                 }
+                return lastMessage;
             }
-            else if((commande == COMMAND_SNAP_POP) && (arguments.count() >= 2)) {
-                if(currentDocument) {
-                    render->selectionClear(true);
-                    currentDocument->popSnapshot(command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+arguments.at(0).length())).trimmed());
-                }
-            }
-            else if((commande == COMMAND_SNAP_PUSH) && (arguments.count() >= 2)) {
-                if(currentDocument)
-                    currentDocument->pushSnapshot(command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+arguments.at(0).length())).trimmed());
-            }
-            else if((commande == COMMAND_SNAP_POP) && (arguments.count() >= 1)) {
-                if(currentDocument) {
-                    render->selectionClear(true);
-                    currentDocument->popSnapshot();
-                }
-            }
-            else if((commande == COMMAND_SNAP_PUSH) && (arguments.count() >= 1)) {
+            else if(commande == COMMAND_CLEAR) {
                 pushSnapshot();
+                currentDocument->clear();
+                return true;
             }
-            else if((commande == COMMAND_SPEED) && (arguments.count() >= 2)) {
-                transport->setSpeed(arguments.at(1).toDouble());
+            else if(commande == COMMAND_SNAP_PUSH) {
+                if(argc > 1)    currentDocument->pushSnapshot(argvFullString(command, argv, 1));
+                else            currentDocument->pushSnapshot();
+            }
+            else if(commande == COMMAND_SNAP_POP) {
+                render->selectionClear(true);
+                if(argc > 1)    currentDocument->popSnapshot(argvFullString(command, argv, 1));
+                else            currentDocument->popSnapshot();
+                return true;
+            }
+            else if(commande == COMMAND_SPEED) {
+                if(argc > 1)
+                    transport->setSpeed(argvDouble(argv, 1));
                 return transport->getSpeed();
             }
-            else if((commande == COMMAND_SPEED) && (arguments.count() >= 1)) {
-                return transport->getSpeed();
-            }
-            else if((commande == COMMAND_TOGGLE_GROUP) && (arguments.count() >= 3) && (currentDocument)) {
-                QString key = arguments.at(1);
-                quint16 posWild = key.indexOf("*");
-                if(posWild > 0) key = key.left(posWild);
-
-                QMapIterator<QString, NxGroup*> groupIterator(currentDocument->groups);
-                while (groupIterator.hasNext()) {
-                    groupIterator.next();
-                    NxGroup *group = groupIterator.value();
-
-                    Qt::CheckState state = Qt::Unchecked;
-                    if(arguments.at(2).toInt() < 0) {
-                        if(groupIterator.key().startsWith(key))
-                            state = group->checkState(0);
-                        if(state == Qt::Unchecked)
-                            state = Qt::Checked;
-                        else
-                            state = Qt::Unchecked;
-                    } else if(arguments.at(2).toInt() > 0)
-                        state = Qt::Checked;
-
-                    if(groupIterator.key().startsWith(key))
-                        group->setCheckState(0, state);
-                }
-            }
-            else if((commande == COMMAND_TOGGLE_GROUP) && (arguments.count() >= 2) && (currentDocument)) {
-                QString key = arguments.at(1);
-                quint16 posWild = key.indexOf("*");
-                if(posWild > 0) key = key.left(posWild);
-
-                QMapIterator<QString, NxGroup*> groupIterator(currentDocument->groups);
-                while (groupIterator.hasNext()) {
-                    groupIterator.next();
-                    if(groupIterator.key().startsWith(key)) {
-                        NxGroup *group = groupIterator.value();
-                        return (group->checkState(0) == Qt::Checked)?(1):(0);
+            else if((commande == COMMAND_SOLO) || (commande == COMMAND_MUTE)) {
+                if(argc > 1) {
+                    QString key = argv.at(1);
+                    bool ok = false;
+                    quint16 objectId = key.toUInt(&ok);
+                    if(ok) {
+                        NxObject *object = currentDocument->getObject(objectId);
+                        if(object) {
+                            if(argc > 2) {
+                                object->setCheckState((commande == COMMAND_MUTE)?(1):(2), (argvDouble(argv, 2))?(Qt::Checked):(Qt::Unchecked));
+                                actionCC();
+                            }
+                            else
+                                return (object->checkState((commande == COMMAND_MUTE)?(1):(2)) == Qt::Checked)?(1):(0);
+                        }
+                    }
+                    else {
+                        NxGroup *group = currentDocument->getGroup(key);
+                        if(group) {
+                            if(argc > 2) {
+                                group->setCheckState((commande == COMMAND_MUTE)?(0):(1), (argvDouble(argv, 2))?(Qt::Checked):(Qt::Unchecked));
+                                actionCC2();
+                            }
+                            else
+                                return (group->checkState((commande == COMMAND_MUTE)?(0):(1)) == Qt::Checked)?(1):(0);
+                        }
                     }
                 }
                 return -1;
             }
-            else if((commande == COMMAND_MOUSE) && (arguments.count() >= 3)) {
-                QCursor::setPos(arguments.at(1).toInt(), arguments.at(2).toInt());
+            else if(commande == COMMAND_MOUSE) {
+                if(argc > 1)
+                    QCursor::setPos(argvDouble(argv, 1), argvDouble(argv, 2));
+                return QString("%1 %2").arg(QCursor::pos().x()).arg(QCursor::pos().y());
             }
-            else if((commande == COMMAND_MESSAGE_SEND) && (arguments.count() >= 2)) {
-                QString mess = "1," + command.mid(command.indexOf(arguments.at(1), command.indexOf(arguments.at(0))+arguments.at(0).length()));
-                NxTrigger *obj = new NxTrigger(this, 0, 0);
-                obj->setMessagePatterns(mess);
-                obj->trig(0);
-                delete obj;
+            else if(commande == COMMAND_MESSAGE_SEND) {
+                if(argc > 1) {
+                    QString mess = "1," + argvFullString(command, argv, 1);
+                    NxTrigger *obj = new NxTrigger(this, 0, 0);
+                    obj->setMessagePatterns(mess);
+                    obj->trig(0);
+                    delete obj;
+                    return true;
+                }
+                return false;
             }
-            else if((commande == COMMAND_AUTOSIZE) && (arguments.count() >= 2)) {
-                render->setTriggerAutosize(arguments.at(1).toUInt());
-                view->toggleAutosize(arguments.at(1).toUInt());
+            else if(commande == COMMAND_AUTOSIZE) {
+                if(argc > 1) {
+                    render->setTriggerAutosize(argvDouble(argv, 1));
+                    view->toggleAutosize(argvDouble(argv, 1));
+                }
+                return render->getTriggerAutosize();
             }
-
-            else if(arguments.count() >= 2) {
-                QString objTxt;
-                objTxt = qPrintable(arguments.at(1));
-                NxObjectDispatchProperty *object = getObject(objTxt);
+            else if(argc > 1) {
+                NxObjectDispatchProperty *object = getObject(argv.at(1));
 
                 if(object) {
-                    if((commande == COMMAND_REMOVE) && (arguments.count() >= 2)) {
+                    if(commande == COMMAND_REMOVE) {
                         if((object->getType() == ObjectsTypeCursor) || (object->getType() == ObjectsTypeCurve) || (object->getType() == ObjectsTypeTrigger)) {
-                            NxObject *objectObj = (NxObject*)object;
-                            removeObject(objectObj);
+                            removeObject((NxObject*)object);
+                            return true;
+                        }
+                        return false;
+                    }
+                    if(commande == COMMAND_GROUP) {
+                        if((object->getType() == ObjectsTypeCursor) || (object->getType() == ObjectsTypeCurve) || (object->getType() == ObjectsTypeTrigger)) {
+                            if(argc > 2) {
+                                NxObject *objectObj = (NxObject*)object;
+                                QString groupId = argv.at(2);
+                                if(groupId.isEmpty())
+                                    groupId = documents[objectObj->getDocumentId()]->getCurrentGroup()->getId();
+                                objectObj->dispatchProperty("groupId", groupId);
+                            }
+                            return object->getProperty("groupId");
+                        }
+                        return "";
+                    }
+                    if(commande == COMMAND_CURSOR_CURVE) {
+                        if(object->getType() == ObjectsTypeCursor) {
+                            NxCursor *cursor  = (NxCursor*)object;
+                            if(argc > 2) {
+                                NxObject *object2 = (NxObject*)getObject(argv.at(2), false);
+                                if((object2) && (object2->getType() == ObjectsTypeCurve)) {
+                                    NxCurve *curve = (NxCurve*)object2;
+                                    cursor->setCurve(curve);
+                                    cursor->calculate();
+                                }
+                            }
+                            NxCurve *curve = cursor->getCurve();
+                            if(curve)
+                                return curve->getId();
                         }
                         return 0;
                     }
-                    else if((commande == COMMAND_GROUP) && (arguments.count() >= 3)) {
-                        if((object->getType() == ObjectsTypeCursor) || (object->getType() == ObjectsTypeCurve) || (object->getType() == ObjectsTypeTrigger)) {
-                            NxObject *objectObj = (NxObject*)object;
-                            QString groupId = arguments.at(2);
-                            if(groupId.isEmpty())
-                                groupId = documents[objectObj->getDocumentId()]->getCurrentGroup()->getId();
-                            objectObj->dispatchProperty("groupId", groupId);
+                    else if(commande == COMMAND_LABEL) {
+                        if(argc > 2)
+                            object->dispatchProperty("label", argvFullString(command, argv, 2));
+                        return object->getProperty("label");
+                    }
+
+                    else if(commande == COMMAND_RESIZE) {
+                        if(argc > 3)
+                            object->dispatchProperty("resizeStr", argv.at(2) + " " + argv.at(3));
+                        return object->getProperty("resizeStr");
+                    }
+                    else if(commande == COMMAND_RESIZEF) {
+                        if(argc > 2)
+                            object->dispatchProperty("resizeF", argvDouble(argv, 2));
+                        return object->getProperty("resizeF");
+                    }
+                    else if(commande == COMMAND_CURSOR_WIDTH) {
+                        if(argc > 2)
+                            object->dispatchProperty("cursorWidth", argvDouble(argv, 2));
+                        return object->getProperty("cursorWidth");
+                    }
+                    else if(commande == COMMAND_CURSOR_DEPTH) {
+                        if(argc > 2)
+                            object->dispatchProperty("cursorDepth", argvDouble(argv, 2));
+                        return object->getProperty("cursorDepth");
+                    }
+
+                    else if(commande == COMMAND_LINE) {
+                        if(argc > 3) {
+                            object->dispatchProperty("lineStipple", argvDouble(argv, 2));
+                            object->dispatchProperty("lineFactor", argvDouble(argv, 3));
                         }
+                        return object->getProperty("lineStipple").toString() + " " + object->getProperty("lineFactor").toString();
+                    }
+                    else if(commande == COMMAND_SIZE) {
+                        if(argc > 2)
+                            object->dispatchProperty("size", argvDouble(argv, 2));
+                        return object->getProperty("size");
                     }
 
-                    else if((commande == COMMAND_CURSOR_CURVE) && (arguments.count() >= 2)) {
-                        if(object->getType() == ObjectsTypeCursor) {
-                            NxCursor *cursor = (NxCursor*)object;
-                            NxObject *object2 = (NxObject*)getObject(qPrintable(arguments.at(2)), false);
-                            if((object2) && (object2->getType() == ObjectsTypeCurve)) {
-                                NxCurve *curve = (NxCurve*)object2;
-                                cursor->setCurve(curve);
-                                cursor->calculate();
-                                return curve->getPathLength();
-                            }
+                    else if(commande == COMMAND_CURSOR_START) {
+                        if(argc > 4) {
+                            object->dispatchProperty("easingStart", argvDouble(argv, 2));
+                            object->dispatchProperty("start", argvFullString(command, argv, 4));
                         }
+                        return object->getProperty("easingStart").toString() + " " + object->getProperty("start").toString();
                     }
 
-                    else if((commande == COMMAND_LABEL) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("label", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
+                    else if(commande == COMMAND_CURSOR_SPEED) {
+                        if(argc > 2) {
+                            if((argc > 3) && (argv.at(2).toLower() == "auto"))
+                                object->dispatchProperty("timeFactorAuto", argvDouble(argv, 3));
+                            else
+                                object->dispatchProperty("timeFactor", argvDouble(argv, 2));
+                        }
+                        return object->getProperty("timeFactor");
                     }
-
-                    else if((commande == COMMAND_RESIZE) && (arguments.count() >= 4)) {
-                        object->dispatchProperty("resizeStr", arguments.at(2) + " " + arguments.at(3));
+                    else if(commande == COMMAND_CURSOR_SPEEDF) {
+                        if(argc > 2)
+                            object->dispatchProperty("timeFactorF", argvDouble(argv, 2));
+                        return object->getProperty("timeFactorF");
                     }
-                    else if((commande == COMMAND_RESIZEF) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("resizeF", arguments.at(2).toDouble());
+                    else if(commande == COMMAND_CURSOR_OFFSET) {
+                        if(argc > 4) {
+                            object->dispatchProperty("timeInitialOffset", argvDouble(argv, 2));
+                            object->dispatchProperty("timeStartOffset",   argvDouble(argv, 3));
+                            if(argv.at(4).toLower() == "end")   object->dispatchProperty("timeEndOffset", 0);
+                            else                                object->dispatchProperty("timeEndOffset", argvDouble(argv, 4));
+                        }
+                        return object->getProperty("timeInitialOffset").toString() + " " + object->getProperty("timeStartOffset").toString() + " " + object->getProperty("timeEndOffset").toString();
                     }
-
-                    else if((commande == COMMAND_CURSOR_WIDTH) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("cursorWidth", arguments.at(2).toDouble());
+                    else if(commande == COMMAND_CURSOR_BOUNDS_SOURCE) {
+                        if(argc > 6)
+                            object->dispatchProperty("boundsSource", argvFullString(command, argv, 2));
+                        return object->getProperty("boundsSource");
                     }
-                    else if((commande == COMMAND_CURSOR_DEPTH) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("cursorDepth", arguments.at(2).toDouble());
+                    else if(commande == COMMAND_CURSOR_BOUNDS_TARGET) {
+                        if(argc > 6)
+                            object->dispatchProperty("boundsTarget", argvFullString(command, argv, 2));
+                        return object->getProperty("boundsTarget");
                     }
-
-                    else if((commande == COMMAND_LINE) && (arguments.count() >= 4)) {
-                        object->dispatchProperty("lineStipple", arguments.at(2).toDouble());
-                        object->dispatchProperty("lineFactor", arguments.at(3).toDouble());
+                    else if(commande == COMMAND_CURSOR_TIME) {
+                        if(argc > 2)
+                            object->dispatchProperty("timeLocal", argvDouble(argv, 2));
+                        return object->getProperty("timeLocal");
                     }
-                    else if((commande == COMMAND_SIZE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("size", arguments.at(2).toDouble());
+                    else if(commande == COMMAND_CURSOR_TIME_PERCENT) {
+                        if(argc > 2)
+                            object->dispatchProperty("timeLocalPercent", argvDouble(argv, 2));
+                        return object->getProperty("timeLocalPercent");
                     }
-
-                    else if((commande == COMMAND_CURSOR_START) && (arguments.count() >= 5)) {
-                        object->dispatchProperty("easingStart", arguments.at(2).toDouble());
-                        object->dispatchProperty("start", command.mid(command.indexOf(arguments.at(4), command.indexOf(arguments.at(3))+arguments.at(3).length())).trimmed());
+                    else if(commande == COMMAND_CURVE_POINT_RMV) {
+                        if((argc > 2) && (object->getType() == ObjectsTypeCurve)) {
+                            ((NxCurve*)object)->removePointAt(argvDouble(argv, 2));
+                            return true;
+                        }
+                        return false;
                     }
-
-                    else if((commande == COMMAND_CURSOR_SPEED) && (arguments.count() >= 4)) {
-                        if(arguments.at(2) == "auto")
-                            object->dispatchProperty("timeFactorAuto", arguments.at(3).toDouble());
+                    else if(commande == COMMAND_CURVE_POINT_SHIFT) {
+                        if((argc > 3) && (object->getType() == ObjectsTypeCurve)) {
+                            ((NxCurve*)object)->shiftPointAt(argvDouble(argv, 2), argvDouble(argv, 3));
+                            return true;
+                        }
+                        return false;
                     }
-                    else if((commande == COMMAND_CURSOR_SPEED) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("timeFactor", arguments.at(2).toDouble());
-                    }
-                    else if((commande == COMMAND_CURSOR_SPEEDF) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("timeFactorF", arguments.at(2).toDouble());
-                    }
-                    else if((commande == COMMAND_CURSOR_OFFSET) && (arguments.count() >= 5)) {
-                        object->dispatchProperty("timeInitialOffset", arguments.at(2).toDouble());
-                        object->dispatchProperty("timeStartOffset", arguments.at(3).toDouble());
-                        if(arguments.at(4).toLower() == "end")
-                            object->dispatchProperty("timeEndOffset", 0);
-                        else
-                            object->dispatchProperty("timeEndOffset", arguments.at(4).toDouble());
-                    }
-                    else if((commande == COMMAND_CURSOR_BOUNDS_SOURCE) && (arguments.count() >= 6)) {
-                        object->dispatchProperty("boundsSource", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                    }
-                    else if((commande == COMMAND_CURSOR_BOUNDS_TARGET) && (arguments.count() >= 6)) {
-                        object->dispatchProperty("boundsTarget", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                    }
-                    else if((commande == COMMAND_CURSOR_TIME) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("timeLocal", arguments.at(2).toDouble());
-                    }
-
-
-                    else if((commande == COMMAND_CURVE_POINT_RMV) && (arguments.count() >= 3)) {
-                        if(object->getType() == ObjectsTypeCurve) {
+                    else if(commande == COMMAND_CURVE_POINT_TRANSLATE) {
+                        if((argc > 2) && (object->getType() == ObjectsTypeCurve)) {
                             NxCurve *curve = (NxCurve*)object;
-                            curve->removePointAt(arguments.at(2).toDouble());
+                            curve->translate(NxPoint(argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4)));
+                            return true;
                         }
+                        return false;
                     }
-                    else if((commande == COMMAND_CURVE_POINT_SHIFT) && (arguments.count() >= 4)) {
-                        if(object->getType() == ObjectsTypeCurve) {
+                    else if(commande == COMMAND_CURVE_POINT_TRANSLATE2) {
+                        if((argc > 2) && (object->getType() == ObjectsTypeCurve)) {
                             NxCurve *curve = (NxCurve*)object;
-                            curve->shiftPointAt(arguments.at(2).toUInt(), arguments.at(3).toInt());
-                        }
-                    }
-                    else if((commande == COMMAND_CURVE_POINT_TRANSLATE) && (arguments.count() >= 5)) {
-                        if(object->getType() == ObjectsTypeCurve) {
-                            NxCurve *curve = (NxCurve*)object;
-                            curve->translate(NxPoint(arguments.at(2).toDouble(), arguments.at(3).toDouble(), arguments.at(4).toDouble()));
-                        }
-                    }
-                    else if((commande == COMMAND_CURVE_POINT_TRANSLATE2) && (arguments.count() >= 6)) {
-                        if(object->getType() == ObjectsTypeCurve) {
-                            NxCurve *curve = (NxCurve*)object;
-                            quint16 indexPoint = arguments.at(2).toUInt();
+                            quint16 indexPoint = argvDouble(argv, 2);
                             if(indexPoint < curve->getPathPointsCount())
-                                curve->translatePoint(indexPoint, NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()));
+                                curve->translatePoint(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)));
+                            NxCurvePoint pt = curve->getPathPointsAt(indexPoint);
+                            return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
                         }
+                        return "0 0 0  0 0 0  0 0 0";
                     }
-                    else if(((commande == COMMAND_CURVE_POINT_X) || (commande == COMMAND_CURVE_POINT_Y) || (commande == COMMAND_CURVE_POINT_Z)) && (arguments.count() >= 4)) {
-                        if(object->getType() == ObjectsTypeCurve) {
+                    else if((commande == COMMAND_CURVE_POINT_X) || (commande == COMMAND_CURVE_POINT_Y) || (commande == COMMAND_CURVE_POINT_Z)) {
+                        if((argc > 2) && (object->getType() == ObjectsTypeCurve)) {
                             NxCurve *curve = (NxCurve*)object;
-                            quint16 indexPoint = arguments.at(2).toUInt();
+                            quint16 indexPoint = argvDouble(argv, 2);
                             if(indexPoint < curve->getPathPointsCount()) {
                                 NxCurvePoint ptAt = curve->getPathPointsAt(indexPoint);
-                                if(commande == COMMAND_CURVE_POINT_X)
-                                    curve->setPointAt(indexPoint, NxPoint(arguments.at(3).toDouble(), ptAt.y(), ptAt.z()), ptAt.c1, ptAt.c2, ptAt.smooth);
-                                if(commande == COMMAND_CURVE_POINT_Y)
-                                    curve->setPointAt(indexPoint, NxPoint(ptAt.x(), arguments.at(3).toDouble(), ptAt.z()), ptAt.c1, ptAt.c2, ptAt.smooth);
-                                if(commande == COMMAND_CURVE_POINT_Z)
-                                    curve->setPointAt(indexPoint, NxPoint(ptAt.x(), ptAt.y(), arguments.at(3).toDouble()), ptAt.c1, ptAt.c2, ptAt.smooth);
+                                if(commande == COMMAND_CURVE_POINT_X)   curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), ptAt.y(), ptAt.z()), ptAt.c1, ptAt.c2, ptAt.smooth);
+                                if(commande == COMMAND_CURVE_POINT_Y)   curve->setPointAt(indexPoint, NxPoint(ptAt.x(), argvDouble(argv, 3), ptAt.z()), ptAt.c1, ptAt.c2, ptAt.smooth);
+                                if(commande == COMMAND_CURVE_POINT_Z)   curve->setPointAt(indexPoint, NxPoint(ptAt.x(), ptAt.y(), argvDouble(argv, 3)), ptAt.c1, ptAt.c2, ptAt.smooth);
+                                NxCurvePoint pt = curve->getPathPointsAt(indexPoint);
+                                return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
                             }
                         }
+                        return "0 0 0  0 0 0  0 0 0";
                     }
 
-                    else if((commande == COMMAND_CURVE_POINT) && (arguments.count() >= 5)) {
+                    else if(commande == COMMAND_CURVE_POINT) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
-                            if(arguments.count() >= 21)  // 3+18 (x, y, z, sx, sy, sz), (c1x, c1y, c1z, c1sx, c1sy, c1sz), (c2x, c2y, c2z, c2sx, c2sy, c2z)
-                                curve->setPointAt(arguments.at(2).toDouble(),
-                                                  NxPoint(arguments.at(3).toDouble(),  arguments.at(4).toDouble(),  arguments.at(5).toDouble(),  arguments.at(6).toDouble(),  arguments.at(7).toDouble(),  arguments.at(8).toDouble()),
-                                                  NxPoint(arguments.at(9).toDouble(),  arguments.at(10).toDouble(), arguments.at(11).toDouble(), arguments.at(12).toDouble(), arguments.at(13).toDouble(), arguments.at(14).toDouble()),
-                                                  NxPoint(arguments.at(15).toDouble(), arguments.at(16).toDouble(), arguments.at(17).toDouble(), arguments.at(18).toDouble(), arguments.at(19).toDouble(), arguments.at(20).toDouble()), false);
-                            else if(arguments.count() >= 15)  // 3+12 (x, y, sx, sy), (c1x, c1y, c1sx, c1sy), (c2x, c2y, c2sx, c2sy)
-                                curve->setPointAt(arguments.at(2).toDouble(),
-                                                  NxPoint(arguments.at(3).toDouble(),  arguments.at(4).toDouble(),  0, arguments.at(5).toDouble(),  arguments.at(6).toDouble(),  0),
-                                                  NxPoint(arguments.at(7).toDouble(),  arguments.at(8).toDouble(),  0, arguments.at(9).toDouble(),  arguments.at(10).toDouble(), 0),
-                                                  NxPoint(arguments.at(11).toDouble(), arguments.at(12).toDouble(), 0, arguments.at(13).toDouble(), arguments.at(14).toDouble(), 0), false);
-                            else if(arguments.count() >= 12) // 3+9 (x, y, z), (c1x, c1y, c1z), (c2x, c2y, c2z)
-                                curve->setPointAt(arguments.at(2).toDouble(),
-                                                  NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(),  arguments.at(5).toDouble()),
-                                                  NxPoint(arguments.at(6).toDouble(), arguments.at(7).toDouble(),  arguments.at(8).toDouble()),
-                                                  NxPoint(arguments.at(9).toDouble(), arguments.at(10).toDouble(), arguments.at(11).toDouble()), false);
-                            else if(arguments.count() >= 10) // 3+6+1 (x, y, z, sx, sy, sz) // REQUIRES A DUMMY ARGUMENT
-                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble(), arguments.at(6).toDouble(), arguments.at(7).toDouble(), arguments.at(8).toDouble()), false);
-                            else if(arguments.count() >= 9)  // 3+6 (x, y), (c1x, c1y), (c2x, c2y)
-                                curve->setPointAt(arguments.at(2).toDouble(),
-                                                  NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()),
-                                                  NxPoint(arguments.at(5).toDouble(), arguments.at(6).toDouble()),
-                                                  NxPoint(arguments.at(7).toDouble(), arguments.at(8).toDouble()), false);
-                            else if(arguments.count() >= 7) // 3+4 (x, y, sx, sy)
-                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), 0, arguments.at(5).toDouble(), arguments.at(6).toDouble(), 0), false);
-                            else if(arguments.count() >= 6) // 3+3 (x, y, z)
-                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()), false);
-                            else if(arguments.count() >= 5) // 3+2 (x, y)
-                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()), false);
-                            return curve->getPathLength();
+                            quint16 indexPoint = argvDouble(argv, 2);
+                            if(argc >= 21)  // 3+18 (x, y, z, sx, sy, sz), (c1x, c1y, c1z, c1sx, c1sy, c1sz), (c2x, c2y, c2z, c2sx, c2sy, c2z)
+                                curve->setPointAt(indexPoint,
+                                                  NxPoint(argvDouble(argv, 3),  argvDouble(argv, 4),  argvDouble(argv, 5),  argvDouble(argv, 6),  argvDouble(argv, 7),  argvDouble(argv, 8)),
+                                                  NxPoint(argvDouble(argv, 9),  argvDouble(argv, 10), argvDouble(argv, 11), argvDouble(argv, 12), argvDouble(argv, 13), argvDouble(argv, 14)),
+                                                  NxPoint(argvDouble(argv, 15), argvDouble(argv, 16), argvDouble(argv, 17), argvDouble(argv, 18), argvDouble(argv, 19), argvDouble(argv, 20)), false);
+                            else if(argc >= 15)  // 3+12 (x, y, sx, sy), (c1x, c1y, c1sx, c1sy), (c2x, c2y, c2sx, c2sy)
+                                curve->setPointAt(indexPoint,
+                                                  NxPoint(argvDouble(argv, 3),  argvDouble(argv, 4),  0, argvDouble(argv, 5),  argvDouble(argv, 6),  0),
+                                                  NxPoint(argvDouble(argv, 7),  argvDouble(argv, 8),  0, argvDouble(argv, 9),  argvDouble(argv, 10), 0),
+                                                  NxPoint(argvDouble(argv, 11), argvDouble(argv, 12), 0, argvDouble(argv, 13), argvDouble(argv, 14), 0), false);
+                            else if(argc >= 12) // 3+9 (x, y, z), (c1x, c1y, c1z), (c2x, c2y, c2z)
+                                curve->setPointAt(indexPoint,
+                                                  NxPoint(argvDouble(argv, 3), argvDouble(argv, 4),  argvDouble(argv, 5)),
+                                                  NxPoint(argvDouble(argv, 6), argvDouble(argv, 7),  argvDouble(argv, 8)),
+                                                  NxPoint(argvDouble(argv, 9), argvDouble(argv, 10), argvDouble(argv, 11)), false);
+                            else if(argc >= 10) // 3+6+1 (x, y, z, sx, sy, sz) // REQUIRES A DUMMY ARGUMENT
+                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5), argvDouble(argv, 6), argvDouble(argv, 7), argvDouble(argv, 8)), false);
+                            else if(argc >= 9)  // 3+6 (x, y), (c1x, c1y), (c2x, c2y)
+                                curve->setPointAt(indexPoint,
+                                                  NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)),
+                                                  NxPoint(argvDouble(argv, 5), argvDouble(argv, 6)),
+                                                  NxPoint(argvDouble(argv, 7), argvDouble(argv, 8)), false);
+                            else if(argc >= 7) // 3+4 (x, y, sx, sy)
+                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), 0, argvDouble(argv, 5), argvDouble(argv, 6), 0), false);
+                            else if(argc >= 6) // 3+3 (x, y, z)
+                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)), false);
+                            else if(argc >= 5) // 3+2 (x, y)
+                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)), false);
+                            NxCurvePoint pt = curve->getPathPointsAt(indexPoint);
+                            return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
                         }
+                        return "0 0 0  0 0 0  0 0 0";
                     }
-                    else if((commande == COMMAND_CURVE_POINT_SMOOTH) && (arguments.count() >= 5)) {
+                    else if(commande == COMMAND_CURVE_POINT_SMOOTH) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
-                            if(arguments.count() >= 9)      // 3+6 (x, y, z, sx, sy, sz)
-                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble(), arguments.at(6).toDouble(), arguments.at(7).toDouble(), arguments.at(8).toDouble()), true);
-                            else if(arguments.count() >= 7) // 3+4 (x, y, sx, sy)
-                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), 0, arguments.at(5).toDouble(), arguments.at(6).toDouble(), 0), true);
-                            else if(arguments.count() >= 6) // 3+3 (x, y, z)
-                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble(), arguments.at(5).toDouble()), true);
-                            else if(arguments.count() >= 5) // 3+2 (x, y)
-                                curve->setPointAt(arguments.at(2).toDouble(), NxPoint(arguments.at(3).toDouble(), arguments.at(4).toDouble()), true);
+                            if(argc >= 9)      // 3+6 (x, y, z, sx, sy, sz)
+                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5), argvDouble(argv, 6), argvDouble(argv, 7), argvDouble(argv, 8)), true);
+                            else if(argc >= 7) // 3+4 (x, y, sx, sy)
+                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), 0, argvDouble(argv, 5), argvDouble(argv, 6), 0), true);
+                            else if(argc >= 6) // 3+3 (x, y, z)
+                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)), true);
+                            else if(argc >= 5) // 3+2 (x, y)
+                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)), true);
+                            NxCurvePoint pt = curve->getPathPointsAt(argvDouble(argv, 2));
+                            return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
                         }
+                        return "0 0 0  0 0 0  0 0 0";
                     }
 
-                    else if((commande == COMMAND_CURVE_TXT) && (arguments.count() >= 5)) {
+                    else if(commande == COMMAND_CURVE_TXT) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
-                            curve->setText(arguments.at(4), arguments[3].replace("_", " ").trimmed());
-                            curve->setResizeF(arguments.at(2).toDouble());
+                            if(argc > 4) {
+                                curve->setText(argv.at(4), argv[3].replace("_", " ").trimmed());
+                                curve->setResizeF(argvDouble(argv, 2));
+                            }
                             return curve->getPathLength();
                         }
+                        return 0;
                     }
-                    else if(((commande == COMMAND_CURVE_SVG) || (commande == COMMAND_CURVE_PATH)) && (arguments.count() >= 4)) {
+                    else if((commande == COMMAND_CURVE_SVG) || (commande == COMMAND_CURVE_PATH)) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
-                            curve->setSVG(command.mid(command.indexOf(arguments.at(3), command.indexOf(arguments.at(2))+arguments.at(2).length())).trimmed());
-                            curve->setResizeF(arguments.at(2).toDouble());
+                            if(argc > 3) {
+                                curve->setSVG(argvFullString(command, argv, 3));
+                                curve->setResizeF(argvDouble(argv, 2));
+                            }
                             return curve->getPathLength();
                         }
+                        return 0;
                     }
-                    else if(((commande == COMMAND_CURVE_SVG2) || (commande == COMMAND_CURVE_LINES)) && (arguments.count() >= 4)) {
+                    else if((commande == COMMAND_CURVE_SVG2) || (commande == COMMAND_CURVE_LINES)) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
-                            curve->setSVG2(command.mid(command.indexOf(arguments.at(3), command.indexOf(arguments.at(2))+arguments.at(2).length())).trimmed());
-                            curve->setResizeF(arguments.at(2).toDouble());
+                            if(argc > 3) {
+                                curve->setSVG2(argvFullString(command, argv, 3));
+                                curve->setResizeF(argvDouble(argv, 2));
+                            }
                             return curve->getPathLength();
                         }
+                        return 0;
                     }
-                    else if((commande == COMMAND_CURVE_IMG) && (arguments.count() >= 4)) {
+                    else if(commande == COMMAND_CURVE_IMG) {
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
-                            curve->setImage(command.mid(command.indexOf(arguments.at(3), command.indexOf(arguments.at(2))+arguments.at(2).length())).trimmed());
-                            curve->setResizeF(arguments.at(2).toDouble());
+                            if(argc > 3) {
+                                curve->setImage(argvFullString(command, argv, 3));
+                                curve->setResizeF(argvDouble(argv, 2));
+                            }
                             return curve->getPathLength();
                         }
+                        return 0;
+                    }
+                    else if(commande == COMMAND_CURVE_SVG) {
+                        if(object->getType() == ObjectsTypeCurve) {
+                            NxCurve *curve = (NxCurve*)object;
+                            if(argc > 4) {
+                                curve->setSVG(argvFullString(command, argv, 4));
+                                curve->setResize(NxSize(argvDouble(argv, 2), argvDouble(argv, 3)));
+                            }
+                            return curve->getPathLength();
+                        }
+                        return 0;
+                    }
+                    else if(commande == COMMAND_CURVE_ELL) {
+                        if(object->getType() == ObjectsTypeCurve) {
+                            NxCurve *curve = (NxCurve*)object;
+                            if(argc > 2)
+                                curve->setEllipse(NxSize(argvDouble(argv, 2), argvDouble(argv, 3)));
+                            return curve->getPathLength();
+                        }
+                        return 0;
                     }
 
-                    //Compatibility
-                    else if((commande == COMMAND_CURVE_SVG) && (arguments.count() >= 5)) {
-                        if(object->getType() == ObjectsTypeCurve) {
-                            NxCurve *curve = (NxCurve*)object;
-                            curve->setSVG(command.mid(command.indexOf(arguments.at(4), command.indexOf(arguments.at(3))+arguments.at(2).length())).trimmed());
-                            curve->setResize(NxSize(arguments.at(2).toDouble(), arguments.at(3).toDouble()));
-                            return curve->getPathLength();
-                        }
+                    else if(commande == COMMAND_POS) {
+                        if(argc > 2)
+                            object->dispatchProperty("posStr", argv.at(2) + " " + argv.at(3) + " " + argv.at(4));
+                        return object->getProperty("posStr");
+                    }
+                    else if(commande == COMMAND_ACTIVE) {
+                        if(argc > 2)
+                            object->dispatchProperty("active", argvDouble(argv, 2));
+                        return object->getProperty("active");
                     }
 
-                    else if((commande == COMMAND_CURVE_ELL) && (arguments.count() >= 4)) {
-                        if(object->getType() == ObjectsTypeCurve) {
-                            NxCurve *curve = (NxCurve*)object;
-                            curve->setEllipse(NxSize(arguments.at(2).toDouble(), arguments.at(3).toDouble()));
-                            return curve->getPathLength();
-                        }
-                    }
-
-                    else if((commande == COMMAND_POS) && (arguments.count() >= 5)) {
-                        object->dispatchProperty("posStr", arguments.at(2) + " " + arguments.at(3) + " " + arguments.at(4));
-                    }
-                    else if((commande == COMMAND_ACTIVE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("active", arguments.at(2).toDouble());
-                    }
-
-                    else if((commande == COMMAND_TRIG) && (arguments.count() >= 0)) {
+                    else if(commande == COMMAND_TRIG) {
                         object->dispatchProperty("forceTrig", true);
                         lastMessageAllow = true;
                         emit(updateTransport(timeLocalStr, lastMessage));
+                        return true;
                     }
 
-                    else if((commande == COMMAND_COLOR_GLOBAL) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorActive", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                        object->dispatchProperty("colorInactive", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                        object->dispatchProperty("colorActiveMessage", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                        object->dispatchProperty("colorInactiveMessage", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
+                    else if(commande == COMMAND_COLOR_GLOBAL) {
+                        if(argc > 2) {
+                            object->dispatchProperty("colorActive",          argvFullString(command, argv, 2));
+                            object->dispatchProperty("colorInactive",        argvFullString(command, argv, 2));
+                            object->dispatchProperty("colorActiveMessage",   argvFullString(command, argv, 2));
+                            object->dispatchProperty("colorInactiveMessage", argvFullString(command, argv, 2));
+                        }
+                        return object->getProperty("colorActive");
                     }
-                    else if((commande == COMMAND_COLOR_ACTIVE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorActive", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
+                    else if(commande == COMMAND_COLOR_ACTIVE) {
+                        if(argc > 2)
+                            object->dispatchProperty("colorActive", argvFullString(command, argv, 2));
+                        return object->getProperty("colorActive");
                     }
-                    else if((commande == COMMAND_COLOR_INACTIVE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorInactive", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
+                    else if(commande == COMMAND_COLOR_INACTIVE) {
+                        if(argc > 2)
+                            object->dispatchProperty("colorInactive", argvFullString(command, argv, 2));
+                        return object->getProperty("colorInactive");
                     }
-                    else if((commande == COMMAND_COLOR_ACTIVE_MESSAGE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorActiveMessage", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
+                    else if(commande == COMMAND_COLOR_ACTIVE_MESSAGE) {
+                        if(argc > 2)
+                            object->dispatchProperty("colorActiveMessage", argvFullString(command, argv, 2));
+                        return object->getProperty("colorActiveMessage");
                     }
-                    else if((commande == COMMAND_COLOR_INACTIVE_MESSAGE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorInactiveMessage", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                    }
-
-                    else if((commande == COMMAND_COLOR_GLOBAL_HUE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorActiveHue", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                        object->dispatchProperty("colorInactiveHue", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                        object->dispatchProperty("colorActiveMessageHue", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                        object->dispatchProperty("colorInactiveMessageHue", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                    }
-                    else if(((commande == COMMAND_COLOR_ACTIVE2) || (commande == COMMAND_COLOR_ACTIVE_HUE)) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorActiveHue", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                    }
-                    else if(((commande == COMMAND_COLOR_INACTIVE2) || (commande == COMMAND_COLOR_INACTIVE_HUE)) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorInactiveHue", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                    }
-                    else if(((commande == COMMAND_COLOR_ACTIVE_MESSAGE2) || (commande == COMMAND_COLOR_ACTIVE_MESSAGE_HUE)) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorActiveMessageHue", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
-                    }
-                    else if(((commande == COMMAND_COLOR_INACTIVE_MESSAGE2) || (commande == COMMAND_COLOR_INACTIVE_MESSAGE_HUE)) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("colorInactiveMessageHue", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
+                    else if(commande == COMMAND_COLOR_INACTIVE_MESSAGE) {
+                        if(argc > 2)
+                            object->dispatchProperty("colorInactiveMessage", argvFullString(command, argv, 2));
+                        return object->getProperty("colorInactiveMessage");
                     }
 
-                    else if((commande == COMMAND_MESSAGE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("messagePatterns", command.mid(command.indexOf(arguments.at(2), command.indexOf(arguments.at(1))+arguments.at(1).length())).trimmed());
+                    else if(commande == COMMAND_COLOR_GLOBAL_HUE) {
+                        if(argc > 2) {
+                            object->dispatchProperty("colorActiveHue",          argvFullString(command, argv, 2));
+                            object->dispatchProperty("colorInactiveHue",        argvFullString(command, argv, 2));
+                            object->dispatchProperty("colorActiveMessageHue",   argvFullString(command, argv, 2));
+                            object->dispatchProperty("colorInactiveMessageHue", argvFullString(command, argv, 2));
+                        }
+                        return object->getProperty("colorActiveHue");
                     }
-                    else if((commande == COMMAND_TRIGGER_OFF) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("triggerOff", arguments.at(2));
+                    else if((commande == COMMAND_COLOR_ACTIVE2) || (commande == COMMAND_COLOR_ACTIVE_HUE)) {
+                        if(argc > 2)
+                            object->dispatchProperty("colorActiveHue", argvFullString(command, argv, 2));
+                        return object->getProperty("colorActiveHue");
+                    }
+                    else if((commande == COMMAND_COLOR_INACTIVE2) || (commande == COMMAND_COLOR_INACTIVE_HUE)) {
+                        if(argc > 2)
+                            object->dispatchProperty("colorInactiveHue", argvFullString(command, argv, 2));
+                        return object->getProperty("colorInactiveHue");
+                    }
+                    else if((commande == COMMAND_COLOR_ACTIVE_MESSAGE2) || (commande == COMMAND_COLOR_ACTIVE_MESSAGE_HUE)) {
+                        if(argc > 2)
+                            object->dispatchProperty("colorActiveMessageHue", argvFullString(command, argv, 2));
+                        return object->getProperty("colorActiveMessageHue");
+                    }
+                    else if((commande == COMMAND_COLOR_INACTIVE_MESSAGE2) || (commande == COMMAND_COLOR_INACTIVE_MESSAGE_HUE)) {
+                        if(argc > 2)
+                            object->dispatchProperty("colorInactiveMessageHue", argvFullString(command, argv, 2));
+                        return object->getProperty("colorInactiveMessageHue");
                     }
 
-                    else if((commande == COMMAND_TEXTURE_GLOBAL) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("textureActive", arguments.at(2));
-                        object->dispatchProperty("textureInactive", arguments.at(2));
-                        object->dispatchProperty("textureActiveMessage", arguments.at(2));
-                        object->dispatchProperty("textureInactiveMessage", arguments.at(2));
+                    else if(commande == COMMAND_MESSAGE) {
+                        if(argc > 2)
+                            object->dispatchProperty("messagePatterns", argvFullString(command, argv, 2));
+                        return object->getProperty("messagePatterns");
                     }
-                    else if((commande == COMMAND_TEXTURE_ACTIVE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("textureActive", arguments.at(2));
-                    }
-                    else if((commande == COMMAND_TEXTURE_INACTIVE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("textureInactive", arguments.at(2));
-                    }
-                    else if((commande == COMMAND_TEXTURE_ACTIVE_MESSAGE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("textureActiveMessage", arguments.at(2));
-                    }
-                    else if((commande == COMMAND_TEXTURE_INACTIVE_MESSAGE) && (arguments.count() >= 3)) {
-                        object->dispatchProperty("textureInactiveMessage", arguments.at(2));
+                    else if(commande == COMMAND_TRIGGER_OFF) {
+                        if(argc > 2)
+                            object->dispatchProperty("triggerOff", argvDouble(argv, 2));
+                        return object->getProperty("triggerOff");
                     }
 
-                    return object->getProperty("id").toDouble();
+                    else if(commande == COMMAND_TEXTURE_GLOBAL) {
+                        if(argc > 2) {
+                            object->dispatchProperty("textureActive",          argv.at(2));
+                            object->dispatchProperty("textureInactive",        argv.at(2));
+                            object->dispatchProperty("textureActiveMessage",   argv.at(2));
+                            object->dispatchProperty("textureInactiveMessage", argv.at(2));
+                        }
+                        return object->getProperty("textureActive");
+                    }
+                    else if(commande == COMMAND_TEXTURE_ACTIVE) {
+                        if(argc > 2)
+                            object->dispatchProperty("textureActive", argv.at(2));
+                        return object->getProperty("textureActive");
+                    }
+                    else if(commande == COMMAND_TEXTURE_INACTIVE) {
+                        if(argc > 2)
+                            object->dispatchProperty("textureInactive", argv.at(2));
+                        return object->getProperty("textureInactive");
+                    }
+                    else if(commande == COMMAND_TEXTURE_ACTIVE_MESSAGE) {
+                        if(argc > 2)
+                            object->dispatchProperty("textureActiveMessage", argv.at(2));
+                        return object->getProperty("textureActiveMessage");
+                    }
+                    else if(commande == COMMAND_TEXTURE_INACTIVE_MESSAGE) {
+                        if(argc > 2)
+                            object->dispatchProperty("textureInactiveMessage", argv.at(2));
+                        return object->getProperty("textureInactiveMessage");
+                    }
+                    return object->getProperty("id");
                 }
             }
         }
@@ -1968,16 +2102,10 @@ QString IanniX::onDraw() {
 void IanniX::askNxObject(void *_object, bool shift) {
     NxObject *object = (NxObject*)_object;
     if((object) && ((object->getType() == ObjectsTypeTrigger) || (object->getType() == ObjectsTypeCursor))) {
-        if((shift) && (object->getType() == ObjectsTypeTrigger)) {
+        if((shift) && (object->getType() == ObjectsTypeTrigger))
             ((NxTrigger*)object)->trig(0);
-            lastMessageAllow = true;
-            emit(updateTransport(timeLocalStr, lastMessage));
-        }
-        else if((shift) && (object->getType() == ObjectsTypeCursor)) {
-            ((NxCursor*)object)->trig(true);
-            lastMessageAllow = true;
-            emit(updateTransport(timeLocalStr, lastMessage));
-        }
+        else if((shift) && (object->getType() == ObjectsTypeCursor))
+            timerTrig(object, true);
         else
             inspector->actionMessages();
     }
@@ -2107,7 +2235,7 @@ void IanniX::editingMove(const NxPoint & point, bool add) {
 void IanniX::actionGridChange(qreal val) {
     render->getRenderOptions()->axisGrid = val;
 }
-void IanniX::actionGridOpacityChange(qreal val) {    
+void IanniX::actionGridOpacityChange(qreal val) {
     if(!render->getColorTheme()) {
         render->getRenderOptions()->colors["grid"] = QColor(255, 255, 255,  23*val);
         render->getRenderOptions()->colors["axis"] = QColor(255, 255, 255,  18*val);
@@ -2308,7 +2436,7 @@ void IanniX::actionRedo() {
     currentDocument->popSnapshot(true);
 }
 void IanniX::actionSync() {
-    QStringList commands = currentDocument->serialize(render->getRenderOptions(), false).split(COMMAND_END);
+    QStringList commands = serialize().split(COMMAND_END);
     foreach(const QString & command, commands)
         sendMessage(syncObject, 0, 0, 0, NxPoint(), NxPoint(), command);
 }
@@ -2396,17 +2524,33 @@ void IanniX::fileWatcherFolder(QStringList extension, QDir dir, QTreeWidgetItem 
 }
 
 void IanniX::logOscSend(const QString & message) {
-    if(lastMessageAllow) {
+    if((lastMessageAllow) || (schedulerActivity == SchedulerOff)) {
         lastMessage = message;
         lastMessageAllow = false;
+        if(schedulerActivity == SchedulerOff)
+            emit(updateTransport(timeLocalStr, lastMessage));
     }
     if(oscConsoleActive)
         inspector->logOscSend(message);
 }
 void IanniX::logOscReceive(const QString & message) {
+    if(lastMessageReceivedAllow) {
+        lastMessageReceived = message;
+        emit(newMessageArrived());
+    }
     if(oscConsoleActive)
         inspector->logOscReceive(message);
 }
+QString IanniX::waitForMessage() {
+    lastMessageReceivedAllow = true;
+    lastMessageReceived = "";
+    QEventLoop loop;
+    connect(this, SIGNAL(newMessageArrived()), &loop, SLOT(quit()));
+    loop.exec();
+    lastMessageReceivedAllow = false;
+    return lastMessageReceived;
+}
+
 void IanniX::pushSnapshot() {
     if(currentDocument)
         currentDocument->pushSnapshot();

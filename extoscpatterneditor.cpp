@@ -104,8 +104,10 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
             setCurrentItem(ui->protocolCombo, ui->protocolLabel, urlMessage.scheme().toLower());
 
             if((urlMessage.scheme().toLower() == "osc") || (urlMessage.scheme().toLower() == "http")) {
-                setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    urlMessage.host());
-                setCurrentItem(ui->portCombo,       ui->portLabel,       QString::number(urlMessage.port()));
+                if(wasLearning) setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    "ip_out");
+                else            setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    urlMessage.host());
+                if(wasLearning) setCurrentItem(ui->portCombo,       ui->portLabel,       "57120");
+                else            setCurrentItem(ui->portCombo,       ui->portLabel,       QString::number(urlMessage.port()));
                 setCurrentItem(ui->addressOscCombo, ui->addressOSCLabel, urlMessage.path());
 
                 ui->hostMidiCombo->setVisible(false);
@@ -121,7 +123,8 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
                 }
             }
             else if(urlMessage.scheme() == "udp") {
-                setCurrentItem(ui->hostIpCombo, ui->hostOSCLabel, urlMessage.host());
+                if(wasLearning) setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    "ip_out");
+                else            setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    urlMessage.host());
                 setCurrentItem(ui->portCombo,   ui->portLabel, QString::number(urlMessage.port()));
                 ui->addressOscCombo->setVisible(false);
                 ui->addressOSCLabel->setVisible(false);
@@ -137,7 +140,8 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
                 }
             }
             else if(urlMessage.scheme() == "midi") {
-                setCurrentItem(ui->hostMidiCombo,    ui->hostMIDILabel,    urlMessage.host());
+                if(wasLearning) setCurrentItem(ui->hostMidiCombo,    ui->hostMIDILabel,    "midi_out");
+                else            setCurrentItem(ui->hostMidiCombo,    ui->hostMIDILabel,    urlMessage.host());
                 setCurrentItem(ui->addressMidiCombo, ui->addressMIDILabel, urlMessage.path());
                 ui->hostIpCombo->setVisible(false);
                 ui->hostOSCLabel->setVisible(false);
@@ -213,6 +217,7 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
         setCurrentItem(trees.at(valueIndex).first, trees.at(valueIndex).second.first, "", false);
 
     itemLock = false;
+    wasLearning = false;
     if(refreshText)
         currentItemChanged();
 }
@@ -292,4 +297,18 @@ void ExtOscPatternEditor::fieldFocusIn() {
         emit(actionRouteFocus(0, (QPlainTextEdit*)sender()));
     else
         emit(actionRouteFocus((QComboBox*)sender(), 0));
+}
+
+void ExtOscPatternEditor::learn() {
+    UiMessageBox *displayBox = new UiMessageBox();
+    displayBox->display(tr("MIDI/OSC learn"), tr("Please send an event to IanniX\n\nMove a slider on your surface control or press a MIDI note…"));
+    QString message = factory->waitForMessage();
+    if(!message.isEmpty()) {
+        if(message.contains("/note"))
+            message = message + " 1";
+        wasLearning = true;
+        ui->patternEdit->setPlainText(message);
+    }
+    displayBox->hide();
+    delete displayBox;
 }

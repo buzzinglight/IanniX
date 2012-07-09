@@ -30,7 +30,7 @@ function onCreate() {
 	run("add cursor       100");
 	run("setCurve         current lastCurve");
 	run("setPattern       current 0 0 1");
-	run("setGroup         current cursors");
+	run("setGroup         current values");
 	run("setWidth         current 0.1");
 	run("setColorHue      current 0 255 255 255");
 	run("setBoundsSource  current 0 " + (circleMax / 2.5) + " " + (circleMax / 2) + " 0 0");
@@ -56,7 +56,7 @@ function addCircle(circleIndex) {
 	run("add cursor       " + circleIndex);
 	run("setCurve         current lastCurve");
 	run("setPattern       current 0 0 1");
-	run("setGroup         current cursors");
+	run("setGroup         current values");
 	run("setWidth         current 0.1");
 	run("setMessage       current 20,");
 	

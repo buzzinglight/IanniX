@@ -69,6 +69,10 @@ QPushButton::checked, QPushButton:pressed {
 	color: white;
 }
 
+QPushButton#patternLearn {
+	border-radius: 7px;
+}
+
 QTreeWidget {
 	color: black;
 	border: 0px solid transparent;
@@ -245,6 +249,37 @@ QComboBox::drop-down {
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="patternLearn">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the message</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to clear the message</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>learn</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -1556,7 +1591,7 @@ QComboBox::drop-down {
    <slot>clearApattern()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>725</x>
+     <x>760</x>
      <y>187</y>
     </hint>
     <hint type="destinationlabel">
@@ -1572,7 +1607,7 @@ QComboBox::drop-down {
    <slot>clearApattern()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>725</x>
+     <x>760</x>
      <y>214</y>
     </hint>
     <hint type="destinationlabel">
@@ -1588,7 +1623,7 @@ QComboBox::drop-down {
    <slot>clearApattern()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>725</x>
+     <x>760</x>
      <y>241</y>
     </hint>
     <hint type="destinationlabel">
@@ -1604,7 +1639,7 @@ QComboBox::drop-down {
    <slot>clearApattern()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>725</x>
+     <x>760</x>
      <y>268</y>
     </hint>
     <hint type="destinationlabel">
@@ -1620,7 +1655,7 @@ QComboBox::drop-down {
    <slot>clearApattern()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>725</x>
+     <x>760</x>
      <y>295</y>
     </hint>
     <hint type="destinationlabel">
@@ -1636,7 +1671,7 @@ QComboBox::drop-down {
    <slot>clearApattern()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>725</x>
+     <x>760</x>
      <y>322</y>
     </hint>
     <hint type="destinationlabel">
@@ -1652,7 +1687,7 @@ QComboBox::drop-down {
    <slot>clearApattern()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>713</x>
+     <x>748</x>
      <y>33</y>
     </hint>
     <hint type="destinationlabel">
@@ -1773,6 +1808,22 @@ QComboBox::drop-down {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>patternLearn</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>learn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>733</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>38</x>
+     <y>491</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>actionRemove()</slot>
@@ -1780,5 +1831,6 @@ QComboBox::drop-down {
   <slot>textPatternChanged()</slot>
   <slot>clearApattern()</slot>
   <slot>fieldFocusIn()</slot>
+  <slot>learn()</slot>
  </slots>
 </ui>

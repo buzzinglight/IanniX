@@ -20,6 +20,7 @@
 #define UIVIEW_H
 
 #include <QMainWindow>
+#include <QTabletEvent>
 #include "uitransport.h"
 #include "uiinspector.h"
 
@@ -142,12 +143,15 @@ signals:
     void actionRoutePasteScript();
     void actionRouteShowTimer();
     void actionRouteSnaphot(qreal);
+    void editingStart(const NxPoint &);
+    void editingStop();
+    void editingMove(const NxPoint &, bool add);
 
 protected:
     void changeEvent(QEvent *e);
     void keyPressEvent(QKeyEvent *event);
     void closeEvent(QCloseEvent *);
-    void tabletEvent(QTabletEvent *);
+    //void tabletEvent(QTabletEvent *);
 
 private:
     Ui::UiView *ui;

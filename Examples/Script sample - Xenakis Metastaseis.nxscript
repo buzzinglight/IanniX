@@ -86,8 +86,8 @@ function addPolyline(path) {
 
 	run("add cursor      " + cursor_id);
 	run("setCurve        current lastCurve");
-	run("setGroup        current cursors");
-	run("setWidth        current 0");
+	run("setGroup        current values");
+	run("setWidth        current 0.2");
 	run("setSpeed        current " + speed);
 	run("setBoundsSource current 0 14.2 6 0");
 	run("setBoundsTarget current 0 1 1 0");
@@ -96,8 +96,8 @@ function addPolyline(path) {
 
 
 /*
-    IanniX — a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 — IanniX Association
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

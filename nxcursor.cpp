@@ -359,6 +359,27 @@ void NxCursor::paint() {
                     glCallList(glListCursor);
                 glPopMatrix();
             }
+
+            //Mapping area
+            if((selectedHover) || (selected)) {
+                glPushMatrix();
+                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 2.F);
+                glLineWidth(1);
+                glEnable(GL_LINE_STIPPLE);
+                glLineStipple(1, 255);
+                glBegin(GL_LINE_LOOP);
+                glVertex3f(boundsSource.topLeft().x(),     boundsSource.topLeft().y(),     boundsSource.topLeft().z());
+                glVertex3f(boundsSource.topRight().x(),    boundsSource.topRight().y(),    boundsSource.topRight().z());
+                glVertex3f(boundsSource.bottomRight().x(), boundsSource.bottomRight().y(), boundsSource.bottomRight().z());
+                glVertex3f(boundsSource.bottomLeft().x(),  boundsSource.bottomLeft().y(),  boundsSource.bottomLeft().z());
+                glEnd();
+                glDisable(GL_LINE_STIPPLE);
+                renderOptions->render->renderText(boundsSource.topLeft().x()     - 0.50, boundsSource.topLeft().y()     - 0.12, 0, QString::number(boundsTarget.topLeft().y(),     'f', 3), renderOptions->renderFont);
+                renderOptions->render->renderText(boundsSource.bottomLeft().x()  - 0.50, boundsSource.bottomLeft().y()  - 0.00, 0, QString::number(boundsTarget.bottomLeft().y(),  'f', 3), renderOptions->renderFont);
+                renderOptions->render->renderText(boundsSource.bottomLeft().x()  - 0.00, boundsSource.bottomLeft().y()  - 0.22, 0, QString::number(boundsTarget.bottomLeft().x(),  'f', 3), renderOptions->renderFont);
+                renderOptions->render->renderText(boundsSource.bottomRight().x() - 0.40, boundsSource.bottomRight().y() - 0.22, 0, QString::number(boundsTarget.bottomRight().x(), 'f', 3), renderOptions->renderFont);
+                glPopMatrix();
+            }
         }
     }
 }

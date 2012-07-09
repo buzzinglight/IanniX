@@ -88,7 +88,7 @@ public:
         calcBoundingRect();
     }
 
-    inline void dragStart() {
+    inline void dragStart(const NxPoint &) {
         isDrag = true;
         if(selectedPathPointPoint >= 0)
             posDrag = getPathPointsAt(selectedPathPointPoint);
@@ -99,7 +99,7 @@ public:
         else
             posDrag = pos;
     }
-    inline void drag(const NxPoint & translation) {
+    inline void drag(const NxPoint & translation, const NxPoint &) {
         if(selectedPathPointPoint >= 0)
             setPointAt(selectedPathPointPoint, posDrag + translation, pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth);
         else if(selectedPathPointControl1 >= 0) {
@@ -152,7 +152,7 @@ public:
     inline NxPoint getPointAt(quint16 index, qreal t) const;
     NxPoint getPointAt(qreal val, bool absoluteTime = false) const;
     qreal getAngleAt(qreal val, bool absoluteTime = false) const;
-    qreal intersects(NxRect rect, NxPoint* collisionPoint = 0) const;
+    qreal intersects(const NxRect &rect, NxPoint* collisionPoint = 0) const;
 
     inline void setResize(const NxSize & size) {
         resize(size);
@@ -178,7 +178,7 @@ public:
             object->calculate();
     }
     inline qreal getResizeF() const {
-        return 0;
+        return 1;
     }
 
 public:
@@ -192,11 +192,13 @@ public:
 
     inline void addCursor(NxObject *cursor) {
         cursors.append(cursor);
+        glListRecreate = true;
     }
     inline void removeCursor(NxObject *cursor) {
         qint16 index = cursors.lastIndexOf(cursor);
         if(index >= 0)
             cursors.removeAt(index);
+        glListRecreate = true;
     }
 
     QString serializeCustom(bool hasAScript) const {

@@ -72,11 +72,8 @@ void ExtOscPatternAsk::changeEvent(QEvent *e) {
         break;
     }
 }
-void ExtOscPatternAsk::mousePressEvent(QMouseEvent *) {
-    /*
-    foreach(ExtOscPatternEditor *patternList, patternLists)
-        patternList->editFocusOut();
-        */
+void ExtOscPatternAsk::closeEvent(QCloseEvent *) {
+    done(1);
 }
 
 const QString ExtOscPatternAsk::getMessagePatterns() const {

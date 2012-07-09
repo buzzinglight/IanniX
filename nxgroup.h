@@ -31,19 +31,22 @@ public:
     explicit NxGroup(NxObjectFactoryInterface *parent, QTreeWidget *parentItem, Qt::CheckState state);
     inline void dispatchProperty(const QString & property, const QVariant & value) {
         //Browse active/inactive objects
-        for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
-
+        for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++)
             //Browse all types of objects
-            for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
+            for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++)
                 //Browse objects
-                foreach(NxObject *object, objects[activityIterator][typeIterator]) {
+                foreach(NxObject *object, objects[activityIterator][typeIterator])
                     object->dispatchProperty(property, value);
-                }
-            }
-        }
     }
-    inline const QVariant getProperty(const QString &) const {
-        return id;
+    inline const QVariant getProperty(const QString & _property) const {
+        //Browse active/inactive objects
+        for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++)
+            //Browse all types of objects
+            for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++)
+                //Browse objects
+                foreach(NxObject *object, objects[activityIterator][typeIterator])
+                    return object->getProperty(_property);
+        return QVariant();
     }
     inline quint8 getType() const {
         return ObjectsTypeGroup;

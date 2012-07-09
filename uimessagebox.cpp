@@ -88,6 +88,20 @@ int UiMessageBox::display(const QString &title, const QString &description, QDia
     delete this;
     return ret;
 }
+void UiMessageBox::display(const QString &title, const QString &description) {
+    setUpdatesEnabled(false);
+    ui->choices->setCurrentIndex(2);
+    ui->messageLabel->setText(description.toUpper());
+    ui->messageButtons->setStandardButtons(QDialogButtonBox::Ok);
+    setWindowTitle(title);
+    setUpdatesEnabled(true);
+
+    updateGeometry();
+    QRect screen = QApplication::desktop()->screenGeometry();
+    move(screen.center() - QPoint(200, 100));
+    show();
+    raise();
+}
 QString UiMessageBox::getText(const QString &title, const QString &description, const QString &value, bool *ok) {
     setUpdatesEnabled(false);
     ui->choices->setCurrentIndex(3);

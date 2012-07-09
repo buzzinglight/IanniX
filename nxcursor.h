@@ -34,21 +34,22 @@
 
 class NxCursor : public NxObject {
     Q_OBJECT
-    Q_PROPERTY(QString start READ getStart WRITE setStart)
-    Q_PROPERTY(qreal   timeStartOffset READ getTimeStartOffset WRITE setTimeStartOffset)
-    Q_PROPERTY(qreal   timeInitialOffset READ getTimeInitialOffset WRITE setTimeInitialOffset)
-    Q_PROPERTY(qreal   timeEndOffset READ getTimeEndOffset WRITE setTimeEndOffset)
-    Q_PROPERTY(QString boundsSource READ getBoundsSource WRITE setBoundsSource)
-    Q_PROPERTY(QString boundsTarget READ getBoundsTarget WRITE setBoundsTarget)
-    Q_PROPERTY(qreal   timeFactor READ getTimeFactor WRITE setTimeFactor)
-    Q_PROPERTY(qreal   timeFactorAuto READ getTimeFactorAuto WRITE setTimeFactorAuto)
-    Q_PROPERTY(qreal   timeFactorF READ getTimeFactorF WRITE setTimeFactorF)
-    Q_PROPERTY(qreal   cursorWidth READ getWidth WRITE setWidth)
-    Q_PROPERTY(qreal   cursorDepth READ getDepth WRITE setDepth)
-    Q_PROPERTY(quint16 easingStart READ getEasing WRITE setEasing)
-    Q_PROPERTY(quint16 nbLoop READ getNbLoop WRITE setNbLoop)
-    Q_PROPERTY(qreal   timeLocal READ getTimeLocal WRITE setTimeLocal)
-    Q_PROPERTY(bool    forceTrig   READ getForceTrig   WRITE setForceTrig)
+    Q_PROPERTY(QString start             READ getStart              WRITE setStart)
+    Q_PROPERTY(qreal   timeStartOffset   READ getTimeStartOffset    WRITE setTimeStartOffset)
+    Q_PROPERTY(qreal   timeInitialOffset READ getTimeInitialOffset  WRITE setTimeInitialOffset)
+    Q_PROPERTY(qreal   timeEndOffset     READ getTimeEndOffset      WRITE setTimeEndOffset)
+    Q_PROPERTY(QString boundsSource      READ getBoundsSource       WRITE setBoundsSource)
+    Q_PROPERTY(QString boundsTarget      READ getBoundsTarget       WRITE setBoundsTarget)
+    Q_PROPERTY(qreal   timeFactor        READ getTimeFactor         WRITE setTimeFactor)
+    Q_PROPERTY(qreal   timeFactorAuto    READ getTimeFactorAuto     WRITE setTimeFactorAuto)
+    Q_PROPERTY(qreal   timeFactorF       READ getTimeFactorF        WRITE setTimeFactorF)
+    Q_PROPERTY(qreal   cursorWidth       READ getWidth              WRITE setWidth)
+    Q_PROPERTY(qreal   cursorDepth       READ getDepth              WRITE setDepth)
+    Q_PROPERTY(quint16 easingStart       READ getEasing             WRITE setEasing)
+    Q_PROPERTY(quint16 nbLoop            READ getNbLoop             WRITE setNbLoop)
+    Q_PROPERTY(qreal   timeLocal         READ getTimeLocal          WRITE setTimeLocal)
+    Q_PROPERTY(qreal   timeLocalPercent  READ getTimeLocalPercent   WRITE setTimeLocalPercent)
+    Q_PROPERTY(bool    forceTrig         READ getForceTrig          WRITE setForceTrig)
 
 
 public:
@@ -80,7 +81,25 @@ public:
         return "cursor";
     }
 
+    inline void dragStart(const NxPoint &) {
+        posDrag = pos;
+        isDrag = true;
+    }
+    inline void drag(const NxPoint & translation, const NxPoint & mousePos) {
+        if(curve) {
+            setTimeLocalPercent(curve->intersects(NxRect(mousePos - NxPoint(renderOptions->objectSize, renderOptions->objectSize), mousePos + NxPoint(renderOptions->objectSize, renderOptions->objectSize))));
+            factory->timerTrig(this, true);
+        }
+        else
+            setPos(posDrag + translation);
+    }
+
+    inline QString getPosStr() const {
+        return QString("%1 %2 %3").arg(cursorPos.x()).arg(cursorPos.y()).arg(cursorPos.z());
+    }
+
     void setTime(qreal delta);
+
     inline void setTimeLocal(qreal _timeLocal) {
         timeLocal = _timeLocal * timeFactor;
         timeLocalAbsolute = qAbs(timeLocal);
@@ -90,6 +109,18 @@ public:
     }
     inline qreal getTimeLocal() const {
         return timeLocal;
+    }
+    inline void setTimeLocalPercent(qreal _timeLocalPercent) {
+        if((curve) && (0 <= _timeLocalPercent) && (_timeLocalPercent <= 1)) {
+            timeLocal = _timeLocalPercent * curve->getPathLength();
+            timeLocalAbsolute = qAbs(timeLocal);
+            timeLocalOld = timeLocal;
+            setNbLoop(0);
+            setTime(0);
+        }
+    }
+    inline qreal getTimeLocalPercent() const {
+        return time;
     }
 
     inline void setStart(const QString & startStr) {
@@ -256,10 +287,7 @@ public:
             timeFactor = curve->getPathLength() / _timeFactorAuto;
     }
     inline qreal getTimeFactorAuto() const {
-        if((curve) && (timeFactor))
-            return curve->getPathLength() / timeFactor;
-        else
-            return 0;
+        return timeFactor;
     }
     inline void setTimeFactorF(qreal _timeFactorF) {
         timeFactorF = _timeFactorF;
@@ -348,8 +376,12 @@ public:
                 retour += prefix + QString(COMMAND_CURSOR_DEPTH + " %1 %2").arg("current").arg(getWidth()) + postfix;
             if((getEasing() != 0) || (getStart() != "1 0"))
                 retour += prefix + QString(COMMAND_CURSOR_START + " %1 %2 %3 %4").arg("current").arg(getEasing()).arg(0).arg(getStart()) + postfix;
+            /*
             if(getTimeLocal() != 0)
                 retour += prefix + QString(COMMAND_CURSOR_TIME + " %1 %2").arg("current").arg(getTimeLocal()) + postfix;
+                */
+            if(getTimeLocalPercent() != 0)
+                retour += prefix + QString(COMMAND_CURSOR_TIME_PERCENT + " %1 %2").arg("current").arg(getTimeLocalPercent()) + postfix;
 
             if(!colorActive.isEmpty()) {
                 if(getColorActive() != "cursor_active")
@@ -382,15 +414,12 @@ public:
     inline const NxPolygon & getCurrentPolygon() const {
         return cursorPoly;
     }
-    inline qreal getCurrentPositionPercent() const {
-        return time;
-    }
+    /*
     inline qreal getCurrentPosition() const {
-        if(curve)
-            return time * curve->getPathLength() / qAbs(factors);
-        else
-            return 0;
+        if(curve)   return time * curve->getPathLength() / qAbs(factors);
+        else        return 0;
     }
+    */
     inline const NxPoint & getCurrentValue() const {
         return cursorRelativePos;
     }
@@ -413,7 +442,7 @@ public:
     void trig(bool force = false);
     bool getForceTrig() { return false;}
     void setForceTrig(bool val) {
-        trig(val);
+        factory->timerTrig(this, val);
     }
 
 

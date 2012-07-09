@@ -535,7 +535,7 @@ void NxCurve::calcBoundingRect() {
         boundingRect = NxRect(-ellipseSize.width(), -ellipseSize.height(), 2*ellipseSize.width(), 2*ellipseSize.height());
     }
     else {
-        qreal step = 0.1;
+        qreal step = 0.01;
         NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
         for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count()-1 ; indexPoint++) {
             NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);
@@ -601,10 +601,14 @@ bool NxCurve::isMouseHover(const NxPoint &mouse) {
     return false;
 }
 
-qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) const {
+qreal NxCurve::intersects(const NxRect &rect, NxPoint* collisionPoint) const {
     qreal step = 0.001;
+    NxRect rectCursor = rect;
+    if(rectCursor.width()  == 0)  rectCursor.setWidth(0.001);
+    if(rectCursor.height() == 0)  rectCursor.setHeight(0.001);
+    if(rectCursor.length() == 0)  rectCursor.setLength(0.001);
     if(curveType == CurveTypeEllipse) {
-        if(boundingRect.intersects(rect)) {
+        if(boundingRect.intersects(rectCursor)) {
             NxPoint pt1 = getPointAt(0);
             for(qreal t = 0 ; t <= 1+step ; t += step) {
                 NxPoint pt2 = getPointAt(t+step);
@@ -612,7 +616,7 @@ qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) const {
                 if(rectCurve.width()  == 0)  rectCurve.setWidth(0.001);
                 if(rectCurve.height() == 0)  rectCurve.setHeight(0.001);
                 if(rectCurve.length() == 0)  rectCurve.setLength(0.001);
-                if(rectCurve.intersects(rect)) {
+                if(rectCurve.intersects(rectCursor)) {
                     if(collisionPoint)
                         *collisionPoint = (pt1+pt2)/2 + pos;
                     return t;
@@ -622,9 +626,9 @@ qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) const {
         }
     }
     else {
-        if(boundingRect.intersects(rect)) {
+        if(boundingRect.intersects(rectCursor)) {
             for(quint16 indexPathPoint = 1 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
-                if(getPathPointsAt(indexPathPoint).boundingRect.intersects(rect)) {
+                if(getPathPointsAt(indexPathPoint).boundingRect.intersects(rectCursor)) {
                     NxPoint pt1 = getPointAt(indexPathPoint-1, (qreal)0);
                     for(qreal t = 0 ; t <= 1+step ; t += step) {
                         NxPoint pt2 = getPointAt(indexPathPoint-1, t+step);
@@ -632,7 +636,7 @@ qreal NxCurve::intersects(NxRect rect, NxPoint* collisionPoint) const {
                         if(rectCurve.width()  == 0)  rectCurve.setWidth(0.001);
                         if(rectCurve.height() == 0)  rectCurve.setHeight(0.001);
                         if(rectCurve.length() == 0)  rectCurve.setLength(0.001);
-                        if(rectCurve.intersects(rect)) {
+                        if(rectCurve.intersects(rectCursor)) {
                             if(collisionPoint)
                                 *collisionPoint = (pt1+pt2)/2 + pos;
                             return (getPathPointsAt(indexPathPoint-1).currentLength + (getPathPointsAt(indexPathPoint).currentLength - getPathPointsAt(indexPathPoint-1).currentLength) * t) / pathLength;

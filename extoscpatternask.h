@@ -43,7 +43,7 @@ private:
     NxObjectFactoryInterface *factory;
 protected:
     void changeEvent(QEvent *e);
-    void mousePressEvent(QMouseEvent *);
+    void closeEvent(QCloseEvent *);
 
 public:
     bool onlyCurves;

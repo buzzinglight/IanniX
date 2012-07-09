@@ -1439,14 +1439,14 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "synthCursor.maxpat",
-				"bootpath" : "/Applications/IanniX/Patches/MaxMSP",
+				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/MaxMSP",
 				"patcherrelativepath" : "",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "synthTrigger.maxpat",
-				"bootpath" : "/Applications/IanniX/Patches/MaxMSP",
+				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/MaxMSP",
 				"patcherrelativepath" : "",
 				"type" : "JSON",
 				"implicit" : 1
