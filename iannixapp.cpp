@@ -958,8 +958,8 @@ void IanniXApp::generateHelp() {
     }
 
 
-    QString introHeader, introFooter;
-    QFile introHeaderFile("Documentation_template/introHeader.html"), introFooterFile("Documentation_template/introFooter.html");
+    QString introHeader, introFooter, releaseNotesRaw;
+    QFile introHeaderFile("Documentation_template/introHeader.html"), introFooterFile("Documentation_template/introFooter.html"), releaseNotesFile("Documentation_template/releaseNotes.txt");
     if(introHeaderFile.open(QFile::ReadOnly)) {
         introHeader = introHeaderFile.readAll();
         introHeaderFile.close();
@@ -968,9 +968,35 @@ void IanniXApp::generateHelp() {
         introFooter = introFooterFile.readAll();
         introFooterFile.close();
     }
+    if(releaseNotesFile.open(QFile::ReadOnly)) {
+        releaseNotesRaw = releaseNotesFile.readAll();
+        releaseNotesFile.close();
+        QFile macReleaseFile  ("../Release/iannix_mac__"     + QCoreApplication::applicationVersion().toLower().replace(" ", "_").replace(".", "_") + ".txt");
+        QFile winReleaseFile  ("../Release/iannix_windows__" + QCoreApplication::applicationVersion().toLower().replace(" ", "_").replace(".", "_") + ".txt");
+        QFile linuxReleaseFile("../Release/iannix_linux__"   + QCoreApplication::applicationVersion().toLower().replace(" ", "_").replace(".", "_") + ".txt");
+        if(macReleaseFile.open(QFile::WriteOnly)) {
+            macReleaseFile.write(qPrintable(releaseNotesRaw));
+            macReleaseFile.close();
+        }
+        if(winReleaseFile.open(QFile::WriteOnly)) {
+            winReleaseFile.write(qPrintable(releaseNotesRaw));
+            winReleaseFile.close();
+        }
+        if(linuxReleaseFile.open(QFile::WriteOnly)) {
+            linuxReleaseFile.write(qPrintable(releaseNotesRaw));
+            linuxReleaseFile.close();
+        }
+    }
     QFile introFile("Documentation/" + tr("EN") + "/intro.html");
     if(introFile.open(QFile::WriteOnly)) {
         introFile.write(qPrintable(header));
+        QString content = "";
+        QStringList releaseNotes = releaseNotesRaw.split("\n");
+        foreach(const QString releaseNote, releaseNotes) {
+            if(releaseNote.startsWith("-")) content += "\n<li>"     + releaseNote.mid(2, releaseNote.length()-2) + "</li>";
+            else                            content += "\n</ul><p>" + releaseNote                                + "</p><ul>";
+        }
+
         introFile.write(qPrintable(introHeader
                                    .arg(tr("Installation"))
                                    .arg(tr("IanniX is compatible with Linux, Mac OS X 10.6+ and Windows and does not require any particular installation.<br/>For Linux users of IanniX who do not build from source, we have included a compiled version that you can run by launching the file <code>IanniX.sh</code>."))
@@ -983,7 +1009,7 @@ void IanniXApp::generateHelp() {
                                    .arg(tr("Bugs"))
                                    .arg(tr("IanniX is still on beta-testing, some bugs are still present but most features can be used properly. You can report errors in the 'Bugs' section of our <a href='http://iannix.org/EN/community.php'>forum</a>."))
                                    .arg(tr("Version tracking"))
-                                   .arg(tr("Known bugs"))));
+                                   .arg(content)));
         introFile.write(qPrintable(introFooter));
         introFile.write(qPrintable(footer));
         introFile.close();
@@ -1059,13 +1085,13 @@ int main(int argc, char *argv[]) {
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
-    QString locale = QLocale::system().name() + "";
+    QString locale = QLocale::system().name();
     QTranslator translator;
     translator.load("Translation_" + locale, "Tools");
     iannixApp.installTranslator(&translator);
 
-    QString appName = "IanniX ";
-    QString appVersion = "0.8.42";
+    QString appName    = "IanniX ";
+    QString appVersion = "0.8.43";
     qDebug("%s", qPrintable(QApplication::applicationDirPath()));
 
 #ifdef Q_OS_MAC

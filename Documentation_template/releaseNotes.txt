@@ -1,0 +1,143 @@
+IanniX 0.8.43
+- translation support (french)
+- documentation update
+- messages templates
+- embedded HTML server
+- commands in scripts returns values run("...")
+- new mapping visualization
+- MIDI learn in message editor
+- new HTTP command : http://127.0.0.1:1236/?sync to have score in realtime
+
+IanniX 0.8.42
+- fixed bug with object solo/mute
+- Syphon server name change
+
+IanniX 0.8.41
+- new message editor
+- lighter files & clipboard needs
+- make hi-resolution screenshots
+- set your viewport size to fit desired size
+- MIDI clock & transport sync
+- File>New is now working better
+- new contextual help
+- transport sync between multiple IanniX
+- timer window (diplaying time eleapsed) for performances
+- Syphon support
+- shift+double clic on an object to force its message to be sent
+
+IanniX 0.8.4
+- strong OpenGL optimisations
+- UI improvements
+- camera can follow a cursor
+- solo/mute objects and groups
+- serial port bug fix
+- easier MIDI device selection
+- projects are now saved in users' documents directory
+- 2D snap-to-grid
+- curve resample function
+- copy and paste as a script
+- alignment and arrange objects functions
+- cursors have now a depth to trig triggers in 3D
+
+IanniX 0.8.35
+- OpenGL and CPU optimisations
+
+IanniX 0.8.34
+- critical bug causing an important time jitter (up to 1 second each 10 minutes) fixed
+- new scheduling precision : 500µs
+- bug with negative negative Cursor Start Offset fixed
+- introducting IP alias (ip_out) in messages to easily change network configurations
+- CPU monitoring
+
+IanniX 0.8.33
+- new TCP/XML interface, compatible with Flash+FLOSC
+- serial port bug fixed
+
+IanniX 0.8.32
+- optimisations for Windows and Linux
+- cursor bug with special loop pattern fix
+- UI improvements
+
+IanniX 0.8.31
+- SVG import bug fixed
+- curve point ID is displayed on hover
+
+IanniX 0.8.3
+- Easing curves for cursors
+- UI improvements
+- better OpenGL performances
+- new visualization options
+- 3D enhancements
+- new examples
+- HTTP control
+- new JavaScripts functions
+- many small bugs in selection fixed
+
+IanniX 0.8.22
+- JavaScript embeddable in messages
+- bug with variable type (String/float) in scripts
+- iannix.execute("") is shortened to run("") in scripts
+- new scripts functions
+- now in 3D! (triggers not working properly in 3D)
+- 2D Bezier curves are editable in the GUI
+- improved freehand tool
+- curve with large amount of points are drawn properly
+- many small bugs in selection fixed
+- fonts problems with Lucida on Windows/Linux/Mac fixed
+- first point of a curve is now independant from curve position (scripts)
+- cursors without OSC-messages don't make the app crash
+
+IanniX 0.8.21
+- bug with duplicate function fix
+- major cursor bug fix (with pattern like 1 -1)
+- undo improved and redo added
+- mouse in fullscreen mode disabled
+- speed slider in transport dock behavior fix
+- messages are not sent when fast-rewinding
+- about window closes with IanniX
+- displays real-time OSC messages on object hover
+- objects ID in script examples are now more human-readable
+- object center list (in inspector) is now sorted by ID
+- MaxMSP example has been updated
+- SuperCollider example added
+- OSC port in examples is now 57120 to be compatible with SuperCollider
+- new simple Javascript example
+- trying to make message editor window more readable...
+- play, stop and fastrewind are now sent
+- snap to grid bug on custom grid fix
+- objects group is now saved with score and when copying/pasting
+- MIDI bug fix
+- raw UDP bug fix
+- Ableton Live (MIDI) example added
+- Arduino (serial port) example added
+- groups can be selected from Object Selection panel
+- multiple selection is allowed in Object Selection panel
+- settings (OSC port, UDP port, Serial port and transport message) are saved when IanniX closes
+- message time interval/period can be changed through the inspector
+- files can be opened with a drag&drop on the Dock (Mac OS X users)
+- files can be opened in command line (1st argument)
+- added nb_triggers, nb_curves and nb_cursors arguments for messages
+- Cancel button is Message Editor is now working
+
+IanniX 0.8.2
+- documentation is now accessible from the Help menu on Windows
+- JPG background are now working on Windows and Linux
+- you can lock the objects position when you navigate in the score (avoiding moving accidentally objects)
+- you can toggle the display of objects labels
+- object selection has been enhanced
+- Snap to grid icon has been added in the toolbar
+- Patches example folder icon has been added in the toolbar
+- displays OSC messages on object hover
+- font size bug on Windows fix
+- script editor closes with IanniX
+- hide menu bar in fullscreen on Windows and Linux
+- bug with trigger size/tickness/zoom fix
+- bug with cursors on empty curves fix
+- minor bugs with inspector fix
+- minor bugs with keyboard shortcuts (arrows) fix
+- compilation warnings fix
+
+Known bugs
+- on Linux, you need to press on ALT+CONTROL to control IanniX in 3D
+- Snap to grid option can make the object selection difficult to use
+- in 3D mode, selection is not possible- easing curves are still in beta, they sometimes don't work...
