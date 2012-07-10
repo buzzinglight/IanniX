@@ -74,162 +74,207 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="227"/>
-        <location filename="../extoscpatterneditor.ui" line="271"/>
+        <location filename="../extoscpatterneditor.ui" line="230"/>
+        <source>osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors</source>
+        <translation>osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos - Message OSC par défaut pour les curseurs</translation>
+    </message>
+    <message>
+        <location filename="../extoscpatterneditor.ui" line="250"/>
+        <source>direct:// setSpeedF 10 1 - Make the cursor #10 start (please set its Master Speed to 0 before)</source>
+        <translation>direct:// setSpeedF 10 1 - Démarre le curseur #10 (il faut mettre au préalable la vitesse générale du curseur à 0)</translation>
+    </message>
+    <message>
+        <location filename="../extoscpatterneditor.ui" line="290"/>
+        <location filename="../extoscpatterneditor.ui" line="334"/>
         <source>Clear the message</source>
         <translation>Effacer le message</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="230"/>
-        <location filename="../extoscpatterneditor.ui" line="274"/>
+        <location filename="../extoscpatterneditor.ui" line="293"/>
+        <location filename="../extoscpatterneditor.ui" line="337"/>
         <source>Click here to clear the message</source>
         <translation>Cliquer ici pour effacer le message</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="236"/>
-        <location filename="../extoscpatterneditor.ui" line="735"/>
-        <location filename="../extoscpatterneditor.ui" line="820"/>
-        <location filename="../extoscpatterneditor.ui" line="905"/>
-        <location filename="../extoscpatterneditor.ui" line="990"/>
-        <location filename="../extoscpatterneditor.ui" line="1075"/>
-        <location filename="../extoscpatterneditor.ui" line="1160"/>
+        <location filename="../extoscpatterneditor.ui" line="299"/>
+        <location filename="../extoscpatterneditor.ui" line="798"/>
+        <location filename="../extoscpatterneditor.ui" line="883"/>
+        <location filename="../extoscpatterneditor.ui" line="968"/>
+        <location filename="../extoscpatterneditor.ui" line="1053"/>
+        <location filename="../extoscpatterneditor.ui" line="1138"/>
+        <location filename="../extoscpatterneditor.ui" line="1223"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="280"/>
+        <location filename="../extoscpatterneditor.ui" line="343"/>
         <source>learn</source>
         <translation>learn</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="313"/>
+        <location filename="../extoscpatterneditor.ui" line="376"/>
         <source>SEND THROUGH</source>
         <translation>ENVOYER SUR</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="335"/>
-        <location filename="../extoscpatterneditor.ui" line="338"/>
+        <location filename="../extoscpatterneditor.ui" line="207"/>
+        <location filename="../extoscpatterneditor.ui" line="210"/>
+        <location filename="../extoscpatterneditor.ui" line="398"/>
+        <location filename="../extoscpatterneditor.ui" line="401"/>
         <source>Select here the protocol used to transmit message</source>
         <translation>Sélectionnez ici un protocole pour envoyer le messager</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="370"/>
+        <location filename="../extoscpatterneditor.ui" line="220"/>
+        <source>Templates</source>
+        <translation>Modèles</translation>
+    </message>
+    <message>
+        <location filename="../extoscpatterneditor.ui" line="245"/>
+        <source>direct:// goto 2 - Make score go back to timecode 000:02.000</source>
+        <translation>direct:// goto 2 - Fait revenir le playback au timecode 000:02.000</translation>
+    </message>
+    <message>
+        <location filename="../extoscpatterneditor.ui" line="225"/>
+        <source>osc://ip_out:57120/trigger trigger_id trigger_xPos trigger_yPos trigger_zPos cursor_id - Default OSC message for triggers</source>
+        <translation>osc://ip_out:57120/trigger trigger_id trigger_xPos trigger_yPos trigger_zPos cursor_id - Message OSC par défaut pour les triggers</translation>
+    </message>
+    <message>
+        <source>osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos - Default OSC message for curves</source>
+        <translation type="obsolete">osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos - Message OSC par défaut pour les curseurs</translation>
+    </message>
+    <message>
+        <location filename="../extoscpatterneditor.ui" line="235"/>
+        <source>midi://midi_out/note 0 69 127 5 - Play a MIDI note (A - 440Hz) during 5 seconds</source>
+        <translation>midi://midi_out/note 0 69 127 5 - Joue une note MIDI (LA - 440Hz) pendant 5 secondes</translation>
+    </message>
+    <message>
+        <location filename="../extoscpatterneditor.ui" line="240"/>
+        <source>midi://midi_out/cc 0 20 cursor_value_y - Send a MIDI control change on controler #20 depending on cursor position</source>
+        <translation>midi://midi_out/cc 0 20 cursor_value_y - Envoie un control change MIDI depuis le contrôleur #20, suivant la valeur du curseur</translation>
+    </message>
+    <message>
+        <source>direct:// setSpeedF 10 1 - Make the cursor #10 start (please set its speedF parameter to 0 before)</source>
+        <translation type="obsolete">direct:// setSpeedF 10 1 - Démarre le curseur #10 (il faut mettre au préalable le Master Speed du curseur à 0)</translation>
+    </message>
+    <message>
+        <location filename="../extoscpatterneditor.ui" line="433"/>
         <source>TO HOST</source>
         <translation>VERS L&apos;HOTE</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="392"/>
-        <location filename="../extoscpatterneditor.ui" line="395"/>
+        <location filename="../extoscpatterneditor.ui" line="455"/>
+        <location filename="../extoscpatterneditor.ui" line="458"/>
         <source>Select or type the destination application/host IP</source>
         <translation>Selectionner ou taper l&apos;application ou l&apos;IP destination</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="433"/>
+        <location filename="../extoscpatterneditor.ui" line="496"/>
         <source>ON PORT</source>
         <translation>SUR LE PORT</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="458"/>
-        <location filename="../extoscpatterneditor.ui" line="461"/>
+        <location filename="../extoscpatterneditor.ui" line="521"/>
+        <location filename="../extoscpatterneditor.ui" line="524"/>
         <source>Select or type the destination application/host port number</source>
         <translation>Selectionner ou taper l&apos;application/numéro de port de destination</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="493"/>
+        <location filename="../extoscpatterneditor.ui" line="556"/>
         <source>TO ADDRESS</source>
         <translation>VERS L&apos;ADRESSE</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="515"/>
-        <location filename="../extoscpatterneditor.ui" line="518"/>
+        <location filename="../extoscpatterneditor.ui" line="578"/>
+        <location filename="../extoscpatterneditor.ui" line="581"/>
         <source>Select or type an OSC address to reach</source>
         <translation>Selectionner ou taper l&apos;adresse OSC à atteindre</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="550"/>
+        <location filename="../extoscpatterneditor.ui" line="613"/>
         <source>TO MIDI DEVICE</source>
         <translation>VERS</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="572"/>
-        <location filename="../extoscpatterneditor.ui" line="575"/>
+        <location filename="../extoscpatterneditor.ui" line="635"/>
+        <location filename="../extoscpatterneditor.ui" line="638"/>
         <source>Select or type a MIDI device to reach</source>
         <translation>Selectionner ou taper le périphérique MIDI à atteindre</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="613"/>
+        <location filename="../extoscpatterneditor.ui" line="676"/>
         <source>TO CONTROL</source>
         <translation>CONTRÔLE</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="638"/>
-        <location filename="../extoscpatterneditor.ui" line="641"/>
+        <location filename="../extoscpatterneditor.ui" line="701"/>
+        <location filename="../extoscpatterneditor.ui" line="704"/>
         <source>Select here a MIDI control</source>
         <translation>Selectionner ici un contrôle MIDI</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="673"/>
+        <location filename="../extoscpatterneditor.ui" line="736"/>
         <source>VALUE 1</source>
         <translation>VALEUR 1</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="695"/>
-        <location filename="../extoscpatterneditor.ui" line="698"/>
-        <location filename="../extoscpatterneditor.ui" line="783"/>
-        <location filename="../extoscpatterneditor.ui" line="786"/>
-        <location filename="../extoscpatterneditor.ui" line="868"/>
-        <location filename="../extoscpatterneditor.ui" line="871"/>
-        <location filename="../extoscpatterneditor.ui" line="953"/>
-        <location filename="../extoscpatterneditor.ui" line="956"/>
-        <location filename="../extoscpatterneditor.ui" line="1038"/>
-        <location filename="../extoscpatterneditor.ui" line="1041"/>
-        <location filename="../extoscpatterneditor.ui" line="1123"/>
-        <location filename="../extoscpatterneditor.ui" line="1126"/>
+        <location filename="../extoscpatterneditor.ui" line="758"/>
+        <location filename="../extoscpatterneditor.ui" line="761"/>
+        <location filename="../extoscpatterneditor.ui" line="846"/>
+        <location filename="../extoscpatterneditor.ui" line="849"/>
+        <location filename="../extoscpatterneditor.ui" line="931"/>
+        <location filename="../extoscpatterneditor.ui" line="934"/>
+        <location filename="../extoscpatterneditor.ui" line="1016"/>
+        <location filename="../extoscpatterneditor.ui" line="1019"/>
+        <location filename="../extoscpatterneditor.ui" line="1101"/>
+        <location filename="../extoscpatterneditor.ui" line="1104"/>
+        <location filename="../extoscpatterneditor.ui" line="1186"/>
+        <location filename="../extoscpatterneditor.ui" line="1189"/>
         <source>Type here a IanniX variable or your custom value</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="726"/>
-        <location filename="../extoscpatterneditor.ui" line="814"/>
-        <location filename="../extoscpatterneditor.ui" line="899"/>
-        <location filename="../extoscpatterneditor.ui" line="984"/>
-        <location filename="../extoscpatterneditor.ui" line="1069"/>
-        <location filename="../extoscpatterneditor.ui" line="1154"/>
+        <location filename="../extoscpatterneditor.ui" line="789"/>
+        <location filename="../extoscpatterneditor.ui" line="877"/>
+        <location filename="../extoscpatterneditor.ui" line="962"/>
+        <location filename="../extoscpatterneditor.ui" line="1047"/>
+        <location filename="../extoscpatterneditor.ui" line="1132"/>
+        <location filename="../extoscpatterneditor.ui" line="1217"/>
         <source>Clear the value</source>
         <translation>Effacer la valeur</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="729"/>
-        <location filename="../extoscpatterneditor.ui" line="817"/>
-        <location filename="../extoscpatterneditor.ui" line="902"/>
-        <location filename="../extoscpatterneditor.ui" line="987"/>
-        <location filename="../extoscpatterneditor.ui" line="1072"/>
-        <location filename="../extoscpatterneditor.ui" line="1157"/>
+        <location filename="../extoscpatterneditor.ui" line="792"/>
+        <location filename="../extoscpatterneditor.ui" line="880"/>
+        <location filename="../extoscpatterneditor.ui" line="965"/>
+        <location filename="../extoscpatterneditor.ui" line="1050"/>
+        <location filename="../extoscpatterneditor.ui" line="1135"/>
+        <location filename="../extoscpatterneditor.ui" line="1220"/>
         <source>Click here to clear the value</source>
         <translation>Cliquer ici pour effacer la valeur</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="761"/>
+        <location filename="../extoscpatterneditor.ui" line="824"/>
         <source>VALUE 2</source>
         <translation>VALEUR 2</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="846"/>
+        <location filename="../extoscpatterneditor.ui" line="909"/>
         <source>VALUE 3</source>
         <translation>VALEUR 3</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="931"/>
+        <location filename="../extoscpatterneditor.ui" line="994"/>
         <source>VALUE 4</source>
         <translation>VALEUR 4</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="1016"/>
+        <location filename="../extoscpatterneditor.ui" line="1079"/>
         <source>VALUE 5</source>
         <translation>VALEUR 5</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="1101"/>
+        <location filename="../extoscpatterneditor.ui" line="1164"/>
         <source>VALUE 6</source>
         <translation>VALEUR 6</translation>
     </message>
@@ -2848,7 +2893,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../uiinspector.ui" line="342"/>
         <source>SCRIPTS &amp; STYLES</source>
-        <translation>SCRIPTS &amp; FEUILLES DE STYLE</translation>
+        <translation>SCRIPTS &amp;&amp; FEUILLES DE STYLE</translation>
     </message>
     <message>
         <location filename="../uiinspector.ui" line="355"/>
@@ -4597,7 +4642,7 @@ Essayez de supprimer cet objet ou changez son ID.</translation>
     <message>
         <location filename="../uiview.ui" line="786"/>
         <source>Snap to X-grid</source>
-        <translation>Grille magnétique — axe des X</translation>
+        <translation>Grille magnétique sur X</translation>
     </message>
     <message utf8="true">
         <location filename="../uiview.ui" line="789"/>
@@ -4826,7 +4871,7 @@ Essayez de supprimer cet objet ou changez son ID.</translation>
     <message>
         <location filename="../uiview.ui" line="1041"/>
         <source>Snap to Y-grid</source>
-        <translation>Grille magnétique — axe des Y</translation>
+        <translation>Grille magnétique sur Y</translation>
     </message>
     <message>
         <location filename="../uiview.ui" line="1047"/>

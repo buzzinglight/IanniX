@@ -14,7 +14,7 @@ function onCreate() {
 	run("rotate 0 0 0");
 	run("center 4 0");
 	run("zoom 100");
-	run("autosize 1");
+	run("autosize 0");
 	
 	//Generate circle curves, cursors and triggers
 	for(var circleIndex = 1 ; circleIndex < circleMax ; circleIndex++)
@@ -71,8 +71,8 @@ function addCircle(circleIndex) {
 
 
 /*
-    IanniX — a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 — IanniX Association
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

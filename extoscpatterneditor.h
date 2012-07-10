@@ -87,6 +87,7 @@ public slots:
     void clearApattern();
     void fieldFocusIn();
     void learn();
+    void applyTemplate();
 
 
 private:

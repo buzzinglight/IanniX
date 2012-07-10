@@ -312,3 +312,9 @@ void ExtOscPatternEditor::learn() {
     displayBox->hide();
     delete displayBox;
 }
+
+void ExtOscPatternEditor::applyTemplate() {
+    QStringList temp = ui->templates->currentText().split(" - ");
+    if(temp.count() > 1)
+        ui->patternEdit->setPlainText(temp.at(0));
+}

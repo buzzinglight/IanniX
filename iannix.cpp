@@ -1484,15 +1484,15 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                         }
                     }
                     actionSpeed();
-                    return true;
+                    return "";
                 }
                 else if(schedulerActivity != SchedulerOn) {
                     setScheduler(SchedulerOn);
                     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
                     midi->sendSPPStart();
-                    return true;
+                    return "";
                 }
-                return false;
+                return "";
             }
             else if(commande == COMMAND_TITLE) {
                 return view->windowTitle();
@@ -1502,9 +1502,9 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                     setScheduler(SchedulerOff);
                     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
                     midi->sendSPPStop();
-                    return true;
+                    return "";
                 }
-                return false;
+                return "";
             }
             else if(commande == COMMAND_GOTO) {
                 if(argc > 1) {
@@ -1524,7 +1524,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
             }
             else if(commande == COMMAND_FF) {
                 actionFast_rewind();
-                return true;
+                return "";
             }
             else if(commande == COMMAND_LOG) {
                 if(argc > 1) {

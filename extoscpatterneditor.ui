@@ -190,6 +190,69 @@ QComboBox::drop-down {
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
+       <widget class="QComboBox" name="templates">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Select here the protocol used to transmit message</string>
+        </property>
+        <property name="statusTip">
+         <string>Select here the protocol used to transmit message</string>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Templates</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>osc://ip_out:57120/trigger trigger_id trigger_xPos trigger_yPos trigger_zPos cursor_id - Default OSC message for triggers</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>midi://midi_out/note 0 69 127 5 - Play a MIDI note (A - 440Hz) during 5 seconds</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>midi://midi_out/cc 0 20 cursor_value_y - Send a MIDI control change on controler #20 depending on cursor position</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>direct:// goto 2 - Make score go back to timecode 000:02.000</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>direct:// setSpeedF 10 1 - Make the cursor #10 start (please set its Master Speed to 0 before)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_7">
         <property name="spacing">
          <number>15</number>
@@ -1223,8 +1286,8 @@ QComboBox::drop-down {
    <slot>currentItemChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>503</x>
-     <y>85</y>
+     <x>630</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>250</x>
@@ -1399,8 +1462,8 @@ QComboBox::drop-down {
    <slot>currentItemChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>605</x>
-     <y>321</y>
+     <x>732</x>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>697</x>
@@ -1559,8 +1622,8 @@ QComboBox::drop-down {
    <slot>currentItemChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>679</x>
-     <y>321</y>
+     <x>734</x>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>778</x>
@@ -1688,7 +1751,7 @@ QComboBox::drop-down {
    <hints>
     <hint type="sourcelabel">
      <x>748</x>
-     <y>33</y>
+     <y>57</y>
     </hint>
     <hint type="destinationlabel">
      <x>332</x>
@@ -1703,8 +1766,8 @@ QComboBox::drop-down {
    <slot>fieldFocusIn()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>135</x>
-     <y>32</y>
+     <x>149</x>
+     <y>70</y>
     </hint>
     <hint type="destinationlabel">
      <x>132</x>
@@ -1719,8 +1782,8 @@ QComboBox::drop-down {
    <slot>fieldFocusIn()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>413</x>
-     <y>176</y>
+     <x>540</x>
+     <y>198</y>
     </hint>
     <hint type="destinationlabel">
      <x>296</x>
@@ -1735,8 +1798,8 @@ QComboBox::drop-down {
    <slot>fieldFocusIn()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>147</x>
-     <y>197</y>
+     <x>274</x>
+     <y>223</y>
     </hint>
     <hint type="destinationlabel">
      <x>-97</x>
@@ -1783,8 +1846,8 @@ QComboBox::drop-down {
    <slot>fieldFocusIn()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>468</x>
-     <y>276</y>
+     <x>595</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>1016</x>
@@ -1815,12 +1878,28 @@ QComboBox::drop-down {
    <slot>learn()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>733</x>
-     <y>47</y>
+     <x>758</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>38</x>
      <y>491</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>templates</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>applyTemplate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>50</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-246</x>
+     <y>541</y>
     </hint>
    </hints>
   </connection>
@@ -1832,5 +1911,6 @@ QComboBox::drop-down {
   <slot>clearApattern()</slot>
   <slot>fieldFocusIn()</slot>
   <slot>learn()</slot>
+  <slot>applyTemplate()</slot>
  </slots>
 </ui>

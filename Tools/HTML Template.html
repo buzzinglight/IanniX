@@ -345,7 +345,7 @@
 
 			$(document).ready(function() {
 				//Extract host
-				ipIanniX = window.document.location.host;
+				ipIanniX = window.document.location.host; //"127.0.0.1:1236"
 
 				//Periodic functions
 				getTime();
@@ -364,12 +364,21 @@
 					$("#reload").addClass("checked");
 					document.location.reload();
 				});
-				$("#screenshot").load(function() {
-					$("#transport").css("top", $("#screenshot").height() + "px");
-					$("#clock").css("top", $("#screenshot").height() + "px");
-					$("#clock").css("left", ($("#screenshot").width()-$("#clock").width()-20) + "px");
-					setTimeout(getScreenshot, timeRefreshScreenshot);
+				$("#screenshot0").load(function() {
+					screenshotLoaded();
 				});	
+				$("#screenshot1").load(function() {
+					screenshotLoaded();
+				});	
+				function screenshotLoaded() {
+					$("#screenshot" + (1-screenshotId)).show();
+					$("#screenshot" + screenshotId).hide();
+					screenshotId = 1-screenshotId;
+					$("#transport").css("top",   $("#screenshot" + screenshotId).height() + "px");
+					$("#clock")    .css("top",   $("#screenshot" + screenshotId).height() + "px");
+					$("#clock")    .css("left", ($("#screenshot" + screenshotId).width()-$("#clock").width()-20) + "px");
+					setTimeout(getScreenshot, timeRefreshScreenshot);
+				}
 			});
 
 
@@ -410,8 +419,10 @@
 				});
 				iannixQuery = "";
 			}
+			var screenshotId = 0;
 			function getScreenshot() {
-				$("#screenshot").attr("src", "http://" + ipIanniX + "?jpg=90&rnd=" + random(0, 100));
+				//alert(screenshotId);
+				$("#screenshot" + (1-screenshotId)).attr("src", "http://" + ipIanniX + "?jpg=80&rnd=" + random(0, 100));
 			}
 		</script>
 		<title>IanniX Web Remote</title>
@@ -419,7 +430,8 @@
 
 	<body>
 		<div>
-			<img src='' class='screenshot' id='screenshot'></img>
+			<img src='' class='screenshot' id='screenshot0'></img>
+			<img src='' class='screenshot' id='screenshot1'></img>
 			<div class='transport' id='transport'>
 				<div class='transportButton' id='ff'    > <img style='margin-top: 7px'  src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzIyMDVCOEQxQkQ1MTFFMEI1RDRGQUVBMTcwRTUwOEMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzIyMDVCOEUxQkQ1MTFFMEI1RDRGQUVBMTcwRTUwOEMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDMjIwNUI4QjFCRDUxMUUwQjVENEZBRUExNzBFNTA4QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDMjIwNUI4QzFCRDUxMUUwQjVENEZBRUExNzBFNTA4QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvVNNxcAAAFESURBVHjaYvz//z/DQAAmhgECoxaTCgyA2JAc9ZRYHA/Em4HYlRz1LGRYqAjE7UAcBsSMQPyNHPWk+BikKQmI9wNxOJRPtnpifawMxC1AHEEt9YQsZgbiGCBuA2IpIiwkWj2+oFYH4kVAvIBIS0lSj8vHcUDcCMQKRAYtqeoZGEBlNRLWBeK1/0kDF0hUnwOyiwXJ55lAXAfEIiRmL31yCgGQhWpAPAOIHUdMWX0LiN2AOA+I39Dbx3+AeDIQOwHxOhLNuEiNoL4MxMHQAv0BkWbMIVE93jgGFQQeQLyMSHNIVY83cd2EFgwJQPyMCLNIUk8oVf8F4oVAbAfEK4iwnGj1xGanu0AcBcTJQPyQGupJycegdvA8aEGzEsonWz05Bch9aD2bCMRPgJiLHPWMFDboDaAti/Okqmcc7UkMe4sBAgwABEK6lgwHBiQAAAAASUVORK5CYII=' width='24px' height='24px'/>  </div>
 				<div class='transportButton' id='play'  > <img style='margin-top: 10px' src='' width='18px' height='18px'/></div>
