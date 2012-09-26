@@ -90,7 +90,13 @@ SOURCES                 += iannix.cpp \
                            help.cpp \
                            uihelp.cpp \
                            uitimer.cpp \
-                           uimessagebox.cpp
+                           uimessagebox.cpp \
+                           qmuparser/muParser.cpp \
+                           qmuparser/muParserBase.cpp \
+                           qmuparser/muParserBytecode.cpp \
+                           qmuparser/muParserCallback.cpp \
+                           qmuparser/muParserError.cpp \
+                           qmuparser/muParserTokenReader.cpp
 
 HEADERS                 += iannix.h \
                            uitransport.h \
@@ -138,7 +144,17 @@ HEADERS                 += iannix.h \
                            help.h \
                            uihelp.h \
                            uitimer.h \
-                           uimessagebox.h
+                           uimessagebox.h \
+                           qmuparser/muParser.h \
+                           qmuparser/muParserBase.h \
+                           qmuparser/muParserBytecode.h \
+                           qmuparser/muParserCallback.h \
+                           qmuparser/muParserDef.h \
+                           qmuparser/muParserError.h \
+                           qmuparser/muParserFixes.h \
+                           qmuparser/muParserStack.h \
+                           qmuparser/muParserToken.h \
+                           qmuparser/muParserTokenReader.h
 
 FORMS                   += uitransport.ui \
                            uirender.ui \

@@ -72,11 +72,14 @@ private:
     QList<QPair<QString, QStringList> > receivedMessages;
     QMutex mutex;
     QString portOutName, portInName;
+    QString portOutNameL, portInNameL;
 public:
     ExtMidiManager(NxObjectFactoryInterface *_factory);
-    void refreshList();
     qreal midiTempo;
     ExtMidiMTC midiMtc;
+
+protected:
+    void timerEvent(QTimerEvent *);
 
 public:
     void send(const ExtMessage & message);

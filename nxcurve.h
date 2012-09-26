@@ -20,9 +20,14 @@
 #define NXCURVE_H
 
 #include "nxobject.h"
+#include <QScriptEngine>
+#include <QScriptValue>
+#include "qmuparser/muParser.h"
 #include "qmath.h"
 
 #define CURVE_PATH_POINTS   300
+
+using namespace mu;
 
 class NxCurvePoint : public NxPoint {
 public:
@@ -37,7 +42,7 @@ public:
     bool smooth;
 };
 
-enum CurveType       { CurveTypePoints, CurveTypeEllipse };
+enum CurveType       { CurveTypePoints, CurveTypeEllipse, CurveTypeEquationCartesian, CurveTypeEquationPolar };
 
 class NxCurve : public NxObject {
     Q_OBJECT
@@ -58,15 +63,33 @@ private:
     qint16 selectedPathPointPoint, selectedPathPointControl1, selectedPathPointControl2;
     NxSize ellipseSize;
     GLuint glListCurve;
+
+    QString equation;
+    QHash<QString,qreal> equationVariables;
+    qreal equationVariableT, equationNbPoints, equationVariableTSteps;
+    Parser equationParser;
+    bool equationIsValid;
+    int equationNbEval;
 public:
+    void setEquation(const QString &type, const QString &_equation);
+    void setEquationPoints(quint16 nbPoints);
+    void setEquationParam(const QString &param, qreal value);
+    void calcEquation();
+    inline QString getEquation() {
+        return equation;
+    }
+    inline quint16 getEquationPoints() {
+        return equationNbPoints;
+    }
+
     inline const NxCurvePoint & getPathPointsAt(quint16 index) const {
 #ifdef KINECT_INSTALLED
-        NxCurvePoint pt = pathPoints.at(index);
+        NxCurvePoint pt = pathPoints.at(qMax(0, qMin((int)index, pathPoints.count()-1)));
         if((factory) && (factory->kinect))
             pt.setZ(pos.z() + factory->kinect->getDepthAt(pos.x() + pt.x(), pos.y() + pt.y()));
         return pt;
 #else
-        return pathPoints.at(index);
+        return pathPoints.at(qMax(0, qMin((int)index, pathPoints.count()-1)));
 #endif
     }
     inline quint16 getPathPointsCount() const { return pathPoints.count(); }
@@ -149,10 +172,10 @@ public:
     void resize(qreal sizeFactorW, qreal sizeFactorH);
     void translate(const NxPoint & point);
     void translatePoint(quint16 pointIndex, const NxPoint & point);
-    inline NxPoint getPointAt(quint16 index, qreal t) const;
-    NxPoint getPointAt(qreal val, bool absoluteTime = false) const;
-    qreal getAngleAt(qreal val, bool absoluteTime = false) const;
-    qreal intersects(const NxRect &rect, NxPoint* collisionPoint = 0) const;
+    inline NxPoint getPointAt(quint16 index, qreal t);
+    NxPoint getPointAt(qreal val, bool absoluteTime = false);
+    qreal getAngleAt(qreal val, bool absoluteTime = false);
+    qreal intersects(const NxRect &rect, NxPoint* collisionPoint = 0);
 
     inline void setResize(const NxSize & size) {
         resize(size);

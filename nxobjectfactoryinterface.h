@@ -60,7 +60,6 @@ public slots:
     virtual qreal getTimeLocal() const = 0;
     virtual void readyToStart() = 0;
     virtual void setMidiOutNewDevice(const QString &midi) = 0;
-    virtual void refreshMidiOutDevice() const = 0;
     virtual QMainWindow* getMainWindow() = 0;
     virtual void scriptError(const QStringList &error, qint16 line) const = 0;
     virtual void syncStop() = 0;

@@ -73,57 +73,56 @@ ExtMidiManager::ExtMidiManager(NxObjectFactoryInterface *_factory)
 
     midiTempo = 120;
 
-    portOutName = "IanniX_Out";
-    portInName = "IanniX_In";
+    portOutName = "from IanniX";
+    portInName  = "to IanniX";
+    portOutNameL = portOutName.toLower().replace(" ", "_").replace("/", "");
+    portInNameL  = portInName .toLower().replace(" ", "_").replace("/", "");
 
-    refreshList();
 
     try {
-        portOutName = portOutName.toLower();
-        portInName = portInName.toLower();
-        portOut.insert(portOutName, new RtMidiOut(portOutName.toStdString()));
-        portIn.insert(portInName, new RtMidiIn(portInName.toStdString()));
+        portOut.insert(portOutNameL, new RtMidiOut(portOutName.toStdString()));
+        portIn .insert(portInNameL,  new RtMidiIn (portInName .toStdString()));
+
 #if !defined(__LINUX_ALSASEQ__) && !defined(__MACOSX_CORE__)
-        if (portOut.value(portOutName)->getPortCount() == 0)
-            portOut.remove(portOutName);
-        if (portIn.value(portInName)->getPortCount() == 0)
-            portIn.remove(portInName);
+        if (portOut.value(portOutNameL)->getPortCount() == 0)
+            portOut.remove(portOutNameL);
+        if (portIn.value(portInNameL)->getPortCount() == 0)
+            portIn.remove(portInNameL);
 #endif
 #if defined(__LINUX_ALSASEQ__) || defined(__MACOSX_CORE__)
-        if(portOut.value(portOutName) != 0)
-            portOut.value(portOutName)->openVirtualPort(portOutName.toStdString());
-        if(portIn.value(portInName) != 0)
-            portIn.value(portInName)->openVirtualPort(portInName.toStdString());
-        factory->setMidiOutNewDevice("IanniX_Out");
+        if(portOut.value(portOutNameL) != 0)
+            portOut.value(portOutNameL)->openVirtualPort(portOutName.toStdString());
+        if(portIn.value(portInNameL) != 0)
+            portIn .value(portInNameL)->openVirtualPort(portInName .toStdString());
+        factory->setMidiOutNewDevice(portOutName);
 #endif
     } catch (RtError& err) {
-        factory->logOscSend(QString::fromStdString(err.getMessage()));
+        //factory->logOscSend(QString::fromStdString(err.getMessage()));
     }
-    if(portIn.value(portInName)) {
-        portIn.value(portInName)->setCallback(&midiCallback, this);
-        portIn.value(portInName)->ignoreTypes(true, false, true);
+    if(portIn.value(portInNameL)) {
+        portIn.value(portInNameL)->setCallback(&midiCallback, this);
+        portIn.value(portInNameL)->ignoreTypes(true, false, true);
     }
+
+    startTimer(5000);
 }
 
-void ExtMidiManager::refreshList() {
-
+void ExtMidiManager::timerEvent(QTimerEvent*) {
     RtMidiIn *portListIn = new RtMidiIn();
     quint8 portListInCount = portListIn->getPortCount();
     for(quint8 portListInIndex = 0; portListInIndex < portListInCount ; portListInIndex++) {
         try {
             QString portName = QString::fromStdString(portListIn->getPortName(portListInIndex));
-            portName = portName.replace(" ", "");
-            portName = portName.replace("/", "");
-            portName = portName.toLower();
-            if((!portIn.contains(portName)) && (portName != portInName)) {
-                portIn.insert(portName, new RtMidiIn());
-                portIn.value(portName)->openPort(portListInIndex);
-                portIn.value(portName)->setCallback(&midiCallback, this);
-                portIn.value(portName)->ignoreTypes(true, true, true);
+            QString portNameL = portName.toLower().replace(" ", "_").replace("/", "");
+            if((!portIn.contains(portNameL)) && (portNameL != portOutNameL)) {
+                portIn.insert(portNameL, new RtMidiIn());
+                portIn.value(portNameL)->openPort(portListInIndex);
+                portIn.value(portNameL)->setCallback(&midiCallback, this);
+                portIn.value(portNameL)->ignoreTypes(true, true, true);
             }
         }
         catch(RtError &err) {
-            factory->logOscSend(QString::fromStdString(err.getMessage()));
+            //factory->logOscSend(QString::fromStdString(err.getMessage()));
         }
     }
     delete portListIn;
@@ -133,26 +132,25 @@ void ExtMidiManager::refreshList() {
     for(quint8 portListOutIndex = 0; portListOutIndex < portListOutCount ; portListOutIndex++) {
         try {
             QString portName = QString::fromStdString(portListOut->getPortName(portListOutIndex));
-            portName = portName.replace(" ", "");
-            portName = portName.replace("/", "");
-            portName = portName.toLower();
-            if(!portOut.contains(portName)) {
+            QString portNameL = portName.toLower().replace(" ", "_").replace("/", "");
+            if((!portOut.contains(portNameL)) && (portNameL != portInNameL)) {
                 factory->setMidiOutNewDevice(portName);
-                portOut.insert(portName, new RtMidiOut());
-                portOut.value(portName)->openPort(portListOutIndex);
+                portOut.insert(portNameL, new RtMidiOut());
+                portOut.value(portNameL)->openPort(portListOutIndex);
             }
         }
         catch(RtError &err) {
-            factory->logOscSend(QString::fromStdString(err.getMessage()));
+            //factory->logOscSend(QString::fromStdString(err.getMessage()));
         }
     }
     delete portListOut;
 }
 
 void ExtMidiManager::send(const ExtMessage & _message) {
-    quint8 channel = _message.getMidiValue(0);
-    QString portname = _message.getMidiPort().toLower();
-    QString command = _message.getMidiCommand().toLower();
+    quint8 channel   = _message.getMidiValue(0);
+    QString portname = _message.getMidiPort();
+    QString command  = _message.getMidiCommand().toLower();
+    portname = portname.toLower();
 
     //Send request
     if(command == "/note") {

@@ -232,12 +232,12 @@ QComboBox::drop-down {
         </item>
         <item>
          <property name="text">
-          <string>midi://midi_out/note 0 69 127 5 - Play a MIDI note (A - 440Hz) during 5 seconds</string>
+          <string>midi://midi_out/note 0 69 127 5 - Play a MIDI note (A - 440Hz) during 5 seconds on channel #0</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>midi://midi_out/cc 0 20 cursor_value_y - Send a MIDI control change on controler #20 depending on cursor position</string>
+          <string>midi://midi_out/cc 1 0 cursor_value_y - Send a MIDI control change on controler #0 on channel #1 depending on cursor position</string>
          </property>
         </item>
         <item>

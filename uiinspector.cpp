@@ -342,9 +342,6 @@ void UiInspector::actionNetwork() {
         factory->pushSnapshot();
         emit(bundleMessageChange(ui->bundleMessageEdit->text(), ui->bundleMessagePort->value()));
     }
-    else if(sender() == ui->midiOutRefresh) {
-        factory->refreshMidiOutDevice();
-    }
 }
 
 void UiInspector::actionInfoID() {
@@ -494,7 +491,8 @@ void UiInspector::refresh() {
 
                 change(indexObject, ui->widthSpin, cursor->getWidth(), prevCursor->getWidth());
                 change(indexObject, ui->depthSpin, cursor->getDepth(), prevCursor->getDepth());
-                change(indexObject, ui->patternLine, cursor->getStart(), prevCursor->getStart(), false);
+                if(sender() != ui->patternLine)
+                    change(indexObject, ui->patternLine, cursor->getStart(), prevCursor->getStart(), false);
                 change(indexObject, ui->easingCombo, cursor->getEasing(), prevCursor->getEasing());
                 change(indexObject, ui->speedSpin, cursor->getTimeFactor(), prevCursor->getTimeFactor());
                 change(indexObject, ui->speedFSpin, cursor->getTimeFactorF(), prevCursor->getTimeFactorF());
@@ -889,7 +887,9 @@ void UiInspector::setIpOut(const QString & ip) {
     ui->ipOutEdit->setText(ip);
     ipOutChange(ip);
 }
-void UiInspector::setMidiOut(const QString & midi) {
+void UiInspector::setMidiOut(const QString & _midi) {
+    QString midi = _midi;
+    if(midi.toLower() == "iannix_out") midi = "from IanniX";
     ui->midiOutCombo->setCurrentIndex(ui->midiOutCombo->findText(midi, Qt::MatchFixedString));
     midiOutChange(ui->midiOutCombo->currentText());
 }

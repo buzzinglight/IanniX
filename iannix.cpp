@@ -255,7 +255,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     if((forceSettings) || (!settings.childKeys().contains("ipOut")))
         settings.setValue("ipOut", "127.0.0.1");
     if((forceSettings) || (!settings.childKeys().contains("midiOut")))
-        settings.setValue("midiOut", "iannix_out");
+        settings.setValue("midiOut", "To_IanniX");
     if((forceSettings) || (!settings.childKeys().contains("midiTempo")))
         settings.setValue("midiTempo", 120);
     if((forceSettings) || (!settings.childKeys().contains("acceptMidiSyncClock")))
@@ -1592,6 +1592,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                 if(argc > 1) {
                     QString mess = "1," + argvFullString(command, argv, 1);
                     NxTrigger *obj = new NxTrigger(this, 0, 0);
+                    //qDebug("%s", qPrintable(mess));
                     obj->setMessagePatterns(mess);
                     obj->trig(0);
                     delete obj;
@@ -1788,6 +1789,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                     }
 
                     else if(commande == COMMAND_CURVE_POINT) {
+                        bool recalculate = true;
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
                             quint16 indexPoint = argvDouble(argv, 2);
@@ -1795,48 +1797,49 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                                 curve->setPointAt(indexPoint,
                                                   NxPoint(argvDouble(argv, 3),  argvDouble(argv, 4),  argvDouble(argv, 5),  argvDouble(argv, 6),  argvDouble(argv, 7),  argvDouble(argv, 8)),
                                                   NxPoint(argvDouble(argv, 9),  argvDouble(argv, 10), argvDouble(argv, 11), argvDouble(argv, 12), argvDouble(argv, 13), argvDouble(argv, 14)),
-                                                  NxPoint(argvDouble(argv, 15), argvDouble(argv, 16), argvDouble(argv, 17), argvDouble(argv, 18), argvDouble(argv, 19), argvDouble(argv, 20)), false);
+                                                  NxPoint(argvDouble(argv, 15), argvDouble(argv, 16), argvDouble(argv, 17), argvDouble(argv, 18), argvDouble(argv, 19), argvDouble(argv, 20)), false, recalculate);
                             else if(argc >= 15)  // 3+12 (x, y, sx, sy), (c1x, c1y, c1sx, c1sy), (c2x, c2y, c2sx, c2sy)
                                 curve->setPointAt(indexPoint,
                                                   NxPoint(argvDouble(argv, 3),  argvDouble(argv, 4),  0, argvDouble(argv, 5),  argvDouble(argv, 6),  0),
                                                   NxPoint(argvDouble(argv, 7),  argvDouble(argv, 8),  0, argvDouble(argv, 9),  argvDouble(argv, 10), 0),
-                                                  NxPoint(argvDouble(argv, 11), argvDouble(argv, 12), 0, argvDouble(argv, 13), argvDouble(argv, 14), 0), false);
+                                                  NxPoint(argvDouble(argv, 11), argvDouble(argv, 12), 0, argvDouble(argv, 13), argvDouble(argv, 14), 0), false, recalculate);
                             else if(argc >= 12) // 3+9 (x, y, z), (c1x, c1y, c1z), (c2x, c2y, c2z)
                                 curve->setPointAt(indexPoint,
                                                   NxPoint(argvDouble(argv, 3), argvDouble(argv, 4),  argvDouble(argv, 5)),
                                                   NxPoint(argvDouble(argv, 6), argvDouble(argv, 7),  argvDouble(argv, 8)),
-                                                  NxPoint(argvDouble(argv, 9), argvDouble(argv, 10), argvDouble(argv, 11)), false);
+                                                  NxPoint(argvDouble(argv, 9), argvDouble(argv, 10), argvDouble(argv, 11)), false, recalculate);
                             else if(argc >= 10) // 3+6+1 (x, y, z, sx, sy, sz) // REQUIRES A DUMMY ARGUMENT
-                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5), argvDouble(argv, 6), argvDouble(argv, 7), argvDouble(argv, 8)), false);
+                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5), argvDouble(argv, 6), argvDouble(argv, 7), argvDouble(argv, 8)), false, recalculate);
                             else if(argc >= 9)  // 3+6 (x, y), (c1x, c1y), (c2x, c2y)
                                 curve->setPointAt(indexPoint,
                                                   NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)),
                                                   NxPoint(argvDouble(argv, 5), argvDouble(argv, 6)),
-                                                  NxPoint(argvDouble(argv, 7), argvDouble(argv, 8)), false);
+                                                  NxPoint(argvDouble(argv, 7), argvDouble(argv, 8)), false, recalculate);
                             else if(argc >= 7) // 3+4 (x, y, sx, sy)
-                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), 0, argvDouble(argv, 5), argvDouble(argv, 6), 0), false);
+                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), 0, argvDouble(argv, 5), argvDouble(argv, 6), 0), false, recalculate);
                             else if(argc >= 6) // 3+3 (x, y, z)
-                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)), false);
+                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)), false, recalculate);
                             else if(argc >= 5) // 3+2 (x, y)
-                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)), false);
+                                curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)), false, recalculate);
                             NxCurvePoint pt = curve->getPathPointsAt(indexPoint);
-                            return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
+                            //return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
                         }
                         return "0 0 0  0 0 0  0 0 0";
                     }
                     else if(commande == COMMAND_CURVE_POINT_SMOOTH) {
+                        bool recalculate = true;
                         if(object->getType() == ObjectsTypeCurve) {
                             NxCurve *curve = (NxCurve*)object;
                             if(argc >= 9)      // 3+6 (x, y, z, sx, sy, sz)
-                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5), argvDouble(argv, 6), argvDouble(argv, 7), argvDouble(argv, 8)), true);
+                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5), argvDouble(argv, 6), argvDouble(argv, 7), argvDouble(argv, 8)), true, recalculate);
                             else if(argc >= 7) // 3+4 (x, y, sx, sy)
-                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), 0, argvDouble(argv, 5), argvDouble(argv, 6), 0), true);
+                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), 0, argvDouble(argv, 5), argvDouble(argv, 6), 0), true, recalculate);
                             else if(argc >= 6) // 3+3 (x, y, z)
-                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)), true);
+                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)), true, recalculate);
                             else if(argc >= 5) // 3+2 (x, y)
-                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)), true);
+                                curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)), true, recalculate);
                             NxCurvePoint pt = curve->getPathPointsAt(argvDouble(argv, 2));
-                            return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
+                            //return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
                         }
                         return "0 0 0  0 0 0  0 0 0";
                     }
@@ -1849,6 +1852,33 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                                 curve->setResizeF(argvDouble(argv, 2));
                             }
                             return curve->getPathLength();
+                        }
+                        return 0;
+                    }
+                    else if(commande == COMMAND_CURVE_EQUATION) {
+                        if(object->getType() == ObjectsTypeCurve) {
+                            NxCurve *curve = (NxCurve*)object;
+                            if(argc > 3)
+                                curve->setEquation(argv.at(2), argvFullString(command, argv, 3));
+                            return curve->getPathLength();
+                        }
+                        return 0;
+                    }
+                    else if(commande == COMMAND_CURVE_EQUATION_PARAM) {
+                        if(object->getType() == ObjectsTypeCurve) {
+                            NxCurve *curve = (NxCurve*)object;
+                            if(argc > 3)
+                                curve->setEquationParam(argv.at(2), argvDouble(argv, 3));
+                            return curve->getPathLength();
+                        }
+                        return 0;
+                    }
+                    else if(commande == COMMAND_CURVE_EQUATION_POINTS) {
+                        if(object->getType() == ObjectsTypeCurve) {
+                            NxCurve *curve = (NxCurve*)object;
+                            if(argc > 2)
+                                curve->setEquationPoints(argvDouble(argv, 2));
+                            return curve->getEquationPoints();
                         }
                         return 0;
                     }
@@ -2047,7 +2077,7 @@ void IanniX::sendMessage(void *_object, void *_trigger, void *_cursor, void *_co
             if(messagesCache.contains(messagePattern.at(0)))
                 message = messagesCache.value(messagePattern.at(0));
             else {
-                message.setUrl(QUrl(messagePattern.at(0), QUrl::TolerantMode), &messageScriptEngine, ipOut, midiOut);
+                message.setUrl(QUrl(messagePattern.at(0), QUrl::TolerantMode), &messageScriptEngine, ipOut, midiOut.replace(" ", "_"));
                 messagesCache.insert(messagePattern.at(0), message);
             }
             if(message.parse(messagePattern, trigger, cursor, curve, collisionCurve, collisionPoint, collisionValue, status, inspector->nbTriggers, inspector->nbCursors, inspector->nbCurves, timeLocal, timeLocalStr)) {

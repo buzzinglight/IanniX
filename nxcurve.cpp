@@ -20,7 +20,6 @@
 
 Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
 
-
 NxCurve::NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
     NxObject(parent, ccParentItem, _renderOptions) {
     calcBoundingRect();
@@ -36,10 +35,90 @@ NxCurve::NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem
     curveType = CurveTypePoints;
     setPointAt(0, NxPoint(), NxPoint(), NxPoint(), false);
     setMessageTimeInterval(20);
+    setEquationPoints(100);
+    equationIsValid = false;
+    equationNbEval = 3;
 }
+
+//setEquation("function plot(t) { var a = new Object(); a.x = 4*(t); a.y = 3; a.z = t; return a; } nbPoints=50;");
 NxCurve::~NxCurve() {
     glDeleteLists(glListCurve, 1);
 }
+
+void NxCurve::setEquation(const QString &type, const QString &_equation) {
+    equation = _equation;
+    if(type.trimmed().toLower() == "polar")
+        curveType = CurveTypeEquationPolar;
+    else
+        curveType = CurveTypeEquationCartesian;
+
+    try {
+        equationParser.DefineVar("t", &equationVariableT);
+        equationParser.SetExpr(qPrintable(equation));
+        calcEquation();
+    }
+    catch (Parser::exception_type &e) {
+        qDebug("[MathParser] Parsing error");
+    }
+    /*
+    equation = _equation;
+    if(equation.isEmpty())
+        isEquation = false;
+    else {
+        isEquation = true;
+        equationProgram = QScriptProgram(equation);
+        equationScript.evaluate(equationProgram);
+        equationGlobal = equationScript.globalObject();
+        equationGlobal.setProperty("plotX", 0);
+        equationGlobal.setProperty("plotY", 0);
+        equationGlobal.setProperty("plotZ", 0);
+        equationPlot   = equationGlobal.property("plot", QScriptValue::ResolveLocal);
+        equationTmin   = equationGlobal.property("tMin", QScriptValue::ResolveLocal).toNumber();
+        equationTmax   = equationGlobal.property("tMax", QScriptValue::ResolveLocal).toNumber();
+        equationTstep  = (equationTmax-equationTmin) / equationGlobal.property("nbPoints", QScriptValue::ResolveLocal).toNumber();
+        equationPlotX  = equationScript.toStringHandle("plotX");
+        equationPlotY  = equationScript.toStringHandle("plotY");
+        equationPlotZ  = equationScript.toStringHandle("plotZ");
+        calcEquation();
+    }
+    */
+}
+void NxCurve::setEquationPoints(quint16 nbPoints) {
+    equationNbPoints = nbPoints;
+    equationVariableTSteps = 1. / equationNbPoints;
+    calcEquation();
+}
+
+void NxCurve::setEquationParam(const QString &param, qreal value) {
+    if(!equationVariables.contains(param)) {
+        equationVariables.insert(param, value);
+        try {
+            equationParser.DefineVar(qPrintable(param), &equationVariables[param]);
+        }
+        catch (Parser::exception_type &e) {
+            qDebug("[MathParser] Param error");
+        }
+    }
+    else
+        equationVariables[param] = value;
+    calcEquation();
+}
+void NxCurve::calcEquation() {
+    equationIsValid = false;
+    try {
+        equationParser.Eval();
+        equationNbEval = equationParser.GetNumResults();
+        if(equationNbEval == 3) {
+            equationIsValid = true;
+            glListRecreate  = true;
+            calcBoundingRect();
+        }
+    }
+    catch (Parser::exception_type &e) {
+        qDebug("[MathParser] Calculation error");
+    }
+}
+
 
 void NxCurve::paint() {
 #ifdef KINECT_INSTALLED
@@ -97,13 +176,28 @@ void NxCurve::paint() {
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
             glLineStipple(lineFactor, lineStipple);
+
             if(curveType == CurveTypeEllipse) {
                 glBegin(GL_LINE_LOOP);
                 for(qreal angle = 0 ; angle <= 2*M_PI ; angle += 0.1)
                     glVertex3f(ellipseSize.width() * qCos(angle), ellipseSize.height() * qSin(angle), 0);
                 glEnd();
             }
-            else {
+            else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+                glBegin(GL_LINE_STRIP);
+                try {
+                    for(equationVariableT = 0 ; equationVariableT <= 1 ; equationVariableT += equationVariableTSteps) {
+                        qreal *ptCoords = equationParser.Eval(equationNbEval);
+                        if(curveType == CurveTypeEquationPolar) glVertex3f(ptCoords[0] * sin(ptCoords[1] * cos(ptCoords[2])), ptCoords[0] * cos(ptCoords[1]), ptCoords[0] * sin(ptCoords[1]) * sin(ptCoords[2]));
+                        else                                    glVertex3f(ptCoords[0], ptCoords[1], ptCoords[2]);
+                    }
+                }
+                catch (Parser::exception_type &e) {
+                    qDebug("[MathParser] Paint error");
+                }
+                glEnd();
+            }
+            else if(curveType == CurveTypePoints) {
                 for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
                     if(indexPoint < pathPoints.count()-1) {
                         NxPoint p1 = getPathPointsAt(indexPoint), p2 = getPathPointsAt(indexPoint+1);
@@ -438,7 +532,10 @@ void NxCurve::resize(qreal sizeFactorW, qreal sizeFactorH) {
         ellipseSize.setWidth(ellipseSize.width()   * sizeFactorW);
         ellipseSize.setHeight(ellipseSize.height() * sizeFactorH);
     }
-    else {
+    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+        //IMPOSSIBLE FOR NOW
+    }
+    else if(curveType == CurveTypePoints) {
         for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++)
             setPointAt(indexPoint, NxPoint(getPathPointsAt(indexPoint).x() * sizeFactor.width(), getPathPointsAt(indexPoint).y() * sizeFactor.height()), NxPoint(getPathPointsAt(indexPoint).c1.x() * sizeFactor.width(), getPathPointsAt(indexPoint).c1.y() * sizeFactor.height()), NxPoint(getPathPointsAt(indexPoint).c2.x() * sizeFactor.width(), getPathPointsAt(indexPoint).c2.y() * sizeFactor.height()), getPathPointsAt(indexPoint).smooth, false);
     }
@@ -460,7 +557,7 @@ void NxCurve::translatePoint(quint16 indexPoint, const NxPoint &point) {
 }
 
 
-inline NxPoint NxCurve::getPointAt(quint16 index, qreal t) const {
+inline NxPoint NxCurve::getPointAt(quint16 index, qreal t) {
     NxPoint p1 = getPathPointsAt(index), p2 = getPathPointsAt(index+1);
     NxPoint c1 = getPathPointsAt(index+1).c1, c2 = getPathPointsAt(index+1).c2;
     qreal mt = 1 - t;
@@ -484,12 +581,24 @@ inline NxPoint NxCurve::getPointAt(quint16 index, qreal t) const {
     }
 }
 
-NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) const {
+NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
     if(curveType == CurveTypeEllipse) {
         qreal angle = 2 * val * M_PI;
         return NxPoint(boundingRect.width() * qCos(angle) / 2, boundingRect.height() * qSin(angle) / 2, 0);
     }
-    else {
+    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+        equationVariableT = val;
+        try {
+            qreal *ptCoords = equationParser.Eval(equationNbEval);
+            if(curveType == CurveTypeEquationPolar) return NxPoint(ptCoords[0] * sin(ptCoords[1] * cos(ptCoords[2])), ptCoords[0] * cos(ptCoords[1]), ptCoords[0] * sin(ptCoords[1]) * sin(ptCoords[2]));
+            else                                    return NxPoint(ptCoords[0], ptCoords[1], ptCoords[2]);
+        }
+        catch (Parser::exception_type &e) {
+            qDebug("[MathParser] PointAt %f error", equationVariableT);
+        }
+        return NxPoint();
+    }
+    else if(curveType == CurveTypePoints) {
         qreal length = 0, lengthOld = 0;
         qreal lengthTarget = (absoluteTime)?(val):(pathLength * val);
         quint16 index = 0;
@@ -503,12 +612,44 @@ NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) const {
         }
         return getPointAt(index, (lengthTarget - lengthOld) / (length - lengthOld));
     }
+    return NxPoint();
 }
-qreal NxCurve::getAngleAt(qreal val, bool absoluteTime) const {
+qreal NxCurve::getAngleAt(qreal val, bool absoluteTime) {
     qreal angle = 0;
     if(curveType == CurveTypeEllipse)
         angle = -((2 * val * M_PI) + M_PI_2) * 180.0F / M_PI;
-    else {
+    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+        try {
+            NxPoint pt1, pt2;
+            qreal *ptCoords;
+
+            equationVariableT = val;
+            ptCoords = equationParser.Eval(equationNbEval);
+            if(curveType == CurveTypeEquationPolar) pt1 = NxPoint(ptCoords[0] * sin(ptCoords[1] * cos(ptCoords[2])), ptCoords[0] * cos(ptCoords[1]), ptCoords[0] * sin(ptCoords[1]) * sin(ptCoords[2]));
+            else                                    pt1 = NxPoint(ptCoords[0], ptCoords[1], ptCoords[2]);
+
+            equationVariableT = val - 0.001;
+            ptCoords = equationParser.Eval(equationNbEval);
+            if(curveType == CurveTypeEquationPolar) pt2 = NxPoint(ptCoords[0] * sin(ptCoords[1] * cos(ptCoords[2])), ptCoords[0] * cos(ptCoords[1]), ptCoords[0] * sin(ptCoords[1]) * sin(ptCoords[2]));
+            else                                    pt2 = NxPoint(ptCoords[0], ptCoords[1], ptCoords[2]);
+
+            NxPoint deltaPos = pt2 - pt1;
+            if((deltaPos.x() > 0) && (deltaPos.y() >= 0))
+                angle = qAtan(deltaPos.y() / deltaPos.x());
+            else if((deltaPos.x() <= 0) && (deltaPos.y() > 0))
+                angle = -qAtan(deltaPos.x() / deltaPos.y()) + M_PI_2;
+            else if((deltaPos.x() < 0) && (deltaPos.y() <= 0))
+                angle = qAtan(deltaPos.y() / deltaPos.x()) + M_PI;
+            else if((deltaPos.x() >= 0) && (deltaPos.y() < 0))
+                angle = -qAtan(deltaPos.x() / deltaPos.y()) + 3 * M_PI_2;
+
+            angle = -angle * 180.0F / M_PI + 180;
+        }
+        catch (Parser::exception_type &e) {
+            qDebug("[MathParser] AngleAt error");
+        }
+    }
+    else if(curveType == CurveTypePoints) {
         NxPoint deltaPos = getPointAt(val - 0.001, absoluteTime) - getPointAt(val, absoluteTime);
         if((deltaPos.x() > 0) && (deltaPos.y() >= 0))
             angle = qAtan(deltaPos.y() / deltaPos.x());
@@ -534,27 +675,70 @@ void NxCurve::calcBoundingRect() {
         //Bounding
         boundingRect = NxRect(-ellipseSize.width(), -ellipseSize.height(), 2*ellipseSize.width(), 2*ellipseSize.height());
     }
-    else {
+    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+        NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
+        for(equationVariableT = 0 ; equationVariableT <= (1-equationVariableTSteps) ; equationVariableT += equationVariableTSteps) {
+            NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);
+
+            NxPoint p1 = getPointAt(equationVariableT), p2 = getPointAt(equationVariableT + equationVariableTSteps);
+            NxPoint delta = p2 - p1;
+            pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
+
+            //Bounding local
+            if(p1.x() < p2.x())  min.setX(p1.x()); else min.setX(p2.x());
+            if(p1.y() < p2.y())  min.setY(p1.y()); else min.setY(p2.y());
+            if(p1.z() < p2.z())  min.setZ(p1.z()); else min.setZ(p2.z());
+            if(p1.x() > p2.x())  max.setX(p1.x()); else max.setX(p2.x());
+            if(p1.y() > p2.y())  max.setY(p1.y()); else max.setY(p2.y());
+            if(p1.z() > p2.z())  max.setZ(p1.z()); else max.setZ(p2.z());
+
+            //Bounding général
+            if(min.x() < minGlobal.x())  minGlobal.setX(min.x());
+            if(min.y() < minGlobal.y())  minGlobal.setY(min.y());
+            if(min.z() < minGlobal.z())  minGlobal.setZ(min.z());
+            if(max.x() > maxGlobal.x())  maxGlobal.setX(max.x());
+            if(max.y() > maxGlobal.y())  maxGlobal.setY(max.y());
+            if(max.z() > maxGlobal.z())  maxGlobal.setZ(max.z());
+        }
+        boundingRect = NxRect(minGlobal, maxGlobal);
+    }
+    else if(curveType == CurveTypePoints) {
         qreal step = 0.01;
         NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
         for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count()-1 ; indexPoint++) {
             NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);
-            NxPoint pt = getPointAt(indexPoint, 0);
-            for(qreal t = 0 ; t <= 1+step ; t += step) {
-                //Longueur
-                NxPoint ptNext = getPointAt(indexPoint, t + step);
-                NxPoint delta  = ptNext - pt;
-                if(t <= 1)
-                    pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
 
+            NxPoint p1 = getPathPointsAt(indexPoint), p2 = getPathPointsAt(indexPoint+1);
+            NxPoint c1 = getPathPointsAt(indexPoint+1).c1, c2 = getPathPointsAt(indexPoint+1).c2;
+            if((c1 == NxPoint()) && (c2 == NxPoint())) {
+                NxPoint delta = p2 - p1;
+                pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
                 //Bounding local
-                if(pt.x() < min.x())  min.setX(pt.x());
-                if(pt.y() < min.y())  min.setY(pt.y());
-                if(pt.z() < min.z())  min.setZ(pt.z());
-                if(pt.x() > max.x())  max.setX(pt.x());
-                if(pt.y() > max.y())  max.setY(pt.y());
-                if(pt.z() > max.z())  max.setZ(pt.z());
-                pt = ptNext;
+                if(p1.x() < p2.x())  min.setX(p1.x()); else min.setX(p2.x());
+                if(p1.y() < p2.y())  min.setY(p1.y()); else min.setY(p2.y());
+                if(p1.z() < p2.z())  min.setZ(p1.z()); else min.setZ(p2.z());
+                if(p1.x() > p2.x())  max.setX(p1.x()); else max.setX(p2.x());
+                if(p1.y() > p2.y())  max.setY(p1.y()); else max.setY(p2.y());
+                if(p1.z() > p2.z())  max.setZ(p1.z()); else max.setZ(p2.z());
+            }
+            else {
+                NxPoint pt = getPointAt(indexPoint, 0);
+                for(qreal t = 0 ; t <= 1+step ; t += step) {
+                    //Longueur
+                    NxPoint ptNext = getPointAt(indexPoint, t + step);
+                    NxPoint delta  = ptNext - pt;
+                    if(t <= 1)
+                        pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
+
+                    //Bounding local
+                    if(pt.x() < min.x())  min.setX(pt.x());
+                    if(pt.y() < min.y())  min.setY(pt.y());
+                    if(pt.z() < min.z())  min.setZ(pt.z());
+                    if(pt.x() > max.x())  max.setX(pt.x());
+                    if(pt.y() > max.y())  max.setY(pt.y());
+                    if(pt.z() > max.z())  max.setZ(pt.z());
+                    pt = ptNext;
+                }
             }
             pathPoints[indexPoint+1].currentLength = pathLength;
             if(min.x() == max.x())  max.setX(max.x() + 0.001);
@@ -601,7 +785,7 @@ bool NxCurve::isMouseHover(const NxPoint &mouse) {
     return false;
 }
 
-qreal NxCurve::intersects(const NxRect &rect, NxPoint* collisionPoint) const {
+qreal NxCurve::intersects(const NxRect &rect, NxPoint* collisionPoint) {
     qreal step = 0.001;
     NxRect rectCursor = rect;
     if(rectCursor.width()  == 0)  rectCursor.setWidth(0.001);
@@ -625,7 +809,12 @@ qreal NxCurve::intersects(const NxRect &rect, NxPoint* collisionPoint) const {
             }
         }
     }
-    else {
+    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+        /*
+          TODO
+        */
+    }
+    else if(curveType == CurveTypePoints) {
         if(boundingRect.intersects(rectCursor)) {
             for(quint16 indexPathPoint = 1 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
                 if(getPathPointsAt(indexPathPoint).boundingRect.intersects(rectCursor)) {
@@ -742,9 +931,9 @@ void NxCurve::isOnPathPoint(const NxRect & point) {
 **
 ****************************************************************************/
 void pathArcSegment(QPainterPath &path,
-                           qreal xc, qreal yc,
-                           qreal th0, qreal th1,
-                           qreal rx, qreal ry, qreal xAxisRotation)
+                    qreal xc, qreal yc,
+                    qreal th0, qreal th1,
+                    qreal rx, qreal ry, qreal xAxisRotation)
 {
     qreal sinTh, cosTh;
     qreal a00, a01, a10, a11;
@@ -775,14 +964,14 @@ void pathArcSegment(QPainterPath &path,
 }
 
 void pathArc(QPainterPath &path,
-                    qreal               rx,
-                    qreal               ry,
-                    qreal               x_axis_rotation,
-                    int         large_arc_flag,
-                    int         sweep_flag,
-                    qreal               x,
-                    qreal               y,
-                    qreal curx, qreal cury)
+             qreal               rx,
+             qreal               ry,
+             qreal               x_axis_rotation,
+             int         large_arc_flag,
+             int         sweep_flag,
+             qreal               x,
+             qreal               y,
+             qreal curx, qreal cury)
 {
     qreal sin_th, cos_th;
     qreal a00, a01, a10, a11;

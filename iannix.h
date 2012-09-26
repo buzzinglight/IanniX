@@ -139,7 +139,7 @@ private:
 public slots:
     const QVariant execute(const QString & command, bool createNewObjectIfExists = false, bool dump = false);
     inline QString argvFullString(const QString &command, const QStringList &argv, quint16 index) const {
-        if(index > 1)   return command.mid(command.indexOf(argv.at(index), command.indexOf(argv.at(index-1))+argv.at(index-1).length())).trimmed();
+        if(index >= 1)   return command.mid(command.indexOf(argv.at(index), command.indexOf(argv.at(index-1))+argv.at(index-1).length())).trimmed();
         else            return command;
     }
     inline qreal argvDouble(const QStringList &argv, quint16 index) const {
@@ -211,9 +211,6 @@ public slots:
     void setMidiSyncSong(bool);
     void setMidiSyncClock(bool);
     void setMidiOutNewDevice(const QString &midi);
-    void refreshMidiOutDevice() const {
-        midi->refreshList();
-    }
 signals:
     void ipOutStatus(bool);
     void midiOutStatus(bool);

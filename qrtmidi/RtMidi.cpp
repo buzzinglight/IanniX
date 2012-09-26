@@ -49,8 +49,9 @@ RtMidi :: RtMidi()
 {
 }
 
-void RtMidi :: error( RtError::Type type )
+void RtMidi :: error( RtError::Type )
 {
+    /*
   if (type == RtError::WARNING) {
     std::cerr << '\n' << errorString_ << "\n\n";
   }
@@ -63,6 +64,7 @@ void RtMidi :: error( RtError::Type type )
     std::cerr << '\n' << errorString_ << "\n\n";
     throw RtError( errorString_, type );
   }
+  */
 }
 
 //*********************************************************************//

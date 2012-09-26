@@ -43,7 +43,7 @@ NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     setWidth(1);
     setDepth(0);
     setTime(0);
-    setSize(2);
+    setSize(1.2);
     setLineFactor(1);
     setLineStipple(0xFFFF);
     setColorActive("cursor_active");
@@ -294,6 +294,15 @@ void NxCursor::paint() {
                 glEnd();
             }
             else {
+                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF()/5.);
+                glBegin(GL_QUADS);
+                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z()+depth/2);
+                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z()+depth/2);
+                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z()-depth/2);
+                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z()-depth/2);
+                glEnd();
+
+                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
                 glBegin(GL_LINE_LOOP);
                 glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z()+depth/2);
                 glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z()+depth/2);
@@ -308,16 +317,17 @@ void NxCursor::paint() {
             glPushMatrix();
             glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
             glRotatef(cursorAngle, 0, 0, 1);
-            qreal size2 = cacheSize/2;
+            qreal size2 = cacheSize/2 * 1.5 * qMin(1., width) * 0.7;
             glBegin(GL_TRIANGLE_FAN);
+            glLineWidth(2);
             if(hasActivity) {
                 if((time - timeOld) >= 0)  glVertex3f(size2, 0, 0);
                 else                       glVertex3f(-size2, 0, 0);
             }
             glVertex3f(0, -size2, 0);
             glVertex3f(0, size2, 0);
+            glLineWidth(1);
             glEnd();
-
             glPopMatrix();
 
             //Special feature YEOSU

@@ -79,6 +79,16 @@
         <translation>osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos - Message OSC par défaut pour les curseurs</translation>
     </message>
     <message>
+        <location filename="../extoscpatterneditor.ui" line="235"/>
+        <source>midi://midi_out/note 0 69 127 5 - Play a MIDI note (A - 440Hz) during 5 seconds on channel #0</source>
+        <translation>midi://midi_out/note 0 69 127 5 - Joue une note MIDI (LA - 440Hz) pendant 5 secondes sur le canal #0</translation>
+    </message>
+    <message>
+        <location filename="../extoscpatterneditor.ui" line="240"/>
+        <source>midi://midi_out/cc 1 0 cursor_value_y - Send a MIDI control change on controler #0 on channel #1 depending on cursor position</source>
+        <translation>midi://midi_out/cc 1 0 cursor_value_y - Envoie un control change MIDI depuis le contrôleur #0 sur le canal #1, suivant la valeur du curseur</translation>
+    </message>
+    <message>
         <location filename="../extoscpatterneditor.ui" line="250"/>
         <source>direct:// setSpeedF 10 1 - Make the cursor #10 start (please set its Master Speed to 0 before)</source>
         <translation>direct:// setSpeedF 10 1 - Démarre le curseur #10 (il faut mettre au préalable la vitesse générale du curseur à 0)</translation>
@@ -144,14 +154,12 @@
         <translation type="obsolete">osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos - Message OSC par défaut pour les curseurs</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="235"/>
         <source>midi://midi_out/note 0 69 127 5 - Play a MIDI note (A - 440Hz) during 5 seconds</source>
-        <translation>midi://midi_out/note 0 69 127 5 - Joue une note MIDI (LA - 440Hz) pendant 5 secondes</translation>
+        <translation type="obsolete">midi://midi_out/note 0 69 127 5 - Joue une note MIDI (LA - 440Hz) pendant 5 secondes</translation>
     </message>
     <message>
-        <location filename="../extoscpatterneditor.ui" line="240"/>
         <source>midi://midi_out/cc 0 20 cursor_value_y - Send a MIDI control change on controler #20 depending on cursor position</source>
-        <translation>midi://midi_out/cc 0 20 cursor_value_y - Envoie un control change MIDI depuis le contrôleur #20, suivant la valeur du curseur</translation>
+        <translation type="obsolete">midi://midi_out/cc 0 20 cursor_value_y - Envoie un control change MIDI depuis le contrôleur #20, suivant la valeur du curseur</translation>
     </message>
     <message>
         <source>direct:// setSpeedF 10 1 - Make the cursor #10 start (please set its speedF parameter to 0 before)</source>
@@ -2459,10 +2467,10 @@ You must use the variables cursor_value_x, cursor_value_y, trigger_value_x, trig
         <location filename="../iannixapp.cpp" line="850"/>
         <location filename="../iannixapp.cpp" line="874"/>
         <location filename="../iannixapp.cpp" line="948"/>
-        <location filename="../iannixapp.cpp" line="971"/>
-        <location filename="../iannixapp.cpp" line="1004"/>
-        <location filename="../iannixapp.cpp" line="1034"/>
-        <location filename="../iannixapp.cpp" line="1043"/>
+        <location filename="../iannixapp.cpp" line="990"/>
+        <location filename="../iannixapp.cpp" line="1030"/>
+        <location filename="../iannixapp.cpp" line="1060"/>
+        <location filename="../iannixapp.cpp" line="1069"/>
         <source>EN</source>
         <translation>FR</translation>
     </message>
@@ -2527,152 +2535,151 @@ You must use the variables cursor_value_x, cursor_value_y, trigger_value_x, trig
         <translation>N’hésitez pas à vous inscrire sur notre &lt;a href=&apos;http://iannix.org/en/community.php&apos; target=&apos;_blank&apos;&gt;forum&lt;/a&gt;. Poster vos problèmes ou astuces pour faire vivre notre communauté !</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="975"/>
+        <location filename="../iannixapp.cpp" line="1001"/>
         <source>Installation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="976"/>
+        <location filename="../iannixapp.cpp" line="1002"/>
         <source>IanniX is compatible with Linux, Mac OS X 10.6+ and Windows and does not require any particular installation.&lt;br/&gt;For Linux users of IanniX who do not build from source, we have included a compiled version that you can run by launching the file &lt;code&gt;IanniX.sh&lt;/code&gt;.</source>
         <translation>IanniX est compatible avec Linux, Mac OS X 10.6+ et Windows et ne nécessite pas d’installation particulière.&lt;br /&gt; Pour les utilisateurs de IanniX sous Linux qui ne souhaitent pas compiler depuis les sources, nous avons inclus une version compilée que vous pourrez exécuter en lançant le fichier &lt;code&gt;IanniX.sh&lt;/code&gt;.</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="977"/>
+        <location filename="../iannixapp.cpp" line="1003"/>
         <source>Open Sound Control</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="978"/>
+        <location filename="../iannixapp.cpp" line="1004"/>
         <source>Open Sound Control is a communication protocol that operates over the IP network (i.e. Ethernet, Wi-Fi, Internet). It is recognized by all operating systems and requires no drivers or network configuration. Some knowledge of networking is needed to more advanced uses.&lt;br /&gt; &lt;br /&gt; The golden rule about OSC is to match IP addresses and ports: a message sent by IanniX to &lt;code&gt;127.0.0.1:57120&lt;/code&gt; means that it is sent to the local machine on port &amp;nbsp;57120. The software that has to receive this message will have to open port 57120.</source>
         <translation>L’Open Sound Control est un protocole de communication qui fonctionne sur le réseau IP (donc sur Ethernet, Wi-Fi, sur Internet…). Il est reconnu par tous les systèmes d’exploitation et ne nécessite pas de drivers ou de configuration réseau. Quelques connaissances en réseau sont toutefois nécessaires pour des usages plus poussés.&lt;br/&gt;&lt;br/&gt; La règle d&apos;or pour l&apos;OSC est de faire correspondre les adresses IP et les ports : un message envoyé par IanniX au &lt;code&gt;127.0.0.1:57120&lt;/code&gt; signifie qu&apos;il est envoyé à la machine local sur le port&amp;nbsp;57120. L&apos;application qui veut recevoir ce message devra donc ouvrir le port 57120.</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="979"/>
+        <location filename="../iannixapp.cpp" line="1005"/>
         <source>MIDI</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="980"/>
+        <location filename="../iannixapp.cpp" line="1006"/>
         <source>In order to remain compatible with the MIDI stations, we have integrated the MIDI protocol natively.&lt;br/&gt; For Windows users who do not have MIDI hardware devices, you must install a virtual MIDI device such as &lt;a href=&apos;http://www.nerds.de/data/setuploopbe1.exe&apos;&gt;LoopBe&lt;/a&gt;.</source>
         <translation>Afin de rester compatible avec les stations MIDI, nous avons intégré nativement le protocole MIDI.&lt;br /&gt; Pour les utilisateurs de Windows qui ne possèdent pas de périphériques MIDI matériels, vous devez installer un périphérique MIDI virtuel tel que &lt;a href=&apos;http://www.nerds.de/data/setuploopbe1.exe&apos;&gt;LoopBe&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="981"/>
+        <location filename="../iannixapp.cpp" line="1007"/>
         <source>Software &amp;amp; interfaces</source>
         <translation>Interfaces &amp;amp; logiciels</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="982"/>
+        <location filename="../iannixapp.cpp" line="1008"/>
         <source>We have made available patches/interfaces for commonly used software that we have tested. Click on &apos;Open Patches Folder&apos; from the IanniX toolbar to discover them.&lt;br/&gt; This is very simple examples that illustrate the principle of communication between IanniX and other software; we invite you to modify them and get inspired for your projects.</source>
         <translation>Nous avons mis à votre disposition des patches/interfaces pour les logiciels couramment utilisés que nous avons testés. Cliquez sur le bouton &apos;Open Patches Folder&apos; de la barre d&apos;outils depuis IanniX pour les découvrir.&lt;br/&gt; Il s&apos;agit d&apos;exemples très simples qui illustrent le principe de communication entre IanniX et les logiciels ; nous vous invitons à les modifier et à vous en inspirer pour vos projets.</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="983"/>
+        <location filename="../iannixapp.cpp" line="1009"/>
         <source>Bugs</source>
         <translation>Bugs</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="984"/>
+        <location filename="../iannixapp.cpp" line="1010"/>
         <source>IanniX is still on beta-testing, some bugs are still present but most features can be used properly. You can report errors in the &apos;Bugs&apos; section of our &lt;a href=&apos;http://iannix.org/EN/community.php&apos;&gt;forum&lt;/a&gt;.</source>
         <translation>IanniX est toujours en beta-testing, quelques bugs sont donc encore présents mais la plupart des fonctionnalités peuvent être employées correctement. Vous pouvez signaler les erreurs dans la section « Bugs » de notre &lt;a href=&apos;http://iannix.org/fr/community.php&apos;&gt;forum&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="985"/>
+        <location filename="../iannixapp.cpp" line="1011"/>
         <source>Version tracking</source>
         <translation>Suivi de versions</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="986"/>
         <source>Known bugs</source>
-        <translation>Bugs connus</translation>
+        <translation type="obsolete">Bugs connus</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1008"/>
+        <location filename="../iannixapp.cpp" line="1034"/>
         <source>Objects</source>
         <translation>Objets</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1009"/>
+        <location filename="../iannixapp.cpp" line="1035"/>
         <source>A IanniX score is composed of three main elements:</source>
         <translation>Une partition IanniX se compose de trois objets fondamentaux&amp;nbsp;:</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1010"/>
+        <location filename="../iannixapp.cpp" line="1036"/>
         <source>&lt;li&gt;&lt;b&gt;a trigger&lt;/b&gt; is a momentary event set in space; it is activated when &lt;b&gt;a cursor&lt;/b&gt; goes past it;&lt;/li&gt;&lt;li&gt;&lt;b&gt;a curve&lt;/b&gt; is a series of points set in space; it defines a trajectory&amp;nbsp;;&lt;/li&gt;&lt;li&gt;&lt;b&gt;a cursor&lt;/b&gt; is similar to a tape head. It triggers discrete events (&lt;b&gt;triggers&lt;/b&gt;) or continuous (values). It can follow &lt;b&gt;a curve&lt;/b&gt; or be completely free (controlled by the mouse, a graphic tablet or by another software).&lt;/li&gt;</source>
         <translation>&lt;li&gt;&lt;b&gt;un trigger&lt;/b&gt; est un événement ponctuel positionné dans l&apos;espace ; il est déclenché lors du passage d&apos;&lt;b&gt;un curseur&lt;/b&gt;&amp;nbsp;;&lt;/li&gt;&lt;li&gt;&lt;b&gt;une courbe&lt;/b&gt; est une suite de points dans l&apos;espace ; elle définit une trajectoire&amp;nbsp;;&lt;/li&gt;&lt;li&gt;&lt;b&gt;un curseur&lt;/b&gt; est une tête de lecture. Il déclenche des événements discrets (&lt;b&gt;triggers&lt;/b&gt;) ou continus (valeurs). Il peut suivre &lt;b&gt;une courbe&lt;/b&gt; ou être complètement libre (contrôlé par la souris, une tablette ou par un autre logiciel).&lt;/li&gt;</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1011"/>
+        <location filename="../iannixapp.cpp" line="1037"/>
         <source>Add objects</source>
         <translation>Ajouter des objets</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1012"/>
+        <location filename="../iannixapp.cpp" line="1038"/>
         <source>To set an object in space, you have three methods:</source>
         <translation>Pour positionner un objet dans l&apos;espace, vous disposez de trois méthodes :</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1013"/>
+        <location filename="../iannixapp.cpp" line="1039"/>
         <source>&lt;li&gt;&lt;b&gt;the graphic interface&lt;/b&gt; thanks to the toolbar;&lt;/li&gt;&lt;li&gt;&lt;b&gt;software interfaces&lt;/b&gt; controlling IanniX via Open Sound Control for example, through &lt;a href=&apos;reference.html&apos;&gt;IanniX commands&lt;/a&gt;;&lt;/li&gt;&lt;li&gt;&lt;b&gt;scripts&lt;/b&gt; that create generative scores via &lt;a href=&apos;script.html&apos;&gt;scripted commands&lt;/a&gt;.&lt;/li&gt;</source>
         <translation>&lt;li&gt;&lt;b&gt;l&apos;interface graphique&lt;/b&gt; à l&apos;aide de la &lt;a href=&apos;overview.html&apos;&gt;barre d&apos;outils&lt;/a&gt;&amp;nbsp;;&lt;/li&gt;&lt;li&gt;&lt;b&gt;les interfaces logicielles&lt;/b&gt; contrôlant IanniX en Open Sound Control par exemple, grâce au système de &lt;a href=&apos;reference.html&apos;&gt;commandes IanniX&lt;/a&gt;&amp;nbsp;;&lt;/li&gt;&lt;li&gt;&lt;b&gt;les scripts&lt;/b&gt; qui créé des partitions génératives via &lt;a href=&apos;script.html&apos;&gt;des commandes scriptées&lt;/a&gt;.&lt;/li&gt;</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1014"/>
+        <location filename="../iannixapp.cpp" line="1040"/>
         <source>Basic vocabulary</source>
         <translation>Vocabulaire fondamental</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1015"/>
+        <location filename="../iannixapp.cpp" line="1041"/>
         <source>A few simple concepts will enable you to understand the mechanisms of IanniX:</source>
         <translation>Quelques notions très simples vous permettront de comprendre les mécanismes de IanniX :</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1016"/>
+        <location filename="../iannixapp.cpp" line="1042"/>
         <source>&lt;li&gt;&lt;b&gt;the identifier (ID)&lt;/b&gt;: each object (trigger, curve or cursor) has an unique identifier;&lt;/li&gt;&lt;li&gt;&lt;b&gt;the group&lt;/b&gt;: objects can be grouped under a group name, allowing control of multiple objects at once.&lt;/li&gt;</source>
         <translation>&lt;li&gt;&lt;b&gt;l&apos;identifiant (ID)&lt;/b&gt; : chaque objet (trigger, courbe ou curseur) possède un identifiant unique&amp;nbsp;;&lt;/li&gt;&lt;li&gt;&lt;b&gt;le groupe&lt;/b&gt; : les objets peuvent être regroupés sous un nom de groupe, permettant le contrôle de plusieurs objets d&apos;un coup.&lt;/li&gt;</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1017"/>
+        <location filename="../iannixapp.cpp" line="1043"/>
         <source>Messages</source>
         <translation>Messages</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1018"/>
+        <location filename="../iannixapp.cpp" line="1044"/>
         <source>Message handling is the main function of IanniX. They can be sent by &lt;b&gt;cursors&lt;/b&gt; and &lt;b&gt;triggers&lt;/b&gt;.</source>
         <translation>La gestion des messages est la fonction principale de IanniX. Ils peuvent être envoyés par &lt;b&gt;les curseurs&lt;/b&gt; et &lt;b&gt;les triggers&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1019"/>
+        <location filename="../iannixapp.cpp" line="1045"/>
         <source>To see if the messages are actually sent or received, IanniX displays a trace in the &apos;Messages&apos; section of inspector.</source>
         <translation>Pour savoir si les messages sont effectivement reçus ou envoyés, IanniX en affiche une trace dans la section « Messages » de l&apos;inspecteur.</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1020"/>
+        <location filename="../iannixapp.cpp" line="1046"/>
         <source>&lt;b&gt;Triggers&lt;/b&gt; usually send one only message when a cursor goes past them. IanniX is limited to sending one message per millisecond maximum.&lt;br/&gt;</source>
         <translation>&lt;b&gt;Les triggers&lt;/b&gt; n&apos;envoient généralement qu&apos;un seul message au passage du curseur et IanniX limite l&apos;envoi à 1 message par milliseconde maximum.&lt;br/&gt;</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1021"/>
+        <location filename="../iannixapp.cpp" line="1047"/>
         <source>&lt;b&gt;Cursors&lt;/b&gt;, by default, generate messages every 20&amp;nbsp;ms (but you can change this time).</source>
         <translation>&lt;b&gt;Les curseurs&lt;/b&gt; génèrent par défaut des messages toutes les 20&amp;nbsp;ms (mais vous pouvez modifier cette période).</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1022"/>
+        <location filename="../iannixapp.cpp" line="1048"/>
         <source>To edit the message that a element has to send, click on &apos;Edit&apos; in the inspector after having selected the object or double-click on the object itself to display this window:</source>
         <translation>Pour éditer le message qu&apos;un objet doit envoyer, cliquez sur &apos;Edit&apos; dans l&apos;inspecteur après avoir sélectionné l’objet ou double-cliquez sur l’objet lui-même pour faire apparaître la fenêtre:</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1023"/>
+        <location filename="../iannixapp.cpp" line="1049"/>
         <source>Recursion</source>
         <translation>Récursivité</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1024"/>
+        <location filename="../iannixapp.cpp" line="1050"/>
         <source>IanniX can be controlled by IanniX itself (!). You can use all the protocols described above, but we recommend using OSC to communicate between two IanniX applications on network computers and use the &lt;code&gt;direct&lt;/code&gt; command to send messages inside one IanniX application.&lt;br/&gt;&lt;br /&gt;&lt;span class=&apos;titre&apos;&gt;Example:&amp;nbsp;&lt;/span&gt;</source>
         <translation>IanniX peut être contrôlé par IanniX lui-même (!). Vous pouvez utiliser tous les protocoles décrits précédemment mais nous vous recommandons d&apos;utiliser l&apos;OSC pour communiquer entre deux IanniX sur des ordinateurs en réseau et d&apos;utiliser la commande &lt;code&gt;direct&lt;/code&gt; pour envoyer des messages à l&apos;intérieur même de IanniX.&lt;br/&gt;&lt;br /&gt;&lt;span class=&apos;titre&apos;&gt;Exemple :&amp;nbsp;&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../iannixapp.cpp" line="1025"/>
+        <location filename="../iannixapp.cpp" line="1051"/>
         <source>Copy / paste this example in Iannix to understand how the code works!</source>
         <translation>Copier/coller cet exemple dans IanniX pour voir son fonctionnement !</translation>
     </message>
