@@ -38,6 +38,7 @@ NxCurve::NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem
     setEquationPoints(100);
     equationIsValid = false;
     equationNbEval = 3;
+    pathLength = 1;
 }
 
 //setEquation("function plot(t) { var a = new Object(); a.x = 4*(t); a.y = 3; a.z = t; return a; } nbPoints=50;");
@@ -56,6 +57,7 @@ void NxCurve::setEquation(const QString &type, const QString &_equation) {
         equationParser.DefineVar("t", &equationVariableT);
         equationParser.SetExpr(qPrintable(equation));
         calcEquation();
+        calcBoundingRect();
     }
     catch (Parser::exception_type &e) {
         qDebug("[MathParser] Parsing error");
@@ -80,6 +82,7 @@ void NxCurve::setEquation(const QString &type, const QString &_equation) {
         equationPlotY  = equationScript.toStringHandle("plotY");
         equationPlotZ  = equationScript.toStringHandle("plotZ");
         calcEquation();
+                calcBoundingRect();
     }
     */
 }
@@ -87,9 +90,10 @@ void NxCurve::setEquationPoints(quint16 nbPoints) {
     equationNbPoints = nbPoints;
     equationVariableTSteps = 1. / equationNbPoints;
     calcEquation();
+    calcBoundingRect();
 }
 
-void NxCurve::setEquationParam(const QString &param, qreal value) {
+void NxCurve::setEquationParam(const QString &param, qreal value, bool boundingRectCalculation) {
     if(!equationVariables.contains(param)) {
         equationVariables.insert(param, value);
         try {
@@ -102,20 +106,23 @@ void NxCurve::setEquationParam(const QString &param, qreal value) {
     else
         equationVariables[param] = value;
     calcEquation();
+    if(boundingRectCalculation)
+        calcBoundingRect();
 }
 void NxCurve::calcEquation() {
-    equationIsValid = false;
-    try {
-        equationParser.Eval();
-        equationNbEval = equationParser.GetNumResults();
-        if(equationNbEval == 3) {
-            equationIsValid = true;
-            glListRecreate  = true;
-            calcBoundingRect();
+    if(id > 0) {
+        equationIsValid = false;
+        try {
+            equationParser.Eval();
+            equationNbEval = equationParser.GetNumResults();
+            if(equationNbEval == 3) {
+                equationIsValid = true;
+                glListRecreate  = true;
+            }
         }
-    }
-    catch (Parser::exception_type &e) {
-        qDebug("[MathParser] Calculation error");
+        catch (Parser::exception_type &e) {
+            qDebug("[MathParser] Curve #%d Calculation error", id);
+        }
     }
 }
 
@@ -183,7 +190,7 @@ void NxCurve::paint() {
                     glVertex3f(ellipseSize.width() * qCos(angle), ellipseSize.height() * qSin(angle), 0);
                 glEnd();
             }
-            else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+            else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
                 glBegin(GL_LINE_STRIP);
                 try {
                     for(equationVariableT = 0 ; equationVariableT <= 1 ; equationVariableT += equationVariableTSteps) {
@@ -532,7 +539,7 @@ void NxCurve::resize(qreal sizeFactorW, qreal sizeFactorH) {
         ellipseSize.setWidth(ellipseSize.width()   * sizeFactorW);
         ellipseSize.setHeight(ellipseSize.height() * sizeFactorH);
     }
-    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+    else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
         //IMPOSSIBLE FOR NOW
     }
     else if(curveType == CurveTypePoints) {
@@ -586,7 +593,7 @@ NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
         qreal angle = 2 * val * M_PI;
         return NxPoint(boundingRect.width() * qCos(angle) / 2, boundingRect.height() * qSin(angle) / 2, 0);
     }
-    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+    else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
         equationVariableT = val;
         try {
             qreal *ptCoords = equationParser.Eval(equationNbEval);
@@ -594,7 +601,8 @@ NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
             else                                    return NxPoint(ptCoords[0], ptCoords[1], ptCoords[2]);
         }
         catch (Parser::exception_type &e) {
-            qDebug("[MathParser] PointAt %f error", equationVariableT);
+            qDebug("%d %s", id, qPrintable(equation));
+            qDebug("[MathParser] Curve #%d PointAt %f error", id, equationVariableT);
         }
         return NxPoint();
     }
@@ -618,7 +626,7 @@ qreal NxCurve::getAngleAt(qreal val, bool absoluteTime) {
     qreal angle = 0;
     if(curveType == CurveTypeEllipse)
         angle = -((2 * val * M_PI) + M_PI_2) * 180.0F / M_PI;
-    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+    else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
         try {
             NxPoint pt1, pt2;
             qreal *ptCoords;
@@ -667,7 +675,7 @@ qreal NxCurve::getAngleAt(qreal val, bool absoluteTime) {
 
 
 void NxCurve::calcBoundingRect() {
-    pathLength = 0;
+    pathLength = 1;
     if(curveType == CurveTypeEllipse) {
         //Longueur
         pathLength = M_PI * qSqrt(0.5 * (boundingRect.width()*boundingRect.width() + boundingRect.height()*boundingRect.height()));
@@ -675,9 +683,11 @@ void NxCurve::calcBoundingRect() {
         //Bounding
         boundingRect = NxRect(-ellipseSize.width(), -ellipseSize.height(), 2*ellipseSize.width(), 2*ellipseSize.height());
     }
-    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+    else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+        pathLength = 0;
         NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
-        for(equationVariableT = 0 ; equationVariableT <= (1-equationVariableTSteps) ; equationVariableT += equationVariableTSteps) {
+        qreal equationVariableTStepsBR = qMin(1., equationVariableTSteps * 20);
+        for(equationVariableT = 0 ; equationVariableT <= (1-equationVariableTStepsBR) ; equationVariableT += equationVariableTStepsBR) {
             NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);
 
             NxPoint p1 = getPointAt(equationVariableT), p2 = getPointAt(equationVariableT + equationVariableTSteps);
@@ -703,6 +713,7 @@ void NxCurve::calcBoundingRect() {
         boundingRect = NxRect(minGlobal, maxGlobal);
     }
     else if(curveType == CurveTypePoints) {
+        pathLength = 0;
         qreal step = 0.01;
         NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
         for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count()-1 ; indexPoint++) {
@@ -809,7 +820,7 @@ qreal NxCurve::intersects(const NxRect &rect, NxPoint* collisionPoint) {
             }
         }
     }
-    else if((equationIsValid) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
+    else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
         /*
           TODO
         */

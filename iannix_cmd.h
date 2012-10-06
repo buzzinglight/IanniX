@@ -61,6 +61,7 @@
 #define COMMAND_CURVE_LINES                 QString("setpointslines")
 #define COMMAND_CURVE_IMG                   QString("setpointsimg")
 #define COMMAND_CURVE_ELL                   QString("setpointsellipse")
+#define COMMAND_CURVE_LENGTH                QString("setlength")
 
 #define COMMAND_SIZE                        QString("setsize")
 #define COMMAND_RESIZE                      QString("setresize")

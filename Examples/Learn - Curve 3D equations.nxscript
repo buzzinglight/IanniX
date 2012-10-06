@@ -12,74 +12,42 @@ function onCreate() {
 	var id = 0;
 
 
-	//[TOP LEFT] Add a simple 2D curve based on cartesian coords
-	run("add curve  " + (1000 + id));
-	run("setPos     current -10 7 0");	
-	//Plot curve
-	info = plot(function(t) { return {
-		index   : 0, nbPoints: 100, 
-		offset  : {x: 0, y:0, z:0}, 
-
-		x       : t * 4,
-		y       : cos(2 * t * TWO_PI),
-		z       : 0,
-
-		t       : [0,1] }});
+	//[TOP LEFT] Add a 2D curve based on cartesian coords
+	run("add curve   " + (1000 + id));
+	run("setPos      current -10 7 0");
+	run("setEquation current cartesian t * 4, cos(2 * t * _pi), 0");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");
 	run("setPattern current 0 0 1 -1");
     run("setDepth   current 0.5");
+	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_yPos");
 	id++;
 
 
 
-	//[TOP MIDDLE] Add a composed 2D curve based on cartesian coords
-	run("add curve  " + (1000 + id));
-	run("setPos     current -4 7 0");	
-	//Plot curve
-	info = plot(function(t) { return {
-		index   : 0, nbPoints: 100, 
-		offset  : {x: 0, y:0, z:0}, 
-
-		x       : t * 4,
-		y       : cos(2 * t * TWO_PI),
-		z       : 0,
-
-		t       : [0,1] }});
-	info = plot(function(t) { return {
-		index   : info.index, nbPoints: 100, 
-		offset  : info.offset, 
-
-		x       : t * 4,
-		y       : exp(-t * 3) * cos(2 * t * TWO_PI) - 1,
-		z       : 0,
-
-		t       : [0,1] }});
+	//[TOP MIDDLE] Add a 2D curve based on cartesian coords
+	run("add curve   " + (1000 + id));
+	run("setPos      current -4 7 0");	
+	run("setEquation current cartesian t * 8, exp(-t * 3) * cos(3 * t * _pi * param) - 1, 0");
+	run("setEquationParam    current param 1");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
     run("setDepth   current 0.5");
+	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_yPos");
 	id++;
 
 
 
-	//[TOP RIGHT] Add a simple 2D curve based on parametric coords
-	run("add curve  " + (1000 + id));
-	run("setPos     current 8 7 0");	
-	//Plot curve
-	info = plot(function(t) { return {
-		index   : 0, nbPoints: 200, 
-		offset  : {x: 0, y:0, z:0}, 
-
-		x       : 2 * cos(t * TWO_PI),
-		y       : sin(2 * t * TWO_PI),
-		z       : 0,
-
-		t       : [0,1] }});
+	//[TOP RIGHT] Add a 2D curve based on parametric coords
+	run("add curve   " + (1000 + id));
+	run("setPos      current 8 7 0");	
+	run("setEquation current cartesian 2 * cos(t * _pi * param / 5), sin(2 * t * 2*_pi), 0");
+	run("setEquationParam    current param 1");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	
@@ -93,83 +61,45 @@ function onCreate() {
 
 
 
-	//[BOTTOM LEFT] Add a simple 2D curve based on polar coords
-	run("add curve  " + (1000 + id));
-	run("setPos     current -8 -7 0");	
-	//Plot curve
-	info = plot(function(t) { return {
-		index   : 0, nbPoints: 200, 
-		offset  : {x: 0, y:0, z:0}, 
-
-		theta   : 2 * t * TWO_PI,
-		r       : 2 * t,
-		phi     : 0,
-
-		t       : [0,1] }});
+	//[BOTTOM LEFT] Add a 2D curve based on polar coords
+	run("add curve   " + (1000 + id));
+	run("setPos      current -8 -5 0");	
+	run("setEquation current polar 2 * t, 2 * t * 2*_pi, 0");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
     run("setDepth   current 0.5");
+	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param1 cursor_xPos, direct:// setEquationParam 1004 param2 cursor_yPos");
 	id++;
 
 
 
-	//[BOTTOM MIDDLE] Add a composed 2D curve based on polar coords
-	run("add curve  " + (1000 + id));
-	run("setPos     current 0 -7 0");	
-	//Plot curve
-	info = plot(function(t) { return {
-		index   : 0, nbPoints: 200, 
-		offset  : {x: 0, y:0, z:0}, 
-
-		theta   : 2 * t * TWO_PI,
-		r       : 2 * t,
-		phi     : 0,
-
-		t       : [0,1] }});
-	info = plot(function(t) { return {
-		index   : info.index, nbPoints: 200, 
-		offset  : info.offset, 
-
-		theta   : cos(2 * t * TWO_PI),
-		r       : 2 * t,
-		phi     : 0,
-
-		t       : [0,1] }});
+	//[BOTTOM MIDDLE] Add a 2D curve based on polar coords
+	run("add curve   " + (1000 + id));
+	run("setPos      current 0 -5 0");	
+	run("setEquation current polar 2 * t * param1/10, cos(2 * t * _pi), param2 * t");
+	run("setEquationParam    current param1 10");
+	run("setEquationParam    current param2 1");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
     run("setDepth   current 0.5");
+	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param1 cursor_xPos, direct:// setEquationParam 1005 param2 cursor_yPos");
 	id++;
 
 
 
-	//[BOTTOM RIGHT] Add a composed 2D curve based on mixed coords
-	run("add curve  " + (1000 + id));
-	run("setPos     current 8 -7 0");	
-	//Plot curve
-	info = plot(function(t) { return {
-		index   : 0, nbPoints: 100, 
-		offset  : {x: 0, y:0, z:0}, 
-
-		theta   : 2 * t * TWO_PI,
-		r       : 2 * t,
-		phi     : 0,
-
-		t       : [0,1] }});
-	info = plot(function(t) { return {
-		index   : info.index, nbPoints: 100, 
-		offset  : info.offset, 
-
-		x       : sin(2 * t * TWO_PI),
-		y       : 2 * t,
-		z       : 0,
-
-		t       : [0,1] }});
+	//[BOTTOM RIGHT] Add a 2D curve based on mixed coords
+	run("add curve   " + (1000 + id));
+	run("setPos      current 8 -5 0");	
+	run("setEquation current polar 2 * t, sin(2 * t * _pi * param2), param1");
+	run("setEquationParam    current param1 1");
+	run("setEquationParam    current param2 1");
+	run("setEquationNbPoints current 300");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	
@@ -183,65 +113,44 @@ function onCreate() {
 
 
 
-	//[LEFT] Add a simple 3D curve based on cartesian coords
-	run("add curve  " + (1000 + id));
-	run("setPos     current -7 1 0");	
-	//Plot curve
-	info = plot(function(t) { return {
-		index   : 0, nbPoints: 300, 
-		offset  : {x: 0, y:0, z:0}, 
-
-		x       : cos(2 * TWO_PI * t),
-		y       : sin(2 * TWO_PI * t),
-		z       : cos(2 * TWO_PI * t),
-
-		t       : [0,1] }});
+	//[LEFT] Add a 3D curve based on cartesian coords
+	run("add curve   " + (1000 + id));
+	run("setPos      current -7 1 0");	
+	run("setEquation current polar cos(2 * 2*_pi * t), sin(2 * 2*_pi * t), cos(2 * 2*_pi * t)");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
     run("setDepth   current 0.5");
+	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_xPos");
 	id++;
 
 
 
-	//[CENTER] Add a simple 3D curve based on spherical coords
-	run("add curve  " + (1000 + id));
-	run("setPos     current 0 1 0");	
-	//Plot curve
-	info = plot(function(t) { return {
-		index   : 0, nbPoints: 300, 
-		offset  : {x: 0, y:0, z:0}, 
-
-		theta   : sin(6 * TWO_PI * t),
-		r       : 2.5 - (5 * t),
-		phi     : cos(6 * TWO_PI * t),
-
-		t       : [0,1] }});
+	//[CENTER] Add a 3D curve based on spherical coords
+	run("add curve   " + (1000 + id));
+	run("setPos      current 0 1 0");	
+	run("setEquation current polar 2.5 - (5 * t), sin(2*_pi * t * param), cos(6 * 2*_pi * t)");
+	run("setEquationParam    current param 1");
+	run("setEquationNbPoints current 300");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current auto 10");	
 	run("setPattern current 0 0 1 -1");
     run("setDepth   current 0.5");
+	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_xPos");
 	id++;
 
 
 
-	//[RIGHT] Add a simple 3D curve based on spherical coords
-	run("add curve  " + (1000 + id));
-	run("setPos     current 7 1 0");	
-	//Plot curve
-	info = plot(function(t) { return {
-		index   : 0, nbPoints: 300, 
-		offset  : {x: 0, y:0, z:0}, 
-
-		theta   : 20 * t,
-		r       :  3 * t,
-		phi     : 20 * t,
-
-		t       : [0,1] }});
+	//[RIGHT] Add a 3D curve based on spherical coords
+	run("add curve   " + (1000 + id));
+	run("setPos      current 7 1 0");	
+	run("setEquation current polar 3 * t, t * param, 10 * t");
+	run("setEquationParam    current param 1");
+	run("setEquationNbPoints current 300");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	

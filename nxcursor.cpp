@@ -218,10 +218,22 @@ void NxCursor::calculate() {
     }
 
     //Cross Poly guard
-    cursorPoly[0] = cursorOld.p1();
-    cursorPoly[1] = cursor.p1();
-    cursorPoly[2] = cursor.p2();
-    cursorPoly[3] = cursorOld.p2();
+    QLineF diag1(cursor.p1().x(),cursor.p1().y(),cursor.p2().x(),cursor.p2().y());
+    QLineF diag2(cursorOld.p1().x(),cursorOld.p1().y(),cursorOld.p2().x(),cursorOld.p2().y());
+    QPointF intersectionPoint;
+
+    if(diag1.intersect(diag2, &intersectionPoint) == QLineF::BoundedIntersection) {
+        cursorPoly[0] = cursor.p1();
+        cursorPoly[1] = cursorOld.p1();
+        cursorPoly[2] = cursor.p2();
+        cursorPoly[3] = cursorOld.p2();
+    } else {
+        cursorPoly[0] = cursorOld.p1();
+        cursorPoly[1] = cursor.p1();
+        cursorPoly[2] = cursor.p2();
+        cursorPoly[3] = cursorOld.p2();
+    }
+
 
     if(false)
         qDebug("%d %d %f %f - %f %f  ==>  %f %f - %f %f", previousCursorReliable, previousPreviousCursorReliable, cursorOld.p1().x(), cursorOld.p1().y(), cursorOld.p2().x(), cursorOld.p2().y(), cursor.p1().x(), cursor.p1().y(), cursor.p2().x(), cursor.p2().y());

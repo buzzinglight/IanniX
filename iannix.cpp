@@ -1865,13 +1865,11 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                         return 0;
                     }
                     else if(commande == COMMAND_CURVE_EQUATION_PARAM) {
-                        if(object->getType() == ObjectsTypeCurve) {
-                            NxCurve *curve = (NxCurve*)object;
-                            if(argc > 3)
-                                curve->setEquationParam(argv.at(2), argvDouble(argv, 3));
-                            return curve->getPathLength();
-                        }
+                        object->dispatchProperty("equationParam", argvFullString(command, argv, 2));
                         return 0;
+                    }
+                    else if(commande == COMMAND_CURVE_LENGTH) {
+                        object->dispatchProperty("pathLength", argvDouble(argv, 2));
                     }
                     else if(commande == COMMAND_CURVE_EQUATION_POINTS) {
                         if(object->getType() == ObjectsTypeCurve) {

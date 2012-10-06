@@ -418,7 +418,7 @@ public:
                             found = addFloat(qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()), patternArgument, patternIndex);
                         }
                     }
-                    else {
+                    {
                         if(patternArgument == "timetag")
                             found = addTimeTag(getTimeTag(), patternArgument, patternIndex);
                         else if(patternArgument == "status")

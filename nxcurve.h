@@ -46,10 +46,11 @@ enum CurveType       { CurveTypePoints, CurveTypeEllipse, CurveTypeEquationCarte
 
 class NxCurve : public NxObject {
     Q_OBJECT
-    Q_PROPERTY(qreal     pathLength  READ getPathLength)
-    Q_PROPERTY(CurveType curveType   READ getCurveType)
-    Q_PROPERTY(QString   resizeStr   READ getResizeStr   WRITE setResizeStr)
-    Q_PROPERTY(qreal     resizeF     READ getResizeF     WRITE setResizeF)
+    Q_PROPERTY(qreal     pathLength     READ getPathLength       WRITE setPathLength)
+    Q_PROPERTY(CurveType curveType      READ getCurveType)
+    Q_PROPERTY(QString   resizeStr      READ getResizeStr        WRITE setResizeStr)
+    Q_PROPERTY(qreal     resizeF        READ getResizeF          WRITE setResizeF)
+    Q_PROPERTY(QString   equationParam  READ getEquationParamStr WRITE setEquationParamStr)
 
 public:
     explicit NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
@@ -73,14 +74,29 @@ private:
 public:
     void setEquation(const QString &type, const QString &_equation);
     void setEquationPoints(quint16 nbPoints);
-    void setEquationParam(const QString &param, qreal value);
+    void setEquationParam(const QString &param, qreal value, bool boundingRectCalculation = false);
     void calcEquation();
     inline QString getEquation() {
         return equation;
     }
-    inline quint16 getEquationPoints() {
+    inline quint16 getEquationPoints() const {
         return equationNbPoints;
     }
+    inline QString getEquationParamStr() const {
+        return "";
+    }
+    inline void setEquationParamStr(const QString &params) {
+        QStringList paramsList = params.split(" ");
+        if(paramsList.count() > 1)
+            setEquationParam(paramsList.at(0), paramsList.at(1).toDouble());
+    }
+    inline void setPathLength(qreal _pathLength) {
+        if(_pathLength > 0)
+            pathLength = _pathLength;
+        else
+            calcBoundingRect();
+    }
+
 
     inline const NxCurvePoint & getPathPointsAt(quint16 index) const {
 #ifdef KINECT_INSTALLED
