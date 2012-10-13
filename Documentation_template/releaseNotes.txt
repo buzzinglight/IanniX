@@ -1,4 +1,4 @@
-IanniX 0.8.43
+IanniX 0.8.45
 - translation support (french)
 - documentation update
 - messages templates
@@ -7,6 +7,10 @@ IanniX 0.8.43
 - new mapping visualization
 - MIDI learn in message editor
 - new HTTP command : http://127.0.0.1:1236/?sync to have score in realtime
+– Fix cursor bug that doesn't trigger triggers with very angular curves
+– New equation system (real-time equations, low-level rendering)
+– Bug with some messages bug (global_time) combined with collision
+messages
 
 IanniX 0.8.42
 - fixed bug with object solo/mute
@@ -140,4 +144,5 @@ IanniX 0.8.2
 Known bugs
 - on Linux, you need to press on ALT+CONTROL to control IanniX in 3D
 - Snap to grid option can make the object selection difficult to use
-- in 3D mode, selection is not possible- easing curves are still in beta, they sometimes don't work...
+- in 3D mode, selection is not possible
+- easing curves are still in beta, they sometimes don't work...

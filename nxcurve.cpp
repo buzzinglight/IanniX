@@ -39,6 +39,7 @@ NxCurve::NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem
     equationIsValid = false;
     equationNbEval = 3;
     pathLength = 1;
+    setInertie(1);
 }
 
 //setEquation("function plot(t) { var a = new Object(); a.x = 4*(t); a.y = 3; a.z = t; return a; } nbPoints=50;");
@@ -132,6 +133,8 @@ void NxCurve::paint() {
 
 #endif
 
+    computeInertie();
+
     //Color
     if(active)
         color = (!colorActive.isEmpty())?(renderOptions->colors.value(colorActive)):(colorActiveColor);
@@ -207,7 +210,7 @@ void NxCurve::paint() {
             else if(curveType == CurveTypePoints) {
                 for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
                     if(indexPoint < pathPoints.count()-1) {
-                        NxPoint p1 = getPathPointsAt(indexPoint), p2 = getPathPointsAt(indexPoint+1);
+                        NxPoint p1  = getPathPointsAt(indexPoint),       p2 = getPathPointsAt(indexPoint+1);
                         NxPoint _c1 = getPathPointsAt(indexPoint+1).c1, _c2 = getPathPointsAt(indexPoint+1).c2;
                         NxPoint c1 = p1 + _c1, c2 = p2 + _c2;
 
@@ -380,6 +383,7 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, bool s
 }
 const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation) {
     glListRecreate = true;
+    bool hasCreate = false;
     if(index >= pathPoints.count()) {
         NxCurvePoint pointStruct;
         pointStruct.setX(point.x());
@@ -392,19 +396,35 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
         pointStruct.c2 = c2;
         pointStruct.smooth = smooth;
         pathPoints.append(pointStruct);
+        pathPointsDest.append(pointStruct);
+        hasCreate = true;
     }
     else {
-        pathPoints[index].setX(point.x());
-        pathPoints[index].setY(point.y());
-        pathPoints[index].setZ(point.z());
-        pathPoints[index].setSx(point.sx());
-        pathPoints[index].setSy(point.sy());
-        pathPoints[index].setSz(point.sz());
-        pathPoints[index].c1 = c1;
-        pathPoints[index].c2 = c2;
-        pathPoints[index].smooth = smooth;
+        if(inertie == 1) {
+            pathPoints[index].setX(point.x());
+            pathPoints[index].setY(point.y());
+            pathPoints[index].setZ(point.z());
+            pathPoints[index].setSx(point.sx());
+            pathPoints[index].setSy(point.sy());
+            pathPoints[index].setSz(point.sz());
+            pathPoints[index].c1 = c1;
+            pathPoints[index].c2 = c2;
+            pathPoints[index].smooth = smooth;
+        }
+        else {
+            pathPointsDest[index].setX(point.x());
+            pathPointsDest[index].setY(point.y());
+            pathPointsDest[index].setZ(point.z());
+            pathPointsDest[index].setSx(point.sx());
+            pathPointsDest[index].setSy(point.sy());
+            pathPointsDest[index].setSz(point.sz());
+            pathPointsDest[index].c1 = c1;
+            pathPointsDest[index].c2 = c2;
+            pathPointsDest[index].smooth = smooth;
+        }
     }
 
+    computeInertie();
 
     //NxPoint ptBefore;
     for(quint16 indexPathPoint = 1 ; indexPathPoint < pathPoints.count()-1 ; indexPathPoint++) {
@@ -423,10 +443,26 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
 
 
     //Length
-    if(boundingRectCalculation)
+    if((boundingRectCalculation) && ((hasCreate) || (cursors.count() > 0)))
         calcBoundingRect();
 
     return point;
+}
+
+void NxCurve::computeInertie() {
+    if((inertie != 1) && (inertie > 0)) {
+        for(quint16 index = 0 ; index < pathPoints.count() ; index++) {
+            pathPoints[index].setX(pathPoints[index].x()   + (pathPointsDest[index].x()  - pathPoints[index].x())  / inertie);
+            pathPoints[index].setY(pathPoints[index].y()   + (pathPointsDest[index].y()  - pathPoints[index].y())  / inertie);
+            pathPoints[index].setZ(pathPoints[index].z()   + (pathPointsDest[index].z()  - pathPoints[index].z())  / inertie);
+            pathPoints[index].setSx(pathPoints[index].sx() + (pathPointsDest[index].sx() - pathPoints[index].sx()) / inertie);
+            pathPoints[index].setSy(pathPoints[index].sy() + (pathPointsDest[index].sy() - pathPoints[index].sy()) / inertie);
+            pathPoints[index].setSz(pathPoints[index].sz() + (pathPointsDest[index].sz() - pathPoints[index].sz()) / inertie);
+            pathPoints[index].c1 = (pathPoints[index].c1   + (pathPointsDest[index].c1   - pathPoints[index].c1)   / inertie);
+            pathPoints[index].c2 = (pathPoints[index].c2   + (pathPointsDest[index].c2   - pathPoints[index].c2)   / inertie);
+        }
+        glListRecreate = true;
+    }
 }
 
 void NxCurve::setSVG(const QString & pathData) {

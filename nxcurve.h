@@ -51,6 +51,7 @@ class NxCurve : public NxObject {
     Q_PROPERTY(QString   resizeStr      READ getResizeStr        WRITE setResizeStr)
     Q_PROPERTY(qreal     resizeF        READ getResizeF          WRITE setResizeF)
     Q_PROPERTY(QString   equationParam  READ getEquationParamStr WRITE setEquationParamStr)
+    Q_PROPERTY(qreal     inertie        READ getInertie          WRITE setInertie)
 
 public:
     explicit NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
@@ -60,7 +61,8 @@ private:
     CurveType curveType;
     qreal pathLength;
     QList<NxObject*> cursors;
-    QList<NxCurvePoint> pathPoints;
+    QList<NxCurvePoint> pathPoints, pathPointsDest;
+    qreal inertie;
     qint16 selectedPathPointPoint, selectedPathPointControl1, selectedPathPointControl2;
     NxSize ellipseSize;
     GLuint glListCurve;
@@ -96,6 +98,12 @@ public:
         else
             calcBoundingRect();
     }
+    inline void setInertie(qreal _inertie) {
+        inertie = _inertie;
+    }
+    inline qreal getInertie() {
+        return inertie;
+    }
 
 
     inline const NxCurvePoint & getPathPointsAt(quint16 index) const {
@@ -108,6 +116,15 @@ public:
         return pathPoints.at(qMax(0, qMin((int)index, pathPoints.count()-1)));
 #endif
     }
+    inline const NxCurvePoint & getPathPointsDestAt(quint16 index) const {
+        return pathPointsDest.at(qMax(0, qMin((int)index, pathPointsDest.count()-1)));
+    }
+    inline void updatePathPointsAt(quint16 index, const NxCurvePoint &pt) {
+        pathPoints[qMax(0, qMin((int)index, pathPoints.count()-1))] = pt;
+    }
+
+    void computeInertie();
+
     inline quint16 getPathPointsCount() const { return pathPoints.count(); }
 
     void resample(quint16 nbPoints);

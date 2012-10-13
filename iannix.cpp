@@ -302,6 +302,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
         settings.setValue("autoresize", false);
     if((forceSettings) || (!settings.childKeys().contains("objectLabel")))
         settings.setValue("objectLabel", true);
+    if((forceSettings) || (!settings.childKeys().contains("grid")))
+        settings.setValue("grid", true);
 
     inspector->setOSCPort(settings.value("oscPort").toUInt());
     inspector->setUDPPort(settings.value("udpPort").toUInt());
@@ -322,6 +324,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     render->setTriggerAutosize(settings.value("autoresize").toBool());
     view->toggleAutosize(settings.value("autoresize").toBool());
     view->setToggleLabel(settings.value("objectLabel").toBool());
+    render->getRenderOptions()->paintAxisGrid = settings.value("grid").toBool();
 
     acceptMidiSyncClock = settings.value("acceptMidiSyncClock").toBool();
     inspector->setMidiSyncClock(settings.value("acceptMidiSyncClock").toBool());
@@ -821,14 +824,14 @@ void IanniX::actionPlay_pause() {
 }
 void IanniX::actionFast_rewind() {
     if(timeLocal != 0) {
-        forceTimeLocal = true;
-        timeLocal = 0;
-        setScheduler(SchedulerOneShot);
-        sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "fastrewind");
         midi->sendSPPStop();
         midi->sendSPPTime(0);
-        view->activateWindow();
     }
+    forceTimeLocal = true;
+    timeLocal = 0;
+    setScheduler(SchedulerOneShot);
+    sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "fastrewind");
+    view->activateWindow();
 }
 
 void IanniX::actionLogo() {
@@ -1720,13 +1723,11 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                         return object->getProperty("timeInitialOffset").toString() + " " + object->getProperty("timeStartOffset").toString() + " " + object->getProperty("timeEndOffset").toString();
                     }
                     else if(commande == COMMAND_CURSOR_BOUNDS_SOURCE) {
-                        if(argc > 6)
-                            object->dispatchProperty("boundsSource", argvFullString(command, argv, 2));
+                        object->dispatchProperty("boundsSource", argvFullString(command, argv, 2));
                         return object->getProperty("boundsSource");
                     }
                     else if(commande == COMMAND_CURSOR_BOUNDS_TARGET) {
-                        if(argc > 6)
-                            object->dispatchProperty("boundsTarget", argvFullString(command, argv, 2));
+                        object->dispatchProperty("boundsTarget", argvFullString(command, argv, 2));
                         return object->getProperty("boundsTarget");
                     }
                     else if(commande == COMMAND_CURSOR_TIME) {
@@ -1738,6 +1739,11 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                         if(argc > 2)
                             object->dispatchProperty("timeLocalPercent", argvDouble(argv, 2));
                         return object->getProperty("timeLocalPercent");
+                    }
+                    else if(commande == COMMAND_CURVE_INERTIE) {
+                        if(argc > 2)
+                            object->dispatchProperty("inertie", argvDouble(argv, 2));
+                        return object->getProperty("inertie");
                     }
                     else if(commande == COMMAND_CURVE_POINT_RMV) {
                         if((argc > 2) && (object->getType() == ObjectsTypeCurve)) {
@@ -2450,6 +2456,7 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     settings.setValue("opacityCurve", inspector->getViewCurveOpacityCheck());
     settings.setValue("autoresize", render->getTriggerAutosize());
     settings.setValue("objectLabel", view->getToggleLabel());
+    settings.setValue("grid", render->getRenderOptions()->paintAxisGrid);
 
     event->accept();
 }

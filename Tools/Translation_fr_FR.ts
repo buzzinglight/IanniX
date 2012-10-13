@@ -17,22 +17,22 @@
 <context>
     <name>ExtMidiManager</name>
     <message>
-        <location filename="../extmidimanager.cpp" line="190"/>
+        <location filename="../extmidimanager.cpp" line="188"/>
         <source>MIDI %1 on ch. %2, send note(%3)=%4</source>
         <translation>MIDI %1 sur ch. %2, note(%3)=%4</translation>
     </message>
     <message>
-        <location filename="../extmidimanager.cpp" line="210"/>
+        <location filename="../extmidimanager.cpp" line="208"/>
         <source>MIDI %1 on ch. %2, send CC(%3)=%4</source>
         <translation>MIDI %1 sur ch. %2, CC (%3)=%4</translation>
     </message>
     <message>
-        <location filename="../extmidimanager.cpp" line="228"/>
+        <location filename="../extmidimanager.cpp" line="226"/>
         <source>MIDI %1 on ch. %2, send PGM=%3</source>
         <translation>MIDI %1 sur ch. %2, PGM=%3</translation>
     </message>
     <message>
-        <location filename="../extmidimanager.cpp" line="250"/>
+        <location filename="../extmidimanager.cpp" line="248"/>
         <source>MIDI %1 on ch. %2, send bend=%3</source>
         <translation>MIDI %1 sur ch. %2, bend=%3</translation>
     </message>
@@ -415,281 +415,281 @@ Bougez un slider sur votre interface de contrôle ou appuyez sur une note MIDI</
 <context>
     <name>IanniX</name>
     <message>
-        <location filename="../iannix.cpp" line="353"/>
         <location filename="../iannix.cpp" line="356"/>
+        <location filename="../iannix.cpp" line="359"/>
         <source>CURRENT PROJECT</source>
         <translation>PROJET COURANT</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="359"/>
+        <location filename="../iannix.cpp" line="362"/>
         <source>TOOLS</source>
         <translation>OUTILS</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="362"/>
+        <location filename="../iannix.cpp" line="365"/>
         <source>EXAMPLES</source>
         <translation>EXEMPLES</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="456"/>
+        <location filename="../iannix.cpp" line="459"/>
         <source>SVG Import</source>
         <translation>Import SVG</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="456"/>
-        <location filename="../iannix.cpp" line="486"/>
-        <location filename="../iannix.cpp" line="497"/>
-        <location filename="../iannix.cpp" line="527"/>
+        <location filename="../iannix.cpp" line="459"/>
+        <location filename="../iannix.cpp" line="489"/>
+        <location filename="../iannix.cpp" line="500"/>
+        <location filename="../iannix.cpp" line="530"/>
         <source>Coordinates systems are differents.
 Please enter a scale factor: </source>
         <translation>Les systèmes de coordonnées sont différents.
 Merci de saisir un facteur de taille :</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="486"/>
-        <location filename="../iannix.cpp" line="497"/>
+        <location filename="../iannix.cpp" line="489"/>
+        <location filename="../iannix.cpp" line="500"/>
         <source>Image import</source>
         <translation>Import d&apos;image</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="527"/>
+        <location filename="../iannix.cpp" line="530"/>
         <source>Text import</source>
         <translation>Import de texte</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="769"/>
+        <location filename="../iannix.cpp" line="772"/>
         <source>IanniX Update Center</source>
         <translation>Mises à jour de IanniX</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="769"/>
+        <location filename="../iannix.cpp" line="772"/>
         <source>A new version of IanniX is available</source>
         <translation>Une nouvelle version de IanniX est disponible</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="769"/>
+        <location filename="../iannix.cpp" line="772"/>
         <source>Would you like to update IanniX with the new version ?</source>
         <translation>Voulez-vous mettre à jour IanniX avec la nouvelle version ?</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="988"/>
+        <location filename="../iannix.cpp" line="991"/>
         <source>New score</source>
         <translation>Nouvelle partition</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="988"/>
+        <location filename="../iannix.cpp" line="991"/>
         <source>Enter the name of your new score:</source>
         <translation>Veuillez entrer un nom pour la nouvelle partition :</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="998"/>
-        <location filename="../iannix.cpp" line="1016"/>
-        <location filename="../iannix.cpp" line="1047"/>
-        <location filename="../iannix.cpp" line="1149"/>
-        <location filename="../iannix.cpp" line="1210"/>
-        <location filename="../iannix.cpp" line="1223"/>
+        <location filename="../iannix.cpp" line="1001"/>
+        <location filename="../iannix.cpp" line="1019"/>
+        <location filename="../iannix.cpp" line="1050"/>
+        <location filename="../iannix.cpp" line="1152"/>
+        <location filename="../iannix.cpp" line="1213"/>
+        <location filename="../iannix.cpp" line="1226"/>
         <source>Filename conflict</source>
         <translation>Conflit de nom de fichiers</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="998"/>
-        <location filename="../iannix.cpp" line="1016"/>
-        <location filename="../iannix.cpp" line="1149"/>
-        <location filename="../iannix.cpp" line="1210"/>
+        <location filename="../iannix.cpp" line="1001"/>
+        <location filename="../iannix.cpp" line="1019"/>
+        <location filename="../iannix.cpp" line="1152"/>
+        <location filename="../iannix.cpp" line="1213"/>
         <source>The file can&apos;t be created! A file with this name exists in your project.</source>
         <translation>Ce fichier ne peut pas être créé ! Un fichier avec le même nom existe déjà dans votre projet.</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1006"/>
+        <location filename="../iannix.cpp" line="1009"/>
         <source>New script</source>
         <translation>Nouveau script</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1006"/>
+        <location filename="../iannix.cpp" line="1009"/>
         <source>Enter the name of your new script:</source>
         <translation>Veuillez entrer un nom du nouveau script :</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1023"/>
+        <location filename="../iannix.cpp" line="1026"/>
         <source>Open IanniX Project Folder</source>
         <translation>Ouvrir un projet IanniX</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1040"/>
-        <location filename="../iannix.cpp" line="1217"/>
+        <location filename="../iannix.cpp" line="1043"/>
+        <location filename="../iannix.cpp" line="1220"/>
         <source>File rename</source>
         <translation>Renommage de fichier</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1040"/>
-        <location filename="../iannix.cpp" line="1217"/>
+        <location filename="../iannix.cpp" line="1043"/>
+        <location filename="../iannix.cpp" line="1220"/>
         <source>New name of script:</source>
         <translation>Nouveau nom du script :</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1047"/>
-        <location filename="../iannix.cpp" line="1223"/>
+        <location filename="../iannix.cpp" line="1050"/>
+        <location filename="../iannix.cpp" line="1226"/>
         <source>The file can&apos;t be renamed! A file with this name exists in your project.</source>
         <translation>Ce fichier ne peut pas être renommé ! Un fichier avec le même nom existe déjà dans votre projet.</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1055"/>
-        <location filename="../iannix.cpp" line="1229"/>
+        <location filename="../iannix.cpp" line="1058"/>
+        <location filename="../iannix.cpp" line="1232"/>
         <source>File remove</source>
         <translation>Suppression de fichier</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1055"/>
-        <location filename="../iannix.cpp" line="1229"/>
+        <location filename="../iannix.cpp" line="1058"/>
+        <location filename="../iannix.cpp" line="1232"/>
         <source>The file will be removed from your disk. Are you sure?</source>
         <translation>Le fichier va être supprimé de votre disque. Êtes-vous sûr ?</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1063"/>
-        <location filename="../iannix.cpp" line="1143"/>
-        <location filename="../iannix.cpp" line="1204"/>
+        <location filename="../iannix.cpp" line="1066"/>
+        <location filename="../iannix.cpp" line="1146"/>
+        <location filename="../iannix.cpp" line="1207"/>
         <source>File duplication</source>
         <translation>Dupplication de fichier</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1063"/>
+        <location filename="../iannix.cpp" line="1066"/>
         <source>Enter the desired name of the duplicated score</source>
         <translation>Entrer le nom de la partition duppliquée</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1084"/>
-        <location filename="../iannix.cpp" line="1086"/>
-        <location filename="../iannix.cpp" line="1088"/>
-        <location filename="../iannix.cpp" line="1109"/>
-        <location filename="../iannix.cpp" line="1111"/>
-        <location filename="../iannix.cpp" line="1113"/>
-        <location filename="../iannix.cpp" line="2479"/>
+        <location filename="../iannix.cpp" line="1087"/>
+        <location filename="../iannix.cpp" line="1089"/>
+        <location filename="../iannix.cpp" line="1091"/>
+        <location filename="../iannix.cpp" line="1112"/>
+        <location filename="../iannix.cpp" line="1114"/>
+        <location filename="../iannix.cpp" line="1116"/>
+        <location filename="../iannix.cpp" line="2514"/>
         <source>IanniX</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1123"/>
+        <location filename="../iannix.cpp" line="1126"/>
         <source>Open a project</source>
         <translation>Ouvrir un projet</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1124"/>
-        <location filename="../iannix.cpp" line="1177"/>
+        <location filename="../iannix.cpp" line="1127"/>
+        <location filename="../iannix.cpp" line="1180"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1125"/>
-        <location filename="../iannix.cpp" line="1178"/>
+        <location filename="../iannix.cpp" line="1128"/>
+        <location filename="../iannix.cpp" line="1181"/>
         <source>Duplicate</source>
         <translation>Dupliquer</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1126"/>
-        <location filename="../iannix.cpp" line="1179"/>
+        <location filename="../iannix.cpp" line="1129"/>
+        <location filename="../iannix.cpp" line="1182"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1127"/>
-        <location filename="../iannix.cpp" line="1180"/>
+        <location filename="../iannix.cpp" line="1130"/>
+        <location filename="../iannix.cpp" line="1183"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1129"/>
-        <location filename="../iannix.cpp" line="1182"/>
+        <location filename="../iannix.cpp" line="1132"/>
+        <location filename="../iannix.cpp" line="1185"/>
         <source>Click here to open a project folder</source>
         <translation>Cliquez ici pour ouvrir un projet</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1130"/>
+        <location filename="../iannix.cpp" line="1133"/>
         <source>Click here to create a new score</source>
         <translation>Cliquer ici pour créer une nouvelle partition</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1131"/>
+        <location filename="../iannix.cpp" line="1134"/>
         <source>Click here to duplicate the score to a new one</source>
         <translation>Cliquer ici pour dupliquer la partition</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1132"/>
+        <location filename="../iannix.cpp" line="1135"/>
         <source>Click here to rename the score</source>
         <translation>Cliquer ici pour renommer la partition</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1133"/>
+        <location filename="../iannix.cpp" line="1136"/>
         <source>Click here to remove the score from project folder</source>
         <translation>Cliquer ici pour supprimer la partition du projet</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1143"/>
-        <location filename="../iannix.cpp" line="1204"/>
+        <location filename="../iannix.cpp" line="1146"/>
+        <location filename="../iannix.cpp" line="1207"/>
         <source>Name of duplicate script:</source>
         <translation>Nom du script duppliqué :</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1174"/>
+        <location filename="../iannix.cpp" line="1177"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1175"/>
+        <location filename="../iannix.cpp" line="1178"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1176"/>
+        <location filename="../iannix.cpp" line="1179"/>
         <source>Open with default external editor</source>
         <translation>Ouvrir avec l&apos;éditeur par défaut</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1181"/>
+        <location filename="../iannix.cpp" line="1184"/>
         <source>Click here to run this script</source>
         <translation>Cliquer ici pour exécuter le script</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1183"/>
+        <location filename="../iannix.cpp" line="1186"/>
         <source>Click here to create a new script</source>
         <translation>Cliquer ici pour créer un nouveau script</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1184"/>
+        <location filename="../iannix.cpp" line="1187"/>
         <source>Click here to duplicate the script to a new one</source>
         <translation>Cliquer ifi pour dupliquer le script</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1185"/>
+        <location filename="../iannix.cpp" line="1188"/>
         <source>Click here to rename the script</source>
         <translation>Cliquer ici pour renommer le script</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1186"/>
+        <location filename="../iannix.cpp" line="1189"/>
         <source>Click here to remove the script from project folder</source>
         <translation>Cliquer icc pour supprimer le script du projet</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="1532"/>
+        <location filename="../iannix.cpp" line="1535"/>
         <source>Script:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="2387"/>
+        <location filename="../iannix.cpp" line="2421"/>
         <source>has</source>
         <translation>a</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="2389"/>
+        <location filename="../iannix.cpp" line="2423"/>
         <source>s have</source>
         <translation>s ont</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="2390"/>
+        <location filename="../iannix.cpp" line="2424"/>
         <source>Score save</source>
         <translation>Enregistrer des partitions</translation>
     </message>
     <message>
-        <location filename="../iannix.cpp" line="2390"/>
+        <location filename="../iannix.cpp" line="2424"/>
         <source>%1 document%2 been changed without saving.
 
 Do you want to save modifications?</source>
@@ -2919,7 +2919,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../uiinspector.ui" line="409"/>
-        <location filename="../uiinspector.cpp" line="546"/>
+        <location filename="../uiinspector.cpp" line="544"/>
         <source>TRIGGER</source>
         <translation>TRIGGER</translation>
     </message>
@@ -3329,8 +3329,8 @@ LA COURBE</translation>
     </message>
     <message>
         <location filename="../uiinspector.ui" line="2438"/>
-        <location filename="../uiinspector.cpp" line="408"/>
-        <location filename="../uiinspector.cpp" line="548"/>
+        <location filename="../uiinspector.cpp" line="405"/>
+        <location filename="../uiinspector.cpp" line="546"/>
         <source>TRIGGERS</source>
         <translation>TRIGGERS</translation>
     </message>
@@ -3346,8 +3346,8 @@ LA COURBE</translation>
     </message>
     <message>
         <location filename="../uiinspector.ui" line="2457"/>
-        <location filename="../uiinspector.cpp" line="409"/>
-        <location filename="../uiinspector.cpp" line="556"/>
+        <location filename="../uiinspector.cpp" line="406"/>
+        <location filename="../uiinspector.cpp" line="554"/>
         <source>CURSORS</source>
         <translation>CURSEURS</translation>
     </message>
@@ -3363,8 +3363,8 @@ LA COURBE</translation>
     </message>
     <message>
         <location filename="../uiinspector.ui" line="2476"/>
-        <location filename="../uiinspector.cpp" line="410"/>
-        <location filename="../uiinspector.cpp" line="552"/>
+        <location filename="../uiinspector.cpp" line="407"/>
+        <location filename="../uiinspector.cpp" line="550"/>
         <source>CURVES</source>
         <translation>COURBES</translation>
     </message>
@@ -3425,7 +3425,7 @@ LA COURBE</translation>
     <message>
         <location filename="../uiinspector.ui" line="2628"/>
         <location filename="../uiinspector.ui" line="2667"/>
-        <location filename="../uiinspector.cpp" line="417"/>
+        <location filename="../uiinspector.cpp" line="414"/>
         <source>GROUPS</source>
         <translation>GROUPES</translation>
     </message>
@@ -3730,79 +3730,77 @@ SERVER IN</translation>
         <translation>Taper ici la configration du port série (syntaxe : port name:baud rate:data bits:parity:stop bits:flow control)</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3538"/>
         <source>Click here to refresh the MIDI in/out available devices</source>
-        <translation>Cliquer ici pour rafraîchir la liste des périphériques MIDI in/out disponibles</translation>
+        <translation type="obsolete">Cliquer ici pour rafraîchir la liste des périphériques MIDI in/out disponibles</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3541"/>
         <source>Refresh MIDI devices</source>
-        <translation>Rafraîchir la liste MIDI</translation>
+        <translation type="obsolete">Rafraîchir la liste MIDI</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3560"/>
+        <location filename="../uiinspector.ui" line="3538"/>
         <source>MIDI TEMPO
 (FOR CLOCK SYNC.)</source>
         <translation>TEMPO MIDI
 (HORLOGE MIDI)</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3580"/>
+        <location filename="../uiinspector.ui" line="3558"/>
         <source>Score BPM</source>
         <translation>BPM de la partition</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3583"/>
+        <location filename="../uiinspector.ui" line="3561"/>
         <source>Type here the BPM (used by MIDI clock for sync)</source>
         <translation>Taper ici le BPM utilisé pour la synchronisation des horologes MIDI</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3601"/>
+        <location filename="../uiinspector.ui" line="3579"/>
         <source>Check this option if you want to sync transport (play, pause, stop, fast rewind, song position) from another sequencer</source>
         <translation>Cocher cette case si vous souhaitez synchroniser le transport (play, pause, stop, retour à zéro, position temporelle) depuis un autre séquenceur</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3604"/>
+        <location filename="../uiinspector.ui" line="3582"/>
         <source>SYNC TRANSPORT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3611"/>
+        <location filename="../uiinspector.ui" line="3589"/>
         <source>Check this option if you want to sync clock from another sequencer</source>
         <translation>Cocher cette case si vous souhaitez synchroniser l&apos;horloge avec un autre séquenceur</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3614"/>
+        <location filename="../uiinspector.ui" line="3592"/>
         <source>SYNC CLOCK</source>
         <translation>SYNC HORLOGE</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3690"/>
+        <location filename="../uiinspector.ui" line="3668"/>
         <source>Mouse position</source>
         <translation>Position de la souris</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3693"/>
+        <location filename="../uiinspector.ui" line="3671"/>
         <source>Mouse current position on score</source>
         <translation>Position de la souris dans la partition</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3700"/>
+        <location filename="../uiinspector.ui" line="3678"/>
         <source>MOUSE</source>
         <translation>SOURIS</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3707"/>
+        <location filename="../uiinspector.ui" line="3685"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3710"/>
+        <location filename="../uiinspector.ui" line="3688"/>
         <source>Score current zoom</source>
         <translation>Zoom actuel dans la partition</translation>
     </message>
     <message>
-        <location filename="../uiinspector.ui" line="3717"/>
+        <location filename="../uiinspector.ui" line="3695"/>
         <source>ZOOM</source>
         <translation>ZOOM</translation>
     </message>
@@ -3829,53 +3827,53 @@ Essayez de supprimer cet objet ou changez son ID.</translation>
         <translation>Inspecteur de couleurs</translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="353"/>
-        <location filename="../uiinspector.cpp" line="364"/>
+        <location filename="../uiinspector.cpp" line="350"/>
+        <location filename="../uiinspector.cpp" line="361"/>
         <source>IanniX Inspector</source>
         <translation>Inspecteur IanniX</translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="353"/>
+        <location filename="../uiinspector.cpp" line="350"/>
         <source>Enter the new ID:</source>
         <translation>Entez le nouvel ID de l&apos;objet :</translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="364"/>
+        <location filename="../uiinspector.cpp" line="361"/>
         <source>Enter the name of the destination group:</source>
         <translation>Entrez le nom du groupe :</translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="392"/>
+        <location filename="../uiinspector.cpp" line="389"/>
         <source>MOUSE:</source>
         <translation>SOURIS : </translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="395"/>
+        <location filename="../uiinspector.cpp" line="392"/>
         <source>ZOOM:</source>
         <translation>ZOOM : </translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="550"/>
+        <location filename="../uiinspector.cpp" line="548"/>
         <source>CURVE</source>
         <translation>COURBE</translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="554"/>
+        <location filename="../uiinspector.cpp" line="552"/>
         <source>CURSOR</source>
         <translation>CURSEUR</translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="873"/>
+        <location filename="../uiinspector.cpp" line="871"/>
         <source>No client connected</source>
         <translation>Aucune client connecté</translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="875"/>
+        <location filename="../uiinspector.cpp" line="873"/>
         <source>1 client connected</source>
         <translation>1 client connecté</translation>
     </message>
     <message>
-        <location filename="../uiinspector.cpp" line="877"/>
+        <location filename="../uiinspector.cpp" line="875"/>
         <source>%1 clients connected</source>
         <translation>%1 client connecté</translation>
     </message>
@@ -4142,925 +4140,925 @@ Essayez de supprimer cet objet ou changez son ID.</translation>
         <translation>Réglage de la grille</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="176"/>
+        <location filename="../uiview.ui" line="170"/>
         <source>Playback</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="183"/>
+        <location filename="../uiview.ui" line="177"/>
         <source>Arrange objects</source>
         <translation>Aligner les objets</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="187"/>
+        <location filename="../uiview.ui" line="181"/>
         <source>Align horizontally</source>
         <translation>Aligner horizontalement</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="195"/>
+        <location filename="../uiview.ui" line="189"/>
         <source>Align vertically</source>
         <translation>Aligner verticalement</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="229"/>
+        <location filename="../uiview.ui" line="223"/>
         <source>Transport</source>
         <translation>Transport</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="250"/>
+        <location filename="../uiview.ui" line="244"/>
         <source>Inspector</source>
         <translation>Inspecteur</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="259"/>
+        <location filename="../uiview.ui" line="253"/>
         <source>Toolbar</source>
         <translation>Barre d&apos;outils</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="298"/>
+        <location filename="../uiview.ui" line="292"/>
         <source>Undo</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="301"/>
+        <location filename="../uiview.ui" line="295"/>
         <source>Click here to undo last action</source>
         <translation>Cliquer ici pour annuler la dernière action</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="304"/>
+        <location filename="../uiview.ui" line="298"/>
         <source>Ctrl+Z</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="309"/>
+        <location filename="../uiview.ui" line="303"/>
         <source>Redo</source>
         <translation>Refaire</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="312"/>
+        <location filename="../uiview.ui" line="306"/>
         <source>Click here to redo last action</source>
         <translation>Cliquer ici pour répéter la dernière action</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="315"/>
+        <location filename="../uiview.ui" line="309"/>
         <source>Ctrl+Y</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="320"/>
+        <location filename="../uiview.ui" line="314"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="323"/>
+        <location filename="../uiview.ui" line="317"/>
         <source>Click here to copy selected objects in clipboard</source>
         <translation>Cliquer ici pour copier les objets sélectionnés dans le presse-papier</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="326"/>
+        <location filename="../uiview.ui" line="320"/>
         <source>Ctrl+C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="331"/>
+        <location filename="../uiview.ui" line="325"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="334"/>
+        <location filename="../uiview.ui" line="328"/>
         <source>Click here to paste copied objects from clipboard</source>
         <translation>Cliquer ici pour coller les objets du presse-papier</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="337"/>
+        <location filename="../uiview.ui" line="331"/>
         <source>Ctrl+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="342"/>
+        <location filename="../uiview.ui" line="336"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="345"/>
+        <location filename="../uiview.ui" line="339"/>
         <source>Click here to copy and remove selected objects</source>
         <translation>Cliquer ici pour copier et supprimer les objets sélectionnés</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="348"/>
+        <location filename="../uiview.ui" line="342"/>
         <source>Ctrl+X</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="353"/>
+        <location filename="../uiview.ui" line="347"/>
         <source>Select all</source>
         <translation>Tout sélectionner</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="356"/>
+        <location filename="../uiview.ui" line="350"/>
         <source>Click here to select all the selectable objects in the score</source>
         <translation>Cliquer ici pour sélectionner tous les objetsn sélectionnables de la partition</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="359"/>
+        <location filename="../uiview.ui" line="353"/>
         <source>Ctrl+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="364"/>
+        <location filename="../uiview.ui" line="358"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="367"/>
+        <location filename="../uiview.ui" line="361"/>
         <source>Click here to remove selected objects</source>
         <translation>Cliquer ici pour supprimer les objets sélectionnés</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="370"/>
+        <location filename="../uiview.ui" line="364"/>
         <source>Backspace</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="375"/>
+        <location filename="../uiview.ui" line="369"/>
         <source>New score</source>
         <translation>Nouvelle partition</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="378"/>
+        <location filename="../uiview.ui" line="372"/>
         <source>Create a new score</source>
         <translation>Créer une nouvelle partition</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="381"/>
+        <location filename="../uiview.ui" line="375"/>
         <source>Click here to create a new empty score</source>
         <translation>Cliquer ici pour créer un nouvelle partition vierge</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="384"/>
+        <location filename="../uiview.ui" line="378"/>
         <source>Ctrl+N</source>
         <translation></translation>
     </message>
     <message utf8="true">
-        <location filename="../uiview.ui" line="389"/>
+        <location filename="../uiview.ui" line="383"/>
         <source>Open project folder…</source>
         <translation>Ouvrir un projet…</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="392"/>
+        <location filename="../uiview.ui" line="386"/>
         <source>Click here to open a folder of scores</source>
         <translation>Cliquer ici pour ouvrir le dossier des partitions</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="395"/>
+        <location filename="../uiview.ui" line="389"/>
         <source>Ctrl+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="400"/>
+        <location filename="../uiview.ui" line="394"/>
         <source>Save current score</source>
         <translation>Sauvegarder la partition</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="403"/>
+        <location filename="../uiview.ui" line="397"/>
         <source>Click here to save the current score</source>
         <translation>Cliquer ici pour sauvegarder la partition courante</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="406"/>
+        <location filename="../uiview.ui" line="400"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="411"/>
+        <location filename="../uiview.ui" line="405"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="414"/>
+        <location filename="../uiview.ui" line="408"/>
         <source>Click here to quit IanniX</source>
         <translation>Cliquer ici pour quitter IanniX</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="417"/>
+        <location filename="../uiview.ui" line="411"/>
         <source>Ctrl+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="432"/>
+        <location filename="../uiview.ui" line="426"/>
         <source>Fullscreen</source>
         <translation>Plein écran</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="435"/>
+        <location filename="../uiview.ui" line="429"/>
         <source>Click here to switch to fullscreen</source>
         <translation>Cliquer ici pour activer le plein-écran</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="438"/>
+        <location filename="../uiview.ui" line="432"/>
         <source>Ctrl+F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="453"/>
+        <location filename="../uiview.ui" line="447"/>
         <source>Inspector panel</source>
         <translation>Inspecteur</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="456"/>
+        <location filename="../uiview.ui" line="450"/>
         <source>Click here to hide/show inspector panel</source>
         <translation>Cliquer ici pour afficher/cacher l&apos;inspecteur</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="459"/>
+        <location filename="../uiview.ui" line="453"/>
         <source>Ctrl+Alt+I</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="474"/>
+        <location filename="../uiview.ui" line="468"/>
         <source>Transport panel</source>
         <translation>Transport</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="477"/>
+        <location filename="../uiview.ui" line="471"/>
         <source>Click here to hide/show transport panel</source>
         <translation>Cliquer ici pour afficher/cacher la barre de transport</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="480"/>
+        <location filename="../uiview.ui" line="474"/>
         <source>Ctrl+Alt+T</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="485"/>
+        <location filename="../uiview.ui" line="479"/>
         <source>Play/pause</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="488"/>
+        <location filename="../uiview.ui" line="482"/>
         <source>Click here to play or pause the playback</source>
         <translation>Cliquer ici pour démarrer ou mettre en pause le playback</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="491"/>
+        <location filename="../uiview.ui" line="485"/>
         <source>Space</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="496"/>
+        <location filename="../uiview.ui" line="490"/>
         <source>Fast rewind</source>
         <translation>Retour à zéro</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="499"/>
+        <location filename="../uiview.ui" line="493"/>
         <source>Click here to fast rewind the playback</source>
         <translation>Cliquer ici pour remettre à zéro le playback</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="502"/>
+        <location filename="../uiview.ui" line="496"/>
         <source>F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="517"/>
+        <location filename="../uiview.ui" line="511"/>
         <source>Grid &amp;&amp; axis</source>
         <translation>Grille &amp;&amp; axes</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="520"/>
+        <location filename="../uiview.ui" line="514"/>
         <source>Click here to show/hide score grid and axis</source>
         <translation>Cliquer ici pour afficher/cacher la grille et les axes</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="523"/>
+        <location filename="../uiview.ui" line="517"/>
         <source>Ctrl+G</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="528"/>
+        <location filename="../uiview.ui" line="522"/>
         <source>Duplicate</source>
         <translation>Dupliquer</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="531"/>
+        <location filename="../uiview.ui" line="525"/>
         <source>Click here to duplicate selected objects</source>
         <translation>Cliquer ici pour dupliquer les objets sélectionnés</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="534"/>
+        <location filename="../uiview.ui" line="528"/>
         <source>Ctrl+D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="545"/>
+        <location filename="../uiview.ui" line="539"/>
         <source>Autoresize object</source>
         <translation>Redimensionnement automatique des objets</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="548"/>
+        <location filename="../uiview.ui" line="542"/>
         <source>Click here to rescale objects according to zoom</source>
         <translation>Cliquer ici pour redimensionner automatiquement les objets en fonction du zoom</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="551"/>
+        <location filename="../uiview.ui" line="545"/>
         <source>Ctrl+Shift+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="556"/>
+        <location filename="../uiview.ui" line="550"/>
         <source>Zoom in</source>
         <translation>Zoomer</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="559"/>
+        <location filename="../uiview.ui" line="553"/>
         <source>Click here to zoom in</source>
         <translation>Cliquer ici pour zoomer</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="562"/>
+        <location filename="../uiview.ui" line="556"/>
         <source>Ctrl+=</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="567"/>
+        <location filename="../uiview.ui" line="561"/>
         <source>Zoom out</source>
         <translation>Dézoomer</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="570"/>
+        <location filename="../uiview.ui" line="564"/>
         <source>Click here to zoom out</source>
         <translation>Cliquer ici pour dézoomer</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="573"/>
+        <location filename="../uiview.ui" line="567"/>
         <source>Ctrl+-</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="578"/>
+        <location filename="../uiview.ui" line="572"/>
         <source>Initial zoom</source>
         <translation>Zoom initial</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="581"/>
+        <location filename="../uiview.ui" line="575"/>
         <source>Click here to restore initial zoom</source>
         <translation>Cliquer ici pour restaurer le zoome initial</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="584"/>
+        <location filename="../uiview.ui" line="578"/>
         <source>Ctrl+Shift+0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="596"/>
+        <location filename="../uiview.ui" line="590"/>
         <source>Draw a smooth curve</source>
         <translation>Dessiner une courbe lissée</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="599"/>
+        <location filename="../uiview.ui" line="593"/>
         <source>Click here to add and draw a smooth curve in your score. Press ESC or click again to end your curve.</source>
         <translation>Cliquer ici pour ajouter et dessiner une courbe lissée dans la partition. Appuyer sur ESC ou recliquer ici pour finir la courbe.</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="602"/>
+        <location filename="../uiview.ui" line="596"/>
         <source>Ctrl+Shift+F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="614"/>
+        <location filename="../uiview.ui" line="608"/>
         <source>Draw straight curve</source>
         <translation>Dessiner une courbe</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="617"/>
+        <location filename="../uiview.ui" line="611"/>
         <source>Click here to add and draw a straight curve in your score. Press ESC or click again to end your curve.</source>
         <translation>Cliquer ici pour ajouter et dessiner une courbe dans la partition. Appuyer sur ESC ou recliquer ici pour finir la courbe.</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="620"/>
+        <location filename="../uiview.ui" line="614"/>
         <source>Ctrl+Shift+G</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="632"/>
+        <location filename="../uiview.ui" line="626"/>
         <source>Add triggers</source>
         <translation>Ajouter des triggers</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="635"/>
+        <location filename="../uiview.ui" line="629"/>
         <source>Click here to add triggers in your score. Press ESC or click again to stop adding triggers.</source>
         <translation>Cliquer ici pour ajouter des triggers dans la partition. Appuyer sur ESC ou recliquer ici pour terminer l&apos;ajout.</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="638"/>
+        <location filename="../uiview.ui" line="632"/>
         <source>Ctrl+Shift+T</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="647"/>
+        <location filename="../uiview.ui" line="641"/>
         <source>Add a cursor</source>
         <translation>Ajouter un curseur</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="650"/>
+        <location filename="../uiview.ui" line="644"/>
         <source>Click here to add cursors on the selected curve. If no curve is selected, cursor will be free (controlled by an external source)</source>
         <translation>Cliquer ici pour ajouter des curseurs sur la courbe sélectionnée. Si aucune courbe est sélectionnée, le curseur sera libre (contrôlé par exemple depuis une source externe)</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="658"/>
+        <location filename="../uiview.ui" line="652"/>
         <source>10 seconds</source>
         <translation>10 secondes</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="669"/>
+        <location filename="../uiview.ui" line="663"/>
         <source>1 second</source>
         <translation>1 seconde</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="677"/>
+        <location filename="../uiview.ui" line="671"/>
         <source>500 milliseconds</source>
         <translation>500 millisecondes</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="685"/>
+        <location filename="../uiview.ui" line="679"/>
         <source>100 milliseconds</source>
         <translation>100 millisecondes</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="693"/>
+        <location filename="../uiview.ui" line="687"/>
         <source>10 milliseconds</source>
         <translation>10 millisecondes</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="701"/>
+        <location filename="../uiview.ui" line="695"/>
         <source>Custom value</source>
         <translation>Valeur personnalisée</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="709"/>
+        <location filename="../uiview.ui" line="703"/>
         <source>100% opaque</source>
         <translation>100% d&apos;opacité</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="717"/>
+        <location filename="../uiview.ui" line="711"/>
         <source>75% opaque</source>
         <translation>75% d&apos;opacité</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="728"/>
+        <location filename="../uiview.ui" line="722"/>
         <source>50% opaque</source>
         <translation>50% d&apos;opacité</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="736"/>
+        <location filename="../uiview.ui" line="730"/>
         <source>25% opaque</source>
         <translation>25% d&apos;opacité</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="744"/>
+        <location filename="../uiview.ui" line="738"/>
         <source>10% opaque</source>
         <translation>10% d&apos;opacité</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="756"/>
+        <location filename="../uiview.ui" line="750"/>
         <source>Add circular curves</source>
         <translation>Ajouter une courbe circulaire</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="759"/>
+        <location filename="../uiview.ui" line="753"/>
         <source>Click here to add circular curves in your score. Press ESC or click again to stop adding circular cuvers.</source>
         <translation>Cliquer ici pour ajouter une courbe circlaire dans la partition. Appuyer sur ESC ou recliquer ici pour finir la courbe.</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="762"/>
+        <location filename="../uiview.ui" line="756"/>
         <source>Ctrl+Shift+R</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="771"/>
+        <location filename="../uiview.ui" line="765"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="774"/>
+        <location filename="../uiview.ui" line="768"/>
         <source>Click here to display IanniX help in your browser</source>
         <translation>Cliquer ici pour afficher l&apos;aide de IanniX dans le navigateur</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="786"/>
+        <location filename="../uiview.ui" line="780"/>
         <source>Snap to X-grid</source>
         <translation>Grille magnétique sur X</translation>
     </message>
     <message utf8="true">
-        <location filename="../uiview.ui" line="789"/>
-        <location filename="../uiview.ui" line="1044"/>
-        <location filename="../uiview.ui" line="1062"/>
+        <location filename="../uiview.ui" line="783"/>
+        <location filename="../uiview.ui" line="1038"/>
+        <location filename="../uiview.ui" line="1056"/>
         <source>Click here to snap actions (objects position, curve points…) to grid</source>
         <translation>Cliquer ici pour activer/désactiver la grille magnétique</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="792"/>
+        <location filename="../uiview.ui" line="786"/>
         <source>Shift+G</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="../uiview.ui" line="791"/>
+        <location filename="../uiview.ui" line="794"/>
         <location filename="../uiview.ui" line="797"/>
-        <location filename="../uiview.ui" line="800"/>
-        <location filename="../uiview.ui" line="803"/>
         <source>Save all scores</source>
         <translation>Sauvegarder toutes les partitions</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="806"/>
+        <location filename="../uiview.ui" line="800"/>
         <source>Click here to save all the opened scores</source>
         <translation>Cliquer ici pour sauvegarder toutes les partitions ouvertes</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="809"/>
+        <location filename="../uiview.ui" line="803"/>
         <source>Ctrl+Alt+Shift+S</source>
         <translation></translation>
     </message>
     <message utf8="true">
-        <location filename="../uiview.ui" line="814"/>
+        <location filename="../uiview.ui" line="808"/>
         <source>Rename score…</source>
         <translation>Renommer la partition…</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="817"/>
+        <location filename="../uiview.ui" line="811"/>
         <source>Click here to rename your score</source>
         <translation>Cliquer ici pour renommer la partition</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="820"/>
+        <location filename="../uiview.ui" line="814"/>
         <source>Ctrl+Alt+Shift+R</source>
         <translation></translation>
     </message>
     <message utf8="true">
-        <location filename="../uiview.ui" line="825"/>
+        <location filename="../uiview.ui" line="819"/>
         <source>Remove score from project folder…</source>
         <translation>Supprimer la partition…</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="828"/>
+        <location filename="../uiview.ui" line="822"/>
         <source>Click here to remove this score from your project folder</source>
         <translation>Cliquer ici pour supprimer la partition du projet</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="833"/>
+        <location filename="../uiview.ui" line="827"/>
         <source>Duplicate score in project folder</source>
         <translation>Dupliquer la partition</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="836"/>
+        <location filename="../uiview.ui" line="830"/>
         <source>Click here to duplicate your score in your project folder</source>
         <translation>Cliquer ici pour dupliquer la partition</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="848"/>
+        <location filename="../uiview.ui" line="842"/>
         <source>Lock objects position</source>
         <translation>Vérouiller la position des objets</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="851"/>
+        <location filename="../uiview.ui" line="845"/>
         <source>Click here to lock/unlock the position of objects (to avoid moving objects while navigating in the score)</source>
         <translation>Cliquer ici vérouiller/dévérouiller la position des objets (pour éviter de déplacer les objets en naviguant dans la partition)</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="866"/>
+        <location filename="../uiview.ui" line="860"/>
         <source>Objects labels</source>
         <translation>Étiquette des objets</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="869"/>
+        <location filename="../uiview.ui" line="863"/>
         <source>Click here to show/hide labels on objects</source>
         <translation>Cliquer ici pour afficher/cacher les étiquette des objets</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="874"/>
+        <location filename="../uiview.ui" line="868"/>
         <source>Open patches folder</source>
         <translation>Ouvrir le dossier des patches</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="877"/>
+        <location filename="../uiview.ui" line="871"/>
         <source>Click here to open the patches folder (external objects for hosts software) provided with IanniX</source>
         <translation>Cliquer ici pour le dossier des patches (objets pour les logiciels hôtes) fourni avec IanniX</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="882"/>
+        <location filename="../uiview.ui" line="876"/>
         <source>About IanniX</source>
         <translation>À propos de IanniX</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="885"/>
+        <location filename="../uiview.ui" line="879"/>
         <source>Click here to display information about IanniX</source>
         <translation>Cliquer ici pour afficher des informations sur IanniX</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="893"/>
+        <location filename="../uiview.ui" line="887"/>
         <source>Send score through default sync output</source>
         <translation>Envoyer la partition sur le port de synchronisation</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="896"/>
+        <location filename="../uiview.ui" line="890"/>
         <source>Click here to send your score through the default sync output</source>
         <translation>Cliquer ici pour envoyer la partition via le port de synchronisation</translation>
     </message>
     <message utf8="true">
-        <location filename="../uiview.ui" line="901"/>
+        <location filename="../uiview.ui" line="895"/>
         <source>Import SVG as a curve…</source>
         <translation>Importer une courbe à partir d&apos;un SVG…</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="904"/>
+        <location filename="../uiview.ui" line="898"/>
         <source>Click here to import a SVG file as a curve in your score</source>
         <translation>Cliquer ici pour importer une courbe à partir d&apos;un fichier SVG</translation>
     </message>
     <message utf8="true">
-        <location filename="../uiview.ui" line="909"/>
+        <location filename="../uiview.ui" line="903"/>
         <source>Import image to be vectorized…</source>
         <translation>Importer une courbe à partir d&apos;une image…</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="912"/>
+        <location filename="../uiview.ui" line="906"/>
         <source>Click here to import image to be vectorized in your score</source>
         <translation>Cliquer ici pour importer une courbe à partir d&apos;une image vectorisée automatiquement</translation>
     </message>
     <message utf8="true">
-        <location filename="../uiview.ui" line="917"/>
+        <location filename="../uiview.ui" line="911"/>
         <source>Import glyph as a curve…</source>
         <translation>Importer une courbe à partir d&apos;un glyphe…</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="920"/>
+        <location filename="../uiview.ui" line="914"/>
         <source>Click here to import a glyph as a curve in your score</source>
         <translation>Cliquer ici pour importer une courbe à partir d&apos;un glyphe</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="935"/>
+        <location filename="../uiview.ui" line="929"/>
         <source>Script editor window</source>
         <translation>Fenêtre d&apos;éditeur de script</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="938"/>
+        <location filename="../uiview.ui" line="932"/>
         <source>Click here to show the script editor window (if you&apos;re working on a script)</source>
         <translation>Cliquer ici pour afficher l&apos;éditeur de script (si vous travaillez dans un script)</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="941"/>
+        <location filename="../uiview.ui" line="935"/>
         <source>Ctrl+E</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="946"/>
+        <location filename="../uiview.ui" line="940"/>
         <source>Reload current script</source>
         <translation>Recharger le script</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="949"/>
+        <location filename="../uiview.ui" line="943"/>
         <source>Click here to reload the current script</source>
         <translation>Cliquer ici pour recharger le script</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="952"/>
+        <location filename="../uiview.ui" line="946"/>
         <source>Ctrl+R</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="964"/>
+        <location filename="../uiview.ui" line="958"/>
         <source>Lighter color theme</source>
         <translation>Thème de couleur lumineux</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="967"/>
+        <location filename="../uiview.ui" line="961"/>
         <source>Click here to change the color theme of IanniX</source>
         <translation>Cliquer ici pour changer le thème de couleurs de IanniX</translation>
     </message>
     <message utf8="true">
-        <location filename="../uiview.ui" line="972"/>
+        <location filename="../uiview.ui" line="966"/>
         <source>Import a background image…</source>
         <translation>Importer une image de fond…</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="975"/>
+        <location filename="../uiview.ui" line="969"/>
         <source>Click here to import a background image in your score</source>
         <translation>Cliquer ici pour importer une image de fond</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="990"/>
+        <location filename="../uiview.ui" line="984"/>
         <source>Allow triggers selection</source>
         <translation>Autoriser la sélection des triggers</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="993"/>
+        <location filename="../uiview.ui" line="987"/>
         <source>Click here to allow/forbid the selection of triggers (on hover, on marquee selection, on select all actions)</source>
         <translation>Cliquer ici pour autoriser/interdire la sélection des triggers (sur toutes les actions de sélection)</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1008"/>
+        <location filename="../uiview.ui" line="1002"/>
         <source>Allow curves selection</source>
         <translation>Autoriser la sélection des courbes</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1011"/>
+        <location filename="../uiview.ui" line="1005"/>
         <source>Click here to allow/forbid the selection of curves (on hover, on marquee selection, on select all actions)</source>
         <translation>Cliquer ici pour autoriser/interdire la sélection des courbes (sur toutes les actions de sélection)</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1026"/>
+        <location filename="../uiview.ui" line="1020"/>
         <source>Allow cursors selection</source>
         <translation>Autoriser la sélection des curseurs</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1029"/>
+        <location filename="../uiview.ui" line="1023"/>
         <source>Click here to allow/forbid the selection of cursors (on hover, on marquee selection, on select all actions)</source>
         <translation>Cliquer ici pour autoriser/interdire la sélection des curseurs (sur toutes les actions de sélection)</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1041"/>
+        <location filename="../uiview.ui" line="1035"/>
         <source>Snap to Y-grid</source>
         <translation>Grille magnétique sur Y</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1047"/>
+        <location filename="../uiview.ui" line="1041"/>
         <source>Shift+H</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1059"/>
+        <location filename="../uiview.ui" line="1053"/>
         <source>Snap to grid</source>
         <translation>Grille magnétique</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1067"/>
-        <location filename="../uiview.ui" line="1070"/>
+        <location filename="../uiview.ui" line="1061"/>
+        <location filename="../uiview.ui" line="1064"/>
         <source>Copy as a script</source>
         <translation>Copier comme un script</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1073"/>
+        <location filename="../uiview.ui" line="1067"/>
         <source>Click here to copy selected objects in clipboard as script commands</source>
         <translation>Cliquer ici pour copier le script générant les objets sélectionnés dans le presse-papier</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1076"/>
+        <location filename="../uiview.ui" line="1070"/>
         <source>Ctrl+Shift+C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1081"/>
-        <location filename="../uiview.ui" line="1084"/>
+        <location filename="../uiview.ui" line="1075"/>
+        <location filename="../uiview.ui" line="1078"/>
         <source>Paste as a script</source>
         <translation>Coller comme un script</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1087"/>
+        <location filename="../uiview.ui" line="1081"/>
         <source>Click here to paste scripts commands from clipboard (a script must be loaded before)</source>
         <translation>Cliquer ici pour coller du script provenant du presse-papier</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1090"/>
+        <location filename="../uiview.ui" line="1084"/>
         <source>Ctrl+Shift+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1095"/>
+        <location filename="../uiview.ui" line="1089"/>
         <source>Distribute horizontally</source>
         <translation>Répartir horizontalement</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1098"/>
+        <location filename="../uiview.ui" line="1092"/>
         <source>Click here to distribute objects horizontally from the leftmost object to the rightmost object</source>
         <translation>Cliquer ici pour répartir les objets horizontalement, de l&apos;objet le plus à gauche à l&apos;objet le plus à droite</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1103"/>
+        <location filename="../uiview.ui" line="1097"/>
         <source>Distribute vertically</source>
         <translation>Répartir verticalement</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1106"/>
+        <location filename="../uiview.ui" line="1100"/>
         <source>Click here to distribute objects vertically from the topmost object to the bottommost object</source>
         <translation>Cliquer ici pour répartir les objets verticalement, de l&apos;objet le plus haut à l&apos;objet le plus bas</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1111"/>
+        <location filename="../uiview.ui" line="1105"/>
         <source>Align left</source>
         <translation>Aligner à gauche</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1114"/>
+        <location filename="../uiview.ui" line="1108"/>
         <source>Click here to align objects on the leftmost object</source>
         <translation>Cliquer ici pour aligner les objets sur l&apos;objet le plus à gauche</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1119"/>
+        <location filename="../uiview.ui" line="1113"/>
         <source>Align center</source>
         <translation>Aligner au centre</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1122"/>
+        <location filename="../uiview.ui" line="1116"/>
         <source>Click here to align objects on the horizontal center of the selection</source>
         <translation>Cliquer ici pour aligner les objets sur le centre de la sélection</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1127"/>
+        <location filename="../uiview.ui" line="1121"/>
         <source>Align right</source>
         <translation>Aligner à droite</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1130"/>
+        <location filename="../uiview.ui" line="1124"/>
         <source>Click here to align objects on the rightmost object</source>
         <translation>Cliquer ici pour aligner les objets sur l&apos;objet le plus à droite</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1135"/>
+        <location filename="../uiview.ui" line="1129"/>
         <source>Align top</source>
         <translation>Aligner en haut</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1138"/>
+        <location filename="../uiview.ui" line="1132"/>
         <source>Click here to align objects on the topmost object</source>
         <translation>Cliquer ici pour aligner les objets sur l&apos;objet le plus haut</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1143"/>
+        <location filename="../uiview.ui" line="1137"/>
         <source>Align middle</source>
         <translation>Aligner au milieu</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1146"/>
+        <location filename="../uiview.ui" line="1140"/>
         <source>Click here to align objects on the vertical center of the selection</source>
         <translation>Cliquer ici pour aligner les objets sur le milieu de la sélection</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1151"/>
+        <location filename="../uiview.ui" line="1145"/>
         <source>Align bottom</source>
         <translation>Aligner en bas</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1154"/>
+        <location filename="../uiview.ui" line="1148"/>
         <source>Click here to align objects on the bottommost object</source>
         <translation>Cliquer ici pour aligner les objets sur l&apos;objet le plus bas</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1159"/>
+        <location filename="../uiview.ui" line="1153"/>
         <source>Distribute circulary</source>
         <translation>Répartir circulairement</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1162"/>
+        <location filename="../uiview.ui" line="1156"/>
         <source>Click here to align objects as a circle</source>
         <translation>Cliquer ici pour aligner les objets en forme de cercle</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1167"/>
+        <location filename="../uiview.ui" line="1161"/>
         <source>Distribute on ellipse</source>
         <translation>Répartir en ellipse</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1170"/>
+        <location filename="../uiview.ui" line="1164"/>
         <source>Click here to align objects as an ellipse</source>
         <translation>Cliquer ici pour aligner les objets en forme d&apos;ellipse</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1175"/>
+        <location filename="../uiview.ui" line="1169"/>
         <source>Make a high resolution snapshot</source>
         <translation>Faire une capture haute-résolution</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1178"/>
+        <location filename="../uiview.ui" line="1172"/>
         <source>Click here to save the current view in a high resolution PNG file (file will be placed on your desktop)</source>
         <translation>Cliquer ici pour exporter la vue courant dans un PNG haute-résolution (le fichier sera placé sur le bureau)</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1181"/>
+        <location filename="../uiview.ui" line="1175"/>
         <source>Ctrl+P</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1186"/>
+        <location filename="../uiview.ui" line="1180"/>
         <location filename="../uiview.cpp" line="379"/>
         <source>Resize viewport</source>
         <translation>Redimensionner la partition</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1189"/>
+        <location filename="../uiview.ui" line="1183"/>
         <source>Click here to resize the viewport (the rendering area). Note that it is recommended to hide Transport bar and Inspector bar to get the exact desired size.</source>
         <translation>Cliquer ici pour redimensionner la partition (zone de rendu). Il est recommendé de cacher l&apos;inspecteur ainsi que la barre de transport pour obtenir la taille exacte.</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1204"/>
-        <location filename="../uiview.ui" line="1207"/>
+        <location filename="../uiview.ui" line="1198"/>
+        <location filename="../uiview.ui" line="1201"/>
         <source>Timer window</source>
         <translation>Fenêtre de timer</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1210"/>
+        <location filename="../uiview.ui" line="1204"/>
         <source>Click here to show the timer window, displaying elapsed time</source>
         <translation>Cliquer ici pour afficher la fenêtre du timer, affichant le temps-écoulé du playback</translation>
     </message>
     <message>
-        <location filename="../uiview.ui" line="1213"/>
+        <location filename="../uiview.ui" line="1207"/>
         <source>Ctrl+T</source>
         <translation></translation>
     </message>

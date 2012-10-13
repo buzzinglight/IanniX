@@ -142,12 +142,6 @@ QStatusBar {
      <addaction name="action100Milliseconds"/>
      <addaction name="action10Milliseconds"/>
      <addaction name="actionCustomValue"/>
-     <addaction name="separator"/>
-     <addaction name="actionOpaque"/>
-     <addaction name="action75_opaque"/>
-     <addaction name="action50_opaque"/>
-     <addaction name="action25_opaque"/>
-     <addaction name="action10_opaque"/>
     </widget>
     <addaction name="actionFullscreen"/>
     <addaction name="separator"/>

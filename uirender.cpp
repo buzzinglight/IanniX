@@ -110,10 +110,10 @@ void UiRender::setColorTheme(bool _colorTheme) {
     colorTheme = _colorTheme;
 
     if(!colorTheme) {
-        renderOptions->colors["empty"]              = QColor( 20,  20,  20, 255);
+        renderOptions->colors["empty"]              = QColor(  0,   0,   0, 255);
         renderOptions->colors["background"]         = QColor(255, 255, 255, 255);
-        renderOptions->colors["grid"]               = QColor(255, 255, 255,  23);
-        renderOptions->colors["axis"]               = QColor(255, 255, 255,  18);
+        renderOptions->colors["grid"]               = QColor(255, 255, 255,  43);
+        renderOptions->colors["axis"]               = QColor(255, 255, 255,  28);
         renderOptions->colors["gridSnap"]           = QColor( 90,  25,  15, 255);
         renderOptions->colors["axisSnap"]           = QColor( 90,  25,  15, 255);
         renderOptions->colors["selection"]          = QColor(255, 255, 255,  40);
@@ -794,8 +794,8 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                 }
                 NxPoint dragTranslation = mousePos - mousePressedAreaPos;
                 if(selectedHover) {
-                    if(mouseSnapX)  dragTranslation.setX(qRound(selectedHover->getPosDrag().x() + dragTranslation.x()) - selectedHover->getPosDrag().x());
-                    if(mouseSnapY)  dragTranslation.setY(qRound(selectedHover->getPosDrag().y() + dragTranslation.y()) - selectedHover->getPosDrag().y());
+                    if(mouseSnapX)  dragTranslation.setX(qRound((selectedHover->getPosDrag().x() + dragTranslation.x()) / renderOptions->axisGrid) * renderOptions->axisGrid - selectedHover->getPosDrag().x());
+                    if(mouseSnapY)  dragTranslation.setY(qRound((selectedHover->getPosDrag().y() + dragTranslation.y()) / renderOptions->axisGrid) * renderOptions->axisGrid - selectedHover->getPosDrag().y());
                 }
                 foreach(NxObject* object, selection)
                     object->drag(dragTranslation, mousePos);

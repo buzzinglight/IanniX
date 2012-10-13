@@ -42,6 +42,7 @@
 #define COMMAND_CURSOR_TIME                 QString("settime")
 #define COMMAND_CURSOR_TIME_PERCENT         QString("settimepercent")
 
+#define COMMAND_CURVE_INERTIE               QString("setinertia")
 #define COMMAND_CURVE_POINT_SHIFT           QString("shiftpoints")
 #define COMMAND_CURVE_POINT_TRANSLATE       QString("translatepoints")
 #define COMMAND_CURVE_POINT_TRANSLATE2      QString("translatepoint")

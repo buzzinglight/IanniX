@@ -184,8 +184,10 @@ public:
 
     inline void setBoundsRect(quint16 index, qreal val, bool source) {
         NxRect *boundsRect;
-        if(source)
+        if(source) {
             boundsRect = &boundsSource;
+            boundsSourceIsBoundingRect = false;
+        }
         else
             boundsRect = &boundsTarget;
         if(index == 0)      boundsRect->setTopLeft(NxPoint(val, boundsRect->topLeft().y(), boundsRect->topLeft().z()));
@@ -263,7 +265,6 @@ public:
 
     inline void setBoundsSource(const QString & bounds, quint16 part = 2) {
         setBoundsRectStr(bounds, true, part);
-        boundsSourceIsBoundingRect = false;
     }
     inline void setBoundsTarget(const QString & bounds, quint16 part = 2) {
         setBoundsRectStr(bounds, false, part);
