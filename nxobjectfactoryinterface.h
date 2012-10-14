@@ -24,6 +24,7 @@
 #include <QMainWindow>
 #include <QPixmap>
 #include "uihelp.h"
+#include "uirenderpreview.h"
 #ifdef KINECT_INSTALLED
 #include "extkinectmanager.h"
 #endif
@@ -61,6 +62,8 @@ public slots:
     virtual void readyToStart() = 0;
     virtual void setMidiOutNewDevice(const QString &midi) = 0;
     virtual QMainWindow* getMainWindow() = 0;
+    virtual UiRenderPreview* getRenderPreview() = 0;
+    virtual bool getPerformancePreview() = 0;
     virtual void scriptError(const QStringList &error, qint16 line) const = 0;
     virtual void syncStop() = 0;
     virtual void syncStart() = 0;

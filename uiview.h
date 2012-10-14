@@ -39,13 +39,20 @@ private:
     bool wasInspectorVisible, wasTransportVisible, isFullScreen;
     QPoint previousPos;
     QSize previousSize;
+    QDesktopWidget *fullscreenDisplays;
+    QList<QPushButton*> fullscreenButtons;
 
 public:
     UiRender* getRender() const;
     UiTransport* getTransport() const;
     UiInspector* getInspector() const;
+    UiRenderPreview* getRenderPreview() const;
+    bool getPerformancePreview() const;
 public slots:
+    void fullscreenDisplaysCountChanged();
+    void fullscreenDisplaysSelected();
     void actionFullscreen();
+    void actionFullscreen(quint8 screenIndex);
     void escFullscreen();
     void actionGrid();
     void actionToggle_Inspector() { emit(actionRouteToggle_Inspector()); }
@@ -56,6 +63,7 @@ public slots:
     void actionZoom_in();
     void actionZoom_out();
     void actionZoom_initial();
+    void actionPerformance();
     void actionDrawFreeCurve()    { emit(actionRouteDrawFreeCurve()); }
     void actionDrawPointCurve()   { emit(actionRouteDrawPointCurve()); }
     void actionDrawTriggers()     { emit(actionRouteDrawTriggers()); }

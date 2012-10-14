@@ -1091,7 +1091,7 @@ int main(int argc, char *argv[]) {
     iannixApp.installTranslator(&translator);
 
     QString appName    = "IanniX ";
-    QString appVersion = "0.8.45";
+    QString appVersion = "0.8.43";
     qDebug("%s", qPrintable(QApplication::applicationDirPath()));
 
 #ifdef Q_OS_MAC

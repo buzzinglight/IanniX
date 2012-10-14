@@ -1,4 +1,5 @@
-IanniX 0.8.45
+IanniX 0.8.43
+– new performance mode
 - translation support (french)
 - documentation update
 - messages templates
@@ -7,10 +8,9 @@ IanniX 0.8.45
 - new mapping visualization
 - MIDI learn in message editor
 - new HTTP command : http://127.0.0.1:1236/?sync to have score in realtime
-– Fix cursor bug that doesn't trigger triggers with very angular curves
-– New equation system (real-time equations, low-level rendering)
-– Bug with some messages bug (global_time) combined with collision
-messages
+- Fix cursor bug that doesn't trigger triggers with very angular curves
+- New equation system (real-time equations, low-level rendering)
+- Bug with some messages bug (global_time) combined with collision messages
 
 IanniX 0.8.42
 - fixed bug with object solo/mute

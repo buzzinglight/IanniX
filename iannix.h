@@ -154,6 +154,8 @@ public slots:
     void sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status);
     QImage takeScreenshot();
     QMainWindow* getMainWindow() { return view; }
+    UiRenderPreview* getRenderPreview() { return view->getRenderPreview(); }
+    bool getPerformancePreview() { return view->getPerformancePreview(); }
     void syncStop() {
         if((acceptMidiSyncSong) && (schedulerActivity != SchedulerOff)) {
             setScheduler(SchedulerOff);

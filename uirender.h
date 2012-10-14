@@ -30,6 +30,7 @@
 #include "nxdocument.h"
 #include "nxobjectfactoryinterface.h"
 #include "uirenderoptions.h"
+#include "uirenderpreview.h"
 #ifdef FFMPEG_INSTALLED
 #include "qffmpeg/QVideoEncoder.h"
 #endif
@@ -55,7 +56,7 @@ public:
     NxRect mapping;
 };
 
-class UiRender : public QGLWidget {
+class UiRender : public QGLWidget, public NxEventsPropagation {
     Q_OBJECT
 public:
     explicit UiRender(QWidget *parent = 0);
@@ -176,22 +177,22 @@ private:
     bool mousePressed, mouseCommand, mouseShift, mouseObjectDrag, mouseSnapX, mouseSnapY, mouseSnapZ;
     bool canObjectDrag;
     qreal pinchValue;
-protected:
+public:
     void wheelEvent(QWheelEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
     bool event(QEvent *event);
-    void dragEnterEvent(QDragEnterEvent *);
-    void dropEvent(QDropEvent *);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 public:
     void zoom();
     void zoom(qreal axisZoom);
     void zoomIn();
     void zoomOut();
     void zoomInitial();
-    void keyPressEvent(QKeyEvent *event);
     void selectionAdd(NxObject *object);
     void selectionClear(bool hoverAussi = false);
     inline void setCanObjectDrag(bool _canObjectDrag) {
@@ -280,11 +281,14 @@ private:
     UiRenderSyphon renderSyphon;
 #endif
 public:
+    void setPerformanceMode(bool _performanceMode);
+private:
+    bool renderPreviewTextureInit, performanceMode;
+    GLuint renderPreviewTexture;
+public:
     bool allowSyphon;
 public slots:
     void allowSyphonServer(bool val);
-
-
 };
 
 #endif //RENDER_H

@@ -324,7 +324,8 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     render->setTriggerAutosize(settings.value("autoresize").toBool());
     view->toggleAutosize(settings.value("autoresize").toBool());
     view->setToggleLabel(settings.value("objectLabel").toBool());
-    render->getRenderOptions()->paintAxisGrid = settings.value("grid").toBool();
+    if(!settings.value("grid").toBool())
+        view->actionGrid();
 
     acceptMidiSyncClock = settings.value("acceptMidiSyncClock").toBool();
     inspector->setMidiSyncClock(settings.value("acceptMidiSyncClock").toBool());
@@ -609,7 +610,7 @@ void IanniX::closeSplash() {
 
 void IanniX::show() {
     view->show();
-    view->activateWindow();
+    //view->activateWindow();
 }
 
 QString IanniX::serialize() {
@@ -785,7 +786,7 @@ void IanniX::actionToggle_Inspector() {
         inspector->parentWidget()->show();
         view->toggleInspector(true);
     }
-    view->activateWindow();;
+    //view->activateWindow();;
 }
 void IanniX::actionToggle_Transport() {
     if(transport->isVisible()) {
@@ -796,7 +797,7 @@ void IanniX::actionToggle_Transport() {
         transport->parentWidget()->show();
         view->toggleTransport(true);
     }
-    view->activateWindow();
+    //view->activateWindow();
 }
 void IanniX::actionToggle_Autosize() {
     if(render->getTriggerAutosize()) {
@@ -820,7 +821,7 @@ void IanniX::actionPlay_pause() {
         sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
         midi->sendSPPStart();
     }
-    view->activateWindow();
+    //view->activateWindow();
 }
 void IanniX::actionFast_rewind() {
     if(timeLocal != 0) {
@@ -831,7 +832,7 @@ void IanniX::actionFast_rewind() {
     timeLocal = 0;
     setScheduler(SchedulerOneShot);
     sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "fastrewind");
-    view->activateWindow();
+    //view->activateWindow();
 }
 
 void IanniX::actionLogo() {
@@ -2436,6 +2437,8 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
         about->close();
     if(uitimer)
         uitimer->close();
+    if(render)
+        render->close();
 
     QSettings settings;
     settings.setValue("oscPort", inspector->getOSCPort());

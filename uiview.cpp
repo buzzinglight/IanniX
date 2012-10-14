@@ -23,7 +23,6 @@ UiView::UiView(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::UiView) {
     ui->setupUi(this);
-    ui->render->setFocus();
     isFullScreen = false;
 
     QRect screen = QApplication::desktop()->screenGeometry();
@@ -56,6 +55,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionResize, SIGNAL(triggered()), SLOT(actionResize()));
 
     connect(ui->actionFullscreen, SIGNAL(triggered()), SLOT(actionFullscreen()));
+    connect(ui->actionPerformance, SIGNAL(triggered()), SLOT(actionPerformance()));
     connect(ui->actionToggle_Inspector, SIGNAL(triggered()), SLOT(actionToggle_Inspector()));
     connect(ui->actionToggle_Transport, SIGNAL(triggered()), SLOT(actionToggle_Transport()));
     connect(ui->actionToggle_Autosize, SIGNAL(triggered()), SLOT(actionToggle_Autosize()));
@@ -115,6 +115,19 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionAlign_ellipse, SIGNAL(triggered()), SLOT(actionAlign_ellipse()));
 
     connect(ui->actionHelp, SIGNAL(triggered()), SLOT(help()));
+
+#ifdef Q_OS_MAC
+    delete ui->renderPreview;
+    ui->renderPreview = new UiRenderPreview(ui->pagePerf, ui->render);
+    ui->pagePerf->layout()->addWidget(ui->renderPreview);
+
+    fullscreenDisplays = QApplication::desktop();
+    connect(fullscreenDisplays, SIGNAL(screenCountChanged(int)), SLOT(fullscreenDisplaysCountChanged()));
+    fullscreenDisplaysCountChanged();
+#else
+    delete ui->actionPerformance;
+#endif
+    ui->render->setFocus();
 }
 
 UiView::~UiView() {
@@ -158,6 +171,12 @@ UiTransport* UiView::getTransport() const {
 UiInspector* UiView::getInspector() const {
     return ui->inspector;
 }
+UiRenderPreview* UiView::getRenderPreview() const {
+    return ui->renderPreview;
+}
+bool UiView::getPerformancePreview() const {
+    return ui->performancePreview->isChecked();
+}
 
 void UiView::keyPressEvent(QKeyEvent *event) {
     ui->render->keyPressEvent(event);
@@ -174,41 +193,80 @@ void UiView::tabletEvent(QTabletEvent *event) {
 }
 */
 
+void UiView::fullscreenDisplaysCountChanged() {
+    foreach(QPushButton *fullscreenButton, fullscreenButtons)
+        delete fullscreenButton;
+    fullscreenButtons.clear();
+
+    for(quint8 fullscreenDisplayIndex = 0 ; fullscreenDisplayIndex < fullscreenDisplays->screenCount() ; fullscreenDisplayIndex++) {
+        QPushButton *fullscreenButton = new QPushButton(tr("FULLSCREEN ON DISPLAY %1 (%2 x %3)").arg(fullscreenDisplayIndex+1).arg(fullscreenDisplays->screenGeometry(fullscreenDisplayIndex).width()).arg(fullscreenDisplays->screenGeometry(fullscreenDisplayIndex).height()), ui->pagePerf);
+        ui->performanceLayout->addWidget(fullscreenButton);
+        connect(fullscreenButton, SIGNAL(released()), SLOT(fullscreenDisplaysSelected()));
+        fullscreenButtons.append(fullscreenButton);
+    }
+}
+void UiView::fullscreenDisplaysSelected() {
+    qint8 index = fullscreenButtons.indexOf((QPushButton*)sender());
+    if(index >= 0)
+        actionFullscreen(index);
+}
+
 void UiView::actionFullscreen() {
-    if(isFullScreen) {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);
-        //setWindowFlags(windowFlags() & ~Qt::WindowStaysOnTopHint);
-        //resize(previousSize);
-        //move(previousPos);
-        ui->render->setCursor(Qt::ArrowCursor);
-        ui->toolBar->setVisible(true);
-        ui->inspector->parentWidget()->setVisible(wasInspectorVisible);
-        ui->transport->parentWidget()->setVisible(wasTransportVisible);
-        ui->statusBar->setVisible(true);
-        ui->menubar->setVisible(true);
-        isFullScreen = false;
-        toggleFullscreen(isFullScreen);
+    if(ui->render->parent())
+        actionFullscreen(fullscreenDisplays->screenNumber(pos()));
+    else
+        actionFullscreen(fullscreenDisplays->screenNumber(ui->render->pos()));
+}
+void UiView::actionFullscreen(quint8 screenIndex) {
+    if(ui->render->parent()) {
+        if(isFullScreen) {
+            setWindowState(windowState() & ~Qt::WindowFullScreen);
+            ui->render->setCursor(Qt::ArrowCursor);
+            ui->toolBar->setVisible(true);
+            ui->inspector->parentWidget()->setVisible(wasInspectorVisible);
+            ui->transport->parentWidget()->setVisible(wasTransportVisible);
+            ui->statusBar->setVisible(true);
+            ui->menubar->setVisible(true);
+            isFullScreen = false;
+            toggleFullscreen(isFullScreen);
+        }
+        else {
+            setWindowState(windowState() | Qt::WindowFullScreen);
+            ui->render->setCursor(Qt::BlankCursor);
+            ui->toolBar->setVisible(false);
+            wasInspectorVisible = ui->inspecteurDock->isVisible();
+            wasTransportVisible = ui->transportDock->isVisible();
+            ui->statusBar->setVisible(false);
+            ui->menubar->setVisible(false);
+            ui->inspector->parentWidget()->hide();
+            ui->transport->parentWidget()->hide();
+            isFullScreen = true;
+            toggleFullscreen(isFullScreen);
+        }
+        //activateWindow();
     }
     else {
-        previousPos = pos();
-        previousSize = size();
-        setWindowState(windowState() | Qt::WindowFullScreen);
-        //setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-        //setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-        //move(QApplication::desktop()->screenGeometry(pos()).topLeft());
-        //resize(QApplication::desktop()->screenGeometry(pos()).size());
-        ui->render->setCursor(Qt::BlankCursor);
-        ui->toolBar->setVisible(false);
-        wasInspectorVisible = ui->inspecteurDock->isVisible();
-        wasTransportVisible = ui->transportDock->isVisible();
-        ui->statusBar->setVisible(false);
-        ui->menubar->setVisible(false);
-        ui->inspector->parentWidget()->hide();
-        ui->transport->parentWidget()->hide();
-        isFullScreen = true;
-        toggleFullscreen(isFullScreen);
+        ui->render->hide();
+        if(isFullScreen) {
+            ui->render->setWindowState(windowState() & ~Qt::WindowFullScreen);
+            ui->render->move(previousPos);
+            ui->render->setCursor(Qt::ArrowCursor);
+            isFullScreen = false;
+            toggleFullscreen(isFullScreen);
+        }
+        else {
+            previousPos  = ui->render->pos();
+            //previousSize = ui->render->size();
+
+            ui->render->move(fullscreenDisplays->screenGeometry(screenIndex).topLeft());
+            ui->render->setWindowState(windowState() | Qt::WindowFullScreen);
+            ui->render->setCursor(Qt::BlankCursor);
+            isFullScreen = true;
+            toggleFullscreen(isFullScreen);
+        }
+        ui->render->show();
+        //ui->render->activateWindow();
     }
-    activateWindow();
     ui->render->selectionClear(true);
 }
 void UiView::escFullscreen() {
@@ -220,10 +278,24 @@ void UiView::actionGrid() {
     if(ui->render->getRenderOptions()->paintAxisGrid) {
         ui->render->getRenderOptions()->paintAxisGrid = false;
         ui->render->getRenderOptions()->paintAxisMain = false;
+        ui->actionGrid->setChecked(false);
     }
     else {
         ui->render->getRenderOptions()->paintAxisGrid = true;
         ui->render->getRenderOptions()->paintAxisMain = true;
+        ui->actionGrid->setChecked(true);
+    }
+}
+
+void UiView::actionPerformance() {
+    if(ui->actionPerformance->isChecked()) {
+        ui->render->setPerformanceMode(true);
+        ui->stackedWidget->setCurrentIndex(1);
+    }
+    else {
+        ui->render->setPerformanceMode(false);
+        ui->stackedWidget->widget(0)->layout()->addWidget(ui->render);
+        ui->stackedWidget->setCurrentIndex(0);
     }
 }
 

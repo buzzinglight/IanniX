@@ -26,6 +26,8 @@ UiRender::UiRender(QWidget *parent) :
     texturesLoaded = true;
     capturedFramesStart = false;
 
+    setFocusPolicy(Qt::StrongFocus);
+
     //Initialize view
     ui->setupUi(this);
     setCursor(Qt::OpenHandCursor);
@@ -40,6 +42,8 @@ UiRender::UiRender(QWidget *parent) :
     renderSyphonInit = false;
     allowSyphon = false;
 #endif
+    renderPreviewTextureInit = false;
+    performanceMode = false;
 
     //Initialisations
     factory = 0;
@@ -252,6 +256,23 @@ void UiRender::rotateTo(const NxPoint & rotation, bool force) {
     zoom();
 }
 
+void UiRender::setPerformanceMode(bool _performanceMode) {
+    performanceMode = _performanceMode;
+    if(performanceMode) {
+        setParent(0);
+        setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
+        move(pos());
+        resize(size());
+        show();
+        //activateWindow();
+        //raise();
+    }
+    else {
+        //activateWindow();
+        //raise();
+    }
+}
+
 //Initialize event
 void UiRender::initializeGL() {
     //OpenGL options
@@ -450,6 +471,20 @@ void UiRender::paintGL() {
     }
 #endif
 
+    if((performanceMode) && (factory->getPerformancePreview())) {
+        glEnable(GL_TEXTURE_2D);
+        if(!renderPreviewTextureInit) {
+            glGenTextures(1, &renderPreviewTexture);
+            renderPreviewTextureInit = true;
+        }
+        glBindTexture(GL_TEXTURE_2D, renderPreviewTexture);
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glDisable(GL_TEXTURE_2D);
+        factory->getRenderPreview()->paintPreview(this, renderPreviewTexture, renderSize);
+    }
+
     if(capturedFramesStart)
         capturedFrames << grabFrameBuffer();
 }
@@ -596,8 +631,6 @@ void UiRender::wheelEvent(QWheelEvent *event) {
         zoom(renderOptions->zoomValue - (qreal)event->delta() / 15.0F);
 }
 void UiRender::mousePressEvent(QMouseEvent *event) {
-    setFocus();
-
     //Save state when pressed
     mousePressedRawPos = NxPoint(event->posF().x(), event->posF().y());
     //Mouse position
@@ -894,9 +927,6 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
-    if(cursor().shape() == Qt::BlankCursor)
-        return;
-
     bool mouse3D      = event->modifiers() & Qt::AltModifier;
     bool mouseControl = event->modifiers() & Qt::ControlModifier;
     bool mouseShift   = event->modifiers() & Qt::ShiftModifier;
@@ -907,25 +937,30 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
         translationDest = NxPoint();
         //refresh();
     }
-    else if((editing) && (renderOptions->allowSelection)) {
-        emit(editingStop());
-        editing = false;
-    }
-    else if((selectedHover) && (event->modifiers() & Qt::ShiftModifier) && (selectedHover->getType() == ObjectsTypeCurve)) {
-        bool ok = false;
-        NxCurve *curve = (NxCurve*)selectedHover;
-        quint16 nbPoints = (new UiMessageBox())->getDouble(tr("IanniX Curve Resample"), tr("Number of points:"), QPixmap(":/infos/res_info_curve.png"), 50, 0, 32767, 1, 0, "", &ok);
-        if(ok) {
-            factory->pushSnapshot();
-            curve->resample(nbPoints);
+    else {
+        if(cursor().shape() == Qt::BlankCursor)
+            return;
+
+        else if((editing) && (renderOptions->allowSelection)) {
+            emit(editingStop());
+            editing = false;
         }
+        else if((selectedHover) && (event->modifiers() & Qt::ShiftModifier) && (selectedHover->getType() == ObjectsTypeCurve)) {
+            bool ok = false;
+            NxCurve *curve = (NxCurve*)selectedHover;
+            quint16 nbPoints = (new UiMessageBox())->getDouble(tr("IanniX Curve Resample"), tr("Number of points:"), QPixmap(":/infos/res_info_curve.png"), 50, 0, 32767, 1, 0, "", &ok);
+            if(ok) {
+                factory->pushSnapshot();
+                curve->resample(nbPoints);
+            }
+        }
+        else if((selectedHover) && (renderOptions->allowSelection) && (selectedHover->getType() == ObjectsTypeCurve)) {
+            NxCurve *curve = (NxCurve*)selectedHover;
+            curve->addMousePointAt(mousePressedAreaPos, mouseControl);
+        }
+        else
+            factory->askNxObject(selectedHover, mouseShift);
     }
-    else if((selectedHover) && (renderOptions->allowSelection) && (selectedHover->getType() == ObjectsTypeCurve)) {
-        NxCurve *curve = (NxCurve*)selectedHover;
-        curve->addMousePointAt(mousePressedAreaPos, mouseControl);
-    }
-    else
-        factory->askNxObject(selectedHover, mouseShift);
 }
 
 void UiRender::keyPressEvent(QKeyEvent *event) {

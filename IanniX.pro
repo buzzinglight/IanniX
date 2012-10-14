@@ -96,7 +96,8 @@ SOURCES                 += iannix.cpp \
                            qmuparser/muParserBytecode.cpp \
                            qmuparser/muParserCallback.cpp \
                            qmuparser/muParserError.cpp \
-                           qmuparser/muParserTokenReader.cpp
+                           qmuparser/muParserTokenReader.cpp \
+    uirenderpreview.cpp
 
 HEADERS                 += iannix.h \
                            uitransport.h \
@@ -154,7 +155,8 @@ HEADERS                 += iannix.h \
                            qmuparser/muParserFixes.h \
                            qmuparser/muParserStack.h \
                            qmuparser/muParserToken.h \
-                           qmuparser/muParserTokenReader.h
+                           qmuparser/muParserTokenReader.h \
+    uirenderpreview.h
 
 FORMS                   += uitransport.ui \
                            uirender.ui \

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1250</width>
-    <height>750</height>
+    <width>906</width>
+    <height>715</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,6 +58,46 @@ QStatusBar {
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QLabel, QPushButton, QCheckBox {
+	color: white;
+	font: 10px;
+	font: &quot;Arial&quot;;
+}
+QPushButton {
+	font: 8px;
+	border: 1px solid rgb(60, 60, 60);
+	border-radius: 4px;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 255), stop:1 rgba(61, 61, 61, 255));
+	min-width: 70px;
+	min-height: 20px;
+	max-height: 20px;
+}
+QPushButton {
+	margin-left: 5px;
+	color: white;
+}
+QPushButton:hover {
+	border: 1px solid rgb(0, 187, 255);
+	background-color: rgb(0, 137, 241, 128);
+}
+QPushButton::checked, QPushButton:pressed {
+	background-color: rgb(0, 187, 255);
+	color: white;
+}
+QCheckBox {
+	spacing: 5px;
+}
+QCheckBox::indicator {
+	width: 11px;
+	height: 11px;
+	border: 1px solid rgb(60, 60, 60);
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
+}
+QCheckBox::indicator:checked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+}</string>
+   </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="spacing">
      <number>0</number>
@@ -66,7 +106,92 @@ QStatusBar {
      <number>0</number>
     </property>
     <item>
-     <widget class="UiRender" name="render" native="true"/>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="pageRender">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="UiRender" name="render" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pagePerf">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,300">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="performanceLayout">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="performanceModeLabel">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font: 75 11pt &quot;Arial&quot;;</string>
+            </property>
+            <property name="text">
+             <string>PERFORMANCE MODE</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="performancePreview">
+            <property name="text">
+             <string>PREVIEW</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="UiRenderPreview" name="renderPreview" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -75,7 +200,7 @@ QStatusBar {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1250</width>
+     <width>906</width>
      <height>22</height>
     </rect>
    </property>
@@ -144,6 +269,7 @@ QStatusBar {
      <addaction name="actionCustomValue"/>
     </widget>
     <addaction name="actionFullscreen"/>
+    <addaction name="actionPerformance"/>
     <addaction name="separator"/>
     <addaction name="actionToggle_Inspector"/>
     <addaction name="actionToggle_Transport"/>
@@ -277,9 +403,11 @@ QStatusBar {
    <addaction name="separator"/>
    <addaction name="actionToggle_Inspector"/>
    <addaction name="actionToggle_Transport"/>
-   <addaction name="actionFullscreen"/>
    <addaction name="actionShowEditor"/>
    <addaction name="actionShowTimer"/>
+   <addaction name="separator"/>
+   <addaction name="actionFullscreen"/>
+   <addaction name="actionPerformance"/>
    <addaction name="separator"/>
    <addaction name="actionLight"/>
    <addaction name="separator"/>
@@ -297,6 +425,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+Z</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionRedo">
    <property name="text">
@@ -307,6 +438,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionCopy">
@@ -319,6 +453,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+C</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionPaste">
    <property name="text">
@@ -329,6 +466,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionCut">
@@ -341,6 +481,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+X</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionSelect_all">
    <property name="text">
@@ -352,6 +495,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+A</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionDelete">
    <property name="text">
@@ -362,6 +508,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Backspace</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionNew">
@@ -377,6 +526,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionOpen">
    <property name="text">
@@ -387,6 +539,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionSave">
@@ -399,6 +554,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionQuit">
    <property name="text">
@@ -409,6 +567,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionFullscreen">
@@ -431,6 +592,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+F</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionToggle_Inspector">
    <property name="checkable">
@@ -451,6 +615,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+I</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionToggle_Transport">
@@ -473,6 +640,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+Alt+T</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionPlay_pause">
    <property name="text">
@@ -484,6 +654,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Space</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionFast_rewind">
    <property name="text">
@@ -494,6 +667,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>F</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionGrid">
@@ -516,6 +692,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+G</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionDuplicate">
    <property name="text">
@@ -526,6 +705,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionToggle_Autosize">
@@ -544,6 +726,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+Shift+A</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionZoom_in">
    <property name="text">
@@ -554,6 +739,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+=</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionZoom_out">
@@ -566,6 +754,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+-</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionZoom_initial">
    <property name="text">
@@ -576,6 +767,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+0</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionDrawFreeCurve">
@@ -595,6 +789,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+Shift+F</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionDrawPointCurve">
    <property name="checkable">
@@ -612,6 +809,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionDrawTriggers">
@@ -631,6 +831,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+Shift+T</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionAddFreeCursor">
    <property name="icon">
@@ -643,6 +846,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to add cursors on the selected curve. If no curve is selected, cursor will be free (controlled by an external source)</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="action10Seconds">
    <property name="checkable">
@@ -650,6 +856,9 @@ QStatusBar {
    </property>
    <property name="text">
     <string>10 seconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="action1second">
@@ -662,6 +871,9 @@ QStatusBar {
    <property name="text">
     <string>1 second</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="action500Milliseconds">
    <property name="checkable">
@@ -669,6 +881,9 @@ QStatusBar {
    </property>
    <property name="text">
     <string>500 milliseconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="action100Milliseconds">
@@ -678,6 +893,9 @@ QStatusBar {
    <property name="text">
     <string>100 milliseconds</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="action10Milliseconds">
    <property name="checkable">
@@ -686,6 +904,9 @@ QStatusBar {
    <property name="text">
     <string>10 milliseconds</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionCustomValue">
    <property name="checkable">
@@ -693,6 +914,9 @@ QStatusBar {
    </property>
    <property name="text">
     <string>Custom value</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionOpaque">
@@ -755,6 +979,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+Shift+R</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionHelp">
    <property name="icon">
@@ -766,6 +993,9 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to display IanniX help in your browser</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionSnapXGrid">
@@ -785,6 +1015,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Shift+G</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionSave_all">
    <property name="text">
@@ -802,6 +1035,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+Alt+Shift+S</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionRename">
    <property name="text">
@@ -813,6 +1049,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+Alt+Shift+R</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionRemove">
    <property name="text">
@@ -821,6 +1060,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to remove this score from your project folder</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionDuplicateScore">
    <property name="text">
@@ -828,6 +1070,9 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to duplicate your score in your project folder</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionLockPos">
@@ -843,6 +1088,9 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to lock/unlock the position of objects (to avoid moving objects while navigating in the score)</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionToggleLabel">
@@ -862,6 +1110,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to show/hide labels on objects</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionPatchesFolder">
    <property name="text">
@@ -870,6 +1121,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to open the patches folder (external objects for hosts software) provided with IanniX</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionAbout">
    <property name="text">
@@ -877,6 +1131,9 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to display information about IanniX</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>
@@ -889,6 +1146,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to send your score through the default sync output</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionImoprt_SVG">
    <property name="text">
@@ -896,6 +1156,9 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to import a SVG file as a curve in your score</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionImoprt_Image">
@@ -905,6 +1168,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to import image to be vectorized in your score</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionImoprt_Text">
    <property name="text">
@@ -912,6 +1178,9 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to import a glyph as a curve in your score</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionShowEditor">
@@ -934,6 +1203,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+E</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionReloadScript">
    <property name="text">
@@ -944,6 +1216,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionLight">
@@ -960,6 +1235,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to change the color theme of IanniX</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionImoprt_Background">
    <property name="text">
@@ -967,6 +1245,9 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to import a background image in your score</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionAllow_triggers_selection">
@@ -986,6 +1267,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to allow/forbid the selection of triggers (on hover, on marquee selection, on select all actions)</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionAllow_curves_selection">
    <property name="checkable">
@@ -1003,6 +1287,9 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to allow/forbid the selection of curves (on hover, on marquee selection, on select all actions)</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionAllow_cursors_selection">
@@ -1022,6 +1309,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to allow/forbid the selection of cursors (on hover, on marquee selection, on select all actions)</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionSnapYGrid">
    <property name="checkable">
@@ -1040,6 +1330,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Shift+H</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionSnapZGrid">
    <property name="checkable">
@@ -1055,6 +1348,9 @@ QStatusBar {
    <property name="statusTip">
     <string>Click here to snap actions (objects position, curve points…) to grid</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionCopyScript">
    <property name="text">
@@ -1068,6 +1364,9 @@ QStatusBar {
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionPasteScript">
@@ -1083,6 +1382,9 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+Shift+V</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionDistributeH">
    <property name="text">
@@ -1090,6 +1392,9 @@ QStatusBar {
    </property>
    <property name="toolTip">
     <string>Click here to distribute objects horizontally from the leftmost object to the rightmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionDistributeV">
@@ -1099,6 +1404,9 @@ QStatusBar {
    <property name="toolTip">
     <string>Click here to distribute objects vertically from the topmost object to the bottommost object</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionAlign_left">
    <property name="text">
@@ -1106,6 +1414,9 @@ QStatusBar {
    </property>
    <property name="toolTip">
     <string>Click here to align objects on the leftmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionAlign_center">
@@ -1115,6 +1426,9 @@ QStatusBar {
    <property name="toolTip">
     <string>Click here to align objects on the horizontal center of the selection</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionAlign_right">
    <property name="text">
@@ -1122,6 +1436,9 @@ QStatusBar {
    </property>
    <property name="toolTip">
     <string>Click here to align objects on the rightmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionAlign_top">
@@ -1131,6 +1448,9 @@ QStatusBar {
    <property name="toolTip">
     <string>Click here to align objects on the topmost object</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionAlign_middle">
    <property name="text">
@@ -1138,6 +1458,9 @@ QStatusBar {
    </property>
    <property name="toolTip">
     <string>Click here to align objects on the vertical center of the selection</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionAlign_bottom">
@@ -1147,6 +1470,9 @@ QStatusBar {
    <property name="toolTip">
     <string>Click here to align objects on the bottommost object</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionAlign_circle">
    <property name="text">
@@ -1155,6 +1481,9 @@ QStatusBar {
    <property name="toolTip">
     <string>Click here to align objects as a circle</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionAlign_ellipse">
    <property name="text">
@@ -1162,6 +1491,9 @@ QStatusBar {
    </property>
    <property name="toolTip">
     <string>Click here to align objects as an ellipse</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionSnapshot">
@@ -1172,7 +1504,10 @@ QStatusBar {
     <string>Click here to save the current view in a high resolution PNG file (file will be placed on your desktop)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string>Ctrl+Shift+P</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionResize">
@@ -1181,6 +1516,9 @@ QStatusBar {
    </property>
    <property name="statusTip">
     <string>Click here to resize the viewport (the rendering area). Note that it is recommended to hide Transport bar and Inspector bar to get the exact desired size.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionShowTimer">
@@ -1206,6 +1544,30 @@ QStatusBar {
    <property name="shortcut">
     <string>Ctrl+T</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPerformance">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_performance.png</normaloff>:/actions/res_icon_performance.png</iconset>
+   </property>
+   <property name="text">
+    <string>Performance mode</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to switch to performance mode</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
  </widget>
  <customwidgets>
@@ -1227,9 +1589,18 @@ QStatusBar {
    <header>uiinspector.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>UiRenderPreview</class>
+   <extends>QWidget</extends>
+   <header>uirenderpreview.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources>
   <include location="IanniX.qrc"/>
  </resources>
  <connections/>
+ <slots>
+  <slot>fullscreenDisplaysSelected()</slot>
+ </slots>
 </ui>
