@@ -60,6 +60,7 @@ private:
     NxCurve *curve;
 private:
     qreal factors, timeLocal, timeLocalOld, timeLocalAbsolute, time, timeOld, nextTimeOld;
+    qreal timeLocalLastSend, timeLastSend;
     qreal timeStartOffset, timeEndOffset, timeInitialOffset;
     NxEasing easing;
     qreal timeFactor, timeFactorF;
@@ -67,11 +68,13 @@ private:
     qreal width, depth;
     NxRect boundsSource, boundsTarget;
     bool boundsSourceIsBoundingRect;
-    NxLine previousCursor;
     bool previousCursorReliable, previousPreviousCursorReliable;
-    QRect boundingRectSearch;
     QVector<qreal> start;
-    NxLine cursor, cursorOld;
+    //NxLine cursor, cursorOld;
+    NxPolygon cursorPoly, cursorPolyOld;
+    NxPoint cursorPosOld, cursorAngleOld;
+    NxPoint cursorPos, cursorRelativePos, cursorAngle;
+    NxPoint cursorPosLastSend, cursorRelativePosLastSend, cursorAngleLastSend;
     GLuint glListCursor;
 public:
     inline quint8 getType() const {
@@ -110,6 +113,9 @@ public:
     inline qreal getTimeLocal() const {
         return timeLocal;
     }
+    inline qreal getTimeLocalLastSend() const {
+        return timeLocalLastSend;
+    }
     inline void setTimeLocalPercent(qreal _timeLocalPercent) {
         if((curve) && (0 <= _timeLocalPercent) && (_timeLocalPercent <= 1)) {
             timeLocal = _timeLocalPercent * curve->getPathLength();
@@ -121,6 +127,9 @@ public:
     }
     inline qreal getTimeLocalPercent() const {
         return time;
+    }
+    inline qreal getTimeLocalPercentLastSend() const {
+        return timeLastSend;
     }
 
     inline void setStart(const QString & startStr) {
@@ -178,9 +187,11 @@ public:
         if(_boundsSource.width() == 0)  _boundsSource.setWidth(0.0001);
         if(_boundsSource.height() == 0) _boundsSource.setHeight(0.0001);
         if(_boundsSource.length() == 0) _boundsSource.setLength(0.0001);
-        return NxPoint( ((_pos.x() - _boundsSource.left())   / _boundsSource.width())  * boundsTarget.width() + boundsTarget.left() ,
-                        ((_pos.y() - _boundsSource.bottom()) / _boundsSource.height()) * boundsTarget.height() + boundsTarget.bottom() );
+        return NxPoint( ((_pos.x() - _boundsSource.left())   / _boundsSource.width())  * boundsTarget.width()  + boundsTarget.left() ,
+                        ((_pos.y() - _boundsSource.bottom()) / _boundsSource.height()) * boundsTarget.height() + boundsTarget.bottom(),
+                        ((_pos.z() - _boundsSource.zTop())   / _boundsSource.length()) * boundsTarget.length() + boundsTarget.zTop() );
     }
+
 
     inline void setBoundsRect(quint16 index, qreal val, bool source) {
         NxRect *boundsRect;
@@ -255,11 +266,11 @@ public:
     }
     inline const QString getBoundsRectStr(bool source, quint16 part = 2) const {
         if(part == 0)
-            return QString("%1 %2").arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3);
+            return QString("%1 %2 %3").arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3).arg(getBoundsRect(2, source), 0, 'f', 3);
         else if(part == 1)
-            return QString("%1 %2").arg(getBoundsRect(3, source), 0, 'f', 3).arg(getBoundsRect(4, source), 0, 'f', 3);
+            return QString("%1 %2 %3").arg(getBoundsRect(3, source), 0, 'f', 3).arg(getBoundsRect(4, source), 0, 'f', 3).arg(getBoundsRect(5, source), 0, 'f', 3);
         else
-            return QString("%1 %2 %3 %4").arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3).arg(getBoundsRect(3, source), 0, 'f', 3).arg(getBoundsRect(4, source), 0, 'f', 3);
+            return QString("%1 %2 %3 %4 %5 %6").arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3).arg(getBoundsRect(2, source), 0, 'f', 3).arg(getBoundsRect(3, source), 0, 'f', 3).arg(getBoundsRect(4, source), 0, 'f', 3).arg(getBoundsRect(5, source), 0, 'f', 3);
     }
 
 
@@ -331,22 +342,23 @@ public:
     inline void calcBoundingRect() {
         //Bounding rect + margin
         boundingRect = cursorPoly.boundingRect();
-        boundingRectSearch.setTopLeft(QPoint(floor(boundingRect.topLeft().x() / 10.0F) * 10 - 1, floor(boundingRect.topRight().y() / 10.0F) * 10 - 1));
-        boundingRectSearch.setBottomRight(QPoint(ceil(boundingRect.bottomRight().x() / 10.0F) * 10 + 1, ceil(boundingRect.bottomRight().y() / 10.0F) * 10 + 1));
         boundingRect = boundingRect.normalized();
-        boundingRectSearch = boundingRectSearch.normalized();
-
         if((boundsSourceIsBoundingRect) && (curve))
             boundsSource = NxRect(curve->getBoundingRect().normalized().bottomLeft(), curve->getBoundingRect().normalized().topRight());
     }
     inline bool isMouseHover(const NxPoint & mouse) {
         NxRect mouseAdjusted = NxRect(mouse - NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2), mouse + NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2));
+        if(mouseAdjusted.contains(cursorPos))
+            return true;
+        else
+            return false;
+        /*
         if((cursor.intersect(NxLine(mouseAdjusted.topLeft(), mouseAdjusted.bottomRight()), 0) == NxLine::BoundedIntersection) || (cursor.intersect(NxLine(mouseAdjusted.bottomLeft(), mouseAdjusted.topRight()), 0) == NxLine::BoundedIntersection))
             return true;
         else
             return false;
+        */
     }
-    inline QRect getBoundingRectSearch() const  { return boundingRectSearch; }
 
 
 public:
@@ -405,11 +417,6 @@ public:
     }
 
 
-private:
-    NxPolygon cursorPoly;
-    NxPoint cursorPos, cursorPosOld, cursorRelativePos;
-    qreal cursorAngle, cursorAngleOld;
-    qreal cursorAngleRoll, cursorAnglePitch;
 public:
     void calculate();
     inline const NxPolygon & getCurrentPolygon() const {
@@ -424,17 +431,20 @@ public:
     inline const NxPoint & getCurrentValue() const {
         return cursorRelativePos;
     }
-    inline qreal getCurrentAngle() const {
+    inline const NxPoint & getCurrentAngle() const {
         return cursorAngle;
-    }
-    inline qreal getCurrentAngleRoll() const {
-        return cursorAngleRoll;
-    }
-    inline qreal getCurrentAnglePitch() const {
-        return cursorAnglePitch;
     }
     inline const NxPoint & getCurrentPos() const {
         return cursorPos;
+    }
+    inline const NxPoint & getCurrentValueLastSend() const {
+        return cursorRelativePosLastSend;
+    }
+    inline const NxPoint & getCurrentAngleLastSend() const {
+        return cursorAngleLastSend;
+    }
+    inline const NxPoint & getCurrentPosLastSend() const {
+        return cursorPosLastSend;
     }
 
 

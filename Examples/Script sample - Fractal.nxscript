@@ -59,9 +59,9 @@ function addCurve(recursion, start, end) {
 		run("setBoundsSource current " + (-size) + " " + size + " " + size + " 0");
 		run("setBoundsTarget current 0 1 1 0");
 		run("setGroup        current values");
-		run("setWidth        current 0");
+		run("setWidth        current 1");
 		
-		//Récursivity on segments
+		//R�cursivity on segments
 		addCurve(recursion + 1, {x:      start.x, y:      start.y} , {x: x1 + start.x, y: y1 + start.y});
 		addCurve(recursion + 1, {x: x1 + start.x, y: y1 + start.y} , {x: x2 + start.x, y: y2 + start.y});
 		addCurve(recursion + 1, {x: x2 + start.x, y: y2 + start.y} , {x: x3 + start.x, y: y3 + start.y});
@@ -70,8 +70,8 @@ function addCurve(recursion, start, end) {
 }
 
 /*
-    IanniX — a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 — IanniX Association
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

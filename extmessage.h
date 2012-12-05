@@ -154,7 +154,7 @@ public:
                             messageScriptValue.setProperty("trigger_distance", qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()));
                         }
                         if((patternArgument.contains("trigger_side")) && (cursor)) {
-                            qreal cursorAngle = fmod(cursor->getCurrentAngle(),360);
+                            qreal cursorAngle = fmod(cursor->getCurrentAngle().z(), 360);
                             float side = 0;
                             if(cursorAngle == 90) //cursor going straight up
                                 side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 1:0;
@@ -178,6 +178,7 @@ public:
                             messageScriptValue.setProperty("cursor_document_id", cursor->getDocumentId());
                         if(patternArgument.contains("cursor_label"))
                             messageScriptValue.setProperty("cursor_label", cursor->getLabel());
+
                         if(patternArgument.contains("cursor_xPos"))
                             messageScriptValue.setProperty("cursor_xPos", cursor->getCurrentPos().x());
                         if(patternArgument.contains("cursor_yPos"))
@@ -207,7 +208,39 @@ public:
                         if(patternArgument.contains("cursor_time_percent"))
                             messageScriptValue.setProperty("cursor_time_percent", cursor->getTimeLocalPercent());
                         if(patternArgument.contains("cursor_angle"))
-                            messageScriptValue.setProperty("cursor_angle", fmod(cursor->getCurrentAngle(),360));
+                            messageScriptValue.setProperty("cursor_angle", fmod(cursor->getCurrentAngle().z(), 360));
+
+                        if(patternArgument.contains("cursor_xPos_delta"))
+                            messageScriptValue.setProperty("cursor_xPos_delta",     cursor->getCurrentPos().x()    - cursor->getCurrentPosLastSend().x());
+                        if(patternArgument.contains("cursor_yPos_delta"))
+                            messageScriptValue.setProperty("cursor_yPos_delta",     cursor->getCurrentPos().y()    - cursor->getCurrentPosLastSend().y());
+                        if(patternArgument.contains("cursor_zPos_delta"))
+                            messageScriptValue.setProperty("cursor_zPos_delta",     cursor->getCurrentPos().z()    - cursor->getCurrentPosLastSend().z());
+                        if(patternArgument.contains("cursor_sxPos_delta"))
+                            messageScriptValue.setProperty("cursor_sxPos_delta",    cursor->getCurrentPos().sx()   - cursor->getCurrentPosLastSend().sx());
+                        if(patternArgument.contains("cursor_syPos_delta"))
+                            messageScriptValue.setProperty("cursor_syPos_delta",    cursor->getCurrentPos().sy()   - cursor->getCurrentPosLastSend().sy());
+                        if(patternArgument.contains("cursor_szPos_delta"))
+                            messageScriptValue.setProperty("cursor_szPos_delta",    cursor->getCurrentPos().sz()   - cursor->getCurrentPosLastSend().sz());
+                        if(patternArgument.contains("cursor_value_x_delta"))
+                            messageScriptValue.setProperty("cursor_value_x_delta",  cursor->getCurrentValue().x()  - cursor->getCurrentValueLastSend().x());
+                        if(patternArgument.contains("cursor_value_y_delta"))
+                            messageScriptValue.setProperty("cursor_value_y_delta",  cursor->getCurrentValue().y()  - cursor->getCurrentValueLastSend().y());
+                        if(patternArgument.contains("cursor_value_z_delta"))
+                            messageScriptValue.setProperty("cursor_value_z_delta",  cursor->getCurrentValue().z()  - cursor->getCurrentValueLastSend().z());
+                        if(patternArgument.contains("cursor_value_sx_delta"))
+                            messageScriptValue.setProperty("cursor_value_sx_delta", cursor->getCurrentValue().sx() - cursor->getCurrentValueLastSend().sx());
+                        if(patternArgument.contains("cursor_value_sy_delta"))
+                            messageScriptValue.setProperty("cursor_value_sy_delta", cursor->getCurrentValue().sy() - cursor->getCurrentValueLastSend().sy());
+                        if(patternArgument.contains("cursor_value_sz_delta"))
+                            messageScriptValue.setProperty("cursor_value_sz_delta", cursor->getCurrentValue().sz() - cursor->getCurrentValueLastSend().sz());
+                        if(patternArgument.contains("cursor_time_delta"))
+                            messageScriptValue.setProperty("cursor_time_delta",         cursor->getTimeLocal()        - cursor->getTimeLocalLastSend());
+                        if(patternArgument.contains("cursor_time_percent_delta"))
+                            messageScriptValue.setProperty("cursor_time_percent_delta", cursor->getTimeLocalPercent() - cursor->getTimeLocalPercentLastSend());
+                        if(patternArgument.contains("cursor_angle_delta"))
+                            messageScriptValue.setProperty("cursor_angle_delta",        cursor->getCurrentAngle().z() - cursor->getCurrentAngleLastSend().z());
+
                         if(patternArgument.contains("cursor_nb_loop"))
                             messageScriptValue.setProperty("cursor_nb_loop", cursor->getNbLoop());
                         if(patternArgument.contains("cursor_message_id"))
@@ -317,7 +350,7 @@ public:
                         else if(patternArgument == "trigger_message_id")
                             found = addFloat(trigger->getMessageId(), patternArgument, patternIndex);
                         else if((patternArgument == "trigger_side") && (cursor)) {
-                            qreal cursorAngle = fmod(cursor->getCurrentAngle(),360);
+                            qreal cursorAngle = fmod(cursor->getCurrentAngle().z(), 360);
                             float side = 0;
                             if(cursorAngle == 90 ) //cursor going straight up
                                 side = (trigger->getPos().x() > cursor->getCurrentPos().x()) ? 1:0;
@@ -339,6 +372,7 @@ public:
                             found = addString(cursor->getDocumentId(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_label")
                             found = addString(cursor->getLabel(), patternArgument, patternIndex);
+
                         else if(patternArgument == "cursor_xPos")
                             found = addFloat(cursor->getCurrentPos().x(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_yPos")
@@ -368,7 +402,39 @@ public:
                         else if(patternArgument == "cursor_time_percent")
                             found = addFloat(cursor->getTimeLocalPercent(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_angle")
-                            found = addFloat(fmod(cursor->getCurrentAngle(),360), patternArgument, patternIndex);
+                            found = addFloat(cursor->getCurrentAngle().z(), patternArgument, patternIndex);
+
+                        else if(patternArgument == "cursor_xPos_delta")
+                            found = addFloat(cursor->getCurrentPos().x()    - cursor->getCurrentPosLastSend().x(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_yPos_delta")
+                            found = addFloat(cursor->getCurrentPos().y()    - cursor->getCurrentPosLastSend().y(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_zPos_delta")
+                            found = addFloat(cursor->getCurrentPos().z()    - cursor->getCurrentPosLastSend().z(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_sxPos_delta")
+                            found = addFloat(cursor->getCurrentPos().sx()   - cursor->getCurrentPosLastSend().sx(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_syPos_delta")
+                            found = addFloat(cursor->getCurrentPos().sy()   - cursor->getCurrentPosLastSend().sy(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_szPos_delta")
+                            found = addFloat(cursor->getCurrentPos().sz()   - cursor->getCurrentPosLastSend().sz(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_x_delta")
+                            found = addFloat(cursor->getCurrentValue().x()  - cursor->getCurrentValueLastSend().x(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_y_delta")
+                            found = addFloat(cursor->getCurrentValue().y()  - cursor->getCurrentValueLastSend().y(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_z_delta")
+                            found = addFloat(cursor->getCurrentValue().z()  - cursor->getCurrentValueLastSend().z(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_sx_delta")
+                            found = addFloat(cursor->getCurrentValue().sx() - cursor->getCurrentValueLastSend().sx(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_sy_delta")
+                            found = addFloat(cursor->getCurrentValue().sy() - cursor->getCurrentValueLastSend().sy(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_value_sz_delta")
+                            found = addFloat(cursor->getCurrentValue().sz() - cursor->getCurrentValueLastSend().sz(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_time_delta")
+                            found = addFloat(cursor->getTimeLocal()         - cursor->getTimeLocalLastSend(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_time_percent_delta")
+                            found = addFloat(cursor->getTimeLocalPercent()  - cursor->getTimeLocalPercentLastSend(), patternArgument, patternIndex);
+                        else if(patternArgument == "cursor_angle_delta")
+                            found = addFloat(cursor->getCurrentAngle().z()  - cursor->getCurrentAngleLastSend().z(), patternArgument, patternIndex);
+
                         else if(patternArgument == "cursor_nb_loop")
                             found = addFloat(cursor->getNbLoop(), patternArgument, patternIndex);
                         else if(patternArgument == "cursor_message_id")

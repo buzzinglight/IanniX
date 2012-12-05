@@ -15,7 +15,7 @@ function onCreate() {
 	//[TOP LEFT] Add a 2D curve based on cartesian coords
 	run("add curve   " + (1000 + id));
 	run("setPos      current -10 7 0");
-	run("setEquation current cartesian t * 4, cos(2 * t * _pi), 0");
+	run("setEquation current cartesian t * 4, cos(2 * t * PI), 0");
 	//Add a cursor
 	run("add cursor " + id);
 	run("setCurve   current lastCurve");	
@@ -161,8 +161,8 @@ function onCreate() {
 }
 
 /*
-    IanniX — a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 — IanniX Association
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

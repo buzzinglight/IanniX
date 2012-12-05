@@ -374,7 +374,7 @@ void UiRender::paintGL() {
         NxCursor *object = (NxCursor*)document->objects.value(followId);
         //rotationDest.setX(-object->getCurrentAngleRoll());
         //rotationDest.setY(-82 - object->getCurrentAnglePitch());
-        renderOptions->rotationDest.setZ(-object->getCurrentAngle() + 90);
+        renderOptions->rotationDest.setZ(-object->getCurrentAngle().z() + 90);
         renderOptions->rotation.setZ(renderOptions->rotationDest.z());
         translationDest = -object->getCurrentPos();
         //scaleDest = 1 * 5;

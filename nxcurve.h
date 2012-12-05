@@ -207,7 +207,7 @@ public:
     void translatePoint(quint16 pointIndex, const NxPoint & point);
     inline NxPoint getPointAt(quint16 index, qreal t);
     NxPoint getPointAt(qreal val, bool absoluteTime = false);
-    qreal getAngleAt(qreal val, bool absoluteTime = false);
+    NxPoint getAngleAt(qreal val, bool absoluteTime = false);
     qreal intersects(const NxRect &rect, NxPoint* collisionPoint = 0);
 
     inline void setResize(const NxSize & size) {

@@ -55,6 +55,19 @@ void NxCurve::setEquation(const QString &type, const QString &_equation) {
         curveType = CurveTypeEquationCartesian;
 
     try {
+        equationParser.DefineConst("PI",         M_PI);
+        equationParser.DefineConst("TWO_PI",     M_PI*2.);
+        equationParser.DefineConst("THIRD_PI",   M_PI/3.);
+        equationParser.DefineConst("QUARTER_PI", M_PI/4.);
+        equationParser.DefineConst("HALF_PI",    M_PI/2.);
+        equationParser.DefineConst("SQRT1_2",    M_SQRT1_2);
+        equationParser.DefineConst("SQRT2",      M_SQRT2);
+        equationParser.DefineConst("E",          M_E);
+        equationParser.DefineConst("LN2",        M_LN2);
+        equationParser.DefineConst("LN10",       M_LN10);
+        equationParser.DefineConst("LOG2E",      M_LOG2E);
+        equationParser.DefineConst("LOG10E",     M_LOG10E);
+
         equationParser.DefineVar("t", &equationVariableT);
         equationParser.SetExpr(qPrintable(equation));
         calcEquation();
@@ -196,9 +209,9 @@ void NxCurve::paint() {
             else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
                 glBegin(GL_LINE_STRIP);
                 try {
-                    for(equationVariableT = 0 ; equationVariableT <= 1 ; equationVariableT += equationVariableTSteps) {
+                    for(equationVariableT = 0 ; equationVariableT <= 1+equationVariableTSteps ; equationVariableT += equationVariableTSteps) {
                         qreal *ptCoords = equationParser.Eval(equationNbEval);
-                        if(curveType == CurveTypeEquationPolar) glVertex3f(ptCoords[0] * sin(ptCoords[1] * cos(ptCoords[2])), ptCoords[0] * cos(ptCoords[1]), ptCoords[0] * sin(ptCoords[1]) * sin(ptCoords[2]));
+                        if(curveType == CurveTypeEquationPolar) glVertex3f(ptCoords[0] * sin(ptCoords[1]) * cos(ptCoords[2]), ptCoords[0] * cos(ptCoords[1]), ptCoords[0] * sin(ptCoords[1]) * sin(ptCoords[2]));
                         else                                    glVertex3f(ptCoords[0], ptCoords[1], ptCoords[2]);
                     }
                 }
@@ -509,7 +522,7 @@ void NxCurve::setImage(const QString & filename) {
     setPath(pathTmp.simplified());
 
     //Scale
-    resize(1, -1);
+    resize(1, 1);
 }
 void NxCurve::setEllipse(const NxSize & size) {
     curveType = CurveTypeEllipse;
@@ -633,7 +646,7 @@ NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
         equationVariableT = val;
         try {
             qreal *ptCoords = equationParser.Eval(equationNbEval);
-            if(curveType == CurveTypeEquationPolar) return NxPoint(ptCoords[0] * sin(ptCoords[1] * cos(ptCoords[2])), ptCoords[0] * cos(ptCoords[1]), ptCoords[0] * sin(ptCoords[1]) * sin(ptCoords[2]));
+            if(curveType == CurveTypeEquationPolar) return NxPoint(ptCoords[0] * sin(ptCoords[1]) * cos(ptCoords[2]), ptCoords[0] * cos(ptCoords[1]), ptCoords[0] * sin(ptCoords[1]) * sin(ptCoords[2]));
             else                                    return NxPoint(ptCoords[0], ptCoords[1], ptCoords[2]);
         }
         catch (Parser::exception_type &e) {
@@ -658,10 +671,10 @@ NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
     }
     return NxPoint();
 }
-qreal NxCurve::getAngleAt(qreal val, bool absoluteTime) {
-    qreal angle = 0;
+NxPoint NxCurve::getAngleAt(qreal val, bool absoluteTime) {
+    qreal angleX = 0, angleY = 0, angleZ = 0;
     if(curveType == CurveTypeEllipse)
-        angle = -((2 * val * M_PI) + M_PI_2) * 180.0F / M_PI;
+        angleZ = -((2 * val * M_PI) + M_PI_2) * 180.0F / M_PI;
     else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
         try {
             NxPoint pt1, pt2;
@@ -678,35 +691,20 @@ qreal NxCurve::getAngleAt(qreal val, bool absoluteTime) {
             else                                    pt2 = NxPoint(ptCoords[0], ptCoords[1], ptCoords[2]);
 
             NxPoint deltaPos = pt2 - pt1;
-            if((deltaPos.x() > 0) && (deltaPos.y() >= 0))
-                angle = qAtan(deltaPos.y() / deltaPos.x());
-            else if((deltaPos.x() <= 0) && (deltaPos.y() > 0))
-                angle = -qAtan(deltaPos.x() / deltaPos.y()) + M_PI_2;
-            else if((deltaPos.x() < 0) && (deltaPos.y() <= 0))
-                angle = qAtan(deltaPos.y() / deltaPos.x()) + M_PI;
-            else if((deltaPos.x() >= 0) && (deltaPos.y() < 0))
-                angle = -qAtan(deltaPos.x() / deltaPos.y()) + 3 * M_PI_2;
-
-            angle = -angle * 180.0F / M_PI + 180;
+            angleZ = qAtan2(deltaPos.x(), deltaPos.y()) * 180.0F / M_PI + 90;
+            angleY = qAtan2(qSqrt(deltaPos.x()*deltaPos.x() + deltaPos.y()*deltaPos.y()), deltaPos.z()) * 180.0F / M_PI + 90 + 180;
         }
         catch (Parser::exception_type &e) {
             qDebug("[MathParser] AngleAt error");
         }
     }
     else if(curveType == CurveTypePoints) {
-        NxPoint deltaPos = getPointAt(val - 0.001, absoluteTime) - getPointAt(val, absoluteTime);
-        if((deltaPos.x() > 0) && (deltaPos.y() >= 0))
-            angle = qAtan(deltaPos.y() / deltaPos.x());
-        else if((deltaPos.x() <= 0) && (deltaPos.y() > 0))
-            angle = -qAtan(deltaPos.x() / deltaPos.y()) + M_PI_2;
-        else if((deltaPos.x() < 0) && (deltaPos.y() <= 0))
-            angle = qAtan(deltaPos.y() / deltaPos.x()) + M_PI;
-        else if((deltaPos.x() >= 0) && (deltaPos.y() < 0))
-            angle = -qAtan(deltaPos.x() / deltaPos.y()) + 3 * M_PI_2;
-
-        angle = -angle * 180.0F / M_PI + 180;
+        NxPoint p2 = getPointAt(val - 0.001, absoluteTime), p1 = getPointAt(val, absoluteTime);
+        NxPoint deltaPos = p2 - p1;
+        angleZ = qAtan2(deltaPos.x(), deltaPos.y()) * 180.0F / M_PI + 90;
+        angleY = qAtan2(qSqrt(deltaPos.x()*deltaPos.x() + deltaPos.y()*deltaPos.y()), deltaPos.z()) * 180.0F / M_PI + 90 + 180;
     }
-    return angle;
+    return NxPoint(angleX, angleY, angleZ);
 }
 
 

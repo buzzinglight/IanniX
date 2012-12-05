@@ -37,25 +37,29 @@ public:
     bool isValid() const;
     NxRect normalized() const;
 
-    inline qreal left() const { return xp; }
-    inline qreal top() const { return yp; }
-    inline qreal right() const { return xp + w; }
-    inline qreal bottom() const { return yp + h; }
+    inline qreal left()    const { return xp; }
+    inline qreal right()   const { return xp + w; }
+    inline qreal top()     const { return yp; }
+    inline qreal bottom()  const { return yp + h; }
+    inline qreal zTop()    const { return zp; }
+    inline qreal zBottom() const { return zp + l; }
 
     inline qreal x() const;
     inline qreal y() const;
     inline qreal z() const;
     inline void setLeft(qreal pos);
-    inline void setTop(qreal pos);
     inline void setRight(qreal pos);
+    inline void setTop(qreal pos);
     inline void setBottom(qreal pos);
+    inline void setzTop(qreal pos);
+    inline void setzBottom(qreal pos);
     inline void setX(qreal pos) { setLeft(pos); }
     inline void setY(qreal pos) { setTop(pos); }
 
-    inline NxPoint topLeft() const     { return NxPoint(xp, yp, zp); }
-    inline NxPoint bottomRight() const { return NxPoint(xp+w, yp+h, zp); }
-    inline NxPoint topRight() const    { return NxPoint(xp+w, yp, zp); }
-    inline NxPoint bottomLeft() const  { return NxPoint(xp, yp+h, zp); }
+    inline NxPoint topLeft() const     { return NxPoint(xp,   yp,   zp); }
+    inline NxPoint topRight() const    { return NxPoint(xp+w, yp,   zp); }
+    inline NxPoint bottomLeft() const  { return NxPoint(xp,   yp+h, zp+l); }
+    inline NxPoint bottomRight() const { return NxPoint(xp+w, yp+h, zp+l); }
     inline NxPoint center() const;
 
     void setTopLeft(const NxPoint &p);
@@ -182,21 +186,18 @@ inline qreal NxRect::y() const
 inline qreal NxRect::z() const
 { return zp; }
 
-inline void NxRect::setLeft(qreal pos) { qreal diff = pos - xp; xp += diff; w -= diff; }
+inline void NxRect::setLeft(qreal pos)    { qreal diff = pos - xp; xp += diff; w -= diff; }
+inline void NxRect::setRight(qreal pos)   { w = pos - xp; }
+inline void NxRect::setTop(qreal pos)     { qreal diff = pos - yp; yp += diff; h -= diff; }
+inline void NxRect::setBottom(qreal pos)  { h = pos - yp; }
+inline void NxRect::setzTop(qreal pos)    { l = pos - zp; }
+inline void NxRect::setzBottom(qreal pos) { qreal diff = pos - zp; zp += diff; l -= diff; }
 
-inline void NxRect::setRight(qreal pos) { w = pos - xp; }
 
-inline void NxRect::setTop(qreal pos) { qreal diff = pos - yp; yp += diff; h -= diff; }
-
-inline void NxRect::setBottom(qreal pos) { h = pos - yp; }
-
-inline void NxRect::setTopLeft(const NxPoint &p) { setLeft(p.x()); setTop(p.y()); }
-
-inline void NxRect::setTopRight(const NxPoint &p) { setRight(p.x()); setTop(p.y()); }
-
-inline void NxRect::setBottomLeft(const NxPoint &p) { setLeft(p.x()); setBottom(p.y()); }
-
-inline void NxRect::setBottomRight(const NxPoint &p) { setRight(p.x()); setBottom(p.y()); }
+inline void NxRect::setTopLeft(const NxPoint &p)     { setLeft(p.x());  setTop(p.y());    setzTop(p.z()); }
+inline void NxRect::setTopRight(const NxPoint &p)    { setRight(p.x()); setTop(p.y());    setzTop(p.z()); }
+inline void NxRect::setBottomLeft(const NxPoint &p)  { setLeft(p.x());  setBottom(p.y()); setzBottom(p.z()); }
+inline void NxRect::setBottomRight(const NxPoint &p) { setRight(p.x()); setBottom(p.y()); setzBottom(p.z()); }
 
 inline NxPoint NxRect::center() const
 { return NxPoint(xp + w/2, yp + h/2, zp + l/2); }

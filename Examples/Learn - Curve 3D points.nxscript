@@ -2,11 +2,11 @@
 function onCreate() {
     //Viewport setup
     run("clear");
-	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
-	run("rotate 0 -70 -10");
+	 run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
+	 run("rotate 0 -70 -10");
     run("center 0 0");
     run("zoom 100");
-	run("autosize 1");
+	 run("autosize 1");
  
     //Create a curve
     run("add curve  1000");
@@ -43,8 +43,8 @@ function onCreate() {
 }
 
 /*
-    IanniX — a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 — IanniX Association
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

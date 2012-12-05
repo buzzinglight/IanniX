@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>379</width>
-    <height>665</height>
+    <height>713</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@ QLabel {
 	font: bold;
 }
 
-QLabel#separator1, QLabel#separator2, QLabel#separator3, QLabel#separator4, QLabel#cursorTargetLabel9 {
+QLabel#separator1, QLabel#separator2, QLabel#separator3, QLabel#separator4, QLabel#cursorTargetLabel9, QLabel#cursorTargetLabel10 {
 	border-top: 1px solid rgb(44, 167, 218);
 }
 
@@ -1663,6 +1663,25 @@ MAPPING</string>
                   </property>
                  </widget>
                 </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="cursorTargetLabel11">
+                  <property name="minimumSize">
+                   <size>
+                    <width>90</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>z RANGE</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="2" column="0" colspan="4">
                  <widget class="QLabel" name="cursorTargetLabel9">
                   <property name="minimumSize">
@@ -1682,6 +1701,227 @@ MAPPING</string>
                   </property>
                   <property name="textFormat">
                    <enum>Qt::PlainText</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0" colspan="4">
+                 <widget class="QLabel" name="cursorTargetLabel10">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>2</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>2</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::PlainText</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="cursorTargetLabel12">
+                  <property name="minimumSize">
+                   <size>
+                    <width>90</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>90</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>MAPPED RANGE</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QDoubleSpinBox" name="cursorSourceZ2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="statusTip">
+                   <string>Change here the values for the graphical mapping of cursors position</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QDoubleSpinBox" name="cursorTargetZ2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="statusTip">
+                   <string>Change here the values for the graphical mapping of cursors position</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"/>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="3">
+                 <widget class="QDoubleSpinBox" name="cursorSourceZ1">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="statusTip">
+                   <string>Change here the values for the graphical mapping of cursors position</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="3">
+                 <widget class="QDoubleSpinBox" name="cursorTargetZ1">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="statusTip">
+                   <string>Change here the values for the graphical mapping of cursors position</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"/>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="2">
+                 <widget class="QLabel" name="cursorTargetLabel13">
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>30</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>=&gt;</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="2">
+                 <widget class="QLabel" name="cursorTargetLabel14">
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>30</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>=&gt;</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
                  </widget>
                 </item>
@@ -2930,7 +3170,7 @@ POINTS</string>
                  </sizepolicy>
                 </property>
                 <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
+                 <enum>Qt::WheelFocus</enum>
                 </property>
                 <property name="toolTip">
                  <string>Sent messages</string>
@@ -2975,7 +3215,7 @@ POINTS</string>
                  </sizepolicy>
                 </property>
                 <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
+                 <enum>Qt::WheelFocus</enum>
                 </property>
                 <property name="toolTip">
                  <string>Received messages</string>
@@ -3846,8 +4086,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>583</y>
+     <x>214</x>
+     <y>639</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>
@@ -3862,8 +4102,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>361</x>
-     <y>583</y>
+     <x>364</x>
+     <y>639</y>
     </hint>
     <hint type="destinationlabel">
      <x>237</x>
@@ -4135,7 +4375,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>390</y>
+     <y>446</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -4151,7 +4391,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>420</y>
+     <y>476</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -4166,8 +4406,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>353</x>
-     <y>630</y>
+     <x>364</x>
+     <y>686</y>
     </hint>
     <hint type="destinationlabel">
      <x>325</x>
@@ -4278,8 +4518,8 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>353</x>
-     <y>630</y>
+     <x>364</x>
+     <y>686</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4374,8 +4614,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>353</x>
-     <y>630</y>
+     <x>364</x>
+     <y>686</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4454,8 +4694,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>587</y>
+     <x>364</x>
+     <y>643</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4470,8 +4710,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>587</y>
+     <x>364</x>
+     <y>643</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4534,8 +4774,8 @@ SERVER IN PORT</string>
    <slot>actionViewChange()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>636</y>
+     <x>94</x>
+     <y>692</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4550,8 +4790,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>517</y>
+     <x>244</x>
+     <y>573</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4566,8 +4806,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>517</y>
+     <x>244</x>
+     <y>573</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4582,8 +4822,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>308</x>
-     <y>517</y>
+     <x>314</x>
+     <y>573</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4599,7 +4839,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>450</y>
+     <y>506</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4614,8 +4854,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>552</y>
+     <x>364</x>
+     <y>608</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4630,8 +4870,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>552</y>
+     <x>364</x>
+     <y>608</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4647,7 +4887,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>482</y>
+     <y>538</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4662,8 +4902,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>255</y>
+     <x>364</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4678,8 +4918,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>255</y>
+     <x>364</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4694,8 +4934,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>241</x>
-     <y>307</y>
+     <x>354</x>
+     <y>367</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -4710,8 +4950,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>292</y>
+     <x>136</x>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
@@ -4726,8 +4966,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>361</x>
-     <y>292</y>
+     <x>364</x>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
@@ -4742,8 +4982,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>361</x>
-     <y>542</y>
+     <x>364</x>
+     <y>598</y>
     </hint>
     <hint type="destinationlabel">
      <x>282</x>
@@ -4758,8 +4998,8 @@ SERVER IN PORT</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>542</y>
+     <x>136</x>
+     <y>598</y>
     </hint>
     <hint type="destinationlabel">
      <x>78</x>
@@ -4775,7 +5015,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>253</x>
-     <y>615</y>
+     <y>671</y>
     </hint>
     <hint type="destinationlabel">
      <x>34</x>
@@ -4823,7 +5063,7 @@ SERVER IN PORT</string>
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>346</y>
+     <y>402</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4838,8 +5078,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>336</y>
+     <x>364</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
      <x>48</x>
@@ -4854,8 +5094,8 @@ SERVER IN PORT</string>
    <slot>actionNetwork()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>350</y>
+     <x>364</x>
+     <y>406</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4907,7 +5147,7 @@ SERVER IN PORT</string>
     </hint>
     <hint type="destinationlabel">
      <x>162</x>
-     <y>752</y>
+     <y>712</y>
     </hint>
    </hints>
   </connection>
@@ -4923,7 +5163,7 @@ SERVER IN PORT</string>
     </hint>
     <hint type="destinationlabel">
      <x>316</x>
-     <y>763</y>
+     <y>712</y>
     </hint>
    </hints>
   </connection>
@@ -4938,7 +5178,7 @@ SERVER IN PORT</string>
      <y>546</y>
     </hint>
     <hint type="destinationlabel">
-     <x>462</x>
+     <x>378</x>
      <y>609</y>
     </hint>
    </hints>
@@ -4954,8 +5194,8 @@ SERVER IN PORT</string>
      <y>552</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-312</x>
-     <y>801</y>
+     <x>0</x>
+     <y>712</y>
     </hint>
    </hints>
   </connection>
@@ -4970,8 +5210,8 @@ SERVER IN PORT</string>
      <y>576</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-311</x>
-     <y>752</y>
+     <x>0</x>
+     <y>712</y>
     </hint>
    </hints>
   </connection>
@@ -4982,12 +5222,12 @@ SERVER IN PORT</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>229</x>
-     <y>593</y>
+     <x>261</x>
+     <y>613</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-441</x>
-     <y>773</y>
+     <x>0</x>
+     <y>712</y>
     </hint>
    </hints>
   </connection>
@@ -5002,7 +5242,7 @@ SERVER IN PORT</string>
      <y>574</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-441</x>
+     <x>0</x>
      <y>535</y>
     </hint>
    </hints>
@@ -5018,8 +5258,72 @@ SERVER IN PORT</string>
      <y>599</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-441</x>
+     <x>0</x>
      <y>487</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceZ2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>634</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>521</x>
+     <y>735</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorTargetZ2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>241</x>
+     <y>652</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>226</x>
+     <y>743</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceZ1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>341</x>
+     <y>636</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-221</x>
+     <y>735</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorTargetZ1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>654</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-126</x>
+     <y>742</y>
     </hint>
    </hints>
   </connection>

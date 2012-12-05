@@ -31,11 +31,16 @@ NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     timeLocalAbsolute = 0;
     previousCursorReliable = false;
     previousPreviousCursorReliable = false;
-    cursorPoly = NxPolygon(4);
-    cursorPoly[0] = NxPoint();
-    cursorPoly[1] = NxPoint();
-    cursorPoly[2] = NxPoint();
-    cursorPoly[3] = NxPoint();
+    cursorPoly       = NxPolygon(4);
+    cursorPoly[0]    = NxPoint();
+    cursorPoly[1]    = NxPoint();
+    cursorPoly[2]    = NxPoint();
+    cursorPoly[3]    = NxPoint();
+    cursorPolyOld    = NxPolygon(4);
+    cursorPolyOld[0] = NxPoint();
+    cursorPolyOld[1] = NxPoint();
+    cursorPolyOld[2] = NxPoint();
+    cursorPolyOld[3] = NxPoint();
     setNbLoop(0);
     setStart("1 0");
     setTimeFactor(1);
@@ -59,13 +64,26 @@ NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
 NxCursor::~NxCursor() {
     glDeleteLists(glListCursor, 1);
 }
-
+qreal toto;
+NxPoint totoPt;
 void NxCursor::setTime(qreal delta) {
     if(curve) {
+        //toto += delta;
+
+
+
+        //totoPt = curve->getPointAt(toto, true);
+
+        //qDebug("%f \t %f \t %f %f %f", delta, toto, totoPt.x(), totoPt.y(), totoPt.z());
+
+
+
+
+
         timeLocalOld = timeLocal;
 
         qint16 indexOfZero = start.indexOf(0);
-        qreal loopFactor = start.at(nbLoop % start.count());
+        qreal loopFactor   = start.at(nbLoop % start.count());
         if((indexOfZero > 0) && (nbLoop > indexOfZero))
             loopFactor = 0;
 
@@ -177,8 +195,8 @@ void NxCursor::calculate() {
 
         //Infos en +
         //NxPoint cursorPosDelta = cursorPosOld - cursorPos;
-        cursorAngleRoll = 0;//-qSin(cursorPosDelta.x() * M_PI) * 180 * 2;
-        cursorAnglePitch = 0;//qSin(cursorPosDelta.y() * M_PI) * 180 * 5;
+        //cursorAngleRoll = 0;//-qSin(cursorPosDelta.x() * M_PI) * 180 * 2;
+        //cursorAnglePitch = 0;//qSin(cursorPosDelta.y() * M_PI) * 180 * 5;
     }
     else {
         cursorPos = pos;
@@ -187,23 +205,18 @@ void NxCursor::calculate() {
         previousCursorReliable = true;
         previousPreviousCursorReliable = true;
 
-        if((cursorPosDelta.x() > 0) && (cursorPosDelta.y() >= 0))
-            cursorAngle = (qAtan(cursorPosDelta.y() / cursorPosDelta.x())) * 180.0F / M_PI;
-        else if((cursorPosDelta.x() <= 0) && (cursorPosDelta.y() > 0))
-            cursorAngle = (-qAtan(cursorPosDelta.x() / cursorPosDelta.y()) + M_PI_2) * 180.0F / M_PI;
-        else if((cursorPosDelta.x() < 0) && (cursorPosDelta.y() <= 0))
-            cursorAngle = (qAtan(cursorPosDelta.y() / cursorPosDelta.x()) + M_PI) * 180.0F / M_PI;
-        else if((cursorPosDelta.x() >= 0) && (cursorPosDelta.y() < 0))
-            cursorAngle = (-qAtan(cursorPosDelta.x() / cursorPosDelta.y()) + 3 * M_PI_2) * 180.0F / M_PI;
-        //cursorAngle = 45;
+        qreal angleZ = -qAtan2(cursorPosDelta.x(), cursorPosDelta.y()) * 180.0F / M_PI + 90;
+        qreal angleY =  qAtan2(qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y()), cursorPosDelta.z()) * 180.0F / M_PI + 90;
+        cursorAngle = NxPoint(0, angleY, angleZ);
     }
 
     if(cursorAngle != cursorAngle)
-        cursorAngle = 0;
+        cursorAngle = NxPoint(0, 0, 0);
     cursorRelativePos = getCursorValue(cursorPos);
 
     //Calculate polygon (from previous cursor to actual cursor)
-    QLineF cursorTmp = QTransform().rotate(cursorAngle + 90.0F).map(QLineF(-width/2.0F, 0, width/2.0F, 0));
+    /*
+    QLineF cursorTmp = QTransform().rotate(cursorAngle.z() + 90.0F).map(QLineF(-width/2.0F, 0, width/2.0F, 0));
     cursor = NxLine(cursorTmp.x1(), cursorTmp.y1(), cursorTmp.x2(), cursorTmp.y2());
     cursor.translate(cursorPos);
 
@@ -233,18 +246,29 @@ void NxCursor::calculate() {
         cursorPoly[2] = cursor.p2();
         cursorPoly[3] = cursorOld.p2();
     }
+    */
 
-
-    if(false)
-        qDebug("%d %d %f %f - %f %f  ==>  %f %f - %f %f", previousCursorReliable, previousPreviousCursorReliable, cursorOld.p1().x(), cursorOld.p1().y(), cursorOld.p2().x(), cursorOld.p2().y(), cursor.p1().x(), cursor.p1().y(), cursor.p2().x(), cursor.p2().y());
-
-    if(false)
-        qDebug("%d %d %f %f %d || %f %f => %f %f", id, nbLoop, timeLocalAbsolute, time, previousCursorReliable, cursorOld.p1().x(), cursorOld.p2().y(), cursor.p1().x(), cursor.p2().y());
+    //Cursor
+    cursorPolyOld = cursorPoly;
+    cursorPoly[0] = NxPoint(0, -width/2, -depth/2);
+    cursorPoly[1] = NxPoint(0, -width/2,  depth/2);
+    cursorPoly[2] = NxPoint(0,  width/2,  depth/2);
+    cursorPoly[3] = NxPoint(0,  width/2, -depth/2);
+    //Rotations + translations
+    qreal angle, angleSin, angleCos;
+    angle = cursorAngle.y() * M_PI / 180., angleSin = qSin(angle), angleCos = qCos(angle);
+    for(quint16 i = 0 ; i < cursorPoly.count() ; i++)
+        cursorPoly[i] = NxPoint(cursorPoly[i].z() * angleSin + cursorPoly[i].x() * angleCos,
+                                cursorPoly[i].y(),
+                                cursorPoly[i].z() * angleCos - cursorPoly[i].x() * angleSin);
+    angle = cursorAngle.z() * M_PI / 180., angleSin = qSin(angle), angleCos = qCos(angle);
+    for(quint16 i = 0 ; i < cursorPoly.count() ; i++)
+        cursorPoly[i] = NxPoint(cursorPos.x() + cursorPoly[i].x() * angleCos - cursorPoly[i].y() * angleSin,
+                                cursorPos.y() + cursorPoly[i].x() * angleSin + cursorPoly[i].y() * angleCos,
+                                cursorPos.z() + cursorPoly[i].z());
 
     calcBoundingRect();
 
-    cursorOld = cursor;
-    previousCursor = cursor;
     if((cursorPos.sx() != cursorPosOld.sx()) || (cursorPos.sy() != cursorPosOld.sy()) || (cursorPos.sz() != cursorPosOld.sz()))
         glListRecreate = true;
     if((curve) && (curve->getPathLength() > 0)) {
@@ -308,27 +332,30 @@ void NxCursor::paint() {
             else {
                 glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF()/5.);
                 glBegin(GL_QUADS);
-                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z()+depth/2);
-                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z()+depth/2);
-                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z()-depth/2);
-                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z()-depth/2);
+                glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
+                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
                 glEnd();
 
                 glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
                 glBegin(GL_LINE_LOOP);
-                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z()+depth/2);
-                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z()+depth/2);
-                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z()-depth/2);
-                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z()-depth/2);
+                glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
+                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
                 glEnd();
             }
             glDisable(GL_LINE_STIPPLE);
             glLineWidth(1);
 
+
             //Cursor reader
             glPushMatrix();
             glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
-            glRotatef(cursorAngle, 0, 0, 1);
+            glRotatef(cursorAngle.z(), 0, 0, 1);
+            glRotatef(cursorAngle.y(), 0, 1, 0);
+            glRotatef(cursorAngle.x(), 1, 0, 0);
             qreal size2 = cacheSize/2 * 1.5 * qMin(1., width) * 0.7;
             glBegin(GL_TRIANGLE_FAN);
             glLineWidth(2);
@@ -395,11 +422,17 @@ void NxCursor::paint() {
                 glVertex3f(boundsSource.bottomRight().x(), boundsSource.bottomRight().y(), boundsSource.bottomRight().z());
                 glVertex3f(boundsSource.bottomLeft().x(),  boundsSource.bottomLeft().y(),  boundsSource.bottomLeft().z());
                 glEnd();
+                if(boundsSource.length() > 0) {
+                    glBegin(GL_LINE);
+                    glVertex3f(boundsSource.topLeft().x(),     boundsSource.topLeft().y(),     boundsSource.topLeft().z());
+                    glVertex3f(boundsSource.bottomRight().x(), boundsSource.bottomRight().y(), boundsSource.bottomRight().z());
+                    glEnd();
+                }
                 glDisable(GL_LINE_STIPPLE);
-                renderOptions->render->renderText(boundsSource.topLeft().x()     - 0.50, boundsSource.topLeft().y()     - 0.12, 0, QString::number(boundsTarget.topLeft().y(),     'f', 3), renderOptions->renderFont);
-                renderOptions->render->renderText(boundsSource.bottomLeft().x()  - 0.50, boundsSource.bottomLeft().y()  - 0.00, 0, QString::number(boundsTarget.bottomLeft().y(),  'f', 3), renderOptions->renderFont);
-                renderOptions->render->renderText(boundsSource.bottomLeft().x()  - 0.00, boundsSource.bottomLeft().y()  - 0.22, 0, QString::number(boundsTarget.bottomLeft().x(),  'f', 3), renderOptions->renderFont);
-                renderOptions->render->renderText(boundsSource.bottomRight().x() - 0.40, boundsSource.bottomRight().y() - 0.22, 0, QString::number(boundsTarget.bottomRight().x(), 'f', 3), renderOptions->renderFont);
+                renderOptions->render->renderText(boundsSource.topLeft().x()     - 0.50, boundsSource.topLeft().y()     - 0.12, boundsSource.topLeft().z(),     QString::number(boundsTarget.topLeft().y(),     'f', 3), renderOptions->renderFont);
+                renderOptions->render->renderText(boundsSource.bottomLeft().x()  - 0.50, boundsSource.bottomLeft().y()  - 0.00, boundsSource.bottomLeft().z(),  QString::number(boundsTarget.bottomLeft().y(),  'f', 3), renderOptions->renderFont);
+                renderOptions->render->renderText(boundsSource.bottomLeft().x()  - 0.00, boundsSource.bottomLeft().y()  - 0.22, boundsSource.bottomLeft().z(),  QString::number(boundsTarget.bottomLeft().x(),  'f', 3), renderOptions->renderFont);
+                renderOptions->render->renderText(boundsSource.bottomRight().x() - 0.40, boundsSource.bottomRight().y() - 0.22, boundsSource.bottomRight().z(), QString::number(boundsTarget.bottomRight().x(), 'f', 3), renderOptions->renderFont);
                 glPopMatrix();
             }
         }
@@ -409,15 +442,73 @@ void NxCursor::paint() {
 void NxCursor::trig(bool force) {
     if((force) || ((((previousCursorReliable) && (hasActivity)) || (!curve)) && (canSendOsc()))) {
         factory->sendMessage(this, 0, this);
+        cursorPosLastSend         = cursorPos;
+        cursorRelativePosLastSend = cursorRelativePos;
+        cursorAngleLastSend       = cursorAngle;
+        timeLocalLastSend         = timeLocal;
+        timeLastSend              = time;
         incMessageId();
     }
 }
 
 bool NxCursor::contains(NxTrigger *trigger) const {
+    if((previousCursorReliable) && (trigger->getActive())) {
+        NxPoint centre1 = trigger->getPos() - NxPoint(  (cursorPoly[0].x() + cursorPoly[1].x() + cursorPoly[2].x() + cursorPoly[3].x()) / 4.,
+                                                        (cursorPoly[0].y() + cursorPoly[1].y() + cursorPoly[2].y() + cursorPoly[3].y()) / 4.,
+                                                        (cursorPoly[0].z() + cursorPoly[1].z() + cursorPoly[2].z() + cursorPoly[3].z()) / 4.);
+        NxPoint centre2 = trigger->getPos() - NxPoint(  (cursorPolyOld[0].x() + cursorPolyOld[1].x() + cursorPolyOld[2].x() + cursorPolyOld[3].x()) / 4.,
+                                                        (cursorPolyOld[0].y() + cursorPolyOld[1].y() + cursorPolyOld[2].y() + cursorPolyOld[3].y()) / 4.,
+                                                        (cursorPolyOld[0].z() + cursorPolyOld[1].z() + cursorPolyOld[2].z() + cursorPolyOld[3].z()) / 4.);
+        //Rotations + translations
+        qreal angle, angleSin, angleCos;
+        angle = -cursorAngle.z() * M_PI / 180., angleSin = qSin(angle), angleCos = qCos(angle);
+        centre1 = NxPoint(centre1.x() * angleCos - centre1.y() * angleSin,
+                          centre1.x() * angleSin + centre1.y() * angleCos,
+                          centre1.z());
+        centre2 = NxPoint(centre2.x() * angleCos - centre2.y() * angleSin,
+                          centre2.x() * angleSin + centre2.y() * angleCos,
+                          centre2.z());
+        angle = -cursorAngle.y() * M_PI / 180., angleSin = qSin(angle), angleCos = qCos(angle);
+        centre1 = NxPoint(centre1.z() * angleSin + centre1.x() * angleCos,
+                          centre1.y(),
+                          centre1.z() * angleCos - centre1.x() * angleSin);
+        centre2 = NxPoint(centre2.z() * angleSin + centre2.x() * angleCos,
+                          centre2.y(),
+                          centre2.z() * angleCos - centre2.x() * angleSin);
+
+        /*
+        qDebug("%f %f %f", centre1.x(), centre1.y(), centre1.z());
+        qDebug("%f %f %f", centre2.x(), centre2.y(), centre2.z());
+        qDebug("--------------------------------------------------------");
+        */
+
+        bool isInWidth = (qAbs(centre1.y()) <= width/2.) && (qAbs(centre2.y()) <= width/2.);
+        bool isInDepth = (qAbs(centre1.z()) <= depth/2.) && (qAbs(centre2.z()) <= depth/2.);
+        bool isInside  = ((centre1.x() >= 0) && (centre2.x() <= 0)) || ((centre1.x() <= 0) && (centre2.x() >= 0));
+
+        if(depth > 0) {
+            //qDebug("%d %d %d", isInWidth, isInDepth, isInside);
+            if(isInDepth && isInWidth && isInside)
+                return true;
+            else
+                return false;
+        }
+        else {
+            //qDebug("%d %d", isInWidth, isInside);
+            if(isInWidth && isInside)
+                return true;
+            else
+                return false;
+        }
+    }
+    else
+        return false;
+    /*
     if((previousCursorReliable) && (trigger->getActive()) && ((trigger->getPos().z()-depth/2 <= cursorPoly[0].z()) && (cursorPoly[0].z()) <= trigger->getPos().z()+depth/2) && (cursorPoly.containsPoint(trigger->getPos(), Qt::OddEvenFill)))
         return true;
     else
         return false;
+        */
 }
 bool NxCursor::trig(NxCurve *collisionCurve) {
     if((performCollision) && (collisionCurve) && (collisionCurve->getActive()) && (collisionCurve != curve)) {

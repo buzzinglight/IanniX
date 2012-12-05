@@ -103,7 +103,7 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
     connect(transport, SIGNAL(actionRouteSyphon(bool)), SLOT(allowSyphonServer(bool)));
     connect(this, SIGNAL(updateTransport(QString,QString)), transport, SLOT(updateTransport(QString,QString)));
     //Timer
-    uitimer = new UiTimer(0);
+    uitimer = new UiTimer(this);
     connect(this, SIGNAL(updateTransport(QString,QString)), uitimer, SLOT(updateTransport(QString,QString)));
     connect(uitimer, SIGNAL(closed(bool)), view, SLOT(toggleTimer(bool)));
 

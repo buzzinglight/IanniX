@@ -24,7 +24,6 @@ void UiTimer::closeEvent(QCloseEvent *e) {
 }
 
 void UiTimer::updateTransport(QString time, QString) {
-    if(isVisible()) {
+    if(isVisible())
         ui->time->setText(time);
-    }
 }
