@@ -32,27 +32,27 @@
 #include <QHostInfo>
 #include <QDomDocument>
 #include <QFileOpenEvent>
-#include "uimessagebox.h"
-#include "nxcpu.h"
 #include <time.h>
-#include "nxobjectfactoryinterface.h"
-#include "extoscmanager.h"
-#include "exttcpmanager.h"
-#include "extudpmanager.h"
-#include "exthttpmanager.h"
-#include "extserialmanager.h"
-#include "extscriptmanager.h"
-#include "extmidimanager.h"
-#include "uiabout.h"
-#include "uisplash.h"
-#include "uitimer.h"
-#include "uitransport.h"
-#include "uiview.h"
-#include "uiinspector.h"
-#include "uieditor.h"
-#include "uihelp.h"
+#include "objects/nxobjectfactoryinterface.h"
+#include "misc/nxcpu.h"
+#include "gui/uimessagebox.h"
+#include "gui/uiabout.h"
+#include "gui/uisplash.h"
+#include "gui/uitimer.h"
+#include "gui/uitransport.h"
+#include "gui/uiview.h"
+#include "gui/uiinspector.h"
+#include "gui/uieditor.h"
+#include "gui/uihelp.h"
+#include "interfaces/extoscmanager.h"
+#include "interfaces/exttcpmanager.h"
+#include "interfaces/extudpmanager.h"
+#include "interfaces/exthttpmanager.h"
+#include "interfaces/extserialmanager.h"
+#include "interfaces/extscriptmanager.h"
+#include "interfaces/extmidimanager.h"
 #ifdef WACOM_INSTALLED
-#include "extwacommanager.h"
+#include "interfaces/extwacommanager.h"
 #endif
 
 enum SchedulerActivity { SchedulerOff, SchedulerOn, SchedulerOneShot };

@@ -1,0 +1,1916 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ExtOscPatternEditor</class>
+ <widget class="QWidget" name="ExtOscPatternEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>775</width>
+    <height>340</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>775</width>
+    <height>340</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>IanniX</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QFrame#global {
+	background-color: rgb(242, 241, 237);
+}
+
+QTextEdit#help {
+	color: white;
+	background-color: transparent;
+}
+
+
+QWidget {
+	font: 10px &quot;Arial&quot;;
+}
+QLabel {
+	font: bold;
+}
+
+QTabWidget::pane {
+	border: 1px solid rgba(255, 255, 255, 32);
+}
+
+QLabel {
+	color: rgb(20, 20, 20);
+}
+
+QLineEdit {
+	background: transparent;
+	border: 0px solid transparent;
+}
+
+QPushButton {
+	border: 1px solid rgb(60, 60, 60, 100);
+	border-radius: 10px;
+	margin: 0px;
+	padding: 0px;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 100), stop:1 rgba(61, 61, 61, 100));
+}
+QPushButton {
+	color: white;
+}
+QPushButton:hover {
+	border: 1px solid rgb(0, 187, 255);
+	background-color: rgb(0, 137, 241, 128);
+}
+QPushButton::checked, QPushButton:pressed {
+	background-color: rgb(0, 187, 255);
+	color: white;
+}
+
+QPushButton#patternLearn {
+	border-radius: 7px;
+}
+
+QTreeWidget {
+	color: black;
+	border: 0px solid transparent;
+	gridline-color: rgb(150, 152, 137);
+	selection-background-color: rgb(82, 146, 218);
+	background: transparent;
+	background-color: rgb(0, 0, 0, 32);
+	alternate-background-color: rgb(0, 0, 0, 32);
+}
+QTreeWidget::item {
+}
+QHeaderView {
+	background: transparent;
+	border: 0px solid transparent;
+	color: rgb(203, 203, 203);
+	min-height: 12px;
+}
+QHeaderView::section {
+	background: rgba(255, 255, 255, 64);
+	padding-left: 4px;
+	border: 0px solid transparent;
+	border-top-left-radius:  6px;
+	border-top-right-radius: 6px;
+	font: bold;
+}
+
+QTreeView::indicator {
+	border: 1px solid rgb(60, 60, 60);
+	width: 11px;
+	height: 11px;
+}
+QTreeView::indicator:unchecked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
+}
+QTreeView::indicator:checked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+}
+
+
+
+QScrollBar:vertical, QScrollBar:horizontal {
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 32);
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+	border: 0px solid transparent;
+	background: rgb(161, 161, 161);
+	border-radius: 3px;
+}
+QScrollBar:vertical {						width: 8px;					}
+QScrollBar:horizontal {					height: 8px;				}
+QScrollBar::handle:vertical {			min-height: 8px;		}
+QScrollBar::handle:horizontal {	min-width: 8px;			}
+QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
+	border: 0px solid transparent;
+	background: transparent;
+	width: 1px;
+	height: 1px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: none;
+}
+
+
+QSplitter::handle {
+	background: rgb(0,0,0, 30);
+}
+QSplitter::handle:pressed {
+	background: rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 4px; }
+QSplitter::handle:vertical     		{	height: 4px; }
+
+QWidget#patternEdit {
+	font: 11px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+}
+
+
+QPlainTextEdit, QComboBox {
+	border: 0px solid transparent;
+	background: rgba(255, 255, 255, 200);
+	color: black;
+	margin-left: 4px;
+	padding-top: -4px;
+	border-radius: 4px;
+}
+QComboBox {
+	selection-color: black;
+	padding-top: 0px;
+	padding-left: 4px;
+}
+QComboBox::drop-down {
+	width: 10px;
+	padding: 4px;
+	border: 0px solid transparent;
+	background: rgb(0, 187, 255);
+    image: url(:/icons/res_icon_down.png);
+}
+</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="global">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QComboBox" name="templates">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Select here the protocol used to transmit message</string>
+        </property>
+        <property name="statusTip">
+         <string>Select here the protocol used to transmit message</string>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Templates</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>osc://ip_out:57120/trigger trigger_id trigger_xPos trigger_yPos trigger_zPos cursor_id - Default OSC message for triggers</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>midi://midi_out/note 0 69 127 5 - Play a MIDI note (A - 440Hz) during 5 seconds on channel #0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>midi://midi_out/cc 1 0 cursor_value_y - Send a MIDI control change on controler #0 on channel #1 depending on cursor position</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>direct:// goto 2 - Make score go back to timecode 000:02.000</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>direct:// setSpeedF 10 1 - Make the cursor #10 start (please set its Master Speed to 0 before)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <property name="spacing">
+         <number>15</number>
+        </property>
+        <item>
+         <widget class="QPlainTextEditWithFocus" name="patternEdit">
+          <property name="plainText">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="patternClear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the message</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to clear the message</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="patternLearn">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the message</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to clear the message</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>learn</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="protocolLabel">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>SEND THROUGH</string>
+            </property>
+            <property name="buddy">
+             <cstring>protocolCombo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="protocolCombo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Select here the protocol used to transmit message</string>
+            </property>
+            <property name="statusTip">
+             <string>Select here the protocol used to transmit message</string>
+            </property>
+            <property name="editable">
+             <bool>false</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="hostOSCLabel">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>TO HOST</string>
+            </property>
+            <property name="buddy">
+             <cstring>hostIpCombo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="hostIpCombo">
+            <property name="minimumSize">
+             <size>
+              <width>340</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>340</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Select or type the destination application/host IP</string>
+            </property>
+            <property name="statusTip">
+             <string>Select or type the destination application/host IP</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="portLabel">
+            <property name="minimumSize">
+             <size>
+              <width>65</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>65</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>ON PORT</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>portCombo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="portCombo">
+            <property name="minimumSize">
+             <size>
+              <width>190</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>190</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Select or type the destination application/host port number</string>
+            </property>
+            <property name="statusTip">
+             <string>Select or type the destination application/host port number</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="addressOSCLabel">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>TO ADDRESS</string>
+            </property>
+            <property name="buddy">
+             <cstring>addressOscCombo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="addressOscCombo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Select or type an OSC address to reach</string>
+            </property>
+            <property name="statusTip">
+             <string>Select or type an OSC address to reach</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="hostMIDILabel">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>TO MIDI DEVICE</string>
+            </property>
+            <property name="buddy">
+             <cstring>hostMidiCombo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="hostMidiCombo">
+            <property name="minimumSize">
+             <size>
+              <width>340</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>340</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Select or type a MIDI device to reach</string>
+            </property>
+            <property name="statusTip">
+             <string>Select or type a MIDI device to reach</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="addressMIDILabel">
+            <property name="minimumSize">
+             <size>
+              <width>65</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>65</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>TO CONTROL</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>addressMidiCombo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="addressMidiCombo">
+            <property name="minimumSize">
+             <size>
+              <width>190</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>190</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Select here a MIDI control</string>
+            </property>
+            <property name="statusTip">
+             <string>Select here a MIDI control</string>
+            </property>
+            <property name="editable">
+             <bool>false</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument1Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 1</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument1Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument1Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="statusTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument1Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to clear the value</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument2Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 2</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument2Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument2Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="statusTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument2Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to clear the value</string>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument3Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 3</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument3Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument3Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="statusTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument3Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to clear the value</string>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument4Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 4</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument4Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument4Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="statusTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument4Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to clear the value</string>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument5Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 5</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument5Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument5Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="statusTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument5Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to clear the value</string>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument6Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 6</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument6Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument6Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="statusTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument6Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
+            </property>
+            <property name="statusTip">
+             <string>Click here to clear the value</string>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QPlainTextEditWithFocus</class>
+   <extends>QPlainTextEdit</extends>
+   <header>interfaces/extoscpatterneditor.h</header>
+   <slots>
+    <signal>focusOut()</signal>
+    <signal>focusIn()</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>QComboBoxWithFocus</class>
+   <extends>QComboBox</extends>
+   <header>interfaces/extoscpatterneditor.h</header>
+   <slots>
+    <signal>focusIn()</signal>
+    <signal>focusOut()</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>patternEdit</tabstop>
+  <tabstop>protocolCombo</tabstop>
+  <tabstop>hostIpCombo</tabstop>
+  <tabstop>portCombo</tabstop>
+  <tabstop>addressOscCombo</tabstop>
+  <tabstop>hostMidiCombo</tabstop>
+  <tabstop>addressMidiCombo</tabstop>
+  <tabstop>argument1Combo</tabstop>
+  <tabstop>argument2Combo</tabstop>
+  <tabstop>argument3Combo</tabstop>
+  <tabstop>argument4Combo</tabstop>
+  <tabstop>argument5Combo</tabstop>
+  <tabstop>argument6Combo</tabstop>
+  <tabstop>patternClear</tabstop>
+  <tabstop>argument1Clear</tabstop>
+  <tabstop>argument2Clear</tabstop>
+  <tabstop>argument3Clear</tabstop>
+  <tabstop>argument4Clear</tabstop>
+  <tabstop>argument5Clear</tabstop>
+  <tabstop>argument6Clear</tabstop>
+ </tabstops>
+ <resources>
+  <include location="IanniX.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>protocolCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>630</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hostIpCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>426</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>portCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>725</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>644</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addressOscCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addressMidiCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>725</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>576</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hostMidiCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>426</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>278</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument1Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>699</x>
+     <y>186</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>434</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument2Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>699</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument3Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>699</x>
+     <y>240</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>19</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument4Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>699</x>
+     <y>267</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>778</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument5Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>556</x>
+     <y>294</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>638</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument6Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>732</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>697</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hostIpCombo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>426</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>portCombo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>725</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>394</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addressOscCombo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>725</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>680</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hostMidiCombo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>426</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument1Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>495</x>
+     <y>186</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument2Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>532</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument3Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>585</x>
+     <y>240</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument4Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>621</x>
+     <y>267</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>541</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument5Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>640</x>
+     <y>294</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>739</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument6Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>734</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>778</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternEdit</sender>
+   <signal>textChanged()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>textPatternChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>88</x>
+     <y>40</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>64</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument1Clear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>760</x>
+     <y>187</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument2Clear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>760</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument3Clear</sender>
+   <signal>pressed()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>760</x>
+     <y>241</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument4Clear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>760</x>
+     <y>268</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>345</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument5Clear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>760</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument6Clear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>760</x>
+     <y>322</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>102</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternClear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>748</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>332</x>
+     <y>-161</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternEdit</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>149</x>
+     <y>70</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>132</x>
+     <y>441</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument1Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>540</x>
+     <y>198</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>296</x>
+     <y>439</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument2Combo</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>274</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-97</x>
+     <y>229</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument3Combo</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>231</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>996</x>
+     <y>546</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument4Combo</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>539</x>
+     <y>255</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1016</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument5Combo</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>595</x>
+     <y>296</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1016</x>
+     <y>236</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument6Combo</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>306</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1016</x>
+     <y>305</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternLearn</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>learn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>758</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>38</x>
+     <y>491</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>templates</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>applyTemplate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>50</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-246</x>
+     <y>541</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>actionRemove()</slot>
+  <slot>currentItemChanged()</slot>
+  <slot>textPatternChanged()</slot>
+  <slot>clearApattern()</slot>
+  <slot>fieldFocusIn()</slot>
+  <slot>learn()</slot>
+  <slot>applyTemplate()</slot>
+ </slots>
+</ui>

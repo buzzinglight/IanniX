@@ -16,22 +16,42 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef IANNIX_SPEC_H
-#define IANNIX_SPEC_H
+#ifndef EXTHTTPMANAGER_H
+#define EXTHTTPMANAGER_H
 
-#include <QObject>
-#include "geometry/nxpoint.h"
-#include "geometry/nxrect.h"
-#include "geometry/nxline.h"
-#include "geometry/nxpolygon.h"
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QDesktopServices>
+#include <QTcpServer>
+#include "extmessage.h"
 
-class NxObjectDispatchProperty {
+class ExtHttpManager : public QTcpServer, public ExtMessageManager {
+    Q_OBJECT
+
+private:
+    QNetworkAccessManager *http;
+    QString htmlTemplate;
+
 public:
-    virtual quint8 getType() const = 0;
-    virtual const QString getTypeStr() const = 0;
-    virtual void dispatchProperty(const QString & property, const QVariant & value) = 0;
-    virtual const QVariant getProperty(const QString & property) const = 0;
+    ExtHttpManager(NxObjectFactoryInterface *_factory);
+
+public:
+    void send(const ExtMessage & message);
+
+protected:
+    void incomingConnection(int socketDescriptor);
+
+public slots:
+    void openPort(quint16);
+    void parseService(const QUrl &url);
+private slots:
+    void parse(QNetworkReply*);
+    void readClient();
+    void discardClient();
+
+signals:
+    void openPortStatus(bool);
 };
 
-
-#endif // IANNIX_SPEC_H
+#endif // EXTHTTPMANAGER_H

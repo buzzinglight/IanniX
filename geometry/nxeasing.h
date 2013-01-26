@@ -16,22 +16,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef IANNIX_SPEC_H
-#define IANNIX_SPEC_H
+#ifndef NXEASING_H
+#define NXEASING_H
 
-#include <QObject>
-#include "geometry/nxpoint.h"
-#include "geometry/nxrect.h"
-#include "geometry/nxline.h"
-#include "geometry/nxpolygon.h"
+#include <QEasingCurve>
+#include <QPixmap>
+#include <QPainter>
 
-class NxObjectDispatchProperty {
+class NxEasing {
+private:
+    QEasingCurve easing;
+
 public:
-    virtual quint8 getType() const = 0;
-    virtual const QString getTypeStr() const = 0;
-    virtual void dispatchProperty(const QString & property, const QVariant & value) = 0;
-    virtual const QVariant getProperty(const QString & property) const = 0;
+    QPixmap getPixmap() const;
+
+public:
+    inline void setType(quint16 type)           { easing.setType((QEasingCurve::Type)type); }
+    inline quint16 getType() const              { return easing.type(); }
+    inline qreal getValue(qreal progress) const { return qBound(0., easing.valueForProgress(progress), 1.); }
+
 };
 
-
-#endif // IANNIX_SPEC_H
+#endif // NXEASING_H

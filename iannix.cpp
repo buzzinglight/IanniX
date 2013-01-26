@@ -395,22 +395,22 @@ IanniX::IanniX(QObject *parent, bool forceSettings) :
                         QStringList edlTracklistChannel = edlTracklists[j].split("\t");
                         if(edlTracklistChannel.count() > 5) {
                             QStringList edlTracklistChannelName = edlTracklistChannel[2].split(" ");
-                            name     = edlTracklistChannelName[0];
+                            name     = edlTracklistChannelName.at(0);
                             info     = edlTracklistChannel[2].replace(name + " ", "");
 
                             start    = edlTracklistChannel[3];
                             QStringList startSeparator = start.split(":");
-                            startSec = startSeparator[0].toDouble()*3600 + startSeparator[1].toDouble()*60 + startSeparator[2].toDouble() + startSeparator[3].toDouble()*1./25.;
+                            startSec = startSeparator.at(0).toDouble()*3600 + startSeparator[1].toDouble()*60 + startSeparator[2].toDouble() + startSeparator[3].toDouble()*1./25.;
                             startSec -= 3600;
 
                             end      = edlTracklistChannel[4];
                             QStringList endSeparator = end.split(":");
-                            endSec = endSeparator[0].toDouble()*3600 + endSeparator[1].toDouble()*60 + endSeparator[2].toDouble() + endSeparator[3].toDouble()*1./25.;
+                            endSec = endSeparator.at(0).toDouble()*3600 + endSeparator[1].toDouble()*60 + endSeparator[2].toDouble() + endSeparator[3].toDouble()*1./25.;
                             endSec -= 3600;
 
                             duration = edlTracklistChannel[5];
                             QStringList durationSeparator = duration.split(":");
-                            durationSec = durationSeparator[0].toDouble()*3600 + durationSeparator[1].toDouble()*60 + durationSeparator[2].toDouble() + durationSeparator[3].toDouble()*1./25.;
+                            durationSec = durationSeparator.at(0).toDouble()*3600 + durationSeparator[1].toDouble()*60 + durationSeparator[2].toDouble() + durationSeparator[3].toDouble()*1./25.;
                         }
                     }
                 }
@@ -1828,7 +1828,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                                 curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)), false, recalculate);
                             else if(argc >= 5) // 3+2 (x, y)
                                 curve->setPointAt(indexPoint, NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)), false, recalculate);
-                            NxCurvePoint pt = curve->getPathPointsAt(indexPoint);
+                            //NxCurvePoint pt = curve->getPathPointsAt(indexPoint);
                             //return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
                         }
                         return "0 0 0  0 0 0  0 0 0";
@@ -1845,7 +1845,7 @@ const QVariant IanniX::execute(const QString & command, bool createNewObjectIfEx
                                 curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)), true, recalculate);
                             else if(argc >= 5) // 3+2 (x, y)
                                 curve->setPointAt(argvDouble(argv, 2), NxPoint(argvDouble(argv, 3), argvDouble(argv, 4)), true, recalculate);
-                            NxCurvePoint pt = curve->getPathPointsAt(argvDouble(argv, 2));
+                            //NxCurvePoint pt = curve->getPathPointsAt(argvDouble(argv, 2));
                             //return QString("%1 %2 %3  %4 %5 %6  %7 %8 %9").arg(pt.x()).arg(pt.y()).arg(pt.z()).arg(pt.c1.x()).arg(pt.c1.y()).arg(pt.c1.z()).arg(pt.c2.x()).arg(pt.c2.y()).arg(pt.c2.z());
                         }
                         return "0 0 0  0 0 0  0 0 0";

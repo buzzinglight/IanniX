@@ -1,6 +1,6 @@
 All platforms
 -------------
-Download Qt for your OS (http://qt.nokia.com/downloads/) and select Qt 4.7.4 for better performances.
+Download Qt for your OS (http://qt-project.org/downloads) and select Qt 4.8.x for better performances & compatibility.
 
 Linux, Mac OS X & Linux
 ------------------

@@ -17,7 +17,7 @@
 */
 
 #include "iannixapp.h"
-#include "help.h"
+#include "misc/help.h"
 
 IanniXApp::IanniXApp(int &argc, char **argv) :
     QApplication(argc, argv) {
@@ -70,7 +70,7 @@ void IanniXApp::setHelp() {
 
     Help::categories["hostMidi"].category = tr("Messages MIDI devices");
     Help::categories["hostMidi"].infos << HelpInfo(QString("midi_out"),            tr("Destination is the default MIDI device set in \"Network\" tab"));
-    Help::categories["hostMidi"].infos << HelpInfo(QString("from IanniX"),         tr("MIDI device created by IanniX (Mac & Linux only)"));
+    Help::categories["hostMidi"].infos << HelpInfo(QString("from_IanniX"),         tr("MIDI device created by IanniX (Mac & Linux only)"));
 
     Help::categories["port"].category = tr("Messages IP ports");
     Help::categories["port"].infos << HelpInfo(QString("57120"),                   tr("Default port used by IanniX"));

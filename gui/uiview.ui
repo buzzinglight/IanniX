@@ -1,0 +1,1606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UiView</class>
+ <widget class="QMainWindow" name="UiView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>906</width>
+    <height>715</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>IanniX — View</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#centralwidget  {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
+}
+
+QDockWidget {
+	color: white;
+	font: 10px;
+}
+QDockWidget::title {
+    text-align: center;
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
+}
+
+QSplitter::handle {
+	background: rgb(255, 255, 255, 30);
+}
+QSplitter::handle:pressed {
+	background: rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 4px; }
+QSplitter::handle:vertical     		{	height: 4px; }
+
+
+QToolButton {
+	border: 0px solid transparent;
+	border-radius: 4px;
+	background-color: transparent;
+	margin: 4px;
+	min-width: 32px;
+	min-height: 32px;
+}
+QToolButton:pressed, QToolButton:checked {
+	border: 0px solid transparent;
+    background-color: rgba(0, 0, 0, 24);
+}
+
+QStatusBar {
+	background-color: rgb(66, 66, 66);
+	color: white;
+	font: 10px;
+	font: &quot;Arial&quot;;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QLabel, QPushButton, QCheckBox {
+	color: white;
+	font: 10px;
+	font: &quot;Arial&quot;;
+}
+QPushButton {
+	font: 8px;
+	border: 1px solid rgb(60, 60, 60);
+	border-radius: 4px;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 255), stop:1 rgba(61, 61, 61, 255));
+	min-width: 70px;
+	min-height: 20px;
+	max-height: 20px;
+}
+QPushButton {
+	margin-left: 5px;
+	color: white;
+}
+QPushButton:hover {
+	border: 1px solid rgb(0, 187, 255);
+	background-color: rgb(0, 137, 241, 128);
+}
+QPushButton::checked, QPushButton:pressed {
+	background-color: rgb(0, 187, 255);
+	color: white;
+}
+QCheckBox {
+	spacing: 5px;
+}
+QCheckBox::indicator {
+	width: 11px;
+	height: 11px;
+	border: 1px solid rgb(60, 60, 60);
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
+}
+QCheckBox::indicator:checked {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+}</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="pageRender">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="UiRender" name="render" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pagePerf">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,300">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="performanceLayout">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="performanceModeLabel">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font: 75 11pt &quot;Arial&quot;;</string>
+            </property>
+            <property name="text">
+             <string>PERFORMANCE MODE</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="performancePreview">
+            <property name="text">
+             <string>PREVIEW</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="UiRenderPreview" name="renderPreview" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>906</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionCopyScript"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionPasteScript"/>
+    <addaction name="actionDuplicate"/>
+    <addaction name="actionCut"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelect_all"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionDrawFreeCurve"/>
+    <addaction name="actionDrawPointCurve"/>
+    <addaction name="actionDrawTriggers"/>
+    <addaction name="actionAddCircleCurve"/>
+    <addaction name="actionAddFreeCursor"/>
+    <addaction name="separator"/>
+    <addaction name="actionSync"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSave_all"/>
+    <addaction name="separator"/>
+    <addaction name="actionImoprt_Text"/>
+    <addaction name="actionImoprt_SVG"/>
+    <addaction name="actionImoprt_Image"/>
+    <addaction name="actionImoprt_Background"/>
+    <addaction name="separator"/>
+    <addaction name="actionRename"/>
+    <addaction name="actionRemove"/>
+    <addaction name="actionDuplicateScore"/>
+    <addaction name="separator"/>
+    <addaction name="actionReloadScript"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <widget class="QMenu" name="menuGrid_size">
+     <property name="title">
+      <string>Grid setup</string>
+     </property>
+     <addaction name="action10Seconds"/>
+     <addaction name="action1second"/>
+     <addaction name="action500Milliseconds"/>
+     <addaction name="action100Milliseconds"/>
+     <addaction name="action10Milliseconds"/>
+     <addaction name="actionCustomValue"/>
+    </widget>
+    <addaction name="actionFullscreen"/>
+    <addaction name="actionPerformance"/>
+    <addaction name="separator"/>
+    <addaction name="actionToggle_Inspector"/>
+    <addaction name="actionToggle_Transport"/>
+    <addaction name="actionShowEditor"/>
+    <addaction name="actionShowTimer"/>
+    <addaction name="separator"/>
+    <addaction name="actionGrid"/>
+    <addaction name="actionSnapXGrid"/>
+    <addaction name="actionSnapYGrid"/>
+    <addaction name="menuGrid_size"/>
+    <addaction name="separator"/>
+    <addaction name="actionZoom_in"/>
+    <addaction name="actionZoom_initial"/>
+    <addaction name="actionZoom_out"/>
+    <addaction name="actionToggle_Autosize"/>
+    <addaction name="separator"/>
+    <addaction name="actionResize"/>
+    <addaction name="actionSnapshot"/>
+    <addaction name="separator"/>
+    <addaction name="actionLight"/>
+   </widget>
+   <widget class="QMenu" name="menuPlayback">
+    <property name="title">
+     <string>Playback</string>
+    </property>
+    <addaction name="actionPlay_pause"/>
+    <addaction name="actionFast_rewind"/>
+   </widget>
+   <widget class="QMenu" name="menuAlignment">
+    <property name="title">
+     <string>Arrange objects</string>
+    </property>
+    <widget class="QMenu" name="menuAlignH">
+     <property name="title">
+      <string>Align horizontally</string>
+     </property>
+     <addaction name="actionAlign_left"/>
+     <addaction name="actionAlign_center"/>
+     <addaction name="actionAlign_right"/>
+    </widget>
+    <widget class="QMenu" name="menuAlignV">
+     <property name="title">
+      <string>Align vertically</string>
+     </property>
+     <addaction name="actionAlign_top"/>
+     <addaction name="actionAlign_middle"/>
+     <addaction name="actionAlign_bottom"/>
+    </widget>
+    <addaction name="menuAlignH"/>
+    <addaction name="menuAlignV"/>
+    <addaction name="separator"/>
+    <addaction name="actionDistributeH"/>
+    <addaction name="actionDistributeV"/>
+    <addaction name="actionAlign_circle"/>
+    <addaction name="actionAlign_ellipse"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
+   <addaction name="menuPlayback"/>
+   <addaction name="menuAlignment"/>
+  </widget>
+  <widget class="QDockWidget" name="transportDock">
+   <property name="minimumSize">
+    <size>
+     <width>54</width>
+     <height>54</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Transport</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="UiTransport" name="transport"/>
+  </widget>
+  <widget class="QDockWidget" name="inspecteurDock">
+   <property name="minimumSize">
+    <size>
+     <width>355</width>
+     <height>42</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Inspector</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="UiInspector" name="inspector"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>Toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionDrawTriggers"/>
+   <addaction name="actionDrawFreeCurve"/>
+   <addaction name="actionDrawPointCurve"/>
+   <addaction name="actionAddCircleCurve"/>
+   <addaction name="actionAddFreeCursor"/>
+   <addaction name="separator"/>
+   <addaction name="actionLockPos"/>
+   <addaction name="actionToggleLabel"/>
+   <addaction name="separator"/>
+   <addaction name="actionGrid"/>
+   <addaction name="actionSnapXGrid"/>
+   <addaction name="actionSnapYGrid"/>
+   <addaction name="separator"/>
+   <addaction name="actionAllow_triggers_selection"/>
+   <addaction name="actionAllow_curves_selection"/>
+   <addaction name="actionAllow_cursors_selection"/>
+   <addaction name="separator"/>
+   <addaction name="actionToggle_Inspector"/>
+   <addaction name="actionToggle_Transport"/>
+   <addaction name="actionShowEditor"/>
+   <addaction name="actionShowTimer"/>
+   <addaction name="separator"/>
+   <addaction name="actionFullscreen"/>
+   <addaction name="actionPerformance"/>
+   <addaction name="separator"/>
+   <addaction name="actionLight"/>
+   <addaction name="separator"/>
+   <addaction name="actionPatchesFolder"/>
+   <addaction name="actionHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to undo last action</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to redo last action</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to copy selected objects in clipboard</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to paste copied objects from clipboard</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to copy and remove selected objects</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSelect_all">
+   <property name="text">
+    <string>Select all</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to select all the selectable objects in the score</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to remove selected objects</string>
+   </property>
+   <property name="shortcut">
+    <string>Backspace</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New score</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a new score</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to create a new empty score</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open project folder…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to open a folder of scores</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save current score</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to save the current score</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to quit IanniX</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionFullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_fullscreen.png</normaloff>:/actions/res_icon_fullscreen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fullscreen</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to switch to fullscreen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionToggle_Inspector">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_inspector.png</normaloff>:/actions/res_icon_inspector.png</iconset>
+   </property>
+   <property name="text">
+    <string>Inspector panel</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to hide/show inspector panel</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+I</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionToggle_Transport">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_transport.png</normaloff>:/actions/res_icon_transport.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transport panel</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to hide/show transport panel</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+T</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPlay_pause">
+   <property name="text">
+    <string>Play/pause</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to play or pause the playback</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionFast_rewind">
+   <property name="text">
+    <string>Fast rewind</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to fast rewind the playback</string>
+   </property>
+   <property name="shortcut">
+    <string>F</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_grid.png</normaloff>:/actions/res_icon_grid.png</iconset>
+   </property>
+   <property name="text">
+    <string>Grid &amp;&amp; axis</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to show/hide score grid and axis</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDuplicate">
+   <property name="text">
+    <string>Duplicate</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to duplicate selected objects</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionToggle_Autosize">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Autoresize object</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to rescale objects according to zoom</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionZoom_in">
+   <property name="text">
+    <string>Zoom in</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to zoom in</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionZoom_out">
+   <property name="text">
+    <string>Zoom out</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to zoom out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionZoom_initial">
+   <property name="text">
+    <string>Initial zoom</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to restore initial zoom</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+0</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDrawFreeCurve">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_curveFree.png</normaloff>:/actions/res_icon_curveFree.png</iconset>
+   </property>
+   <property name="text">
+    <string>Draw a smooth curve</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add and draw a smooth curve in your score. Press ESC or click again to end your curve.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+F</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDrawPointCurve">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_curvePoint.png</normaloff>:/actions/res_icon_curvePoint.png</iconset>
+   </property>
+   <property name="text">
+    <string>Draw straight curve</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add and draw a straight curve in your score. Press ESC or click again to end your curve.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDrawTriggers">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_trigger.png</normaloff>:/actions/res_icon_trigger.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add triggers</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add triggers in your score. Press ESC or click again to stop adding triggers.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+T</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAddFreeCursor">
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_cursor.png</normaloff>:/actions/res_icon_cursor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add a cursor</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add cursors on the selected curve. If no curve is selected, cursor will be free (controlled by an external source)</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action10Seconds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>10 seconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action1second">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1 second</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action500Milliseconds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>500 milliseconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action100Milliseconds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>100 milliseconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action10Milliseconds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>10 milliseconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCustomValue">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Custom value</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionOpaque">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>100% opaque</string>
+   </property>
+  </action>
+  <action name="action75_opaque">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>75% opaque</string>
+   </property>
+  </action>
+  <action name="action50_opaque">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>50% opaque</string>
+   </property>
+  </action>
+  <action name="action25_opaque">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>25% opaque</string>
+   </property>
+  </action>
+  <action name="action10_opaque">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>10% opaque</string>
+   </property>
+  </action>
+  <action name="actionAddCircleCurve">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_curveCircle.png</normaloff>:/actions/res_icon_curveCircle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add circular curves</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to add circular curves in your score. Press ESC or click again to stop adding circular cuvers.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_help.png</normaloff>:/actions/res_icon_help.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to display IanniX help in your browser</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSnapXGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_grid_snapX.png</normaloff>:/actions/res_icon_grid_snapX.png</iconset>
+   </property>
+   <property name="text">
+    <string>Snap to X-grid</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to snap actions (objects position, curve points…) to grid</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+G</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSave_all">
+   <property name="text">
+    <string>Save all scores</string>
+   </property>
+   <property name="iconText">
+    <string>Save all scores</string>
+   </property>
+   <property name="toolTip">
+    <string>Save all scores</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to save all the opened scores</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+Shift+S</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="text">
+    <string>Rename score…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to rename your score</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+Shift+R</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRemove">
+   <property name="text">
+    <string>Remove score from project folder…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to remove this score from your project folder</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDuplicateScore">
+   <property name="text">
+    <string>Duplicate score in project folder</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to duplicate your score in your project folder</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionLockPos">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_lock.png</normaloff>:/actions/res_icon_lock.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lock objects position</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to lock/unlock the position of objects (to avoid moving objects while navigating in the score)</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionToggleLabel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_label.png</normaloff>:/actions/res_icon_label.png</iconset>
+   </property>
+   <property name="text">
+    <string>Objects labels</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to show/hide labels on objects</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPatchesFolder">
+   <property name="text">
+    <string>Open patches folder</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to open the patches folder (external objects for hosts software) provided with IanniX</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About IanniX</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to display information about IanniX</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionSync">
+   <property name="text">
+    <string>Send score through default sync output</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to send your score through the default sync output</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionImoprt_SVG">
+   <property name="text">
+    <string>Import SVG as a curve…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to import a SVG file as a curve in your score</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionImoprt_Image">
+   <property name="text">
+    <string>Import image to be vectorized…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to import image to be vectorized in your score</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionImoprt_Text">
+   <property name="text">
+    <string>Import glyph as a curve…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to import a glyph as a curve in your score</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionShowEditor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_editor.png</normaloff>:/actions/res_icon_editor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Script editor window</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to show the script editor window (if you're working on a script)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionReloadScript">
+   <property name="text">
+    <string>Reload current script</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to reload the current script</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionLight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_light.png</normaloff>:/actions/res_icon_light.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lighter color theme</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to change the color theme of IanniX</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionImoprt_Background">
+   <property name="text">
+    <string>Import a background image…</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to import a background image in your score</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAllow_triggers_selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/general/res_icon_trigger_select.png</normaloff>:/general/res_icon_trigger_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Allow triggers selection</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to allow/forbid the selection of triggers (on hover, on marquee selection, on select all actions)</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAllow_curves_selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/general/res_icon_curve_select.png</normaloff>:/general/res_icon_curve_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Allow curves selection</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to allow/forbid the selection of curves (on hover, on marquee selection, on select all actions)</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAllow_cursors_selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/general/res_icon_cursor_select.png</normaloff>:/general/res_icon_cursor_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Allow cursors selection</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to allow/forbid the selection of cursors (on hover, on marquee selection, on select all actions)</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSnapYGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_grid_snapY.png</normaloff>:/actions/res_icon_grid_snapY.png</iconset>
+   </property>
+   <property name="text">
+    <string>Snap to Y-grid</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to snap actions (objects position, curve points…) to grid</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+H</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSnapZGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/actions/res_icon_grid_snap.png</normaloff>:/actions/res_icon_grid_snap.png</iconset>
+   </property>
+   <property name="text">
+    <string>Snap to grid</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to snap actions (objects position, curve points…) to grid</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCopyScript">
+   <property name="text">
+    <string>Copy as a script</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy as a script</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to copy selected objects in clipboard as script commands</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+C</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPasteScript">
+   <property name="text">
+    <string>Paste as a script</string>
+   </property>
+   <property name="toolTip">
+    <string>Paste as a script</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to paste scripts commands from clipboard (a script must be loaded before)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+V</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDistributeH">
+   <property name="text">
+    <string>Distribute horizontally</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to distribute objects horizontally from the leftmost object to the rightmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDistributeV">
+   <property name="text">
+    <string>Distribute vertically</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to distribute objects vertically from the topmost object to the bottommost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_left">
+   <property name="text">
+    <string>Align left</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the leftmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_center">
+   <property name="text">
+    <string>Align center</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the horizontal center of the selection</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_right">
+   <property name="text">
+    <string>Align right</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the rightmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_top">
+   <property name="text">
+    <string>Align top</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the topmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_middle">
+   <property name="text">
+    <string>Align middle</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the vertical center of the selection</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_bottom">
+   <property name="text">
+    <string>Align bottom</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects on the bottommost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_circle">
+   <property name="text">
+    <string>Distribute circulary</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects as a circle</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_ellipse">
+   <property name="text">
+    <string>Distribute on ellipse</string>
+   </property>
+   <property name="toolTip">
+    <string>Click here to align objects as an ellipse</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSnapshot">
+   <property name="text">
+    <string>Make a high resolution snapshot</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to save the current view in a high resolution PNG file (file will be placed on your desktop)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+P</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionResize">
+   <property name="text">
+    <string>Resize viewport</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to resize the viewport (the rendering area). Note that it is recommended to hide Transport bar and Inspector bar to get the exact desired size.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionShowTimer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_timer.png</normaloff>:/actions/res_icon_timer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Timer window</string>
+   </property>
+   <property name="toolTip">
+    <string>Timer window</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to show the timer window, displaying elapsed time</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPerformance">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="IanniX.qrc">
+     <normaloff>:/actions/res_icon_performance.png</normaloff>:/actions/res_icon_performance.png</iconset>
+   </property>
+   <property name="text">
+    <string>Performance mode</string>
+   </property>
+   <property name="statusTip">
+    <string>Click here to switch to performance mode</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>UiRender</class>
+   <extends>QWidget</extends>
+   <header>gui/uirender.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>UiTransport</class>
+   <extends>QWidget</extends>
+   <header>gui/uitransport.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>UiInspector</class>
+   <extends>QWidget</extends>
+   <header>gui/uiinspector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>UiRenderPreview</class>
+   <extends>QWidget</extends>
+   <header>gui/uirenderpreview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="IanniX.qrc"/>
+ </resources>
+ <connections/>
+ <slots>
+  <slot>fullscreenDisplaysSelected()</slot>
+ </slots>
+</ui>
