@@ -1,0 +1,72 @@
+//Setup of the script
+function onConfigure() {
+	//Name of the script
+	title("Grid");
+	//Global variables
+	ask("Lines", "Quantity", "lineMax", 50);
+	ask("Shape", "Center circle size", "circleRadius", 0.3);
+	ask("Shape", "External circle size", "circleRadius2", 5);
+}
+
+//Creation of the score
+function onCreate() {
+	//Viewport setup
+	run("clear");
+	run("registerTexture background");
+	run("rotate 0 0 0");
+	run("center 0 0");
+	run("zoom 130");
+	
+	
+	//Lines
+	for(var lineIndex = 0 ; lineIndex < lineMax ; lineIndex++) {
+		var angle = map(lineIndex, 0, lineMax, 0, TWO_PI);
+		addLine(lineIndex, {x: circleRadius  * cos(angle), y: circleRadius  * sin(angle)},
+		                    {x: circleRadius2 * cos(angle), y: circleRadius2 * sin(angle)});
+	}
+}
+
+//Custom function
+function addLine(lineIndex, start, end) {
+	var percent = lineIndex / lineMax;
+
+	run("add curve       " + (1000 + lineIndex));
+	run("setGroup        current lines");
+	run("setPointAt      current 0 " + start.x + " " + start.y);
+	run("setPointAt      current 1 " + end.x   + " " + end.y);
+	run("setColorHue     current " + rangeMid(percent, 74, 30, 74) + " 255 192 255");
+
+	run("add cursor      " + lineIndex);
+	run("setCurve        current lastCurve");
+	run("setGroup        current values");
+	run("setBoundsSource current " + (-circleRadius2) + " " + circleRadius2 + " " + (-circleRadius2) + " " + circleRadius2);
+	run("setSpeed        current " + (1 + percent));
+	run("setColor        current 170 180 190 255");
+	run("setSize         current 2");
+	run("setPattern      current 0 0 1");
+
+	run("add trigger     " + (2000 + lineIndex));
+	run("setGroup        current triggers");
+	run("setPos          current " + (end.x * 0.9) + " " + (end.y * 0.9) + " 0");
+	run("setSize         current 0.5");
+	run("setColorHue     current " + rangeMid(percent, 0, 40, 0) + " 255 255 255");
+}
+
+/*
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+

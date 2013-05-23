@@ -19,11 +19,10 @@
 #include "extoscpatternask.h"
 #include "ui_extoscpatternask.h"
 
-ExtOscPatternAsk::ExtOscPatternAsk(NxObjectFactoryInterface *_factory, QWidget *parent, QList<NxObject*> *_objects) :
+ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject *> *_objects) :
     QDialog(parent),
     ui(new Ui::ExtOscPatternAsk) {
     ui->setupUi(this);
-    factory = _factory;
     objects = _objects;
     QStringList messagePatterns;
     onlyCurves = true;
@@ -38,10 +37,9 @@ ExtOscPatternAsk::ExtOscPatternAsk(NxObjectFactoryInterface *_factory, QWidget *
             if(!messagePatterns.contains(messagePattern)) {
                 messagePatterns.append(messagePattern);
 
-                ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(factory, this);
+                ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(this);
                 connect(patternEditor, SIGNAL(actionRouteFocus(QComboBox*,QPlainTextEdit*)), SLOT(actionFieldFocus(QComboBox*,QPlainTextEdit*)));
                 ui->tabs->addTab(patternEditor, tr("Message %1").arg(ui->tabs->count()+1));
-                ui->tabs->setCurrentIndex(ui->tabs->count()-1);
                 patternLists.append(patternEditor);
                 patternEditor->setPattern(messagePatternItems, true);
             }
@@ -53,6 +51,8 @@ ExtOscPatternAsk::ExtOscPatternAsk(NxObjectFactoryInterface *_factory, QWidget *
         ui->removeButton->setVisible(false);
 
     ui->splitter->setSizes(QList<int>() << 350 << 0);
+    if(ui->tabs->count())
+        ui->tabs->setCurrentIndex(0);
 
     QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.center() - rect().center());
@@ -86,7 +86,6 @@ const QString ExtOscPatternAsk::getMessagePatterns() const {
 }
 
 void ExtOscPatternAsk::actionAddMessage() {
-    QSettings settings;
     bool isTrigger = false;
     bool isCursor = false;
     foreach(const NxObject *object, *objects) {
@@ -95,18 +94,11 @@ void ExtOscPatternAsk::actionAddMessage() {
         else if(object->getType() == ObjectsTypeTrigger)
             isTrigger = true;
     }
-    QString messagePatternItem = "";
-    if((isCursor) && (!isTrigger))
-        messagePatternItem = settings.value("defaultMessageCursor").toString();
-    else if((!isCursor) && (isTrigger))
-        messagePatternItem = settings.value("defaultMessageTrigger").toString();
-    else
-        messagePatternItem = settings.value("defaultMessage").toString();
-
+    QString messagePatternItem = Global::defaultMessage;
 
     QVector< QVector<QByteArray > > messagePatternItemsList = NxObject::parseMessagesPattern(messagePatternItem);
     foreach(const QVector<QByteArray > & messagePatternItems, messagePatternItemsList) {
-        ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(factory, this);
+        ExtOscPatternEditor *patternEditor = new ExtOscPatternEditor(this);
         connect(patternEditor, SIGNAL(actionRouteFocus(QComboBox*,QPlainTextEdit*)), SLOT(actionFieldFocus(QComboBox*,QPlainTextEdit*)));
         ui->tabs->addTab(patternEditor, tr("Message %1").arg(ui->tabs->count()+1));
         ui->tabs->setCurrentIndex(ui->tabs->count()-1);
@@ -135,7 +127,7 @@ void ExtOscPatternAsk::actionRemoveMessage() {
 
 void ExtOscPatternAsk::actionFieldFocus(QComboBox *combo, QPlainTextEdit *plaintext) {
     if(plaintext)
-        ui->help->display(plaintext, QStringList() << "commands" << "values" << "javascript");
+        ui->help->scriptHelp(plaintext, QStringList() << "commands" << "values" << "javascript");
     if(combo)
-        ui->help->display(combo, QStringList() << "commands" << "values" << "javascript");
+        ui->help->scriptHelp(combo, QStringList() << "commands" << "values" << "javascript");
 }

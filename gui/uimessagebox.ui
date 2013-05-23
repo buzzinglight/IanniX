@@ -6,526 +6,666 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>245</width>
-    <height>201</height>
+    <width>266</width>
+    <height>168</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>IanniX</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	font: 12px &quot;Arial&quot;;
+   <string notr="true">QTabWidget, QLabel, QCheckBox, QLineEdit, QPlainTextEdit, QPushButton, QSpinBox, QDoubleSpinBox, QTreeView, QHeaderView, QTabBar, QComboBox, QFrame#globalFrame, QTabBar::tab, QTreeView, QHeaderView, QDockWidget, QStatusBar {
+	font: 						10px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+	padding:					0px;
+	margin:					0px;
+	min-height: 				20px;
+	color: 						white;
+	border: 					0px solid black;
 }
-QLabel {
-	font: bold;
+QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox::indicator, QTreeView::indicator, QComboBox, QTreeView, QHeaderView {
+	border: 					1px solid rgb(55, 55, 55);
+	border-radius: 		2px;
+	background-color: 	rgb(70, 70, 70);
 }
-
-QLabel#separator1, QLabel#separator2, QLabel#separator3, QLabel#separator4 {
-	border-top: 1px solid rgb(44, 167, 218);
-}
-
-QFrame#globalFrame {
-	border: 0px solid transparent;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
-}
-QScrollArea#scrollArea, QWidget#scrollArea2 {
-	border: 0px solid transparent;
-	background: transparent;
+QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox {
+	margin-top: 			4px;
+	margin-bottom: 		4px;
 }
 
-QWidget#tabProject, QWidget#tabView, QWidget#tabInfo, QWidget#tabControlCenter, QWidget#tabOSC {
-	background-color: transparent;
+QFrame#globalFrame, QFrame#transportFrame, QFrame#timeFrame, QFrame#optionFrame, QFrame#speedFrame, QFrame#logoFrame, QFrame#perfFrame, QDialog {
+	background-color: 	rgb(40, 40, 40);
 }
-QTabWidget::pane {
-	border: 1px solid rgba(255, 255, 255, 32);
+QLabel, QTabBar::tab {
+	font: 						bold;
 }
-
 QLabel, QCheckBox {
-	color: rgb(220, 220, 220);
+	color: 						rgb(210, 210, 210);
+}
+
+QTabWidget::pane {
+	border: 					1px solid rgb(50, 50, 50);
+}
+QTabWidget::tab-bar {
+	left: 							0px;
+}
+QTabWidget#tab {
+	color: red;
+}
+QTabBar::tab {
+	min-height: 							25px; /* FIX IN SS-TAB */
+	background-color: 				rgb(110, 110, 110);
+    border-top-left-radius: 		4px;
+    border-top-right-radius: 	4px;
+	margin-right:						2px;
+	padding-left: 						5px;
+	padding-right:						5px;
+	color: 									rgb(220, 220, 220);
+}
+QTabBar::tab:selected {
+	background-color: 				rgb(242, 241, 237);
+	color: 									black;
+}
+QTabBar::tab:hover {
+	color: 									black;
+}
+QTabBar::tab:!selected {
+    margin-top: 						2px;
+}
+QTabBar::tab:disabled {
+	color: 									gray;
 }
 
 
-
-QLineEdit {
-	background: transparent;
-	border: 0px solid transparent;
-}
-
-QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit {
-	border: 1px solid rgb(60, 60, 60);
-	border-radius: 4px;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 255), stop:1 rgba(61, 61, 61, 255));
-	min-width: 70px;
-	min-height: 30px;
-
-}
 QPushButton {
-	margin-left: 5px;
-	color: white;
+	margin-left: 			6px;
 }
 QPushButton:hover {
-	border: 1px solid rgb(0, 187, 255);
-	background-color: rgb(0, 137, 241, 128);
+	border: 					1px solid rgb(28, 124, 195);
+	background-color: 	rgb(21, 91, 143);
 }
-QPushButton::checked, QPushButton:pressed {
-	background-color: rgb(0, 187, 255);
-	color: white;
+QPushButton::checked, QPushButton:pressed, QCheckBox::indicator:checked, QTreeView::indicator:checked {
+	background-color: 	rgb(0, 187, 255);
 }
 
 
 QCheckBox {
-	spacing: 5px;
+	spacing: 					5px;
 }
-QCheckBox::indicator {
-	width: 11px;
-	height: 11px;
-	border: 1px solid rgb(60, 60, 60);
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
-}
-QCheckBox::indicator:checked {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+QCheckBox::indicator, QTreeView::indicator  {
+	width: 						10px;
+	height: 					10px;
 }
 
-QDoubleSpinBox, QSpinBox, QLineEdit  {
-	padding: 2px;
-	padding-top: 0px;
-	color: white;
+QSpinBox, QDoubleSpinBox, QLineEdit {
+	padding-left	:			5px;
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button, QSpinBox::down-button, QDoubleSpinBox::down-button {
+	width: 						5px;
+	padding: 					2px;
+	padding-left:			3px;
+	background-color: 	rgb(60, 60, 60);
+	border: 					0px solid black;
+	border-left:				1px solid rgb(70, 70, 70);
 }
 QSpinBox::up-button, QDoubleSpinBox::up-button {
-	width: 5px;
-    image: url(:/icons/res_icon_plus.png);
-	padding: 2px;
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 64);
+    image: 						url(:/icons/res_icon_plus.png);
+	border-bottom:		1px solid rgb(70, 70, 70);
 }
 QSpinBox::down-button, QDoubleSpinBox::down-button {
-	width: 5px;
-    image: url(:/icons/res_icon_minus.png);
-	padding: 2px;
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 64);
+    image: 						url(:/icons/res_icon_minus.png);
+}
+
+
+QComboBox {
+	background:			rgb(242, 241, 237);
+	color: 					black;
+	margin-left: 		3px;
+	border-radius: 	3px;
+	selection-color: 	black;
+	padding-left: 		5px;
+}
+QComboBox::drop-down {
+	width: 						10px;
+	padding: 					2px;
+	border: 					0px solid black;
+	background-color: 	rgb(70, 70, 70);
+    image: 						url(:/icons/res_icon_down.png);
+}
+QComboBox QAbstractItemView {
+	min-height: 				50px;
 }
 
 
 
-QTreeWidget {
-	alternate-background-color: rgb(79, 79, 81);
-	color: white;
-	border: 0px solid transparent;
-	gridline-color: rgb(150, 152, 137);
-	selection-background-color: rgb(0, 187, 255);
-	background: transparent;
-	background-color: rgb(63, 64, 64);
-}
-QTreeWidget::item {
+QTreeView {
+	background:								rgb(50, 50, 50);
+	alternate-background-color: 	rgb(55, 55, 55);
+	selection-background-color: 	rgb(0, 187, 255);
+	gridline-color: 							rgb(60, 60, 60);
 }
 QHeaderView {
-	background: transparent;
-	border: 0px solid transparent;
-	color: rgb(203, 203, 203);
-	min-height: 12px;
+	background: 							transparent;
+	border: 									0px solid black;
+	color: 										rgb(200, 200, 200);
+	min-height: 								14px;
 }
 QHeaderView::section {
-	background: rgba(255, 255, 255, 64);
-	padding-left: 4px;
-	border: 0px solid transparent;
-	border-top-left-radius:  6px;
-	border-top-right-radius: 6px;
-	font: bold;
+	background: 							rgb(90, 90, 90);
+	padding-left: 							5px;
+	border-top-left-radius:  			3px;
+	border-top-right-radius: 		3px;
+	margin-right:							1px;
+	font: 										9px &quot;Arial&quot;;
 }
-
-QTreeView::indicator {
-	border: 1px solid rgb(60, 60, 60);
-	width: 11px;
-	height: 11px;
-}
-QTreeView::indicator:unchecked {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
-}
-QTreeView::indicator:checked {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
+QTreeView::item {
+	min-height: 20px;
 }
 
 
 
 QScrollBar:vertical, QScrollBar:horizontal {
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 32);
+	border: 				0px solid black;
+	background: 		rgba(255, 255, 255, 32);
 }
 QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-	border: 0px solid transparent;
-	background: rgb(161, 161, 161);
-	border-radius: 3px;
+	border: 				0px solid black;
+	background: 		rgb(161, 161, 161);
+	border-radius: 	3px;
 }
-QScrollBar:vertical {						width: 8px;					}
-QScrollBar:horizontal {					height: 8px;				}
+QScrollBar:vertical {						width: 			8px;					}
+QScrollBar:horizontal {					height: 		8px;				}
 QScrollBar::handle:vertical {			min-height: 8px;		}
-QScrollBar::handle:horizontal {	min-width: 8px;			}
+QScrollBar::handle:horizontal {	min-width: 	8px;			}
 QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
-	border: 0px solid transparent;
-	background: transparent;
-	width: 1px;
-	height: 1px;
+	border: 			0px solid black;
+	background: 	transparent;
+	width: 				1px;
+	height: 			1px;
 }
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
-	background: none;
+	background: 	none;
+}
+
+
+QSlider:horizontal {
+	min-width: 				100px;
+}
+QSlider::groove:horizontal {
+	border: 					0px solid transparent;
+	background-color: 	rgb(70, 70, 70);
+	height: 					3px;
+}
+QSlider::handle:horizontal {
+	width: 						11px;
+	height: 					10px;
+	border-radius: 		5px;
+	margin-top: 			-4px;
+	margin-bottom: 		-4px;
+	border: 					0px solid black;
+	background-color: 	rgb(0, 187, 250);
 }
 
 
 QSplitter::handle {
-	background: rgb(255, 255, 255, 30);
+	background: 							rgb(255, 255, 255, 30);
 }
 QSplitter::handle:pressed {
-	background: rgb(0, 187, 255);
+	background: 							rgb(0, 187, 255);
  }
-QSplitter::handle:horizontal	 	{	width: 4px; }
-QSplitter::handle:vertical     		{	height: 4px; }
+QSplitter::handle:horizontal	 	{	width: 	4px; }
+QSplitter::handle:vertical     		{	height:	4px; }
 
-
-QComboBox {
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 200);
-	color: black;
-	margin-left: 4px;
-	padding-top: -4px;
-	border-radius: 4px;
+QDockWidget {
 }
-QComboBox {
-	selection-color: black;
-	padding-top: 0px;
-	padding-left: 4px;
-}
-QComboBox::drop-down {
-	width: 10px;
-	padding: 4px;
-	border: 0px solid transparent;
-	background: rgb(0, 187, 255);
-    image: url(:/icons/res_icon_down.png);
-}
-
-QPlainTextEdit {
-	background-color: rgb(242, 241, 237);
+QDockWidget::title {
+    text-align:				center;
+	background-color: 	rgb(70, 70, 70);
 }
 
 
-QTabWidget::tab-bar {
-	left: 5px;
+QToolButton {
+	border: 					0px solid black;
+	border-radius: 		3px;
+	margin: 					2px;
 }
-QTabWidget {
-	border: 0px transparent;
-}
-QTabBar::tab {
-	background-color: rgba(255, 255, 255, 100);
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-	font: bold;
-	min-height: 25px;
-	margin-left: 2px;
-	padding-left: 5px;
-	padding-right: 5px;
-	color: rgb(220, 220, 220);
-}
-QTabBar::tab:selected {
-	background-color: rgb(242, 241, 237);
-	color: black;
-}
-QTabBar::tab:hover {
-	color: black;
-}
-QTabBar::tab:!selected {
-     margin-top: 2px;
+QToolButton:pressed, QToolButton:checked {
+	border: 					0px solid black;
+    background-color: 	rgba(0, 0, 0, 20);
 }
 
 
+QStatusBar {
+	color: 						rgb(210, 210, 210);
+	border-top: 				1px solid rgb(50, 50, 50);
+	background-color: 	rgb(30, 30, 30);
+}
+
+
+
+
+
+/*TRANSPORT*/
+QFrame#transportFrame, QFrame#timeFrame, QFrame#optionFrame, QFrame#speedFrame, QFrame#logoFrame, QFrame#perfFrame{
+	border: 					0px solid black;
+	border-left: 				1px solid rgb(50, 50, 50);
+}
+QWIdget {
+	margin:					0px;
+	padding:					0px;
+}
+QWidget#speedSlider {
+	margin-top: 			7px;
+}
+QWidget#timeEdit, QWidget#perfCpuEdit, QWidget#perfOpenGLEdit, QWidget#perfSchedulerEdit {
+	background-color: 	transparent;
+	border: 					0px solid black;
+	font:							9px;
+	color: 						rgb(140, 140, 140);
+}
+QLineEdit#timeEdit {
+	font: 						40px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
+	color: 						rgb(0, 187, 255);
+}
+QPushButton#logoButton {
+	border: 					0px solid black;
+	background-color: 	transparent;
+}
+QPushButton:hover#logoButton {
+	border: 					1px solid rgb(28, 124, 195);
+	background-color: 	rgb(21, 91, 143);
+}
+QPushButton#ffButton, QPushButton#playButton {
+	min-width:  		40px;
+	min-height: 		40px;
+	border-radius: 20px;
+}
+QPushButton#logoButton {
+	margin: -2px;
+}
+/* ---- */
+
+
+/* INSPECTEUR */
+QWidget#ssTabInfoGeneral, QWidget#ssTabInfoSpace, QWidget#ssTabInfoTime, QWidget#ssTabInfoMessage, QWidget#ssTabConfigLog, QWidget#ssTabConfigNetwork, QWidget#ssTabConfigMIDI, QWidget#ssTabConfigArduino, QWidget#ssTabConfigSyphon, QWidget#ssTabConfigWeb, QWidget#ssTabRessource {
+	background-color: 	rgb(50, 50, 50)
+}
+QWidget#tabProject, QWidget#tabView, QWidget#tabInfo, QWidget#tabControlCenter, QWidget#tabConfig {
+	background-color: 	transparent;
+}
+QWidget#equationEdit {
+	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+}
+
+/* ----- */
+
+
+
+/* MAIN */
+QWidget#centralwidget  {
+	background-color: black;
+}
+/* ----- */
+
+
+/* DIALOG */
+QDialogButtonBox QPushButton {
+	padding-left: 		10px;
+	padding-right: 	10px;
+	min-height:			25px;
+	margin:				5px;
+}
+/* ------ */
 </string>
   </property>
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <property name="spacing">
-    <number>0</number>
+    <number>12</number>
    </property>
    <property name="margin">
-    <number>0</number>
+    <number>12</number>
    </property>
    <item>
-    <widget class="QFrame" name="globalFrame">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+    <widget class="QStackedWidget" name="choices">
+     <property name="currentIndex">
+      <number>4</number>
      </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+     <widget class="QWidget" name="page">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>15</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="spinLabel">
+         <property name="text">
+          <string>ENTER A VALUE FOR</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="spinSpin">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_3">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="spinpPicture">
+           <property name="text">
+            <string>PICTURE</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>15</number>
+         </property>
+         <item>
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="spinpLabel">
+           <property name="text">
+            <string>ENTER A VALUE FOR</string>
+           </property>
+           <property name="buddy">
+            <cstring>spinpSpin</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="spinpSpin">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="messageLabel">
+         <property name="text">
+          <string>ENTER A VALUE FOR</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_4">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>15</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <spacer name="horizontalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="textLabel">
+         <property name="text">
+          <string>ENTER A VALUE FOR</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>textEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="textEdit">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_10">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_5">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="updatePicture">
+           <property name="text">
+            <string>PICTURE</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="updateLabel">
+         <property name="text">
+          <string>Title of popup</string>
+         </property>
+         <property name="buddy">
+          <cstring>updatePlain</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="updatePlain">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="updateLabel2">
+         <property name="text">
+          <string>Question</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="messageButtons">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_5">
-      <property name="spacing">
-       <number>15</number>
-      </property>
-      <property name="margin">
-       <number>15</number>
-      </property>
-      <item>
-       <widget class="QStackedWidget" name="choices">
-        <property name="currentIndex">
-         <number>4</number>
-        </property>
-        <widget class="QWidget" name="page">
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <property name="spacing">
-           <number>15</number>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="spinLabel">
-            <property name="text">
-             <string>ENTER A VALUE FOR</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="spinSpin">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_3">
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <property name="spacing">
-           <number>5</number>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
-            <item>
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="spinpPicture">
-              <property name="text">
-               <string>PICTURE</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <property name="spacing">
-             <number>15</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="spinpLabel">
-              <property name="text">
-               <string>ENTER A VALUE FOR</string>
-              </property>
-              <property name="buddy">
-               <cstring>spinpSpin</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="spinpSpin">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_2">
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="messageLabel">
-            <property name="text">
-             <string>ENTER A VALUE FOR</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_4">
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <property name="spacing">
-           <number>15</number>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="textLabel">
-            <property name="text">
-             <string>ENTER A VALUE FOR</string>
-            </property>
-            <property name="buddy">
-             <cstring>textEdit</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="textEdit">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_5">
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="updatePicture">
-              <property name="text">
-               <string>PICTURE</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QLabel" name="updateLabel">
-            <property name="text">
-             <string>ENTER A VALUE FOR</string>
-            </property>
-            <property name="buddy">
-             <cstring>updatePlain</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPlainTextEdit" name="updatePlain">
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="updateLabel2">
-            <property name="text">
-             <string>ENTER A VALUE FOR</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDialogButtonBox" name="messageButtons">
-        <property name="standardButtons">
-         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>
@@ -537,9 +677,7 @@ QTabBar::tab:!selected {
   <tabstop>updatePlain</tabstop>
   <tabstop>messageButtons</tabstop>
  </tabstops>
- <resources>
-  <include location="IanniX.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>messageButtons</sender>

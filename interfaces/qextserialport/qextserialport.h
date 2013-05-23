@@ -264,7 +264,7 @@ class QEXTSERIALPORT_EXPORT QextSerialPort: public QIODevice
         QString errorString();
 
 #ifdef Q_OS_WIN
-        virtual bool waitForReadyRead(int msecs);  ///< @todo implement.
+        virtual bool waitForReadyRead(int msecs);  //implement.
         virtual qint64 bytesToWrite() const;
         static QString fullPortNameWin(const QString & name);
 #endif
@@ -315,7 +315,6 @@ class QEXTSERIALPORT_EXPORT QextSerialPort: public QIODevice
 //         * This signal is emitted whenever port settings are updated.
 //         * 	\param valid \p true if settings are valid, \p false otherwise.
 //         *
-//         * 	@todo implement.
 //         */
 //        // void validSettings(bool valid);
 

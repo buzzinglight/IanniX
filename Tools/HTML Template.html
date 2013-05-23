@@ -392,11 +392,13 @@
 					if(dataValues.length > 0) {
 						var playPosTemp = dataValues[0] * 1.;
 						
-						var min = Math.floor(playPos / 60);
-						var sec = Math.floor(playPos) % 60;
-						var ms  = Math.floor((playPos-(sec+min*60))*1000);
-						var playPosStr = (min+"").pad(3) + ":" + (sec+"").pad(2) + "." + (ms+"").pad(3);
-						$("#time").text(playPosStr);
+						if(playPos == playPos) {
+							var min = Math.floor(playPos / 60);
+							var sec = Math.floor(playPos) % 60;
+							var ms  = Math.floor((playPos-(sec+min*60))*1000);
+							var playPosStr = (min+"").pad(3) + ":" + (sec+"").pad(2) + "." + (ms+"").pad(3);
+							$("#time").text(playPosStr);
+						}
 
 						if(playPosTemp != playPos) {
 							$("#play").addClass("checked");

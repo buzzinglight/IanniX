@@ -32,51 +32,48 @@
 #include <QHostInfo>
 #include <QDomDocument>
 #include <QFileOpenEvent>
+#include <QDesktopServices>
+#ifdef QT5
+#include <QStandardPaths>
+#endif
 #include <time.h>
-#include "objects/nxobjectfactoryinterface.h"
-#include "misc/nxcpu.h"
+#include "misc/application.h"
 #include "gui/uimessagebox.h"
-#include "gui/uiabout.h"
 #include "gui/uisplash.h"
-#include "gui/uitimer.h"
-#include "gui/uitransport.h"
 #include "gui/uiview.h"
 #include "gui/uiinspector.h"
-#include "gui/uieditor.h"
 #include "gui/uihelp.h"
-#include "interfaces/extoscmanager.h"
-#include "interfaces/exttcpmanager.h"
-#include "interfaces/extudpmanager.h"
-#include "interfaces/exthttpmanager.h"
-#include "interfaces/extserialmanager.h"
-#include "interfaces/extscriptmanager.h"
-#include "interfaces/extmidimanager.h"
+#include "messages/messagemanager.h"
+#include "interfaces/interfacesyphon.h"
+#include "interfaces/interfacedirect.h"
+#include "interfaces/interfacehttp.h"
+#include "interfaces/interfacemidi.h"
+#include "interfaces/interfaceosc.h"
+#include "interfaces/interfaceserial.h"
+#include "interfaces/interfacetcp.h"
+#include "interfaces/interfaceudp.h"
 #ifdef WACOM_INSTALLED
 #include "interfaces/extwacommanager.h"
 #endif
 
-enum SchedulerActivity { SchedulerOff, SchedulerOn, SchedulerOneShot };
-
-class IanniX : public NxObjectFactoryInterface, public NxObjectDispatchProperty {
+class IanniX : public ApplicationCurrent, public NxObjectDispatchProperty, public MessageDispatcher {
     Q_OBJECT
 
 private:
     QDir scriptDir;
-    QString baseDocumentDir;
     bool hasStarted;
+    QString updateAnonymousId;
+    QSettings *iniSettings, *globalSettings;
 public:
-    explicit IanniX(QObject *parent, bool forceSettings);
+    explicit IanniX(QObject *parent = 0);
     void readyToStart();
-    inline void dispatchProperty(const QString & property, const QVariant & value) {
-        //Browse documents
-        foreach(NxDocument *document, documents)
-            document->dispatchProperty(property, value);
+    inline void dispatchProperty(const QString &_property, const QVariant &value)  {    dispatchProperty(qPrintable(_property), value); }
+    inline const QVariant getProperty(const QString &_property) const              {    return getProperty(qPrintable(_property));      }
+    inline void dispatchProperty(const char *_property, const QVariant &value) {
+        currentDocument->dispatchProperty(_property, value);
     }
-    inline const QVariant getProperty(const QString &_property) const {
-        //Browse documents
-        foreach(NxDocument *document, documents)
-            return document->getProperty(_property);
-        return QVariant();
+    inline const QVariant getProperty(const char *_property) const {
+        return currentDocument->getProperty(_property);
     }
     inline quint8 getType() const {
         return ObjectsTypeScheduler;
@@ -89,36 +86,38 @@ public:
     //OBJECT MANAGEMENT
 private:
     NxDocument *currentDocument;
-    ExtScriptManager *currentScript;
-    QList<ExtScriptManager*> activeScripts;
 public:
-    NxGroup* addGroup(const QString & documentId, const QString & groupId);
+    NxGroup* addGroup(const QString & groupId);
     void setObjectActivity(void *_object, quint8 activeOld);
     void setObjectGroupId(void *_object, const QString & groupIdOld);
+    void setObjectId(void *_object, quint16 idOld);
     void removeObject(NxObject *object);
+    quint16 getCount(qint8 objectType = -1);
+    void* getObjectById(quint16 id) {
+        return currentDocument->getObject(id);
+    }
+
 public:
     inline NxObjectDispatchProperty* getObject(const QString & objectIdStr, bool saveObject = true) const {
-        if(currentDocument) {
-            bool ok = false;
-            quint16 objectId = objectIdStr.toUInt(&ok);
-            if(ok) {
-                NxObject *object = currentDocument->getObject(objectId);
-                if(saveObject)
-                    currentDocument->setCurrentObject(object);
-                return object;
-            }
-            else if(objectIdStr.toLower() == "all")
-                return currentDocument;
-            else if(objectIdStr.toLower() == "current")
-                return currentDocument->getCurrentObject();
-            else if(objectIdStr.toLower() == "lastcurve")
-                return currentDocument->getCurrentCurve();
-            else {
-                if(currentDocument->groups.contains(objectIdStr))
-                    return currentDocument->groups.value(objectIdStr);
-                else
-                    return 0;
-            }
+        bool ok = false;
+        quint16 objectId = objectIdStr.toUInt(&ok);
+        if(ok) {
+            NxObject *object = currentDocument->getObject(objectId);
+            if(saveObject)
+                currentDocument->setCurrentObject(object);
+            return object;
+        }
+        else if(objectIdStr.toLower() == "all")
+            return currentDocument;
+        else if(objectIdStr.toLower() == "current")
+            return currentDocument->getCurrentObject();
+        else if(objectIdStr.toLower() == "selection")
+            return render->getSelection();
+        else if(objectIdStr.toLower() == "lastcurve")
+            return currentDocument->getCurrentCurve();
+        else {
+            if(currentDocument->groups.contains(objectIdStr))
+                return currentDocument->groups.value(objectIdStr);
         }
         return 0;
     }
@@ -126,110 +125,67 @@ public:
 
     //FACTORY INTERFACE
 private:
-    QHash<QString, NxDocument*> documents;
-    QFileSystemWatcher fileWatcher;
-    ExtMessage message;
-    QHash<QByteArray, ExtMessage> messagesCache;
+    Message message;
+    QHash<QByteArray, Message> messagesCache;
     QScriptEngine messageScriptEngine;
-    bool acceptMidiSyncClock, acceptMidiSyncSong;
-private slots:
-    void fileWatcherChanged(const QString &);
-private:
-    void fileWatcherFolder(QStringList extension, QDir dir, QTreeWidgetItem *parentList, bool isDocument);
 public slots:
-    const QVariant execute(const QString & command, bool createNewObjectIfExists = false, bool dump = false);
+    const QVariant execute(const MessageIncomming & command, bool createNewObjectIfExists = false, bool needOutput = false);
+    const QVariant execute(const QString & command, ExecuteSource source, bool createNewObjectIfExists = false, bool needOutput = false);
     inline QString argvFullString(const QString &command, const QStringList &argv, quint16 index) const {
         if(index >= 1)   return command.mid(command.indexOf(argv.at(index), command.indexOf(argv.at(index-1))+argv.at(index-1).length())).trimmed();
-        else            return command;
+        else             return command;
     }
     inline qreal argvDouble(const QStringList &argv, quint16 index) const {
         if(index < argv.count())    return argv.at(index).toDouble();
         else                        return 0;
     }
-
-    QString onOscReceive(const QString & protocol, const QString & host, const QString & port, const QString & destination, const QStringList & arguments);
-    QString onDraw();
-    void askNxObject(void *_object, bool shift);
-    void send(const ExtMessage & message);
-    void sendMessage(void *_object, void *_trigger, void *_cursor, void *_collisionCurve, const NxPoint & collisionPoint, const NxPoint & collisionValue, const QString & status);
-    QImage takeScreenshot();
-    QMainWindow* getMainWindow() { return view; }
+    QString incomingMessage(const MessageIncomming &source, bool needOutput = false);
+    void openMessageEditor();
+    void send(const Message & message);
+    QMainWindow* getMainWindow()        { return view; }
     UiRenderPreview* getRenderPreview() { return view->getRenderPreview(); }
-    bool getPerformancePreview() { return view->getPerformancePreview(); }
+    bool getPerformancePreview()        { return view->getPerformancePreview(); }
     void syncStop() {
-        if((acceptMidiSyncSong) && (schedulerActivity != SchedulerOff)) {
+        if((InterfaceMidi::syncTransport) && (schedulerActivity != SchedulerOff)) {
             setScheduler(SchedulerOff);
-            sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "stop");
+            MessageManager::networkSynchro(QString("stop"));
         }
     }
     void syncStart() {
-        if((acceptMidiSyncSong) && (schedulerActivity != SchedulerOn)) {
+        if((InterfaceMidi::syncTransport) && (schedulerActivity != SchedulerOn)) {
             setScheduler(SchedulerOn);
-            sendMessage(transportObject, 0, 0, 0, NxPoint(), NxPoint(), "play");
+            MessageManager::networkSynchro(QString("play"));
         }
     }
     void syncGoto(qreal time) {
-        if(acceptMidiSyncSong)
-            actionGoto(time, false);
+        if(InterfaceMidi::syncTransport)
+            forceGoto(time, false);
     }
     void syncTimer(qreal delta) {
-        if(acceptMidiSyncClock) {
-            timerOk = false;
+        if(InterfaceMidi::syncClock) {
+            Transport::timerOk = false;
             timerTick(delta);
         }
     }
 
-    void scriptError(const QStringList &error, qint16 line) const {
-        editor->scriptError(error, line);
-    }
-public:
-    qreal getTimeLocal() const { return timeLocal; }
-
 
     //EXTERNAL INTERFACES
 private:
-    ExtOscManager    *osc;
-    ExtTcpManager    *tcp;
-    ExtUdpManager    *udp;
-    ExtHttpManager   *http;
-    ExtSerialManager *serial;
-    ExtMidiManager   *midi;
 #ifdef WACOM_INSTALLED
     ExtWacomManager  *wacom;
 #endif
-    bool oscConsoleActive;
-    QHostAddress oscBundleHost;
-    quint16 oscBundlePort;
-    QString defaultMessageTrigger, defaultMessageCursor;
-    NxTrigger *transportObject, *syncObject;
-    QString ipOut, midiOut;
-    int ipOutId;
 public:
-    void loadProject(const QString & projectFile);
-public slots:
-    void setIpOut(const QString &);
-    void setMidiOut(const QString &);
-    void ipOutStatusFound(const QHostInfo &);
-    void setMidiSyncSong(bool);
-    void setMidiSyncClock(bool);
-    void setMidiOutNewDevice(const QString &midi);
-signals:
-    void ipOutStatus(bool);
-    void midiOutStatus(bool);
-
+    void loadProject(const QString & projectFile = "");
 
     //TIME MANAGEMENT
 private:
     UiRender *render;
-    qreal renderMeasureAbsoluteValOld;
-    QTime renderMeasureAbsolute;
-    NxCpu *cpu;
-private:
-    qreal timeLocal, timeTransportRefresh, timePerfRefresh, timePerfCounter;
-    QString timeLocalStr;
     QTimer *timer;
-    bool timerOk;
-    bool forceTimeLocal;
+    int timerTime, timerPerf;
+private:
+    SchedulerActivity schedulerActivity;
+public:
+    void setScheduler(SchedulerActivity _schedulerActivity);
 protected:
     void timerEvent(QTimerEvent *);
 private slots:
@@ -238,107 +194,51 @@ private slots:
     void timerTick(qreal delta);
     void timerTrig(void *object, bool force = false);
     void closeSplash();
-signals:
-    void updateTransport(QString, QString);
-private:
-    SchedulerActivity schedulerActivity;
-public:
-    void setScheduler(SchedulerActivity _schedulerActivity);
-    inline bool getScheduler() const {
-        return timerOk;
-    }
 
 
     //USER INTERFACE
 private:
-    UiTransport *transport;
+    Transport *transport;
     UiInspector *inspector;
     UiView *view;
-    UiTimer *uitimer;
     UiSplash *splash;
-    UiAbout *about;
-    UiEditor *editor;
-    quint16 freehandCurveId, freehandCurveIndex;
+    bool forceUpdate;
     QNetworkAccessManager *updateManager;
-    void checkForUpdates();
-    QTreeWidgetItem *projectScore, *projectScript, *exampleScript, *libScript;
-    NxPoint editingStartPoint;
-    bool lastMessageAllow, lastMessageReceivedAllow;
-    QString lastMessage, lastMessageReceived;
+    QString waitForMessageValue;
     QIcon iconAppPlay, iconAppPause;
 private slots:
     void checkForUpdatesFinished(QNetworkReply*);
 public:
-    void show();
-    QString serialize();
+    void checkForUpdates();
+    const QString serialize() const;
 public slots:
-    void actionToggle_Inspector();
-    void actionToggle_Transport();
-    void actionToggle_Autosize();
-    void actionPlay_pause();
-    void actionFast_rewind();
-    void actionLogo();
-    void actionGoto();
-    void actionGoto(qreal, bool midiSync = true);
-    void actionSetScheduler();
-    void actionSetOpenGL();
-    void actionSpeed();
-    void actionTabChange(int);
-    void actionViewChange();
-    void actionCC();
-    void actionCC2();
-    void actionChangeID(quint16, quint16); ////CG////
+    void forceGoto(qreal, bool midiSync = true);
+    void forceSchedulerTimer(qreal);
+    void forceOpenGLTimer(qreal);
+
+    void actionPlayPause();
+    void actionCC(QTreeWidgetItem*,int);
     void actionNew();
-    void actionNewScript();
     void actionOpen();
     void actionSave();
     void actionSave_as();
-    void actionSave_all();
-    void actionRename();
-    void actionRemove();
-    void actionDuplicateScore();
+    void currentDocumentChanged(UiSyncItem*);
     void actionUndo();
     void actionRedo();
-    void actionSync();
-    void actionProjectFiles();
-    void actionProjectScripts();
-    void actionProjectScript();
-    void actionProjectScriptsContext(const QPoint & point);
-    void actionProjectFilesContext(const QPoint & point);
-    void actionDrawFreeCurve();
-    void actionDrawPointCurve();
-    void actionDrawTriggers();
-    void actionAddFreeCursor();
-    void actionCircleCurve();
     void actionImportSVG(const QString &filename);
-    void actionImportImage(const QString &filename);
     void actionImportBackground(const QString &filename);
-    void actionSelectionModeChange(bool,bool,bool);
     void actionImportText(const QString &font, const QString &text);
-    void actionImportOldIanniXScore(const QString & filename);
-    void editingStart(const NxPoint &);
-    void editingStop();
-    void editingMove(const NxPoint &, bool add);
-    void actionGridChange(qreal val);
-    void actionGridOpacityChange(qreal val);
-    void actionShowEditor();
-    void actionShowTimer();
     void actionReloadScript();
     void actionCloseEvent(QCloseEvent *event);
-    void transportMessageChange(const QString & );
-    void syncMessageChange(const QString & );
-    void bundleMessageChange(const QString &, quint16);
     void actionUnmuteGroups();
     void actionUnmuteObjects();
     void actionUnsoloGroups();
     void actionUnsoloObjects();
-    void allowSyphonServer(bool);
 public slots:
-    void logOscSend(const QString & message);
-    void logOscReceive(const QString & message);
     QString waitForMessage();
     void pushSnapshot();
-    void actionPasteScript();
+    void actionPaste();
+    void actionCopy();
 signals:
     void newMessageArrived();
 

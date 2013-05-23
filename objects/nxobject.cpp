@@ -19,15 +19,12 @@
 
 #include "nxobject.h"
 
-NxObject::NxObject(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
+NxObject::NxObject(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     QObject(parent), QTreeWidgetItem(ccParentItem) {
-    renderOptions = _renderOptions;
-    factory = parent;
-    documentId.clear();
     groupId.clear();
     id = 0;
     messageTimeNowOld = 0;
-    active = ObjectsActivityInactive;
+    active = ObjectsActivityActive;
     pos = NxPoint();
     parentObject = 0;
     selectedHover = false;
@@ -38,10 +35,14 @@ NxObject::NxObject(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     setMessageTimeInterval(1);
     isDrag = false;
     performCollision = false;
+    lineFactor = 1;
+    lineStipple = 0xFFFF;
     setMessageId(0);
-    setCheckState(1, Qt::Checked);
-    setCheckState(2, Qt::Unchecked);
+    setSolo(0);
+    setMute(0);
+    setForeground(0, Qt::gray);
 }
+
 
 void NxObject::setMessagePatterns(const QString & messagePatternsStr) {
     messagePatterns.clear();
@@ -187,4 +188,37 @@ QVector< QVector<QByteArray> > NxObject::parseMessagesPattern(const QString & me
         messagePatterns.append(messagePattern);
 
     return messagePatterns;
+}
+
+void NxObject::dispatchProperty(const char *_property, const QVariant & value) {
+    QStringList asCurvePoints = QStringList() << COMMAND_CURVE_POINT_RMV << COMMAND_CURVE_TXT << COMMAND_CURVE_LINES << COMMAND_CURVE_POINT << COMMAND_CURVE_POINT_TRANSLATE << COMMAND_CURVE_POINT_SHIFT << COMMAND_CURVE_EDITOR << COMMAND_CURVE_PATH << COMMAND_CURVE_POINT_SMOOTH << COMMAND_CURVE_POINT_X << COMMAND_CURVE_POINT_Y << COMMAND_CURVE_POINT_Z << COMMAND_CURVE_IMG << COMMAND_CURVE_POINT_TRANSLATE2;
+    if(asCurvePoints.contains(QString(_property))) propertyChanged(COMMAND_CURVE_POINT);
+    else                                           propertyChanged(_property);
+    setProperty(_property, value);
+}
+
+
+
+
+
+
+QIcon NxObject::widgetIconActiveOff;
+QIcon NxObject::widgetIconActiveOn;
+QIcon NxObject::widgetIconSoloOff;
+QIcon NxObject::widgetIconSoloOn;
+
+void NxObject::setMute(quint16 _val) {
+    objectMute = _val;
+    if(objectMute)  setIcon(1, widgetIconActiveOff);
+    else            setIcon(1, widgetIconActiveOn);
+}
+void NxObject::setSolo(quint16 _val) {
+    objectSolo = _val;
+    if(objectSolo)  setIcon(2, widgetIconSoloOn);
+    else            setIcon(2, widgetIconSoloOff);
+}
+
+void NxObject::widgetClick(int col) {
+    if(col == 1)        Application::current->execute(QString("%1 %2 %3").arg(COMMAND_MUTE).arg(id).arg(1-objectMute), ExecuteSourceGui);
+    else if(col == 2)   Application::current->execute(QString("%1 %2 %3").arg(COMMAND_SOLO).arg(id).arg(1-objectSolo), ExecuteSourceGui);
 }

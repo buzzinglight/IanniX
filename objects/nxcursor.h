@@ -20,9 +20,10 @@
 #define NXCURSOR_H
 
 #include <QEasingCurve>
+#include "geometry/nxeasing.h"
+#include "messages/messagemanager.h"
 #include "objects/nxcurve.h"
 #include "objects/nxtrigger.h"
-#include "geometry/nxeasing.h"
 
 #ifndef M_PI
 #define M_PI    (3.14159265358979323846)
@@ -31,29 +32,25 @@
 #define M_PI_2	(1.57079632679489661923)
 #endif
 
-
-class NxCursor : public NxObject {
+class NxCursor : public NxObject, public NxCursorAbstraction {
     Q_OBJECT
-    Q_PROPERTY(QString start             READ getStart              WRITE setStart)
-    Q_PROPERTY(qreal   timeStartOffset   READ getTimeStartOffset    WRITE setTimeStartOffset)
-    Q_PROPERTY(qreal   timeInitialOffset READ getTimeInitialOffset  WRITE setTimeInitialOffset)
-    Q_PROPERTY(qreal   timeEndOffset     READ getTimeEndOffset      WRITE setTimeEndOffset)
-    Q_PROPERTY(QString boundsSource      READ getBoundsSource       WRITE setBoundsSource)
-    Q_PROPERTY(QString boundsTarget      READ getBoundsTarget       WRITE setBoundsTarget)
-    Q_PROPERTY(qreal   timeFactor        READ getTimeFactor         WRITE setTimeFactor)
-    Q_PROPERTY(qreal   timeFactorAuto    READ getTimeFactorAuto     WRITE setTimeFactorAuto)
-    Q_PROPERTY(qreal   timeFactorF       READ getTimeFactorF        WRITE setTimeFactorF)
-    Q_PROPERTY(qreal   cursorWidth       READ getWidth              WRITE setWidth)
-    Q_PROPERTY(qreal   cursorDepth       READ getDepth              WRITE setDepth)
-    Q_PROPERTY(quint16 easingStart       READ getEasing             WRITE setEasing)
-    Q_PROPERTY(quint16 nbLoop            READ getNbLoop             WRITE setNbLoop)
-    Q_PROPERTY(qreal   timeLocal         READ getTimeLocal          WRITE setTimeLocal)
-    Q_PROPERTY(qreal   timeLocalPercent  READ getTimeLocalPercent   WRITE setTimeLocalPercent)
-    Q_PROPERTY(bool    forceTrig         READ getForceTrig          WRITE setForceTrig)
+
+    Q_PROPERTY(QString setoffset            READ getOffset             WRITE setOffset)
+    Q_PROPERTY(QString setpattern           READ getStart              WRITE setStart)
+    Q_PROPERTY(quint16 setboundssourcemode  READ getBoundsSourceMode   WRITE setBoundsSourceMode)
+    Q_PROPERTY(QString setboundssource      READ getBoundsSource       WRITE setBoundsSource)
+    Q_PROPERTY(QString setboundstarget      READ getBoundsTarget       WRITE setBoundsTarget)
+    Q_PROPERTY(QString setspeed             READ getTimeFactorStr      WRITE setTimeFactorStr)
+    Q_PROPERTY(qreal   setwidth             READ getWidth              WRITE setWidth)
+    Q_PROPERTY(qreal   setdepth             READ getDepth              WRITE setDepth)
+    Q_PROPERTY(qreal   setspeedf            READ getTimeFactorF        WRITE setTimeFactorF)
+    Q_PROPERTY(qreal   settime              READ getTimeLocal          WRITE setTimeLocal)
+    Q_PROPERTY(qreal   settimepercent       READ getTimeLocalPercent   WRITE setTimeLocalPercent)
+    Q_PROPERTY(bool    trig                 READ getForceTrig          WRITE setForceTrig)
 
 
 public:
-    explicit NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
+    explicit NxCursor(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
     ~NxCursor();
 
 private:
@@ -67,7 +64,6 @@ private:
     quint16 nbLoop, nbLoopOld;
     qreal width, depth;
     NxRect boundsSource, boundsTarget;
-    bool boundsSourceIsBoundingRect;
     bool previousCursorReliable, previousPreviousCursorReliable;
     QVector<qreal> start;
     //NxLine cursor, cursorOld;
@@ -77,6 +73,7 @@ private:
     NxPoint cursorPosLastSend, cursorRelativePosLastSend, cursorAngleLastSend;
     qreal cursorAngleCacheSinZ, cursorAngleCacheCosZ, cursorAngleCacheSinY, cursorAngleCacheCosY;
     GLuint glListCursor;
+    quint16 boundsSourceMode;
 public:
     inline quint8 getType() const {
         return ObjectsTypeCursor;
@@ -85,21 +82,39 @@ public:
         return "cursor";
     }
 
-    inline void dragStart(const NxPoint &) {
+    inline void dragStart(const NxPoint &, bool) {
         posDrag = pos;
         isDrag = true;
     }
-    inline void drag(const NxPoint & translation, const NxPoint & mousePos) {
-        if(curve) {
-            setTimeLocalPercent(curve->intersects(NxRect(mousePos - NxPoint(renderOptions->objectSize, renderOptions->objectSize), mousePos + NxPoint(renderOptions->objectSize, renderOptions->objectSize))));
-            factory->timerTrig(this, true);
+    inline void drag(const NxPoint & translation, const NxPoint & mousePos, bool multipleObjects) {
+        if((curve) && (!multipleObjects)) {
+            qreal pos = curve->intersects(NxRect(mousePos - NxPoint(Global::objectSize, Global::objectSize), mousePos + NxPoint(Global::objectSize, Global::objectSize)));
+            if(pos > 0) {
+                Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURSOR_TIME_PERCENT).arg(id).arg(pos), ExecuteSourceGui);
+                Application::current->timerTrig(this, true);
+            }
         }
-        else
-            setPos(posDrag + translation);
+        else if(!curve)
+            dragParent(translation);
     }
 
     inline QString getPosStr() const {
         return QString("%1 %2 %3").arg(cursorPos.x()).arg(cursorPos.y()).arg(cursorPos.z());
+    }
+
+    inline QString getOffset() const {
+        if(timeEndOffset == 0)  return QString("%1 %2 end").arg(timeInitialOffset).arg(timeStartOffset);
+        else                    return QString("%1 %2 %3").arg(timeInitialOffset).arg(timeStartOffset).arg(timeEndOffset);
+    }
+    inline void setOffset(const QString & offset) {
+        QStringList offsetItems = offset.split(" ", QString::SkipEmptyParts);
+        if(offsetItems.count() > 2) {
+            timeInitialOffset = offsetItems.at(0).toDouble();
+            timeStartOffset   = offsetItems.at(1).toDouble();
+            if(offsetItems.at(2).toLower() == "end")    timeEndOffset = 0;
+            else                                        timeEndOffset = offsetItems.at(2).toDouble();
+            setTime(0);
+        }
     }
 
     void setTime(qreal delta);
@@ -135,18 +150,62 @@ public:
 
     inline void setStart(const QString & startStr) {
         QStringList startItems = startStr.split(" ", QString::SkipEmptyParts);
-        setNbLoop(0);
-        setTime(0);
-        start.clear();
-        foreach(const QString & startItem, startItems)
-            start.append(startItem.toDouble());
+
+        if(startItems.count() > 2) {
+            setEasing(startItems.at(0).toInt());
+            startItems.removeFirst();
+            //startItems.at(1).toInt(); UNUSED
+            startItems.removeFirst();
+
+            setNbLoop(0);
+            setTime(0);
+            start.clear();
+            foreach(const QString & startItem, startItems) {
+                bool valOk = false;
+                qreal val = startItem.toDouble(&valOk);
+                if(valOk)
+                    start.append(val);
+            }
+            if(start.isEmpty())
+                start.append(1);
+        }
     }
     inline const QString getStart() const {
         QString retour;
         foreach(const qreal startItem, start)
             retour += QString::number(startItem) + " ";
-        return retour.trimmed();
+        return (QString("%1 0 %2").arg(getEasing()).arg(retour)).trimmed();
     }
+
+    inline QString getTimeFactorStr() const {
+        if(curve) {
+            if(lockPathLength)  return QString("lock %3").arg(timeFactor);
+            else                return QString::number(timeFactor);
+        }
+        return QString();
+    }
+    inline void setTimeFactorStr(const QString & time) {
+        QStringList timeItems = time.split(" ", QString::SkipEmptyParts);
+        if(timeItems.count() > 1) {
+            if(timeItems.at(0).toLower() == "autolock") {
+                lockPathLength = true;
+                setTimeFactorAuto(timeItems.at(1).toDouble());
+            }
+            if(timeItems.at(0).toLower() == "lock") {
+                lockPathLength = true;
+                setTimeFactor(timeItems.at(1).toDouble());
+            }
+            if(timeItems.at(0).toLower() == "auto") {
+                lockPathLength = false;
+                setTimeFactorAuto(timeItems.at(1).toDouble());
+            }
+        }
+        else if(timeItems.count() > 0) {
+            lockPathLength = false;
+            setTimeFactor(timeItems.at(0).toDouble());
+        }
+    }
+
 
     inline void setNbLoop(quint16 _nbLoop) {
         nbLoop = _nbLoop;
@@ -183,109 +242,45 @@ public:
         return timeInitialOffset;
     }
 
-    inline const NxPoint getCursorValue(const NxPoint & _pos) const {
+    inline const NxPoint getCursorValue(const NxPoint & _pos) {
+        if(boundsSourceMode == 2) {
+            boundsSource = Global::axisArea;
+            boundsSource.translate(-Global::axisCenter);
+        }
         NxRect _boundsSource = boundsSource;
         if(_boundsSource.width() == 0)  _boundsSource.setWidth(0.0001);
         if(_boundsSource.height() == 0) _boundsSource.setHeight(0.0001);
-        if(_boundsSource.length() == 0) _boundsSource.setLength(0.0001);
+        if(_boundsSource.length() == 0) _boundsSource.setLength(-0.0001);
         return NxPoint( ((_pos.x() - _boundsSource.left())   / _boundsSource.width())  * boundsTarget.width()  + boundsTarget.left() ,
                         ((_pos.y() - _boundsSource.bottom()) / _boundsSource.height()) * boundsTarget.height() + boundsTarget.bottom(),
                         ((_pos.z() - _boundsSource.zTop())   / _boundsSource.length()) * boundsTarget.length() + boundsTarget.zTop() );
     }
 
 
-    inline void setBoundsRect(quint16 index, qreal val, bool source) {
-        NxRect *boundsRect;
-        if(source) {
-            boundsRect = &boundsSource;
-            boundsSourceIsBoundingRect = false;
-        }
-        else
-            boundsRect = &boundsTarget;
-        if(index == 0)      boundsRect->setTopLeft(NxPoint(val, boundsRect->topLeft().y(), boundsRect->topLeft().z()));
-        else if(index == 1) boundsRect->setTopLeft(NxPoint(boundsRect->topLeft().x(), val, boundsRect->topLeft().z()));
-        else if(index == 2) boundsRect->setTopLeft(NxPoint(boundsRect->topLeft().x(), boundsRect->topLeft().y(), val));
-        else if(index == 3) boundsRect->setBottomRight(NxPoint(val, boundsRect->bottomRight().y(), boundsRect->bottomRight().z()));
-        else if(index == 4) boundsRect->setBottomRight(NxPoint(boundsRect->bottomRight().x(), val, boundsRect->bottomRight().z()));
-        else if(index == 5) boundsRect->setBottomRight(NxPoint(boundsRect->bottomRight().x(), boundsRect->bottomRight().y(), val));
+    void setBoundsRect(quint16 index, qreal val, bool source);
+    qreal getBoundsRect(quint16 index, bool source) const;
+    void setBoundsRectStr(const QString & _bounds, bool source);
+    const QString getBoundsRectStr(bool source) const;
+
+    inline quint16 getBoundsSourceMode() const {
+        return boundsSourceMode;
     }
-    inline qreal getBoundsRect(quint16 index, bool source) const {
-        NxRect boundsRect;
-        if(source)
-            boundsRect = boundsSource;
-        else
-            boundsRect = boundsTarget;
-        if(index == 0)      return boundsRect.topLeft().x();
-        else if(index == 1) return boundsRect.topLeft().y();
-        else if(index == 2) return boundsRect.topLeft().z();
-        else if(index == 3) return boundsRect.bottomRight().x();
-        else if(index == 4) return boundsRect.bottomRight().y();
-        else if(index == 5) return boundsRect.bottomRight().z();
-        return 0;
+    inline void setBoundsSourceMode(quint16 _boundsSourceMode) {
+        boundsSourceMode = _boundsSourceMode;
+        calcBoundingRect();
     }
 
-    inline void setBoundsRectStr(const QString & _bounds, bool source, quint16 part = 2) {
-        QStringList bounds = _bounds.split(" ", QString::SkipEmptyParts);
-        if(part == 0) {
-            if(bounds.count() == 2) {
-                setBoundsRect(0, bounds.at(0).toDouble(), source);
-                setBoundsRect(1, bounds.at(1).toDouble(), source);
-            }
-            else if(bounds.count() == 3) {
-                setBoundsRect(0, bounds.at(0).toDouble(), source);
-                setBoundsRect(1, bounds.at(1).toDouble(), source);
-                setBoundsRect(2, bounds.at(2).toDouble(), source);
-            }
-        }
-        else if(part == 1) {
-            if(bounds.count() == 2) {
-                setBoundsRect(3, bounds.at(0).toDouble(), source);
-                setBoundsRect(4, bounds.at(1).toDouble(), source);
-            }
-            else if(bounds.count() == 3) {
-                setBoundsRect(3, bounds.at(0).toDouble(), source);
-                setBoundsRect(4, bounds.at(1).toDouble(), source);
-                setBoundsRect(5, bounds.at(2).toDouble(), source);
-            }
-        }
-        else {
-            if(bounds.count() == 4) {
-                setBoundsRect(0, bounds.at(0).toDouble(), source);
-                setBoundsRect(1, bounds.at(1).toDouble(), source);
-                setBoundsRect(3, bounds.at(2).toDouble(), source);
-                setBoundsRect(4, bounds.at(3).toDouble(), source);
-            }
-            else if(bounds.count() == 6) {
-                setBoundsRect(0, bounds.at(0).toDouble(), source);
-                setBoundsRect(1, bounds.at(1).toDouble(), source);
-                setBoundsRect(2, bounds.at(2).toDouble(), source);
-                setBoundsRect(3, bounds.at(3).toDouble(), source);
-                setBoundsRect(4, bounds.at(4).toDouble(), source);
-                setBoundsRect(5, bounds.at(5).toDouble(), source);
-            }
-        }
+    inline void setBoundsSource(const QString & bounds) {
+        setBoundsRectStr(bounds, true);
     }
-    inline const QString getBoundsRectStr(bool source, quint16 part = 2) const {
-        if(part == 0)
-            return QString("%1 %2 %3").arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3).arg(getBoundsRect(2, source), 0, 'f', 3);
-        else if(part == 1)
-            return QString("%1 %2 %3").arg(getBoundsRect(3, source), 0, 'f', 3).arg(getBoundsRect(4, source), 0, 'f', 3).arg(getBoundsRect(5, source), 0, 'f', 3);
-        else
-            return QString("%1 %2 %3 %4 %5 %6").arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3).arg(getBoundsRect(2, source), 0, 'f', 3).arg(getBoundsRect(3, source), 0, 'f', 3).arg(getBoundsRect(4, source), 0, 'f', 3).arg(getBoundsRect(5, source), 0, 'f', 3);
+    inline void setBoundsTarget(const QString & bounds) {
+        setBoundsRectStr(bounds, false);
     }
-
-
-    inline void setBoundsSource(const QString & bounds, quint16 part = 2) {
-        setBoundsRectStr(bounds, true, part);
+    inline const QString getBoundsSource() const {
+        return getBoundsRectStr(true);
     }
-    inline void setBoundsTarget(const QString & bounds, quint16 part = 2) {
-        setBoundsRectStr(bounds, false, part);
-    }
-    inline const QString getBoundsSource(quint16 part = 2) const {
-        return getBoundsRectStr(true, part);
-    }
-    inline const QString getBoundsTarget(quint16 part = 2) const {
-        return getBoundsRectStr(false, part);
+    inline const QString getBoundsTarget() const {
+        return getBoundsRectStr(false);
     }
 
 
@@ -328,6 +323,9 @@ public:
     inline NxCurve* getCurve() const {
         return curve;
     }
+    inline void* getCurveVoid() const {
+        return curve;
+    }
     inline void setCurve(NxCurve *_curve) {
         if(curve)
             curve->removeCursor(this);
@@ -344,11 +342,21 @@ public:
         //Bounding rect + margin
         boundingRect = cursorPoly.boundingRect();
         boundingRect = boundingRect.normalized();
-        if((boundsSourceIsBoundingRect) && (curve))
+        if((boundsSourceMode < 2) && (curve)) {
             boundsSource = NxRect(curve->getBoundingRect().normalized().bottomLeft(), curve->getBoundingRect().normalized().topRight());
+            if(boundsSourceMode == 1) {
+                boundsSource.setWidth (boundsSource.width()  + width);
+                boundsSource.setHeight(boundsSource.height() - width);
+                boundsSource.translate(NxPoint(-width/2, width/2));
+            }
+        }
+        else if(boundsSourceMode == 2) {
+            boundsSource = Global::axisArea;
+            boundsSource.translate(-Global::axisCenter);
+        }
     }
     inline bool isMouseHover(const NxPoint & mouse) {
-        NxRect mouseAdjusted = NxRect(mouse - NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2), mouse + NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2));
+        NxRect mouseAdjusted = NxRect(mouse - NxPoint(Global::objectSize/2, Global::objectSize/2), mouse + NxPoint(Global::objectSize/2, Global::objectSize/2));
         if(mouseAdjusted.contains(cursorPos))
             return true;
         else
@@ -363,57 +371,20 @@ public:
 
 
 public:
-    QString serializeCustom(bool hasAScript) const {
-        QString retour = "";
-        QString prefix = "", postfix = COMMAND_END;
-        if(hasAScript) {
-            prefix = "run(\"";
-            postfix =  "\");" + COMMAND_END;
-        }
-        if(curve) {
-            retour += prefix + QString(COMMAND_CURSOR_CURVE + " %1 %2").arg("current").arg("lastCurve") + postfix;
-            if((getLineStipple() != 0xFFFF) || (getLineFactor() != 1))
-                retour += prefix + QString(COMMAND_LINE + " %1 %2 %3").arg("current").arg(getLineStipple()).arg(getLineFactor()) + postfix;
-            if((getTimeInitialOffset() != 0) || (getTimeStartOffset() != 0) || (getTimeEndOffset() != 0))
-                retour += prefix + QString(COMMAND_CURSOR_OFFSET + " %1 %2 %3 %4").arg("current").arg(getTimeInitialOffset()).arg(getTimeStartOffset()).arg(getTimeEndOffset()) + postfix;
-            if(!boundsSourceIsBoundingRect)
-                retour += prefix + QString(COMMAND_CURSOR_BOUNDS_SOURCE + " %1 %2").arg("current").arg(getBoundsSource()) + postfix;
-            if((getBoundsTarget() != "0.000 1.000 0.000 1.000 0.000 1.000") && (getBoundsTarget() != "0.000 1.000 1.000 0.000"))
-                retour += prefix + QString(COMMAND_CURSOR_BOUNDS_TARGET + " %1 %2").arg("current").arg(getBoundsTarget()) + postfix;
-            if(getTimeFactor() != 1)
-                retour += prefix + QString(COMMAND_CURSOR_SPEED + " %1 %2").arg("current").arg(getTimeFactor()) + postfix;
-            if(getTimeFactorF() != 1)
-                retour += prefix + QString(COMMAND_CURSOR_SPEEDF + " %1 %2").arg("current").arg(getTimeFactorF()) + postfix;
-            if(getWidth() != 1)
-                retour += prefix + QString(COMMAND_CURSOR_WIDTH + " %1 %2").arg("current").arg(getWidth()) + postfix;
-            if(getDepth() != 0)
-                retour += prefix + QString(COMMAND_CURSOR_DEPTH + " %1 %2").arg("current").arg(getWidth()) + postfix;
-            if((getEasing() != 0) || (getStart() != "1 0"))
-                retour += prefix + QString(COMMAND_CURSOR_START + " %1 %2 %3 %4").arg("current").arg(getEasing()).arg(0).arg(getStart()) + postfix;
-            /*
-            if(getTimeLocal() != 0)
-                retour += prefix + QString(COMMAND_CURSOR_TIME + " %1 %2").arg("current").arg(getTimeLocal()) + postfix;
-                */
-            if(getTimeLocalPercent() != 0)
-                retour += prefix + QString(COMMAND_CURSOR_TIME_PERCENT + " %1 %2").arg("current").arg(getTimeLocalPercent()) + postfix;
+    const QString serialize() const {
+        QString retour;
+        QString objectId = QString::number(getId());
 
-            if(!colorActive.isEmpty()) {
-                if(getColorActive() != "cursor_active")
-                    retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2").arg("current").arg(getColorActive()) + postfix;
+        foreach(const QString &command, propertiesToSerialize.value(NxObjectDispatchProperty::source)) {
+            if(command == COMMAND_ID) {
+                retour += "\trun(\"" + QString("%1 %2 %3").arg(COMMAND_ADD).arg(getTypeStr()).arg(objectId) + "\");\n"; objectId = "current";
+                retour += "\trun(\"" + QString("%1 %2 %3").arg(COMMAND_CURSOR_CURVE).arg(objectId).arg("lastCurve") + "\");\n";
             }
-            else
-                retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColor().red()).arg(getColorActiveColor().green()).arg(getColorActiveColor().blue()).arg(getColorActiveColor().alpha()) + postfix;
-            if(!colorInactive.isEmpty()) {
-                if(getColorInactive() != "cursor_inactive")
-                    retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2").arg("current").arg(getColorInactive()) + postfix;
-            }
-            else
-                retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColor().red()).arg(getColorInactiveColor().green()).arg(getColorInactiveColor().blue()).arg(getColorInactiveColor().alpha()) + postfix;
-            if(getSize() != 2)
-                retour += prefix + QString(COMMAND_SIZE + " %1 %2").arg("current").arg(getSize()) + postfix;
-            if((messageTimeInterval != 20) || (getMessagePatternsStr() != QSettings().value("defaultMessageCursor").toString()+" ,"))
-                retour += prefix + QString(COMMAND_MESSAGE + " %1 %2, %3").arg("current").arg(QString::number(messageTimeInterval)).arg(getMessagePatternsStr()) + postfix;
+            else if(command != COMMAND_CURSOR_CURVE)
+                retour += "\trun(\"" + QString("%1 %2 %3").arg(command).arg(objectId).arg(getProperty(qPrintable(command)).toString()) + "\");\n";
         }
+        if(!retour.isEmpty())
+            retour += "\n";
         return retour;
     }
 
@@ -454,7 +425,7 @@ public:
     void trig(bool force = false);
     bool getForceTrig() { return false;}
     void setForceTrig(bool val) {
-        factory->timerTrig(this, val);
+        Application::current->timerTrig(this, val);
     }
 
 

@@ -26,9 +26,9 @@
    <string>IanniX</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background: transparent;
-font: 14px &quot;Arial&quot;;
-color: rgba(255,255,255,128);</string>
+   <string notr="true">background: 	transparent;
+font: 				14px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+color: 				rgba(255,255,255,128);</string>
   </property>
   <widget class="QPushButton" name="logo">
    <property name="geometry">
@@ -55,7 +55,7 @@ color: rgba(255,255,255,128);</string>
     <string/>
    </property>
    <property name="icon">
-    <iconset resource="IanniX.qrc">
+    <iconset resource="../icons/IanniX.qrc">
      <normaloff>:/general/res_splash2.png</normaloff>:/general/res_splash2.png</iconset>
    </property>
    <property name="iconSize">
@@ -69,7 +69,7 @@ color: rgba(255,255,255,128);</string>
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>425</y>
+     <y>430</y>
      <width>216</width>
      <height>31</height>
     </rect>
@@ -102,7 +102,7 @@ color: rgba(255,255,255,128);</string>
   </widget>
  </widget>
  <resources>
-  <include location="IanniX.qrc"/>
+  <include location="../icons/IanniX.qrc"/>
  </resources>
  <connections>
   <connection>

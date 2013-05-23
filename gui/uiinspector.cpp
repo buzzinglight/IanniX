@@ -23,51 +23,51 @@ UiInspector::UiInspector(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UiInspector) {
     ui->setupUi(this);
+    toolbarButton = 0;
+    lastTabBeforeRessources = 0;
 
-    ui->splitter_2->setStretchFactor(0, 1);
-    ui->splitter_2->setStretchFactor(1, 2);
+    MessageManager::setInterfaces(0, 0, ui->spaceForMessageLog);
+    ui->ressourcesTextures->showImport(true);
+    ui->ressourcesTextures->showNew(false);
+    ui->ressourcesTextures->showDuplicate(false);
+    Global::textures->configure(tr("Textures"),   ui->ressourcesTextures);
+    Global::colors->configure(tr("Score colors"), ui->ressourcesColors);
 
-    ui->ccView->setColumnWidth(0, 85);
+    ui->files->importAsFiles = false;
+    UiFileItem::configure(ui->files);
+    UiFileItem::syncWith(QFileInfoList() << QFileInfo(Global::pathApplication.absoluteFilePath() + "/Examples/") << QFileInfo(Global::pathDocuments.absoluteFilePath() + "/"), ui->files->getTree());
+    ui->files->showNewRoot(true);
+    ui->files->showOpen(true);
+    //UiRenderOptions::texturesWidget = ui->ressourcesTextures;
+    /*
+    UiRenderOptions::texturesWidget->setColumnWidth(0, 100);
+    UiRenderOptions::texturesWidget->setColumnWidth(1, 55);
+    UiRenderOptions::texturesWidget->setColumnWidth(2, 55);
+    UiRenderOptions::texturesWidget->setColumnWidth(3, 55);
+    UiRenderOptions::texturesWidget->setColumnWidth(4, 55);
+    */
+
+    ui->ccView->setColumnWidth(0, 105);
     ui->ccView->setColumnWidth(1, 25);
     ui->ccView->setColumnWidth(2, 25);
     ui->ccView->setColumnWidth(3, 40);
-    ui->cc2View->setColumnWidth(0, 45);
-    ui->cc2View->setColumnWidth(1, 25);
 
-    quint16 colWidth = 45;
-    ui->pointsList->setColumnWidth(0, colWidth);
-    ui->pointsList->setColumnWidth(1, colWidth);
-    ui->pointsList->setColumnWidth(2, colWidth);
-    ui->pointsList->setColumnWidth(3, colWidth);
-    ui->pointsList->setColumnWidth(4, colWidth);
-    ui->pointsList->setColumnWidth(5, colWidth);
-    ui->pointsList->setColumnWidth(6, colWidth);
-    ui->pointsList->setColumnWidth(7, colWidth);
-    ui->pointsList->setColumnWidth(8, colWidth);
-    ui->pointsList->setColumnWidth(9, colWidth);
-    ui->pointsList->setColumnWidth(10, colWidth);
+    //ui->ssTabInfo->setTabEnabled(4, false);
+    ui->ssTabInfo->setCurrentIndex(lastTabBeforeRessources);
 
     render = 0;
-    factory = 0;
-    triggerItem = new QTreeWidgetItem(ui->ccView, QStringList() << "");
-    triggerItem->setFlags(Qt::ItemIsEnabled);
-    curveItem = new QTreeWidgetItem(ui->ccView, QStringList() << "");
-    curveItem->setFlags(Qt::ItemIsEnabled);
-    cursorItem = new QTreeWidgetItem(ui->ccView, QStringList() << "");
-    cursorItem->setFlags(Qt::ItemIsEnabled);
+
+    Global::followId          .setAction(ui->followId,              "scoreFollowId");
+    Global::paintCurvesOpacity.setAction(ui->viewCurveOpacityCheck, "guiPaintCurvesOpacity");
 
     ui->followId->setValue(-1);
-
     ui->ccView->expandAll();
     ui->ccView->sortByColumn(0, Qt::AscendingOrder);
 
     ui->colorCombo1->clear();
     ui->colorCombo2->clear();
-    ui->colorCombo3->clear();
-    ui->colorCombo4->clear();
-
-    ui->syncMessageLabel->setVisible(false);
-    ui->syncMessageEdit->setVisible(false);
+    ui->textureCombo1->clear();
+    ui->textureCombo2->clear();
 
     actionInfoLock = true;
 
@@ -83,10 +83,36 @@ UiInspector::UiInspector(QWidget *parent) :
 
     refresh();
 }
+void UiInspector::addInterfaces() {
+    QHashIterator<MessagesType, NetworkInterface*> interfacesIterator(MessageManager::interfaces);
+    while (interfacesIterator.hasNext()) {
+        interfacesIterator.next();
+        if(interfacesIterator.key() == MessagesTypeSerial)
+            ui->ssTabConfigArduinoLayout->addWidget(interfacesIterator.value());
+        else if(interfacesIterator.key() == MessagesTypeMidi)
+            ui->ssTabConfigMIDILayout->addWidget(interfacesIterator.value());
+        else if((interfacesIterator.key() == MessagesTypeOsc) || (interfacesIterator.key() == MessagesTypeUdp) || (interfacesIterator.key() == MessagesTypeTcp) || (interfacesIterator.key() == MessagesTypeHttp))
+            ui->ssTabConfigNetworkLayout->addWidget(interfacesIterator.value());
+        else if((interfacesIterator.key() == MessagesTypeSyphon) || (interfacesIterator.key() == MessagesTypeDirect))
+            ui->ssTabConfigSyphonLayout->addWidget(interfacesIterator.value());
+    }
+}
 
 UiInspector::~UiInspector() {
     delete ui;
 }
+
+void UiInspector::showEvent(QShowEvent *e) {
+    if(toolbarButton)
+        toolbarButton->setChecked(true);
+    QWidget::showEvent(e);
+}
+void UiInspector::closeEvent(QCloseEvent *e) {
+    if(toolbarButton)
+        toolbarButton->setChecked(false);
+    QWidget::closeEvent(e);
+}
+
 
 void UiInspector::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
@@ -99,163 +125,68 @@ void UiInspector::changeEvent(QEvent *e) {
     }
 }
 
-QTreeWidget* UiInspector::getViewGroup() const {
-    return ui->cc2View;
-}
-qreal UiInspector::getViewZStart() const {
-    return ui->viewZStartSpin->value();
-}
-qreal UiInspector::getViewZEnd() const {
-    return ui->viewZEndSpin->value();
-}
-
-QTreeWidget* UiInspector::getProjectFiles() const {
-    return ui->projectFiles;
-}
-QTreeWidget* UiInspector::getProjectScripts() const {
-    return ui->projectScripts;
-}
-bool UiInspector::setProjectFiles(QString filename) {
-    for(quint16 i = 0 ; i < ui->projectFiles->topLevelItemCount() ; i++) {
-        for(quint16 j = 0 ; j < ui->projectFiles->topLevelItem(i)->childCount() ; j++) {
-            if(ui->projectFiles->topLevelItem(i)->child(j)->text(0) == filename) {
-                ui->projectFiles->setCurrentItem(ui->projectFiles->topLevelItem(i)->child(j));
-                return true;
-            }
-        }
-    }
-    return false;
-}
-bool UiInspector::setProjectScripts(QString filename) {
-    for(quint16 i = 0 ; i < ui->projectScripts->topLevelItemCount() ; i++) {
-        for(quint16 j = 0 ; j < ui->projectScripts->topLevelItem(i)->childCount() ; j++) {
-            if(ui->projectScripts->topLevelItem(i)->child(j)->text(0) == filename) {
-                ui->projectScripts->setCurrentItem(ui->projectScripts->topLevelItem(i)->child(j));
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-void UiInspector::changeID_success(bool result, quint16 newId) {  ////CG////
-    if (result)
-        foreach(NxObject *object, *(render->getSelection())) //This should only loop once
-            object->setId(newId);
-    else
-        (new UiMessageBox())->display(tr("Can't change ID."), tr("Another object has this ID.\nTry deleting that object, or change its ID."), QDialogButtonBox::Ok);
+UiTreeView* UiInspector::getFileWidget() const {
+    return ui->files;
 }
 
 void UiInspector::actionCCButton() {
-    if(sender() == ui->unmuteGroups)
-        emit(actionUnmuteGroups());
-    else if(sender() == ui->unmuteObjects)
-        emit(actionUnmuteObjects());
-    else if(sender() == ui->unsoloGroups)
-        emit(actionUnsoloGroups());
-    else if(sender() == ui->unsoloObjects)
-        emit(actionUnsoloObjects());
-    else if(sender() == ui->followId)
-        emit(actionFollowID(ui->followId->value()));
+    if(sender() == ui->unmuteGroups)        emit(actionUnmuteGroups());
+    else if(sender() == ui->unmuteObjects)  emit(actionUnmuteObjects());
+    else if(sender() == ui->unsoloGroups)   emit(actionUnsoloGroups());
+    else if(sender() == ui->unsoloObjects)  emit(actionUnsoloObjects());
     actionCC();
-    actionCC2();
 }
 
 void UiInspector::actionInfo() {
     if(!actionInfoLock) {
-        factory->pushSnapshot();
-        foreach(NxObject *object, *(render->getSelection())) {
-            //if(ui->IDSpin == sender()) {  ///Issue - if object was not changed, it conflicts with itself - change spin into a button/dialog combo like group
-            //    object->setId(ui->IDSpin->value());
-            //    emit(actionChangeID(ui->IDSpin->value()));   ////CG////
-            //}
-            //else
-            if(ui->positionX == sender())
-                object->setPos(NxPoint(ui->positionX->value(), object->getPos().y(), object->getPos().z()));
-            else if(ui->positionY == sender())
-                object->setPos(NxPoint(object->getPos().x(), ui->positionY->value(), object->getPos().z()));
-            else if(ui->positionZ == sender())
-                object->setPos(NxPoint(object->getPos().x(), object->getPos().y(), ui->positionZ->value()));
-            else if(ui->activityCheck == sender())
-                object->setActive(ui->activityCheck->isChecked());
-            else if(ui->labelLine == sender())
-                object->setLabel(ui->labelLine->text());
-            else if(ui->sizeSpin == sender())
-                object->setSize(ui->sizeSpin->value());
-            else if(ui->messagesSpin == sender())
-                object->setMessageTimeInterval(ui->messagesSpin->value());
+        Application::current->pushSnapshot();
 
-            if(object->getType() == ObjectsTypeCursor) {
-                NxCursor *cursor = (NxCursor*)object;
-                if(ui->widthSpin == sender())
-                    cursor->setWidth(ui->widthSpin->value());
-                else if(ui->depthSpin == sender())
-                    cursor->setDepth(ui->depthSpin->value());
-                else if(ui->speedFSpin == sender())
-                    cursor->setTimeFactorF(ui->speedFSpin->value());
-                else if(ui->patternLine == sender())
-                    cursor->setStart(ui->patternLine->currentText().split(" - ").at(0));
-                else if(ui->easingCombo == sender())
-                    cursor->setEasing(ui->easingCombo->currentIndex());
-                else if(ui->speedSpin == sender())
-                    cursor->setTimeFactor(ui->speedSpin->value());
-                else if(ui->cursorLengthSpin == sender())
-                    cursor->setTimeFactor(cursor->getCurve()->getPathLength() / ui->cursorLengthSpin->value());
-                else if(ui->offsetInitialSpin == sender())
-                    cursor->setTimeInitialOffset(ui->offsetInitialSpin->value());
-                else if(ui->offsetStartSpin == sender())
-                    cursor->setTimeStartOffset(ui->offsetStartSpin->value());
-                else if(ui->offsetEndSpin == sender())
-                    cursor->setTimeEndOffset(ui->offsetEndSpin->value());
-                else if(ui->cursorSourceX1 == sender())
-                    cursor->setBoundsRect(0, ui->cursorSourceX1->value(), true);
-                else if(ui->cursorSourceY1 == sender())
-                    cursor->setBoundsRect(1, ui->cursorSourceY1->value(), true);
-                else if(ui->cursorSourceZ1 == sender())
-                    cursor->setBoundsRect(2, ui->cursorSourceZ1->value(), true);
-                else if(ui->cursorSourceX2 == sender())
-                    cursor->setBoundsRect(3, ui->cursorSourceX2->value(), true);
-                else if(ui->cursorSourceY2 == sender())
-                    cursor->setBoundsRect(4, ui->cursorSourceY2->value(), true);
-                else if(ui->cursorSourceZ2 == sender())
-                    cursor->setBoundsRect(5, ui->cursorSourceZ2->value(), true);
-                else if(ui->cursorTargetX1 == sender())
-                    cursor->setBoundsRect(0, ui->cursorTargetX1->value(), false);
-                else if(ui->cursorTargetY1 == sender())
-                    cursor->setBoundsRect(1, ui->cursorTargetY1->value(), false);
-                else if(ui->cursorTargetZ1 == sender())
-                    cursor->setBoundsRect(2, ui->cursorTargetZ1->value(), false);
-                else if(ui->cursorTargetX2 == sender())
-                    cursor->setBoundsRect(3, ui->cursorTargetX2->value(), false);
-                else if(ui->cursorTargetY2 == sender())
-                    cursor->setBoundsRect(4, ui->cursorTargetY2->value(), false);
-                else if(ui->cursorTargetZ2 == sender())
-                    cursor->setBoundsRect(5, ui->cursorTargetZ2->value(), false);
-            }
-            else if(object->getType() == ObjectsTypeCurve) {
-                NxCurve *curve = (NxCurve*)object;
-                if(ui->sizeWSpin == sender())
-                    curve->setResize(NxSize(ui->sizeWSpin->value(), curve->getResize().height()));
-                else if(ui->sizeHSpin == sender())
-                    curve->setResize(NxSize(curve->getResize().width(), ui->sizeHSpin->value()));
-                if(ui->pointsList == sender()) {
-                    if(curve->getCurveType() == CurveTypePoints) {
-                        ui->pointsList->sortItems(0, Qt::AscendingOrder);
-                        for(quint16 itemIndex = 0 ; itemIndex < ui->pointsList->topLevelItemCount() ; itemIndex++) {
-                            QTreeWidgetItem *item = ui->pointsList->topLevelItem(itemIndex);
-                            curve->setPointAt(itemIndex, NxPoint(item->text(1).toDouble(), item->text(2).toDouble(), item->text(3).toDouble()), NxPoint(item->text(5).toDouble(), item->text(6).toDouble(), item->text(7).toDouble()), NxPoint(item->text(8).toDouble(), item->text(9).toDouble(), item->text(10).toDouble()), (item->checkState(4)==Qt::Checked)?(true):(false), false);
-                        }
-                        curve->calcBoundingRect();
-                        curve->calculate();
-                    }
-                }
-            }
-            else if(object->getType() == ObjectsTypeTrigger) {
-                NxTrigger *trigger = (NxTrigger*)object;
-                if(ui->triggerOffSpin == sender())
-                    trigger->setTriggerOff(ui->triggerOffSpin->value());
-            }
+        if(ui->positionX == sender())                       Application::current->execute(QString("%1 selection %2").arg(COMMAND_POS_X).arg(ui->positionX->value()), ExecuteSourceGui);
+        else if(ui->positionY == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_POS_Y).arg(ui->positionY->value()), ExecuteSourceGui);
+        else if(ui->positionZ == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_POS_Z).arg(ui->positionZ->value()), ExecuteSourceGui);
+        else if(ui->activityCheck == sender())              Application::current->execute(QString("%1 selection %2").arg(COMMAND_ACTIVE).arg(ui->activityCheck->isChecked()), ExecuteSourceGui);
+        else if(ui->labelLine == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_LABEL).arg(ui->labelLine->text()), ExecuteSourceGui);
+        else if(ui->sizeSpin == sender())                   Application::current->execute(QString("%1 selection %2").arg(COMMAND_SIZE).arg(ui->sizeSpin->value()), ExecuteSourceGui);
+        else if(ui->messagesSpin == sender())               Application::current->execute(QString("%1 selection %2").arg(COMMAND_MESSAGE_INTERVAL).arg(ui->messagesSpin->value()), ExecuteSourceGui);
+        else if(ui->widthSpin == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_WIDTH).arg(ui->widthSpin->value()), ExecuteSourceGui);
+        else if(ui->depthSpin == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_DEPTH).arg(ui->depthSpin->value()), ExecuteSourceGui);
+        else if(ui->speedFSpin == sender())                 Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_SPEEDF).arg(ui->speedFSpin->value()), ExecuteSourceGui);
+        else if(ui->speedSpin == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_SPEED).arg(ui->speedSpin->value()), ExecuteSourceGui);
+        else if(ui->triggerOffSpin == sender())             Application::current->execute(QString("%1 selection %2").arg(COMMAND_TRIGGER_OFF).arg(ui->triggerOffSpin->value()), ExecuteSourceGui);
+        else if(ui->pointsLists == sender())                Application::current->execute(QString("%1 selection 1").arg(COMMAND_CURVE_EDITOR), ExecuteSourceGui);
+        else if(ui->cursorSourceX1 == sender())             Application::current->execute(QString("%1 selection 0 %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE).arg(ui->cursorSourceX1->value()), ExecuteSourceGui);
+        else if(ui->cursorSourceY1 == sender())             Application::current->execute(QString("%1 selection 1 %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE).arg(ui->cursorSourceY1->value()), ExecuteSourceGui);
+        else if(ui->cursorSourceZ1 == sender())             Application::current->execute(QString("%1 selection 2 %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE).arg(ui->cursorSourceZ1->value()), ExecuteSourceGui);
+        else if(ui->cursorSourceX2 == sender())             Application::current->execute(QString("%1 selection 3 %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE).arg(ui->cursorSourceX2->value()), ExecuteSourceGui);
+        else if(ui->cursorSourceY2 == sender())             Application::current->execute(QString("%1 selection 4 %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE).arg(ui->cursorSourceY2->value()), ExecuteSourceGui);
+        else if(ui->cursorSourceZ2 == sender())             Application::current->execute(QString("%1 selection 5 %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE).arg(ui->cursorSourceZ2->value()), ExecuteSourceGui);
+        else if(ui->cursorTargetX1 == sender())             Application::current->execute(QString("%1 selection 0 %2").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetX1->value()), ExecuteSourceGui);
+        else if(ui->cursorTargetY1 == sender())             Application::current->execute(QString("%1 selection 1 %2").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetY1->value()), ExecuteSourceGui);
+        else if(ui->cursorTargetZ1 == sender())             Application::current->execute(QString("%1 selection 2 %2").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetZ1->value()), ExecuteSourceGui);
+        else if(ui->cursorTargetX2 == sender())             Application::current->execute(QString("%1 selection 3 %2").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetX2->value()), ExecuteSourceGui);
+        else if(ui->cursorTargetY2 == sender())             Application::current->execute(QString("%1 selection 4 %2").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetY2->value()), ExecuteSourceGui);
+        else if(ui->cursorTargetZ2 == sender())             Application::current->execute(QString("%1 selection 5 %2").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetZ2->value()), ExecuteSourceGui);
+        else if(ui->equationPoints == sender())             Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURVE_EQUATION_POINTS).arg(ui->equationPoints->value()), ExecuteSourceGui);
+        else if(ui->cursorSourceMode0 == sender())          Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE_MODE).arg(0), ExecuteSourceGui);
+        else if(ui->cursorSourceMode1 == sender())          Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE_MODE).arg(1), ExecuteSourceGui);
+        else if(ui->cursorSourceMode2 == sender())          Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE_MODE).arg(2), ExecuteSourceGui);
+        else if(ui->cursorSourceMode3 == sender())          Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE_MODE).arg(3), ExecuteSourceGui);
+        else if((ui->cursorLengthSpin == sender()) || (ui->cursorSpeedLock == sender())) {
+            if(ui->cursorSpeedLock->isChecked())            Application::current->execute(QString("%1 selection autolock %2").arg(COMMAND_CURSOR_SPEED).arg(ui->cursorLengthSpin->value()), ExecuteSourceGui);
+            else                                            Application::current->execute(QString("%1 selection auto     %2").arg(COMMAND_CURSOR_SPEED).arg(ui->cursorLengthSpin->value()), ExecuteSourceGui);
         }
+        else if((ui->equationType0 == sender()) || (ui->equationType1 == sender()) || (ui->equationEdit == sender())) {
+            if(ui->equationType0->isChecked())  Application::current->execute(QString("%1 selection cartesian %2").arg(COMMAND_CURVE_EQUATION).arg(ui->equationEdit->toPlainText().remove("\n").trimmed()), ExecuteSourceGui);
+            else                                Application::current->execute(QString("%1 selection polar %2").arg(COMMAND_CURVE_EQUATION).arg(ui->equationEdit->toPlainText().remove("\n").trimmed()), ExecuteSourceGui);
+        }
+        else if((ui->offsetInitialSpin == sender()) || (ui->offsetStartSpin == sender()) || (ui->offsetEndSpin == sender()))
+            Application::current->execute(QString("%1 selection %2 %3 %4").arg(COMMAND_CURSOR_OFFSET).arg(ui->offsetInitialSpin->value()).arg(ui->offsetStartSpin->value()).arg(ui->offsetEndSpin->value()), ExecuteSourceGui);
+        else if((ui->sizeWSpin == sender()) || (ui->sizeHSpin == sender()))
+            Application::current->execute(QString("%1 selection %2 %3").arg(COMMAND_RESIZE).arg(ui->sizeWSpin->value()).arg(ui->sizeHSpin->value()), ExecuteSourceGui);
+        else if(ui->easingCombo == sender())                Application::current->execute(QString("%1 selection %1 %2 %3 %4").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetY2->value()), ExecuteSourceGui);
+        else if((ui->patternLine == sender()) || (ui->easingCombo == sender()))
+            Application::current->execute(QString("%1 selection %2 0 %3").arg(COMMAND_CURSOR_START).arg(ui->easingCombo->currentIndex()).arg(ui->patternLine->currentText().split(" - ").at(0)), ExecuteSourceGui);
+
         refresh();
     }
 }
@@ -271,133 +202,72 @@ void UiInspector::actionColor() {
             QColor valColor = QColorDialog::getColor(oldVal, 0, tr("IanniX Color Inspector"), QColorDialog::ShowAlphaChannel);
             val = QString("%1 %2 %3 %4").arg(valColor.red()).arg(valColor.green()).arg(valColor.blue()).arg(valColor.alpha());
         }
-        factory->pushSnapshot();
-        foreach(NxObject *object, *(render->getSelection())) {
-            if(ui->colorCombo1 == sender())
-                object->setColorActive(val);
-            else if(ui->colorCombo2 == sender())
-                object->setColorInactive(val);
-            else if(object->getType() == ObjectsTypeTrigger) {
-                NxTrigger *trigger = (NxTrigger*)object;
-                if(ui->colorCombo3 == sender())
-                    trigger->setColorActiveMessage(val);
-                else if(ui->colorCombo4 == sender())
-                    trigger->setColorInactiveMessage(val);
-            }
-        }
+        Application::current->pushSnapshot();
+
+        if(ui->colorCombo1 == sender())         Application::current->execute(QString("%1 selection %2").arg(COMMAND_COLOR_ACTIVE).arg(val), ExecuteSourceGui);
+        else if(ui->colorCombo2 == sender())    Application::current->execute(QString("%1 selection %2").arg(COMMAND_COLOR_INACTIVE).arg(val), ExecuteSourceGui);
+
         refresh();
     }
 }
+void UiInspector::actionTexture() {
+    if(!actionInfoLock) {
+        QComboBox *combo = (QComboBox*)sender();
+        QString val = combo->currentText();
+        Application::current->pushSnapshot();
 
-void UiInspector::actionNetwork() {
-    if(ui->oscInPortSpin == sender()) {
-        factory->pushSnapshot();
-        ui->oscInPortSpin->setStyleSheet("");
-        emit(oscPortChange(ui->oscInPortSpin->value()));
-    }
-    else if(ui->udpInPortSpin == sender()) {
-        factory->pushSnapshot();
-        ui->udpInPortSpin->setStyleSheet("");
-        emit(udpPortChange(ui->udpInPortSpin->value()));
-    }
-    else if(ui->tcpInPortSpin == sender()) {
-        factory->pushSnapshot();
-        ui->tcpInPortSpin->setStyleSheet("");
-        emit(tcpPortChange(ui->tcpInPortSpin->value()));
-    }
-    if(ui->httpInPortSpin == sender()) {
-        factory->pushSnapshot();
-        ui->httpInPortSpin->setStyleSheet("");
-        emit(httpPortChange(ui->httpInPortSpin->value()));
-    }
-    else if(ui->ipOutEdit == sender()) {
-        factory->pushSnapshot();
-        ui->ipOutEdit->setStyleSheet("");
-        emit(ipOutChange(ui->ipOutEdit->text()));
-    }
-    else if(ui->midiOutCombo == sender()) {
-        factory->pushSnapshot();
-        ui->midiOutCombo->setStyleSheet("");
-        emit(midiOutChange(ui->midiOutCombo->currentText()));
-    }
-    else if(ui->midiTempoSpin == sender()) {
-        factory->pushSnapshot();
-        ui->midiTempoSpin->setStyleSheet("");
-        emit(midiTempoChange(ui->midiTempoSpin->value()));
-    }
-    else if(ui->midiSyncClock == sender()) {
-        factory->pushSnapshot();;
-        emit(midiSyncClockChanged(ui->midiSyncClock->isChecked()));
-    }
-    else if(ui->midiSyncSong == sender()) {
-        factory->pushSnapshot();;
-        emit(midiSyncSongChanged(ui->midiSyncSong->isChecked()));
-    }
-    else if(ui->serialInPortEdit == sender()) {
-        factory->pushSnapshot();
-        ui->serialInPortEdit->setStyleSheet("");
-        emit(serialPortChange(ui->serialInPortEdit->text()));
-    }
-    else if(ui->transportMessageEdit == sender()) {
-        factory->pushSnapshot();
-        emit(transportMessageChange(ui->transportMessageEdit->text()));
-    }
-    else if(ui->syncMessageEdit == sender()) {
-        factory->pushSnapshot();
-        emit(syncMessageChange(ui->syncMessageEdit->text()));
-    }
-    else if((sender() == ui->bundleMessageEdit) || (sender() == ui->bundleMessagePort)) {
-        factory->pushSnapshot();
-        emit(bundleMessageChange(ui->bundleMessageEdit->text(), ui->bundleMessagePort->value()));
+        if(ui->textureCombo1 == sender())         Application::current->execute(QString("%1 selection %2").arg(COMMAND_TEXTURE_ACTIVE).arg(val), ExecuteSourceGui);
+        else if(ui->textureCombo2 == sender())    Application::current->execute(QString("%1 selection %2").arg(COMMAND_TEXTURE_INACTIVE).arg(val), ExecuteSourceGui);
+
+        refresh();
     }
 }
 
 void UiInspector::actionInfoID() {
     bool ok = false;
     quint16 oldId = ui->newIdButton->text().toInt();
-    quint16 newId = (new UiMessageBox())->getDouble(tr("IanniX Inspector"), tr("Enter the new ID:"), oldId, 0, 32767, 1, 0, "", &ok);
-    if(ok && (newId != oldId)) {
-        factory->pushSnapshot();
-        emit(actionChangeID(oldId, newId));
-        needRefresh = true;
+    quint16 newId = (new UiMessageBox())->getDouble(tr("Object ID"), tr("Enter the new ID:"), oldId, 0, 32767, 1, 0, "", &ok);
+    if((ok) && (oldId != newId)) {
+        if(Application::current->getObjectById(newId))
+            (new UiMessageBox())->display(tr("Object ID"), tr("Another object has this ID.\nTry deleting that object, or change its ID."), QDialogButtonBox::Ok);
+        else {
+            Application::current->pushSnapshot();
+            Application::current->execute(QString("%1 %2 %3").arg(COMMAND_ID).arg(oldId).arg(newId), ExecuteSourceGui);
+            needRefresh = true;
+        }
     }
 }
 
 
 void UiInspector::actionInfoGroup() {
     bool ok = false;
-    QString groupeId = (new UiMessageBox())->getText(tr("IanniX Inspector"), tr("Enter the name of the destination group:"), ui->groupIdButton->text(), &ok);
+    QString groupeId = (new UiMessageBox())->getText(tr("Object Group ID"), tr("Enter the name of the desired group:"), ui->groupIdButton->text(), &ok);
     if(ok) {
-        factory->pushSnapshot();
-        foreach(NxObject *object, *(render->getSelection()))
-            object->setGroupId(groupeId);
+        Application::current->pushSnapshot();
+        Application::current->execute(QString("%1 selection %2").arg(COMMAND_GROUP).arg(groupeId), ExecuteSourceGui);
         needRefresh = true;
     }
 }
 void UiInspector::actionMessages() {
     if(render->getSelection()->count()) {
-        factory->pushSnapshot();
-        ExtOscPatternAsk *ask = new ExtOscPatternAsk(factory, 0, render->getSelection());
-        if(!ask->onlyCurves) {
-            if(ask->exec()) {
-                foreach(NxObject *object, *(render->getSelection()))
-                    object->setMessagePatterns(ask->getMessagePatterns());
-            }
-        }
+        Application::current->pushSnapshot();
+        ExtOscPatternAsk *ask = new ExtOscPatternAsk(Application::current->getMainWindow(), render->getSelection());
+        if(!ask->onlyCurves)
+            if(ask->exec())
+                Application::current->execute(QString("%1 selection %2").arg(COMMAND_MESSAGE).arg(ask->getMessagePatterns()), ExecuteSourceGui);
     }
 }
 
-void UiInspector::logOscSend(const QString & message) {
-    ui->oscSendText->appendPlainText(message);
-}
-void UiInspector::logOscReceive(const QString & message) {
-    ui->oscReceiveText->appendPlainText(message);
-}
 void UiInspector::setMousePos(const NxPoint & pos) {
-    ui->mouseLabel->setText(tr("MOUSE:") + QString(" %1 / %2").arg(pos.x(), 0, 'f', 3).arg(pos.y(), 0, 'f', 3));
+    ui->mouseLabel->setText(tr("MOUSE:") + QString(" %1 s. / %2 s.").arg(pos.x(), 0, 'f', 3).arg(pos.y(), 0, 'f', 3));
 }
 void UiInspector::setMouseZoom(qreal zoom) {
     ui->zoomLabel->setText(tr("ZOOM:") + QString(" %1%").arg(zoom, 0, 'f', 1));
+}
+void UiInspector::actionTabChange(int tab) {
+    if(tab == 1)    askRefresh();
+    if(tab == 3)    MessageManager::setLogVisibility(true);
+    else            MessageManager::setLogVisibility(false);
 }
 
 void UiInspector::timerEvent(QTimerEvent *) {
@@ -406,27 +276,19 @@ void UiInspector::timerEvent(QTimerEvent *) {
 }
 void UiInspector::refresh() {
     needRefresh = false;
+    if(!Application::current)
+        return;
 
-    nbTriggers = triggerItem->childCount();
-    nbCursors  = cursorItem->childCount();
-    nbCurves   = curveItem->childCount();
-    QString triggerStr = tr("TRIGGERS") + QString(" (%1)").arg(nbTriggers);
-    QString cursorStr  = tr("CURSORS")  + QString(" (%1)").arg(nbCursors);
-    QString curveStr   = tr("CURVES")   + QString(" (%1)").arg(nbCurves);
-    triggerItem->setText(0, triggerStr);
-    cursorItem ->setText(0, cursorStr);
-    curveItem  ->setText(0, curveStr);
-    ui->viewTriggerCheck->setText(triggerStr);
-    ui->viewCursorCheck ->setText(cursorStr);
-    ui->viewCurveCheck  ->setText(curveStr);
-    ui->viewGroupLabel  ->setText(tr("GROUPS") + QString(" (%1)").arg(ui->cc2View->topLevelItemCount()));
-
+    MessageManager::transportNbTriggers = Application::current->getCount(ObjectsTypeTrigger);
+    MessageManager::transportNbCursors  = Application::current->getCount(ObjectsTypeCursor);
+    MessageManager::transportNbCurves   = Application::current->getCount(ObjectsTypeCurve);
+    MessageManager::transportNbGroups   = Application::current->getCount(-2);
     actionInfoLock = true;
 
-    quint16 counterTriggers = 0, counterCurves = 0, counterCurvePoints = 0, counterCursors = 0, counterCursorsCurve = 0;
+    quint16 counterTriggers = 0, counterCurves = 0, counterCurvePoints = 0, counterCurveEquation = 0, counterCursors = 0, counterCursorsCurve = 0;
 
-    if(render) {
-        QList<NxObject*> *objects = render->getSelection();
+    if((render) && (ui->tab->currentIndex() == 1)) {
+        UiRenderSelection *objects = render->getSelection();
         NxObject *objectsHover = 0;
         if((objects->count() == 0) && (render->getSelectedHover()))
             objectsHover = render->getSelectedHover();
@@ -437,16 +299,16 @@ void UiInspector::refresh() {
 
         ui->colorCombo1->clear();
         ui->colorCombo2->clear();
-        ui->colorCombo3->clear();
-        ui->colorCombo4->clear();
-        colorComboAdd(ui->colorCombo1, render->getRenderOptions()->colors.keys());
-        colorComboAdd(ui->colorCombo2, render->getRenderOptions()->colors.keys());
-        colorComboAdd(ui->colorCombo3, render->getRenderOptions()->colors.keys());
-        colorComboAdd(ui->colorCombo4, render->getRenderOptions()->colors.keys());
+        colorComboAdd(ui->colorCombo1, Global::colors->keys());
+        colorComboAdd(ui->colorCombo2, Global::colors->keys());
         colorComboAdd(ui->colorCombo1, QStringList() << "Custom");
         colorComboAdd(ui->colorCombo2, QStringList() << "Custom");
-        colorComboAdd(ui->colorCombo3, QStringList() << "Custom");
-        colorComboAdd(ui->colorCombo4, QStringList() << "Custom");
+        ui->textureCombo1->clear();
+        ui->textureCombo2->clear();
+        textureComboAdd(ui->textureCombo1, QStringList() << "");
+        textureComboAdd(ui->textureCombo2, QStringList() << "");
+        textureComboAdd(ui->textureCombo1, Global::textures->keys());
+        textureComboAdd(ui->textureCombo2, Global::textures->keys());
 
         for(quint16 indexObject = 0 ; indexObject < objects->count()+1 ; indexObject++) {
             NxObject *object = 0;
@@ -471,6 +333,9 @@ void UiInspector::refresh() {
                 counterCursorsCurve++;
             if((object->getType() == ObjectsTypeCurve) && (((NxCurve*)object)->getCurveType() == CurveTypePoints))
                 counterCurvePoints++;
+            if((object->getType() == ObjectsTypeCurve) && ((((NxCurve*)object)->getCurveType() == CurveTypeEquationCartesian) || (((NxCurve*)object)->getCurveType() == CurveTypeEquationPolar)))
+                counterCurveEquation++;
+
 
             if (objects->count() > 1)  ////CG//// Don't allow ID change if more than one object selected
                 ui->newIdButton->setDisabled(true);
@@ -488,8 +353,8 @@ void UiInspector::refresh() {
             change(indexObject, ui->positionZ, object->getPos().z(), prevObject->getPos().z());
             change(indexObject, ui->activityCheck, object->getActive(), prevObject->getActive());
             change(indexObject, ui->labelLine, object->getLabel(), prevObject->getLabel());
-            change(indexObject, ui->colorCombo1, object->getColorActiveVerbose(), prevObject->getColorActiveVerbose());
-            change(indexObject, ui->colorCombo2, object->getColorInactiveVerbose(), prevObject->getColorInactiveVerbose());
+            change(indexObject, ui->colorCombo1, object->getColorActiveVerbose(), prevObject->getColorActiveVerbose(), true);
+            change(indexObject, ui->colorCombo2, object->getColorInactiveVerbose(), prevObject->getColorInactiveVerbose(), true);
             change(indexObject, ui->sizeSpin, object->getSize(), prevObject->getSize());
 
             if(object->getType() == ObjectsTypeCursor) {
@@ -500,10 +365,11 @@ void UiInspector::refresh() {
                 change(indexObject, ui->widthSpin, cursor->getWidth(), prevCursor->getWidth());
                 change(indexObject, ui->depthSpin, cursor->getDepth(), prevCursor->getDepth());
                 if(sender() != ui->patternLine)
-                    change(indexObject, ui->patternLine, cursor->getStart(), prevCursor->getStart(), false);
+                    change(indexObject, ui->patternLine, cursor->getStart().mid(4), prevCursor->getStart().mid(4), false);
                 change(indexObject, ui->easingCombo, cursor->getEasing(), prevCursor->getEasing());
                 change(indexObject, ui->speedSpin, cursor->getTimeFactor(), prevCursor->getTimeFactor());
                 change(indexObject, ui->speedFSpin, cursor->getTimeFactorF(), prevCursor->getTimeFactorF());
+                change(indexObject, ui->cursorSpeedLock, cursor->getLockPathLength(), prevCursor->getLockPathLength());
                 change(indexObject, ui->offsetInitialSpin, cursor->getTimeInitialOffset(), prevCursor->getTimeInitialOffset());
                 change(indexObject, ui->offsetStartSpin, cursor->getTimeStartOffset(), prevCursor->getTimeStartOffset());
                 change(indexObject, ui->offsetEndSpin, cursor->getTimeEndOffset(), prevCursor->getTimeEndOffset());
@@ -519,6 +385,11 @@ void UiInspector::refresh() {
                 change(indexObject, ui->cursorTargetX2, cursor->getBoundsRect(3, false), prevCursor->getBoundsRect(3, false));
                 change(indexObject, ui->cursorTargetY2, cursor->getBoundsRect(4, false), prevCursor->getBoundsRect(4, false));
                 change(indexObject, ui->cursorTargetZ2, cursor->getBoundsRect(5, false), prevCursor->getBoundsRect(5, false));
+                change(indexObject, ui->cursorSourceMode0, cursor->getBoundsSourceMode()==0, prevCursor->getBoundsSourceMode()==0);
+                change(indexObject, ui->cursorSourceMode1, cursor->getBoundsSourceMode()==1, prevCursor->getBoundsSourceMode()==1);
+                change(indexObject, ui->cursorSourceMode2, cursor->getBoundsSourceMode()==2, prevCursor->getBoundsSourceMode()==2);
+                change(indexObject, ui->cursorSourceMode3, cursor->getBoundsSourceMode()==3, prevCursor->getBoundsSourceMode()==3);
+
                 change(indexObject, ui->messagesSpin, object->getMessageTimeInterval(), prevObject->getMessageTimeInterval());
 
                 if(cursor->getCurve()) {
@@ -532,9 +403,13 @@ void UiInspector::refresh() {
                 if(prevCurve == 0)
                     prevCurve = curve;
 
-                change(indexObject, ui->sizeWSpin,  curve->getResize().width(), prevCurve->getResize().width());
-                change(indexObject, ui->sizeHSpin,  curve->getResize().height(), prevCurve->getResize().height());
-                change(indexObject, ui->pointsList, curve->getPathPoints(), prevCurve->getPathPoints());
+                change(indexObject, ui->sizeWSpin,      curve->getResize().width(), prevCurve->getResize().width());
+                change(indexObject, ui->sizeHSpin,      curve->getResize().height(), prevCurve->getResize().height());
+                change(indexObject, ui->equationPoints, curve->getEquationPoints(), prevCurve->getEquationPoints());
+                change(indexObject, ui->equationType0,  curve->getEquationType()==0, prevCurve->getEquationType()==0);
+                change(indexObject, ui->equationType1,  curve->getEquationType()==1, prevCurve->getEquationType()==1);
+                change(indexObject, ui->equationEdit,   curve->getEquation(true), prevCurve->getEquation(true));
+
                 prevCurve = curve;
             }
             else if(object->getType() == ObjectsTypeTrigger) {
@@ -543,14 +418,14 @@ void UiInspector::refresh() {
                     prevTrigger = trigger;
 
                 change(indexObject, ui->triggerOffSpin, trigger->getTriggerOff(), prevTrigger->getTriggerOff());
-                change(indexObject, ui->colorCombo3, trigger->getColorActiveMessageVerbose(), prevTrigger->getColorActiveMessageVerbose());
-                change(indexObject, ui->colorCombo4, trigger->getColorInactiveMessageVerbose(), prevTrigger->getColorInactiveMessageVerbose());
-                //change(indexObject, ui->messagesSpin, object->getMessageTimeInterval(), prevObject->getMessageTimeInterval());
+                change(indexObject, ui->textureCombo1, trigger->getTextureActive(), prevTrigger->getTextureActive(), false);
+                change(indexObject, ui->textureCombo2, trigger->getTextureInactive(), prevTrigger->getTextureInactive(), false);
                 prevTrigger = trigger;
             }
             prevObject = object;
         }
     }
+
     ui->typeLabel->setText("");
     if(counterTriggers == 1)
         ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterTriggers) + " " + tr("TRIGGER"));
@@ -565,7 +440,7 @@ void UiInspector::refresh() {
     else if(counterCursors > 1)
         ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCursors) + " " + tr("CURSORS"));
 
-    bool showCursorInfo = false, showTriggerInfo = false, showCurveInfo = false, showCurvePointsInfo = false, showCursorCurveInfo = false, showGenericInfo = false;
+    bool showCursorInfo = false, showTriggerInfo = false, showCurveInfo = false, showCurvePointsInfo = false, showCursorCurveInfo = false, showGenericInfo = false, showCurveEquationInfo = false;
     if(counterCurves > 0)
         showCurveInfo = true;
     if(counterCursors > 0)
@@ -576,15 +451,15 @@ void UiInspector::refresh() {
         showCursorCurveInfo = true;
     if(counterCurvePoints > 0)
         showCurvePointsInfo = true;
+    if(counterCurveEquation > 0)
+        showCurveEquationInfo = true;
     if((counterCursors + counterCurves + counterTriggers) > 0)
         showGenericInfo = true;
-
-    ui->labelSelection->setVisible(!showGenericInfo);
-    ui->separator1->setVisible(showCursorInfo | showTriggerInfo);
 
     ui->newIdButton->setVisible(showGenericInfo);
     ui->IDLabel->setVisible(showGenericInfo);
     ui->groupIdButton->setVisible(showGenericInfo);
+    ui->groupIdLabel->setVisible(showGenericInfo);
     ui->positionX->setVisible(showCurveInfo | showTriggerInfo);
     ui->positionY->setVisible(showCurveInfo | showTriggerInfo);
     ui->positionZ->setVisible(showCurveInfo | showTriggerInfo);
@@ -592,24 +467,27 @@ void UiInspector::refresh() {
     ui->activityCheck->setVisible(showGenericInfo);
     ui->activityLabel->setVisible(showGenericInfo);
     ui->messagesButton->setVisible(showCursorInfo | showTriggerInfo);
-    ui->messagesLabel->setVisible(showCursorInfo | showTriggerInfo);
-    ui->messagesSpin->setVisible(showCursorInfo | showTriggerInfo);
-    ui->messagesLabel2->setVisible(showCursorInfo | showTriggerInfo);
+    ui->messagesSpin->setVisible(showCursorInfo);
     ui->sizeSpin->setVisible(showGenericInfo);
     ui->sizeLabel2->setVisible(showGenericInfo);
     ui->labelLabel->setVisible(showGenericInfo);
     ui->labelLine->setVisible(showGenericInfo);
-    ui->colorLabel->setVisible(showGenericInfo);
+    ui->colorLabel1->setVisible(showGenericInfo);
+    ui->colorLabel2->setVisible(showGenericInfo);
     ui->colorCombo1->setVisible(showGenericInfo);
     ui->colorCombo2->setVisible(showGenericInfo);
+    ui->textureLabel1->setVisible(showTriggerInfo);
+    ui->textureLabel2->setVisible(showTriggerInfo);
+    ui->textureCombo1->setVisible(showTriggerInfo);
+    ui->textureCombo2->setVisible(showTriggerInfo);
 
     ui->widthSpin->setVisible(showCursorInfo);
     ui->depthSpin->setVisible(showCursorInfo);
     ui->widthLabel->setVisible(showCursorInfo);
     ui->patternLine->setVisible(showCursorInfo);
+    ui->easingLabel->setVisible(showCursorInfo);
     ui->easingCombo->setVisible(showCursorInfo);
     ui->patternLabel->setVisible(showCursorInfo);
-    ui->speedSpin->setVisible(showCursorCurveInfo);
     ui->offsetInitialSpin->setVisible(showCursorCurveInfo);
     ui->offsetStartSpin->setVisible(showCursorCurveInfo);
     ui->offsetEndSpin->setVisible(showCursorCurveInfo);
@@ -619,371 +497,254 @@ void UiInspector::refresh() {
     ui->offsetLabel3->setVisible(showCursorCurveInfo);
     ui->cursorLengthSpin->setVisible(showCursorCurveInfo);
     ui->cursorSpeedLabel->setVisible(showCursorCurveInfo);
-    ui->cursorPosLabel2->setVisible(showCursorCurveInfo);
-    ui->cursorBoundsLabel->setVisible(showCursorCurveInfo);
-    ui->cursorSourceX1->setVisible(showCursorCurveInfo);
-    ui->cursorSourceX2->setVisible(showCursorCurveInfo);
-    ui->cursorSourceY1->setVisible(showCursorCurveInfo);
-    ui->cursorSourceY2->setVisible(showCursorCurveInfo);
-    ui->cursorSourceZ1->setVisible(showCursorCurveInfo);
-    ui->cursorSourceZ2->setVisible(showCursorCurveInfo);
+    ui->cursorSpeedLock->setVisible(showCursorCurveInfo);
+    if(ui->cursorSpeedLock->isChecked()) {
+        ui->cursorSpeedLabel_2->setVisible(false);
+        ui->speedSpin->setVisible(false);
+    }
+    else {
+        ui->speedSpin->setVisible(showCursorCurveInfo);
+        ui->cursorSpeedLabel_2->setVisible(showCursorCurveInfo);
+    }
     ui->cursorTargetX1->setVisible(showCursorCurveInfo);
     ui->cursorTargetX2->setVisible(showCursorCurveInfo);
     ui->cursorTargetY1->setVisible(showCursorCurveInfo);
     ui->cursorTargetY2->setVisible(showCursorCurveInfo);
     ui->cursorTargetZ1->setVisible(showCursorCurveInfo);
     ui->cursorTargetZ2->setVisible(showCursorCurveInfo);
-    ui->cursorTargetLabel1->setVisible(showCursorCurveInfo);
-    ui->cursorTargetLabel2->setVisible(showCursorCurveInfo);
+    if(!ui->cursorSourceMode3->isChecked()) {
+        ui->cursorSourceX1->setVisible(false);
+        ui->cursorSourceY1->setVisible(false);
+        ui->cursorSourceZ1->setVisible(false);
+        ui->cursorSourceX2->setVisible(false);
+        ui->cursorSourceY2->setVisible(false);
+        ui->cursorSourceZ2->setVisible(false);
+        ui->cursorTargetLabel1->setVisible(false);
+        ui->cursorTargetLabel2->setVisible(false);
+        ui->cursorTargetLabel5->setVisible(false);
+        ui->cursorTargetLabel6->setVisible(false);
+        ui->cursorTargetLabel11->setVisible(false);
+        ui->cursorTargetLabel13->setVisible(false);
+    }
+    else {
+        ui->cursorSourceX1->setVisible(showCursorCurveInfo);
+        ui->cursorSourceX2->setVisible(showCursorCurveInfo);
+        ui->cursorSourceY1->setVisible(showCursorCurveInfo);
+        ui->cursorSourceY2->setVisible(showCursorCurveInfo);
+        ui->cursorSourceZ1->setVisible(showCursorCurveInfo);
+        ui->cursorSourceZ2->setVisible(showCursorCurveInfo);
+        ui->cursorTargetLabel1->setVisible(showCursorCurveInfo);
+        ui->cursorTargetLabel2->setVisible(showCursorCurveInfo);
+        ui->cursorTargetLabel5->setVisible(showCursorCurveInfo);
+        ui->cursorTargetLabel6->setVisible(showCursorCurveInfo);
+        ui->cursorTargetLabel11->setVisible(showCursorCurveInfo);
+        ui->cursorTargetLabel13->setVisible(showCursorCurveInfo);
+    }
     ui->cursorTargetLabel3->setVisible(showCursorCurveInfo);
     ui->cursorTargetLabel4->setVisible(showCursorCurveInfo);
-    ui->cursorTargetLabel5->setVisible(showCursorCurveInfo);
-    ui->cursorTargetLabel6->setVisible(showCursorCurveInfo);
     ui->cursorTargetLabel7->setVisible(showCursorCurveInfo);
     ui->cursorTargetLabel8->setVisible(showCursorCurveInfo);
-    ui->cursorTargetLabel9->setVisible(showCursorCurveInfo);
-    ui->cursorTargetLabel10->setVisible(showCursorCurveInfo);
-    ui->cursorTargetLabel11->setVisible(showCursorCurveInfo);
     ui->cursorTargetLabel12->setVisible(showCursorCurveInfo);
-    ui->cursorTargetLabel13->setVisible(showCursorCurveInfo);
     ui->cursorTargetLabel14->setVisible(showCursorCurveInfo);
+    ui->cursorSourceMode->setVisible(showCursorCurveInfo);
     ui->speedFLabel->setVisible(showCursorCurveInfo);
     ui->speedFSpin->setVisible(showCursorCurveInfo);
 
     ui->triggerOffLabel->setVisible(showTriggerInfo);
     ui->triggerOffSpin->setVisible(showTriggerInfo);
-    ui->colorCombo3->setVisible(showTriggerInfo);
-    ui->colorCombo4->setVisible(showTriggerInfo);
 
     ui->sizeHSpin->setVisible(showCurveInfo);
     ui->sizeWSpin->setVisible(showCurveInfo);
     ui->sizeLabel->setVisible(showCurveInfo);
     ui->pointsLabel->setVisible(showCurvePointsInfo);
-    ui->pointsList->setVisible(showCurvePointsInfo);
+    ui->pointsLists->setVisible(showCurvePointsInfo);
+    ui->equationLabel->setVisible(showCurveEquationInfo);
+    ui->equationType->setVisible(showCurveEquationInfo);
+    ui->equationPoints->setVisible(showCurveEquationInfo);
+    ui->equationEdit->setVisible(showCurveEquationInfo);
 
+    if((!showGenericInfo) && (ui->ssTabInfo->currentIndex() != 4))
+        lastTabBeforeRessources = ui->ssTabInfo->currentIndex();
+    ui->ssTabInfo->setTabEnabled(0, showGenericInfo);
+    ui->ssTabInfo->setTabEnabled(1, showGenericInfo);
+    ui->ssTabInfo->setTabEnabled(2, showCursorInfo | showTriggerInfo);
+    ui->ssTabInfo->setTabEnabled(3, showCursorInfo | showTriggerInfo);
+    if((ui->ssTabInfo->currentIndex() == 4) && (showGenericInfo)) {
+        if(ui->ssTabInfo->isTabEnabled(lastTabBeforeRessources))
+            ui->ssTabInfo->setCurrentIndex(lastTabBeforeRessources);
+        else if(ui->ssTabInfo->isTabEnabled(lastTabBeforeRessources-1))
+            ui->ssTabInfo->setCurrentIndex(lastTabBeforeRessources -1);
+        else if(ui->ssTabInfo->isTabEnabled(lastTabBeforeRessources-2))
+            ui->ssTabInfo->setCurrentIndex(lastTabBeforeRessources -2);
+    }
 
     actionInfoLock = false;
 }
+void UiInspector::change(quint16 indexObject, QRadioButton *spin, bool val, bool prevVal) {
+    if(indexObject == 0) {
+        if(spin->styleSheet() != "")
+            spin->setStyleSheet("");
+        if(!spin->hasFocus())
+            spin->setChecked(val);
+    }
+    else if((spin->styleSheet() == "") && (prevVal != val)) {
+        spin->setStyleSheet("color: gray;");
+    }
+}
+
 void UiInspector::change(quint16 indexObject, QDoubleSpinBox *spin, qreal val, qreal prevVal) {
     if(indexObject == 0) {
-        spin->setStyleSheet("");
-        spin->setValue(val);
+        if(spin->styleSheet() != "")
+            spin->setStyleSheet("");
+        if(!spin->hasFocus())
+            spin->setValue(val);
     }
-    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
+    else if((spin->styleSheet() == "") && (prevVal != val)) {
         spin->setStyleSheet("color: gray;");
     }
 }
 void UiInspector::change(quint16 indexObject, QSpinBox *spin, qint32 val, qint32 prevVal) {
     if(indexObject == 0) {
-        spin->setStyleSheet("");
-        spin->setValue(val);
+        if(spin->styleSheet() != "")
+            spin->setStyleSheet("");
+        if(!spin->hasFocus())
+            spin->setValue(val);
     }
-    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
+    else if((spin->styleSheet() == "") && (prevVal != val)) {
         spin->setStyleSheet("color: gray;");
     }
 }
 void UiInspector::change(quint16 indexObject, QPushButton *spin, const QString & val, const QString & prevVal) {
     if(indexObject == 0) {
-        spin->setStyleSheet("");
-        spin->setText(val);
+        if(spin->styleSheet() != "")
+            spin->setStyleSheet("");
+        if(!spin->hasFocus())
+            spin->setText(val);
     }
-    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
+    else if((spin->styleSheet() == "") && (prevVal != val)) {
         spin->setStyleSheet("color: gray;");
     }
 }
 void UiInspector::change(quint16 indexObject, QCheckBox *spin, quint8 val, quint8 prevVal) {
     if(indexObject == 0) {
-        spin->setStyleSheet("");
-        spin->setChecked(val);
+        if(spin->styleSheet() != "")
+            spin->setStyleSheet("");
+        if(!spin->hasFocus())
+            spin->setChecked(val);
     }
-    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
+    else if((spin->styleSheet() == "") && (prevVal != val)) {
         spin->setStyleSheet("QCheckBox::indicator { background-color: rgba(50, 237, 255, 128); }");
     }
 }
 void UiInspector::change(quint16 indexObject, QLineEdit *spin, const QString & val, const QString & prevVal) {
     if(indexObject == 0) {
-        spin->setStyleSheet("");
-        spin->setText(val);
+        if(spin->styleSheet() != "")
+            spin->setStyleSheet("");
+        if(!spin->hasFocus())
+            spin->setText(val);
     }
-    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
+    else if((spin->styleSheet() == "") && (prevVal != val)) {
+        spin->setStyleSheet("QCheckBox::indicator { background-color: rgba(50, 237, 255, 128); }");
+    }
+}
+void UiInspector::change(quint16 indexObject, QPlainTextEdit *spin, const QString & val, const QString & prevVal) {
+    if(indexObject == 0) {
+        if(spin->styleSheet() != "")
+            spin->setStyleSheet("");
+        if(!spin->hasFocus())
+            spin->setPlainText(val);
+    }
+    else if((spin->styleSheet() == "") && (prevVal != val)) {
         spin->setStyleSheet("QCheckBox::indicator { background-color: rgba(50, 237, 255, 128); }");
     }
 }
 void UiInspector::change(quint16 indexObject, QComboBox *spin, const QString & val, const QString & prevVal, bool isColor) {
-    qint16 indexVal = spin->findText(val);
     if(isColor) {
-        if(indexVal < 0)
-            colorComboAdd(spin, QStringList() << val);
     }
-    else
-        spin->setEditText(val);
+    else {
+        if((!spin->hasFocus()) && (spin->isEditable()))
+            spin->setEditText(val);
+    }
 
     if(indexObject == 0) {
-        spin->setStyleSheet("");
-        if(isColor) spin->setCurrentIndex(spin->findText(val));
-        else        spin->setEditText(val);
-    }
-    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
-        spin->setStyleSheet("");
-        if(isColor) spin->setCurrentIndex(-1);
-        //else        spin->setEditText("");
-    }
-}
-void UiInspector::change(quint16 indexObject, QComboBox *spin, quint16 val, quint16 prevVal) {
-    if(indexObject == 0) {
-        spin->setStyleSheet("");
-        spin->setCurrentIndex(val);
-    }
-    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
-        spin->setStyleSheet("");
-        spin->setCurrentIndex(-1);
-    }
-}
-void UiInspector::change(quint16 indexObject, QTreeWidget *spin, const QList<NxCurvePoint> &val, const QList<NxCurvePoint> &prevVal) {
-    if(indexObject == 0) {
-        spin->setStyleSheet("");
-        quint16 ptIndex = 0;
-        if(val.count() != spin->topLevelItemCount())
-            spin->clear();
-        foreach(const NxCurvePoint &pt, val) {
-            QTreeWidgetItem *item;
-            if(ptIndex < spin->topLevelItemCount()) item = spin->topLevelItem(ptIndex);
-            else                                    item = new QTreeWidgetItem();
-            item->setText(0, QString::number(ptIndex++));
-            item->setText(1, QString::number(pt.x()));
-            item->setText(2, QString::number(pt.y()));
-            item->setText(3, QString::number(pt.z()));
-            item->setText(4, "");
-            item->setText(5, QString::number(pt.c1.x()));
-            item->setText(6, QString::number(pt.c1.y()));
-            item->setText(7, QString::number(pt.c1.z()));
-            item->setText(8, QString::number(pt.c2.x()));
-            item->setText(9, QString::number(pt.c2.y()));
-            item->setText(10, QString::number(pt.c2.z()));
-            item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
-            if(pt.smooth)   item->setCheckState(4, Qt::Checked);
-            else            item->setCheckState(4, Qt::Unchecked);
-            spin->addTopLevelItem(item);
+        qint16 indexVal = spin->findText(val);
+        if((indexVal < 0) && (isColor))
+            colorComboAdd(spin, QStringList() << val);
+
+        if(!spin->hasFocus()) {
+            if(spin->isEditable()) spin->setEditText(val);
+            else                   spin->setCurrentIndex(indexVal);
         }
     }
-    else if((spin->styleSheet().isEmpty()) && (prevVal != val)) {
-        spin->setStyleSheet("QCheckBox::indicator { background-color: rgba(50, 237, 255, 128); }");
+    else if(prevVal != val) {
+        if((isColor) && (spin->currentIndex() >= 0))
+            spin->setCurrentIndex(-1);
+    }
+}
+void UiInspector::change(quint16 indexObject, QComboBox *spin, qint16 val, qint16 prevVal) {
+    if(indexObject == 0) {
+        if(!spin->hasFocus())
+            spin->setCurrentIndex(val);
+    }
+    else if((spin->styleSheet() == "") && (prevVal != val)) {
+        if(spin->currentIndex() >= 0)
+            spin->setCurrentIndex(-1);
     }
 }
 
 void UiInspector::colorComboAdd(QComboBox *spin, QStringList values) {
     foreach(const QString & value, values) {
+        QString colorName = value;
         QPixmap icon(32, 32);
         QColor color = Qt::gray;
-        QStringList valueSplit = value.split(" ", QString::SkipEmptyParts);
-        if(valueSplit.count() == 4)
-            color = QColor(valueSplit.at(0).toUInt(), valueSplit.at(1).toUInt(), valueSplit.at(2).toUInt(), valueSplit.at(3).toUInt());
+        QStringList valueSplit = colorName.split(" ", QString::SkipEmptyParts);
+        if(valueSplit.count() == 4) color = QColor(valueSplit.at(0).toUInt(), valueSplit.at(1).toUInt(), valueSplit.at(2).toUInt(), valueSplit.at(3).toUInt());
+        else if((colorName.startsWith(Global::colorsPrefix(0))) || (colorName.startsWith(Global::colorsPrefix(1)))) {
+            if(((colorName.startsWith(Global::colorsPrefix(0))) && (Global::colorsPrefix() == Global::colorsPrefix(0))) || ((colorName.startsWith(Global::colorsPrefix(1))) && (Global::colorsPrefix() == Global::colorsPrefix(1)))) {
+                color = Global::colors->value(colorName);
+                colorName = colorName.remove(Global::colorsPrefix());
+            }
+            else
+                continue;
+        }
         else
-            color = render->getRenderOptions()->colors.value(value);
+            color = Global::colors->value(colorName);
         icon.fill(color);
-        if(value != "Custom")
-            spin->addItem(QIcon(icon), value);
+        if(colorName != "Custom")
+            spin->addItem(QIcon(icon), colorName);
         else
+            spin->addItem(colorName);
+    }
+}
+void UiInspector::textureComboAdd(QComboBox *spin, QStringList values) {
+    foreach(const QString & value, values) {
+        if((value.isEmpty()) || (Global::textures->value(value)->loaded))
             spin->addItem(value);
     }
 }
 
-QList<NxObject*> UiInspector::getSelectedCCObject() const {
-    QList<NxObject*> objects;
-    foreach(const QTreeWidgetItem* item, ui->ccView->selectedItems())
-        if((item != triggerItem) && (item != cursorItem) && (item != curveItem))
-            objects.append((NxObject*)item);
-    return objects;
+QTreeWidgetItem* UiInspector::getObjectRootItem() const {
+    return ui->ccView->invisibleRootItem();
 }
-QList<NxGroup*> UiInspector::getSelectedCC2Object() const {
-    QList<NxGroup*> groups;
-    foreach(const QTreeWidgetItem* item, ui->cc2View->selectedItems())
-        groups.append((NxGroup*)item);
-    return groups;
+QPair< QList<NxGroup*>, UiRenderSelection> UiInspector::getSelectedCCObject() const {
+    UiRenderSelection objects;
+    QList<NxGroup*>  groups;
+    foreach(const QTreeWidgetItem* item, ui->ccView->selectedItems())
+        if(item->text(0) == tr("GROUP"))     groups .append((NxGroup*) item);
+        else                                 objects.append((NxObject*)item);
+    return qMakePair(groups, objects);
 }
 
-////CG//// Created to clear treewidget selections to avoid a crash on object deletion
+void UiInspector::showSpaceTab() {
+    ui->tab->setCurrentIndex(1);
+    ui->ssTabInfo->setCurrentIndex(1);
+}
+void UiInspector::showRessourcesTab(const QString &) {
+    ui->tab->setCurrentIndex(1);
+    ui->ssTabInfo->setTabEnabled(4, true);
+    ui->ssTabInfo->setCurrentIndex(4);
+}
+
 void UiInspector::clearCCselections() {
     ui->ccView->clearSelection();
-    ui->cc2View->clearSelection();
-}
-
-quint16 UiInspector::getCurrentTab() const {
-    return ui->tab->currentIndex();
-}
-void UiInspector::setCurrentTab(quint16 val) {
-    ui->tab->setCurrentIndex(val);
-}
-
-bool UiInspector::getViewTriggerCheck() const {
-    return ui->viewTriggerCheck->isChecked();
-}
-void UiInspector::setViewTriggerCheck(bool val) {
-    ui->viewTriggerCheck->setChecked(val);
-}
-
-bool UiInspector::getViewCurveCheck() const {
-    return ui->viewCurveCheck->isChecked();
-}
-void UiInspector::setViewCurveCheck(bool val) {
-    ui->viewCurveCheck->setChecked(val);
-}
-
-bool UiInspector::getViewCursorCheck() const {
-    return ui->viewCursorCheck->isChecked();
-}
-void UiInspector::setViewCursorCheck(bool val) {
-    ui->viewCursorCheck->setChecked(val);
-}
-
-bool UiInspector::getViewCurveOpacityCheck() const {
-    return ui->viewCurveOpacityCheck->isChecked();
-}
-void UiInspector::setViewCurveOpacityCheck(bool val) {
-    ui->viewCurveOpacityCheck->setChecked(val);
-}
-
-void UiInspector::setOSCOk(bool val) {
-    if(val)
-        ui->oscInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
-    else
-        ui->oscInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
-}
-void UiInspector::setTCPOk(bool val) {
-    if(val)
-        ui->tcpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
-    else
-        ui->tcpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
-}
-void UiInspector::setUDPOk(bool val) {
-    if(val)
-        ui->udpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
-    else
-        ui->udpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
-}
-void UiInspector::setHttpOk(bool val) {
-    if(val)
-        ui->httpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
-    else
-        ui->httpInPortSpin->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
-}
-void UiInspector::setIpOutOk(bool val) {
-    if(val)
-        ui->ipOutEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
-    else
-        ui->ipOutEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
-}
-void UiInspector::setSerialOk(bool val) {
-    if(val)
-        ui->serialInPortEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));");
-    else
-        ui->serialInPortEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
-}
-void UiInspector::setOSCPort(quint16 port) {
-    ui->oscInPortSpin->setValue(port);
-    oscPortChange(port);
-}
-void UiInspector::setTCPPort(quint16 port) {
-    ui->tcpInPortSpin->setValue(port);
-    tcpPortChange(port);
-}
-void UiInspector::setTCPClients(quint16 nb) {
-    if(nb == 0)
-        ui->tcpInClientLabel->setText(tr("No client connected"));
-    else if(nb == 1)
-        ui->tcpInClientLabel->setText(tr("1 client connected"));
-    else
-        ui->tcpInClientLabel->setText(tr("%1 clients connected").arg(nb));
-}
-
-void UiInspector::setUDPPort(quint16 port) {
-    ui->udpInPortSpin->setValue(port);
-    udpPortChange(port);
-}
-void UiInspector::setHttpPort(quint16 port) {
-    ui->httpInPortSpin->setValue(port);
-    httpPortChange(port);
-}
-void UiInspector::setIpOut(const QString & ip) {
-    ui->ipOutEdit->setText(ip);
-    ipOutChange(ip);
-}
-void UiInspector::setMidiOut(const QString & _midi) {
-    QString midi = _midi;
-    if(midi.toLower() == "iannix_out") midi = "from_IanniX";
-    ui->midiOutCombo->setCurrentIndex(ui->midiOutCombo->findText(midi, Qt::MatchFixedString));
-    midiOutChange(ui->midiOutCombo->currentText());
-}
-void UiInspector::setMidiTempo(qreal tempo) {
-    ui->midiTempoSpin->setValue(tempo);
-}
-void UiInspector::setMidiOutNewDevice(const QString &midi) {
-    ui->midiOutCombo->addItem(midi);
-}
-void UiInspector::setMidiSyncClock(bool val) {
-    ui->midiSyncClock->setChecked(val);
-}
-void UiInspector::setMidiSyncSong(bool val) {
-    ui->midiSyncSong->setChecked(val);
-}
-
-void UiInspector::setSerialPort(const QString & port) {
-    ui->serialInPortEdit->setText(port);
-    serialPortChange(port);
-}
-void UiInspector::setTransportMessage(const QString & message) {
-    ui->transportMessageEdit->setText(message);
-    transportMessageChange(message);
-}
-void UiInspector::setSyncMessage(const QString & message) {
-    ui->syncMessageEdit->setText(message);
-    syncMessageChange(message);
-}
-void UiInspector::setBundleMessage(const QString &message, quint16 port) {
-    ui->bundleMessageEdit->setText(message);
-    ui->bundleMessagePort->setValue(port);
-    bundleMessageChange(message, port);
-}
-
-quint16 UiInspector::getOSCPort() const {
-    return ui->oscInPortSpin->value();
-}
-quint16 UiInspector::getUDPPort() const {
-    return ui->udpInPortSpin->value();
-}
-quint16 UiInspector::getHttpPort() const {
-    return ui->httpInPortSpin->value();
-}
-quint16 UiInspector::getTCPPort() const {
-    return ui->tcpInPortSpin->value();
-}
-qreal UiInspector::getMidiTempo() const {
-    return ui->midiTempoSpin->value();
-}
-bool UiInspector::getMidiSyncClock() const {
-    return ui->midiSyncClock->isChecked();
-}
-bool UiInspector::getMidiSyncSong() const {
-    return ui->midiSyncSong->isChecked();
-}
-const QString UiInspector::getIpOut() const {
-    return ui->ipOutEdit->text();
-}
-const QString UiInspector::getMidiOut() const {
-    return ui->midiOutCombo->currentText();
-}
-const QString UiInspector::getSerialPort() const {
-    return ui->serialInPortEdit->text();
-}
-const QString UiInspector::getTransportMessage() const {
-    return ui->transportMessageEdit->text();
-}
-const QString UiInspector::getSyncMessage() const {
-    return ui->syncMessageEdit->text();
-}
-const QString UiInspector::getBundleHost() const {
-    return ui->bundleMessageEdit->text();
-}
-quint16 UiInspector::getBundlePort() const {
-    return ui->bundleMessagePort->value();
 }

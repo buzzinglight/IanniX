@@ -79,8 +79,7 @@ NxRect NxPolygon::boundingRect() const {
 }
 
 
-bool NxPolygon::containsPoint(const NxPoint &pt, Qt::FillRule) const
-{
+bool NxPolygon::containsPoint(const NxPoint &pt, Qt::FillRule) const {
     if (isEmpty())
         return false;
 

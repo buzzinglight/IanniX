@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QDesktopWidget>
+#include <QMessageBox>
 
 namespace Ui {
 class UiMessageBox;

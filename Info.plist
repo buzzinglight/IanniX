@@ -15,11 +15,24 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>iannix</string>
+				<string>IANNIX</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icon_file.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>IanniX Score</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>nxscore</string>
 				<string>NXSCORE</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>icon.icns</string>
+			<string>icon_file.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>IanniX Score</string>
 			<key>CFBundleTypeRole</key>
@@ -32,9 +45,9 @@
 				<string>NXSCRIPT</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>icon_orange.icns</string>
+			<string>icon_file.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>IanniX Script</string>
+			<string>IanniX Score</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -45,9 +58,9 @@
 				<string>NXSTYLE</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>icon_green.icns</string>
+			<string>icon_file.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>IanniX Style</string>
+			<string>IanniX Score</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -59,6 +72,6 @@
 	<key>CFBundleSignature</key>
 	<string>INNX</string>
 	<key>CFBundleVersion</key>
-	<string>0.8.43</string>
+	<string>0.9</string>
 </dict>
 </plist>

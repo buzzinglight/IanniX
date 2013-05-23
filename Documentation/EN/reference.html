@@ -326,7 +326,7 @@
 	<h3>setBoundsSource &mdash; Mapping values</h3>
 	<div class='roll'>
 		<p>You can set your cursor to send values within a chosen interval. For example, if it is operating in a 3x3 square, it can still send coordinates as values between 0 and 1.<br/>Use setBoundsSource to indicate to IanniX the interval in which your cursor is located and setBoundsTarget to set the range of your sent values. Generally BoundsSource is correctly set by default.<br/>You must use the variables cursor_value_x, cursor_value_y, trigger_value_x, trigger_value_y, collison_value_x or collison_value_y that values sent are those of boundsTarget.<br/><br/>
-		<span class='api'>setBoundsSource &lt;target&gt; &lt;x-top-left-corner&gt; &lt;y-top-left-corner&gt; &lt;x-bottom-right-corner&gt; &lt;y-bottom-right-corner&gt;<br/>setBoundsTarget &lt;target&gt; &lt;x-top-left-value&gt;  &lt;y-top-left-value&gt;  &lt;x-bottom-right-value&gt; &lt;y-bottom-right-value&gt;</span><br/><br/>
+		<span class='api'>setBoundsSource &lt;target&gt; &lt;x-start&gt; &lt;x-end&gt; &lt;y-start&gt; &lt;y-end&gt; &lt;z-start&gt; &lt;z-end&gt;<br/>setBoundsTarget &lt;target&gt; &lt;x-start&gt; &lt;x-end&gt; &lt;y-start&gt; &lt;y-end&gt; &lt;z-start&gt; &lt;z-end&gt;</span><br/><br/>
 		<span class='titre'>Example: <code>setBoundsSource 2 0 3 3 0<br/>setBoundsTarget 2 0 1 1 0</code></span></p>
 		<table class='exemple' summary=''>
 			<tr>
@@ -343,7 +343,7 @@
 	<h3>setBoundsTarget &mdash; Mapping values</h3>
 	<div class='roll'>
 		<p>You can set your cursor to send values within a chosen interval. For example, if it is operating in a 3x3 square, it can still send coordinates as values between 0 and 1.<br/>Use setBoundsSource to indicate to IanniX the interval in which your cursor is located and setBoundsTarget to set the range of your sent values. Generally BoundsSource is correctly set by default.<br/>You must use the variables cursor_value_x, cursor_value_y, trigger_value_x, trigger_value_y, collison_value_x or collison_value_y that values sent are those of boundsTarget.<br/><br/>
-		<span class='api'>setBoundsSource &lt;target&gt; &lt;x-top-left-corner&gt; &lt;y-top-left-corner&gt; &lt;x-bottom-right-corner&gt; &lt;y-bottom-right-corner&gt;<br/>setBoundsTarget &lt;target&gt; &lt;x-top-left-value&gt;  &lt;y-top-left-value&gt;  &lt;x-bottom-right-value&gt; &lt;y-bottom-right-value&gt;</span><br/><br/>
+		<span class='api'>setBoundsSource &lt;target&gt; &lt;x-start&gt; &lt;x-end&gt; &lt;y-start&gt; &lt;y-end&gt; &lt;z-start&gt; &lt;z-end&gt;<br/>setBoundsTarget &lt;target&gt; &lt;x-start&gt; &lt;x-end&gt; &lt;y-start&gt; &lt;y-end&gt; &lt;z-start&gt; &lt;z-end&gt;</span><br/><br/>
 		<span class='titre'>Example: <code>setBoundsSource 2 0 3 3 0<br/>setBoundsTarget 2 0 1 1 0</code></span></p>
 		<table class='exemple' summary=''>
 			<tr>
@@ -725,13 +725,13 @@
 	<div class='roll'>
 		<p>Save your texture as a variable. If you are using the following variables, the display is directly modified because native textures are saved under those variables. Use the tool "restore triggers original shapes" from the inspector "scripts & styles" to find the original textures.<br/><br/>
 		<span class='api'>registerTexture &lt;variable&gt; &lt;x-top-left-corner&gt; &lt;y-top-left-corner&gt; &lt;x-bottom-right-corner&gt; &lt;y-bottom-right-corner&gt; &lt;file name&gt;</span><br/><br/>
-		<span class='titre'>Example: <code>registerTexture trigger_active_message -1 1 1 -1 ./Examples/trigger_triangle.png</code></span></p>
+		<span class='titre'>Example: <code>registerTexture trigger_active -1 1 1 -1 ./Examples/trigger_triangle.png</code></span></p>
 		<table class='exemple' summary=''>
 			<tr>
 				<td><img src='../Common/img/registerTexture.png' alt='setGroup' /></td>
 				<td>
 					<div class='copypaste'>Copy / paste this example in IanniX to understand how the code works!</div>
-					<div class='code'><code>registerTexture trigger_active_message -1 1 1 -1 ./Examples/trigger_triangle.png<br/>add trigger 1<br/>add trigger 2<br/>add trigger 3<br/>setPos 1 1 1 0<br/>setPos 3 -1 -1 0<br/>setActive 3 0<br/>setLabel 1 1<br/>setLabel 2 2<br/>setLabel 3 3</code></div>
+					<div class='code'><code>registerTexture trigger_active -1 1 1 -1 ./Examples/trigger_triangle.png<br/>add trigger 1<br/>add trigger 2<br/>add trigger 3<br/>setPos 1 1 1 0<br/>setPos 3 -1 -1 0<br/>setActive 3 0<br/>setLabel 1 1<br/>setLabel 2 2<br/>setLabel 3 3</code></div>
 				</td>
 			</tr>
 		</table>
@@ -771,32 +771,6 @@
 		<table class='exemple' summary=''>
 			<tr>
 				<td><img src='../Common/img/setTextureInactive.png' alt='setGroup' /></td>
-			</tr>
-		</table>
-	</div>
-</div>
-
-<div id='setTextureActiveMessage' class='fonction'>
-	<h3>setTextureActiveMessage &mdash; Texture of an active object that send messages</h3>
-	<div class='roll'>
-		<p>Modify the texture of an object or a group with a preloaded texture (refer to registerTexture).<br/><br/>
-		<span class='api'>setTextureActiveMessage &lt;target&gt; &lt;variable&gt;</span><br/><br/>
-		<table class='exemple' summary=''>
-			<tr>
-				<td><img src='../Common/img/setTextureActiveMessage.png' alt='setGroup' /></td>
-			</tr>
-		</table>
-	</div>
-</div>
-
-<div id='setTextureInactiveMessage' class='fonction'>
-	<h3>setTextureInactiveMessage &mdash; Texture of an inactive object that send messages</h3>
-	<div class='roll'>
-		<p>Modify the texture of an object or a group with a preloaded texture (refer to registerTexture).<br/><br/>
-		<span class='api'>setTextureInactiveMessage &lt;target&gt; &lt;variable&gt;</span><br/><br/>
-		<table class='exemple' summary=''>
-			<tr>
-				<td><img src='../Common/img/setTextureInactiveMessage.png' alt='setGroup' /></td>
 			</tr>
 		</table>
 	</div>
@@ -887,32 +861,6 @@
 	</div>
 </div>
 
-<div id='setColorActiveMessage' class='fonction'>
-	<h3>setColorActiveMessage &mdash; Color of an active object that send messages (RGB)</h3>
-	<div class='roll'>
-		<p>Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur).<br/><br/>
-		<span class='api'>setColorActiveMessage &lt;target&gt; &lt;r&gt; &lt;g&gt; &lt;b&gt; &lt;a&gt;<br/>setColorActiveMessage &lt;target&gt; &lt;variable&gt;</span><br/><br/>
-		<table class='exemple' summary=''>
-			<tr>
-				<td><img src='../Common/img/setColorActiveMessage.png' alt='setGroup' /></td>
-			</tr>
-		</table>
-	</div>
-</div>
-
-<div id='setColorInactiveMessage' class='fonction'>
-	<h3>setColorInactiveMessage &mdash; Color of an inactive object that send messages (RGB)</h3>
-	<div class='roll'>
-		<p>Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur).<br/><br/>
-		<span class='api'>setColorInactiveMessage &lt;target&gt; &lt;r&gt; &lt;g&gt; &lt;b&gt; &lt;a&gt;<br/>setColorInactiveMessage &lt;target&gt; &lt;variable&gt;</span><br/><br/>
-		<table class='exemple' summary=''>
-			<tr>
-				<td><img src='../Common/img/setColorInactiveMessage.png' alt='setGroup' /></td>
-			</tr>
-		</table>
-	</div>
-</div>
-
 <div id='setColorActiveHue' class='fonction'>
 	<h3>setColorActiveHue &mdash; Color of an active object that does not send any messages (HSB)</h3>
 	<div class='roll'>
@@ -930,30 +878,6 @@
 	<div class='roll'>
 		<p>Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur).<br/><br/>
 		<span class='api'>setColorInactiveHue &lt;target&gt; &lt;h&gt; &lt;s&gt; &lt;b&gt; &lt;a&gt;<br/>setColorInactiveHue &lt;target&gt; &lt;variable&gt;</span><br/><br/>
-		<table class='exemple' summary=''>
-			<tr>
-			</tr>
-		</table>
-	</div>
-</div>
-
-<div id='setColorActiveMessageHue' class='fonction'>
-	<h3>setColorActiveMessageHue &mdash; Color of an inactive object that does not send any messages (HSB)</h3>
-	<div class='roll'>
-		<p>Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur).<br/><br/>
-		<span class='api'>setColorActiveMessageHue &lt;target&gt; &lt;h&gt; &lt;s&gt; &lt;b&gt; &lt;a&gt;<br/>setColorActiveMessageHue &lt;target&gt; &lt;variable&gt;</span><br/><br/>
-		<table class='exemple' summary=''>
-			<tr>
-			</tr>
-		</table>
-	</div>
-</div>
-
-<div id='setColorInactiveMessageHue' class='fonction'>
-	<h3>setColorInactiveMessageHue &mdash; Color of an inactive object that send messages (HSB)</h3>
-	<div class='roll'>
-		<p>Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur).<br/><br/>
-		<span class='api'>setColorInactiveMessageHue &lt;target&gt; &lt;h&gt; &lt;s&gt; &lt;b&gt; &lt;a&gt;<br/>setColorInactiveMessageHue &lt;target&gt; &lt;variable&gt;</span><br/><br/>
 		<table class='exemple' summary=''>
 			<tr>
 			</tr>
@@ -1211,11 +1135,6 @@
 	<p>Group name of the triggered trigger<br/>
 </div>
 
-<div id='trigger_document_id' class='fonction'>
-	<h3>trigger_document_id</h3><div class='roll'></div>
-	<p>Document name of the triggered trigger<br/>
-</div>
-
 <div id='trigger_label' class='fonction'>
 	<h3>trigger_label</h3><div class='roll'></div>
 	<p>Label of the triggered trigger<br/>
@@ -1281,11 +1200,6 @@
 	<p>Group name of the running cursor<br/>
 </div>
 
-<div id='cursor_document_id' class='fonction'>
-	<h3>cursor_document_id</h3><div class='roll'></div>
-	<p>Document name of the running cursor<br/>
-</div>
-
 <div id='cursor_label' class='fonction'>
 	<h3>cursor_label</h3><div class='roll'></div>
 	<p>Label of the running cursor<br/>
@@ -1336,6 +1250,51 @@
 	<p>Angle of the cursor<br/>
 </div>
 
+<div id='cursor_xPos_delta' class='fonction'>
+	<h3>cursor_xPos_delta</h3><div class='roll'></div>
+	<p>Variation of x coordinate of the running cursor<br/>
+</div>
+
+<div id='cursor_yPos_delta' class='fonction'>
+	<h3>cursor_yPos_delta</h3><div class='roll'></div>
+	<p>Variation of y coordinate of the running cursor<br/>
+</div>
+
+<div id='cursor_zPos_delta' class='fonction'>
+	<h3>cursor_zPos_delta</h3><div class='roll'></div>
+	<p>Variation of z coordinate of the running cursor<br/>
+</div>
+
+<div id='cursor_value_x_delta' class='fonction'>
+	<h3>cursor_value_x_delta</h3><div class='roll'></div>
+	<p>Variation of x mapped coordinate of the running cursor<br/>
+</div>
+
+<div id='cursor_value_y_delta' class='fonction'>
+	<h3>cursor_value_y_delta</h3><div class='roll'></div>
+	<p>Variation of y mapped coordinate of the running cursor<br/>
+</div>
+
+<div id='cursor_value_z_delta' class='fonction'>
+	<h3>cursor_value_z_delta</h3><div class='roll'></div>
+	<p>Variation of z mapped coordinate of the running cursor<br/>
+</div>
+
+<div id='cursor_time_delta' class='fonction'>
+	<h3>cursor_time_delta</h3><div class='roll'></div>
+	<p>Variation of current progression of the cursor on the curve (in seconds)<br/>
+</div>
+
+<div id='cursor_time_percent_delta' class='fonction'>
+	<h3>cursor_time_percent_delta</h3><div class='roll'></div>
+	<p>Variation of current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)<br/>
+</div>
+
+<div id='cursor_angle_delta' class='fonction'>
+	<h3>cursor_angle_delta</h3><div class='roll'></div>
+	<p>Variation of angle of the cursor<br/>
+</div>
+
 <div id='cursor_nb_loop' class='fonction'>
 	<h3>cursor_nb_loop</h3><div class='roll'></div>
 	<p>Number of loops done by the cursor on the curve<br/>
@@ -1354,11 +1313,6 @@
 <div id='curve_group_id' class='fonction'>
 	<h3>curve_group_id</h3><div class='roll'></div>
 	<p>Group name of curve where the cursor runs on<br/>
-</div>
-
-<div id='curve_document_id' class='fonction'>
-	<h3>curve_document_id</h3><div class='roll'></div>
-	<p>Document name of curve where the cursor runs on<br/>
 </div>
 
 <div id='curve_label' class='fonction'>
@@ -1389,11 +1343,6 @@
 <div id='collision_curve_group_id' class='fonction'>
 	<h3>collision_curve_group_id</h3><div class='roll'></div>
 	<p>Group name of the collided curve<br/>
-</div>
-
-<div id='collision_curve_document_id' class='fonction'>
-	<h3>collision_curve_document_id</h3><div class='roll'></div>
-	<p>Document name of the collided curve<br/>
 </div>
 
 <div id='collision_curve_label' class='fonction'>
@@ -1609,11 +1558,6 @@
 <div id='map(x, low1, high1, low2, high2)' class='fonction'>
 	<h3>map(x, low1, high1, low2, high2)</h3><div class='roll'></div>
 	<p>Scale x to cover the range from low2 to high2, assuming x ranges between low1 and high1<br/>
-</div>
-
-<div id='E' class='fonction'>
-	<h3>E</h3><div class='roll'></div>
-	<p>Mathematical constant e<br/>
 </div>
 
 <div id='LN2' class='fonction'>

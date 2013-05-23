@@ -22,23 +22,27 @@
 #include <QObject>
 #include <QTreeWidgetItem>
 #include "nxtrigger.h"
-#include "nxcurve.h"
 #include "nxcursor.h"
+#include "nxcurve.h"
 
 class NxGroup : public QObject, public NxObjectDispatchProperty, public QTreeWidgetItem {
     Q_OBJECT
+
+    Q_PROPERTY(quint16 setmute READ getMute WRITE setMute)
+    Q_PROPERTY(quint16 setsolo READ getSolo WRITE setSolo)
+
 public:
-    explicit NxGroup(NxObjectFactoryInterface *parent, QTreeWidget *parentItem, Qt::CheckState state);
-    inline void dispatchProperty(const QString & property, const QVariant & value) {
+    explicit NxGroup(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
+    inline void dispatchProperty(const char *_property, const QVariant & value) {
         //Browse active/inactive objects
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++)
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++)
                 //Browse objects
                 foreach(NxObject *object, objects[activityIterator][typeIterator])
-                    object->dispatchProperty(property, value);
+                    object->dispatchProperty(_property, value);
     }
-    inline const QVariant getProperty(const QString & _property) const {
+    inline const QVariant getProperty(const char *_property) const {
         //Browse active/inactive objects
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++)
             //Browse all types of objects
@@ -71,15 +75,14 @@ public:
         }
         return boundingRect;
     }
-    inline quint16 getCount() const {
+    inline quint16 getCount(qint8 objectType = -1) const {
         quint16 counter = 0;
         //Browse active/inactive objects
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
             //Browse all types of objects
-            for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-                //Count objects
-                counter += objects[activityIterator][typeIterator].count();
-            }
+            for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++)
+                if((objectType < 0) || (typeIterator == objectType))
+                    counter += objects[activityIterator][typeIterator].count();
         }
         return counter;
     }
@@ -93,10 +96,41 @@ protected:
 public slots:
     inline void setId(const QString & _id) {
         id = _id;
-        setText(2, tr("Group") + " " + id);
+        if(_id.isEmpty()) {
+            //setHidden(true);
+
+        }
+        else {
+            //setHidden(false);
+            setText(3, id);
+            setText(4, id);
+        }
     }
     inline const QString & getId() const {
         return id;
+    }
+
+
+private:
+    quint16 objectSolo, objectMute;
+public:
+    bool isSolo()     const { return objectSolo >  0; }
+    bool isNotMuted() const { return objectMute == 0; }
+    bool isMuted()    const { return objectMute > 0; }
+    quint16 getSolo()  const { return objectSolo; }
+    quint16 getMute()  const { return objectMute; }
+    void setSolo(quint16 _val);
+    void setMute(quint16 _val);
+    void widgetClick(int col);
+
+public:
+    const QString serialize() const;
+    inline void dispatchPropertyToGroup(const char *_property, const QVariant & value) {
+        propertyChanged(_property);
+        setProperty(_property, value);
+    }
+    inline const QVariant getPropertyFromGroup(const char *_property) const {
+        return property(_property);
     }
 };
 

@@ -168,7 +168,7 @@ namespace mu
     value_type fVal(0);
 
     stringstream_type stream(a_szExpr);
-    stream.seekg(0);        // todo:  check if this really is necessary
+    stream.seekg(0);        // check if this really is necessary
     stream.imbue(Parser::s_locale);
     stream >> fVal;
     stringstream_type::pos_type iEnd = stream.tellg(); // Position after reading

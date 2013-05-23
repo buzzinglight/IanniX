@@ -51,7 +51,7 @@ public:
     inline const QString & getValue() const     { return value; }
     inline bool isDefFloat() const              { bool ok = false; def.toDouble(&ok); return ok; }
     inline const QString & getDefStr() const    { return def; }
-    inline qreal getDefFloat() const            { return def.toDouble(); }  ////CG//// Eliminate warning about returning volatile
+    inline qreal getDefFloat() const            { return def.toDouble(); }
     inline void setDef(const QString & _def)    { def = _def; }
 };
 

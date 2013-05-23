@@ -18,79 +18,66 @@
 
 #include "nxdocument.h"
 
-NxDocument::NxDocument(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile, QTreeWidgetItem *parentList) :
-    ExtScriptManager(_factory, _scriptFile, parentList) {
+NxDocument::NxDocument(ApplicationCurrent *parent, UiFileItem *_fileItem) :
+    QObject(parent) {
+    fileItem = _fileItem;
+    connect(fileItem, SIGNAL(askFileClose()),  SLOT(askFileClose()));
+    connect(fileItem, SIGNAL(askFileOpen()),   SLOT(askFileOpen()));
+    connect(fileItem, SIGNAL(askFileReload()), SLOT(askFileReload()));
+    connect(fileItem, SIGNAL(askFileSave()),   SLOT(askFileSave()));
     setCurrentObject(0);
     setCurrentGroup(0);
     currentCurve = 0;
     snapshotsIndex = 0;
     isLoaded = false;
-    if(scriptFile.isFile())
-        setId(qPrintable(scriptFile.baseName()));
-    setHasChanged(false);
 }
 
-QString NxDocument::serialize(UiRenderOptions *renderOptions, bool hasAScript) {
-    QString retour = "";
-    QString prefix = "", postfix = COMMAND_END;
-    if(hasAScript) {
-        prefix = "run(\"";
-        postfix =  "\");" + COMMAND_END;
-    }
 
-    if(renderOptions) {
-        retour += prefix + QString(COMMAND_ZOOM + " %1").arg(renderOptions->zoomValue) + postfix;
-        retour += prefix + QString(COMMAND_SPEED + " %1").arg(renderOptions->timeFactor) + postfix;
-        retour += prefix + QString(COMMAND_CENTER + " %1 %2").arg(-renderOptions->axisCenter.x()).arg(-renderOptions->axisCenter.y()) + postfix;
-        retour += prefix + QString(COMMAND_ROTATE + " %1 %2 %3").arg(renderOptions->rotationDest.x()).arg(renderOptions->rotationDest.y()).arg(renderOptions->rotationDest.z()) + postfix;
-        retour += prefix + QString(COMMAND_AUTOSIZE + " %1").arg(renderOptions->triggerAutosize) + postfix;
-        foreach(const QString &command, registredTextures)
-            retour += prefix + command + postfix;
-        foreach(const QString &command, registredColors)
-            retour += prefix + command + postfix;
-    }
+const QString NxDocument::serialize() const {
+    QString retour;
+    QString prefix = "\trun(\"", postfix = "\");\n";
 
-    //Browse documents
-    foreach(NxGroup *group, groups) {
-        //Browse active/inactive objects
-        for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
-
-            //Browse all types of objects
-            for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-                //Browse objects
-                foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
-                    if(((typeIterator == ObjectsTypeCursor) && (((NxCursor*)object)->getCurve() == 0)) || (typeIterator == ObjectsTypeCurve) || (typeIterator == ObjectsTypeTrigger))
-                        retour += object->serialize(hasAScript) + COMMAND_END;
-                }
+    if(NxObjectDispatchProperty::source == ExecuteSourceGui) {
+        //Textures
+        QMapIterator<QString, UiRenderTexture*> textureIterator(*Global::textures);
+        while (textureIterator.hasNext()) {
+            textureIterator.next();
+            UiRenderTexture *texture = textureIterator.value();
+            if(texture->filename.exists()) {
+                QString filename = getScriptFile().absoluteDir().relativeFilePath(texture->filename.absoluteFilePath());
+                retour += prefix + QString("%1 %2 %3  %4 %5 %6 %7").arg(COMMAND_TEXTURE).arg(textureIterator.key()).arg(texture->mapping.topLeft().x()).arg(texture->mapping.topLeft().y()).arg(texture->mapping.bottomRight().x()).arg(texture->mapping.bottomRight().y()).arg(filename) + postfix;
             }
         }
+
+        //Colors
+        QMapIterator<QString, QColor> colorIterator(*Global::colors);
+        while (colorIterator.hasNext()) {
+            colorIterator.next();
+            if(!((Global::defaultColors.contains(colorIterator.key())) && (Global::defaultColors.value(colorIterator.key()) == colorIterator.value()))) {
+                QColor color = colorIterator.value();
+                retour += prefix + QString("%1 %2  %3 %4 %5 %6").arg(COMMAND_GLOBAL_COLOR).arg(colorIterator.key()).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()) + postfix;
+            }
+        }
+
+        retour += COMMAND_END;
     }
 
-    foreach(NxGroup *group, groups) {
-        if(group->checkState(0) == Qt::Unchecked)
-            retour += COMMAND_MUTE + QString(" %1 0").arg(group->getId()) + COMMAND_END;
-        if(group->checkState(1) == Qt::Checked)
-            retour += COMMAND_SOLO + QString(" %1 1").arg(group->getId()) + COMMAND_END;
-    }
-    foreach(NxObject *object, objects) {
-        if(object->checkState(1) == Qt::Unchecked)
-            retour += COMMAND_MUTE + QString(" %1 0").arg(object->getId()) + COMMAND_END;
-        if(object->checkState(2) == Qt::Checked)
-            retour += COMMAND_SOLO + QString(" %1 1").arg(object->getId()) + COMMAND_END;
-    }
+    //Browse groups
+    foreach(NxGroup *group, groups)
+        retour += group->serialize();
+
     return retour;
 }
 
 void NxDocument::pushSnapshot() {
-    setHasChanged(true);
     if(snapshotsIndex < snapshots.count())
-        snapshots.replace(snapshotsIndex, serialize(0, false));
+        snapshots.replace(snapshotsIndex, Application::current->serialize());
     else
-        snapshots.append(serialize(0, false));
-    //qDebug("PUSH snapshot %d", snapshotsIndex);
+        snapshots.append(Application::current->serialize());
     snapshotsIndex++;
 }
 void NxDocument::popSnapshot(bool revert) {
+    Application::Application::render->selectionClear(true);
     bool canDo = false;
     if((revert) && (snapshotsIndex < snapshots.count()-1)) {
         snapshotsIndex++;
@@ -108,47 +95,249 @@ void NxDocument::popSnapshot(bool revert) {
     }
     if(canDo) {
         clear();
-        //qDebug("POP  snapshot %d", snapshotsIndex);
         QString snapshot = snapshots.at(snapshotsIndex);
-        //snapshots.removeLast();
         QStringList snapshotCommands = snapshot.split(COMMAND_END, QString::SkipEmptyParts);
         foreach(const QString & command, snapshotCommands)
-            factory->execute(command);
-    }
-}
-
-void NxDocument::pushSnapshot(const QString & snapshotId) {
-    snapshotsSpecial[snapshotId] = serialize(0, false);
-    qDebug("Pushing snapshot %s", qPrintable(snapshotId));
-}
-void NxDocument::popSnapshot(const QString & snapshotId) {
-    if(snapshotsSpecial.contains(snapshotId)) {
-        qDebug("Poping snapshot %s", qPrintable(snapshotId));
-        clear();
-        QStringList snapshotCommands = snapshotsSpecial.value(snapshotId).split(COMMAND_END, QString::SkipEmptyParts);
-        foreach(const QString & command, snapshotCommands)
-            factory->execute(command);
+            Application::current->execute(command, ExecuteSourceCopyPaste);
     }
 }
 
 
-
-void NxDocument::load() {
+void NxDocument::open() {
     if(!isLoaded) {
         clear();
-        parseScript();
+        open(true);
         isLoaded = true;
     }
 }
+bool NxDocument::open(bool configure) {
+    //Open the script file (if its a file)
+    if(getScriptFile().exists()) {
+        QFile scriptFileContent(getScriptFile().absoluteFilePath());
+        if(scriptFileContent.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            //Read file
+            scriptContent = scriptFileContent.readAll();
+            scriptFileContent.close();
 
-bool NxDocument::save(UiRenderOptions *options) {
-    QFile scriptFileContent(getScriptFile().absoluteFilePath());
-    if(scriptFileContent.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        //Write file
-        scriptFileContent.write(serialize(options, false).toLatin1());
-        scriptFileContent.close();
-        setHasChanged(false);
-        return true;
+            //Open the script
+            QScriptValue scriptFunctions = scriptEngine.newQObject(this);
+            script = scriptEngine.globalObject();
+
+            //Map specials features/keywords/functions
+            script.setProperty("mouseX",   mousePos.x());
+            script.setProperty("mouseY",   mousePos.y());
+            script.setProperty("iannix",   scriptFunctions);
+            script.setProperty("nx",       scriptFunctions);
+
+            //GUI to ask the user variables
+            variable = new ExtScriptVariableAsk(Application::current->getMainWindow());
+
+
+
+            //Load
+            if(getScriptFile().suffix().toLower() == "nxscore") {
+                QStringList paste = scriptContent.split(COMMAND_END, QString::SkipEmptyParts);
+                foreach(const QString & command, paste)
+                    Application::current->execute(command, ExecuteSourceGui);
+            }
+            else {
+                QScriptValue scriptReturn = scriptEvaluate(scriptContent, false);
+
+                //Extract function
+                if(getScriptFile().suffix().toLower() == "iannix") {
+                    scriptMakeWithScript       = script.property("makeWithScript");
+                    scriptOnIncomingMessage    = script.property("onIncomingMessage");
+                    scriptAskUserForParameters = script.property("askUserForParameters");
+                }
+                else {
+                    scriptOnIncomingMessage    = script.property("onMessage");
+                    scriptMakeWithScript       = script.property("onCreate");
+                    scriptAskUserForParameters = script.property("onConfigure");
+                }
+                scriptMadeThroughGUI           = script.property("madeThroughGUI");
+                scriptAlterateWithScript       = script.property("alterateWithScript");
+                scriptMadeThroughInterfaces    = script.property("madeThroughInterfaces");
+
+
+                //Extract errors
+                QStringList errors = scriptEngine.uncaughtExceptionBacktrace();
+                if(scriptReturn.isError())
+                    errors << scriptReturn.property("message").toString();
+                if(errors.count())  Transport::editor->scriptError(errors, scriptEngine.uncaughtExceptionLineNumber());
+                else                Transport::editor->scriptError(QStringList(), -1);
+
+
+                //Call the "askUserForParameters()" function
+                if(configure) {
+                    scriptAskUserForParameters.call(QScriptValue(), QScriptValueList());
+                    Application::current->pushSnapshot();
+                }
+
+                //Ask variables to user and sets the variable in the script
+                QList<ExtScriptVariable*> variables = variable->ask();
+                if(variable->result()) {
+                    foreach(const ExtScriptVariable *variable, variables) {
+                        if(variable->isDefFloat())  script.setProperty(variable->getValue(), variable->getDefFloat());
+                        else                        script.setProperty(variable->getValue(), variable->getDefStr());
+                    }
+
+                    //Call the functions
+                    source = ExecuteSourceScript;
+                    scriptMakeWithScript       .call(QScriptValue(), QScriptValueList());
+                    source = ExecuteSourceGui;
+                    scriptMadeThroughGUI       .call(QScriptValue(), QScriptValueList());
+                    source = ExecuteSourceNetwork;
+                    scriptMadeThroughInterfaces.call(QScriptValue(), QScriptValueList());
+                    source = ExecuteSourceScript;
+                    scriptAlterateWithScript   .call(QScriptValue(), QScriptValueList());
+
+                    return true;
+                }
+            }
+        }
     }
     return false;
+}
+
+bool NxDocument::save() {
+    QString scoreContent = "";
+    if((!getScriptFile().exists()) || (getScriptFile().suffix().toLower() != "iannix")) {
+        //Load IanniX Score template
+        QFile scoreTemplateFile(Global::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
+        if(scoreTemplateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            scoreContent = scoreTemplateFile.readAll();
+            scoreTemplateFile.close();
+        }
+    }
+    else {
+        //Load IanniX Score
+        QFile scoreTemplateFile(getScriptFile().absoluteFilePath());
+        if(scoreTemplateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            scoreContent = scoreTemplateFile.readAll();
+            scoreTemplateFile.close();
+        }
+    }
+
+    //Locate functions
+    NxObjectDispatchProperty::source = ExecuteSourceGui;
+    remplaceInFunction(&scoreContent, "//GUI: NEVER EVER REMOVE THIS LINE\n", Application::current->serialize());
+    NxObjectDispatchProperty::source = ExecuteSourceNetwork;
+    remplaceInFunction(&scoreContent, "//INTERFACES: NEVER EVER REMOVE THIS LINE\n", Application::current->serialize());
+    remplaceInFunction(&scoreContent, " *\t//APP VERSION: NEVER EVER REMOVE THIS LINE\n", QString(" *\tMade with IanniX %1").arg(QCoreApplication::applicationVersion()));
+
+    qDebug("%s", qPrintable(scoreContent));
+    qDebug("SAVED TO %s", qPrintable(getScriptFile().absoluteFilePath()));
+
+    QFile scriptFileContent(getScriptFile().absoluteFilePath());
+    if(!scriptFileContent.exists()) {
+        if(scriptFileContent.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            qDebug("%s", qPrintable(scoreContent));
+            scriptFileContent.write(scoreContent.toLatin1());
+            scriptFileContent.close();
+            return true;
+        }
+    }
+    return false;
+}
+/*
+void NxDocument::fileWatcherChanged(const QString &) {
+    if(isSelected()) {
+        parseScript(false);
+        Application::current->execute("fastrewind", ExecuteSourceGui);
+    }
+}
+*/
+
+void NxDocument::remplaceInFunction(QString *content, const QString &delimiter, const QString &data) {
+    qint32 startReplace = content->indexOf(delimiter, 0) + delimiter.length();
+    qint32 endReplace   = content->indexOf(delimiter, startReplace);
+    if((startReplace < endReplace) && (startReplace >= 0) && (endReplace >= 0))
+        *content = content->left(startReplace) + data + "\n" + content->mid(endReplace);
+}
+
+
+
+
+const QString NxDocument::loadLibrary() {
+    QString scriptContent = "";
+
+    QFileInfoList scriptDirs = QDir(Global::pathApplication.absoluteFilePath() + "/Tools/").entryInfoList(QStringList() << "*.js", QDir::Files | QDir::NoDotAndDotDot);
+    foreach(const QFileInfo & scriptFile, scriptDirs) {
+        QFile scriptFileContent(scriptFile.absoluteFilePath());
+        if(scriptFileContent.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            //Read file
+            scriptContent += scriptFileContent.readAll();
+            scriptFileContent.close();
+        }
+    }
+    return scriptContent;
+}
+
+QScriptValue NxDocument::scriptEvaluate(const QString &scriptContent, bool _createNewObjectIfExists) {
+    createNewObjectIfExists = _createNewObjectIfExists;
+    return scriptEngine.evaluate(scriptContent + loadLibrary());
+}
+
+void NxDocument::askFileOpen() {
+    qDebug("==> OPEN %s", qPrintable(getScriptFile().absoluteFilePath()));
+    restoreDefaults();
+    open();
+}
+void NxDocument::askFileSave() {
+    qDebug("==> SAVE %s", qPrintable(getScriptFile().absoluteFilePath()));
+    save();
+}
+void NxDocument::askFileReload() {
+    qDebug("==> RELOAD %s", qPrintable(getScriptFile().absoluteFilePath()));
+    open();
+}
+void NxDocument::askFileClose() {
+    qDebug("==> CLOSE %s", qPrintable(getScriptFile().absoluteFilePath()));
+}
+
+void NxDocument::restoreDefaults() {
+    Global::defaultColors.insert("darktheme_empty"                  , QColor(  0,   0,   0, 255));
+    Global::defaultColors.insert("darktheme_background"             , QColor(255, 255, 255, 255));
+    Global::defaultColors.insert("darktheme_grid"                   , QColor(255, 255, 255,  43));
+    Global::defaultColors.insert("darktheme_axis"                   , QColor(255, 255, 255,  28));
+    Global::defaultColors.insert("darktheme_gridSnap"               , QColor( 90,  25,  15, 255));
+    Global::defaultColors.insert("darktheme_axisSnap"               , QColor( 90,  25,  15, 255));
+    Global::defaultColors.insert("darktheme_selection"              , QColor(255, 255, 255,  40));
+    Global::defaultColors.insert("darktheme_object_selection"       , QColor(255, 240,  35, 255));
+    Global::defaultColors.insert("darktheme_object_hover"           , QColor( 35, 255, 165, 255));
+    Global::defaultColors.insert("darktheme_cursor_active"          , QColor(255,  80,  30, 255));
+    Global::defaultColors.insert("darktheme_cursor_inactive"        , QColor(255, 255, 255,  92));
+    Global::defaultColors.insert("darktheme_trigger_active"         , QColor(  0, 185, 255, 255));
+    Global::defaultColors.insert("darktheme_trigger_inactive"       , QColor(255, 255, 255, 92));
+    Global::defaultColors.insert("darktheme_curve_active"           , QColor(255, 255, 255, 175));
+    Global::defaultColors.insert("darktheme_curve_inactive"         , QColor(255, 255, 255,  92));
+    Global::defaultColors.insert("darktheme_simple_curve_active"    , QColor(115, 159,  89, 255));
+    Global::defaultColors.insert("darktheme_simple_curve_inactive"  , QColor(115, 159,  89, 255));
+    Global::defaultColors.insert("lighttheme_empty"                 , QColor(242, 241, 237, 255));
+    Global::defaultColors.insert("lighttheme_background"            , QColor(255, 255, 255, 255));
+    Global::defaultColors.insert("lighttheme_grid"                  , QColor(  0,   0,   0,  20));
+    Global::defaultColors.insert("lighttheme_axis"                  , QColor(  0,   0,   0,  13));
+    Global::defaultColors.insert("lighttheme_gridSnap"              , QColor(255, 190, 190, 255));
+    Global::defaultColors.insert("lighttheme_axisSnap"              , QColor(255, 190, 190, 255));
+    Global::defaultColors.insert("lighttheme_selection"             , QColor(  0,   0,   0,  40));
+    Global::defaultColors.insert("lighttheme_object_selection"      , QColor(  0,  15, 220, 255));
+    Global::defaultColors.insert("lighttheme_object_hover"          , QColor(220,   0,  90, 255));
+    Global::defaultColors.insert("lighttheme_cursor_active"         , QColor(255,  80,  30, 255));
+    Global::defaultColors.insert("lighttheme_cursor_inactive"       , QColor(  0,   0,   0,  92));
+    Global::defaultColors.insert("lighttheme_trigger_active"        , QColor(  0, 185, 255, 255));
+    Global::defaultColors.insert("lighttheme_trigger_inactive"      , QColor(  0,   0,   0,  92));
+    Global::defaultColors.insert("lighttheme_curve_active"          , QColor(  0,   0,   0, 175));
+    Global::defaultColors.insert("lighttheme_curve_inactive"        , QColor(  0,   0,   0,  92));
+    Global::defaultColors.insert("lighttheme_simple_curve_active"   , QColor(115, 159,  89, 255));
+    Global::defaultColors.insert("lighttheme_simple_curve_inactive" , QColor(115, 159,  89, 255));
+    Global::colors->clear();
+    QMapIterator<QString, QColor> colorIterator(Global::defaultColors);
+    while (colorIterator.hasNext()) {
+        colorIterator.next();
+        Global::colors->insert(colorIterator.key(), colorIterator.value());
+    }
+
+    Application::render->loadTexture(new UiRenderTexture("background",       QFileInfo("filename"), NxRect(-4, 4, 8, -8)));
+    Application::render->loadTexture(new UiRenderTexture("trigger_active",   QFileInfo("filename"), NxRect(-1, 1, 2, -2)));
+    Application::render->loadTexture(new UiRenderTexture("trigger_inactive", QFileInfo("filename"), NxRect(-1, 1, 2, -2)));
 }

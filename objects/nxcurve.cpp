@@ -20,29 +20,27 @@
 
 Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
 
-NxCurve::NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
-    NxObject(parent, ccParentItem, _renderOptions) {
+NxCurve::NxCurve(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
+    NxObject(parent, ccParentItem) {
+    QTreeWidgetItem::setText(0, tr("CURVE"));
     calcBoundingRect();
     glListCurve = glGenLists(1);
     setSize(1.2);
-    setLineFactor(1);
-    setLineStipple(0xFFFF);
-    setColorActive("curve_active");
-    setColorInactive("curve_inactive");
-    selectedPathPointPoint = -1;
-    selectedPathPointControl1 = -1;
-    selectedPathPointControl2 = -1;
+    setColorActive("_simple_curve_active");
+    setColorInactive("_simple_curve_inactive");
+    selectedPathPointPoint = selectedPathPointControl1 = selectedPathPointControl2 = -1;
     curveType = CurveTypePoints;
     setPointAt(0, NxPoint(), NxPoint(), NxPoint(), false);
     setMessageTimeInterval(20);
-    setEquationPoints(100);
+    setEquationPoints(400);
     equationIsValid = false;
+    glListRecreateFromEditor = false;
     equationNbEval = 3;
-    pathLength = 1;
+    pathLength = 0;
     setInertie(1);
+    pathPointsEditor = 0;
 }
 
-//setEquation("function plot(t) { var a = new Object(); a.x = 4*(t); a.y = 3; a.z = t; return a; } nbPoints=50;");
 NxCurve::~NxCurve() {
     glDeleteLists(glListCurve, 1);
 }
@@ -76,29 +74,6 @@ void NxCurve::setEquation(const QString &type, const QString &_equation) {
     catch (Parser::exception_type &e) {
         qDebug("[MathParser] Parsing error");
     }
-    /*
-    equation = _equation;
-    if(equation.isEmpty())
-        isEquation = false;
-    else {
-        isEquation = true;
-        equationProgram = QScriptProgram(equation);
-        equationScript.evaluate(equationProgram);
-        equationGlobal = equationScript.globalObject();
-        equationGlobal.setProperty("plotX", 0);
-        equationGlobal.setProperty("plotY", 0);
-        equationGlobal.setProperty("plotZ", 0);
-        equationPlot   = equationGlobal.property("plot", QScriptValue::ResolveLocal);
-        equationTmin   = equationGlobal.property("tMin", QScriptValue::ResolveLocal).toNumber();
-        equationTmax   = equationGlobal.property("tMax", QScriptValue::ResolveLocal).toNumber();
-        equationTstep  = (equationTmax-equationTmin) / equationGlobal.property("nbPoints", QScriptValue::ResolveLocal).toNumber();
-        equationPlotX  = equationScript.toStringHandle("plotX");
-        equationPlotY  = equationScript.toStringHandle("plotY");
-        equationPlotZ  = equationScript.toStringHandle("plotZ");
-        calcEquation();
-                calcBoundingRect();
-    }
-    */
 }
 void NxCurve::setEquationPoints(quint16 nbPoints) {
     equationNbPoints = nbPoints;
@@ -107,7 +82,7 @@ void NxCurve::setEquationPoints(quint16 nbPoints) {
     calcBoundingRect();
 }
 
-void NxCurve::setEquationParam(const QString &param, qreal value, bool boundingRectCalculation) {
+void NxCurve::setEquationParam(const QString &param, qreal value) {
     if(!equationVariables.contains(param)) {
         equationVariables.insert(param, value);
         try {
@@ -120,8 +95,7 @@ void NxCurve::setEquationParam(const QString &param, qreal value, bool boundingR
     else
         equationVariables[param] = value;
     calcEquation();
-    if(boundingRectCalculation)
-        calcBoundingRect();
+    calcBoundingRect();
 }
 void NxCurve::calcEquation() {
     if(id > 0) {
@@ -132,6 +106,7 @@ void NxCurve::calcEquation() {
             if(equationNbEval == 3) {
                 equationIsValid = true;
                 glListRecreate  = true;
+                calculate();
             }
         }
         catch (Parser::exception_type &e) {
@@ -149,20 +124,26 @@ void NxCurve::paint() {
     computeInertie();
 
     //Color
-    if(active)
-        color = (!colorActive.isEmpty())?(renderOptions->colors.value(colorActive)):(colorActiveColor);
-    else
-        color = (!colorInactive.isEmpty())?(renderOptions->colors.value(colorInactive)):(colorInactiveColor);
+    if(active) {
+        if(colorActive.isEmpty())                                                                                   color = colorActiveColor;
+        else if((colorActive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorActive)))  color = Global::colors->value(Global::colorsPrefix() + colorActive);
+        else if(Global::colors->contains(colorActive))                                                              color = Global::colors->value(colorActive);
+        else                                                                                                        color = Qt::gray;
+    }
+    else {
+        if(colorInactive.isEmpty())                                                                                     color = colorInactiveColor;
+        else if((colorInactive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorInactive)))  color = Global::colors->value(Global::colorsPrefix() + colorInactive);
+        else if(Global::colors->contains(colorInactive))                                                                color = Global::colors->value(colorInactive);
+        else                                                                                                            color = Qt::gray;
+    }
 
     if(color.alpha() > 0) {
         //Mouse hover
-        if(selectedHover)
-            color = renderOptions->colors.value("object_hover");
-        if(selected)
-            color = renderOptions->colors.value("object_selection");
+        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_object_hover");
+        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_object_selection");
 
         //Hide curve if a cursor is present but inactive
-        if((renderOptions->paintCurvesOpacity) && (cursors.count() > 0)) {
+        if((Global::paintCurvesOpacity) && (cursors.count() > 0)) {
             bool display = false;
             foreach(const NxObject *cursor, cursors)
                 if(cursor->getHasActivity()) {
@@ -174,12 +155,10 @@ void NxCurve::paint() {
         }
 
         //Start
-        bool opacityCheck = (renderOptions->paintCurves) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd));
-
-        if(!renderOptions->allowSelectionCurves)
+        if(!Global::allowSelectionCurves)
             color.setAlphaF(color.alphaF()/3);
 
-        if(opacityCheck)
+        if(Global::paintThisGroup)
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
@@ -188,13 +167,17 @@ void NxCurve::paint() {
         glTranslatef(pos.x(), pos.y(), pos.z());
 
         //Label
-        if((opacityCheck) && (renderOptions->paintLabel) && (!label.isEmpty())) {
-            NxPoint pt = getPathPointsAt(0);
-            renderOptions->render->renderText(pt.x(), pt.y(), pt.z(), label, renderOptions->renderFont);
+        if((Global::paintThisGroup) && (Global::paintLabel) && (!label.isEmpty())) {
+            NxPoint pt = getPointAt(0);
+            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id) + " - " + label, Global::renderFont);
+        }
+        else if(selectedHover) {
+            NxPoint pt = getPointAt(0);
+            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id), Global::renderFont);
         }
 
         //Draw
-        if((glListRecreate) || (renderOptions->forceLists)) {
+        if((glListRecreate) || (glListRecreateFromEditor) || (Global::forceLists)) {
             glNewList(glListCurve, GL_COMPILE_AND_EXECUTE);
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
@@ -247,19 +230,24 @@ void NxCurve::paint() {
                         }
 
                         //if((selected) && (indexPoint == selectedPathPointPoint))
-                        //    renderOptions->render->renderText(p1.x(), p1.y(), p1.z(), QString::number(indexPoint), renderOptions->renderFont);
+                        //    UiRenderOptions::render->renderText(p1.x(), p1.y(), p1.z(), QString::number(indexPoint), UiRenderOptions::renderFont);
                     }
                 }
             }
             glDisable(GL_LINE_STIPPLE);
             glEndList();
-            glListRecreate = false;
+            if(glListRecreateFromEditor)
+                calcBoundingRect();
+            if((glListRecreate) && (pathPointsEditor) && (pathPointsEditor->isVisible()))
+                pathPoints.update();
+            glListRecreate           = false;
+            glListRecreateFromEditor = false;
         }
         else
             glCallList(glListCurve);
 
         //Selection
-        if(selected) {
+        if((selected) && (curveType == CurveTypePoints)) {
             glLineWidth(1);
             for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
                 NxPoint p1 = getPathPointsAt(indexPoint);
@@ -269,7 +257,7 @@ void NxCurve::paint() {
                 else
                     glColor4f(color.redF(), color.greenF(), color.blueF(), 0.5);
                 glBegin(GL_QUADS);
-                qreal squareSize = (0.15 * renderOptions->zoomLinear) / 4;
+                qreal squareSize = (0.15 * Global::zoomLinear) / 4;
                 glVertex3f(p1.x() - squareSize, p1.y() - squareSize, p1.z());
                 glVertex3f(p1.x() + squareSize, p1.y() - squareSize, p1.z());
                 glVertex3f(p1.x() + squareSize, p1.y() + squareSize, p1.z());
@@ -309,17 +297,17 @@ void NxCurve::paint() {
 }
 
 void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
-    NxRect mouseRect = NxRect(_mousePos - NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2, renderOptions->objectSize/2), _mousePos + NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2, renderOptions->objectSize/2));
+    NxRect mouseRect = NxRect(_mousePos - NxPoint(Global::objectSize/2, Global::objectSize/2, Global::objectSize/2), _mousePos + NxPoint(Global::objectSize/2, Global::objectSize/2, Global::objectSize/2));
 
     for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
         if(mouseRect.contains(pos + pathPoints.at(indexPoint))) {
             if(remove)
-                removePointAt(indexPoint);
+                Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURVE_POINT_RMV).arg(id).arg(indexPoint), ExecuteSourceGui);
             else {
                 if(pathPoints[indexPoint].smooth) {
                     pathPoints[indexPoint].smooth = false;
                     pathPoints[indexPoint].c2 = NxPoint();
-                    if(indexPoint < pathPoints.count()) {
+                    if(indexPoint < pathPoints.count()-1) {
                         pathPoints[indexPoint+1].smooth = false;
                         pathPoints[indexPoint+1].c1 = NxPoint();
                     }
@@ -347,6 +335,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
                 pt.c1 = NxPoint(0, 0, 0);
                 pt.c2 = NxPoint(0, 0, 0);
                 pt -= pos;
+
                 if(indexPoint < pathPoints.count()) {
                     pathPoints.insert(indexPoint, pt);
                     pathPoints[indexPoint].smooth = pathPoints.at(indexPoint+1).smooth;
@@ -363,7 +352,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
     }
 }
 
-void NxCurve::removePointAt(quint16 index) {
+void NxCurve::setRemovePointAt(quint16 index) {
     glListRecreate = true;
     if((pathPoints.count() > 2) && (index < pathPoints.count()))
         pathPoints.removeAt(index);
@@ -372,7 +361,7 @@ void NxCurve::removePointAt(quint16 index) {
     calcBoundingRect();
 }
 
-void NxCurve::shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation) {
+bool NxCurve::shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation) {
     if(index < pathPoints.count()) {
         qint16 indexPoint;
         if((direction < 0) && (index > 1)) {
@@ -390,11 +379,12 @@ void NxCurve::shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalc
     }
     if(boundingRectCalculation)
         calcBoundingRect();
+    return true;
 }
-const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, bool smooth, bool boundingRectCalculation) {
-    return setPointAt(index, point, NxPoint(), NxPoint(), smooth, boundingRectCalculation);
+const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, bool smooth, bool boundingRectCalculation, bool fromGui) {
+    return setPointAt(index, point, NxPoint(), NxPoint(), smooth, boundingRectCalculation, fromGui);
 }
-const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation) {
+const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation, bool fromGui) {
     glListRecreate = true;
     bool hasCreate = false;
     if(index >= pathPoints.count()) {
@@ -437,20 +427,39 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
         }
     }
 
+    if(fromGui) {
+        if(pathPoints[index].smooth)
+            Application::current->execute(QString("%1 %2  %3  %4 %5 %6").arg(COMMAND_CURVE_POINT_SMOOTH).arg(id).arg(index).arg(point.x()).arg(point.y()).arg(point.z()), ExecuteSourceInformative);
+        else if((pathPoints[index].c1 == NxPoint()) && (pathPoints[index].c2 == NxPoint()))
+            Application::current->execute(QString("%1 %2  %3  %4 %5 %6").arg(COMMAND_CURVE_POINT).arg(id).arg(index).arg(point.x()).arg(point.y()).arg(point.z()), ExecuteSourceInformative);
+        else
+            Application::current->execute(QString("%1 %2  %3  %4 %5 %6  %7 %8 %9  %10 %11 %12").arg(COMMAND_CURVE_POINT).arg(id).arg(index).arg(point.x()).arg(point.y()).arg(point.z()).arg(c1.x()).arg(c1.y()).arg(c1.z()).arg(c2.x()).arg(c2.y()).arg(c2.z()), ExecuteSourceInformative);
+    }
+
     computeInertie();
 
-    //NxPoint ptBefore;
-    for(quint16 indexPathPoint = 1 ; indexPathPoint < pathPoints.count()-1 ; indexPathPoint++) {
-        if(getPathPointsAt(indexPathPoint).smooth) {
-            NxPoint ptBefore = getPathPointsAt(indexPathPoint - 1);
-            NxPoint pt       = getPathPointsAt(indexPathPoint);
-            NxPoint ptAfter  = getPathPointsAt(indexPathPoint + 1);
-            NxPoint ptDelta  = (ptAfter - ptBefore) / 4;
-            //qreal distanceBefore = qSqrt((pt-ptBefore).x()*(pt-ptBefore).x() + (pt-ptBefore).y()*(pt-ptBefore).y() + (pt-ptBefore).z()*(pt-ptBefore).z());
-            //qreal distanceAfter  = qSqrt((pt-ptAfter).x()*(pt-ptAfter).x() + (pt-ptAfter).y()*(pt-ptAfter).y() + (pt-ptAfter).z()*(pt-ptAfter).z());
-            pathPoints[indexPathPoint].c2   = -ptDelta;// * (distanceBefore / (distanceBefore + distanceAfter));
-            pathPoints[indexPathPoint+1].c1 =  ptDelta;// * (distanceAfter  / (distanceBefore + distanceAfter));
-            ptBefore = pt;
+    //Inside curve point
+    if(pathPoints.count() > 1) {
+        for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
+            if(getPathPointsAt(indexPathPoint).smooth) {
+                qreal factor = 5;
+                if(indexPathPoint == 0) {
+                    NxPoint ptBefore = getPathPointsAt(indexPathPoint);
+                    NxPoint ptAfter  = getPathPointsAt(indexPathPoint+1);
+                    pathPoints[indexPathPoint+1].c1 =  (ptAfter - ptBefore) / factor;
+                }
+                else if(indexPathPoint == pathPoints.count() - 1) {
+                    NxPoint ptBefore = getPathPointsAt(indexPathPoint-1);
+                    NxPoint ptAfter  = getPathPointsAt(indexPathPoint);
+                    pathPoints[indexPathPoint  ].c2 = -(ptAfter - ptBefore) / factor;
+                }
+                else {
+                    NxPoint ptBefore = getPathPointsAt(indexPathPoint-1);
+                    NxPoint ptAfter  = getPathPointsAt(indexPathPoint+1);
+                    pathPoints[indexPathPoint  ].c2 = -(ptAfter - ptBefore) / factor;
+                    pathPoints[indexPathPoint+1].c1 =  (ptAfter - ptBefore) / factor;
+                }
+            }
         }
     }
 
@@ -511,7 +520,6 @@ void NxCurve::setImage(const QString & filename) {
 
     //Create mask
     QBitmap bitmap(pixmap.createHeuristicMask());
-    //bitmap.save(file.dir().absolutePath() + QDir::separator() + file.baseName() + "_mask.png");
 
     //Create path
     pathPoints.clear();
@@ -530,10 +538,17 @@ void NxCurve::setEllipse(const NxSize & size) {
 
     //Draw ellipse
     pathPoints.clear();
+    glListRecreate = true;
 
     //Calculations
     calcBoundingRect();
     resize(1, 1);
+}
+
+void NxCurve::setText(const QString & text) {
+    QStringList textItems = text.split(" ", QString::SkipEmptyParts);
+    if(textItems.count() > 1)
+        setText(textItems.at(1), textItems[0].replace("_", " ").trimmed());
 }
 
 void NxCurve::setText(const QString & text, const QString & family) {
@@ -602,14 +617,16 @@ void NxCurve::resize(const NxSize & size) {
     NxSize sizeFactor(size.width() / boundingRect.width(), size.height() / boundingRect.height());
     resize(sizeFactor.width(), sizeFactor.height());
 }
-void NxCurve::translate(const NxPoint & point) {
+bool NxCurve::translate(const NxPoint & point) {
     for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++)
         setPointAt(indexPoint, getPathPointsAt(indexPoint) + point, getPathPointsAt(indexPoint).c1, getPathPointsAt(indexPoint).c2, getPathPointsAt(indexPoint).smooth, false);
     calcBoundingRect();
+    return true;
 }
 
 void NxCurve::translatePoint(quint16 indexPoint, const NxPoint &point) {
-    setPointAt(indexPoint, getPathPointsAt(indexPoint) + point, getPathPointsAt(indexPoint).c1, getPathPointsAt(indexPoint).c2, getPathPointsAt(indexPoint).smooth, false);
+    if(indexPoint < pathPoints.count())
+        setPointAt(indexPoint, getPathPointsAt(indexPoint) + point, getPathPointsAt(indexPoint).c1, getPathPointsAt(indexPoint).c2, getPathPointsAt(indexPoint).smooth, false);
 }
 
 
@@ -709,24 +726,37 @@ NxPoint NxCurve::getAngleAt(qreal val, bool absoluteTime) {
 
 
 void NxCurve::calcBoundingRect() {
-    pathLength = 1;
-    if(curveType == CurveTypeEllipse) {
-        //Longueur
-        pathLength = M_PI * qSqrt(0.5 * (boundingRect.width()*boundingRect.width() + boundingRect.height()*boundingRect.height()));
+    bool calculatePathLength = false;
+    foreach(NxObject *cursor, cursors)
+        if(!cursor->getLockPathLength()) {
+            calculatePathLength = true;
+            break;
+        }
 
+    NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
+    if(calculatePathLength)
+        pathLength = 0;
+
+    if(curveType == CurveTypeEllipse) {
         //Bounding
         boundingRect = NxRect(-ellipseSize.width(), -ellipseSize.height(), 2*ellipseSize.width(), 2*ellipseSize.height());
+
+        //Longueur
+        if(calculatePathLength)
+            pathLength = M_PI * qSqrt(0.5 * (boundingRect.width()*boundingRect.width() + boundingRect.height()*boundingRect.height()));
     }
-    else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
-        pathLength = 0;
-        NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
-        qreal equationVariableTStepsBR = qMin(1., equationVariableTSteps * 20);
-        for(equationVariableT = 0 ; equationVariableT <= (1-equationVariableTStepsBR) ; equationVariableT += equationVariableTStepsBR) {
+    else if(((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)) && (equationIsValid) && (!equation.isEmpty()))  {
+        qreal step = 0.1;
+        if(calculatePathLength)
+            step = 0.01;
+        for(equationVariableT = 0 ; equationVariableT <= 1 ; equationVariableT += step) {
             NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);
 
             NxPoint p1 = getPointAt(equationVariableT), p2 = getPointAt(equationVariableT + equationVariableTSteps);
-            NxPoint delta = p2 - p1;
-            pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
+            if(calculatePathLength) {
+                NxPoint delta = p2 - p1;
+                pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
+            }
 
             //Bounding local
             if(p1.x() < p2.x())  min.setX(p1.x()); else min.setX(p2.x());
@@ -747,17 +777,16 @@ void NxCurve::calcBoundingRect() {
         boundingRect = NxRect(minGlobal, maxGlobal);
     }
     else if(curveType == CurveTypePoints) {
-        pathLength = 0;
-        qreal step = 0.01;
-        NxPoint minGlobal(9999,9999,9999,9999), maxGlobal(-9999,-9999,-9999,-9999);
         for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count()-1 ; indexPoint++) {
             NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);
 
             NxPoint p1 = getPathPointsAt(indexPoint), p2 = getPathPointsAt(indexPoint+1);
             NxPoint c1 = getPathPointsAt(indexPoint+1).c1, c2 = getPathPointsAt(indexPoint+1).c2;
             if((c1 == NxPoint()) && (c2 == NxPoint())) {
-                NxPoint delta = p2 - p1;
-                pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
+                if(calculatePathLength) {
+                    NxPoint delta = p2 - p1;
+                    pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
+                }
                 //Bounding local
                 if(p1.x() < p2.x())  min.setX(p1.x()); else min.setX(p2.x());
                 if(p1.y() < p2.y())  min.setY(p1.y()); else min.setY(p2.y());
@@ -768,12 +797,17 @@ void NxCurve::calcBoundingRect() {
             }
             else {
                 NxPoint pt = getPointAt(indexPoint, 0);
+                qreal step = 0.1;
+                if(calculatePathLength)
+                    step = 0.01;
                 for(qreal t = 0 ; t <= 1+step ; t += step) {
                     //Longueur
                     NxPoint ptNext = getPointAt(indexPoint, t + step);
-                    NxPoint delta  = ptNext - pt;
-                    if(t <= 1)
-                        pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
+                    if(calculatePathLength) {
+                        NxPoint delta  = ptNext - pt;
+                        if(t <= 1)
+                            pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
+                    }
 
                     //Bounding local
                     if(pt.x() < min.x())  min.setX(pt.x());
@@ -785,7 +819,8 @@ void NxCurve::calcBoundingRect() {
                     pt = ptNext;
                 }
             }
-            pathPoints[indexPoint+1].currentLength = pathLength;
+            if(calculatePathLength)
+                pathPoints[indexPoint+1].currentLength = pathLength;
             if(min.x() == max.x())  max.setX(max.x() + 0.001);
             if(min.y() == max.y())  max.setY(max.y() + 0.001);
             if(min.z() == max.z())  max.setZ(max.z() + 0.001);
@@ -803,11 +838,14 @@ void NxCurve::calcBoundingRect() {
     }
     boundingRect.translate(pos);
     boundingRect = boundingRect.normalized();
+
+    if(pathLength == 0)
+        pathLength = 1;
 }
 
 
 bool NxCurve::isMouseHover(const NxPoint &mouse) {
-    NxRect mouseRect = NxRect(mouse - NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2, renderOptions->objectSize/2), mouse + NxPoint(renderOptions->objectSize/2, renderOptions->objectSize/2, renderOptions->objectSize/2));
+    NxRect mouseRect = NxRect(mouse - NxPoint(Global::objectSize/2, Global::objectSize/2, Global::objectSize/2), mouse + NxPoint(Global::objectSize/2, Global::objectSize/2, Global::objectSize/2));
     if(intersects(mouseRect) >= 0)
         return true;
     else if(selected) {
@@ -836,8 +874,8 @@ qreal NxCurve::intersects(const NxRect &rect, NxPoint* collisionPoint) {
     if(rectCursor.width()  == 0)  rectCursor.setWidth(0.001);
     if(rectCursor.height() == 0)  rectCursor.setHeight(0.001);
     if(rectCursor.length() == 0)  rectCursor.setLength(0.001);
-    if(curveType == CurveTypeEllipse) {
-        if(boundingRect.intersects(rectCursor)) {
+    if(boundingRect.intersects(rectCursor)) {
+        if(curveType == CurveTypeEllipse) {
             NxPoint pt1 = getPointAt(0);
             for(qreal t = 0 ; t <= 1+step ; t += step) {
                 NxPoint pt2 = getPointAt(t+step);
@@ -853,14 +891,23 @@ qreal NxCurve::intersects(const NxRect &rect, NxPoint* collisionPoint) {
                 pt1 = pt2;
             }
         }
-    }
-    else if((equationIsValid) && (!equation.isEmpty()) && ((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)))  {
-        /*
-          TODO
-        */
-    }
-    else if(curveType == CurveTypePoints) {
-        if(boundingRect.intersects(rectCursor)) {
+        else if(((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)) && (equationIsValid) && (!equation.isEmpty()))  {
+            NxPoint pt1 = getPointAt(0);
+            for(qreal t = 0 ; t <= 1+step ; t += step) {
+                NxPoint pt2 = getPointAt(t+step);
+                NxRect rectCurve = NxRect(pt1, pt2).translated(pos);
+                if(rectCurve.width()  == 0)  rectCurve.setWidth(0.001);
+                if(rectCurve.height() == 0)  rectCurve.setHeight(0.001);
+                if(rectCurve.length() == 0)  rectCurve.setLength(0.001);
+                if(rectCurve.intersects(rectCursor)) {
+                    if(collisionPoint)
+                        *collisionPoint = (pt1+pt2)/2 + pos;
+                    return t;
+                }
+                pt1 = pt2;
+            }
+        }
+        else if(curveType == CurveTypePoints) {
             for(quint16 indexPathPoint = 1 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
                 if(getPathPointsAt(indexPathPoint).boundingRect.intersects(rectCursor)) {
                     NxPoint pt1 = getPointAt(indexPathPoint-1, (qreal)0);
@@ -902,11 +949,12 @@ void NxCurve::resample(quint16 nbPoints) {
     glListRecreate = true;
 }
 
+void NxCurve::isOnPathPoint() {
+    selectedPathPointPoint = selectedPathPointControl1 = selectedPathPointControl2 = -1;
+}
 void NxCurve::isOnPathPoint(const NxRect & point) {
     if(!isDrag) {
-        selectedPathPointPoint = -1;
-        selectedPathPointControl1 = -1;
-        selectedPathPointControl2 = -1;
+        isOnPathPoint();
         for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
             NxPoint pt = getPathPointsAt(indexPathPoint);
             NxPoint c2 = pt + getPathPointsAt(indexPathPoint).c2;

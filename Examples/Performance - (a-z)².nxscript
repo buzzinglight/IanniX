@@ -32,16 +32,14 @@ var curvesTranslation = [
 function onCreate() {
 	//Viewport setup
 	run("clear");
-	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
-	run("autosize 1");
+	run("registerTexture background");
+	
 
 	//Custom colors
-	run("registerColor curve_active       0   0   0 255");
-	run("registerColor curve_inactive     0   0   0  40");
-	run("registerColor cursor_active    255  80  30 255");
-	run("registerColor cursor_inactive    0   0   0  40");
-	run("registerColor trigger_active_message    0 185 255 255");
-	run("registerColor trigger_inactive_message  0   0   0  40");
+	run("registerColor lighttheme_curve_active       0   0   0 255");
+	run("registerColor lighttheme_curve_inactive     0   0   0  40");
+	run("registerColor lighttheme_cursor_active    255  80  30 255");
+	run("registerColor lighttheme_cursor_inactive    0   0   0  40");
 
 	//Center on score origin
 	run("center 0 0");
@@ -132,8 +130,8 @@ function onCreate() {
 	run("setSize    trigger1 0.5");
 	run("setMessage trigger2 1, osc://ip_out:57120/trigger trigger_id trigger_value_x trigger_value_y, direct:// rotate {random(-20, 20)}  {random(0, -80)}  {random(-40, 40)}");
 	run("setSize    trigger2 0.5");
-	run("setColorActiveMessage trigger1 0 185 255 255");
-	run("setColorActiveMessage trigger2 240 0 255 255");
+	run("setColorActive trigger1 0 185 255 255");
+	run("setColorActive trigger2 240 0 255 255");
 }
 
 
@@ -173,7 +171,7 @@ function onMessage(protocol, host, port, destination, values) {
 				run("setActive " + (1000+ id) + " " + val);
 				run("setActive " + id + " " + val);
 				run("setSpeedF " + id + " " + val);
-				run("sendOsc osc://ip_out:57120/mute " + id + " " + val);
+				run("sendOsc osc://ip_out:57120/setmute " + id + " " + val);
 			}
 			//Enable/disable triggers (toggles)
 			else if(cc == 27)
@@ -195,9 +193,9 @@ function onMessage(protocol, host, port, destination, values) {
 			}
 			//Triggers opacity
 			else if(cc == 7)
-				run("setColorActiveMessage trigger1 0 185 255 " + range(val, 32, 255));
+				run("setColorActive trigger1 0 185 255 " + range(val, 32, 255));
 			else if(cc == 8)
-				run("setColorActiveMessage trigger2 240 0 255 " + range(val, 32, 255));
+				run("setColorActive trigger2 240 0 255 " + range(val, 32, 255));
 		}
 	}
 }

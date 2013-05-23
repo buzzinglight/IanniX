@@ -7,170 +7,129 @@
     <x>0</x>
     <y>0</y>
     <width>775</width>
-    <height>340</height>
+    <height>430</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>775</width>
-    <height>340</height>
+    <height>430</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>IanniX</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QFrame#global {
-	background-color: rgb(242, 241, 237);
-}
-
-QTextEdit#help {
-	color: white;
-	background-color: transparent;
-}
-
-
-QWidget {
-	font: 10px &quot;Arial&quot;;
+   <string notr="true">QWidget {
+	font: 						10px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+	margin: 					0px;
+	padding: 					0px;
 }
 QLabel {
-	font: bold;
+	font: 						9px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+	font:							bold;
+	color: 						rgb(20, 20, 20);
 }
-
-QTabWidget::pane {
-	border: 1px solid rgba(255, 255, 255, 32);
-}
-
-QLabel {
-	color: rgb(20, 20, 20);
-}
-
 QLineEdit {
-	background: transparent;
-	border: 0px solid transparent;
+	background: 			transparent;
+	border: 					0px solid black;
 }
 
-QPushButton {
-	border: 1px solid rgb(60, 60, 60, 100);
-	border-radius: 10px;
-	margin: 0px;
-	padding: 0px;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 100), stop:1 rgba(61, 61, 61, 100));
+QFrame#global {
+	background-color:	rgb(242, 241, 237);
 }
-QPushButton {
-	color: white;
-}
-QPushButton:hover {
-	border: 1px solid rgb(0, 187, 255);
-	background-color: rgb(0, 137, 241, 128);
-}
-QPushButton::checked, QPushButton:pressed {
-	background-color: rgb(0, 187, 255);
-	color: white;
-}
-
-QPushButton#patternLearn {
-	border-radius: 7px;
-}
-
-QTreeWidget {
-	color: black;
-	border: 0px solid transparent;
-	gridline-color: rgb(150, 152, 137);
-	selection-background-color: rgb(82, 146, 218);
-	background: transparent;
-	background-color: rgb(0, 0, 0, 32);
-	alternate-background-color: rgb(0, 0, 0, 32);
-}
-QTreeWidget::item {
-}
-QHeaderView {
-	background: transparent;
-	border: 0px solid transparent;
-	color: rgb(203, 203, 203);
-	min-height: 12px;
-}
-QHeaderView::section {
-	background: rgba(255, 255, 255, 64);
-	padding-left: 4px;
-	border: 0px solid transparent;
-	border-top-left-radius:  6px;
-	border-top-right-radius: 6px;
-	font: bold;
-}
-
-QTreeView::indicator {
-	border: 1px solid rgb(60, 60, 60);
-	width: 11px;
-	height: 11px;
-}
-QTreeView::indicator:unchecked {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
-}
-QTreeView::indicator:checked {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
-}
-
-
-
-QScrollBar:vertical, QScrollBar:horizontal {
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 32);
-}
-QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-	border: 0px solid transparent;
-	background: rgb(161, 161, 161);
-	border-radius: 3px;
-}
-QScrollBar:vertical {						width: 8px;					}
-QScrollBar:horizontal {					height: 8px;				}
-QScrollBar::handle:vertical {			min-height: 8px;		}
-QScrollBar::handle:horizontal {	min-width: 8px;			}
-QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
-	border: 0px solid transparent;
-	background: transparent;
-	width: 1px;
-	height: 1px;
-}
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
-	background: none;
-}
-
-
-QSplitter::handle {
-	background: rgb(0,0,0, 30);
-}
-QSplitter::handle:pressed {
-	background: rgb(0, 187, 255);
- }
-QSplitter::handle:horizontal	 	{	width: 4px; }
-QSplitter::handle:vertical     		{	height: 4px; }
-
-QWidget#patternEdit {
+QPlainTextEdit#patternEdit {
 	font: 11px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
 }
 
 
 QPlainTextEdit, QComboBox {
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 200);
-	color: black;
-	margin-left: 4px;
-	padding-top: -4px;
-	border-radius: 4px;
+	min-height: 				20px;
+	color: 						black;
+	border: 					0px solid black;
+	border-radius: 		2px;
+	background-color: 	rgb(252, 251, 251);
 }
+
 QComboBox {
-	selection-color: black;
-	padding-top: 0px;
-	padding-left: 4px;
+	margin-left: 		3px;
+	border-radius: 	3px;
+	selection-color: 	black;
+	padding-left: 		5px;
+	selection-color: 	black;
 }
 QComboBox::drop-down {
-	width: 10px;
-	padding: 4px;
-	border: 0px solid transparent;
-	background: rgb(0, 187, 255);
-    image: url(:/icons/res_icon_down.png);
+	width: 						10px;
+	padding: 					2px;
+	border: 					0px solid black;
+	background: 			rgb(0, 187, 255);
+    image: 						url(:/icons/res_icon_down.png);
 }
+QComboBox QAbstractItemView {
+	min-height: 				50px;
+}
+
+
+
+
+
+QPushButton {
+	border: 					1px solid rgb(204, 203, 200);
+	border-radius: 		10px;
+	background-color: 	rgb(213, 212, 209);
+	color: 						white;
+}
+QPushButton:hover {
+	border: 					1px solid rgb(0, 187, 255);
+	background-color: 	rgb(0, 137, 241, 128);
+}
+QPushButton::checked, QPushButton:pressed {
+	background-color: 	rgb(0, 187, 255);
+}
+QPushButton#patternLearn {
+	border-radius: 		2px;
+}
+
+QTextEdit#help {
+	color: 						white;
+	background-color:	transparent;
+}
+
+
+QScrollBar:vertical, QScrollBar:horizontal {
+	border: 				0px solid black;
+	background: 		rgba(255, 255, 255, 32);
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+	border: 				0px solid black;
+	background: 		rgb(161, 161, 161);
+	border-radius: 	3px;
+}
+QScrollBar:vertical {						width: 			8px;					}
+QScrollBar:horizontal {					height: 		8px;				}
+QScrollBar::handle:vertical {			min-height: 8px;		}
+QScrollBar::handle:horizontal {	min-width: 	8px;			}
+QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
+	border: 			0px solid black;
+	background: 	transparent;
+	width: 				1px;
+	height: 			1px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: 	none;
+}
+
+QSplitter::handle {
+	background: 							rgb(255, 255, 255, 30);
+}
+QSplitter::handle:pressed {
+	background: 							rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 	4px; }
+QSplitter::handle:vertical     		{	height:	4px; }
+
+QSplitter::handle:horizontal	 	{	width: 4px; }
+QSplitter::handle:vertical     		{	height: 4px; }
 </string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -206,9 +165,6 @@ QComboBox::drop-down {
         <property name="toolTip">
          <string>Select here the protocol used to transmit message</string>
         </property>
-        <property name="statusTip">
-         <string>Select here the protocol used to transmit message</string>
-        </property>
         <property name="editable">
          <bool>false</bool>
         </property>
@@ -222,22 +178,32 @@ QComboBox::drop-down {
         </item>
         <item>
          <property name="text">
-          <string>osc://ip_out:57120/trigger trigger_id trigger_xPos trigger_yPos trigger_zPos cursor_id - Default OSC message for triggers</string>
+          <string>osc://ip_out:57120/trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id - Default OSC message for triggers</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors</string>
+          <string>osc://ip_out:57120/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>midi://midi_out/note 0 69 127 5 - Play a MIDI note (A - 440Hz) during 5 seconds on channel #0</string>
+          <string>osc://ip_out:57120/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0 - Default OSC message for classical playhead</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>midi://midi_out/cc 1 0 cursor_value_y - Send a MIDI control change on controler #0 on channel #1 depending on cursor position</string>
+          <string>midi://midi_out/notef 1 trigger_value_y trigger_value_x 3 - Default MIDI message for triggers</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>midi://midi_out/note 1 69 127 5 - Play a MIDI note #69 (A - 440Hz) during 5 seconds on channel #1 with maximum velocity</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>midi://midi_out/ccf 1 0 cursor_value_y - Send a MIDI control change on controler #0 on channel #1 depending on cursor position (as float value between 0 and 1)</string>
          </property>
         </item>
         <item>
@@ -287,10 +253,7 @@ QComboBox::drop-down {
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the message</string>
-            </property>
-            <property name="statusTip">
-             <string>Click here to clear the message</string>
+             <string>Clears the message</string>
             </property>
             <property name="styleSheet">
              <string notr="true"/>
@@ -324,17 +287,14 @@ QComboBox::drop-down {
             <property name="maximumSize">
              <size>
               <width>30</width>
-              <height>20</height>
+              <height>16777215</height>
              </size>
             </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the message</string>
-            </property>
-            <property name="statusTip">
-             <string>Click here to clear the message</string>
+             <string>Learn a message by copying next received message</string>
             </property>
             <property name="styleSheet">
              <string notr="true"/>
@@ -352,6 +312,9 @@ QComboBox::drop-down {
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
          <number>1</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
         </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -395,9 +358,6 @@ QComboBox::drop-down {
              </size>
             </property>
             <property name="toolTip">
-             <string>Select here the protocol used to transmit message</string>
-            </property>
-            <property name="statusTip">
              <string>Select here the protocol used to transmit message</string>
             </property>
             <property name="editable">
@@ -452,9 +412,6 @@ QComboBox::drop-down {
              </size>
             </property>
             <property name="toolTip">
-             <string>Select or type the destination application/host IP</string>
-            </property>
-            <property name="statusTip">
              <string>Select or type the destination application/host IP</string>
             </property>
             <property name="editable">
@@ -520,9 +477,6 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Select or type the destination application/host port number</string>
             </property>
-            <property name="statusTip">
-             <string>Select or type the destination application/host port number</string>
-            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -577,9 +531,6 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Select or type an OSC address to reach</string>
             </property>
-            <property name="statusTip">
-             <string>Select or type an OSC address to reach</string>
-            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -632,9 +583,6 @@ QComboBox::drop-down {
              </size>
             </property>
             <property name="toolTip">
-             <string>Select or type a MIDI device to reach</string>
-            </property>
-            <property name="statusTip">
              <string>Select or type a MIDI device to reach</string>
             </property>
             <property name="editable">
@@ -700,9 +648,6 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Select here a MIDI control</string>
             </property>
-            <property name="statusTip">
-             <string>Select here a MIDI control</string>
-            </property>
             <property name="editable">
              <bool>false</bool>
             </property>
@@ -757,9 +702,6 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Type here a IanniX variable or your custom value</string>
             </property>
-            <property name="statusTip">
-             <string>Type here a IanniX variable or your custom value</string>
-            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -787,9 +729,6 @@ QComboBox::drop-down {
             </property>
             <property name="toolTip">
              <string>Clear the value</string>
-            </property>
-            <property name="statusTip">
-             <string>Click here to clear the value</string>
             </property>
             <property name="styleSheet">
              <string notr="true"/>
@@ -845,9 +784,6 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Type here a IanniX variable or your custom value</string>
             </property>
-            <property name="statusTip">
-             <string>Type here a IanniX variable or your custom value</string>
-            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -875,9 +811,6 @@ QComboBox::drop-down {
             </property>
             <property name="toolTip">
              <string>Clear the value</string>
-            </property>
-            <property name="statusTip">
-             <string>Click here to clear the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -930,9 +863,6 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Type here a IanniX variable or your custom value</string>
             </property>
-            <property name="statusTip">
-             <string>Type here a IanniX variable or your custom value</string>
-            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -960,9 +890,6 @@ QComboBox::drop-down {
             </property>
             <property name="toolTip">
              <string>Clear the value</string>
-            </property>
-            <property name="statusTip">
-             <string>Click here to clear the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1015,9 +942,6 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Type here a IanniX variable or your custom value</string>
             </property>
-            <property name="statusTip">
-             <string>Type here a IanniX variable or your custom value</string>
-            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -1045,9 +969,6 @@ QComboBox::drop-down {
             </property>
             <property name="toolTip">
              <string>Clear the value</string>
-            </property>
-            <property name="statusTip">
-             <string>Click here to clear the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1100,9 +1021,6 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Type here a IanniX variable or your custom value</string>
             </property>
-            <property name="statusTip">
-             <string>Type here a IanniX variable or your custom value</string>
-            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -1130,9 +1048,6 @@ QComboBox::drop-down {
             </property>
             <property name="toolTip">
              <string>Clear the value</string>
-            </property>
-            <property name="statusTip">
-             <string>Click here to clear the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1185,9 +1100,6 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Type here a IanniX variable or your custom value</string>
             </property>
-            <property name="statusTip">
-             <string>Type here a IanniX variable or your custom value</string>
-            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -1216,8 +1128,321 @@ QComboBox::drop-down {
             <property name="toolTip">
              <string>Clear the value</string>
             </property>
-            <property name="statusTip">
-             <string>Click here to clear the value</string>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument7Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 7</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument6Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument7Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument7Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_15">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument8Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 8</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument6Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument8Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument8Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_16">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument9Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 9</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument6Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument9Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument9Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
+            </property>
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_17">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="argument10Label">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>VALUE 10</string>
+            </property>
+            <property name="buddy">
+             <cstring>argument6Combo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBoxWithFocus" name="argument10Combo">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Type here a IanniX variable or your custom value</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="argument10Clear">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Clear the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1275,9 +1500,7 @@ QComboBox::drop-down {
   <tabstop>argument5Clear</tabstop>
   <tabstop>argument6Clear</tabstop>
  </tabstops>
- <resources>
-  <include location="IanniX.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>protocolCombo</sender>
@@ -1430,11 +1653,11 @@ QComboBox::drop-down {
    <slot>currentItemChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>699</x>
-     <y>267</y>
+     <x>734</x>
+     <y>262</y>
     </hint>
     <hint type="destinationlabel">
-     <x>778</x>
+     <x>774</x>
      <y>352</y>
     </hint>
    </hints>
@@ -1446,8 +1669,8 @@ QComboBox::drop-down {
    <slot>currentItemChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>556</x>
-     <y>294</y>
+     <x>683</x>
+     <y>284</y>
     </hint>
     <hint type="destinationlabel">
      <x>638</x>
@@ -1462,8 +1685,8 @@ QComboBox::drop-down {
    <slot>currentItemChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>732</x>
-     <y>320</y>
+     <x>734</x>
+     <y>306</y>
     </hint>
     <hint type="destinationlabel">
      <x>697</x>
@@ -1590,8 +1813,8 @@ QComboBox::drop-down {
    <slot>currentItemChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>621</x>
-     <y>267</y>
+     <x>734</x>
+     <y>262</y>
     </hint>
     <hint type="destinationlabel">
      <x>541</x>
@@ -1606,8 +1829,8 @@ QComboBox::drop-down {
    <slot>currentItemChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>640</x>
-     <y>294</y>
+     <x>734</x>
+     <y>284</y>
     </hint>
     <hint type="destinationlabel">
      <x>739</x>
@@ -1623,10 +1846,10 @@ QComboBox::drop-down {
    <hints>
     <hint type="sourcelabel">
      <x>734</x>
-     <y>320</y>
+     <y>306</y>
     </hint>
     <hint type="destinationlabel">
-     <x>778</x>
+     <x>774</x>
      <y>352</y>
     </hint>
    </hints>
@@ -1687,7 +1910,7 @@ QComboBox::drop-down {
    <hints>
     <hint type="sourcelabel">
      <x>760</x>
-     <y>241</y>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1703,7 +1926,7 @@ QComboBox::drop-down {
    <hints>
     <hint type="sourcelabel">
      <x>760</x>
-     <y>268</y>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1719,7 +1942,7 @@ QComboBox::drop-down {
    <hints>
     <hint type="sourcelabel">
      <x>760</x>
-     <y>295</y>
+     <y>282</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1735,7 +1958,7 @@ QComboBox::drop-down {
    <hints>
     <hint type="sourcelabel">
      <x>760</x>
-     <y>322</y>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1755,7 +1978,7 @@ QComboBox::drop-down {
     </hint>
     <hint type="destinationlabel">
      <x>332</x>
-     <y>-161</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1771,7 +1994,7 @@ QComboBox::drop-down {
     </hint>
     <hint type="destinationlabel">
      <x>132</x>
-     <y>441</y>
+     <y>384</y>
     </hint>
    </hints>
   </connection>
@@ -1782,12 +2005,12 @@ QComboBox::drop-down {
    <slot>fieldFocusIn()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>540</x>
-     <y>198</y>
+     <x>667</x>
+     <y>197</y>
     </hint>
     <hint type="destinationlabel">
      <x>296</x>
-     <y>439</y>
+     <y>384</y>
     </hint>
    </hints>
   </connection>
@@ -1798,11 +2021,11 @@ QComboBox::drop-down {
    <slot>fieldFocusIn()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>274</x>
-     <y>223</y>
+     <x>401</x>
+     <y>219</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-97</x>
+     <x>0</x>
      <y>229</y>
     </hint>
    </hints>
@@ -1818,8 +2041,8 @@ QComboBox::drop-down {
      <y>231</y>
     </hint>
     <hint type="destinationlabel">
-     <x>996</x>
-     <y>546</y>
+     <x>774</x>
+     <y>384</y>
     </hint>
    </hints>
   </connection>
@@ -1830,11 +2053,11 @@ QComboBox::drop-down {
    <slot>fieldFocusIn()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>539</x>
-     <y>255</y>
+     <x>666</x>
+     <y>275</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1016</x>
+     <x>774</x>
      <y>189</y>
     </hint>
    </hints>
@@ -1846,11 +2069,11 @@ QComboBox::drop-down {
    <slot>fieldFocusIn()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>595</x>
-     <y>296</y>
+     <x>722</x>
+     <y>284</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1016</x>
+     <x>774</x>
      <y>236</y>
     </hint>
    </hints>
@@ -1866,7 +2089,7 @@ QComboBox::drop-down {
      <y>306</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1016</x>
+     <x>774</x>
      <y>305</y>
     </hint>
    </hints>
@@ -1883,7 +2106,7 @@ QComboBox::drop-down {
     </hint>
     <hint type="destinationlabel">
      <x>38</x>
-     <y>491</y>
+     <y>384</y>
     </hint>
    </hints>
   </connection>
@@ -1898,8 +2121,296 @@ QComboBox::drop-down {
      <y>26</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-246</x>
-     <y>541</y>
+     <x>0</x>
+     <y>384</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument9Clear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>760</x>
+     <y>397</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>774</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument8Clear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>760</x>
+     <y>372</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>774</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument7Clear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>760</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>774</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument6Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>393</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>361</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument6Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>415</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument7Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>463</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>439</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument8Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>415</x>
+     <y>373</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>301</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument9Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>462</x>
+     <y>397</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>405</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument7Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>463</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>487</x>
+     <y>437</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument8Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>507</x>
+     <y>373</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument9Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>591</x>
+     <y>397</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>575</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument7Combo</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>352</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument8Combo</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>384</x>
+     <y>373</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>403</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument9Combo</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>435</x>
+     <y>397</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>572</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument10Clear</sender>
+   <signal>released()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>clearApattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>750</x>
+     <y>412</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>680</x>
+     <y>482</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument10Combo</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>214</x>
+     <y>411</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>449</x>
+     <y>517</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument10Combo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>325</x>
+     <y>407</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>508</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>argument10Combo</sender>
+   <signal>focusIn()</signal>
+   <receiver>ExtOscPatternEditor</receiver>
+   <slot>fieldFocusIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>170</x>
+     <y>412</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>335</x>
+     <y>548</y>
     </hint>
    </hints>
   </connection>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UiRender</class>
+ <widget class="QWidget" name="UiRender">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>556</width>
+    <height>471</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>IanniX — Render</string>
+  </property>
+  <property name="statusTip">
+   <string>Score render|As you understood, IanniX is a graphical sequencer. It means that you'll have to draw a score using three main objects: triggers (events), curves (spatial trajectories) and cursors (playheads). The score rendering area is 3D space where you'll be able to manipulate these objects. By default, one grid unit represents one second.\n\n Here are some useful tips to navigate through your score:\n - Click+mouse move allows you the scroll in the score\n - Mouse wheel will zoom or unzoom\n - Shift+click selects objects\n - Alt+click+mouse move changes the camera point of view\n - Alt+mouse wheel changes the camera distance\n - Alt+double click resets the camera position if you're lost in 3D (this can happen)\n\n If an object is selected:\n - Double click on the object allows you to edit its messages\n - Shift+double click force the object to sent its messages (very useful while making your mappings/MIDI learnings)\n\n And last thing, score edition is not possible if you're in 3D... So before trying to edit something, go back to 2D with Alt+double click.</string>
+  </property>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

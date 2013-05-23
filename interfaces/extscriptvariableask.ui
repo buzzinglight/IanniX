@@ -14,95 +14,19 @@
    <string>IanniX</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	font: 11px &quot;Arial&quot;;
-}
-
-QWidget#ExtScriptVariableAsk {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
-}
-
-QLabel {
-	color: white;
-}
-
-
-QPushButton {
-	color: white;
-	font: bold;
-	border: 1px solid rgb(60, 60, 60);
-	min-width: 70px;
-	min-height: 30px;
-	border-radius: 4px;
-	color: rgb(192, 192, 192);
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 255), stop:1 rgba(61, 61, 61, 255));
-
-}
-QPushButton:hover {
-	border: 1px solid rgb(0, 187, 255);
-	background-color: rgb(0, 137, 241, 128);
-}
-QPushButton::checked {
-	background-color: rgb(0, 187, 255);
-	color: white;
-}
-
-QTreeWidget {
-	alternate-background-color: rgb(79, 79, 81);
-	color: white;
-	border: 0px solid transparent;
-	gridline-color: rgb(150, 152, 137);
-	selection-background-color: rgb(0, 187, 255);
-	background: transparent;
-	background-color: rgb(63, 64, 64);
-}
-QTreeWidget::item {
-}
-QHeaderView {
-	background: transparent;
-	border: 0px solid transparent;
-	color: rgb(203, 203, 203);
-	min-height: 12px;
-}
-QHeaderView::section {
-	background: rgba(255, 255, 255, 64);
-	padding-left: 4px;
-	border: 0px solid transparent;
-	border-top-left-radius:  6px;
-	border-top-right-radius: 6px;
-	font: bold;
-}
-
-QScrollBar:vertical, QScrollBar:horizontal {
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 32);
-}
-QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-	border: 0px solid transparent;
-	background: rgb(161, 161, 161);
-	border-radius: 3px;
-}
-QScrollBar:vertical {						width: 8px;					}
-QScrollBar:horizontal {					height: 8px;				}
-QScrollBar::handle:vertical {			min-height: 8px;		}
-QScrollBar::handle:horizontal {	min-width: 8px;			}
-QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
-	border: 0px solid transparent;
-	background: transparent;
-	width: 1px;
-	height: 1px;
-}
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
-	background: none;
-}
-
-</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>10</number>
+   </property>
+   <property name="margin">
+    <number>10</number>
+   </property>
    <item>
     <widget class="QLabel" name="scriptTitle">
      <property name="styleSheet">
-      <string notr="true">font: bold;</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>PLEASE ENTER VALUES TO LAUNCH SCRIPT:</string>
@@ -115,10 +39,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-pa
    <item>
     <widget class="QTreeWidget" name="variablesList">
      <property name="toolTip">
-      <string>List of script variables</string>
-     </property>
-     <property name="statusTip">
-      <string>Double-click on a column to change a value</string>
+      <string>Lists all the editable variables of the script</string>
      </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>

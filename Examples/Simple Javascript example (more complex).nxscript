@@ -7,10 +7,10 @@ var speed_spread = 3;
 function onCreate() {
 	//Clear score
 	run("clear");
-	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
+	run("registerTexture background");
 	run("rotate 0 0 0");
 	run("center -8 5");
-	run("autosize 1");
+	
 
 	//Loop from 0 to number of lines
 	for(var index = 0 ; index < number_of_lines ; index++) {
@@ -30,7 +30,7 @@ function onCreate() {
 		//Play curve ONE time (speed = 1 then speed = -1)
 		run("setPattern current 0 0 1 -1");
 		//Mapping
-		run("setBoundsSource current " + (-number_of_lines) + " " + (number_of_lines / vertical_grid_dilatation) + " 0 0");
+		run("setBoundsSource current " + (-number_of_lines) + " 0 0 " + (number_of_lines / vertical_grid_dilatation));
 		//Cursor speed
 		if(fixed_duration)
 			run("setSpeed current auto " + (speed_base + (speed_spread * index / (number_of_lines-1))));

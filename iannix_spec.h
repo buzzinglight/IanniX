@@ -20,17 +20,29 @@
 #define IANNIX_SPEC_H
 
 #include <QObject>
+#include <QMap>
+#include <QStringList>
 #include "geometry/nxpoint.h"
 #include "geometry/nxrect.h"
 #include "geometry/nxline.h"
 #include "geometry/nxpolygon.h"
 
+enum ExecuteSource { ExecuteSourceSystem, ExecuteSourceGui, ExecuteSourceScript, ExecuteSourceNetwork, ExecuteSourceInformative, ExecuteSourceCopyPaste };
+
 class NxObjectDispatchProperty {
+protected:
+    QMap<ExecuteSource, QStringList> propertiesToSerialize;
 public:
-    virtual quint8 getType() const = 0;
-    virtual const QString getTypeStr() const = 0;
-    virtual void dispatchProperty(const QString & property, const QVariant & value) = 0;
-    virtual const QVariant getProperty(const QString & property) const = 0;
+    static ExecuteSource source;
+
+public:
+    void propertyChanged(const char *_property);
+
+public:
+    virtual quint8         getType() const    { return 0;         }
+    virtual const QString  getTypeStr() const { return QString(); }
+    virtual void           dispatchProperty(const char *_property, const QVariant & value) = 0;
+    virtual const QVariant getProperty(const char *_property) const = 0;
 };
 
 

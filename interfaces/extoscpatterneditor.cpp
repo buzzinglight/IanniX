@@ -19,11 +19,10 @@
 #include "extoscpatterneditor.h"
 #include "ui_extoscpatterneditor.h"
 
-ExtOscPatternEditor::ExtOscPatternEditor(NxObjectFactoryInterface *_factory, QWidget *parent) :
+ExtOscPatternEditor::ExtOscPatternEditor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ExtOscPatternEditor) {
     ui->setupUi(this);
-    factory = _factory;
     textLock = false;
     itemLock = false;
     patternNbValues = 0;
@@ -35,6 +34,10 @@ ExtOscPatternEditor::ExtOscPatternEditor(NxObjectFactoryInterface *_factory, QWi
     trees << qMakePair(ui->argument4Combo, qMakePair(ui->argument4Label, ui->argument4Clear));
     trees << qMakePair(ui->argument5Combo, qMakePair(ui->argument5Label, ui->argument5Clear));
     trees << qMakePair(ui->argument6Combo, qMakePair(ui->argument6Label, ui->argument6Clear));
+    trees << qMakePair(ui->argument7Combo, qMakePair(ui->argument7Label, ui->argument7Clear));
+    trees << qMakePair(ui->argument8Combo, qMakePair(ui->argument8Label, ui->argument8Clear));
+    trees << qMakePair(ui->argument9Combo, qMakePair(ui->argument9Label, ui->argument9Clear));
+    trees << qMakePair(ui->argument10Combo, qMakePair(ui->argument10Label, ui->argument10Clear));
 
     foreach(const HelpInfo &info, Help::categories["protocols"].infos)
         ui->protocolCombo->addItem(info.keyword + QString(" - ") + info.title);
@@ -73,7 +76,7 @@ const QString ExtOscPatternEditor::getPattern() const {
     else if(protocol == "udp")
         messagePattern += getItem(ui->hostIpCombo, "ip_out") + ":" + getItem(ui->portCombo, 57120);
     else if(protocol == "midi")
-        messagePattern += getItem(ui->hostMidiCombo, "midi_out") + getItem(ui->addressMidiCombo, "/cc", "/");
+        messagePattern += getItem(ui->hostMidiCombo, "midi_out") + getItem(ui->addressMidiCombo, "/ccf", "/");
 
     for(quint16 treeIndex = 0 ; treeIndex < trees.count() ; treeIndex++) {
         QString value = getItem(trees.at(treeIndex).first, "");
@@ -151,22 +154,22 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
                 ui->addressOSCLabel->setVisible(false);
 
                 trees.at(0).second.first->setText(tr("MIDI CHANNEL"));
-                if(urlMessage.path().toLower() == "/note") {
+                if((urlMessage.path().toLower() == "/note") || (urlMessage.path().toLower() == "/notef")) {
                     trees.at(1).second.first->setText(tr("NOTE NUMBER"));
                     trees.at(2).second.first->setText(tr("VELOCITY"));
                     trees.at(3).second.first->setText(tr("DURATION"));
                     patternNbValues = 4;
                 }
-                else if(urlMessage.path().toLower() == "/pgm") {
+                else if((urlMessage.path().toLower() == "/pgm") || (urlMessage.path().toLower() == "/pgmf")) {
                     trees.at(1).second.first->setText(tr("PROGRAM ID"));
                     patternNbValues = 2;
                 }
-                else if(urlMessage.path().toLower() == "/cc") {
+                else if((urlMessage.path().toLower() == "/cc") || (urlMessage.path().toLower() == "/ccf")) {
                     trees.at(1).second.first->setText(tr("CONTROLLER ID"));
                     trees.at(2).second.first->setText(tr("VALUE"));
                     patternNbValues = 3;
                 }
-                else if(urlMessage.path().toLower() == "/bend") {
+                else if((urlMessage.path().toLower() == "/bend") || (urlMessage.path().toLower() == "/bendf")) {
                     trees.at(1).second.first->setText(tr("VALUE"));
                     patternNbValues = 2;
                 }
@@ -280,6 +283,10 @@ void ExtOscPatternEditor::clearApattern() {
     if(sender() == ui->argument4Clear)  setCurrentItem(trees.at(3).first, trees.at(3).second.first, "");
     if(sender() == ui->argument5Clear)  setCurrentItem(trees.at(4).first, trees.at(4).second.first, "");
     if(sender() == ui->argument6Clear)  setCurrentItem(trees.at(5).first, trees.at(5).second.first, "");
+    if(sender() == ui->argument7Clear)  setCurrentItem(trees.at(6).first, trees.at(6).second.first, "");
+    if(sender() == ui->argument8Clear)  setCurrentItem(trees.at(7).first, trees.at(7).second.first, "");
+    if(sender() == ui->argument9Clear)  setCurrentItem(trees.at(8).first, trees.at(8).second.first, "");
+    if(sender() == ui->argument10Clear)  setCurrentItem(trees.at(9).first, trees.at(9).second.first, "");
     if(sender() == ui->patternClear) {
         itemLock = true;
         textLock = true;
@@ -302,7 +309,7 @@ void ExtOscPatternEditor::fieldFocusIn() {
 void ExtOscPatternEditor::learn() {
     UiMessageBox *displayBox = new UiMessageBox();
     displayBox->display(tr("MIDI/OSC learn"), tr("Please send an event to IanniX\n\nMove a slider on your surface control or press a MIDI note…"));
-    QString message = factory->waitForMessage();
+    QString message = Application::current->waitForMessage();
     if(!message.isEmpty()) {
         if(message.contains("/note"))
             message = message + " 1";

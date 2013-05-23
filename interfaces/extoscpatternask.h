@@ -24,7 +24,7 @@
 #include <QDesktopWidget>
 #include "objects/nxobject.h"
 #include "interfaces/extoscpatterneditor.h"
-#include "interfaces/extmessage.h"
+#include "messages/message.h"
 
 namespace Ui {
     class ExtOscPatternAsk;
@@ -34,13 +34,12 @@ class ExtOscPatternAsk : public QDialog {
     Q_OBJECT
 
 public:
-    explicit ExtOscPatternAsk(NxObjectFactoryInterface *_factory, QWidget *parent, QList<NxObject *> *_objects);
+    explicit ExtOscPatternAsk(QWidget *parent, QList<NxObject *> *_objects);
     ~ExtOscPatternAsk();
 
 private:
     QList<NxObject*> *objects;
     QList<ExtOscPatternEditor*> patternLists;
-    NxObjectFactoryInterface *factory;
 protected:
     void changeEvent(QEvent *e);
     void closeEvent(QCloseEvent *);
@@ -52,9 +51,6 @@ public:
 public slots:
     void actionAddMessage();
     void actionRemoveMessage();
-    void help() {
-        QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Documentation/" + tr("EN") + "/index.html").absoluteFilePath().replace("\\", "/") + "#messages", QUrl::TolerantMode));
-    }
     void actionFieldFocus(QComboBox*,QPlainTextEdit*);
 
 private:

@@ -11,9 +11,9 @@
 function onCreate() {
 	//Clear score objects
 	run("clear");
-	run("registerTexture background 0 0 0 0 ./Tools/background.jpg");
+	run("registerTexture background");
 	run("rotate 0 0 0");
-	run("autosize 1");
+	
 	//Center on score origin
 	run("center 20 -13");
 	//100% zoom
@@ -1446,20 +1446,25 @@ function ajouterCurseur(info, param, control) {
 	run("add cursor " + param.id);
 	run("setGroup current " + param.group);
 	run("setCurve current " + info.id);
-	run("setSpeed current " + param.speed);
+	run("setSpeed current lock " + param.speed);
 	run("setWidth current 4.5");
-	run("setBoundsSource current " + info.bounds.xMin + " " + (info.bounds.yMax+info.yPos) + " " + info.bounds.xMax + " " + (info.bounds.yMin+info.yPos));
-	run("setBoundsTarget current 0 " + param.value_top + " 1 " + param.value_bottom);
+	run("setBoundsSource current " + info.bounds.xMin + " " + info.bounds.xMax + " " + (info.bounds.yMin+info.yPos) + " " + (info.bounds.yMax+info.yPos));
+	run("setBoundsTarget current "
+		+ (control.curveWidthFrom  * control.curve.bounds.xMax) + " " +
+		+ (control.curveWidthTo    * control.curve.bounds.xMax) + " " +
+		+ (control.curveHeightFrom * control.curve.bounds.yMax) + " " +
+		+ (control.curveHeightTo   * control.curve.bounds.yMax));
+
 	if(control != undefined)
-		run("setMessage current 20, osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y, direct:// setResize {(cursor_xPos>" + control.xThresh + ")?(" + control.curve.id + "):(-1)} {map(cursor_value_y," + param.value_bottom + "," + param.value_top + "," + (control.curveWidthFrom*control.curve.bounds.xMax) + "," + (control.curveWidthTo*control.curve.bounds.xMax) + ")} {map(cursor_value_y," + param.value_bottom + "," + param.value_top + "," + (control.curveHeightFrom*control.curve.bounds.yMax) + "," + (control.curveHeightTo*control.curve.bounds.yMax) + ")}");
+		run("setMessage current 20, osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y, direct:// setResize " + control.curve.id + " cursor_value_x cursor_value_y");
 	else
 		run("setMessage current 20, osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y");
 }
 
 
 /*
-    IanniX — a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 — IanniX Association
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

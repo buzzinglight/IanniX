@@ -7,16 +7,15 @@
 
 class HelpInfo {
 public:
-    explicit HelpInfo(const QString &_keyword = "", const QString &_title = "", const QString &_description = "", const QString &_syntax = "", const QString &_example = "", const QString &_snippet = "", const QString &_visuel = "") {
+    QString keyword, title, description, syntax;
+
+public:
+    explicit HelpInfo(const QString &_keyword = "", const QString &_title = "", const QString &_description = "", const QString &_syntax = "") {
         keyword     = _keyword;
         title       = _title;
         description = _description;
         syntax      = _syntax;
-        example     = _example;
-        snippet     = _snippet;
-        visuel      = _visuel;
     }
-    QString keyword, title, description, syntax, visuel, snippet, example;
 };
 
 class HelpCategory {

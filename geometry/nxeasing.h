@@ -28,13 +28,12 @@ private:
     QEasingCurve easing;
 
 public:
-    QPixmap getPixmap() const;
+    const QPixmap getPixmap() const;
 
 public:
     inline void setType(quint16 type)           { easing.setType((QEasingCurve::Type)type); }
     inline quint16 getType() const              { return easing.type(); }
     inline qreal getValue(qreal progress) const { return qBound(0., easing.valueForProgress(progress), 1.); }
-
 };
 
 #endif // NXEASING_H

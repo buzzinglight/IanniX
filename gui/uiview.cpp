@@ -24,67 +24,89 @@ UiView::UiView(QWidget *parent) :
     ui(new Ui::UiView) {
     ui->setupUi(this);
     isFullScreen = false;
+    freehandCurveId = 0;
+
+
+    //About
+    about = new UiAbout();
+
+    //Helper
+    help  = new UiHelp();
+    connect(&help->visibility, SIGNAL(triggered(bool)), SLOT(showHelp()));
+    connect(ui->statusBar, SIGNAL(messageChanged(QString)), help, SLOT(statusHelp(QString)));
+    ui->statusBar->setVisible(false);
+    help->visibility.setAction(ui->actionShowHelp, "showHelp");
+
+    ui->render->defaultStatusTip = ui->render->statusTip();
+    ui->render->curveStatusTip   = ui->actionDrawFreeCurve->statusTip().remove(tr("\nPress ESC or click again on the toolbar button to stop edition."));
+    ui->render->cursorStatusTip  = ui->actionAddFreeCursor->statusTip().remove(tr("\nPress ESC or click again on the toolbar button to stop edition."));
+    ui->render->triggerStatusTip = ui->actionDrawTriggers ->statusTip().remove(tr("\nPress ESC or click again on the toolbar button to stop edition."));
 
     QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.center() - rect().center());
 
-    connect(ui->actionNew, SIGNAL(triggered()), ui->render, SLOT(actionNew()));
-    connect(ui->actionOpen, SIGNAL(triggered()), ui->render, SLOT(actionOpen()));
-    connect(ui->actionSave, SIGNAL(triggered()), ui->render, SLOT(actionSave()));
-    connect(ui->actionSave_all, SIGNAL(triggered()), ui->render, SLOT(actionSave_all()));
-    connect(ui->actionDuplicateScore, SIGNAL(triggered()), ui->render, SLOT(actionDuplicateScore()));
-    connect(ui->actionRename, SIGNAL(triggered()), ui->render, SLOT(actionRename()));
-    connect(ui->actionRemove, SIGNAL(triggered()), ui->render, SLOT(actionRemove()));
-    connect(ui->actionImoprt_SVG, SIGNAL(triggered()), SLOT(actionImportSVG()));
-    connect(ui->actionImoprt_Image, SIGNAL(triggered()), SLOT(actionImportImage()));
+    connect(ui->render, SIGNAL(editingMove(NxPoint,bool)), SLOT(editingMove(NxPoint,bool)));
+    connect(ui->render, SIGNAL(editingStart(NxPoint)),     SLOT(editingStart(NxPoint)));
+    connect(ui->render, SIGNAL(editingStop()),             SLOT(editingStop()));
+
+    connect(ui->actionNew,               SIGNAL(triggered()), ui->render, SLOT(actionNew()));
+    connect(ui->actionOpen,              SIGNAL(triggered()), ui->render, SLOT(actionOpen()));
+    connect(ui->actionSave,              SIGNAL(triggered()), ui->render, SLOT(actionSave()));
+    connect(ui->actionImoprt_SVG,        SIGNAL(triggered()), SLOT(actionImportSVG()));
     connect(ui->actionImoprt_Background, SIGNAL(triggered()), SLOT(actionImportBackground()));
-    connect(ui->actionImoprt_Text, SIGNAL(triggered()), SLOT(actionImportText()));
+    connect(ui->actionImoprt_Text,       SIGNAL(triggered()), SLOT(actionImportText()));
 
-    connect(ui->actionRedo, SIGNAL(triggered()), ui->render, SLOT(actionRedo()));
-    connect(ui->actionUndo, SIGNAL(triggered()), ui->render, SLOT(actionUndo()));
-    connect(ui->actionCopy, SIGNAL(triggered()), ui->render, SLOT(actionCopy()));
-    connect(ui->actionPasteScript, SIGNAL(triggered()), SLOT(actionPasteScript()));
-    connect(ui->actionCopyScript, SIGNAL(triggered()), ui->render, SLOT(actionCopyScript()));
-    connect(ui->actionPaste, SIGNAL(triggered()), ui->render, SLOT(actionPaste()));
-    connect(ui->actionDuplicate, SIGNAL(triggered()), ui->render, SLOT(actionDuplicate()));
-    connect(ui->actionCut, SIGNAL(triggered()), ui->render, SLOT(actionCut()));
-    connect(ui->actionSelect_all, SIGNAL(triggered()), ui->render, SLOT(actionSelect_all()));
-    connect(ui->actionDelete, SIGNAL(triggered()), ui->render, SLOT(actionDelete()));
-    connect(ui->actionSync, SIGNAL(triggered()), ui->render, SLOT(actionSync()));
-    connect(ui->actionSnapshot, SIGNAL(triggered()), SLOT(actionSnapshot()));
-    connect(ui->actionResize, SIGNAL(triggered()), SLOT(actionResize()));
+    connect(ui->actionRedo,              SIGNAL(triggered()), ui->render, SLOT(actionRedo()));
+    connect(ui->actionUndo,              SIGNAL(triggered()), ui->render, SLOT(actionUndo()));
+    connect(ui->actionCopy,              SIGNAL(triggered()), ui->render, SLOT(actionCopy()));
+    connect(ui->actionPaste,             SIGNAL(triggered()), ui->render, SLOT(actionPaste()));
+    connect(ui->actionDuplicate,         SIGNAL(triggered()), ui->render, SLOT(actionDuplicate()));
+    connect(ui->actionCut,               SIGNAL(triggered()), ui->render, SLOT(actionCut()));
+    connect(ui->actionSelect_all,        SIGNAL(triggered()), ui->render, SLOT(actionSelect_all()));
+    connect(ui->actionDelete,            SIGNAL(triggered()), ui->render, SLOT(actionDelete()));
+    connect(ui->actionResize,            SIGNAL(triggered()), SLOT(actionResize()));
+    connect(ui->actionSnapshot,          SIGNAL(triggered()), SLOT(actionSnapshot()));
 
-    connect(ui->actionFullscreen, SIGNAL(triggered()), SLOT(actionFullscreen()));
+    connect(ui->actionZoom_in,           SIGNAL(triggered()), ui->render, SLOT(zoomIn()));
+    connect(ui->actionZoom_out,          SIGNAL(triggered()), ui->render, SLOT(zoomOut()));
+    connect(ui->actionZoom_initial,      SIGNAL(triggered()), ui->render, SLOT(zoomInitial()));
+    connect(ui->actionAbout,             SIGNAL(triggered()), about, SLOT(show()));
+    connect(ui->actionQuit,              SIGNAL(triggered()), SLOT(close()));
+    connect(ui->actionToggle_Inspector,  SIGNAL(triggered()), SLOT(showInspector()));
+    connect(ui->actionToggle_Transport,  SIGNAL(triggered()), SLOT(showTransport()));
+    connect(ui->actionPatchesFolder,     SIGNAL(triggered()), SLOT(actionPatchesFolder()));
+    Global::triggerAutosize       .setAction(ui->actionToggle_Autosize,          "guiTriggerAutosize");
+    Global::colorTheme            .setAction(ui->actionLight,                    "guiColorTheme");
+    Global::paintAxisGrid         .setAction(ui->actionGrid,                     "guiPaintAxisGrid");
+    Global::paintLabel            .setAction(ui->actionToggleLabel,              "guiPaintLabel");
+    Global::mouseSnapX            .setAction(ui->actionSnapXGrid,                "guiMouseSnapX");
+    Global::mouseSnapY            .setAction(ui->actionSnapYGrid,                "guiMouseSnapY");
+    Global::allowLockPos          .setAction(ui->actionLockPos,                  "guiAllowLockPos");
+    Global::allowSelectionCursors .setAction(ui->actionAllow_cursors_selection,  "guiAllowSelectionCursors");
+    Global::allowSelectionCurves  .setAction(ui->actionAllow_curves_selection,   "guiAllowSelectionCurves");
+    Global::allowSelectionTriggers.setAction(ui->actionAllow_triggers_selection, "guiAllowSelectionTriggers");
+    Global::allowPlaySelected     .setAction(ui->actionPlaySelected,             "guiAllowPlaySelected");
+
+    connect(ui->actionFullscreen, SIGNAL(triggered()), SLOT(goToFullscreen()));
     connect(ui->actionPerformance, SIGNAL(triggered()), SLOT(actionPerformance()));
-    connect(ui->actionToggle_Inspector, SIGNAL(triggered()), SLOT(actionToggle_Inspector()));
-    connect(ui->actionToggle_Transport, SIGNAL(triggered()), SLOT(actionToggle_Transport()));
-    connect(ui->actionToggle_Autosize, SIGNAL(triggered()), SLOT(actionToggle_Autosize()));
-    connect(ui->actionGrid, SIGNAL(triggered()), SLOT(actionGrid()));
-    connect(ui->actionZoom_in, SIGNAL(triggered()), SLOT(actionZoom_in()));
-    connect(ui->actionZoom_out, SIGNAL(triggered()), SLOT(actionZoom_out()));
-    connect(ui->actionZoom_initial, SIGNAL(triggered()), SLOT(actionZoom_initial()));
-    connect(ui->actionLight, SIGNAL(triggered(bool)), ui->render, SLOT(setColorTheme(bool)));
-
-    connect(ui->actionToggleLabel, SIGNAL(triggered()), SLOT(actionToggleLabel()));
-    connect(ui->actionLockPos, SIGNAL(triggered()), SLOT(actionLockPos()));
-    connect(ui->actionPatchesFolder, SIGNAL(triggered()), SLOT(actionPatchesFolder()));
-    connect(ui->actionQuit, SIGNAL(triggered()), SLOT(actionQuit()));
-    connect(ui->actionAbout, SIGNAL(triggered()), SLOT(actionAbout()));
 
     connect(ui->actionPlay_pause, SIGNAL(triggered()), SLOT(actionPlay_pause()));
     connect(ui->actionFast_rewind, SIGNAL(triggered()), SLOT(actionFast_rewind()));
 
-    connect(ui->actionDrawFreeCurve, SIGNAL(triggered()), SLOT(actionDrawFreeCurve()));
-    connect(ui->actionDrawPointCurve, SIGNAL(triggered()), SLOT(actionDrawPointCurve()));
-    connect(ui->actionDrawTriggers, SIGNAL(triggered()), SLOT(actionDrawTriggers()));
-    connect(ui->actionAddFreeCursor, SIGNAL(triggered()), SLOT(actionAddFreeCursor()));
-    connect(ui->actionAddCircleCurve, SIGNAL(triggered()), SLOT(actionCircleCurve()));
-    connect(ui->actionSnapXGrid, SIGNAL(triggered()), SLOT(actionSnapXGrid()));
-    connect(ui->actionSnapYGrid, SIGNAL(triggered()), SLOT(actionSnapYGrid()));
-    connect(ui->actionSnapZGrid, SIGNAL(triggered()), SLOT(actionSnapZGrid()));
-    connect(ui->actionShowEditor, SIGNAL(triggered()), SLOT(actionShowEditor()));
-    connect(ui->actionShowTimer, SIGNAL(triggered()), SLOT(actionShowTimer()));
-    connect(ui->actionReloadScript, SIGNAL(triggered()), SLOT(actionReloadScript()));
+    connect(ui->actionDrawFreeCurve,        SIGNAL(triggered()), SLOT(actionDrawFreeCurve()));
+    connect(ui->actionDrawPointCurve,       SIGNAL(triggered()), SLOT(actionDrawPointCurve()));
+    connect(ui->actionDrawFreeCurveSimple,  SIGNAL(triggered()), SLOT(actionDrawFreeCurveSimple()));
+    connect(ui->actionDrawPointCurveSimple, SIGNAL(triggered()), SLOT(actionDrawPointCurveSimple()));
+    connect(ui->actionDrawTriggers,         SIGNAL(triggered()), SLOT(actionDrawTriggers()));
+    connect(ui->actionAddFreeCursor,        SIGNAL(triggered()), SLOT(actionAddFreeCursor()));
+    connect(ui->actionAddCircleCurve,       SIGNAL(triggered()), SLOT(actionCircleCurve()));
+    connect(ui->actionAddMathCurve,         SIGNAL(triggered()), SLOT(actionAddMathCurve()));
+    connect(ui->actionAddMathCurveSimple,   SIGNAL(triggered()), SLOT(actionAddMathCurveSimple()));
+    connect(ui->actionAddTimeline,          SIGNAL(triggered()), SLOT(actionAddTimeline()));
+
+    connect(ui->actionShowEditor,     SIGNAL(triggered()), SLOT(showEditor()));
+    connect(ui->actionShowTimer,      SIGNAL(triggered()), SLOT(showTimer()));
+    connect(ui->actionReloadScript,   SIGNAL(triggered()), SLOT(actionReloadScript()));
 
     connect(ui->action10Seconds, SIGNAL(triggered()), SLOT(gridChange()));
     connect(ui->action1second, SIGNAL(triggered()), SLOT(gridChange()));
@@ -93,34 +115,22 @@ UiView::UiView(QWidget *parent) :
     connect(ui->action10Milliseconds, SIGNAL(triggered()), SLOT(gridChange()));
     connect(ui->actionCustomValue, SIGNAL(triggered()), SLOT(gridChange()));
 
-    connect(ui->actionOpaque, SIGNAL(triggered()), SLOT(gridOpacityChange()));
-    connect(ui->action75_opaque, SIGNAL(triggered()), SLOT(gridOpacityChange()));
-    connect(ui->action50_opaque, SIGNAL(triggered()), SLOT(gridOpacityChange()));
-    connect(ui->action25_opaque, SIGNAL(triggered()), SLOT(gridOpacityChange()));
-    connect(ui->action10_opaque, SIGNAL(triggered()), SLOT(gridOpacityChange()));
-
-    connect(ui->actionAllow_cursors_selection,  SIGNAL(changed()), SLOT(actionSelectionModeChange()));
-    connect(ui->actionAllow_curves_selection,   SIGNAL(changed()), SLOT(actionSelectionModeChange()));
-    connect(ui->actionAllow_triggers_selection, SIGNAL(changed()), SLOT(actionSelectionModeChange()));
-
-    connect(ui->actionAlign_bottom, SIGNAL(triggered()), SLOT(actionAlign_bottom()));
-    connect(ui->actionAlign_center, SIGNAL(triggered()), SLOT(actionAlign_center()));
-    connect(ui->actionAlign_left, SIGNAL(triggered()),   SLOT(actionAlign_left()));
-    connect(ui->actionAlign_middle, SIGNAL(triggered()), SLOT(actionAlign_middle()));
-    connect(ui->actionAlign_right, SIGNAL(triggered()),  SLOT(actionAlign_right()));
-    connect(ui->actionAlign_top, SIGNAL(triggered()),    SLOT(actionAlign_top()));
-    connect(ui->actionDistributeH, SIGNAL(triggered()),  SLOT(actionDistributeH()));
-    connect(ui->actionDistributeV, SIGNAL(triggered()),  SLOT(actionDistributeV()));
-    connect(ui->actionAlign_circle, SIGNAL(triggered()), SLOT(actionAlign_circle()));
+    connect(ui->actionAlign_bottom,  SIGNAL(triggered()), SLOT(actionAlign_bottom()));
+    connect(ui->actionAlign_center,  SIGNAL(triggered()), SLOT(actionAlign_center()));
+    connect(ui->actionAlign_left,    SIGNAL(triggered()), SLOT(actionAlign_left()));
+    connect(ui->actionAlign_middle,  SIGNAL(triggered()), SLOT(actionAlign_middle()));
+    connect(ui->actionAlign_right,   SIGNAL(triggered()), SLOT(actionAlign_right()));
+    connect(ui->actionAlign_top,     SIGNAL(triggered()), SLOT(actionAlign_top()));
+    connect(ui->actionDistributeH,   SIGNAL(triggered()), SLOT(actionDistributeH()));
+    connect(ui->actionDistributeV,   SIGNAL(triggered()), SLOT(actionDistributeV()));
+    connect(ui->actionAlign_circle,  SIGNAL(triggered()), SLOT(actionAlign_circle()));
     connect(ui->actionAlign_ellipse, SIGNAL(triggered()), SLOT(actionAlign_ellipse()));
 
-    connect(ui->actionHelp, SIGNAL(triggered()), SLOT(help()));
 
 #ifdef Q_OS_MAC
     delete ui->renderPreview;
     ui->renderPreview = new UiRenderPreview(ui->pagePerf, ui->render);
     ui->pagePerf->layout()->addWidget(ui->renderPreview);
-
     fullscreenDisplays = QApplication::desktop();
     connect(fullscreenDisplays, SIGNAL(screenCountChanged(int)), SLOT(fullscreenDisplaysCountChanged()));
     fullscreenDisplaysCountChanged();
@@ -134,18 +144,6 @@ UiView::~UiView() {
     delete ui;
 }
 
-void UiView::toggleInspector(bool val) {
-    ui->actionToggle_Inspector->setChecked(val);
-}
-void UiView::toggleTransport(bool val) {
-    ui->actionToggle_Transport->setChecked(val);
-}
-void UiView::toggleEditor(bool val) {
-    ui->actionShowEditor->setChecked(val);
-}
-void UiView::toggleTimer(bool val) {
-    ui->actionShowTimer->setChecked(val);
-}
 void UiView::toggleFullscreen(bool val) {
     ui->actionFullscreen->setChecked(val);
 }
@@ -165,7 +163,7 @@ void UiView::changeEvent(QEvent *e) {
 UiRender* UiView::getRender() const {
     return ui->render;
 }
-UiTransport* UiView::getTransport() const {
+Transport* UiView::getTransport() const {
     return ui->transport;
 }
 UiInspector* UiView::getInspector() const {
@@ -183,6 +181,10 @@ void UiView::keyPressEvent(QKeyEvent *event) {
 }
 void UiView::closeEvent(QCloseEvent *event) {
     emit(actionRouteCloseEvent(event));
+    if(about)
+        about->close();
+    if(help)
+        help->close();
 }
 
 /*
@@ -199,7 +201,8 @@ void UiView::fullscreenDisplaysCountChanged() {
     fullscreenButtons.clear();
 
     for(quint8 fullscreenDisplayIndex = 0 ; fullscreenDisplayIndex < fullscreenDisplays->screenCount() ; fullscreenDisplayIndex++) {
-        QPushButton *fullscreenButton = new QPushButton(tr("FULLSCREEN ON DISPLAY %1 (%2 x %3)").arg(fullscreenDisplayIndex+1).arg(fullscreenDisplays->screenGeometry(fullscreenDisplayIndex).width()).arg(fullscreenDisplays->screenGeometry(fullscreenDisplayIndex).height()), ui->pagePerf);
+        QPushButton *fullscreenButton = new QPushButton(tr("DISPLAY %1 (%2 x %3)").arg(fullscreenDisplayIndex+1).arg(fullscreenDisplays->screenGeometry(fullscreenDisplayIndex).width()).arg(fullscreenDisplays->screenGeometry(fullscreenDisplayIndex).height()), ui->pagePerf);
+        fullscreenButton->setToolTip(tr("Moves the render window on this video output and switches to fullscreen"));
         ui->performanceLayout->addWidget(fullscreenButton);
         connect(fullscreenButton, SIGNAL(released()), SLOT(fullscreenDisplaysSelected()));
         fullscreenButtons.append(fullscreenButton);
@@ -208,16 +211,14 @@ void UiView::fullscreenDisplaysCountChanged() {
 void UiView::fullscreenDisplaysSelected() {
     qint8 index = fullscreenButtons.indexOf((QPushButton*)sender());
     if(index >= 0)
-        actionFullscreen(index);
+        goToFullscreen(index);
 }
 
-void UiView::actionFullscreen() {
-    if(ui->render->parent())
-        actionFullscreen(fullscreenDisplays->screenNumber(pos()));
-    else
-        actionFullscreen(fullscreenDisplays->screenNumber(ui->render->pos()));
+void UiView::goToFullscreen() {
+    if(ui->render->parent())    goToFullscreen(fullscreenDisplays->screenNumber(pos()));
+    else                        goToFullscreen(fullscreenDisplays->screenNumber(ui->render->pos()));
 }
-void UiView::actionFullscreen(quint8 screenIndex) {
+void UiView::goToFullscreen(quint8 screenIndex) {
     if(ui->render->parent()) {
         if(isFullScreen) {
             setWindowState(windowState() & ~Qt::WindowFullScreen);
@@ -267,25 +268,21 @@ void UiView::actionFullscreen(quint8 screenIndex) {
         ui->render->show();
         //ui->render->activateWindow();
     }
-    ui->render->selectionClear(true);
+    Application::render->selectionClear(true);
 }
 void UiView::escFullscreen() {
     if(isFullScreen)
-        actionFullscreen();
+        goToFullscreen();
 }
 
-void UiView::actionGrid() {
-    if(ui->render->getRenderOptions()->paintAxisGrid) {
-        ui->render->getRenderOptions()->paintAxisGrid = false;
-        ui->render->getRenderOptions()->paintAxisMain = false;
-        ui->actionGrid->setChecked(false);
-    }
-    else {
-        ui->render->getRenderOptions()->paintAxisGrid = true;
-        ui->render->getRenderOptions()->paintAxisMain = true;
-        ui->actionGrid->setChecked(true);
-    }
+void UiView::actionPlay_pause() {
+    if(Transport::timerOk)  Application::current->execute(QString("%1").arg(COMMAND_STOP), ExecuteSourceGui);
+    else                    Application::current->execute(QString("%1").arg(COMMAND_PLAY), ExecuteSourceGui);
 }
+void UiView::actionFast_rewind() {
+    Application::current->execute(QString("%1").arg(COMMAND_FF), ExecuteSourceGui);
+}
+
 
 void UiView::actionPerformance() {
     if(ui->actionPerformance->isChecked()) {
@@ -299,39 +296,12 @@ void UiView::actionPerformance() {
     }
 }
 
-void UiView::actionZoom_in() {
-    ui->render->zoomIn();
-}
-void UiView::actionZoom_out() {
-    ui->render->zoomOut();
-}
-void UiView::actionZoom_initial() {
-    ui->render->zoomInitial();
-}
-void UiView::actionToggleLabel() {
-    ui->render->getRenderOptions()->paintLabel = ui->actionToggleLabel->isChecked();
-}
-void UiView::setToggleLabel(bool val) {
-    ui->actionToggleLabel->setChecked(val);
-    actionToggleLabel();
-}
-bool UiView::getToggleLabel() {
-    return ui->actionToggleLabel->isChecked();
-}
 
-void UiView::actionSelectionModeChange() {
-    emit(actionRouteSelectionModeChange(ui->actionAllow_cursors_selection->isChecked(), ui->actionAllow_curves_selection->isChecked(), ui->actionAllow_triggers_selection->isChecked()));
-}
 
 void UiView::actionImportSVG() {
     QString fileName = QFileDialog::getOpenFileName(0, tr("Select a SVG file…"), QDir::currentPath(), tr("SVG Files") + " (*.svg)");
     if(!fileName.isEmpty())
         emit(actionRouteImportSVG(fileName));
-}
-void UiView::actionImportImage() {
-    QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images") + " (*.png *.jpg *.jpeg)");
-    if(!fileName.isEmpty())
-        emit(actionRouteImportImage(fileName));
 }
 void UiView::actionImportBackground() {
     QString fileName = QFileDialog::getOpenFileName(0, tr("Select an image…"), QDir::currentPath(), tr("Images") + " (*.png *.jpg *.jpeg)");
@@ -347,44 +317,64 @@ void UiView::actionImportText() {
 
 void UiView::actionSnapshot() {
     bool ok = false;
-    qreal scaleFactor = (new UiMessageBox())->getDouble(tr("Snaptshot"), tr("Snapshot will be saved on your desktop.\nPlease enter a scale factor:"), QPixmap(":/infos/res_info_export.png"), 4, 0.1, 30, 0.25, 2, "times current screen size", &ok);
+    qreal scaleFactor = (new UiMessageBox())->getDouble(tr("Score Snapshot"), tr("Snapshot will be saved on your desktop.\nPlease enter a scale factor:"), QPixmap(":/infos/res_info_export.png"), 4, 0.1, 30, 0.25, 2, "times current screen size", &ok);
     if(ok)
-        emit(actionRouteSnaphot(scaleFactor));
+        ui->render->capture(scaleFactor);
 }
 
-void UiView::actionLockPos() {
-    if(ui->actionDrawTriggers->isChecked()) {
-        ui->actionDrawTriggers->setChecked(false);
-        emit(actionRouteDrawTriggers());
+void UiView::showTimer() {
+    ui->transport->bigTimer->toolbarButton = ui->actionShowTimer;
+    if(ui->transport->bigTimer->isVisible())    ui->transport->bigTimer->close();
+    else                                        ui->transport->bigTimer->show();
+}
+void UiView::showHelp() {
+    if(help->visibility) {
+        if(help->pos() == QPoint(0, 0))
+            help->move(QPoint(qMax(0, geometry().left() - help->width()), geometry().center().y() - help->height()));
+        UiHelp::statusHelp(ui->render);
+        help->show();
     }
-    else if(ui->actionDrawPointCurve->isChecked()) {
-        ui->actionDrawPointCurve->setChecked(false);
-        emit(actionRouteDrawPointCurve());
-    }
-    else if(ui->actionDrawFreeCurve->isChecked()) {
-        ui->actionDrawFreeCurve->setChecked(false);
-        emit(actionRouteDrawFreeCurve());
-    }
-    ui->render->setCanObjectDrag(!ui->actionLockPos->isChecked());
+    else
+        help->close();
+}
+void UiView::showEditor() {
+    ui->transport->editor->toolbarButton = ui->actionShowEditor;
+    if(ui->transport->editor->isVisible())  ui->transport->editor->close();
+    else                                    ui->transport->editor->show();
+}
+void UiView::showTransport() {
+    ui->transport->toolbarButton = ui->actionToggle_Transport;
+    if(ui->transport->isVisible())   ui->transport->parentWidget()->close();
+    else                             ui->transport->parentWidget()->show();
+}
+void UiView::showInspector() {
+    ui->inspector->toolbarButton = ui->actionToggle_Inspector;
+    if(ui->inspector->isVisible())    ui->inspector->parentWidget()->close();
+    else                              ui->inspector->parentWidget()->show();
 }
 
-void UiView::setColorTheme(bool val) {
-    ui->actionLight->setChecked(val);
-}
 
 void UiView::unToogleDraw(quint16 id) {
-    if(id == 1)
+    if(id == 1) {
         ui->actionDrawFreeCurve->setChecked(false);
-    else if(id == 2)
+        ui->actionDrawFreeCurveSimple->setChecked(false);
+    }
+    else if(id == 2) {
         ui->actionDrawPointCurve->setChecked(false);
-    else if(id == 3)
+        ui->actionDrawPointCurveSimple->setChecked(false);
+    }
+    else if(id == 3) {
         ui->actionDrawTriggers->setChecked(false);
-    else if(id == 4)
+    }
+    else if(id == 4) {
         ui->actionAddCircleCurve->setChecked(false);
+    }
     else {
         ui->actionDrawTriggers->setChecked(false);
         ui->actionDrawFreeCurve->setChecked(false);
+        ui->actionDrawFreeCurveSimple->setChecked(false);
         ui->actionDrawPointCurve->setChecked(false);
+        ui->actionDrawPointCurveSimple->setChecked(false);
         ui->actionAddCircleCurve->setChecked(false);
     }
 }
@@ -393,20 +383,20 @@ void UiView::gridChange() {
     QAction *action = (QAction*)sender();
     bool ok = true;
     if(action == ui->action10Seconds)
-        actionRouteGridChange(10);
+        Global::axisGrid = 10;
     else if(action == ui->action1second)
-        actionRouteGridChange(1);
+        Global::axisGrid = 1;
     else if(action == ui->action500Milliseconds)
-        actionRouteGridChange(0.5);
+        Global::axisGrid = 0.5;
     else if(action == ui->action100Milliseconds)
-        actionRouteGridChange(0.1);
+        Global::axisGrid = 0.1;
     else if(action == ui->action10Milliseconds)
-        actionRouteGridChange(0.01);
+        Global::axisGrid = 0.01;
     else if(action == ui->actionCustomValue) {
         qreal val = (new UiMessageBox())->getDouble(tr("Custom grid value"), tr("Enter the desired grid time value in seconds:"), 0.500, 0.001, 999, 0.1, 3, "seconds", &ok);
         if(ok) {
             ui->actionCustomValue->setText(tr("Custom value:") + QString(" %1 ").arg(val) + tr("sec"));
-            actionRouteGridChange(val);
+            Global::axisGrid = val;
         }
     }
     if(ok) {
@@ -419,36 +409,11 @@ void UiView::gridChange() {
         action->setChecked(true);
     }
 }
-void UiView::gridOpacityChange() {
-    QAction *action = (QAction*)sender();
-    bool ok = true;
-    if(action == ui->actionOpaque)
-        actionRouteGridOpacityChange(2);
-    else if(action == ui->action75_opaque)
-        actionRouteGridOpacityChange(1.5);
-    else if(action == ui->action50_opaque)
-        actionRouteGridOpacityChange(1);
-    else if(action == ui->action25_opaque)
-        actionRouteGridOpacityChange(0.5);
-    else if(action == ui->action10_opaque)
-        actionRouteGridOpacityChange(0.3);
-    if(ok) {
-        ui->actionOpaque->setChecked(false);
-        ui->action75_opaque->setChecked(false);
-        ui->action50_opaque->setChecked(false);
-        ui->action25_opaque->setChecked(false);
-        ui->action10_opaque->setChecked(false);
-        action->setChecked(true);
-    }
-}
 
-void UiView::toggleAutosize(bool val) {
-    ui->actionToggle_Autosize->setChecked(val);
-}
 
 void UiView::actionResize() {
     QSize currentSize = ui->render->size();
-    QStringList newSizes = (new UiMessageBox())->getText(tr("Resize viewport"), tr("New viewport size"), tr("%1 x %2").arg(currentSize.width()).arg(currentSize.height())).split("x", QString::SkipEmptyParts);
+    QStringList newSizes = (new UiMessageBox())->getText(tr("Viewport Resize"), tr("New viewport size:"), tr("%1 x %2").arg(currentSize.width()).arg(currentSize.height())).split("x", QString::SkipEmptyParts);
     if(newSizes.count() == 2) {
         QSize newSize(newSizes.at(0).toUInt(), newSizes.at(1).toUInt());
         if((newSize.width() > 0) && (newSize.height() > 0))
@@ -459,3 +424,173 @@ void UiView::actionResize(QSize newSize) {
     resize(size() + newSize - ui->render->size());
 }
 
+
+
+
+
+
+
+void UiView::actionDrawFreeCurve(bool cursor) {
+    if((Global::editingMode == EditingModeFree) && (Global::editing))
+        editingStop();
+    else {
+        freehandCurveNeedsCursor = cursor;
+        unToogleDraw(2);
+        unToogleDraw(3);
+        unToogleDraw(4);
+        ui->render->setEditingMode(EditingModeFree);
+    }
+}
+void UiView::actionDrawPointCurve(bool cursor) {
+    if((Global::editingMode == EditingModePoint) && (Global::editing))
+        editingStop();
+    else {
+        freehandCurveNeedsCursor = cursor;
+        unToogleDraw(1);
+        unToogleDraw(3);
+        unToogleDraw(4);
+        ui->render->setEditingMode(EditingModePoint);
+    }
+}
+void UiView::actionDrawTriggers() {
+    if((Global::editingMode == EditingModeTriggers) && (Global::editing))
+        editingStop();
+    else {
+        unToogleDraw(1);
+        unToogleDraw(2);
+        unToogleDraw(4);
+        ui->render->setEditingMode(EditingModeTriggers);
+    }
+}
+void UiView::actionAddTimeline() {
+    unToogleDraw(1);
+    unToogleDraw(2);
+    unToogleDraw(3);
+    unToogleDraw(4);
+    Application::render->selectionClear(true);
+    quint16 id1 = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
+    Application::current->execute("setPointAt          " + QString::number(id1) + " 0 -5 0", ExecuteSourceGui);
+    Application::current->execute("setPointAt          " + QString::number(id1) + " 1  5 0", ExecuteSourceGui);
+    quint16 id2 = Application::current->execute("add cursor auto", ExecuteSourceGui).toUInt();
+    Application::current->execute("setWidth            " + QString::number(id2) + " 5", ExecuteSourceGui);
+    Application::current->execute("setCurve            " + QString::number(id2) + " lastCurve", ExecuteSourceGui);
+    Application::current->execute("setBoundsSourceMode " + QString::number(id2) + " 1", ExecuteSourceGui);
+    Application::current->execute("setMessage          " + QString::number(id2) + " 20, " + Global::defaultMessageCurve, ExecuteSourceGui);
+    ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id1));
+    ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id2));
+}
+void UiView::actionAddMathCurve() {
+    unToogleDraw(1);
+    unToogleDraw(2);
+    unToogleDraw(3);
+    unToogleDraw(4);
+    Application::render->selectionClear(true);
+    quint16 id = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
+    Application::current->execute("setEquation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), cos(4*t*PI)", ExecuteSourceGui);
+    ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id));
+    ui->inspector->showSpaceTab();
+    id = Application::current->execute("add cursor auto", ExecuteSourceGui).toUInt();
+    Application::current->execute("setCurve " + QString::number(id) + " lastCurve", ExecuteSourceGui);
+}
+void UiView::actionAddMathCurveSimple() {
+    unToogleDraw(1);
+    unToogleDraw(2);
+    unToogleDraw(3);
+    unToogleDraw(4);
+    Application::render->selectionClear(true);
+    quint16 id = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
+    Application::current->execute("setEquation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), 0", ExecuteSourceGui);
+    ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id));
+    ui->inspector->showSpaceTab();
+}
+void UiView::actionAddFreeCursor() {
+    bool freeCursor = true;
+    unToogleDraw(1);
+    unToogleDraw(2);
+    unToogleDraw(3);
+    unToogleDraw(4);
+    editingStop();
+    Application::current->pushSnapshot();
+    foreach(const NxObject *object, *(ui->render->getSelection())) {
+        if(object->getType() == ObjectsTypeCurve) {
+            freeCursor = false;
+            NxCurve *curve = (NxCurve*)object;
+            quint16 cursorId = Application::current->execute(QString("add cursor auto"), ExecuteSourceGui).toUInt();
+            Application::current->execute(QString("setCurve %1 %2").arg(cursorId).arg(curve->getId()), ExecuteSourceGui);
+            Application::current->execute(QString("setOffset %1 %2 0 end").arg(cursorId).arg(curve->getMaxOffset() / 2), ExecuteSourceGui);
+        }
+    }
+    if(freeCursor)
+        Application::current->execute(QString("add cursor auto"), ExecuteSourceGui).toUInt();
+}
+
+
+void UiView::actionCircleCurve() {
+    if((Global::editingMode == EditingModeCircle) && (Global::editing))
+        editingStop();
+    else {
+        unToogleDraw(1);
+        unToogleDraw(2);
+        unToogleDraw(3);
+        ui->render->setEditingMode(EditingModeCircle);
+    }
+}
+
+void UiView::editingStart(const NxPoint & point) {
+    if(Global::editing) {
+        if((Global::editingMode == EditingModeFree) || (Global::editingMode == EditingModePoint)) {
+            editingStartPoint = point;
+            freehandCurveIndex = 1;
+            Application::current->pushSnapshot();
+            freehandCurveId = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
+            Application::current->execute(QString("%1 %2 %3 %4 0").arg(COMMAND_POS).arg(freehandCurveId).arg(editingStartPoint.x()).arg(editingStartPoint.y()), ExecuteSourceGui);
+            if(Global::editingMode == EditingModeFree)
+                Application::current->execute(QString("%1 %2 0 0 0 0").arg(COMMAND_CURVE_POINT_SMOOTH).arg(freehandCurveId), ExecuteSourceGui);
+            else
+                Application::current->execute(QString("%1 %2 0 0 0 0").arg(COMMAND_CURVE_POINT).arg(freehandCurveId), ExecuteSourceGui);
+
+        }
+        else if(Global::editingMode == EditingModeTriggers) {
+            Application::current->pushSnapshot();
+            quint16 triggerId = Application::current->execute("add trigger auto", ExecuteSourceGui).toUInt();
+            Application::current->execute(QString("%1 %2 %3 %4 0").arg(COMMAND_POS).arg(triggerId).arg(point.x()).arg(point.y()), ExecuteSourceGui);
+        }
+        else if(Global::editingMode == EditingModeCircle) {
+            Application::current->pushSnapshot();
+            quint16 curveId = Application::current->execute(QString("add curve auto"), ExecuteSourceGui).toUInt();
+            Application::current->execute(QString("%1 %2 %3 %4 0").arg(COMMAND_POS).arg(curveId).arg(point.x()).arg(point.y()), ExecuteSourceGui);
+            Application::current->execute(QString("%1 %2 2 2").arg(COMMAND_CURVE_ELL).arg(curveId), ExecuteSourceGui);
+            quint16 cursorId = Application::current->execute(QString("add cursor auto"), ExecuteSourceGui).toUInt();
+            Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURSOR_CURVE).arg(cursorId).arg(curveId), ExecuteSourceGui);
+        }
+    }
+}
+void UiView::editingStop() {
+    if((Global::editing) && ((Global::editingMode == EditingModeFree) || (Global::editingMode == EditingModePoint))) {
+        if(freehandCurveIndex > 1) {
+            Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURVE_POINT_RMV).arg(freehandCurveId).arg(freehandCurveIndex), ExecuteSourceGui);
+            if(freehandCurveNeedsCursor) {
+                quint16 cursorId = Application::current->execute(QString("add cursor auto"), ExecuteSourceGui).toUInt();
+                Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURSOR_CURVE).arg(cursorId).arg(freehandCurveId), ExecuteSourceGui);
+            }
+        }
+        else if(freehandCurveId > 0)
+            Application::current->execute(QString("%1 %2").arg(COMMAND_REMOVE).arg(freehandCurveId), ExecuteSourceGui);
+    }
+    unToogleDraw(0);
+    ui->render->unsetEditing();
+}
+void UiView::editingMove(const NxPoint & point, bool add) {
+    if((Global::editing) && (Global::editingMode == EditingModeFree)) {
+        NxPoint newPoint = point - editingStartPoint;
+        Application::current->execute(QString("%1 %2 %3 %4 %5").arg(COMMAND_CURVE_POINT_SMOOTH).arg(freehandCurveId).arg(freehandCurveIndex).arg(newPoint.x()).arg(newPoint.y()), ExecuteSourceGui);
+        if(add)
+            freehandCurveIndex++;
+    }
+    else if((Global::editing) && (Global::editingMode == EditingModePoint)) {
+        NxPoint newPoint = point - editingStartPoint;
+        Application::current->execute(QString("%1 %2 %3 %4 %5").arg(COMMAND_CURVE_POINT).arg(freehandCurveId).arg(freehandCurveIndex).arg(newPoint.x()).arg(newPoint.y()), ExecuteSourceGui);
+        if(add)
+            freehandCurveIndex++;
+    }
+}

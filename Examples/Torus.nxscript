@@ -1,0 +1,77 @@
+//Setup of the script
+function onConfigure() {
+	title("Torus");
+	//Global variables
+	ask("Circles", "Quantity", "circleMax", 50);
+	ask("Circles", "Ratio", "circleRatio", 1);
+	ask("Cursor speed", "- auto [duration]\n- incremental", "speed", "incremental");
+}
+
+var circleSize = 2;
+
+//Creation of the score
+function onCreate() {
+	//Viewport setup
+	run("clear");
+	run("registerTexture background");
+	run("rotate 0 0 0");
+	run("center 0 0");
+	run("zoom 100");
+	
+	
+	//Generate circle curves, cursors and triggers
+	for(var circleIndex = 0 ; circleIndex < circleMax ; circleIndex++) {
+		var angle = map(circleIndex, 0, circleMax, 0, TWO_PI);
+		addCircle(circleIndex, {x: circleSize * cos(angle), y: circleSize * sin(angle)});
+	}
+}
+
+//Custom function
+function addCircle(circleIndex, center) {
+	var percent = circleIndex / circleMax;
+	var radius = circleSize / 2;
+
+	run("add curve        " + (1000 + circleIndex));
+	run("setGroup         current lines");
+	run("setPointsEllipse current " + (circleSize / circleRatio / 2) + " " + circleSize / 2);
+	run("setPos           current " + center.x + " " + center.y + " 0");
+	run("setColorHue      current 303 " + rangeMid(percent, 255, 0, 255) + " 192 255");
+	run("setSize          current 0.2");
+	
+	run("add cursor       " + circleIndex);
+	run("setCurve         current lastCurve");
+	run("setGroup         current values");
+	if(speed == "incremental")
+		run("setSpeed         current " + (0.5 + percent));
+	else
+		run("setSpeed         current " + speed);
+	run("setBoundsSource  current " + (-2*circleSize) + " " + 2*circleSize + " " + (-2*circleSize) + " " + 2*circleSize);
+	run("setColorHue      current " + range(percent, 0, 200) + " 100 192 255");
+	run("setWidth         current 2");
+	run("setPattern       current 0 0 1");
+	run("add              trigger " + (2000 + circleIndex));
+	run("setGroup         current triggers");
+	run("setPos           current " + (center.x*1.7) + " " + (center.y*1.7) + " 0");
+	run("setSize          current 0.5");
+	run("setColorHue      current " + rangeMid(percent, 0, 40, 0) + " 255 255 255");
+}
+
+
+/*
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+

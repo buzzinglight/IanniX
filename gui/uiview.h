@@ -21,8 +21,9 @@
 
 #include <QMainWindow>
 #include <QTabletEvent>
-#include "uitransport.h"
 #include "uiinspector.h"
+#include "transport/uiabout.h"
+#include "gui/uihelp.h"
 
 namespace Ui {
     class UiView;
@@ -35,7 +36,10 @@ public:
     explicit UiView(QWidget *parent = 0);
     ~UiView();
 
+public:
+    UiHelp *help;
 private:
+    UiAbout *about;
     bool wasInspectorVisible, wasTransportVisible, isFullScreen;
     QPoint previousPos;
     QSize previousSize;
@@ -43,117 +47,82 @@ private:
     QList<QPushButton*> fullscreenButtons;
 
 public:
-    UiRender* getRender() const;
-    UiTransport* getTransport() const;
-    UiInspector* getInspector() const;
+    UiRender*        getRender() const;
+    Transport*       getTransport() const;
+    UiInspector*     getInspector() const;
     UiRenderPreview* getRenderPreview() const;
     bool getPerformancePreview() const;
 public slots:
     void fullscreenDisplaysCountChanged();
     void fullscreenDisplaysSelected();
-    void actionFullscreen();
-    void actionFullscreen(quint8 screenIndex);
+    void showTimer();
+    void showHelp();
+    void showTransport();
+    void showInspector();
+    void showEditor();
+
+    void toggleFullscreen(bool);
+    void goToFullscreen();
+    void goToFullscreen(quint8 screenIndex);
     void escFullscreen();
-    void actionGrid();
-    void actionToggle_Inspector() { emit(actionRouteToggle_Inspector()); }
-    void actionToggle_Transport() { emit(actionRouteToggle_Transport()); }
-    void actionToggle_Autosize()  { emit(actionRouteToggle_Autosize()); }
-    void actionPlay_pause()       { emit(actionRoutePlay_pause()); }
-    void actionFast_rewind()      { emit(actionRouteFast_rewind()); }
-    void actionZoom_in();
-    void actionZoom_out();
-    void actionZoom_initial();
+    void actionPlay_pause();
+    void actionFast_rewind();
     void actionPerformance();
-    void actionDrawFreeCurve()    { emit(actionRouteDrawFreeCurve()); }
-    void actionDrawPointCurve()   { emit(actionRouteDrawPointCurve()); }
-    void actionDrawTriggers()     { emit(actionRouteDrawTriggers()); }
-    void actionAddFreeCursor()    { emit(actionRouteAddFreeCursor()); }
-    void actionCircleCurve()      { emit(actionRouteCircleCurve()); }
-    void actionSnapXGrid()        { emit(actionRouteSnapXGrid()); }
-    void actionSnapYGrid()        { emit(actionRouteSnapYGrid()); }
-    void actionSnapZGrid()        { emit(actionRouteSnapZGrid()); }
-    void actionShowEditor()       { emit(actionRouteShowEditor()); }
-    void actionShowTimer()        { emit(actionRouteShowTimer()); }
     void actionReloadScript()     { emit(actionRouteReloadScript()); }
-    void actionPasteScript()      { emit(actionRoutePasteScript()); }
-    void actionSelectionModeChange();
     void actionImportSVG();
-    void actionImportImage();
     void actionImportBackground();
     void actionImportText();
-    void actionLockPos();
-    void actionToggleLabel();
-    void setToggleLabel(bool val);
-    bool getToggleLabel();
-    void actionAbout()            { emit(actionRouteAbout()); }
-    void setColorTheme(bool);
 
-    void actionAlign_top()        { emit(actionRouteArrange(0)); }
-    void actionAlign_left()       { emit(actionRouteArrange(1)); }
-    void actionAlign_bottom()     { emit(actionRouteArrange(2)); }
-    void actionAlign_right()      { emit(actionRouteArrange(3)); }
-    void actionAlign_middle()     { emit(actionRouteArrange(4)); }
-    void actionAlign_center()     { emit(actionRouteArrange(5)); }
-    void actionDistributeH()      { emit(actionRouteArrange(6)); }
-    void actionDistributeV()      { emit(actionRouteArrange(7)); }
-    void actionAlign_circle()     { emit(actionRouteArrange(8)); }
-    void actionAlign_ellipse()    { emit(actionRouteArrange(9)); }
+    void actionAlign_top()        { emit(arrangeObjects(0)); }
+    void actionAlign_left()       { emit(arrangeObjects(1)); }
+    void actionAlign_bottom()     { emit(arrangeObjects(2)); }
+    void actionAlign_right()      { emit(arrangeObjects(3)); }
+    void actionAlign_middle()     { emit(arrangeObjects(4)); }
+    void actionAlign_center()     { emit(arrangeObjects(5)); }
+    void actionDistributeH()      { emit(arrangeObjects(6)); }
+    void actionDistributeV()      { emit(arrangeObjects(7)); }
+    void actionAlign_circle()     { emit(arrangeObjects(8)); }
+    void actionAlign_ellipse()    { emit(arrangeObjects(9)); }
+
     void actionSnapshot();
     void actionResize();
     void actionResize(QSize size);
     void unToogleDraw(quint16 id);
     void gridChange();
-    void gridOpacityChange();
-    void help() {
-        QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Documentation/" + tr("EN") + "/index.html").absoluteFilePath().replace("\\", "/"), QUrl::TolerantMode));
-    }
     void actionPatchesFolder() {
-        QDesktopServices::openUrl(QUrl("file:///" + QFileInfo("Patches/").absoluteFilePath().replace("\\", "/"), QUrl::TolerantMode));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/").absoluteFilePath()));
     }
-    void actionQuit()  {
-        close();
-    }
-    void toggleAutosize(bool val);
-    void toggleInspector(bool);
-    void toggleTransport(bool);
-    void toggleEditor(bool);
-    void toggleTimer(bool);
-    void toggleFullscreen(bool);
 
-signals:
-    void actionRouteToggle_Inspector();
-    void actionRouteToggle_Transport();
-    void actionRouteToggle_Autosize();
-    void actionRoutePlay_pause();
-    void actionRouteFast_rewind();
-    void actionRouteGrid();
-    void actionRouteDrawFreeCurve();
-    void actionRouteDrawPointCurve();
-    void actionRouteDrawTriggers();
-    void actionRouteAddFreeCursor();
-    void actionRouteCircleCurve();
-    void actionRouteGridChange(qreal);
-    void actionRouteGridOpacityChange(qreal);
-    void actionRouteSelectionModeChange(bool,bool,bool);
-    void actionRouteSnapXGrid();
-    void actionRouteSnapYGrid();
-    void actionRouteSnapZGrid();
-    void actionRouteShowEditor();
-    void actionRouteReloadScript();
-    void actionRouteAbout();
-    void actionRouteQuit();
-    void actionRouteImportSVG(QString);
-    void actionRouteImportImage(QString);
-    void actionRouteImportBackground(QString);
-    void actionRouteImportText(QString,QString);
-    void actionRouteCloseEvent(QCloseEvent*);
-    void actionRouteArrange(quint16 type);
-    void actionRoutePasteScript();
-    void actionRouteShowTimer();
-    void actionRouteSnaphot(qreal);
+
+private:
+    quint16 freehandCurveId, freehandCurveIndex;
+    bool freehandCurveNeedsCursor;
+    NxPoint editingStartPoint;
+public slots:
+    void actionDrawFreeCurveSimple()  { actionDrawFreeCurve (false); }
+    void actionDrawPointCurveSimple() { actionDrawPointCurve(false); }
+    void actionDrawFreeCurve(bool cursor = true);
+    void actionDrawPointCurve(bool cursor = true);
+    void actionDrawTriggers();
+    void actionAddTimeline();
+    void actionAddFreeCursor();
+    void actionCircleCurve();
+    void actionAddMathCurve();
+    void actionAddMathCurveSimple();
     void editingStart(const NxPoint &);
     void editingStop();
     void editingMove(const NxPoint &, bool add);
+
+
+signals:
+    void forceGoto(qreal,bool);
+    void arrangeObjects(quint16 type);
+
+    void actionRouteReloadScript();
+    void actionRouteImportSVG(QString);
+    void actionRouteImportBackground(QString);
+    void actionRouteImportText(QString,QString);
+    void actionRouteCloseEvent(QCloseEvent*);
 
 protected:
     void changeEvent(QEvent *e);

@@ -115,7 +115,6 @@ void QKinect::init()
     m_gamma.resize(2048);
     /// open the device at present hard coded to device 0 as I only
     /// have 1 kinect
-    /// \todo make this support multiple devices at some stage
     if (freenect_open_device(m_ctx, &m_dev, m_userDeviceNumber) < 0)
     {
         qDebug()<<"Could not open device\n";
@@ -136,7 +135,6 @@ void QKinect::init()
     m_newDepthFrame=false;
     m_deviceActive=true;
     // set our video formats to RGB by default
-    /// \todo make this more flexible at some stage
 
 #ifdef Q_OS_MAC
     freenect_set_video_mode(m_dev, freenect_find_video_mode(FREENECT_RESOLUTION_MEDIUM, FREENECT_VIDEO_RGB));

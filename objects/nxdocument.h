@@ -20,98 +20,72 @@
 #define NXDOCUMENT_H
 
 #include <QObject>
+#include <QScriptEngine>
+#include <QFile>
+#include <QFileInfo>
+#include <QInputDialog>
+#include <QFileSystemWatcher>
+#include "misc/application.h"
 #include "objects/nxgroup.h"
-#include "interfaces/extscriptmanager.h"
-#include "gui/uirenderoptions.h"
+#include "interfaces/extscriptvariableask.h"
+#include "render/uirenderoptions.h"
+#include "gui/uimessagebox.h"
+#include "messages/messagemanagerloginterface.h"
 
-class NxDocument : public ExtScriptManager, public NxObjectDispatchProperty {
+class NxDocument : public QObject, public QTreeWidgetItem, public MessageDispatcher, public NxObjectDispatchProperty {
     Q_OBJECT
 
+public:
+    ExecuteSource source;
+    UiFileItem *fileItem;
+public slots:
+    void askFileOpen();
+    void askFileSave();
+    void askFileReload();
+    void askFileClose();
 private:
     bool isLoaded;
     QList<QString> snapshots;
     quint16 snapshotsIndex;
-    QMap<QString,QString> snapshotsSpecial;
 public:
-    explicit NxDocument(NxObjectFactoryInterface *_factory, QFileInfo _scriptFile, QTreeWidgetItem *parentList);
-    inline void dispatchProperty(const QString & property, const QVariant & value) {
-        //Browse groups
-        foreach(NxGroup *group, groups)
-            group->dispatchProperty(property, value);
-    }
-    inline const QVariant getProperty(const QString &_property) const {
-        foreach(NxGroup *group, groups)
-            return group->getProperty(_property);
-        return QVariant();
-    }
-    inline quint8 getType() const {
-        return ObjectsTypeDocument;
-    }
-    inline const QString getTypeStr() const {
-        return "document";
-    }
-    inline const NxRect getBoundingRect() const {
-        NxRect boundingRect;
-
-        //Browse groups
-        foreach(const NxGroup *group, groups)
-            boundingRect = boundingRect.united(group->getBoundingRect());
-
-        return boundingRect;
-    }
+    explicit NxDocument(ApplicationCurrent *parent, UiFileItem *_fileItem);
 
     inline void clear() {
         QStringList commands;
         foreach(const NxObject *object, objects)
-            commands << COMMAND_REMOVE + " " + QString::number(object->getId());
+            commands << QString(COMMAND_REMOVE) + " " + QString::number(object->getId());
         foreach(const QString & command, commands)
-            execute(command);
+            Application::current->execute(command, ExecuteSourceCopyPaste);
         groups.clear();
     }
-    QString serialize(UiRenderOptions *options, bool hasAScript);
+
+
+    const QString serialize() const;
     void pushSnapshot();
     void popSnapshot(bool revert=false);
-    void pushSnapshot(const QString & snapshotId);
-    void popSnapshot(const QString & snapshotId);
-    void load();
-    bool save(UiRenderOptions *options);
+    void open();
+    bool save();
+    void remplaceInFunction(QString *content, const QString &delimiter, const QString &data);
+    QScriptValue scriptEvaluate(const QString &script, bool _createNewObjectIfExists);
 
 public:
     QMap<QString, NxGroup*> groups;
     QHash<quint16, NxObject*> objects;
-    QHash<QString,QString> registredTextures, registredColors;
 
 private:
     NxObject *currentObject;
     NxGroup *currentGroup;
     NxCurve *currentCurve;
-protected:
-    QString id;
 public slots:
-    inline void setId(const QString & _id) {
-        id = _id;
-        updateTitle();
-    }
-    inline const QString & getId() const {
-        return id;
-    }
-    inline NxObject* getCurrentObject() const {
-        return currentObject;
-    }
     inline void setCurrentObject(NxObject *_currentObject) {
         currentObject = _currentObject;
         if((currentObject) && (currentObject->getType() == ObjectsTypeCurve))
             currentCurve = (NxCurve*)currentObject;
     }
-    inline NxCurve* getCurrentCurve() const {
-        return currentCurve;
-    }
-    inline NxGroup* getCurrentGroup() const {
-        return currentGroup;
-    }
-    inline void setCurrentGroup(NxGroup *_currentGroup) {
-        currentGroup = _currentGroup;
-    }
+    inline void setCurrentGroup(NxGroup *_currentGroup) {  currentGroup = _currentGroup;  }
+    inline NxObject* getCurrentObject() const { return currentObject; }
+    inline NxCurve* getCurrentCurve()   const { return currentCurve;  }
+    inline NxGroup* getCurrentGroup()   const { return currentGroup;  }
 
 public:
     inline NxObject* getObject(quint16 id) const {
@@ -134,14 +108,89 @@ public:
                 nextId = objects.keys().at(index);
         return nextId+1;
     }
-    inline bool getHasChanged() const {
-        return hasChanged;
+
+
+
+    //SCRIPT
+public:
+    QScriptEngine scriptEngine;
+protected:
+    ExtScriptVariableAsk *variable;
+    QScriptValue script;
+    QScriptValue scriptOnIncomingMessage, scriptMakeWithScript, scriptAlterateWithScript, scriptMadeThroughGUI, scriptMadeThroughInterfaces, scriptAskUserForParameters;
+    NxPoint mousePos;
+    QString scriptContent;
+
+public:
+    bool open(bool configure);
+    inline void setMousePos(const NxPoint & _pos) {
+        mousePos = _pos;
+    }
+
+    inline QString incomingMessage(const MessageIncomming &source, bool needOutput = false) {
+        if(scriptOnIncomingMessage.isValid()) {
+            QString argumentsStr;
+            foreach(const QString &argument, source.arguments)
+                argumentsStr += "\"" + argument + "\",";
+            argumentsStr.chop(1);
+            if(needOutput)
+                return scriptOnIncomingMessage.call(QScriptValue(), QScriptValueList() << source.protocol << source.host << source.port.toString() << source.destination << scriptEngine.evaluate(QString("[%5]").arg(argumentsStr))).toString();
+            else
+                scriptOnIncomingMessage.call(QScriptValue(), QScriptValueList() << source.protocol << source.host << source.port.toString() << source.destination << scriptEngine.evaluate(QString("[%5]").arg(argumentsStr)));
+        }
+        return QString();
+    }
+
+    inline const QFileInfo getScriptFile() const {
+        if(fileItem)
+            return fileItem->filename.file;
+        return QFileInfo();
+    }
+
+public:
+    bool createNewObjectIfExists;
+public slots:
+    void ask(const QString & group, const QString & prompt, const QString & value, const QString & def)     {   return variable->ask(group, prompt, value, def);    }
+    void meta(const QString & meta)                                                                         {   return variable->meta(meta);    }
+    const QVariant execute(const QString & command) const                                                   {   return Application::current->execute(command, source, createNewObjectIfExists, true);   }
+
+public:
+    static const QString loadLibrary();
+
+public:
+    inline void dispatchProperty(const char *_property, const QVariant & value) {
+        //Browse groups
+        foreach(NxGroup *group, groups)
+            group->dispatchProperty(_property, value);
+    }
+    inline const QVariant getProperty(const char *_property) const {
+        foreach(NxGroup *group, groups)
+            return group->getProperty(_property);
+        return QVariant();
+    }
+    inline quint8 getType() const {
+        return ObjectsTypeDocument;
+    }
+    inline const QString getTypeStr() const {
+        return "document";
+    }
+    inline const NxRect getBoundingRect() const {
+        NxRect boundingRect;
+
+        //Browse groups
+        foreach(const NxGroup *group, groups)
+            boundingRect = boundingRect.united(group->getBoundingRect());
+
+        return boundingRect;
     }
 
 
+    //DEFAULT
+public:
+    static void restoreDefaults();
+
 signals:
 
-public slots:
 
 };
 

@@ -18,12 +18,14 @@
 
 #include "nxcursor.h"
 
-NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
-    NxObject(parent, ccParentItem, _renderOptions) {
+NxCursor::NxCursor(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
+    NxObject(parent, ccParentItem) {
+    setText(0, tr("CURSOR"));
     glListCursor = glGenLists(1);
     curve = 0;
     setTimeLocal(0);
     nextTimeOld = 0;
+    lockPathLength = false;
     timeOld = 0;
     time = 0;
     timeLocal = 0;
@@ -43,32 +45,29 @@ NxCursor::NxCursor(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentIt
     cursorPolyOld[2] = NxPoint();
     cursorPolyOld[3] = NxPoint();
     setNbLoop(0);
-    setStart("1 0");
+    setStart("0 0 1 0");
     setTimeFactor(1);
     setTimeFactorF(1);
     setWidth(1);
-    setDepth(0);
+    setDepth(0.5);
     setTime(0);
     setSize(1.2);
-    setLineFactor(1);
-    setLineStipple(0xFFFF);
-    setColorActive("cursor_active");
-    setColorInactive("cursor_inactive");
+    setColorActive("_cursor_active");
+    setColorInactive("_cursor_inactive");
     setTimeStartOffset(0);
     setTimeEndOffset(0);
     setTimeInitialOffset(0);
     setEasing(0);
     setBoundsSource("-10 10 -10 10 -10 10");
     setBoundsTarget("0 1 0 1 0 1");
-    boundsSourceIsBoundingRect = true;
+    setBoundsSourceMode(1);
+    setMessagePatterns("20," + Global::defaultMessageCursor.val());
 }
 NxCursor::~NxCursor() {
     glDeleteLists(glListCursor, 1);
 }
-qreal toto;
-NxPoint totoPt;
 void NxCursor::setTime(qreal delta) {
-    if(curve) {
+    if((curve) && (start.count())) {
         //toto += delta;
 
 
@@ -253,41 +252,48 @@ void NxCursor::calculate() {
 
 void NxCursor::paint() {
     //Color
-    if(active)
-        color = (!colorActive.isEmpty())?(renderOptions->colors.value(colorActive)):(colorActiveColor);
-    else
-        color = (!colorInactive.isEmpty())?(renderOptions->colors.value(colorInactive)):(colorInactiveColor);
+    if(active) {
+        if(colorActive.isEmpty())                                                                                       color = colorActiveColor;
+        else if((colorActive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorActive)))      color = Global::colors->value(Global::colorsPrefix() + colorActive);
+        else if(Global::colors->contains(colorActive))                                                                  color = Global::colors->value(colorActive);
+        else                                                                                                            color = Qt::gray;
+    }
+    else {
+        if(colorInactive.isEmpty())                                                                                     color = colorInactiveColor;
+        else if((colorInactive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorInactive)))  color = Global::colors->value(Global::colorsPrefix() + colorInactive);
+        else if(Global::colors->contains(colorInactive))                                                                color = Global::colors->value(colorInactive);
+        else                                                                                                            color = Qt::gray;
+    }
 
     if(color.alpha() > 0) {
         //Size of cursors
-        qreal cacheSize = renderOptions->objectSize;
+        qreal cacheSize = Global::objectSize;
 
         //Mouse hover
-        if(selectedHover)
-            color = renderOptions->colors.value("object_hover");
-        if(selected)
-            color = renderOptions->colors.value("object_selection");
+        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_object_hover");
+        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_object_selection");
 
         //Start
-        bool opacityCheck = ((renderOptions->paintCursors) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)));
-        if(!opacityCheck)
+        if(!Global::paintThisGroup)
             color.setAlphaF(0.1);
 
-        if(!renderOptions->allowSelectionCursors)
+        if(!Global::allowSelectionCursors)
             color.setAlphaF(color.alphaF()/3);
 
         glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 
         //Cursor chasse-neige
-        if((0.0F <= time) && (time <= 1.0F) && (start.at(nbLoop % start.count()) != 0)) {
+        if((0.0F <= time) && (time <= 1.0F) && (start.count()) && (start.at(nbLoop % start.count()) != 0)) {
             //Label
-            if((opacityCheck) && (renderOptions->paintLabel) && (!label.isEmpty()))
-                renderOptions->render->renderText(cursorPos.x(), cursorPos.y(), cursorPos.z(), label, renderOptions->renderFont);
+            if((Global::paintThisGroup) && (Global::paintLabel) && (!label.isEmpty()))
+                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id) + " - " + label, Global::renderFont);
+            else if(selectedHover)
+                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id), Global::renderFont);
             if(selectedHover) {
-                qreal startY = 0;
+                qreal startY = -0.4;
                 foreach(const QString & messageLabelItem, messageLabel) {
-                    renderOptions->render->renderText(cursorPos.x(), cursorPos.y() + startY, cursorPos.z(), messageLabelItem, renderOptions->renderFont);
-                    startY -= cacheSize * 1.5;
+                    Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + startY, cursorPos.z(), messageLabelItem, Global::renderFont);
+                    startY -= 0.6;
                 }
             }
 
@@ -350,7 +356,7 @@ void NxCursor::paint() {
                 else
                     glLineWidth(1);
 
-                if((glListRecreate) || (renderOptions->forceLists)) {
+                if((glListRecreate) || (Global::forceLists)) {
                     glNewList(glListCursor, GL_COMPILE_AND_EXECUTE);
                     qreal lats = 40, longs = 40;
                     qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
@@ -382,6 +388,10 @@ void NxCursor::paint() {
 
             //Mapping area
             if((selectedHover) || (selected)) {
+                if(boundsSourceMode == 2) {
+                    boundsSource = Global::axisArea;
+                    boundsSource.translate(-Global::axisCenter);
+                }
                 glPushMatrix();
                 glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 2.F);
                 glLineWidth(1);
@@ -390,20 +400,36 @@ void NxCursor::paint() {
                 glBegin(GL_LINE_LOOP);
                 glVertex3f(boundsSource.topLeft().x(),     boundsSource.topLeft().y(),     boundsSource.topLeft().z());
                 glVertex3f(boundsSource.topRight().x(),    boundsSource.topRight().y(),    boundsSource.topRight().z());
-                glVertex3f(boundsSource.bottomRight().x(), boundsSource.bottomRight().y(), boundsSource.bottomRight().z());
-                glVertex3f(boundsSource.bottomLeft().x(),  boundsSource.bottomLeft().y(),  boundsSource.bottomLeft().z());
+                glVertex3f(boundsSource.bottomRight().x(), boundsSource.bottomRight().y(), boundsSource.topRight().z());
+                glVertex3f(boundsSource.bottomLeft().x(),  boundsSource.bottomLeft().y(),  boundsSource.topLeft().z());
                 glEnd();
-                if(boundsSource.length() > 0) {
-                    glBegin(GL_LINE);
-                    glVertex3f(boundsSource.topLeft().x(),     boundsSource.topLeft().y(),     boundsSource.topLeft().z());
+                if(boundsSource.length() != 0) {
+                    glBegin(GL_LINE_LOOP);
+                    glVertex3f(boundsSource.topLeft().x(),     boundsSource.topLeft().y(),     boundsSource.bottomLeft().z());
+                    glVertex3f(boundsSource.topRight().x(),    boundsSource.topRight().y(),    boundsSource.bottomRight().z());
                     glVertex3f(boundsSource.bottomRight().x(), boundsSource.bottomRight().y(), boundsSource.bottomRight().z());
+                    glVertex3f(boundsSource.bottomLeft().x(),  boundsSource.bottomLeft().y(),  boundsSource.bottomLeft().z());
+                    glEnd();
+                    glBegin(GL_LINES);
+                    glVertex3f(boundsSource.topLeft().x(),     boundsSource.topLeft().y(),     boundsSource.topLeft().z());
+                    glVertex3f(boundsSource.topLeft().x(),     boundsSource.topLeft().y(),     boundsSource.bottomLeft().z());
+                    glVertex3f(boundsSource.topRight().x(),    boundsSource.topRight().y(),    boundsSource.topRight().z());
+                    glVertex3f(boundsSource.topRight().x(),    boundsSource.topRight().y(),    boundsSource.bottomRight().z());
+                    glVertex3f(boundsSource.bottomRight().x(), boundsSource.bottomRight().y(), boundsSource.topRight().z());
+                    glVertex3f(boundsSource.bottomRight().x(), boundsSource.bottomRight().y(), boundsSource.bottomRight().z());
+                    glVertex3f(boundsSource.bottomLeft().x(),  boundsSource.bottomLeft().y(),  boundsSource.topLeft().z());
+                    glVertex3f(boundsSource.bottomLeft().x(),  boundsSource.bottomLeft().y(),  boundsSource.bottomLeft().z());
                     glEnd();
                 }
                 glDisable(GL_LINE_STIPPLE);
-                renderOptions->render->renderText(boundsSource.topLeft().x()     - 0.50, boundsSource.topLeft().y()     - 0.12, boundsSource.topLeft().z(),     QString::number(boundsTarget.topLeft().y(),     'f', 3), renderOptions->renderFont);
-                renderOptions->render->renderText(boundsSource.bottomLeft().x()  - 0.50, boundsSource.bottomLeft().y()  - 0.00, boundsSource.bottomLeft().z(),  QString::number(boundsTarget.bottomLeft().y(),  'f', 3), renderOptions->renderFont);
-                renderOptions->render->renderText(boundsSource.bottomLeft().x()  - 0.00, boundsSource.bottomLeft().y()  - 0.22, boundsSource.bottomLeft().z(),  QString::number(boundsTarget.bottomLeft().x(),  'f', 3), renderOptions->renderFont);
-                renderOptions->render->renderText(boundsSource.bottomRight().x() - 0.40, boundsSource.bottomRight().y() - 0.22, boundsSource.bottomRight().z(), QString::number(boundsTarget.bottomRight().x(), 'f', 3), renderOptions->renderFont);
+                Application::render->renderText(boundsSource.topLeft().x()     - 0.50, boundsSource.topLeft().y()     - 0.12, boundsSource.topLeft().z(),   QString::number(boundsTarget.topLeft().y(),     'f', 3), Global::renderFont);
+                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.50, boundsSource.bottomLeft().y()  - 0.00, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().y(),  'f', 3), Global::renderFont);
+                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.00, boundsSource.bottomLeft().y()  - 0.22, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().x(),  'f', 3), Global::renderFont);
+                Application::render->renderText(boundsSource.bottomRight().x() - 0.40, boundsSource.bottomRight().y() - 0.22, boundsSource.topRight().z(),  QString::number(boundsTarget.bottomRight().x(), 'f', 3), Global::renderFont);
+                if(boundsSource.length() != 0) {
+                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.bottomRight().z(),     QString::number(boundsTarget.bottomRight().z(), 'f', 3), Global::renderFont);
+                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.topRight().z() - 0.50, QString::number(boundsTarget.topRight().z(),    'f', 3), Global::renderFont);
+                }
                 glPopMatrix();
             }
         }
@@ -412,7 +438,7 @@ void NxCursor::paint() {
 
 void NxCursor::trig(bool force) {
     if((force) || ((((previousCursorReliable) && (hasActivity)) || (!curve)) && (canSendOsc()))) {
-        factory->sendMessage(this, 0, this);
+        MessageManager::outgoingMessage(MessageManagerDestination(this, 0, this));
         cursorPosLastSend         = cursorPos;
         cursorRelativePosLastSend = cursorRelativePos;
         cursorAngleLastSend       = cursorAngle;
@@ -431,7 +457,7 @@ bool NxCursor::contains(NxTrigger *trigger) const {
                                                         (cursorPolyOld.at(0).y() + cursorPolyOld.at(1).y() + cursorPolyOld.at(2).y() + cursorPolyOld.at(3).y()) / 4.,
                                                         (cursorPolyOld.at(0).z() + cursorPolyOld.at(1).z() + cursorPolyOld.at(2).z() + cursorPolyOld.at(3).z()) / 4.);
         //Rotations + translations
-        qreal angle, angleSin, angleCos;
+        qreal angleSin, angleCos;
         //angle = -cursorAngle.z() * M_PI / 180., angleSin = qSin(angle), angleCos = qCos(angle);
         angleSin = cursorAngleCacheSinZ;
         angleCos = cursorAngleCacheCosZ;
@@ -490,7 +516,7 @@ bool NxCursor::trig(NxCurve *collisionCurve) {
         NxPoint collisionPoint;
         qreal percent = collisionCurve->intersects(boundingRect, &collisionPoint);
         if(percent >= 0) {
-            factory->sendMessage(this, 0, this, collisionCurve, collisionPoint, getCursorValue(collisionPoint));
+            MessageManager::outgoingMessage(MessageManagerDestination(this, 0, this, collisionCurve, collisionPoint, getCursorValue(collisionPoint)));
             return true;
         }
         return false;
@@ -499,3 +525,59 @@ bool NxCursor::trig(NxCurve *collisionCurve) {
         return false;
 }
 
+
+void NxCursor::setBoundsRect(quint16 index, qreal val, bool source) {
+    NxRect *boundsRect;
+    if(source) {
+        boundsRect = &boundsSource;
+        boundsSourceMode = 3;
+    }
+    else
+        boundsRect = &boundsTarget;
+    if(     index == 0) boundsRect->setTopLeft    (NxPoint(val,                           boundsRect->topLeft()    .y(), boundsRect->topLeft()    .z()));
+    else if(index == 1) boundsRect->setTopLeft    (NxPoint(boundsRect->topLeft()    .x(), val,                           boundsRect->topLeft()    .z()));
+    else if(index == 5) boundsRect->setTopLeft    (NxPoint(boundsRect->topLeft()    .x(), boundsRect->topLeft()    .y(), val));
+    else if(index == 3) boundsRect->setBottomRight(NxPoint(val,                           boundsRect->bottomRight().y(), boundsRect->bottomRight().z()));
+    else if(index == 4) boundsRect->setBottomRight(NxPoint(boundsRect->bottomRight().x(), val,                           boundsRect->bottomRight().z()));
+    else if(index == 2) boundsRect->setBottomRight(NxPoint(boundsRect->bottomRight().x(), boundsRect->bottomRight().y(), val));
+}
+qreal NxCursor::getBoundsRect(quint16 index, bool source) const {
+    NxRect boundsRect;
+    if(source)  boundsRect = boundsSource;
+    else        boundsRect = boundsTarget;
+    if(index == 0)      return boundsRect.topLeft().x();
+    else if(index == 1) return boundsRect.topLeft().y();
+    else if(index == 2) return boundsRect.topLeft().z();
+    else if(index == 3) return boundsRect.bottomRight().x();
+    else if(index == 4) return boundsRect.bottomRight().y();
+    else if(index == 5) return boundsRect.bottomRight().z();
+    return 0;
+}
+
+void NxCursor::setBoundsRectStr(const QString & _bounds, bool source) {
+    QStringList bounds = _bounds.split(" ", QString::SkipEmptyParts);
+    if(bounds.count() == 4) {
+        setBoundsRect(0, bounds.at(0).toDouble(), source);
+        setBoundsRect(3, bounds.at(1).toDouble(), source);
+        setBoundsRect(4, bounds.at(2).toDouble(), source);
+        setBoundsRect(1, bounds.at(3).toDouble(), source);
+        setBoundsRect(2, 0, source);
+        setBoundsRect(5, 0, source);
+    }
+    else if(bounds.count() == 6) {
+        setBoundsRect(0, bounds.at(0).toDouble(), source);
+        setBoundsRect(3, bounds.at(1).toDouble(), source);
+        setBoundsRect(4, bounds.at(2).toDouble(), source);
+        setBoundsRect(1, bounds.at(3).toDouble(), source);
+        setBoundsRect(2, bounds.at(4).toDouble(), source);
+        setBoundsRect(5, bounds.at(5).toDouble(), source);
+    }
+    else if(bounds.count() > 1)
+        setBoundsRect(bounds.at(0).toDouble(), bounds.at(1).toDouble(), source);
+}
+const QString NxCursor::getBoundsRectStr(bool source) const {
+    return QString("%1 %2 %3 %4 %5 %6")
+            .arg(getBoundsRect(0, source), 0, 'f', 3).arg(getBoundsRect(3, source), 0, 'f', 3)
+            .arg(getBoundsRect(4, source), 0, 'f', 3).arg(getBoundsRect(1, source), 0, 'f', 3)
+            .arg(getBoundsRect(2, source), 0, 'f', 3).arg(getBoundsRect(5, source), 0, 'f', 3);
+}

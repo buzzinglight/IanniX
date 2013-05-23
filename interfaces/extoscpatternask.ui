@@ -7,205 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>415</height>
+    <height>505</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>IanniX — Message editor</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#ExtOscPatternAsk {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(74, 74, 74, 255), stop:1 rgba(22, 22, 22, 255));
-}
-
-QTextEdit#help {
-	color: white;
-	background-color: transparent;
-}
-
-
-QWidget {
-	font: 10px &quot;Arial&quot;;
-}
-QLabel {
-	font: bold;
-}
-
-QTabWidget::pane {
-	border: 1px solid rgba(255, 255, 255, 32);
-}
-
-QLabel {
-	color: rgb(220, 220, 220);
-}
-
-QLineEdit {
-	background: transparent;
-	border: 0px solid transparent;
-}
-
-QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit {
-	border: 1px solid rgb(60, 60, 60);
-	border-radius: 4px;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(99, 100, 103, 255), stop:1 rgba(61, 61, 61, 255));
-}
-QPushButton {
-	margin-left: 5px;
-	color: white;
-	padding: 10px;
-}
-QPushButton:hover {
-	border: 1px solid rgb(0, 187, 255);
-	background-color: rgb(0, 137, 241, 128);
-}
-QPushButton::checked, QPushButton:pressed {
-	background-color: rgb(0, 187, 255);
-	color: white;
-}
-
-
-QCheckBox {
-	spacing: 5px;
-}
-QCheckBox::indicator {
-	width: 11px;
-	height: 11px;
-	border: 1px solid rgb(60, 60, 60);
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
-}
-QCheckBox::indicator:checked {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
-}
-
-QDoubleSpinBox, QSpinBox, QLineEdit  {
-	padding: 2px;
-	padding-top: 0px;
-	color: white;
-}
-QSpinBox::up-button, QDoubleSpinBox::up-button {
-	width: 5px;
-    image: url(:/icons/res_icon_plus.png);
-	padding: 2px;
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 64);
-}
-QSpinBox::down-button, QDoubleSpinBox::down-button {
-	width: 5px;
-    image: url(:/icons/res_icon_minus.png);
-	padding: 2px;
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 64);
-}
-
-
-
-QTreeWidget {
-	alternate-background-color: rgb(79, 79, 81);
-	color: white;
-	border: 0px solid transparent;
-	gridline-color: rgb(150, 152, 137);
-	selection-background-color: rgb(0, 187, 255);
-	background: transparent;
-	background-color: rgb(63, 64, 64);
-}
-QTreeWidget::item {
-}
-QHeaderView {
-	background: transparent;
-	border: 0px solid transparent;
-	color: rgb(203, 203, 203);
-	min-height: 12px;
-}
-QHeaderView::section {
-	background: rgba(255, 255, 255, 64);
-	padding-left: 4px;
-	border: 0px solid transparent;
-	border-top-left-radius:  6px;
-	border-top-right-radius: 6px;
-	font: bold;
-}
-
-QTreeView::indicator {
-	border: 1px solid rgb(60, 60, 60);
-	width: 11px;
-	height: 11px;
-}
-QTreeView::indicator:unchecked {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(139, 140, 143, 255), stop:1 rgba(101, 101, 101, 255));
-}
-QTreeView::indicator:checked {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(50, 237, 255), stop:1 rgba(0, 187, 255, 255));
-}
-
-
-
-QScrollBar:vertical, QScrollBar:horizontal {
-	border: 0px solid transparent;
-	background: rgba(255, 255, 255, 32);
-}
-QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-	border: 0px solid transparent;
-	background: rgb(161, 161, 161);
-	border-radius: 3px;
-}
-QScrollBar:vertical {						width: 8px;					}
-QScrollBar:horizontal {					height: 8px;				}
-QScrollBar::handle:vertical {			min-height: 8px;		}
-QScrollBar::handle:horizontal {	min-width: 8px;			}
-QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
-	border: 0px solid transparent;
-	background: transparent;
-	width: 1px;
-	height: 1px;
-}
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
-	background: none;
-}
-
-
-QSplitter::handle {
-	background: rgb(255, 255, 255, 30);
-}
-QSplitter::handle:pressed {
-	background: rgb(0, 187, 255);
- }
-QSplitter::handle:horizontal	 	{	width: 4px; }
-QSplitter::handle:vertical     		{	height: 4px; }
-
-
-
-
-
-QTabWidget::pane {	
-}
-
-QTabWidget::tab-bar {
-	left: 5px;
-}
-QTabWidget {
-	border: 0px transparent;
-}
-QTabBar::tab {
-	background-color: rgba(255, 255, 255, 120);
-	padding: 2px;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    min-width: 100px;
-    min-height: 15px;
-	font: bold;
-}
-QTabBar::tab:selected {
-	background-color: rgb(255, 87, 0);
-	color: white;
-}
-QTabBar::tab:hover {
-	color: white;
-}
-QTabBar::tab:!selected {
-     margin-top: 2px;
-}
-
-</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
@@ -229,7 +38,7 @@ QTabBar::tab:!selected {
          <property name="minimumSize">
           <size>
            <width>775</width>
-           <height>340</height>
+           <height>20</height>
           </size>
          </property>
          <property name="currentIndex">
@@ -243,12 +52,21 @@ QTabBar::tab:!selected {
           <widget class="QPushButton" name="addButton">
            <property name="minimumSize">
             <size>
-             <width>150</width>
-             <height>0</height>
+             <width>170</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>170</width>
+             <height>27</height>
             </size>
            </property>
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="toolTip">
+            <string>Adds a new message</string>
            </property>
            <property name="text">
             <string>ADD A NEW MESSAGE</string>
@@ -259,63 +77,24 @@ QTabBar::tab:!selected {
           <widget class="QPushButton" name="removeButton">
            <property name="minimumSize">
             <size>
-             <width>150</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="text">
-            <string>REMOVE CURRENT MESSAGE</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>30</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="help_button">
-           <property name="minimumSize">
-            <size>
-             <width>40</width>
-             <height>0</height>
+             <width>170</width>
+             <height>22</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>40</width>
-             <height>40</height>
+             <width>170</width>
+             <height>27</height>
             </size>
            </property>
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
            </property>
+           <property name="toolTip">
+            <string>Removes current message</string>
+           </property>
            <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="IanniX.qrc">
-             <normaloff>:/actions/res_icon_help.png</normaloff>:/actions/res_icon_help.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
+            <string>REMOVE CURRENT MESSAGE</string>
            </property>
           </widget>
          </item>
@@ -369,9 +148,7 @@ QTabBar::tab:!selected {
  <tabstops>
   <tabstop>tabs</tabstop>
  </tabstops>
- <resources>
-  <include location="IanniX.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
@@ -402,22 +179,6 @@ QTabBar::tab:!selected {
     <hint type="destinationlabel">
      <x>286</x>
      <y>180</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>help_button</sender>
-   <signal>released()</signal>
-   <receiver>ExtOscPatternAsk</receiver>
-   <slot>help()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>423</x>
-     <y>687</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>267</x>
-     <y>-106</y>
     </hint>
    </hints>
   </connection>

@@ -1,53 +1,70 @@
 <RCC>
-  <qresource prefix="/general">
-    <file>res_about.png</file>
-    <file>res_icon_ff.png</file>
-    <file>res_icon_inspector_info.png</file>
-    <file>res_icon_inspector_osc.png</file>
-    <file>res_icon_inspector_project.png</file>
-    <file>res_icon_inspector_view.png</file>
-    <file>res_icon_pause.png</file>
-    <file>res_icon_cursor_select.png</file>
-    <file>res_icon_curve_select.png</file>
-    <file>res_icon_trigger_select.png</file>
-    <file>res_icon_play.png</file>
-    <file>res_logo.png</file>
-    <file>res_splash.png</file>
-    <file>res_splash2.png</file>
-  </qresource>
-  <qresource prefix="/icons">
-    <file>res_icon_down.png</file>
-    <file>res_icon_minus.png</file>
-    <file>res_icon_plus.png</file>
-    <file>res_appicon_pause.png</file>
-    <file>res_appicon_play.png</file>
-  </qresource>
-  <qresource prefix="/actions">
-    <file>res_icon_curveCircle.png</file>
-    <file>res_icon_label.png</file>
-    <file>res_icon_lock.png</file>
-    <file>res_icon_help.png</file>
-    <file>res_icon_grid.png</file>
-    <file>res_icon_fullscreen.png</file>
-    <file>res_icon_inspector.png</file>
-    <file>res_icon_light.png</file>
-    <file>res_icon_transport.png</file>
-    <file>res_icon_cursor.png</file>
-    <file>res_icon_curveFree.png</file>
-    <file>res_icon_curvePoint.png</file>
-    <file>res_icon_trigger.png</file>
-    <file>res_icon_grid_snapX.png</file>
-    <file>res_icon_grid_snapY.png</file>
-    <file>res_icon_performance.png</file>
-    <file>res_icon_editor.png</file>
-    <file>res_icon_timer.png</file>
-  </qresource>
-  <qresource prefix="/infos">
-    <file>res_info_export.png</file>
-    <file>res_info_img.png</file>
-    <file>res_info_svg.png</file>
-    <file>res_info_txt.png</file>
-    <file>res_info_update.png</file>
-    <file>res_info_curve.png</file>
-  </qresource>
+    <qresource prefix="/general">
+        <file>res_about.png</file>
+        <file>res_icon_ff.png</file>
+        <file>res_icon_inspector_info.png</file>
+        <file>res_icon_inspector_osc.png</file>
+        <file>res_icon_inspector_project.png</file>
+        <file>res_icon_inspector_view.png</file>
+        <file>res_icon_pause.png</file>
+        <file>res_icon_cursor_select.png</file>
+        <file>res_icon_curve_select.png</file>
+        <file>res_icon_trigger_select.png</file>
+        <file>res_icon_play.png</file>
+        <file>res_logo.png</file>
+        <file>res_splash.png</file>
+        <file>res_splash2.png</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>res_icon_down.png</file>
+        <file>res_icon_minus.png</file>
+        <file>res_icon_plus.png</file>
+        <file>res_appicon_pause.png</file>
+        <file>res_appicon_play.png</file>
+    </qresource>
+    <qresource prefix="/actions">
+        <file>res_icon_curveCircle.png</file>
+        <file>res_icon_label.png</file>
+        <file>res_icon_lock.png</file>
+        <file>res_icon_help.png</file>
+        <file>res_icon_grid.png</file>
+        <file>res_icon_fullscreen.png</file>
+        <file>res_icon_inspector.png</file>
+        <file>res_icon_light.png</file>
+        <file>res_icon_transport.png</file>
+        <file>res_icon_cursor.png</file>
+        <file>res_icon_curveFree.png</file>
+        <file>res_icon_curvePoint.png</file>
+        <file>res_icon_trigger.png</file>
+        <file>res_icon_grid_snapX.png</file>
+        <file>res_icon_grid_snapY.png</file>
+        <file>res_icon_performance.png</file>
+        <file>res_icon_editor.png</file>
+        <file>res_icon_timer.png</file>
+        <file>res_icon_timeline.png</file>
+        <file>res_icon_play_selected.png</file>
+        <file>res_icon_patches_folder.png</file>
+        <file>res_icon_curveFree_simple.png</file>
+        <file>res_icon_curvePoint_simple.png</file>
+        <file>res_icon_curveEq_simple.png</file>
+        <file>res_icon_curveEq.png</file>
+    </qresource>
+    <qresource prefix="/infos">
+        <file>res_info_export.png</file>
+        <file>res_info_update.png</file>
+        <file>res_info_curve.png</file>
+    </qresource>
+    <qresource prefix="/gui">
+        <file>res_icon_check_lock_off.png</file>
+        <file>res_icon_check_lock_on.png</file>
+        <file>res_icon_check_active_off.png</file>
+        <file>res_icon_check_active_on.png</file>
+        <file>res_icon_check_solo_off.png</file>
+        <file>res_icon_check_solo_on.png</file>
+    </qresource>
+    <qresource prefix="/items">
+        <file>res_item_file.png</file>
+        <file>res_item_folder.png</file>
+        <file>res_item_reveal.png</file>
+    </qresource>
 </RCC>

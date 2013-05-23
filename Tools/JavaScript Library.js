@@ -18,10 +18,12 @@
 
 //Shortcut to IanniX Object
 function run(_command) 	{	return iannix.execute(_command);		}
-function title(_title) 	{	return iannix.meta(_title);				}
-function console(_log)	{ 	return iannix.execute('log ' + _log);	}
+function console(_log)	{ 	return iannix.execute("log " + _log);	}
 function ask(_category, _label, _variable, _defaultValue) {
 	return iannix.ask(_category, _label, _variable, _defaultValue);
+}
+function title(_title) 	{
+	return iannix.meta(_title);
 }
 
 //Prototypes for Strings
@@ -118,35 +120,4 @@ function rangeMid(value, low, mid, high) {
 }
 function map(value, low1, high1, low2, high2) {
 	return range(norm(value, low1, high1), low2, high2);
-}
-
-
-//Plotting functions
-function plot(expression) {
-	//Extract ranges
-	var result  = expression(t);
-	var initial = result;
-	var step = (initial.t[1] - initial.t[0]) / initial.nbPoints;
-	for(var t = initial.t[0] ; t < initial.t[1] ; t += step) {
-		//Evaluate expression
-		result = expression(t);
-
-		//From spherical to carthesian coords
-		if((result.r != undefined) && (result.theta != undefined) && (result.phi != undefined)) {
-			result.x = result.r * Math.sin(result.theta) * Math.cos(result.phi);
-			result.y = result.r * Math.cos(result.theta);
-			result.z = result.r * Math.sin(result.theta) * Math.sin(result.phi);
-		}
-		
-		//Add points
-		if((result.x != undefined) && (result.y != undefined) && (result.z != undefined)) {
-			result.x += initial.offset.x;
-			result.y += initial.offset.y;
-			result.z += initial.offset.z;
-			iannix.execute('setPointAt current ' + (initial.index++) + ' ' + result.x + ' ' + result.y + ' ' + result.z);
-		}
-	}
-	result.index  = initial.index;
-	result.offset = {x: result.x, y: result.y, z: result.z};
-	return result;
 }

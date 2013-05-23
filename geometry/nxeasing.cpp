@@ -18,7 +18,7 @@
 
 #include "nxeasing.h"
 
-QPixmap NxEasing::getPixmap() const {
+const QPixmap NxEasing::getPixmap() const {
     QPixmap pixmap(128, 128);
     pixmap.fill(Qt::transparent);
     QPainter painter;

@@ -33,63 +33,66 @@
 #include <QtCore/qmath.h>
 #include "iannix_spec.h"
 #include "iannix_cmd.h"
-#include "gui/uirenderoptions.h"
-#include "objects/nxobjectfactoryinterface.h"
+#include "render/uirenderoptions.h"
+#include "misc/application.h"
 
 #define ObjectsTypeLength       3
 #define ObjectsActivityLenght   2
-enum ObjectsType     { ObjectsTypeCurve=0, ObjectsTypeTrigger=1, ObjectsTypeCursor=2, ObjectsTypeGroup=3, ObjectsTypeDocument=4, ObjectsTypeScheduler=5 };
+enum ObjectsType     { ObjectsTypeCurve=0, ObjectsTypeTrigger=1, ObjectsTypeCursor=2, ObjectsTypeGroup=3, ObjectsTypeDocument=4, ObjectsTypeScheduler=5, ObjectsTypeSelection=6  };
 enum ObjectsActivity { ObjectsActivityInactive=0, ObjectsActivityActive=1 };
 
 class NxObject : public QObject, public NxObjectDispatchProperty, public QTreeWidgetItem {
     Q_OBJECT
-    Q_PROPERTY(bool    selectedHover       READ getSelectedHover       WRITE setSelectedHover)
-    Q_PROPERTY(bool    selected            READ getSelected            WRITE setSelected)
-    Q_PROPERTY(quint16 id                  READ getId                  WRITE setId)
-    Q_PROPERTY(QString groupId             READ getGroupId             WRITE setGroupId)
-    Q_PROPERTY(QString documentId          READ getDocumentId          WRITE setDocumentId)
-    Q_PROPERTY(QString label               READ getLabel               WRITE setLabel)
-    Q_PROPERTY(QString posStr              READ getPosStr              WRITE setPosStr)
-    Q_PROPERTY(qreal   size                READ getSize                WRITE setSize)
-    Q_PROPERTY(quint16 lineFactor          READ getLineFactor          WRITE setLineFactor)
-    Q_PROPERTY(quint16 lineStipple         READ getLineStipple         WRITE setLineStipple)
-    Q_PROPERTY(bool    active              READ getActive              WRITE setActive)
-    Q_PROPERTY(QString colorActive         READ getColorActive         WRITE setColorActive)
-    Q_PROPERTY(QString colorInactive       READ getColorInactive       WRITE setColorInactive)
-    Q_PROPERTY(QString colorActiveHue      READ getColorActive         WRITE setColorActiveHue)
-    Q_PROPERTY(QString colorInactiveHue    READ getColorInactive       WRITE setColorInactiveHue)
-    Q_PROPERTY(QString messagePatterns     READ getMessagePatternsStr  WRITE setMessagePatterns)
-    Q_PROPERTY(quint16 messageTimeInterval READ getMessageTimeInterval WRITE setMessageTimeInterval)
+
+    Q_PROPERTY(quint16 setid               READ getId                   WRITE setId)
+    Q_PROPERTY(QString setline             READ getLineStr              WRITE setLineStr)
+    Q_PROPERTY(QString setgroup            READ getGroupId              WRITE setGroupId)
+    Q_PROPERTY(quint16 setactive           READ getActive               WRITE setActive)
+    Q_PROPERTY(quint16 setmute             READ getMute                 WRITE setMute)
+    Q_PROPERTY(quint16 setsolo             READ getSolo                 WRITE setSolo)
+    Q_PROPERTY(qreal   setposx             READ getPosX                 WRITE setPosX)
+    Q_PROPERTY(qreal   setposy             READ getPosY                 WRITE setPosY)
+    Q_PROPERTY(qreal   setposz             READ getPosZ                 WRITE setPosZ)
+    Q_PROPERTY(qreal   setsize             READ getSize                 WRITE setSize)
+    Q_PROPERTY(quint16 setmessageinterval  READ getMessageTimeInterval  WRITE setMessageTimeInterval)
+    Q_PROPERTY(QString setpos              READ getPosStr               WRITE setPosStr)
+    Q_PROPERTY(QString setmessage          READ getMessagePatternsStr   WRITE setMessagePatterns)
+    Q_PROPERTY(QString setlabel            READ getLabel                WRITE setLabel)
+    Q_PROPERTY(QString settranslate        READ getPosTranslateStr      WRITE setPosTranslateStr)
+    Q_PROPERTY(QString setcoloractive      READ getColorActiveVerbose   WRITE setColorActive)
+    Q_PROPERTY(QString setcolorinactive    READ getColorInactiveVerbose WRITE setColorInactive)
+    Q_PROPERTY(QString setcoloractivehue   READ getColorActiveVerbose   WRITE setColorActiveHue)
+    Q_PROPERTY(QString setcolorinactivehue READ getColorInactiveVerbose WRITE setColorInactiveHue)
+
+
 
 public:
     bool operator<(const QTreeWidgetItem &other) const {
-        return (text(0).toUInt() < other.text(0).toUInt());
+        int column = treeWidget()->sortColumn();
+        //Columns : TYPE, ACTIVE, SOLO, ID, GROUP ID
+        if(    (column == 1) || (column == 2))  return icon(column).cacheKey() < other.icon(column).cacheKey();
+        else if(column == 3)                    return text(column).toUInt()   < other.text(column).toUInt();
+        else                                    return text(column).toLower()  < other.text(column).toLower();
     }
 
 public:
-    explicit NxObject(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
+    explicit NxObject(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
 
 public:
     virtual void paint() { }
-    inline void dispatchProperty(const QString & property, const QVariant & value) {
-        setProperty(qPrintable(property), value);
-    }
-    inline const QVariant getProperty(const QString & _property) const {
-        return property(qPrintable(_property));
-    }
+    void dispatchProperty(const char *_property, const QVariant & value);
+    inline const QVariant getProperty(const char *_property) const { return property(_property); }
 
 protected:
-    UiRenderOptions *renderOptions;
-    NxObjectFactoryInterface *factory;
     quint16 id;
-    QString groupId, documentId;
-    quint8 active;
+    QString groupId;
+    quint16 active;
     quint64 messageId;
     NxPoint pos, posDrag, posOffset;
     qreal size;
     quint16 lineFactor, lineStipple;
     QColor  color, colorActiveColor, colorInactiveColor, colorActiveColorMessage, colorInactiveColorMessage;
-    QString colorActive, colorInactive, colorActiveMessage, colorInactiveMessage;
+    QString colorActive, colorInactive;
     bool colorGlobal;
     NxRect boundingRect;
     QString label;
@@ -102,6 +105,7 @@ protected:
     NxObject *parentObject;
     bool isDrag, performCollision;
     bool glListRecreate;
+    bool lockPathLength;
 public slots:
     inline void setPosOffset(const NxPoint & _posOffset) {
         posOffset = _posOffset;
@@ -134,9 +138,14 @@ public slots:
         return hasActivity;
     }
 
+    inline bool getLockPathLength() const               { return lockPathLength; }
+    inline void setLockPathLength(bool _lockPathLength) { lockPathLength = _lockPathLength; }
+
     inline void setId(quint16 _id) {
+        quint16 oldId = id;
         id = _id;
         setText(3, QString::number(id));
+        Application::current->setObjectId(this, oldId);
     }
     inline quint16 getId() const {
         return id;
@@ -145,16 +154,10 @@ public slots:
         QString groupIdOld = groupId;
         groupId = _groupId;
         setText(4, groupId);
-        factory->setObjectGroupId(this, groupIdOld);
+        Application::current->setObjectGroupId(this, groupIdOld);
     }
     inline const QString & getGroupId() const {
         return groupId;
-    }
-    inline void setDocumentId(const QString & _documentId) {
-        documentId = _documentId;
-    }
-    inline const QString & getDocumentId() const {
-        return documentId;
     }
 
     inline void setLabel(const QString & _label) {
@@ -184,7 +187,7 @@ public slots:
 
 
     inline void setPos(const NxPoint & _pos) {
-        if((pos != _pos) && (factory)) {
+        if(pos != _pos) {
             pos = _pos + posOffset;
             posOffset = NxPoint();
             calcBoundingRect();
@@ -193,14 +196,43 @@ public slots:
     }
     inline void setPosStr(const QString & pos) {
         QStringList posItems = pos.split(" ", QString::SkipEmptyParts);
-        if(posItems.count() >= 3)
+        if(posItems.count() > 2)
             setPos(NxPoint(posItems.at(0).toDouble(), posItems.at(1).toDouble(), posItems.at(2).toDouble()));
+        else if(posItems.count() > 1)
+            setPos(NxPoint(posItems.at(0).toDouble(), posItems.at(1).toDouble(), 0));
     }
+    inline void setPosTranslateStr(const QString & posTranslate) {
+        QStringList posItems = posTranslate.split(" ", QString::SkipEmptyParts);
+        if(posItems.count() > 2)
+            setPos(pos + NxPoint(posItems.at(0).toDouble(), posItems.at(1).toDouble(), posItems.at(2).toDouble()));
+        else if(posItems.count() > 1)
+            setPos(pos + NxPoint(posItems.at(0).toDouble(), posItems.at(1).toDouble(), 0));
+    }
+    inline void setPosX(qreal val) { setPos(NxPoint(val, pos.y(), pos.z())); }
+    inline qreal getPosX() const { return pos.x(); }
+    inline void setPosY(qreal val) { setPos(NxPoint(pos.x(), val, pos.z())); }
+    inline qreal getPosY() const { return pos.y(); }
+    inline void setPosZ(qreal val) { setPos(NxPoint(pos.x(), pos.y(), val)); }
+    inline qreal getPosZ() const { return pos.z(); }
     inline const NxPoint & getPos() const {
         return pos;
     }
     inline virtual QString getPosStr() const {
         return QString("%1 %2 %3").arg(pos.x()).arg(pos.y()).arg(pos.z());
+    }
+    inline QString getPosTranslateStr() const {
+        return QString("%1 %2 %3").arg(pos.x()).arg(pos.y()).arg(pos.z());
+    }
+
+    inline QString getLineStr() const {
+        return QString("%1 %2").arg(getLineStipple()).arg(getLineFactor());
+    }
+    inline void setLineStr(const QString & line) {
+        QStringList lineItems = line.split(" ", QString::SkipEmptyParts);
+        if(lineItems.count() > 1) {
+            lineStipple = lineItems.at(0).toInt();
+            lineFactor  = lineItems.at(1).toInt();
+        }
     }
 
     virtual void calcBoundingRect() = 0;
@@ -214,25 +246,23 @@ public slots:
     inline qreal getSize() const {
         return size;
     }
-    inline void setLineStipple(quint16 _lineStipple) {
-        lineStipple = _lineStipple;
-    }
     inline quint16 getLineStipple() const {
         return lineStipple;
-    }
-    inline void setLineFactor(quint16 _lineFactor) {
-        lineFactor = _lineFactor;
     }
     inline quint16 getLineFactor() const {
         return lineFactor;
     }
 
-    inline virtual void dragStart(const NxPoint &) {
+    inline virtual void dragStart(const NxPoint &, bool) {
         posDrag = pos;
         isDrag = true;
     }
-    inline virtual void drag(const NxPoint & translation, const NxPoint &) {
+    inline virtual void drag(const NxPoint &translation, const NxPoint &, bool) {
+        dragParent(translation);
+    }
+    inline void dragParent(const NxPoint &translation) {
         setPos(posDrag + translation);
+        Application::current->execute(QString("%1 %2 %3 %4 %5").arg(COMMAND_POS).arg(id).arg(pos.x()).arg(pos.y()).arg(pos.z()), ExecuteSourceInformative);
     }
     inline virtual void dragStop() {
         posDrag = pos;
@@ -245,20 +275,12 @@ public slots:
         return boundingRect;
     }
 
-    inline void setActive(quint8 _active) {
-        if(factory) {
-            quint8 activeOld = active;
-            active = _active;
-            factory->setObjectActivity(this, activeOld);
-            /*
-            if(active)
-                setCheckState(0, Qt::Checked);
-            else
-                setCheckState(0, Qt::Unchecked);
-            */
-        }
+    inline void setActive(quint16 _active) {
+        quint16 activeOld = active;
+        active = _active;
+        Application::current->setObjectActivity(this, activeOld);
     }
-    inline quint8 getActive() const {
+    inline quint16 getActive() const {
         return active;
     }
 
@@ -283,9 +305,6 @@ public slots:
         else {
             colorActive = _color;
         }
-    }
-    inline const QString & getColorActive() const {
-        return colorActive;
     }
     inline const QColor & getColorActiveColor() const {
         return colorActiveColor;
@@ -316,9 +335,6 @@ public slots:
         else
             colorInactive = _color;
     }
-    inline const QString & getColorInactive() const {
-        return colorInactive;
-    }
     inline const QColor & getColorInactiveColor() const {
         return colorInactiveColor;
     }
@@ -346,6 +362,7 @@ public slots:
                 messagePatternsStr += messagePatternItem + " ";
             messagePatternsStr += ", ";
         }
+        messagePatternsStr = QString::number(messageTimeInterval) + ", " + messagePatternsStr;
         return messagePatternsStr.trimmed();
     }
     inline bool canSendOsc() {
@@ -365,28 +382,7 @@ public slots:
     }
 
 
-    virtual QString serializeCustom(bool) const { return ""; }
-    inline QString serialize(bool hasAScript) const {
-        QString retour;
-        QString prefix = "", postfix = COMMAND_END;
-        if(hasAScript) {
-            prefix = "run(\"";
-            postfix =  "\");" + COMMAND_END;
-        }
-
-        retour += prefix + QString(COMMAND_ADD + " %1 %2").arg(getTypeStr()).arg(getId()) + postfix;
-        if((getPos().x() != 0) || (getPos().y() != 0) || (getPos().z() != 0))
-            retour += prefix + QString(COMMAND_POS + " %1 %2 %3 %4").arg("current").arg(getPos().x()).arg(getPos().y()).arg(getPos().z()) + postfix;
-        if(getActive() != 1)
-            retour += prefix + QString(COMMAND_ACTIVE + " %1 %2").arg("current").arg(getActive()) + postfix;
-        if(getGroupId() != "")
-            retour += prefix + QString(COMMAND_GROUP + " %1 %2").arg("current").arg(getGroupId()) + postfix;
-
-        if(getLabel() != "")
-            retour += prefix + QString(COMMAND_LABEL + " %1 %2").arg("current").arg(getLabel()) + postfix;
-        retour += serializeCustom(hasAScript);
-        return retour;
-    }
+    virtual const QString serialize() const = 0;
 
 
     static QVector< QVector<QByteArray> > parseMessagesPattern(const QString & messagePatternsStr, quint16 *messageInterval = 0);
@@ -395,6 +391,21 @@ signals:
 
 public slots:
 
+
+
+public:
+    static QIcon widgetIconActiveOff, widgetIconActiveOn, widgetIconSoloOff, widgetIconSoloOn;
+private:
+    quint16 objectSolo, objectMute;
+public:
+    bool isSolo()       const { return objectSolo >  0; }
+    bool isNotMuted()   const { return objectMute == 0; }
+    bool isMuted()      const { return objectMute > 0; }
+    quint16 getSolo()   const { return objectSolo; }
+    quint16 getMute()   const { return objectMute; }
+    void setSolo(quint16 _val);
+    void setMute(quint16 _val);
+    void widgetClick(int col);
 };
 
 #endif // NXOBJECT_H

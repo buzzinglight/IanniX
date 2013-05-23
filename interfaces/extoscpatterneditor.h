@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <QPlainTextEdit>
 #include "gui/uimessagebox.h"
-#include "objects/nxobjectfactoryinterface.h"
+#include "misc/application.h"
 #include "objects/nxobject.h"
 #include "misc/help.h"
 
@@ -58,7 +58,7 @@ class ExtOscPatternEditor : public QWidget{
     Q_OBJECT
 
 public:
-    explicit ExtOscPatternEditor(NxObjectFactoryInterface *_factory, QWidget *parent = 0);
+    explicit ExtOscPatternEditor(QWidget *parent);
     ~ExtOscPatternEditor();
 
 private:
@@ -66,7 +66,6 @@ private:
     QList< QPair<QComboBoxWithFocus*, QPair<QLabel*, QPushButton* > > > trees;
     QList< QPushButton > treesButton;
     quint16 patternNbValues;
-    NxObjectFactoryInterface *factory;
     bool wasLearning;
 
 public:

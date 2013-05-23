@@ -19,54 +19,67 @@
 #ifndef NXCURVE_H
 #define NXCURVE_H
 
-#include "nxobject.h"
 #include <QScriptEngine>
 #include <QScriptValue>
 #include "geometry/qmuparser/muParser.h"
+#include "nxobject.h"
 #include "qmath.h"
+#include "items/uipathpointsitem.h"
 
 #define CURVE_PATH_POINTS   300
 
 using namespace mu;
 
-class NxCurvePoint : public NxPoint {
-public:
-    NxCurvePoint() {
-        currentLength = 0;
-        smooth = false;
-    }
-
-    NxPoint c1, c2;
-    qreal currentLength;
-    NxRect boundingRect;
-    bool smooth;
-};
-
 enum CurveType       { CurveTypePoints, CurveTypeEllipse, CurveTypeEquationCartesian, CurveTypeEquationPolar };
+
+Q_DECLARE_METATYPE(QList<qreal>)
 
 class NxCurve : public NxObject {
     Q_OBJECT
-    Q_PROPERTY(qreal     pathLength     READ getPathLength       WRITE setPathLength)
-    Q_PROPERTY(CurveType curveType      READ getCurveType)
-    Q_PROPERTY(QString   resizeStr      READ getResizeStr        WRITE setResizeStr)
-    Q_PROPERTY(qreal     resizeF        READ getResizeF          WRITE setResizeF)
-    Q_PROPERTY(QString   equationParam  READ getEquationParamStr WRITE setEquationParamStr)
-    Q_PROPERTY(qreal     inertie        READ getInertie          WRITE setInertie)
+
+    Q_PROPERTY(CurveType curveType            READ getCurveType)
+
+    Q_PROPERTY(bool      displaycurveeditor   READ getShowPathPointsEditor  WRITE setShowPathPointsEditor)
+    Q_PROPERTY(qreal     setinertia           READ getInertie               WRITE setInertie)
+    Q_PROPERTY(qreal     setlength            READ getPathLength            WRITE setPathLength)
+    Q_PROPERTY(QString   setresize            READ getResizeStr             WRITE setResizeStr)
+    Q_PROPERTY(qreal     setresizef           READ getResizeF               WRITE setResizeF)
+    Q_PROPERTY(QString   setequation          READ getEquationStr           WRITE setEquationStr)
+    Q_PROPERTY(QString   setequationparam     READ getEquationParamStr      WRITE setEquationParamStr)
+    Q_PROPERTY(quint16   setequationnbpoints  READ getEquationPoints        WRITE setEquationPoints)
+    Q_PROPERTY(QString   setpointsellipse     READ getEllipseStr            WRITE setEllipseStr)
+    Q_PROPERTY(quint16   removepointat        READ getRemovePointAt         WRITE setRemovePointAt)
+    Q_PROPERTY(QString   shiftpoints          READ getShiftPointAt          WRITE setShiftPointAt)
+    Q_PROPERTY(QString   translatepoints      READ getTranslate             WRITE setTranslate)
+    Q_PROPERTY(QString   translatepoint       READ getTranslatePoint        WRITE setTranslatePoint)
+    Q_PROPERTY(QString   setpointsimg         READ getResizeStr             WRITE setImage)
+    Q_PROPERTY(QString   setpointslines       READ getResizeStr             WRITE setSVG2)
+    Q_PROPERTY(QString   setpointspath        READ getResizeStr             WRITE setSVG)
+    Q_PROPERTY(QString   setpointstxt         READ getResizeStr             WRITE setText)
+    Q_PROPERTY(QList<qreal> setpointxat       READ getPointAtList           WRITE setPointXAt)
+    Q_PROPERTY(QList<qreal> setpointyat       READ getPointAtList           WRITE setPointYAt)
+    Q_PROPERTY(QList<qreal> setpointzat       READ getPointAtList           WRITE setPointZAt)
+    Q_PROPERTY(QList<qreal> setpointat        READ getPointAtList           WRITE setPointAtList)
+    Q_PROPERTY(QList<qreal> setsmoothpointat  READ getPointAtList           WRITE setSmoothPointAtList)
+
+
+
 
 public:
-    explicit NxCurve(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
+    explicit NxCurve(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
     ~NxCurve();
 
 private:
+    bool glListRecreateFromEditor;
     CurveType curveType;
     qreal pathLength;
     QList<NxObject*> cursors;
-    QList<NxCurvePoint> pathPoints, pathPointsDest;
+    UiPathPointsItems pathPoints, pathPointsDest;
+    UiTreeView *pathPointsEditor;
     qreal inertie;
     qint16 selectedPathPointPoint, selectedPathPointControl1, selectedPathPointControl2;
     NxSize ellipseSize;
     GLuint glListCurve;
-
     QString equation;
     QHash<QString,qreal> equationVariables;
     qreal equationVariableT, equationNbPoints, equationVariableTSteps;
@@ -74,18 +87,117 @@ private:
     bool equationIsValid;
     int equationNbEval;
 public:
+    void setPointXAt(const QList<qreal> &points) {
+        quint16 indexPoint = points.at(0);
+        if(indexPoint < getPathPointsCount()) {
+            NxCurvePoint ptAt = getPathPointsAt(indexPoint);
+            setPointAt(indexPoint, NxPoint(points.at(1), ptAt.y(), ptAt.z()), ptAt.c1, ptAt.c2, ptAt.smooth);
+        }
+    }
+    void setPointYAt(const QList<qreal> &points) {
+        quint16 indexPoint = points.at(0);
+        if(indexPoint < getPathPointsCount()) {
+            NxCurvePoint ptAt = getPathPointsAt(indexPoint);
+            setPointAt(indexPoint, NxPoint(ptAt.x(), points.at(1), ptAt.z()), ptAt.c1, ptAt.c2, ptAt.smooth);
+        }
+    }
+    void setPointZAt(const QList<qreal> &points) {
+        quint16 indexPoint = points.at(0);
+        if(indexPoint < getPathPointsCount()) {
+            NxCurvePoint ptAt = getPathPointsAt(indexPoint);
+            setPointAt(indexPoint, NxPoint(ptAt.x(), ptAt.y(), points.at(1)), ptAt.c1, ptAt.c2, ptAt.smooth);
+        }
+    }
+
+    void setPointAtList(const QList<qreal> &points) {
+        bool recalculate = true;
+        if(points.count() > 18)  // 3+18 (x, y, z, sx, sy, sz), (c1x, c1y, c1z, c1sx, c1sy, c1sz), (c2x, c2y, c2z, c2sx, c2sy, c2z)
+            setPointAt(points.at(0),
+                       NxPoint(points.at(1),  points.at(2),  points.at(3),  points.at(4),  points.at(5),  points.at(6)),
+                       NxPoint(points.at(7),  points.at(8),  points.at(9),  points.at(10), points.at(11), points.at(12)),
+                       NxPoint(points.at(13), points.at(14), points.at(15), points.at(16), points.at(17), points.at(18)), false, recalculate);
+        else if(points.count() > 12)  // 3+12 (x, y, sx, sy), (c1x, c1y, c1sx, c1sy), (c2x, c2y, c2sx, c2sy)
+            setPointAt(points.at(0),
+                       NxPoint(points.at(1),  points.at(2),  0, points.at(3),  points.at(4),  0),
+                       NxPoint(points.at(5),  points.at(6),  0, points.at(7),  points.at(8),  0),
+                       NxPoint(points.at(9),  points.at(10), 0, points.at(11), points.at(12), 0), false, recalculate);
+        else if(points.count() > 9) // 3+9 (x, y, z), (c1x, c1y, c1z), (c2x, c2y, c2z)
+            setPointAt(points.at(0),
+                       NxPoint(points.at(1), points.at(2),  points.at(3)),
+                       NxPoint(points.at(4), points.at(5),  points.at(6)),
+                       NxPoint(points.at(7), points.at(8),  points.at(9)), false, recalculate);
+        else if(points.count() > 7) // 3+6+1 (x, y, z, sx, sy, sz) // REQUIRES A DUMMY ARGUMENT
+            setPointAt(points.at(0), NxPoint(points.at(1), points.at(2), points.at(3), points.at(4), points.at(5), points.at(6)), false, recalculate);
+        else if(points.count() > 6)  // 3+6 (x, y), (c1x, c1y), (c2x, c2y)
+            setPointAt(points.at(0),
+                       NxPoint(points.at(1), points.at(2)),
+                       NxPoint(points.at(3), points.at(4)),
+                       NxPoint(points.at(5), points.at(6)), false, recalculate);
+        else if(points.count() > 4) // 3+4 (x, y, sx, sy)
+            setPointAt(points.at(2), NxPoint(points.at(1), points.at(2), 0, points.at(3), points.at(4), 0), false, recalculate);
+        else if(points.count() > 3) // 3+3 (x, y, z)
+            setPointAt(points.at(0), NxPoint(points.at(1), points.at(2), points.at(3)), false, recalculate);
+        else if(points.count() > 2) // 3+2 (x, y)
+            setPointAt(points.at(0), NxPoint(points.at(1), points.at(2)), false, recalculate);
+    }
+    void setSmoothPointAtList(const QList<qreal> &points) {
+        bool recalculate = true;
+        if(points.count() > 6)      // 3+6 (x, y, z, sx, sy, sz)
+            setPointAt(points.at(0), NxPoint(points.at(1), points.at(2), points.at(3), points.at(4), points.at(5), points.at(6)), true, recalculate);
+        else if(points.count() > 4) // 3+4 (x, y, sx, sy)
+            setPointAt(points.at(0), NxPoint(points.at(1), points.at(2), 0, points.at(3), points.at(4), 0), true, recalculate);
+        else if(points.count() > 3) // 3+3 (x, y, z)
+            setPointAt(points.at(0), NxPoint(points.at(1), points.at(2), points.at(3)), true, recalculate);
+        else if(points.count() > 2) // 3+2 (x, y)
+            setPointAt(points.at(0), NxPoint(points.at(1), points.at(2)), true, recalculate);
+    }
+    QList<qreal> getPointAtList() const {
+        return QList<qreal>();
+    }
+
+
+    void setEquationStr(const QString &val) {
+        QStringList valItems = val.split(" ", QString::SkipEmptyParts);
+        if(valItems.count() > 1)
+            setEquation(valItems.at(0), val.mid(val.indexOf(valItems.at(1), val.indexOf(valItems.at(0))+valItems.at(0).length())).trimmed());
+    }
+    inline const QString getEquationStr() { return getEquationTypeStr() + " " + getEquation(); }
     void setEquation(const QString &type, const QString &_equation);
     void setEquationPoints(quint16 nbPoints);
-    void setEquationParam(const QString &param, qreal value, bool boundingRectCalculation = false);
+    void setEquationParam(const QString &param, qreal value);
     void calcEquation();
-    inline QString getEquation() {
-        return equation;
+    inline QString getEquation(bool readable = false) {
+        if(readable) {
+            QStringList equationStrs = equation.split(",");
+            QString equationReturn = "";
+            foreach(const QString &equationStr, equationStrs)
+                equationReturn += equationStr.trimmed() + "\n,\n";
+            if(equationStrs.count())
+                equationReturn.chop(3);
+            return equationReturn.trimmed();
+        }
+        else
+            return equation;
+    }
+    inline qint16 getEquationType() const {
+        if(curveType == CurveTypeEquationCartesian)
+            return 0;
+        else if(curveType == CurveTypeEquationPolar)
+            return 1;
+        return -1;
+    }
+    inline const QString getEquationTypeStr() const {
+        if(curveType == CurveTypeEquationCartesian)
+            return "cartesian";
+        else if(curveType == CurveTypeEquationPolar)
+            return "polar";
+        return "";
     }
     inline quint16 getEquationPoints() const {
         return equationNbPoints;
     }
     inline QString getEquationParamStr() const {
-        return "";
+        return QString();
     }
     inline void setEquationParamStr(const QString &params) {
         QStringList paramsList = params.split(" ");
@@ -109,8 +221,8 @@ public:
     inline const NxCurvePoint & getPathPointsAt(quint16 index) const {
 #ifdef KINECT_INSTALLED
         NxCurvePoint pt = pathPoints.at(qBound(0, (int)index, pathPoints.count()-1));
-        if((factory) && (factory->kinect))
-            pt.setZ(pos.z() + factory->kinect->getDepthAt(pos.x() + pt.x(), pos.y() + pt.y()));
+        if((Application::current) && (Application::current->kinect))
+            pt.setZ(pos.z() + Application::current->kinect->getDepthAt(pos.x() + pt.x(), pos.y() + pt.y()));
         return pt;
 #else
         return pathPoints.at(qBound(0, (int)index, pathPoints.count()-1));
@@ -129,23 +241,41 @@ public:
 
     void resample(quint16 nbPoints);
 
+    void isOnPathPoint();
     void isOnPathPoint(const NxRect & point);
     inline CurveType getCurveType() const {
         return curveType;
     }
 
-    inline const QList<NxCurvePoint> & getPathPoints() const {
+
+    inline const UiPathPointsItems & getPathPoints() const {
         return pathPoints;
     }
-    inline void setPathPoints(const QList<NxCurvePoint> &_pathPoints) {
+    inline void setShowPathPointsEditor(bool show = true) {
+        if(!pathPointsEditor) {
+            pathPointsEditor = new UiTreeView(0);
+            pathPointsEditor->resize(575, 270);
+            pathPointsEditor->setWindowFlags(Qt::Tool);
+            pathPointsEditor->setStyleSheet(Application::current->getMainWindow()->styleSheet() + pathPointsEditor->styleSheet() + "QWidget#UiTreeView { background-color: rgb(40, 40, 40); }");
+            pathPoints.configure(tr("Path points"), pathPointsEditor, &glListRecreateFromEditor);
+        }
+        pathPointsEditor->setWindowTitle(tr("Curve #%1").arg(id));
+        pathPoints.update();
+        if(show)    pathPointsEditor->show();
+        else        pathPointsEditor->hide();
+    }
+    inline bool getShowPathPointsEditor() const { return true; }
+    inline void setPathPoints(const UiPathPointsItems &_pathPoints) {
         pathPoints = _pathPoints;
         glListRecreate = true;
         calculate();
         calcBoundingRect();
     }
 
-    inline void dragStart(const NxPoint &) {
+    inline void dragStart(const NxPoint &, bool multipleObjects) {
         isDrag = true;
+        if(multipleObjects)
+            selectedPathPointPoint = selectedPathPointControl1 = selectedPathPointControl2 = -1;
         if(selectedPathPointPoint >= 0)
             posDrag = getPathPointsAt(selectedPathPointPoint);
         else if(selectedPathPointControl1 >= 0)
@@ -155,20 +285,23 @@ public:
         else
             posDrag = pos;
     }
-    inline void drag(const NxPoint & translation, const NxPoint &) {
-        if(selectedPathPointPoint >= 0)
-            setPointAt(selectedPathPointPoint, posDrag + translation, pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth);
+    inline void drag(const NxPoint & translation, const NxPoint &, bool multipleObjects) {
+        if(multipleObjects)
+            selectedPathPointPoint = selectedPathPointControl1 = selectedPathPointControl2 = -1;
+        if(selectedPathPointPoint >= 0) {
+            setPointAt(selectedPathPointPoint, posDrag + translation, pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth, true, true);
+        }
         else if(selectedPathPointControl1 >= 0) {
             if(selectedPathPointControl1 > 0)
                 pathPoints[selectedPathPointControl1-1].smooth = false;
-            setPointAt(selectedPathPointControl1, pathPoints.value(selectedPathPointControl1), posDrag + translation, pathPoints.value(selectedPathPointControl1).c2, pathPoints.value(selectedPathPointControl1).smooth);
+            setPointAt(selectedPathPointControl1, pathPoints.value(selectedPathPointControl1), posDrag + translation, pathPoints.value(selectedPathPointControl1).c2, pathPoints.value(selectedPathPointControl1).smooth, true, true);
         }
         else if(selectedPathPointControl2 >= 0) {
             pathPoints[selectedPathPointControl2].smooth = false;
-            setPointAt(selectedPathPointControl2, pathPoints.value(selectedPathPointControl2), pathPoints.value(selectedPathPointControl2).c1, posDrag + translation, pathPoints.value(selectedPathPointControl2).smooth);
+            setPointAt(selectedPathPointControl2, pathPoints.value(selectedPathPointControl2), pathPoints.value(selectedPathPointControl2).c1, posDrag + translation, pathPoints.value(selectedPathPointControl2).smooth, true, true);
         }
         else
-            setPos(posDrag + translation);
+            dragParent(translation);
 
         foreach(NxObject *object, cursors)
             object->calculate();
@@ -191,20 +324,52 @@ public:
 
     inline qreal getPathLength() const  { return pathLength; }
     void addMousePointAt(const NxPoint & _mousePos, bool remove);
-    void removePointAt(quint16 index);
-    const NxPoint & setPointAt(quint16 index, const NxPoint & point, bool smooth, bool boundingRectCalculation = true);
-    const NxPoint & setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation = true);
-    void shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation = true);
+    void setRemovePointAt(quint16 index);
+    inline quint16 getRemovePointAt() const { return 0.; }
+    const NxPoint & setPointAt(quint16 index, const NxPoint & point, bool smooth, bool boundingRectCalculation = true, bool fromGui = false);
+    const NxPoint & setPointAt(quint16 index, const NxPoint & point, const NxPoint & c1, const NxPoint & c2, bool smooth, bool boundingRectCalculation = true, bool fromGui = false);
+
     void setSVG(const QString & pathData);
     void setSVG2(const QString & polylineData);
     void setImage(const QString & filename);
+    void setText(const QString & text);
     void setText(const QString & text, const QString & family);
     void setEllipse(const NxSize & size);
+    void setEllipseStr(const QString &val) {
+        QStringList valItems = val.split(" ", QString::SkipEmptyParts);
+        if(valItems.count() > 1)
+            setEllipse(NxSize(valItems.at(0).toDouble(), valItems.at(1).toDouble()));
+    }
+    const QString getEllipseStr() const {
+        return QString("%1 %2").arg(getResize().width()/2).arg(getResize().height()/2);
+    }
+
+    bool shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation = true);
+    bool translate(const NxPoint & point);
+    void translatePoint(quint16 pointIndex, const NxPoint & point);
+    const QString getShiftPointAt() const { return QString(); }
+    void setShiftPointAt(const QString &val) {
+        QStringList valItems = val.split(" ", QString::SkipEmptyParts);
+        if(valItems.count() > 1)
+            shiftPointAt(valItems.at(0).toDouble(), valItems.at(1).toDouble());
+    }
+    const QString getTranslate() const { return QString(); }
+    void setTranslate(const QString &val) {
+        QStringList valItems = val.split(" ", QString::SkipEmptyParts);
+        if(valItems.count() > 2)
+            translate(NxPoint(valItems.at(0).toDouble(), valItems.at(1).toDouble(), valItems.at(2).toDouble()));
+    }
+    const QString getTranslatePoint() const { return QString(); }
+    void setTranslatePoint(const QString &val) {
+        QStringList valItems = val.split(" ", QString::SkipEmptyParts);
+        if(valItems.count() > 3)
+            translatePoint(valItems.at(0).toInt(), NxPoint(valItems.at(1).toDouble(), valItems.at(2).toDouble(), valItems.at(3).toDouble()));
+    }
+
+
     void setPath(const QPainterPath &path);
     void resize(const NxSize & size);
     void resize(qreal sizeFactorW, qreal sizeFactorH);
-    void translate(const NxPoint & point);
-    void translatePoint(quint16 pointIndex, const NxPoint & point);
     inline NxPoint getPointAt(quint16 index, qreal t);
     NxPoint getPointAt(qreal val, bool absoluteTime = false);
     NxPoint getAngleAt(qreal val, bool absoluteTime = false);
@@ -248,64 +413,61 @@ public:
 
     inline void addCursor(NxObject *cursor) {
         cursors.append(cursor);
+        calcBoundingRect();
         glListRecreate = true;
+        if(cursors.count()) {
+            if(colorActive   == "_simple_curve_active")   colorActive   = "_curve_active";
+            if(colorInactive == "_simple_curve_inactive") colorInactive = "_curve_inactive";
+        } else {
+            if(colorActive   == "_curve_active")   colorActive   = "_simple_curve_active";
+            if(colorInactive == "_curve_inactive") colorInactive = "_simple_curve_inactive";
+        }
     }
     inline void removeCursor(NxObject *cursor) {
         qint16 index = cursors.lastIndexOf(cursor);
         if(index >= 0)
             cursors.removeAt(index);
+        calcBoundingRect();
         glListRecreate = true;
+        if(cursors.count()) {
+            if(colorActive   == "_simple_curve_active")   colorActive   = "_curve_active";
+            if(colorInactive == "_simple_curve_inactive") colorInactive = "_curve_inactive";
+        } else {
+            if(colorActive   == "_curve_active")   colorActive   = "_simple_curve_active";
+            if(colorInactive == "_curve_inactive") colorInactive = "_simple_curve_inactive";
+        }
     }
 
-    QString serializeCustom(bool hasAScript) const {
-        QString retour = "";
-        QString prefix = "", postfix = COMMAND_END;
-        if(hasAScript) {
-            prefix = "run(\"";
-            postfix =  "\");" + COMMAND_END;
-        }
-        if(curveType == CurveTypeEllipse)
-            retour += prefix + QString(COMMAND_CURVE_ELL + " %1 %2 %3").arg("current").arg(getResize().width()/2).arg(getResize().height()/2) + postfix;
-        else {
-            if(hasAScript) {
+    const QString serialize() const {
+        QString retour;
+        QString objectId = QString::number(getId());
+
+        foreach(const QString &command, propertiesToSerialize.value(NxObjectDispatchProperty::source)) {
+            if(command == COMMAND_ID) {
+                retour += "\trun(\"" + QString("%1 %2 %3").arg(COMMAND_ADD).arg(getTypeStr()).arg(objectId) + "\");\n"; objectId = "current";
+            }
+            else if(command == COMMAND_CURVE_POINT) {
                 QString idStr = QString::number(id);
-                retour += "var points" + idStr + " = [\n";
+                retour += "\tvar points" + idStr + " = [\n";
                 for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
-                    retour += QString("\t{x: %1, y: %2, z: %3, ").arg(getPathPointsAt(indexPathPoint).x()).arg(getPathPointsAt(indexPathPoint).y()).arg(getPathPointsAt(indexPathPoint).z());
+                    retour += QString("\t\t{x: %1, y: %2, z: %3, ").arg(getPathPointsAt(indexPathPoint).x()).arg(getPathPointsAt(indexPathPoint).y()).arg(getPathPointsAt(indexPathPoint).z());
                     retour += QString("c1x: %1, c1y: %2, c1z: %3, ").arg(getPathPointsAt(indexPathPoint).c1.x()).arg(getPathPointsAt(indexPathPoint).c1.y()).arg(getPathPointsAt(indexPathPoint).c1.z());
                     retour += QString("c2x: %1, c2y: %2, c2z: %3},\n").arg(getPathPointsAt(indexPathPoint).c2.x()).arg(getPathPointsAt(indexPathPoint).c2.y()).arg(getPathPointsAt(indexPathPoint).c2.z());
                 }
-                retour += "];" + COMMAND_END;
-                retour += "for(var i = 0 ; i < points" + idStr + ".length ; i++)" + COMMAND_END;
-                retour += "\trun(\"setPointAt current \" + i + \" \" + points" + idStr + "[i].x + \" \" + points" + idStr + "[i].y + \" \" + points" + idStr + "[i].z + \" \" + points" + idStr + "[i].c1x + \" \" + points" + idStr + "[i].c1y + \" \" + points" + idStr + "[i].c1z + \" \" + points" + idStr + "[i].c2x + \" \" + points" + idStr + "[i].c2y + \" \" + points" + idStr + "[i].c2z);" + COMMAND_END;
+                retour += "\t];\n";
+                retour += "\tfor(var i = 0 ; i < points" + idStr + ".length ; i++)\n";
+                retour += QString("\t\trun(\"%1 %2 \" + i + \" \" + points" + idStr + "[i].x + \" \" + points" + idStr + "[i].y + \" \" + points" + idStr + "[i].z + \" \" + points" + idStr + "[i].c1x + \" \" + points" + idStr + "[i].c1y + \" \" + points" + idStr + "[i].c1z + \" \" + points" + idStr + "[i].c2x + \" \" + points" + idStr + "[i].c2y + \" \" + points" + idStr + "[i].c2z);\n").arg(COMMAND_CURVE_POINT).arg(objectId);
             }
-            else {
-                for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
-                    retour += prefix + QString(COMMAND_CURVE_POINT + " %1  %2  %3 %4 %5  ").arg("current").arg(indexPathPoint).arg(getPathPointsAt(indexPathPoint).x()).arg(getPathPointsAt(indexPathPoint).y()).arg(getPathPointsAt(indexPathPoint).z());
-                    retour += prefix + QString("%1 %2 %3  ").arg(getPathPointsAt(indexPathPoint).c1.x()).arg(getPathPointsAt(indexPathPoint).c1.y()).arg(getPathPointsAt(indexPathPoint).c1.z());
-                    retour += prefix + QString("%1 %2 %3").arg(getPathPointsAt(indexPathPoint).c2.x()).arg(getPathPointsAt(indexPathPoint).c2.y()).arg(getPathPointsAt(indexPathPoint).c2.z()) + postfix;
-                }
-            }
-            if((getLineStipple() != 0xFFFF) || (getLineFactor() != 1))
-                retour += prefix + QString(COMMAND_LINE + " %1 %2 %3").arg("current").arg(getLineStipple()).arg(getLineFactor()) + postfix;
+            else
+                retour += "\trun(\"" + QString("%1 %2 %3").arg(command).arg(objectId).arg(getProperty(qPrintable(command)).toString()) + "\");\n";
         }
-        if(!colorActive.isEmpty()) {
-            if(getColorActive() != "curve_active")
-                retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2").arg("current").arg(getColorActive()) + postfix;
-        }
-        else
-            retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColor().red()).arg(getColorActiveColor().green()).arg(getColorActiveColor().blue()).arg(getColorActiveColor().alpha()) + postfix;
-        if(!colorInactive.isEmpty()) {
-            if(getColorInactive() != "curve_inactive")
-                retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2").arg("current").arg(getColorInactive()) + postfix;
-        }
-        else
-            retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColor().red()).arg(getColorInactiveColor().green()).arg(getColorInactiveColor().blue()).arg(getColorInactiveColor().alpha()) + postfix;
-        if(getSize() != 1.2)
-            retour += prefix + QString(COMMAND_SIZE + " %1 %2").arg("current").arg(getSize()) + postfix;
 
         foreach(const NxObject *cursor, cursors)
-            retour += cursor->serialize(hasAScript);
+            retour += cursor->serialize();
+
+        if(!retour.isEmpty())
+            retour += "\n";
+
         return retour;
     }
 

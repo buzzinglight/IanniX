@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InterfaceDirect</class>
+ <widget class="QWidget" name="InterfaceDirect">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>226</width>
+    <height>32</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="statusTip">
+   <string>Recursive Interface|You've understood that IanniX can send messages to other software in order to control parameters. But imagine if you loop the output of IanniX on its input... Messages will be directly re-interpreted by IanniX, creating a recursive score.\nBut you can also use recursivity for very simple use cases: for example, a trigger that rewind the score, a cursor that moves the camera point of view...</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>10</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <item>
+      <widget class="QCheckBox" name="enable">
+       <property name="toolTip">
+        <string>Enable or disable recursive messages and control</string>
+       </property>
+       <property name="text">
+        <string>ENABLE RECURSIVITY (direct://)</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_28">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>141</width>
+         <height>11</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

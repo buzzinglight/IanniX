@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InterfaceSyphon</class>
+ <widget class="QWidget" name="InterfaceSyphon">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>173</width>
+    <height>37</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="statusTip">
+   <string>Syphon Interface|IanniX can output its score video flow through Syphon. With this functionnality, you can for example use the score as an element of your video installation or performance (video mapping, VJ-ing...).</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>5</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QCheckBox" name="serverEnable">
+     <property name="toolTip">
+      <string>Enable or disable score rendering output through Syphon</string>
+     </property>
+     <property name="text">
+      <string>ENABLE SYPHON OUT</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

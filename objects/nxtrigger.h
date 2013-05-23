@@ -20,29 +20,26 @@
 #define NXTRIGGER_H
 
 #include "nxobject.h"
+#include "messages/messagemanager.h"
 
 class NxTrigger : public NxObject {
     Q_OBJECT
-    Q_PROPERTY(QString textureActive           READ getTextureActive          WRITE setTextureActive)
-    Q_PROPERTY(QString textureInactive         READ getTextureInactive        WRITE setTextureInactive)
-    Q_PROPERTY(QString textureActiveMessage    READ getTextureActiveMessage   WRITE setTextureActiveMessage)
-    Q_PROPERTY(QString textureInactiveMessage  READ getTextureInactiveMessage WRITE setTextureInactiveMessage)
-    Q_PROPERTY(QString colorActiveMessage      READ getColorActiveMessage     WRITE setColorActiveMessage)
-    Q_PROPERTY(QString colorInactiveMessage    READ getColorInactiveMessage   WRITE setColorInactiveMessage)
-    Q_PROPERTY(QString colorActiveMessageHue   READ getColorActiveMessage     WRITE setColorActiveMessageHue)
-    Q_PROPERTY(QString colorInactiveMessageHue READ getColorInactiveMessage   WRITE setColorInactiveMessageHue)
-    Q_PROPERTY(qreal   triggerOff              READ getTriggerOff             WRITE setTriggerOff)
-    Q_PROPERTY(bool    forceTrig               READ getForceTrig              WRITE setForceTrig)
+
+    Q_PROPERTY(QString settextureactive   READ getTextureActive   WRITE setTextureActive)
+    Q_PROPERTY(QString settextureinactive READ getTextureInactive WRITE setTextureInactive)
+    Q_PROPERTY(qreal   settriggeroff      READ getTriggerOff      WRITE setTriggerOff)
+    Q_PROPERTY(bool    trig               READ getForceTrig       WRITE setForceTrig)
 
 public:
-    explicit NxTrigger(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions);
+    explicit NxTrigger(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
 
 private:
     qreal cacheSize;
-    QString textureActive, textureInactive, textureActiveMessage, textureInactiveMessage;
+    QString textureActive, textureInactive;
     NxObject *cursorTrigged;
     QColor colorTrigged;
     qreal triggerOff;
+    static GLuint glListTrigger;
 public:
     inline quint8 getType() const {
         return ObjectsTypeTrigger;
@@ -69,95 +66,12 @@ public:
     inline const QString & getTextureInactive() const {
         return textureInactive;
     }
-    inline void setTextureActiveMessage(const QString & _textureActiveMessage) {
-        textureActiveMessage = _textureActiveMessage;
-    }
-    inline const QString & getTextureActiveMessage() const {
-        return textureActiveMessage;
-    }
-    inline void setTextureInactiveMessage(const QString & _textureInactiveMessage) {
-        textureInactiveMessage = _textureInactiveMessage;
-    }
-    inline const QString & getTextureInactiveMessage() const {
-        return textureInactiveMessage;
-    }
     inline qreal getTriggerOff() const {
         return triggerOff;
     }
     inline void setTriggerOff(qreal _triggerOff) {
         triggerOff = _triggerOff;
     }
-
-    inline void setColorActiveMessage(const QString & _color) {
-        QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
-        if(colorItem.count() == 4) {
-            colorActiveMessage = "";
-            colorActiveColorMessage = QColor(colorItem.at(0).toDouble(), colorItem.at(1).toDouble(), colorItem.at(2).toDouble(), colorItem.at(3).toDouble());
-        }
-        else {
-            colorActiveMessage = _color;
-        }
-    }
-    inline void setColorActiveMessageHue(const QString & _color) {
-        QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
-        if(colorItem.count() == 4) {
-            colorActiveMessage = "";
-            QColor color;
-            color.setHsv(colorItem.at(0).toDouble(), colorItem.at(1).toDouble(), colorItem.at(2).toDouble(), colorItem.at(3).toDouble());
-            colorActiveColorMessage = color;
-        }
-        else {
-            colorActiveMessage = _color;
-        }
-    }
-    inline const QString & getColorActiveMessage() const {
-        return colorActiveMessage;
-    }
-    inline const QColor & getColorActiveColorMessage() const {
-        return colorActiveColorMessage;
-    }
-    inline const QString getColorActiveMessageVerbose() const {
-        if(!colorActiveMessage.isEmpty())
-            return colorActiveMessage;
-        else
-            return QString("%1 %2 %3 %4").arg(colorActiveColorMessage.red()).arg(colorActiveColorMessage.green()).arg(colorActiveColorMessage.blue()).arg(colorActiveColorMessage.alpha());
-    }
-    inline void setColorInactiveMessage(const QString & _color) {
-        QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
-        if(colorItem.count() == 4) {
-            colorInactiveMessage = "";
-            colorInactiveColorMessage = QColor(colorItem.at(0).toDouble(), colorItem.at(1).toDouble(), colorItem.at(2).toDouble(), colorItem.at(3).toDouble());
-        }
-        else
-            colorInactiveMessage = _color;
-    }
-    inline void setColorInactiveMessageHue(const QString & _color) {
-        QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
-        if(colorItem.count() == 4) {
-            colorInactiveMessage = "";
-            QColor color;
-            color.setHsv(colorItem.at(0).toDouble(), colorItem.at(1).toDouble(), colorItem.at(2).toDouble(), colorItem.at(3).toDouble());
-            colorInactiveColorMessage = color;
-        }
-        else
-            colorInactiveMessage = _color;
-    }
-    inline const QString & getColorInactiveMessage() const {
-        return colorInactiveMessage;
-    }
-    inline const QColor & getColorInactiveColorMessage() const {
-        return colorInactiveColorMessage;
-    }
-    inline const QString getColorInactiveMessageVerbose() const {
-        if(!colorInactiveMessage.isEmpty())
-            return colorInactiveMessage;
-        else
-            return QString("%1 %2 %3 %4").arg(colorInactiveColorMessage.red()).arg(colorInactiveColorMessage.green()).arg(colorInactiveColorMessage.blue()).arg(colorInactiveColorMessage.alpha());
-    }
-
-
-
-
 
 public:
     inline void calcBoundingRect() {
@@ -173,55 +87,18 @@ public:
             return false;
     }
 
-    QString serializeCustom(bool hasAScript) const {
+    const QString serialize() const {
         QString retour = "";
-        QString prefix = "", postfix = COMMAND_END;
-        if(hasAScript) {
-            prefix = "run(\"";
-            postfix =  "\");" + COMMAND_END;
-        }
-        if(getTriggerOff() != 0)
-            retour += prefix + QString(COMMAND_TRIGGER_OFF + " %1 %2").arg("current").arg(getTriggerOff()) + postfix;
+        QString objectId = QString::number(getId());
 
-        if(getTextureActive() != "trigger_active")
-            retour += prefix + QString(COMMAND_TEXTURE_ACTIVE + " %1 %2").arg("current").arg(getTextureActive()) + postfix;
-        if(getTextureInactive() != "trigger_inactive")
-            retour += prefix + QString(COMMAND_TEXTURE_INACTIVE + " %1 %2").arg("current").arg(getTextureInactive()) + postfix;
-        if(getTextureActiveMessage() != "trigger_active_message")
-            retour += prefix + QString(COMMAND_TEXTURE_ACTIVE_MESSAGE + " %1 %2").arg("current").arg(getTextureActiveMessage()) + postfix;
-        if(getTextureInactiveMessage() != "trigger_inactive_message")
-            retour += prefix + QString(COMMAND_TEXTURE_INACTIVE_MESSAGE + " %1 %2").arg("current").arg(getTextureInactiveMessage()) + postfix;
-
-        if(!colorActive.isEmpty()) {
-            if(getColorActive() != "trigger_active")
-                retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2").arg("current").arg(getColorActive()) + postfix;
+        foreach(const QString &command, propertiesToSerialize.value(NxObjectDispatchProperty::source)) {
+            if(command == COMMAND_ID) {
+                retour += "\trun(\"" + QString("%1 %2 %3").arg(COMMAND_ADD).arg(getTypeStr()).arg(objectId) + "\");\n"; objectId = "current";
+            }
+            else                      retour += "\trun(\"" + QString("%1 %2 %3").arg(command).arg(objectId).arg(getProperty(qPrintable(command)).toString()) + "\");\n";
         }
-        else
-            retour += prefix + QString(COMMAND_COLOR_ACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColor().red()).arg(getColorActiveColor().green()).arg(getColorActiveColor().blue()).arg(getColorActiveColor().alpha()) + postfix;
-        if(!colorInactive.isEmpty()) {
-            if(getColorInactive() != "trigger_inactive")
-                retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2").arg("current").arg(getColorInactive()) + postfix;
-        }
-        else
-            retour += prefix + QString(COMMAND_COLOR_INACTIVE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColor().red()).arg(getColorInactiveColor().green()).arg(getColorInactiveColor().blue()).arg(getColorInactiveColor().alpha()) + postfix;
-        if(!colorActiveMessage.isEmpty()) {
-            if(getColorActiveMessage() != "trigger_active_message")
-                retour += prefix + QString(COMMAND_COLOR_ACTIVE_MESSAGE + " %1 %2").arg("current").arg(getColorActiveMessage()) + postfix;
-        }
-        else
-            retour += prefix + QString(COMMAND_COLOR_ACTIVE_MESSAGE + " %1 %2 %3 %4 %5").arg("current").arg(getColorActiveColorMessage().red()).arg(getColorActiveColorMessage().green()).arg(getColorActiveColorMessage().blue()).arg(getColorActiveColorMessage().alpha()) + postfix;
-
-        if(!colorInactiveMessage.isEmpty()) {
-            if(getColorInactiveMessage() != "trigger_inactive_message")
-                retour += prefix + QString(COMMAND_COLOR_INACTIVE_MESSAGE + " %1 %2").arg("current").arg(getColorInactiveMessage()) + postfix;
-        }
-        else
-            retour += prefix + QString(COMMAND_COLOR_INACTIVE_MESSAGE + " %1 %2 %3 %4 %5").arg("current").arg(getColorInactiveColorMessage().red()).arg(getColorInactiveColorMessage().green()).arg(getColorInactiveColorMessage().blue()).arg(getColorInactiveColorMessage().alpha()) + postfix;
-        if(getSize() != 1)
-            retour += prefix + QString(COMMAND_SIZE + " %1 %2").arg("current").arg(getSize()) + postfix;
-
-        if(getMessagePatternsStr() != QSettings().value("defaultMessageTrigger").toString()+" ,")
-            retour += prefix + QString(COMMAND_MESSAGE + " %1 %2, %3").arg("current").arg(QString::number(messageTimeInterval)).arg(getMessagePatternsStr()) + postfix;
+        if(!retour.isEmpty())
+            retour += "\n";
         return retour;
     }
 

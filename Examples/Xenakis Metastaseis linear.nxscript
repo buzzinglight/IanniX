@@ -1,0 +1,119 @@
+//Setup of the script
+function onConfigure() {
+	//Name
+	title("Xenakis Metastaseis");
+	//Global variables
+	ask("Speed", "- auto [duration]\n- [speed]", "speed", "auto 40");
+}
+
+//Creation of the score
+function onCreate() {
+	//Viewport setup
+	run("clear");
+	run("registerTexture background");
+	run("rotate 0 0 0");
+	run("zoom 180");
+	run("center 3 7");
+	
+
+	//Draw polylines curves
+	addPolyline("0,0.35 2.88,3.05 4.69968,5.91624 5.77802,4.82202 5.7789,4.82112,");
+	addPolyline("0,4.67 2.89,2.14 4.715,6.275 5.775,4.82376");
+	addPolyline("0.005,3.0451.8 2.905,6.455 4.71,4.475 5.77812,4.82");
+	addPolyline("0.005,3.045 2.915,5.91 4.71032,4.30156 5.77812,4.81908");
+	addPolyline("0.005,8.99 2.905,10.78 4.715,4.825 5.77918,4.81916");
+	addPolyline("0.005,11.69 2.89,9.345 4.71002,5.2 5.77584,4.82166");
+	addPolyline("0.005,12.415 2.89,8.805 4.71,5.365 5.77062,4.82438");
+	addPolyline("0.005,12.76 2.89,8.455 4.71,5.365 5.77274,4.8237");
+	addPolyline("0.005,13.12 2.895,8.1 4.705,5.565 5.7721,4.82544");
+	addPolyline("0.005,12.935 2.89,8.275 4.705,5.565 5.76834,4.82834");
+	addPolyline("0.005,13.31 2.89,7.91 4.705,5.5625 5.77,4.82834");
+	addPolyline("0.005,13.855 2.89,7.39 4.71,5.74 5.77334,4.82584");
+	addPolyline("0.005,14.025 2.895,7.21 4.71002,5.73916 5.77002,4.82666");
+	addPolyline("0.005,0 2.89,2.88 4.7,5.92 5.77834,4.81998");
+	addPolyline("0.00594,2.70562 2.89594,5.74062 4.71016,4.30384 5.7725,4.81584");
+	addPolyline("0.01,0.699999999999999 2.89,3.23 4.7,5.92 5.78,4.82");
+	addPolyline("0.01,1.08 2.89,3.4 4.705,4.65 5.77948,4.82");
+	addPolyline("0.01,1.43 2.9,6.825 4.71,4.475 5.77876,4.81876");
+	addPolyline("0.01,1.625 2.895,6.65 4.71032,4.47282 5.77376,4.81876");
+	addPolyline("0.01,3.4 2.885,2.685 4.7,5.92 5.77852,4.8215");
+	addPolyline("0.01,3.58 2.895,5.215 4.71,4.11 5.77688,4.81812");
+	addPolyline("0.01,3.765 2.895,5.015 4.71032,4.1075 5.77562,4.8175");
+	addPolyline("0.01,3.94 2.895,4.84 4.71,4.11 5.77812,4.81876");
+	addPolyline("0.01,4.315 2.89,1.935 4.715,6.275 5.77798,4.82276");
+	addPolyline("0.01,5.02 2.895,2.33 4.71562,6.26124 5.77834,4.81834");
+	addPolyline("0.01,5.375 2.9,2.5 4.715,6.275 5.77912,4.8212");
+	addPolyline("0.01,5.74 2.885,4.665 4.71,3.925 5.7788,4.819");
+	addPolyline("0.01,6.485 2.89,4.305 4.71,3.92312 5.77998,4.82");
+	addPolyline("0.01,6.82 2.89,4.125 4.71,3.925 5.77812,4.81844");
+	addPolyline("0.01,7.89 2.89,3.585 4.70562,4.64782 5.77562,4.82");
+	addPolyline("0.01,8.805 2.905,5.535 4.70978,4.29246 5.77712,4.81862");
+	addPolyline("0.01,8.625 2.895,10.24 4.7125,5.01 5.7775,4.8175");
+	addPolyline("0.01,9.885 2.895,10.97 4.715,4.825 5.7725,4.82082");
+	addPolyline("0.01,10.25 2.9,11.135 4.715,4.82498 5.7725,4.81998");
+	addPolyline("0.01,10.62 2.895,9.875 4.715,5.01 5.7775,4.81812");
+	addPolyline("0.01,10.965 2.895,9.685 4.71312,5.01 5.76938,4.81876");
+	addPolyline("0.01,11.325 2.91,9.51 4.71,5.2 5.76084,4.82666");
+	addPolyline("0.01,9.705 2.89,10.425 4.715,5.01 5.77476,4.81954");
+	addPolyline("0.01,12.04 2.895,9.185 4.71,5.2 5.77464,4.82032");
+	addPolyline("0.01,12.235 2.885,9.005 4.71,5.365 5.77906,4.82");
+	addPolyline("0.01,12.58 2.89,8.645 4.71084,5.36584 5.77688,4.82062");
+	addPolyline("0.01,13.67 2.89,7.565 4.71,5.74 5.77902,4.82086");
+	addPolyline("0.01,14.2 2.9,7.045 4.71,5.74 5.78,4.82");
+	addPolyline("0.01094,2.31562 2.89094,6.11062 4.71032,4.30156 5.7775,4.81834");
+	addPolyline("0.015,6.105 2.89,4.47 4.71062,3.9275 5.77832,4.81832");
+	addPolyline("0.015,7.205 2.9,3.93 4.705,4.65 5.7772,4.81956");
+	addPolyline("0.015,7.55 2.915,3.74 4.705,4.65 5.77688,4.81938");
+	addPolyline("0.015,8.08 2.895,5.385 4.71,4.11 5.7769,4.81792");
+	addPolyline("0.015,8.275 2.885,10.065 4.715,5.01 5.775,4.81876");
+	addPolyline("0.02,1.97 2.905,6.275 4.71032,4.47312 5.77876,4.82062");
+	addPolyline("0.02,9.34 2.9,10.61 4.71252,4.82416 5.77502,4.82082");
+	addPolyline("0.02,13.485 2.89,7.725 4.705,5.565 5.77102,4.82622");
+
+	//Timeline
+	run("add curve  1000");
+	run("setPointAt current 1 6 0");
+
+	run("add cursor      auto")
+	run("setWidth        current 30");
+	run("setCurve        current lastCurve");
+	run("setSpeed        current " + speed);
+	run("setGroup        current values");
+	run("setMessage      current 20, osc://ip_out:57120/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0, tcp:// curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0");
+	run("setBoundsSource current 0 6 0 14.2");
+
+	//Change cursors color
+	run("setColor cursors 255 135 0 255");
+	run("setColor lines   100 200 255 255");
+	run("registerTexture background -1.85 16.3 7.4 -0.8 ./Samples/Xenakis - Metastaseis.png");
+}
+
+//Cursor index as global variable
+var curve_id = 0;
+//Custom function
+function addPolyline(path) {
+	run("add curve       " + curve_id);
+	run("setGroup        current lines");
+	run("setPointsLines  current 1 " + path);
+	curve_id++;
+}
+
+
+/*
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+

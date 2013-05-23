@@ -776,9 +776,8 @@ ulong QextSerialPort::lineStatus(void) {
     return Status;
 }
 
-bool QextSerialPort::waitForReadyRead(int msecs)
+bool QextSerialPort::waitForReadyRead(int /*msecs*/)
 {
-    //@todo implement
     return false;
 }
 

@@ -18,58 +18,54 @@
 
 #include "nxtrigger.h"
 
-NxTrigger::NxTrigger(NxObjectFactoryInterface *parent, QTreeWidgetItem *ccParentItem, UiRenderOptions *_renderOptions) :
-        NxObject(parent, ccParentItem, _renderOptions) {
-    setColorActive("trigger_active");
-    setColorInactive("trigger_inactive");
-    setColorActiveMessage("trigger_active_message");
-    setColorInactiveMessage("trigger_inactive_message");
+GLuint NxTrigger::glListTrigger = 0;
+
+NxTrigger::NxTrigger(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
+    NxObject(parent, ccParentItem) {
+    setText(0, tr("TRIGGER"));
+    setColorActive  ("_trigger_active");
+    setColorInactive("_trigger_inactive");
     setSize(1);
     cacheSize = 0;
     cursorTrigged = 0;
-    setTextureActive("trigger_active");
+    setTextureActive  ("trigger_active");
     setTextureInactive("trigger_inactive");
-    setTextureActiveMessage("trigger_active_message");
-    setTextureInactiveMessage("trigger_inactive_message");
     setTriggerOff(0);
+    setMessagePatterns("1," + Global::defaultMessageTrigger.val());
 }
 
 void NxTrigger::paint() {
     //Color
     if(cursorTrigged)
         color = colorTrigged;
-    else if(messagePatterns.count() > 0) {
-        if(active)
-            color = (!colorActiveMessage.isEmpty())?(renderOptions->colors.value(colorActiveMessage)):(colorActiveColorMessage);
-        else
-            color = (!colorInactiveMessage.isEmpty())?(renderOptions->colors.value(colorInactiveMessage)):(colorInactiveColorMessage);
+    else if(active) {
+        if(colorActive.isEmpty())                                                                                   color = colorActiveColor;
+        else if((colorActive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorActive)))  color = Global::colors->value(Global::colorsPrefix() + colorActive);
+        else if(Global::colors->contains(colorActive))                                                              color = Global::colors->value(colorActive);
+        else                                                                                                        color = Qt::gray;
     }
     else {
-        if(active)
-            color = (!colorActive.isEmpty())?(renderOptions->colors.value(colorActive)):(colorActiveColor);
-        else
-            color = (!colorInactive.isEmpty())?(renderOptions->colors.value(colorInactive)):(colorInactiveColor);
+        if(colorInactive.isEmpty())                                                                                     color = colorInactiveColor;
+        else if((colorInactive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorInactive)))  color = Global::colors->value(Global::colorsPrefix() + colorInactive);
+        else if(Global::colors->contains(colorInactive))                                                                color = Global::colors->value(colorInactive);
+        else                                                                                                            color = Qt::gray;
     }
 
     //Size of trigger
-    if(cacheSize != renderOptions->objectSize*size) {
-        cacheSize = renderOptions->objectSize*size;
+    if(cacheSize != Global::objectSize*size) {
+        cacheSize = Global::objectSize*size;
         calcBoundingRect();
     }
 
     if((color.alpha() > 0) && (cacheSize > 0)) {
-        if(selectedHover)
-            color = renderOptions->colors.value("object_hover");
-        if(selected)
-            color = renderOptions->colors.value("object_selection");
+        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_object_hover");
+        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_object_selection");
 
         //Start
-        bool opacityCheck = ((renderOptions->paintTriggers) && (renderOptions->paintThisGroup) && ((renderOptions->paintZStart <= pos.z()) && (pos.z() <= renderOptions->paintZEnd)));
-
-        if(!renderOptions->allowSelectionTriggers)
+        if(!Global::allowSelectionTriggers)
             color.setAlphaF(color.alphaF()/3);
 
-        if(opacityCheck)
+        if(Global::paintThisGroup)
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
@@ -77,47 +73,64 @@ void NxTrigger::paint() {
 
         glPushMatrix();
         glTranslatef(pos.x(), pos.y(), pos.z());
-        glRotatef(renderOptions->rotation.z(), 0, 0, -1);
-        glRotatef(renderOptions->rotation.x(), 0, -1, 0);
-        glRotatef(renderOptions->rotation.y(), -1, 0, 0);
-
-        //Draw
-        Texture texture;
-        if(messagePatterns.count() > 0) {
-            if(active)
-                texture = renderOptions->textures.value(textureActiveMessage);
-            else
-                texture = renderOptions->textures.value(textureInactiveMessage);
-        }
-        else {
-            if(active)
-                texture = renderOptions->textures.value(textureActive);
-            else
-                texture = renderOptions->textures.value(textureInactive);
-        }
+        glRotatef(Global::rotation.z(), 0, 0, -1);
+        glRotatef(Global::rotation.x(), 0, -1, 0);
+        glRotatef(Global::rotation.y(), -1, 0, 0);
 
         //Label
-        if((opacityCheck) && (renderOptions->paintLabel) && (!label.isEmpty()))
-            renderOptions->render->renderText(cacheSize * 1.1 * texture.mapping.right()/2, cacheSize * 1.1 * texture.mapping.top(), 0, label, renderOptions->renderFont);
+        if((Global::paintThisGroup) && (Global::paintLabel) && (!label.isEmpty()))
+            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id) + " - " + label, Global::renderFont);
+        else if(selectedHover)
+            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id), Global::renderFont);
         if(selectedHover) {
-            qreal startY = 0;
+            qreal startY = -0.2 - cacheSize * 1.2;
             foreach(const QString & messageLabelItem, messageLabel) {
-                renderOptions->render->renderText(cacheSize * 1.5 * texture.mapping.right(), startY, 0, messageLabelItem, renderOptions->renderFont);
-                startY -= cacheSize * 1.5;
+                Application::render->renderText(cacheSize * 1.2, startY, 0, messageLabelItem, Global::renderFont);
+                startY -= 0.4;
             }
         }
 
 
 
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture.texture);
-        glBegin(GL_QUADS);
-        glTexCoord2d(0, 0); glVertex3f(cacheSize * texture.mapping.left(),  cacheSize * texture.mapping.bottom(), 0);
-        glTexCoord2d(1, 0); glVertex3f(cacheSize * texture.mapping.right(), cacheSize * texture.mapping.bottom(), 0);
-        glTexCoord2d(1, 1); glVertex3f(cacheSize * texture.mapping.right(), cacheSize * texture.mapping.top(), 0);
-        glTexCoord2d(0, 1); glVertex3f(cacheSize * texture.mapping.left(),  cacheSize * texture.mapping.top(), 0);
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
+        //Draw
+        bool ok = false;
+        QString textureName = (active)?(textureActive):(textureInactive);
+        if(Global::textures->contains(textureName)) {
+            UiRenderTexture *texture = Global::textures->value(textureName);
+            if((texture) && (texture->loaded) && (texture->mapping.width() != 0 ) && (texture->mapping.height() != 0)) {
+                ok = true;
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, texture->texture);
+                glBegin(GL_QUADS);
+                glTexCoord2d(0, 0); glVertex3f(cacheSize * texture->mapping.left(),  cacheSize * texture->mapping.bottom(), 0);
+                glTexCoord2d(1, 0); glVertex3f(cacheSize * texture->mapping.right(), cacheSize * texture->mapping.bottom(), 0);
+                glTexCoord2d(1, 1); glVertex3f(cacheSize * texture->mapping.right(), cacheSize * texture->mapping.top(), 0);
+                glTexCoord2d(0, 1); glVertex3f(cacheSize * texture->mapping.left(),  cacheSize * texture->mapping.top(), 0);
+                glEnd();
+                glDisable(GL_TEXTURE_2D);
+            }
+        }
+        if(!ok) {
+            glScalef(cacheSize, cacheSize, cacheSize);
+            if(glListTrigger == 0) {
+                glListTrigger = glGenLists(1);
+                glNewList(glListTrigger, GL_COMPILE_AND_EXECUTE);
+                glLineWidth(size);
+                glBegin(GL_POLYGON);
+                for(qreal drawAngle = 0 ; drawAngle < 2*M_PI ; drawAngle += 0.3)
+                    glVertex2d(0.7 * qCos(drawAngle), 0.7 * qSin(drawAngle));
+                glEnd();
+                glLineWidth(1.5);
+                glBegin(GL_LINE_LOOP);
+                for(qreal drawAngle = 0 ; drawAngle < 2*M_PI ; drawAngle += 0.3)
+                    glVertex2d(1.2 * qCos(drawAngle), 1.2 * qSin(drawAngle));
+                glEnd();
+                glLineWidth(1);
+                glEndList();
+            }
+            else
+                glCallList(glListTrigger);
+        }
 
         //End
         glPopMatrix();
@@ -126,26 +139,23 @@ void NxTrigger::paint() {
 
 void NxTrigger::trig(NxObject *cursor) {
     /*if((!cursor) || (!cursorTrigged)) {*/
-        if(cursor) {
-            colorTrigged = cursor->getCurrentColor();
-            colorTrigged.setAlpha(255);
-        }
-        cursorTrigged = cursor;
-        QTimer::singleShot(qMax(triggerOff*1000, (qreal)80), this, SLOT(trigEnd()));
-        factory->sendMessage(this, this, cursorTrigged);
+    if(cursor) {
+        colorTrigged = cursor->getCurrentColor();
+        colorTrigged.setAlpha(255);
+    }
+    cursorTrigged = cursor;
+    QTimer::singleShot(qMax(triggerOff*1000, (qreal)80), this, SLOT(trigEnd()));
+    MessageManager::outgoingMessage(MessageManagerDestination(this, this, cursorTrigged));
     //}
 }
 void NxTrigger::trigEnd() {
     NxObject *cursorTriggedTmp = cursorTrigged;
-
-    ////CG//// 
-	//Suppress trigger-off if it is a midi message (note-off will be done by midi note duration in midi message)
     bool isMidiMessage = false;
     foreach(const QVector<QByteArray> & messagePattern, this->getMessagePatterns()) {
         if(messagePattern.at(0).startsWith("midi"))
             isMidiMessage = true;
-        }
+    }
     cursorTrigged = 0;
     if(triggerOff > 0 && !isMidiMessage)
-        factory->sendMessage(this, this, cursorTriggedTmp);
+        MessageManager::outgoingMessage(MessageManagerDestination(this, this, cursorTriggedTmp));
 }

@@ -22,112 +22,107 @@
 
 #define COMMAND_END_BYTE                    '\n'
 #define COMMAND_END                         QString(COMMAND_END_BYTE)
-#define COMMAND_ADD                         QString("add")
-#define COMMAND_REMOVE                      QString("remove")
-#define COMMAND_CLEAR                       QString("clear")
-#define COMMAND_GROUP                       QString("setgroup")
-#define COMMAND_ACTIVE                      QString("setactive")
 
-#define COMMAND_TRIGGER_OFF                 QString("settriggeroff")
-
-#define COMMAND_CURSOR_CURVE                QString("setcurve")
-#define COMMAND_CURSOR_WIDTH                QString("setwidth")
-#define COMMAND_CURSOR_DEPTH                QString("setdepth")
-#define COMMAND_CURSOR_START                QString("setpattern")
-#define COMMAND_CURSOR_SPEED                QString("setspeed")
-#define COMMAND_CURSOR_SPEEDF               QString("setspeedf")
-#define COMMAND_CURSOR_OFFSET               QString("setoffset")
-#define COMMAND_CURSOR_BOUNDS_SOURCE        QString("setboundssource")
-#define COMMAND_CURSOR_BOUNDS_TARGET        QString("setboundstarget")
-#define COMMAND_CURSOR_TIME                 QString("settime")
-#define COMMAND_CURSOR_TIME_PERCENT         QString("settimepercent")
-
-#define COMMAND_CURVE_INERTIE               QString("setinertia")
-#define COMMAND_CURVE_POINT_SHIFT           QString("shiftpoints")
-#define COMMAND_CURVE_POINT_TRANSLATE       QString("translatepoints")
-#define COMMAND_CURVE_POINT_TRANSLATE2      QString("translatepoint")
-#define COMMAND_CURVE_POINT                 QString("setpointat")
-#define COMMAND_CURVE_POINT_X               QString("setpointxat")
-#define COMMAND_CURVE_POINT_Y               QString("setpointyat")
-#define COMMAND_CURVE_POINT_Z               QString("setpointzat")
-#define COMMAND_CURVE_POINT_SMOOTH          QString("setsmoothpointat")
-#define COMMAND_CURVE_POINT_RMV             QString("removepointat")
-#define COMMAND_CURVE_EQUATION              QString("setequation")
-#define COMMAND_CURVE_EQUATION_PARAM        QString("setequationparam")
-#define COMMAND_CURVE_EQUATION_POINTS       QString("setequationnbpoints")
-#define COMMAND_CURVE_TXT                   QString("setpointstxt")
-#define COMMAND_CURVE_SVG                   QString("setpointssvg")
-#define COMMAND_CURVE_SVG2                  QString("setpointssvg2")
-#define COMMAND_CURVE_PATH                  QString("setpointspath")
-#define COMMAND_CURVE_LINES                 QString("setpointslines")
-#define COMMAND_CURVE_IMG                   QString("setpointsimg")
-#define COMMAND_CURVE_ELL                   QString("setpointsellipse")
-#define COMMAND_CURVE_LENGTH                QString("setlength")
-
-#define COMMAND_SIZE                        QString("setsize")
-#define COMMAND_RESIZE                      QString("setresize")
-#define COMMAND_RESIZEF                     QString("setresizef")
-#define COMMAND_LINE                        QString("setline")
-#define COMMAND_POS                         QString("setpos")
-#define COMMAND_LABEL                       QString("setlabel")
-
-#define COMMAND_MESSAGE                     QString("setmessage")
-#define COMMAND_MESSAGE_SEND                QString("sendosc")
-
-#define COMMAND_MOUSE                       QString("mouse")
-#define COMMAND_SOLO                        QString("solo")
-#define COMMAND_MUTE                        QString("mute")
-
-#define COMMAND_TEXTURE                     QString("registertexture")
-
-#define COMMAND_TEXTURE_GLOBAL              QString("settexture")
-#define COMMAND_TEXTURE_ACTIVE              QString("settextureactive")
-#define COMMAND_TEXTURE_INACTIVE            QString("settextureinactive")
-#define COMMAND_TEXTURE_ACTIVE_MESSAGE      QString("settextureactivemessage")
-#define COMMAND_TEXTURE_INACTIVE_MESSAGE    QString("settextureinactivemessage")
+// DOCUMENTED IN GUI
+#define COMMAND_ADD                         "add"
+#define COMMAND_REMOVE                      "remove"
+#define COMMAND_CLEAR                       "clear"
+#define COMMAND_ID                          "setid"
+#define COMMAND_GROUP                       "setgroup"
+#define COMMAND_TRIGGER_OFF                 "settriggeroff"
+#define COMMAND_ACTIVE                      "setactive"
+#define COMMAND_CURSOR_CURVE                "setcurve"
+#define COMMAND_CURSOR_START                "setpattern"
+#define COMMAND_CURSOR_WIDTH                "setwidth"
+#define COMMAND_CURSOR_DEPTH                "setdepth"
+#define COMMAND_CURSOR_SPEED                "setspeed"
+#define COMMAND_CURSOR_SPEEDF               "setspeedf"
+#define COMMAND_CURSOR_BOUNDS_SOURCE        "setboundssource"
+#define COMMAND_CURSOR_BOUNDS_SOURCE_MODE   "setboundssourcemode"
+#define COMMAND_CURSOR_BOUNDS_TARGET        "setboundstarget"
+#define COMMAND_CURSOR_OFFSET               "setoffset"
+#define COMMAND_CURVE_EDITOR                "displaycurveeditor"
+#define COMMAND_CURVE_EQUATION              "setequation"
+#define COMMAND_CURVE_EQUATION_POINTS       "setequationnbpoints"
+#define COMMAND_CURVE_ELL                   "setpointsellipse"
+#define COMMAND_CURVE_POINT                 "setpointat"
+#define COMMAND_CURVE_POINT_SMOOTH          "setsmoothpointat"
+#define COMMAND_CURVE_POINT_RMV             "removepointat"
+#define COMMAND_SIZE                        "setsize"
+#define COMMAND_POS                         "setpos"
+#define COMMAND_POS_TRANSLATE               "settranslate"
+#define COMMAND_POS_X                       "setposx"
+#define COMMAND_POS_Y                       "setposy"
+#define COMMAND_POS_Z                       "setposz"
+#define COMMAND_MESSAGE                     "setmessage"
+#define COMMAND_MESSAGE_INTERVAL            "setmessageinterval"
+#define COMMAND_LABEL                       "setlabel"
+#define COMMAND_ZOOM                        "zoom"
+#define COMMAND_GOTO                        "goto"
+#define COMMAND_PLAY                        "play"
+#define COMMAND_STOP                        "stop"
+#define COMMAND_FF                          "fastrewind"
+#define COMMAND_SPEED                       "speed"
+#define COMMAND_CENTER                      "center"
+#define COMMAND_ROTATE                      "rotate"
+#define COMMAND_TRIG                        "trig"
+#define COMMAND_GLOBAL_COLOR                "registercolor"
+#define COMMAND_COLOR_ACTIVE                "setcoloractive"
+#define COMMAND_COLOR_INACTIVE              "setcolorinactive"
+#define COMMAND_TEXTURE                     "registertexture"
+#define COMMAND_TEXTURE_ACTIVE              "settextureactive"
+#define COMMAND_TEXTURE_INACTIVE            "settextureinactive"
+#define COMMAND_SOLO                        "setsolo"
+#define COMMAND_MUTE                        "setmute"
+#define COMMAND_CURVE_TXT                   "setpointstxt"
+#define COMMAND_CURVE_PATH                  "setpointspath"
+#define COMMAND_CURVE_IMG                   "setpointsimg"
+#define COMMAND_RESIZE                      "setresize"
+#define COMMAND_CURSOR_TIME_PERCENT         "settimepercent"
 
 
-#define COMMAND_GLOBAL_COLOR                QString("registercolor")
-#define COMMAND_GLOBAL_COLOR2               QString("registercolor2")
-#define COMMAND_GLOBAL_COLOR_HUE            QString("registercolorhue")
 
-#define COMMAND_COLOR_GLOBAL                QString("setcolor")
-#define COMMAND_COLOR_GLOBAL2               QString("setcolor2")
-#define COMMAND_COLOR_GLOBAL_HUE            QString("setcolorhue")
+// CLOSE TO OTHER FUNCTIONS
+#define COMMAND_TEXTURE_GLOBAL              "settexture"
+#define COMMAND_GLOBAL_COLOR_HUE            "registercolorhue"
+#define COMMAND_COLOR_GLOBAL                "setcolor"
+#define COMMAND_COLOR_GLOBAL_HUE            "setcolorhue"
+#define COMMAND_COLOR_ACTIVE_HUE            "setcoloractivehue"
+#define COMMAND_COLOR_INACTIVE_HUE          "setcolorinactivehue"
+#define COMMAND_CURSOR_TIME                 "settime"
 
-#define COMMAND_COLOR_ACTIVE                QString("setcoloractive")
-#define COMMAND_COLOR_INACTIVE              QString("setcolorinactive")
-#define COMMAND_COLOR_ACTIVE_MESSAGE        QString("setcoloractivemessage")
-#define COMMAND_COLOR_INACTIVE_MESSAGE      QString("setcolorinactivemessage")
 
-#define COMMAND_COLOR_ACTIVE2               QString("setcoloractive2")
-#define COMMAND_COLOR_INACTIVE2             QString("setcolorinactive2")
-#define COMMAND_COLOR_ACTIVE_MESSAGE2       QString("setcoloractivemessage2")
-#define COMMAND_COLOR_INACTIVE_MESSAGE2     QString("setcolorinactivemessage2")
-#define COMMAND_COLOR_ACTIVE_HUE            QString("setcoloractivehue")
-#define COMMAND_COLOR_INACTIVE_HUE          QString("setcolorinactivehue")
-#define COMMAND_COLOR_ACTIVE_MESSAGE_HUE    QString("setcoloractivemessagehue")
-#define COMMAND_COLOR_INACTIVE_MESSAGE_HUE  QString("setcolorinactivemessagehue")
+// DOCUMENTED IN SCRIPT TEMPLATE
+#define COMMAND_LOG                         "log"
+#define COMMAND_TITLE                       "title"
 
-#define COMMAND_TRIG                        QString("trig")
 
-#define COMMAND_AUTOSIZE                    QString("autosize")
-#define COMMAND_ZOOM                        QString("zoom")
-#define COMMAND_CENTER                      QString("center")
-#define COMMAND_ROTATE                      QString("rotate")
-#define COMMAND_PLAY                        QString("play")
-#define COMMAND_STOP                        QString("stop")
-#define COMMAND_FF                          QString("fastrewind")
-#define COMMAND_SPEED                       QString("speed")
-#define COMMAND_LOG                         QString("log")
-#define COMMAND_GOTO                        QString("goto")
-#define COMMAND_TITLE                       QString("title")
-#define COMMAND_SLEEP                       QString("sleep")
-#define COMMAND_VIEWPORT                    QString("viewport")
-#define COMMAND_SNAPSHOT                    QString("snapshot")
-#define COMMAND_LOAD                        QString("load")
+// SCRIPT SPECIFC
+#define COMMAND_CURVE_EQUATION_PARAM        "setequationparam"
+#define COMMAND_CURVE_LINES                 "setpointslines"
+#define COMMAND_LOAD                        "load"
+#define COMMAND_CURVE_LENGTH                "setlength"
+#define COMMAND_MESSAGE_SEND                "sendosc"
+#define COMMAND_MOUSE                       "mouse"
+#define COMMAND_CURVE_POINT_SHIFT           "shiftpoints"
+#define COMMAND_CURVE_POINT_TRANSLATE       "translatepoints"
+#define COMMAND_CURVE_POINT_TRANSLATE2      "translatepoint"
+#define COMMAND_CURVE_POINT_X               "setpointxat"
+#define COMMAND_CURVE_POINT_Y               "setpointyat"
+#define COMMAND_CURVE_POINT_Z               "setpointzat"
+#define COMMAND_RESIZEF                     "setresizef"
 
-#define COMMAND_SNAP_PUSH                   QString("pushsnapshot")
-#define COMMAND_SNAP_POP                    QString("popsnapshot")
+
+// BETA FUNCTIONS
+#define COMMAND_CURVE_INERTIE               "setinertia"
+#define COMMAND_LINE                        "setline"
+
+
+// INTERNAL FUNCTIONS
+#define COMMAND_SNAP_PUSH                   "pushsnapshot"
+#define COMMAND_SNAP_POP                    "popsnapshot"
+#define COMMAND_SLEEP                       "sleep"
+#define COMMAND_VIEWPORT                    "viewport"
+#define COMMAND_SNAPSHOT                    "snapshot"
 
 #endif // IANNIX_CMD_H

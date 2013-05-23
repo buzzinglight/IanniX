@@ -680,10 +680,10 @@ bool QextSerialPort::open(OpenMode mode)
     if (mode == QIODevice::NotOpen)
         return isOpen();
     if (!isOpen()) {
-        qDebug() << "trying to open file" << port.toAscii();
+        //qDebug() << "trying to open file" << qPrintable(port);
         //note: linux 2.6.21 seems to ignore O_NDELAY flag
-        if ((fd = ::open(port.toAscii() ,O_RDWR | O_NOCTTY | O_NDELAY)) != -1) {
-            qDebug("file opened succesfully");
+        if ((fd = ::open(qPrintable(port) ,O_RDWR | O_NOCTTY | O_NDELAY)) != -1) {
+            //qDebug("file opened succesfully");
 
             setOpenMode(mode);              // Flag the port as opened
             tcgetattr(fd, &old_termios);    // Save the old termios
@@ -719,7 +719,7 @@ bool QextSerialPort::open(OpenMode mode)
                 connect(readNotifier, SIGNAL(activated(int)), this, SIGNAL(readyRead()));
             }
         } else {
-            qDebug() << "could not open file:" << strerror(errno);
+            //qDebug() << "could not open file:" << strerror(errno);
             lastErr = E_FILE_NOT_FOUND;
         }
     }
