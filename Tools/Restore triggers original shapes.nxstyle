@@ -1,7 +1,0 @@
-//Creation of the score
-function onCreate() {
-	run("registerTexture trigger_active -1  1  1  -1 ./Tools/trigger.png");
-	run("registerTexture trigger_inactive -1  1  1  -1 ./Tools/trigger.png");
-	run("registerTexture trigger_active_message -1  1  1  -1 ./Tools/trigger_message.png");
-	run("registerTexture trigger_inactive_message -1  1  1  -1 ./Tools/trigger_message.png");
-}

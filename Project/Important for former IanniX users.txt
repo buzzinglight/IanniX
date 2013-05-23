@@ -1,4 +1,0 @@
-Projects files are now saved in your personal documents directory:
-	- Mac OS user, it is stored in "~/Documents/IanniX"
-	- Linux user, it is stored in "~/Documents/IanniX"
-	- Windows user, it is stored in "My Documents\IanniX"

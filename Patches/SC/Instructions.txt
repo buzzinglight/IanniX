@@ -1,7 +1,0 @@
-To be put in the Extentions folder of Supercollider:
-
-/Library/Application Support/SuperCollider/Extensions/
-
-or
-
-~/Application Support/SuperCollider/Extensions/
