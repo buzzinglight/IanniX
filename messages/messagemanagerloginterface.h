@@ -112,6 +112,7 @@ public:
         ihmFeedbackNok = "QAbstractSpinBox, QPlainTextEdit {background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));}";
     }
 public:
+    virtual void clear() {}
     virtual bool send(const Message &, QStringList* =0) { return false; }
     virtual inline void networkBundle(bool)             {}
     virtual inline void networkManualParsing()          {}

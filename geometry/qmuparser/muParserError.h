@@ -140,7 +140,7 @@ public:
     explicit ParserError(const string_type &sMsg);
     ParserError( EErrorCodes a_iErrc,
                  const string_type &sTok,
-                 const string_type &sFormula = string_type(_T("(formula is not available)")),
+                 const string_type &sFormula = string_type(),
                  int a_iPos = -1);
     ParserError( EErrorCodes a_iErrc, 
                  int a_iPos, 

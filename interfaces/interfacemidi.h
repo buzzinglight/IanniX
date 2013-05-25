@@ -56,6 +56,7 @@ class InterfaceMidi : public NetworkInterface {
     
 public:
     explicit InterfaceMidi(QWidget *parent = 0);
+    void clear();
     ~InterfaceMidi();
 
 public:

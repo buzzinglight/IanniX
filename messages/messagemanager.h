@@ -24,6 +24,7 @@ private:
 public:
     static void setInterfaces(MessageDispatcher *_dispatcher = 0, QScriptEngine *_scriptEngine = 0, QLayout *logWidget = 0, QLayout *logMiniWidget = 0);
     static void addNetworkInterface(MessagesType type, NetworkInterface *interface);
+    static void deleteNetworkInterface();
     static inline void setLogVisibility(bool logVisible) {
         if(messageManagerLog) messageManagerLog->logEnable = logVisible;
     }

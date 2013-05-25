@@ -90,11 +90,11 @@ typedef muInt_t (*muIdentFun_t)(const muChar_t*, muInt_t*, muFloat_t*); // [opti
 
 //-----------------------------------------------------------------------------------------------------
 // Constants
-const int muOPRT_ASCT_LEFT = 0;
-const int muOPRT_ASCT_RIGHT = 1;
+static const int muOPRT_ASCT_LEFT  = 0;
+static const int muOPRT_ASCT_RIGHT = 1;
 
-const int muBASETYPE_FLOAT   = 0;
-const int muBASETYPE_INT     = 1;
+static const int muBASETYPE_FLOAT  = 0;
+static const int muBASETYPE_INT    = 1;
 
 //-----------------------------------------------------------------------------------------------------
 //

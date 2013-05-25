@@ -130,11 +130,19 @@ namespace mu
       
     It does not contain any information but the error code.
   */
-  ParserError::ParserError(EErrorCodes /*a_iErrc*/) 
-    :m_ErrMsg(ParserErrorMsg::Instance())
+  ParserError::ParserError(EErrorCodes a_iErrc) 
+    :m_strMsg()
+    ,m_strFormula()
+    ,m_strTok()
+    ,m_iPos(-1)
+    ,m_iErrc(a_iErrc)
+    ,m_ErrMsg(ParserErrorMsg::Instance())
   {
-    Reset();
-    m_strMsg = _T("parser error");
+    m_strMsg = m_ErrMsg[m_iErrc];
+    stringstream_type stream;
+    stream << (int)m_iPos;
+    ReplaceSubString(m_strMsg, _T("$POS$"), stream.str());
+    ReplaceSubString(m_strMsg, _T("$TOK$"), m_strTok);
   }
 
   //------------------------------------------------------------------------------

@@ -77,8 +77,8 @@ HEADERS  += interfaces/extscriptvariableask.h   interfaces/extoscpatternask.h   
 SOURCES  += interfaces/extscriptvariableask.cpp interfaces/extoscpatternask.cpp interfaces/extoscpatterneditor.cpp
 FORMS    += interfaces/extscriptvariableask.ui  interfaces/extoscpatternask.ui  interfaces/extoscpatterneditor.ui
 
-HEADERS  += interfaces/qextserialport/qextserialport.h   interfaces/qextserialport/qextserialenumerator.h interfaces/qextserialport/qextserialport_global.h
-SOURCES  += interfaces/qextserialport/qextserialport.cpp
+HEADERS  += interfaces/qextserialport/qextserialport.h   interfaces/qextserialport/qextserialenumerator.h   interfaces/qextserialport/qextserialport_global.h interfaces/qextserialport/qextserialport_p.h interfaces/qextserialport/qextserialenumerator_p.h
+SOURCES  += interfaces/qextserialport/qextserialport.cpp interfaces/qextserialport/qextserialenumerator.cpp
 HEADERS  += interfaces/qrtmidi/RtMidi.h   interfaces/qrtmidi/RtError.h
 SOURCES  += interfaces/qrtmidi/RtMidi.cpp
 debug:DEFINES += __RTMIDI_DEBUG__
@@ -134,24 +134,35 @@ macx {
     BUNDLE_RES.path      = Contents/Resources
     QMAKE_BUNDLE_DATA   += BUNDLE_RES
 }
+
+
 win32 {
     DEFINES             += __WINDOWS_MM__
-    LIBS                += -lwinmm -lsetupapi
+    LIBS                += -lwinmm -lsetupapi #-ladvapi32 -luser32
     RC_FILE              = icon.rc
-    SOURCES             += interfaces/qextserialport/win_qextserialport.cpp  interfaces/qextserialport/qextserialenumerator_win.cpp
+    SOURCES             += interfaces/qextserialport/qextserialport_win.cpp  interfaces/qextserialport/qextserialenumerator_win.cpp
     DEFINES             += WINVER=0x0501 # needed for mingw to pull in appropriate dbt business...probably a better way to do this
 }
+unix {
+    SOURCES            += interfaces/qextserialport/qextserialport_unix.cpp
+    linux* {
+        SOURCES        += interfaces/qextserialport/qextserialenumerator_linux.cpp
+    } else:macx {
+        SOURCES        += interfaces/qextserialport/qextserialenumerator_osx.cpp
+    } else {
+        SOURCES        += interfaces/qextserialport/qextserialenumerator_unix.cpp
+    }
+}
 linux* {
-    DEFINES             += __LINUX_ALSASEQ__
-    DEFINES             += AVOID_TIMESTAMPING
-    LIBS                += -lasound
-    PKGCONFIG           += alsa
+    DEFINES                  += __LINUX_ALSA__
+    DEFINES                  += AVOID_TIMESTAMPING
+    DEFINES                  += __linux__
+    LIBS                     += -lasound
+    PKGCONFIG                += alsa
+    !qesp_linux_udev:DEFINES += QESP_NO_UDEV
+    qesp_linux_udev: LIBS    += -ludev
 }
 macx {
     DEFINES             += __MACOSX_CORE__
     LIBS                += -framework CoreMidi -framework CoreAudio -framework CoreFoundation -framework IOKit -framework Carbon
-    SOURCES             += interfaces/qextserialport/qextserialenumerator_osx.cpp
 }
-unix:SOURCES            += interfaces/qextserialport/posix_qextserialport.cpp
-unix:!macx:SOURCES      += interfaces/qextserialport/qextserialenumerator_unix.cpp
-

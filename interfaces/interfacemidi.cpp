@@ -18,8 +18,8 @@ InterfaceMidi::InterfaceMidi(QWidget *parent) :
     portInName  = "To IanniX";
 
     try {
-        portOut.insert(getPortName(portOutName), new RtMidiOut(portOutName.toStdString()));
-        portIn .insert(getPortName(portInName),  new RtMidiIn (portInName .toStdString()));
+        portOut.insert(getPortName(portOutName), new RtMidiOut(RtMidi::UNSPECIFIED, portOutName.toStdString()));
+        portIn .insert(getPortName(portInName),  new RtMidiIn (RtMidi::UNSPECIFIED, portInName .toStdString()));
 
 #if !defined(__LINUX_ALSASEQ__) && !defined(__MACOSX_CORE__)
         if (portOut.value(getPortName(portOutName))->getPortCount() == 0)
@@ -372,7 +372,16 @@ qreal ExtMidiMTC::decode(quint16 msg) {
     return smpteTime;
 }
 
+void InterfaceMidi::clear() {
+    foreach(RtMidiIn  *port, portIn)
+        delete port;
+    portIn.clear();
+    foreach(RtMidiOut *port, portOut)
+        delete port;
+    portOut.clear();
+}
 InterfaceMidi::~InterfaceMidi() {
+    clear();
     delete ui;
 }
 

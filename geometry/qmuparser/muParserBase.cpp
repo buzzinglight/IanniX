@@ -761,19 +761,16 @@ namespace mu
 
     try
     {
-      // Collect the function arguments from the value stack
+      // Check function arguments; write dummy value into valtok to represent the result
       switch(a_FunTok.GetArgCount())
       {
-      case 0: valTok.SetVal( ((strfun_type1)pFunc)(a_vArg[0].GetAsString().c_str()) );  break;
-      case 1: valTok.SetVal( ((strfun_type2)pFunc)(a_vArg[1].GetAsString().c_str(),
-                                                   a_vArg[0].GetVal()) );  break;
-      case 2: valTok.SetVal( ((strfun_type3)pFunc)(a_vArg[2].GetAsString().c_str(), 
-                                                   a_vArg[1].GetVal(), 
-                                                   a_vArg[0].GetVal()) );  break;
+      case 0: valTok.SetVal(1); a_vArg[0].GetAsString();  break;
+      case 1: valTok.SetVal(1); a_vArg[1].GetAsString();  a_vArg[0].GetVal();  break;
+      case 2: valTok.SetVal(1); a_vArg[2].GetAsString();  a_vArg[1].GetVal();  a_vArg[0].GetVal();  break;
       default: Error(ecINTERNAL_ERROR);
       }
     }
-    catch(ParserError& /*e*/)
+    catch(ParserError& )
     {
       Error(ecVAL_EXPECTED, m_pTokenReader->GetPos(), a_FunTok.GetAsString());
     }
@@ -781,6 +778,7 @@ namespace mu
     // string functions won't be optimized
     m_vRPN.AddStrFun(pFunc, a_FunTok.GetArgCount(), a_vArg.back().GetIdx());
     
+    // Push dummy value representing the function result to the stack
     return valTok;
   }
 
@@ -1038,7 +1036,7 @@ namespace mu
                   continue;
 
       case  cmPOW: 
-              Stack[--sidx]  = MathImpl<value_type>::Pow(Stack[sidx], Stack[1+sidx]); ;
+              --sidx; Stack[sidx] = MathImpl<value_type>::Pow(Stack[sidx], Stack[1+sidx]);
               continue;
 
       case  cmLAND: --sidx; Stack[sidx]  = Stack[sidx] && Stack[sidx+1]; continue;
@@ -1422,9 +1420,17 @@ namespace mu
   */
   value_type ParserBase::ParseString() const
   {
-    CreateRPN();
-    m_pParseFormula = &ParserBase::ParseCmdCode;
-    return (this->*m_pParseFormula)(); 
+    try
+    {
+      CreateRPN();
+      m_pParseFormula = &ParserBase::ParseCmdCode;
+      return (this->*m_pParseFormula)(); 
+    }
+    catch(ParserError &exc)
+    {
+      exc.SetFormula(m_pTokenReader->GetExpr());
+      throw;
+    }
   }
 
   //---------------------------------------------------------------------------
@@ -1604,61 +1610,63 @@ namespace mu
   void ParserBase::StackDump(const ParserStack<token_type> &a_stVal, 
                              const ParserStack<token_type> &a_stOprt) const
   {
+      /*
     ParserStack<token_type> stOprt(a_stOprt), 
                             stVal(a_stVal);
 
-    ;//mu::console() << _T("\nValue stack:\n");
+    mu::console() << _T("\nValue stack:\n");
     while ( !stVal.empty() ) 
     {
       token_type val = stVal.pop();
       if (val.GetType()==tpSTR)
-        ;//mu::console() << _T(" \"") << val.GetAsString() << _T("\" ");
+        mu::console() << _T(" \"") << val.GetAsString() << _T("\" ");
       else
-        ;//mu::console() << _T(" ") << val.GetVal() << _T(" ");
+        mu::console() << _T(" ") << val.GetVal() << _T(" ");
     }
-    ;//mu::console() << "\nOperator stack:\n";
+    mu::console() << "\nOperator stack:\n";
 
     while ( !stOprt.empty() )
     {
       if (stOprt.top().GetCode()<=cmASSIGN) 
       {
-        ;//mu::console() << _T("OPRT_INTRNL \"")
-                      //<< ParserBase::c_DefaultOprt[stOprt.top().GetCode()]
-                      //<< _T("\" \n");
+        mu::console() << _T("OPRT_INTRNL \"")
+                      << ParserBase::c_DefaultOprt[stOprt.top().GetCode()] 
+                      << _T("\" \n");
       }
       else
       {
         switch(stOprt.top().GetCode())
         {
-        case cmVAR:   ;//mu::console() << _T("VAR\n");  break;
-        case cmVAL:   ;//mu::console() << _T("VAL\n");  break;
-        case cmFUNC:  ;//mu::console() << _T("FUNC \"")
-                                    //<< stOprt.top().GetAsString()
-                                    //<< _T("\"\n");   break;
-        case cmFUNC_BULK:  ;//mu::console() << _T("FUNC_BULK \"")
-                                         //<< stOprt.top().GetAsString()
-                                         //<< _T("\"\n");   break;
-        case cmOPRT_INFIX: ;//mu::console() << _T("OPRT_INFIX \"")
-                                         //<< stOprt.top().GetAsString()
-                                         //<< _T("\"\n");      break;
-        case cmOPRT_BIN:   ;//mu::console() << _T("OPRT_BIN \"")
-                                         //<< stOprt.top().GetAsString()
-                                         //<< _T("\"\n");           break;
-        case cmFUNC_STR: ;//mu::console() << _T("FUNC_STR\n");       break;
-        case cmEND:      ;//mu::console() << _T("END\n");            break;
-        case cmUNKNOWN:  ;//mu::console() << _T("UNKNOWN\n");        break;
-        case cmBO:       ;//mu::console() << _T("BRACKET \"(\"\n");  break;
-        case cmBC:       ;//mu::console() << _T("BRACKET \")\"\n");  break;
-        case cmIF:       ;//mu::console() << _T("IF\n");  break;
-        case cmELSE:     ;//mu::console() << _T("ELSE\n");  break;
-        case cmENDIF:    ;//mu::console() << _T("ENDIF\n");  break;
-        default:         ;//mu::console() << stOprt.top().GetCode() << _T(" ");  break;
+        case cmVAR:   mu::console() << _T("VAR\n");  break;
+        case cmVAL:   mu::console() << _T("VAL\n");  break;
+        case cmFUNC:  mu::console() << _T("FUNC \"") 
+                                    << stOprt.top().GetAsString() 
+                                    << _T("\"\n");   break;
+        case cmFUNC_BULK:  mu::console() << _T("FUNC_BULK \"") 
+                                         << stOprt.top().GetAsString() 
+                                         << _T("\"\n");   break;
+        case cmOPRT_INFIX: mu::console() << _T("OPRT_INFIX \"")
+                                         << stOprt.top().GetAsString() 
+                                         << _T("\"\n");      break;
+        case cmOPRT_BIN:   mu::console() << _T("OPRT_BIN \"") 
+                                         << stOprt.top().GetAsString() 
+                                         << _T("\"\n");           break;
+        case cmFUNC_STR: mu::console() << _T("FUNC_STR\n");       break;
+        case cmEND:      mu::console() << _T("END\n");            break;
+        case cmUNKNOWN:  mu::console() << _T("UNKNOWN\n");        break;
+        case cmBO:       mu::console() << _T("BRACKET \"(\"\n");  break;
+        case cmBC:       mu::console() << _T("BRACKET \")\"\n");  break;
+        case cmIF:       mu::console() << _T("IF\n");  break;
+        case cmELSE:     mu::console() << _T("ELSE\n");  break;
+        case cmENDIF:    mu::console() << _T("ENDIF\n");  break;
+        default:         mu::console() << stOprt.top().GetCode() << _T(" ");  break;
         }
       }	
       stOprt.pop();
     }
 
-    ;//mu::console() << dec << endl;
+    mu::console() << dec << endl;
+    */
   }
 
   //------------------------------------------------------------------------------

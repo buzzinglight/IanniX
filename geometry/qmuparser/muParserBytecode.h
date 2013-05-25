@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2012 Ingo Berg
+  Copyright (C) 2004-2013 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -82,7 +82,7 @@ namespace mu
   values and function pointers. Those are necessary in order to calculate the result.
   All those data items will be casted to the underlying datatype of the bytecode.
 
-  \author (C) 2004-2012 Ingo Berg 
+  \author (C) 2004-2013 Ingo Berg 
 */
 class ParserByteCode
 {

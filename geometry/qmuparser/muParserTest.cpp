@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2012 Ingo Berg
+  Copyright (C) 2013 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -983,6 +983,23 @@ namespace mu
       iStat += ThrowTest(_T("a+b+c=10"),     ecUNEXPECTED_OPERATOR);
       iStat += ThrowTest(_T("a=b=3"),        ecUNEXPECTED_OPERATOR);
 
+#if defined(MUP_MATH_EXCEPTIONS)
+      // divide by zero whilst constant folding
+      iStat += ThrowTest(_T("1/0"),          ecDIV_BY_ZERO);
+      // square root of a negative number
+      iStat += ThrowTest(_T("sqrt(-1)"),     ecDOMAIN_ERROR);
+      // logarithms of zero
+      iStat += ThrowTest(_T("ln(0)"),        ecDOMAIN_ERROR);
+      iStat += ThrowTest(_T("log2(0)"),      ecDOMAIN_ERROR);
+      iStat += ThrowTest(_T("log10(0)"),     ecDOMAIN_ERROR);
+      iStat += ThrowTest(_T("log(0)"),       ecDOMAIN_ERROR);
+      // logarithms of negative values
+      iStat += ThrowTest(_T("ln(-1)"),       ecDOMAIN_ERROR);
+      iStat += ThrowTest(_T("log2(-1)"),     ecDOMAIN_ERROR);
+      iStat += ThrowTest(_T("log10(-1)"),    ecDOMAIN_ERROR);
+      iStat += ThrowTest(_T("log(-1)"),      ecDOMAIN_ERROR);
+#endif
+
       // functions without parameter
       iStat += ThrowTest( _T("3+ping(2)"),    ecTOO_MANY_PARAMS);
       iStat += ThrowTest( _T("3+ping(a+2)"),  ecTOO_MANY_PARAMS);
@@ -1375,8 +1392,8 @@ namespace mu
     {
       ParserTester::c_iCount++;
 
-      value_type vVarVal[] = {1, 2, 3};    // variable values
-      value_type fVal[2] = {-99, -999}; // results: initially should be different
+      value_type vVarVal[] = {1, 2, 3};   // variable values
+      value_type fVal[2] = {-99, -999};   // results: initially should be different
       int iRet(0);
 
       try

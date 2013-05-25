@@ -1120,6 +1120,8 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
     if(transport)
         transport->close();
 
+    MessageManager::deleteNetworkInterface();
+
     event->accept();
 }
 

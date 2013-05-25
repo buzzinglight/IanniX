@@ -7,47 +7,41 @@ InterfaceSerial::InterfaceSerial(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
 
-    baudrateEnum["BAUD50"] = BAUD50;
-    baudrateEnum["BAUD75"] = BAUD75;
-    baudrateEnum["BAUD110"] = BAUD110;
-    baudrateEnum["BAUD134"] = BAUD134;
-    baudrateEnum["BAUD150"] = BAUD150;
-    baudrateEnum["BAUD200"] = BAUD200;
-    baudrateEnum["BAUD300"] = BAUD300;
-    baudrateEnum["BAUD600"] = BAUD600;
-    baudrateEnum["BAUD1200"] = BAUD1200;
-    baudrateEnum["BAUD1800"] = BAUD1800;
-    baudrateEnum["BAUD2400"] = BAUD2400;
-    baudrateEnum["BAUD4800"] = BAUD4800;
-    baudrateEnum["BAUD9600"] = BAUD9600;
-    baudrateEnum["BAUD14400"] = BAUD14400;
-    baudrateEnum["BAUD19200"] = BAUD19200;
-    baudrateEnum["BAUD38400"] = BAUD38400;
-    baudrateEnum["BAUD56000"] = BAUD56000;
-    baudrateEnum["BAUD57600"] = BAUD57600;
-    baudrateEnum["BAUD76800"] = BAUD76800;
+    baudrateEnum["BAUD50"]     = BAUD50;
+    baudrateEnum["BAUD75"]     = BAUD75;
+    baudrateEnum["BAUD110"]    = BAUD110;
+    baudrateEnum["BAUD134"]    = BAUD134;
+    baudrateEnum["BAUD150"]    = BAUD150;
+    baudrateEnum["BAUD200"]    = BAUD200;
+    baudrateEnum["BAUD300"]    = BAUD300;
+    baudrateEnum["BAUD600"]    = BAUD600;
+    baudrateEnum["BAUD1200"]   = BAUD1200;
+    baudrateEnum["BAUD1800"]   = BAUD1800;
+    baudrateEnum["BAUD2400"]   = BAUD2400;
+    baudrateEnum["BAUD4800"]   = BAUD4800;
+    baudrateEnum["BAUD9600"]   = BAUD9600;
+    baudrateEnum["BAUD19200"]  = BAUD19200;
+    baudrateEnum["BAUD38400"]  = BAUD38400;
+    baudrateEnum["BAUD57600"]  = BAUD57600;
+    baudrateEnum["BAUD76800"]  = BAUD76800;
     baudrateEnum["BAUD115200"] = BAUD115200;
-    baudrateEnum["BAUD128000"] = BAUD128000;
-    baudrateEnum["BAUD256000"] = BAUD256000;
 
-    databitsEnum["DATA_5"] = DATA_5;
-    databitsEnum["DATA_6"] = DATA_6;
-    databitsEnum["DATA_7"] = DATA_7;
-    databitsEnum["DATA_8"] = DATA_8;
+    databitsEnum["DATA_5"]     = DATA_5;
+    databitsEnum["DATA_6"]     = DATA_6;
+    databitsEnum["DATA_7"]     = DATA_7;
+    databitsEnum["DATA_8"]     = DATA_8;
 
-    parityEnum["PAR_NONE"] = PAR_NONE;
-    parityEnum["PAR_ODD"] = PAR_ODD;
-    parityEnum["PAR_EVEN"] = PAR_EVEN;
-    parityEnum["PAR_MARK"] = PAR_MARK;
-    parityEnum["PAR_SPACE"] = PAR_SPACE;
+    parityEnum["PAR_NONE"]     = PAR_NONE;
+    parityEnum["PAR_ODD"]      = PAR_ODD;
+    parityEnum["PAR_EVEN"]     = PAR_EVEN;
+    parityEnum["PAR_SPACE"]    = PAR_SPACE;
 
-    stopbitsEnum["STOP_1"] = STOP_1;
-    stopbitsEnum["STOP_1_5"] = STOP_1_5;
-    stopbitsEnum["STOP_2"] = STOP_2;
+    stopbitsEnum["STOP_1"]     = STOP_1;
+    stopbitsEnum["STOP_2"]     = STOP_2;
 
-    flowEnum["FLOW_OFF"] = FLOW_OFF;
-    flowEnum["FLOW_HARDWARE"] = FLOW_HARDWARE;
-    flowEnum["FLOW_XONXOFF"] = FLOW_XONXOFF;
+    flowEnum["FLOW_OFF"]       = FLOW_OFF;
+    flowEnum["FLOW_HARDWARE"]  = FLOW_HARDWARE;
+    flowEnum["FLOW_XONXOFF"]   = FLOW_XONXOFF;
 
     //Interfaces link
     enable.setAction(ui->enable, "interfaceSerialEnable");

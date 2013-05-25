@@ -6,7 +6,7 @@
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
 
-  Copyright (C) 2012 Ingo Berg
+  Copyright (C) 2013 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -68,15 +68,53 @@ namespace mu
 
   //---------------------------------------------------------------------------
   // Logarithm functions
-  value_type Parser::Log2(value_type v)  { return MathImpl<value_type>::Log2(v);  }  // Logarithm base 2
-  value_type Parser::Log10(value_type v) { return MathImpl<value_type>::Log10(v); } // Logarithm base 10
-  value_type Parser::Ln(value_type v)    { return MathImpl<value_type>::Log(v);   } // Logarithm base e (natural logarithm)
+
+  // Logarithm base 2
+  value_type Parser::Log2(value_type v)  
+  { 
+    #ifdef MUP_MATH_EXCEPTIONS
+        if (v<=0)
+          throw ParserError(ecDOMAIN_ERROR, _T("Log2"));
+    #endif
+
+    return MathImpl<value_type>::Log2(v);  
+  }  
+
+  // Logarithm base 10
+  value_type Parser::Log10(value_type v) 
+  { 
+    #ifdef MUP_MATH_EXCEPTIONS
+        if (v<=0)
+          throw ParserError(ecDOMAIN_ERROR, _T("Log10"));
+    #endif
+
+    return MathImpl<value_type>::Log10(v); 
+  } 
+
+// Logarithm base e (natural logarithm)
+  value_type Parser::Ln(value_type v)    
+  { 
+    #ifdef MUP_MATH_EXCEPTIONS
+        if (v<=0)
+          throw ParserError(ecDOMAIN_ERROR, _T("Ln"));
+    #endif
+
+    return MathImpl<value_type>::Log(v);   
+  } 
 
   //---------------------------------------------------------------------------
   //  misc
   value_type Parser::Exp(value_type v)  { return MathImpl<value_type>::Exp(v);  }
   value_type Parser::Abs(value_type v)  { return MathImpl<value_type>::Abs(v);  }
-  value_type Parser::Sqrt(value_type v) { return MathImpl<value_type>::Sqrt(v); }
+  value_type Parser::Sqrt(value_type v) 
+  { 
+    #ifdef MUP_MATH_EXCEPTIONS
+        if (v<0)
+          throw ParserError(ecDOMAIN_ERROR, _T("sqrt"));
+    #endif
+
+    return MathImpl<value_type>::Sqrt(v); 
+  }
   value_type Parser::Rint(value_type v) { return MathImpl<value_type>::Rint(v); }
   value_type Parser::Sign(value_type v) { return MathImpl<value_type>::Sign(v); }
 
@@ -168,7 +206,7 @@ namespace mu
     value_type fVal(0);
 
     stringstream_type stream(a_szExpr);
-    stream.seekg(0);        // check if this really is necessary
+    stream.seekg(0);        // todo:  check if this really is necessary
     stream.imbue(Parser::s_locale);
     stream >> fVal;
     stringstream_type::pos_type iEnd = stream.tellg(); // Position after reading

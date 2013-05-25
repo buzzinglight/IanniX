@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2012 Ingo Berg
+  Copyright (C) 2013 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -49,7 +49,7 @@ namespace mu
 
 //--------------------------------------------------------------------------------------------------
 /** \brief Mathematical expressions parser (base parser engine).
-    \author (C) 2012 Ingo Berg
+    \author (C) 2013 Ingo Berg
 
   This is the implementation of a bytecode based mathematical expressions parser. 
   The formula will be parsed from string and converted into a bytecode. 

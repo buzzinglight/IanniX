@@ -33,6 +33,11 @@ void MessageManager::addNetworkInterface(MessagesType type, NetworkInterface *in
     if(interface)
         interfaces.insert(type, interface);
 }
+void MessageManager::deleteNetworkInterface() {
+    foreach(NetworkInterface *interface, interfaces)
+        interface->clear();
+    interfaces.clear();
+}
 
 void MessageManager::networkBundle(bool open) {
     foreach(NetworkInterface *interface, interfaces)
