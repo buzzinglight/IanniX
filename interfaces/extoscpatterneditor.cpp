@@ -23,8 +23,9 @@ ExtOscPatternEditor::ExtOscPatternEditor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ExtOscPatternEditor) {
     ui->setupUi(this);
-    textLock = false;
-    itemLock = false;
+    textLock  = false;
+    itemLock  = false;
+    isTrigger = false;
     patternNbValues = 0;
 
     trees.clear();
@@ -90,10 +91,11 @@ const QString ExtOscPatternEditor::getPattern() const {
 void ExtOscPatternEditor::setPattern(const QString &pattern, bool refreshText) {
     QVector< QVector<QByteArray> > messagePatternItems = NxObject::parseMessagesPattern(pattern);
     if(messagePatternItems.count() > 0)
-        setPattern(messagePatternItems.first(), refreshText);
+        setPattern(messagePatternItems.first(), refreshText, isTrigger);
 }
 
-void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePatternItems, bool refreshText) {
+void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePatternItems, bool refreshText, bool _isTrigger) {
+    isTrigger = _isTrigger;
     itemLock = true;
     bool first = true;
     quint16 valueIndex = 0;
@@ -311,10 +313,43 @@ void ExtOscPatternEditor::learn() {
     displayBox->display(tr("MIDI/OSC learn"), tr("Please send an event to IanniX\n\nMove a slider on your surface control or press a MIDI note…"));
     QString message = Application::current->waitForMessage();
     if(!message.isEmpty()) {
-        if(message.contains("/note"))
-            message = message + " 1";
+        QStringList messageArguments = message.split("\t", QString::SkipEmptyParts);
+        QString messageRecomposed;
+        QString valuePrefix = "cursor_";
+        if(isTrigger)
+            valuePrefix = "trigger_";
+        if(message.contains("/note")) {
+            for(quint16 i = 0 ; i < qMin(4, messageArguments.count()) ; i++) {
+                QString messageArgument = messageArguments.at(i);
+                if(i == 0)      messageRecomposed += messageArgument.replace("/note", "/notef") + " ";
+                else if(i == 1) messageRecomposed += messageArgument + " "; //Canal
+                else if(i == 2) messageRecomposed += valuePrefix + "value_y "; //Note
+                else if(i == 3) messageRecomposed += valuePrefix + "value_x "; //Velocity
+            }
+            messageRecomposed += " 1";
+        }
+        else if(message.contains("/cc")) {
+            for(quint16 i = 0 ; i < qMin(4, messageArguments.count()) ; i++) {
+                QString messageArgument = messageArguments.at(i);
+                if(i == 0)      messageRecomposed += messageArgument.replace("/cc", "/ccf") + " ";
+                else if(i == 1) messageRecomposed += messageArgument + " "; //Canal
+                else if(i == 2) messageRecomposed += messageArgument + " "; //CC ID
+                else if(i == 3) messageRecomposed += valuePrefix + "value_y "; //Value
+            }
+        }
+        else if((message.contains("/pgm")) || (message.contains("/bend"))) {
+            for(quint16 i = 0 ; i < qMin(3, messageArguments.count()) ; i++) {
+                QString messageArgument = messageArguments.at(i);
+                if(i == 0)      messageRecomposed += messageArgument.replace("/bend", "/bendf").replace("/pgm", "/pgmf") + " ";
+                else if(i == 1) messageRecomposed += messageArgument + " "; //Canal
+                else if(i == 2) messageRecomposed += valuePrefix + "value_y "; //Value
+            }
+        }
+        else
+            messageRecomposed = message;
         wasLearning = true;
-        ui->patternEdit->setPlainText(message);
+        ui->patternEdit->setPlainText(messageRecomposed.trimmed());
+        ui->patternEdit->setPlainText(getPattern());
     }
     displayBox->hide();
     delete displayBox;

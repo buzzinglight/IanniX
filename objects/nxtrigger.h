@@ -32,6 +32,7 @@ class NxTrigger : public NxObject {
 
 public:
     explicit NxTrigger(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
+    void initializeCustom();
 
 private:
     qreal cacheSize;

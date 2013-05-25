@@ -25,6 +25,10 @@ Transport::Transport(QWidget *parent) :
     speedLock = false;
     toolbarButton = 0;
 
+    Help::syncHelpWith(ui->timeEdit,   COMMAND_GOTO);
+    Help::syncHelpWith(ui->ffButton,   COMMAND_FF);
+    Help::syncHelpWith(ui->speedSpin,  COMMAND_SPEED);
+
     Transport::timerOk.setAction(ui->playButton);
 
     //Timer
@@ -79,7 +83,7 @@ void Transport::refreshPerformances() {
     perfOpenGLRefreshTime = 0;
     perfOpenGLCounterTime = 0;
 }
-void Transport::refreshTime() {
+const QString & Transport::getTimeLocalStr() {
     timeLocalStr = "";
 
     quint16 min = timeLocal / 60;
@@ -96,6 +100,11 @@ void Transport::refreshTime() {
     else if(milli < 100) timeLocalStr += "0";
     timeLocalStr += QString::number(milli);
 
+    return timeLocalStr;
+}
+
+void Transport::refreshTime() {
+    getTimeLocalStr();
     if((!ui->timeEdit->hasFocus()) && (isVisible()))
         ui->timeEdit->setText(timeLocalStr);
     bigTimer->refreshTime(timeLocalStr);

@@ -37,7 +37,7 @@
      <item>
       <widget class="QCheckBox" name="enable">
        <property name="toolTip">
-        <string>Enable or disable serial port messages and control</string>
+        <string>Enables or disables serial port messages and control</string>
        </property>
        <property name="text">
         <string>ENABLE SERIAL PORT</string>
@@ -75,7 +75,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Open the folder where you can find examples of IanniX interfacing with softwares using serial port</string>
+        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using serial port</string>
        </property>
        <property name="text">
         <string>OPEN EXAMPLES</string>

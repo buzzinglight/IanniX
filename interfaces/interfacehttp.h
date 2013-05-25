@@ -27,7 +27,7 @@ private:
     QNetworkAccessManager *http;
 
 public:
-    bool send(const Message & );
+    bool send(const Message &message, QStringList *messageSent = 0);
 public:
     bool portChanged(quint16 port);
 protected:
@@ -62,7 +62,7 @@ private slots:
     }
 
 public:
-    bool send(const Message & message);
+    bool send(const Message &message, QStringList *messageSent = 0);
 
 private:
     Ui::InterfaceHttp *ui;

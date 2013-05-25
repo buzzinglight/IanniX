@@ -60,8 +60,29 @@ void UiHelp::statusHelp(QString _statusText) {
 }
 void UiHelp::messageHelp(QString _messageText) {
     if(isVisible()) {
-        messageTexts.append(_messageText.replace("\\n", "<br/>"));
+        _messageText = _messageText.replace("\\n", "<br/>");
+        QStringList messageTextsArguments = _messageText.split(" ", QString::SkipEmptyParts);
+
+        quint16 radix = 0;
+        HelpInfo helpInfo = Help::getHelpFor(messageTextsArguments.first());
+        QStringList syntaxes = helpInfo.syntax.split(" <");
+        QString radixMessage;
+        for(quint16 i = 0 ; i < syntaxes.count() ; i++) {
+            if((syntaxes.at(i) == "<target>") || (syntaxes.at(i) == "point_index>"))
+                radix = i+1;
+        }
+        for(quint16 i = 0 ; i < messageTextsArguments.count() ; i++) {
+            if(i <= radix)   radixMessage += messageTextsArguments.at(i) + " ";
+            else             break;
+        }
+
+        if((messageTexts.count()) && messageTexts.last().first.startsWith(radixMessage))
+            messageTexts[messageTexts.count()-1] = qMakePair(_messageText, helpInfo);
+        else
+            messageTexts.append(qMakePair(_messageText, helpInfo));
+
         while(messageTexts.count() > 10) messageTexts.removeFirst();
+
         statusRefresh = true;
     }
 }
@@ -97,11 +118,15 @@ void UiHelp::statusHelp() {
             html += QString("<p class='sstitre'>%1</p>").arg(tr("You've just performed action through graphical user interface. Here are the messages you would have to use if you wanted to control IannIX from an other software ou interface."));
 
             html += QString("<p class='code snippet'>");
-            foreach(const QString &messageText, messageTexts) {
+            for(quint16 i = 0 ; i < messageTexts.count() ; i++) {
+                const QString messageText   = messageTexts.at(i).first.trimmed();
+                QString messageDescription  = messageTexts.at(i).second.description.trimmed();
+                QString messageSyntax       = messageTexts.at(i).second.syntax.trimmed();
+
                 QStringList messageTextsArguments = messageText.split(" ", QString::SkipEmptyParts);
 
-                QString verboseMessage = messageText;
-                verboseMessage = verboseMessage.replace(" selection ", " <span class='hint'>&lt;object id or group&gt;</span> ");
+                QString messageVerbose = messageText;
+                messageVerbose = messageVerbose.replace(" selection ", " <span class='hint'>&lt;object id or group&gt;</span> ");
 
                 QString parametersMessage = "";
                 quint16 messageTextsArgumentIndex = 0;
@@ -112,8 +137,8 @@ void UiHelp::statusHelp() {
                         bool ok = false;
                         messageTextsArgument.toDouble(&ok);
                         if(ok) {
-                            if(     ((messageTextsArgumentIndex == 1) && (messageTextsArgumentIndex == (messageTextsArguments.count()-1))) ||
-                                    ((messageTextsArgumentIndex == 2) && (messageTextsArgumentIndex == (messageTextsArguments.count()-1))) || (messageTextsArgumentIndex > 2)) {
+                            if(((messageTextsArgumentIndex == 1) && (messageTextsArgumentIndex == (messageTextsArguments.count()-1))) ||
+                               ((messageTextsArgumentIndex == 2) && (messageTextsArgumentIndex == (messageTextsArguments.count()-1))) || (messageTextsArgumentIndex > 2)) {
                                 parametersMessage += "$1 ";
                                 added = true;
                                 paramOk = true;
@@ -135,12 +160,14 @@ void UiHelp::statusHelp() {
                 }
                 codeMessage.chop(2);
 
-                html += verboseMessage;
+                html += QString("<span class='action'>%1</span><br/>").arg(messageDescription.replace("\n", "<br/>"));
+                html += messageVerbose;
                 html += "<span class='action'>";
-                html += QString(" /&nbsp;<a href='%1'>&gt;&nbsp;Copy</a>").arg(messageText);
+                html += QString("  &nbsp;<a href='%1'>&gt;&nbsp;Copy</a>").arg(messageText);
                 html += QString(" /&nbsp;<a href='%1'>&gt;&nbsp;for MaxMSP</a>").arg(QString("{ \"boxes\" : [ { \"box\" : { \"maxclass\" : \"flonum\", \"outlettype\" : [ \"float\", \"bang\" ], \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 58.0, 50.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-5\", \"numoutlets\" : 2, \"parameter_enable\" : 0 }  } , { \"box\" : { \"maxclass\" : \"message\", \"text\" : \"/iannix/%1\", \"outlettype\" : [ \"\" ], \"fontname\" : \"Arial\", \"numinlets\" : 2, \"patching_rect\" : [ 37.0, 85.0, 95.0, 18.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-3\", \"numoutlets\" : 1 }  } , { \"box\" : { \"maxclass\" : \"newobj\", \"text\" : \"udpsend 127.0.0.1 %2\", \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 110.0, 140.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-1\", \"numoutlets\" : 0 }  }  ], \"lines\" : [ { \"patchline\" : { \"source\" : [ \"obj-5\", 0 ], \"destination\" : [ \"obj-3\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  } , { \"patchline\" : { \"source\" : [ \"obj-3\", 0 ], \"destination\" : [ \"obj-1\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  }  ], \"appversion\" : { \"major\" : 6, \"minor\" : 0, \"revision\" : 8 }  } ").arg(parametersMessage).arg(oscPort));
                 html += QString(" /&nbsp;<a href='%1'>&gt;&nbsp;for Processing</a>").arg(QString("iannix.send(%1);").arg(codeMessage));
-                html += "</span>";
+                html += "</span><br/>";
+                html += QString("<span class='action'>%1 %2</span><br/>").arg(messageTexts.at(i).second.keyword).arg(messageSyntax.replace(">", "&gt;").replace("<", "&lt;").replace("\n", "<br/>"));
                 html += "<br/>";
             }
             html += QString("</p>");
@@ -196,7 +223,9 @@ void UiHelp::scriptHelp(const QString &looking, const QStringList &lookCategorie
                 HelpCategory helpCategory = Help::categories.value(category);
                 foreach(const HelpInfo &info, helpCategory.infos) {
                     if(((i == 0) && (looking.toLower().contains(info.keyword.toLower()))) || ((i == 1) && (looking.toLower().contains(info.keyword.toLower().left(5)))) || ((i == 2) && (looking.toLower().contains(info.keyword.toLower().left(3))))) {
-                        QString keyword = info.keyword, title = info.title.toUpper(), syntax = info.syntax, description = info.description;
+                        QString keyword = info.keyword, title = info.title.toUpper(), syntax = info.syntax, description = info.description.trimmed();
+                        if(category == "commands")
+                            syntax = keyword + " " + syntax;
                         syntax      = syntax.     replace(">", "&gt;").replace("<", "&lt;").replace("\n", "<br/>");
                         description = description.replace(">", "&gt;").replace("<", "&lt;").replace("\n", "<br/>");
 
@@ -205,7 +234,7 @@ void UiHelp::scriptHelp(const QString &looking, const QStringList &lookCategorie
                             if(!description.isEmpty())
                                 htmlCategory += QString("<span class='sstitre'>%1</span><table width='100%'><tr><td></td><td width='97%' class='description'><span             >%2</span></td></tr></table><br/><br/>").arg(title).arg(description);
                             if(!syntax.isEmpty())
-                                htmlCategory += QString("<span class='sstitre'>%3</span><table width='100%'><tr><td></td><td width='97%' class='syntax'     ><span class='code'>%1</span></td></tr><tr><td></td><td align='right'><a class='action' href='%2'>%4</a></td></tr></table><br/><br/>").arg(syntax).arg(info.syntax).arg(tr("SYNTAX")).arg(tr("IMPLEMENT IN SCRIPT"));
+                                htmlCategory += QString("<span class='sstitre'>%3</span><table width='100%'><tr><td></td><td width='97%' class='syntax'     ><span class='code'>%1</span></td></tr><tr><td></td><td align='right'><a class='action' href='%2'>%4</a></td></tr></table><br/><br/>").arg(syntax).arg(info.keyword + " " + info.syntax).arg(tr("SYNTAX")).arg(tr("IMPLEMENT IN SCRIPT"));
                             htmlCategory += QString("<hr/>");
                         }
                         else {

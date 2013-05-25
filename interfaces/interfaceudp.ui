@@ -31,7 +31,7 @@
      <item>
       <widget class="QCheckBox" name="enable">
        <property name="toolTip">
-        <string>Enable or disable raw UDP messages and control</string>
+        <string>Enables or disables raw UDP messages and control</string>
        </property>
        <property name="text">
         <string>ENABLE RAW UDP (FUDI)</string>
@@ -69,7 +69,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Open the folder where you can find examples of IanniX interfacing with softwares using raw UDP</string>
+        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using raw UDP</string>
        </property>
        <property name="text">
         <string>OPEN EXAMPLES</string>

@@ -76,10 +76,17 @@ public:
     inline const QByteArray &   getAddress()      const {   return address;             }
     inline const QUrl &         getUrlMessage()   const {   return urlMessage;          }
 
-    const QByteArray getVerboseMessage() const;
+    const QByteArray getVerboseMessage(bool withDestination=false) const;
     inline qreal getMidiValue(quint8 index) const {
         if(index < midiValues.count())  return midiValues.at(index);
         else                            return 0;
+    }
+    inline void setMidiValue(quint8 index, qreal value, const QString &extraInfo = "") {
+        if(index < midiValues.count()) {
+            if(extraInfo.isEmpty()) verboseValues[index] = value;
+            else                    verboseValues[index] = QString("%1 (%2)").arg(value).arg(extraInfo);
+            midiValues[index]    = value;
+        }
     }
 };
 

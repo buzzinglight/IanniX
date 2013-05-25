@@ -8,7 +8,8 @@ InterfaceOsc::InterfaceOsc(QWidget *parent) :
     connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
 
     //OSC adress of IanniX
-    oscMatchAdress = "/iannix/";
+    oscMatchAdressIanniX    = "/iannix/";
+    oscMatchAdressTransport = "/transport/";
     bundleMessageId = 0;
 
     bundlePort = 0;
@@ -82,7 +83,7 @@ void InterfaceOsc::parseOSC() {
 
 
                     //Parse content
-                    QString commandDestination = QString(addressBuffer).remove(oscMatchAdress);
+                    QString commandDestination = QString(addressBuffer).remove(oscMatchAdressIanniX).remove(oscMatchAdressTransport);
                     QString command = commandDestination + " ";
                     QStringList commandArguments;
                     quint16 indexDataBuffer = 0;
@@ -129,12 +130,22 @@ void InterfaceOsc::parseOSC() {
 
                     MessageManager::incomingMessage(MessageIncomming("osc", receivedHost.toString(), receivedPort, commandDestination, command, commandArguments));
 
-                    if(command.toLower().startsWith("/transport play"))
-                        Transport::syncStart();
-                    else if(command.toLower().startsWith("/transport stop"))
-                        Transport::syncStop();
-                    else if(command.toLower().startsWith("/transport fastrewind"))
-                        Transport::syncGoto(0);
+                    /*
+                    Application::synchroLoopGuard = this;
+                    if(command.toLower().startsWith("transport play"))
+                        Application::current->execute(COMMAND_PLAY, ExecuteSourceNetwork);
+                    else if(command.toLower().startsWith("transport stop"))
+                        Application::current->execute(COMMAND_STOP, ExecuteSourceNetwork);
+                    else if(command.toLower().startsWith("transport fastrewind")) {
+                        Application::current->execute(COMMAND_FF, ExecuteSourceNetwork);
+                    }
+                    else if(command.toLower().startsWith("transport goto")) {
+                        qreal time = command.remove("transport goto").trimmed().toDouble();
+                        if(time == 0)   Application::current->execute(COMMAND_FF, ExecuteSourceNetwork);
+                        else            Application::current->execute(QString("%1 %2").arg(COMMAND_GOTO).arg(time), ExecuteSourceNetwork);
+                    }
+                    Application::synchroLoopGuard = 0;
+                    */
                 }
             }
         }
@@ -142,8 +153,12 @@ void InterfaceOsc::parseOSC() {
 }
 
 void InterfaceOsc::networkSynchro(bool start) {
-    if(start)   networkSynchro(QString("play"));
-    else        networkSynchro(QString("stop"));
+    if(start)   networkSynchro(QString(COMMAND_PLAY));
+    else {
+        if(Transport::timeLocal == 0)
+            networkSynchro(QString(COMMAND_FF));
+        networkSynchro(QString(COMMAND_STOP));
+    }
 }
 void InterfaceOsc::networkSynchro(const QString &info) {
     MessageManager::outgoingMessage(MessageManagerDestination(MessageManager::transportObject, 0, 0, 0, NxPoint(), NxPoint(), TransportStatus(MessageManager::transportNbTriggers, MessageManager::transportNbCursors, MessageManager::transportNbCurves, info)));
@@ -151,7 +166,7 @@ void InterfaceOsc::networkSynchro(const QString &info) {
 
 
 
-bool InterfaceOsc::send(const Message & message) {
+bool InterfaceOsc::send(const Message &message, QStringList *messageSent) {
     if(!enable)
         return false;
 
@@ -163,7 +178,7 @@ bool InterfaceOsc::send(const Message & message) {
         socket->writeDatagram(message.getBuffer(), message.getHost(), message.getPort());
 
         //Log in console
-        MessageManager::logSend(message);
+        MessageManager::logSend(message, messageSent);
     }
     return true;
 }

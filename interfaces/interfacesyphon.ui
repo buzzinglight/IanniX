@@ -26,7 +26,7 @@
    <item>
     <widget class="QCheckBox" name="serverEnable">
      <property name="toolTip">
-      <string>Enable or disable score rendering output through Syphon</string>
+      <string>Enables or disables score rendering output through Syphon</string>
      </property>
      <property name="text">
       <string>ENABLE SYPHON OUT</string>

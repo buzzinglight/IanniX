@@ -2,7 +2,7 @@
 function onCreate() {
 	//Viewport setup
 	run("clear");
-	run("registerTexture background -7.4 4.6 7.4 -4.6 ./Examples/logo.png");
+	run("registerTexture background -7.4 4.6 7.4 -4.6 logo.png");
 	run("rotate 0 0 0");
 	run("center 0 0");
 	run("zoom 150");

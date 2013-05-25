@@ -73,7 +73,6 @@ void draw() {
 
 
 void mouseMoved() {
-  println("ICI");
   /*
    * IanniX Interface
    * Send messages to IanniX
@@ -87,8 +86,7 @@ void mouseMoved() {
 
 
 void mousePressed() {
-println("LA");
-    /*
+   /*
    * IanniX Interface
    * Transport control
    */
@@ -125,17 +123,17 @@ void curvesFromIanniX(IanniXMessage message) {
 } 
 
 //Score played
-void scoreStarted() {
-  println("IanniX score started !");
+void scoreStarted(Float time, String timeStr) {
+  println("IanniX score started @ " + time + "s. / " + timeStr + " !");
 }
 
 //Score stopped
-void scoreStopped() {
-  println("IanniX score stopped !");
+void scoreStopped(Float time, String timeStr) {
+  println("IanniX score stopped @ " + time + "s. / " + timeStr + " !");
 }
 
 //Score rewinded
-void scoreRewinded() {
-  println("IanniX score rewinded !");
+void scoreRewinded(Float time, String timeStr) {
+  println("IanniX score rewinded @ " + time + "s. / " + timeStr + " !");
 }
 

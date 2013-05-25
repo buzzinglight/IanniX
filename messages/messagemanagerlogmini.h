@@ -17,13 +17,12 @@ public:
 
 private:
     bool canDisplay;
-    const MessageLog *lastMessage;
 
 protected:
     void timerEvent(QTimerEvent *);
 public:
-    void logSend   (const MessageLog &log, bool force = false);
-    void logReceive(const MessageLog &log, bool force = false);
+    void logSend   (const MessageLog &log, QStringList *sentMessage = 0);
+    void logReceive(const MessageLog &log, QStringList *sentMessage = 0);
 
 private:
     Ui::MessageManagerLogMini *ui;

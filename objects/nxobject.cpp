@@ -24,23 +24,32 @@ NxObject::NxObject(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     groupId.clear();
     id = 0;
     messageTimeNowOld = 0;
-    active = ObjectsActivityActive;
-    pos = NxPoint();
     parentObject = 0;
     selectedHover = false;
     selected = false;
     hasActivity = false;
     hasActivityOld = false;
     glListRecreate = true;
-    setMessageTimeInterval(1);
     isDrag = false;
     performCollision = false;
+    active = ObjectsActivityActive;
+    setForeground(0, Qt::gray);
+    setMessageId(0);
     lineFactor = 1;
     lineStipple = 0xFFFF;
-    setMessageId(0);
+    initialize(true);
+}
+void NxObject::initialize(bool firstTime) {
+    if(!firstTime) {
+        setGroupId("");
+        setActive(1);
+    }
     setSolo(0);
     setMute(0);
-    setForeground(0, Qt::gray);
+    setPos(NxPoint());
+    setMessageTimeInterval(1);
+    setMessagePatterns("");
+    setLabel("");
 }
 
 
@@ -191,7 +200,7 @@ QVector< QVector<QByteArray> > NxObject::parseMessagesPattern(const QString & me
 }
 
 void NxObject::dispatchProperty(const char *_property, const QVariant & value) {
-    QStringList asCurvePoints = QStringList() << COMMAND_CURVE_POINT_RMV << COMMAND_CURVE_TXT << COMMAND_CURVE_LINES << COMMAND_CURVE_POINT << COMMAND_CURVE_POINT_TRANSLATE << COMMAND_CURVE_POINT_SHIFT << COMMAND_CURVE_EDITOR << COMMAND_CURVE_PATH << COMMAND_CURVE_POINT_SMOOTH << COMMAND_CURVE_POINT_X << COMMAND_CURVE_POINT_Y << COMMAND_CURVE_POINT_Z << COMMAND_CURVE_IMG << COMMAND_CURVE_POINT_TRANSLATE2;
+    QStringList asCurvePoints = QStringList() << COMMAND_CURVE_POINT_RMV << COMMAND_CURVE_TXT << COMMAND_CURVE_LINES << COMMAND_CURVE_POINT << COMMAND_CURVE_POINT_TRANSLATE << COMMAND_CURVE_POINT_SHIFT << COMMAND_CURVE_EDITOR << COMMAND_CURVE_PATH << COMMAND_CURVE_POINT_SMOOTH << COMMAND_CURVE_POINT_X << COMMAND_CURVE_POINT_Y << COMMAND_CURVE_POINT_Z << COMMAND_CURVE_POINT_TRANSLATE2;
     if(asCurvePoints.contains(QString(_property))) propertyChanged(COMMAND_CURVE_POINT);
     else                                           propertyChanged(_property);
     setProperty(_property, value);

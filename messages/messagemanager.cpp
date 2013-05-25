@@ -43,21 +43,19 @@ void MessageManager::networkManualParsing() {
         interface->networkManualParsing();
 }
 void MessageManager::networkSynchro(bool start) {
-    foreach(NetworkInterface *interface, interfaces)
-        interface->networkSynchro(start);
-}
-void MessageManager::networkSynchro(const QString &info) {
-    foreach(NetworkInterface *interface, interfaces)
-        interface->networkSynchro(info);
+    foreach(NetworkInterface *interface, interfaces) {
+        if(interface != Application::synchroLoopGuard)
+            interface->networkSynchro(start);
+    }
 }
 
-void MessageManager::logSend(const MessageLog &message, bool force) {
+void MessageManager::logSend(const MessageLog &message, QStringList *sentMessage) {
     foreach(MessageManagerLogInterface *log, logs)
-        log->logSend(message, force);
+        log->logSend(message, sentMessage);
 }
-void MessageManager::logReceive(const MessageLog &message, bool force) {
+void MessageManager::logReceive(const MessageLog &message, QStringList *sentMessage) {
     foreach(MessageManagerLogInterface *log, logs)
-        log->logReceive(message, force);
+        log->logReceive(message, sentMessage);
 }
 void MessageManager::logInfo(const QString &message) {
     qDebug("%s", qPrintable(message));
@@ -83,10 +81,10 @@ void MessageManager::outgoingMessage(const MessageManagerDestination &destinatio
                 messagesCache.insert(messagePattern.at(0), message);
             }
             if(message.parse(messagePattern, destination)) {
-                if(interfaces[message.getType()]->send(message)) {
-                    if(((NxObject*)destination.object)->getSelectedHover())
-                        sentMessages << message.getVerboseMessage();
-                }
+                if(((NxObject*)destination.object)->getSelectedHover())
+                    interfaces[message.getType()]->send(message, &sentMessages);
+                else
+                    interfaces[message.getType()]->send(message);
             }
         }
         if((((NxObject*)destination.object)->getSelectedHover()) && (sentMessages.count()))

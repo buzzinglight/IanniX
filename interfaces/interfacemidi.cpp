@@ -1,10 +1,12 @@
 #include "interfacemidi.h"
 #include "ui_interfacemidi.h"
 
-UiBool  InterfaceMidi::syncClock     = false;
-UiBool  InterfaceMidi::syncTransport = true;
+UiBool  InterfaceMidi::syncTransportIn  = true;
+UiBool  InterfaceMidi::syncTransportOut = true;
 QString InterfaceMidi::portInName    = "from_iannix";
 QString InterfaceMidi::portOutName   = "to_iannix";
+
+QString InterfaceMidi::midiNotes[12] = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"};
 
 InterfaceMidi::InterfaceMidi(QWidget *parent) :
     NetworkInterface(parent),
@@ -41,10 +43,12 @@ InterfaceMidi::InterfaceMidi(QWidget *parent) :
 
     //Interfaces link
     enable.setAction(ui->enable,          "interfaceMidiEnable");
-    syncClock.setAction(ui->syncClock,    "interfaceMidiSyncClock");
-    syncTransport.setAction(ui->syncSong, "interfaceMidiSyncTransport");
+    syncTransportIn .setAction(ui->syncTransportIn,  "interfaceMidiSyncTransportIn");
+    syncTransportOut.setAction(ui->syncTransportOut, "interfaceMidiSyncTransportOut");
     syncBpm.setAction(ui->bpm,            "interfaceMidiSyncBpm");
     MessageManager::aliases["midi_out"].setAction(ui->aliasPort, "interfaceMidiPortAlias");
+
+    //syncClock.setAction(ui->syncClock,    "interfaceMidiSyncClock");
 #ifdef Q_OS_WIN
     MessageManager::aliases["midi_out"] = "Microsoft GS Wavetable Synth";
 #else
@@ -53,6 +57,10 @@ InterfaceMidi::InterfaceMidi(QWidget *parent) :
     syncBpm = 120;
 
     startTimer(5000);
+}
+
+QString InterfaceMidi::getNoteName(quint16 noteValue) {
+    return QString("%1%2").arg(midiNotes[noteValue % 12]).arg((noteValue / 12)-1);
 }
 
 
@@ -90,42 +98,45 @@ void InterfaceMidi::timerEvent(QTimerEvent*) {
     delete portListOut;
 }
 
-bool InterfaceMidi::send(const Message & _message) {
+bool InterfaceMidi::send(const Message &_message, QStringList *messageSent) {
     if(!enable)
         return false;
 
-    quint8 channel   = qBound(1, (int)_message.getMidiValue(0), 16);
-    QString portname = _message.getMidiPort();
-    QString command  = _message.getMidiCommand().toLower();
+    Message message  = _message;
+    quint8 channel   = qBound(1, (int)message.getMidiValue(0), 16);
+    QString portname = message.getMidiPort();
+    QString command  = message.getMidiCommand().toLower();
 
     //Send request
-    if(command == "/note") {
-        sendNote(portname, channel, _message.getMidiValue(1), _message.getMidiValue(2));
-        qreal duration = _message.getMidiValue(3) * 1000.;
-        if(duration > 0)
-            new ExtMidiNoteOff(this, portname, channel, _message.getMidiValue(1), duration);
+    if(command == "/notef") {
+        message.setMidiValue(1, qBound(0, (int)(message.getMidiValue(1)*127.), 127));
+        message.setMidiValue(2, qBound(0, (int)(message.getMidiValue(2)*127.), 127));
     }
-    else if(command == "/notef") {
-        sendNote(portname, channel, _message.getMidiValue(1)*127., _message.getMidiValue(2)*127.);
-        qreal duration = _message.getMidiValue(3) * 1000.;
-        if(duration > 0)
-            new ExtMidiNoteOff(this, portname, channel, _message.getMidiValue(1)*127., duration);
-    }
-    else if(command == "/cc")
-        sendCC  (portname, channel, _message.getMidiValue(1), _message.getMidiValue(2));
     else if(command == "/ccf")
-        sendCC  (portname, channel, _message.getMidiValue(1), _message.getMidiValue(2)*127.);
-    else if(command == "/pgm")
-        sendPGM (portname, channel, _message.getMidiValue(1));
+        message.setMidiValue(2, qBound(0, (int)(message.getMidiValue(2)*127.), 127));
     else if(command == "/pgmf")
-        sendPGM (portname, channel, _message.getMidiValue(1)*127.);
-    else if(command == "/bend")
-        sendBend(portname, channel, _message.getMidiValue(1));
+        message.setMidiValue(1, message.getMidiValue(1)*127.);
     else if(command == "/bendf")
-        sendBend(portname, channel, _message.getMidiValue(1)*127.);
+        message.setMidiValue(1, message.getMidiValue(1)*127.);
+
+
+    if((command == "/note") || (command == "/notef")) {
+        message.setMidiValue(1, message.getMidiValue(1), getNoteName(message.getMidiValue(1)));
+        message.setMidiValue(3, message.getMidiValue(3), QString("%1 s.").arg(message.getMidiValue(3)));
+        sendNote(portname, channel, message.getMidiValue(1), message.getMidiValue(2));
+        qreal duration = message.getMidiValue(3) * 1000.;
+        if(duration > 0)
+            new ExtMidiNoteOff(this, portname, channel, message.getMidiValue(1), duration);
+    }
+    else if((command == "/cc") || (command == "/ccf"))
+        sendCC  (portname, channel, message.getMidiValue(1), message.getMidiValue(2));
+    else if((command == "/pgm") || (command == "/pgmf"))
+        sendPGM (portname, channel, message.getMidiValue(1));
+    else if((command == "/bend") || (command == "/bendf"))
+        sendBend(portname, channel, message.getMidiValue(1));
 
     //Log in console
-    MessageManager::logSend(_message);
+    MessageManager::logSend(message, messageSent);
 
     return true;
 }
@@ -204,10 +215,14 @@ void InterfaceMidi::sendBend(const QString & portname, quint8 channel, qreal _be
     }
 }
 void InterfaceMidi::networkSynchro(bool start) {
-    if(start)   sendSPPStart();
-    else        sendSPPStop();
-    //TODO SYNCHRO
-    sendSPPTime(Transport::timeLocal);
+    if(syncTransportOut) {
+        if(start) {
+            sendSPPTime(Transport::timeLocal);
+            sendSPPStart();
+        }
+        else
+            sendSPPStop();
+    }
 }
 
 void InterfaceMidi::sendSPPStart() {
@@ -264,30 +279,46 @@ void InterfaceMidi::networkManualParsing() {
     mutex.lock();
     while(receivedMessages.count()) {
         //Fire events (log, message and script mapping)
-        MessageManager::incomingMessage(MessageIncomming("midi", "midiin", QVariant(), "", "", QStringList() << receivedMessages.at(0).first << receivedMessages.at(0).second));
+        QString command = receivedMessages.first().first;
+        //foreach(const QString &commandArgs, receivedMessages.first().second) {
+        for(quint16 i = 0 ; i < receivedMessages.first().second.count() ; i++) {
+            if((receivedMessages.first().first == "note") && (i == 1))
+                command += QString(" %1 (%2)").arg(receivedMessages.first().second.at(i)).arg(getNoteName(receivedMessages.first().second.at(i).toInt()));
+            else
+                command += " " + receivedMessages.first().second.at(i);
+        }
+        MessageManager::incomingMessage(MessageIncomming("midi", "midiin", QVariant(), receivedMessages.first().first, command, QStringList() << receivedMessages.first().second));
         receivedMessages.removeFirst();
+    }
+    while(receivedCommands.count()) {
+        Application::synchroLoopGuard = this;
+        Application::current->execute(receivedCommands.first(), ExecuteSourceNetwork);
+        Application::synchroLoopGuard = 0;
+        receivedCommands.removeFirst();
     }
     mutex.unlock();
 }
 void InterfaceMidi::receivedMidiRealtime(quint8 type, quint8 val1, quint8 val2) {
-    if(type == MIDI_SPP)
-        Transport::syncGoto((128*val2 + val1) * 4 * ((60. / syncBpm) / 16));
-    else if(type == MIDI_CLOCK)
-        Transport::syncTimer((60. / syncBpm) / 24.);
-    else if(type == MIDI_TIMECODE){
-        qreal slaveTime = midiMtc.decode(val1);
-        qDebug("TIMECODE %f", slaveTime);
+    if(syncTransportIn) {
+        mutex.lock();
+        if(type == MIDI_SPP) {
+            qreal time = (128*val2 + val1) * 4 * ((60. / syncBpm) / 16);
+            if(time == 0)   receivedCommands << COMMAND_FF;
+            else            receivedCommands << QString("%1 %2").arg(COMMAND_GOTO).arg(time);
+        }
+        else if((type == MIDI_CLOCK) || (type == MIDI_TICK) || (type == MIDI_TIMECODE)) {
+            //qreal delta = (60. / syncBpm) / 24.;
+            //qreal slaveTime = midiMtc.decode(val1);
+            //qDebug("TIMECODE %f", slaveTime);
+        }
+        else if(type == MIDI_CONTINUE)
+            receivedCommands << COMMAND_PLAY;
+        else if(type == MIDI_STOP)
+            receivedCommands << COMMAND_STOP;
+        else if(type == MIDI_START)
+            receivedCommands << COMMAND_PLAY;
+        mutex.unlock();
     }
-    else if(type == MIDI_TICK)
-        qDebug("TICK");
-    else if(type == MIDI_CONTINUE)
-        Transport::syncStart();
-    else if(type == MIDI_STOP)
-        Transport::syncStop();
-    else if(type == MIDI_START)
-        Transport::syncStart();
-    else
-        qDebug("MIDI Sync Error");
 }
 
 
@@ -351,7 +382,7 @@ void midiCallback(double, std::vector< unsigned char > *receivedMessage, void *u
     quint8 receivedMessageBytes = receivedMessage->size();
     if(receivedMessageBytes > 0) {
         quint8 status = receivedMessage->at(0) & MASK_STATUS;
-        quint8 channel = receivedMessage->at(0) & MASK_CHANNEL;
+        quint8 channel = (receivedMessage->at(0) & MASK_CHANNEL) + 1;
 
         switch(status) {
         case MASK_STATUS: {

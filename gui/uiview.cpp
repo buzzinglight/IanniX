@@ -24,8 +24,10 @@ UiView::UiView(QWidget *parent) :
     ui(new Ui::UiView) {
     ui->setupUi(this);
     isFullScreen = false;
-    freehandCurveId = 0;
+    freehandCurveId = freehandCurveIndex = 0;
 
+    Help::syncHelpWith(ui->actionImoprt_Text, COMMAND_CURVE_TXT);
+    Help::syncHelpWith(ui->actionImoprt_SVG,  COMMAND_CURVE_PATH);
 
     //About
     about = new UiAbout();
@@ -434,6 +436,7 @@ void UiView::actionDrawFreeCurve(bool cursor) {
     if((Global::editingMode == EditingModeFree) && (Global::editing))
         editingStop();
     else {
+        freehandCurveId = freehandCurveIndex = 0;
         freehandCurveNeedsCursor = cursor;
         unToogleDraw(2);
         unToogleDraw(3);
@@ -445,6 +448,7 @@ void UiView::actionDrawPointCurve(bool cursor) {
     if((Global::editingMode == EditingModePoint) && (Global::editing))
         editingStop();
     else {
+        freehandCurveId = freehandCurveIndex = 0;
         freehandCurveNeedsCursor = cursor;
         unToogleDraw(1);
         unToogleDraw(3);
@@ -469,13 +473,13 @@ void UiView::actionAddTimeline() {
     unToogleDraw(4);
     Application::render->selectionClear(true);
     quint16 id1 = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
-    Application::current->execute("setPointAt          " + QString::number(id1) + " 0 -5 0", ExecuteSourceGui);
-    Application::current->execute("setPointAt          " + QString::number(id1) + " 1  5 0", ExecuteSourceGui);
+    Application::current->execute("setpointat " + QString::number(id1) + " 0 -5 0", ExecuteSourceGui);
+    Application::current->execute("setpointat " + QString::number(id1) + " 1  5 0", ExecuteSourceGui);
     quint16 id2 = Application::current->execute("add cursor auto", ExecuteSourceGui).toUInt();
-    Application::current->execute("setWidth            " + QString::number(id2) + " 5", ExecuteSourceGui);
-    Application::current->execute("setCurve            " + QString::number(id2) + " lastCurve", ExecuteSourceGui);
-    Application::current->execute("setBoundsSourceMode " + QString::number(id2) + " 1", ExecuteSourceGui);
-    Application::current->execute("setMessage          " + QString::number(id2) + " 20, " + Global::defaultMessageCurve, ExecuteSourceGui);
+    Application::current->execute("setwidth " + QString::number(id2) + " 5", ExecuteSourceGui);
+    Application::current->execute("setcurve " + QString::number(id2) + " lastCurve", ExecuteSourceGui);
+    Application::current->execute("setboundssourcemode " + QString::number(id2) + " 1", ExecuteSourceGui);
+    Application::current->execute("setmessage " + QString::number(id2) + " 20, " + Global::defaultMessageCurve, ExecuteSourceGui);
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id1));
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id2));
 }
@@ -486,11 +490,11 @@ void UiView::actionAddMathCurve() {
     unToogleDraw(4);
     Application::render->selectionClear(true);
     quint16 id = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
-    Application::current->execute("setEquation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), cos(4*t*PI)", ExecuteSourceGui);
+    Application::current->execute("setequation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), cos(4*t*PI)", ExecuteSourceGui);
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id));
     ui->inspector->showSpaceTab();
     id = Application::current->execute("add cursor auto", ExecuteSourceGui).toUInt();
-    Application::current->execute("setCurve " + QString::number(id) + " lastCurve", ExecuteSourceGui);
+    Application::current->execute("setcurve " + QString::number(id) + " lastCurve", ExecuteSourceGui);
 }
 void UiView::actionAddMathCurveSimple() {
     unToogleDraw(1);
@@ -499,7 +503,7 @@ void UiView::actionAddMathCurveSimple() {
     unToogleDraw(4);
     Application::render->selectionClear(true);
     quint16 id = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
-    Application::current->execute("setEquation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), 0", ExecuteSourceGui);
+    Application::current->execute("setequation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), 0", ExecuteSourceGui);
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id));
     ui->inspector->showSpaceTab();
 }
@@ -516,8 +520,8 @@ void UiView::actionAddFreeCursor() {
             freeCursor = false;
             NxCurve *curve = (NxCurve*)object;
             quint16 cursorId = Application::current->execute(QString("add cursor auto"), ExecuteSourceGui).toUInt();
-            Application::current->execute(QString("setCurve %1 %2").arg(cursorId).arg(curve->getId()), ExecuteSourceGui);
-            Application::current->execute(QString("setOffset %1 %2 0 end").arg(cursorId).arg(curve->getMaxOffset() / 2), ExecuteSourceGui);
+            Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURSOR_CURVE).arg(cursorId).arg(curve->getId()), ExecuteSourceGui);
+            Application::current->execute(QString("%1 %2 %3 0 end").arg(COMMAND_CURSOR_OFFSET).arg(cursorId).arg(curve->getMaxOffset() / 2), ExecuteSourceGui);
         }
     }
     if(freeCursor)
@@ -568,14 +572,14 @@ void UiView::editingStart(const NxPoint & point) {
 void UiView::editingStop() {
     if((Global::editing) && ((Global::editingMode == EditingModeFree) || (Global::editingMode == EditingModePoint))) {
         if(freehandCurveIndex > 1) {
-            Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURVE_POINT_RMV).arg(freehandCurveId).arg(freehandCurveIndex), ExecuteSourceGui);
+            Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURVE_POINT_RMV).arg(freehandCurveId).arg(freehandCurveIndex), ExecuteSourceSystem);
             if(freehandCurveNeedsCursor) {
                 quint16 cursorId = Application::current->execute(QString("add cursor auto"), ExecuteSourceGui).toUInt();
                 Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURSOR_CURVE).arg(cursorId).arg(freehandCurveId), ExecuteSourceGui);
             }
         }
         else if(freehandCurveId > 0)
-            Application::current->execute(QString("%1 %2").arg(COMMAND_REMOVE).arg(freehandCurveId), ExecuteSourceGui);
+            Application::current->execute(QString("%1 %2").arg(COMMAND_REMOVE).arg(freehandCurveId), ExecuteSourceSystem);
     }
     unToogleDraw(0);
     ui->render->unsetEditing();

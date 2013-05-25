@@ -32,11 +32,10 @@ public:
     static void networkManualParsing();
     static void networkBundle(bool open);
     static void networkSynchro(bool start);
-    static void networkSynchro(const QString &info);
 
 public:
-    static void logSend   (const MessageLog &message, bool force = false);
-    static void logReceive(const MessageLog &message, bool force = false);
+    static void logSend   (const MessageLog &message, QStringList *sentMessage = 0);
+    static void logReceive(const MessageLog &message, QStringList *sentMessage = 0);
     static void logInfo   (const QString &message);
     static QString incomingMessage(const MessageIncomming &source, bool needOutput = false);
     static void outgoingMessage(const MessageManagerDestination &destination);

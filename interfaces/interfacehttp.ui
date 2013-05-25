@@ -31,7 +31,7 @@
      <item>
       <widget class="QCheckBox" name="enable">
        <property name="toolTip">
-        <string>Enable or disable HTTP messages and control</string>
+        <string>Enables or disables HTTP messages and control</string>
        </property>
        <property name="text">
         <string>ENABLE HTTP</string>
@@ -69,7 +69,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Open a specific URL in your web browser allowing you to control IanniX remotely</string>
+        <string>Opens a specific URL in your web browser allowing you to control IanniX remotely</string>
        </property>
        <property name="text">
         <string>OPEN URL</string>

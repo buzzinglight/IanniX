@@ -31,7 +31,7 @@
      <item>
       <widget class="QCheckBox" name="enable">
        <property name="toolTip">
-        <string>Enable or disable recursive messages and control</string>
+        <string>Enables or disables recursive messages and control</string>
        </property>
        <property name="text">
         <string>ENABLE RECURSIVITY (direct://)</string>

@@ -20,8 +20,8 @@ public:
 
 public:
     bool logEnable;
-    void logSend   (const MessageLog &log, bool force = false);
-    void logReceive(const MessageLog &log, bool force = false);
+    void logSend   (const MessageLog &log, QStringList *sentMessage = 0);
+    void logReceive(const MessageLog &log, QStringList *sentMessage = 0);
 
 private:
     Ui::MessageManagerLog *ui;

@@ -78,19 +78,19 @@ public class IanniX {
     }
 
     try {  
-      scoreStarted = parent.getClass().getMethod("scoreStarted");
+      scoreStarted = parent.getClass().getMethod("scoreStarted", Float.class, String.class);
     } 
     catch (Exception e) {  
       println("[IanniX interface] You may create a scoreStarted method");
     }
     try {  
-      scoreStopped = parent.getClass().getMethod("scoreStopped");
+      scoreStopped = parent.getClass().getMethod("scoreStopped", Float.class, String.class);
     } 
     catch (Exception e) {  
       println("[IanniX interface] You may create a scoreStopped method");
     }
     try {  
-      scoreRewinded = parent.getClass().getMethod("scoreRewinded");
+      scoreRewinded = parent.getClass().getMethod("scoreRewinded", Float.class, String.class);
     } 
     catch (Exception e) {  
       println("[IanniX interface] You may create a scoreRewinded method");
@@ -107,21 +107,21 @@ public class IanniX {
 
   //Event when a message is receveived from IanniX
   protected void oscEvent(OscMessage iannixMessage) {
-    if ((iannixMessage.checkAddrPattern("/cursor")) && (iannixMessage.arguments().length >= 7)) {
+    if ((iannixMessage.checkAddrPattern("/cursor")) && (iannixMessage.arguments().length > 7)) {
       callCursorsFromIanniX(new IanniXMessage("cursor", 
       new IannixObject((int)iannixMessage.get(0).floatValue(), iannixMessage.get(1).stringValue()), 
       new PVector(iannixMessage.get(2).floatValue(), iannixMessage.get(3).floatValue(), iannixMessage.get(4).floatValue()), 
       new PVector(iannixMessage.get(5).floatValue(), iannixMessage.get(6).floatValue(), iannixMessage.get(7).floatValue())
         ));
     }
-    else if ((iannixMessage.checkAddrPattern("/curve")) && (iannixMessage.arguments().length >= 7)) {
+    else if ((iannixMessage.checkAddrPattern("/curve")) && (iannixMessage.arguments().length > 7)) {
       callCurvesFromIanniX(new IanniXMessage("curve", 
       new IannixObject((int)iannixMessage.get(0).floatValue(), iannixMessage.get(1).stringValue()), 
       new PVector(iannixMessage.get(2).floatValue(), iannixMessage.get(3).floatValue(), iannixMessage.get(4).floatValue()), 
       new PVector(iannixMessage.get(5).floatValue(), iannixMessage.get(6).floatValue(), iannixMessage.get(7).floatValue())
         ));
     }
-    else if ((iannixMessage.checkAddrPattern("/trigger")) && (iannixMessage.arguments().length >= 9)) {
+    else if ((iannixMessage.checkAddrPattern("/trigger")) && (iannixMessage.arguments().length > 9)) {
       callTriggersFromIanniX(new IanniXMessage("trigger", 
       new IannixObject((int)iannixMessage.get(0).floatValue(), iannixMessage.get(1).stringValue()), 
       new PVector(iannixMessage.get(2).floatValue(), iannixMessage.get(3).floatValue(), iannixMessage.get(4).floatValue()), 
@@ -129,13 +129,13 @@ public class IanniX {
       new IannixObject((int)iannixMessage.get(8).floatValue(), iannixMessage.get(9).stringValue()) 
         ));
     }
-    else if ((iannixMessage.checkAddrPattern("/transport")) && (iannixMessage.arguments().length >= 4)) {
+    else if ((iannixMessage.checkAddrPattern("/transport")) && (iannixMessage.arguments().length > 2)) {
       if (iannixMessage.get(0).stringValue().equalsIgnoreCase("play"))
-        callScoreStarted();
+        callScoreStarted(iannixMessage.get(1).floatValue(), iannixMessage.get(2).stringValue());
       else if (iannixMessage.get(0).stringValue().equalsIgnoreCase("stop"))
-        callScoreStopped();
+        callScoreStopped(iannixMessage.get(1).floatValue(), iannixMessage.get(2).stringValue());
       else if (iannixMessage.get(0).stringValue().equalsIgnoreCase("fastrewind"))
-        callScoreRewinded();
+        callScoreRewinded(iannixMessage.get(1).floatValue(), iannixMessage.get(2).stringValue());
     }
   }
 
@@ -172,36 +172,36 @@ public class IanniX {
   }
 
 
-  private void callScoreStarted() {
+  private void callScoreStarted(Float time, String timeStr) {
     playingState    = true;
     scoreHasStarted = true;
     if (scoreStarted != null) {
       try {
-        scoreStarted.invoke(parent);
+        scoreStarted.invoke(parent, time, timeStr);
       } 
       catch (Exception e) {
       }
     }
   }
-  private void callScoreStopped() {
+  private void callScoreStopped(Float time, String timeStr) {
     playingState    = false;
     scoreHasStopped = true;
     if (scoreStopped != null) {
       try {
-        scoreStopped.invoke(parent);
+        scoreStopped.invoke(parent, time, timeStr);
       } 
       catch (Exception e) {
       }
     }
   }
-  private void callScoreRewinded() {
+  private void callScoreRewinded(Float time, String timeStr) {
     scoreHasRewinded = true;
     receivedCursorsMessages.clear();
     receivedTriggersMessages.clear();
     receivedCurvesMessages.clear();
     if (scoreRewinded != null) {
       try {
-        scoreRewinded.invoke(parent);
+        scoreRewinded.invoke(parent, time, timeStr);
       } 
       catch (Exception e) {
       }

@@ -45,7 +45,7 @@ void InterfaceUdp::parseOSC() {
     }
 }
 
-bool InterfaceUdp::send(const Message & message) {
+bool InterfaceUdp::send(const Message &message, QStringList *messageSent) {
     if(!enable)
         return false;
 
@@ -53,7 +53,7 @@ bool InterfaceUdp::send(const Message & message) {
     socket->writeDatagram(message.getAsciiMessage() + ';' + '\n', message.getHost(), message.getPort());
 
     //Log in console
-    MessageManager::logSend(message);
+    MessageManager::logSend(message, messageSent);
 
     return true;
 }

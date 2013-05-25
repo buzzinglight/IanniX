@@ -686,7 +686,7 @@ QDialogButtonBox QPushButton {
     <string>Paste</string>
    </property>
    <property name="toolTip">
-    <string>Paste copied objects from clipboard</string>
+    <string>Pastes copied objects from clipboard</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
@@ -1224,7 +1224,7 @@ QDialogButtonBox QPushButton {
     <string>Snap to X-grid</string>
    </property>
    <property name="toolTip">
-    <string>Snap mouse actions on vertical grid</string>
+    <string>Snaps mouse actions on vertical grid</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
@@ -1299,6 +1299,9 @@ QDialogButtonBox QPushButton {
   <action name="actionAbout">
    <property name="text">
     <string>About IanniX</string>
+   </property>
+   <property name="toolTip">
+    <string>Opens About IanniX window</string>
    </property>
    <property name="statusTip">
     <string>About IanniX|IanniX is open source and developed by volunteers. Discover who they are!</string>
@@ -1501,7 +1504,7 @@ QDialogButtonBox QPushButton {
     <string>Snap to Y-grid</string>
    </property>
    <property name="toolTip">
-    <string>Snap mouse actions on horizontal grid</string>
+    <string>Snaps mouse actions on horizontal grid</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
@@ -1792,7 +1795,7 @@ QDialogButtonBox QPushButton {
     <string>Add a math curve with a cursor</string>
    </property>
    <property name="toolTip">
-    <string>Add a math curve with a cursor</string>
+    <string>Adds a math curve with a cursor</string>
    </property>
    <property name="statusTip">
     <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>

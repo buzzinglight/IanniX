@@ -23,22 +23,26 @@ Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
 NxCurve::NxCurve(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     NxObject(parent, ccParentItem) {
     QTreeWidgetItem::setText(0, tr("CURVE"));
-    calcBoundingRect();
     glListCurve = glGenLists(1);
-    setSize(1.2);
-    setColorActive("_simple_curve_active");
-    setColorInactive("_simple_curve_inactive");
     selectedPathPointPoint = selectedPathPointControl1 = selectedPathPointControl2 = -1;
     curveType = CurveTypePoints;
-    setPointAt(0, NxPoint(), NxPoint(), NxPoint(), false);
-    setMessageTimeInterval(20);
-    setEquationPoints(400);
     equationIsValid = false;
     glListRecreateFromEditor = false;
     equationNbEval = 3;
     pathLength = 0;
-    setInertie(1);
     pathPointsEditor = 0;
+
+    initializeCustom();
+}
+void NxCurve::initializeCustom() {
+    setSize(1.2);
+    setColorActive("_simple_curve_active");
+    setColorInactive("_simple_curve_inactive");
+    setInertie(1);
+    setEquationStr("");
+    setEquationPoints(400);
+    pathPoints.clear();
+    setPointAt(0, NxPoint(), NxPoint(), NxPoint(), false);
 }
 
 NxCurve::~NxCurve() {
@@ -667,7 +671,6 @@ NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
             else                                    return NxPoint(ptCoords[0], ptCoords[1], ptCoords[2]);
         }
         catch (Parser::exception_type &e) {
-            qDebug("%d %s", id, qPrintable(equation));
             qDebug("[MathParser] Curve #%d PointAt %f error", id, equationVariableT);
         }
         return NxPoint();

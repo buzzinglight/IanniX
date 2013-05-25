@@ -22,12 +22,17 @@ GLuint NxTrigger::glListTrigger = 0;
 
 NxTrigger::NxTrigger(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     NxObject(parent, ccParentItem) {
-    setText(0, tr("TRIGGER"));
-    setColorActive  ("_trigger_active");
-    setColorInactive("_trigger_inactive");
-    setSize(1);
     cacheSize = 0;
     cursorTrigged = 0;
+    setText(0, tr("TRIGGER"));
+
+    initializeCustom();
+}
+
+void NxTrigger::initializeCustom() {
+    setSize(1);
+    setColorActive  ("_trigger_active");
+    setColorInactive("_trigger_inactive");
     setTextureActive  ("trigger_active");
     setTextureInactive("trigger_inactive");
     setTriggerOff(0);

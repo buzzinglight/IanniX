@@ -67,6 +67,7 @@ class NxCurve : public NxObject {
 
 public:
     explicit NxCurve(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
+    void initializeCustom();
     ~NxCurve();
 
 private:

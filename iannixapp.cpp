@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     //iannixApp.installTranslator(&translator);
 
     QString appName    = "IanniX ";
-    QString appVersion = "0.9";
+    QString appVersion = "0.9.0";
 
 #ifdef Q_OS_MAC
     appName += "Mac";
@@ -274,364 +274,82 @@ void IanniXApp::setHelp() {
     Help::categories["javascript"].infos << HelpInfo(QString("SQRT2"), 		tr("Square root of two"));
 
     Help::categories["commands"].category = tr("IanniX Commands");
-    Help::categories["commands"].infos << HelpInfo(QString("add"),
-                                                   tr("Add an object"),
-                                                   tr("Adds an object on the score. The keyword auto automatically assigns an ID to your object."),
-                                                   tr("add <trigger|curve|cursor> <id>\nadd <trigger|curve|cursor> auto"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("remove"),
-                                                   tr("Remove an object"),
-                                                   tr("Removes an object in the score thanks to its ID."),
-                                                   tr("remove <id>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("trig"),
-                                                   tr("Force object to send its message(s)"),
-                                                   tr("Forces an object to send its message(s)."),
-                                                   tr("trig <target>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("clear"),
-                                                   tr("Erase a score"),
-                                                   tr("Erase all objects into the score"),
-                                                   tr("clear"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setGroup"),
-                                                   tr("Defining a group"),
-                                                   tr("Groups are identified by a word you are free to choose. Objects are not required to be part of a group."),
-                                                   tr("setGroup <target> <group name>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setActive"),
-                                                   tr("Enable/disable an object"),
-                                                   tr("An object is enable by default, but you can disable it. Disabled objects will not send messages."),
-                                                   tr("setActive <target> <0|1>"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("setTriggerOff"),
-                                                   tr("Time before release (note off) of a trigger"),
-                                                   tr("When a note is played thanks to a trigger, you can configure it to turn the note off automatically after a configurable delay. The time before release should normally be set to zero when note-off time is not being sent in the messages of this trigger."),
-                                                   tr("setTriggerOff <target> <delay>"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("setCurve"),
-                                                   tr("Assign a cursor to a curve"),
-                                                   tr("After creating your cursor, make sure you have assigned the curve you want it to follow. You can use the keyword lastCurve to designate the last curve added."),
-                                                   tr("setCurve <cursor target> <curve target>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setWidth"),
-                                                   tr("Width of the cursor play head"),
-                                                   tr("You can edit in real time the width of a cursor in order to enable or disable triggers nearby."),
-                                                   tr("setWidth <target> <width>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setDepth"),
-                                                   tr("Depth of the cursor play head"),
-                                                   tr("You can edit in real time the depth of a cursor in order to enable or disable triggers nearby."),
-                                                   tr("setDepth <target> <depth>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setPattern"),
-                                                   tr("Cursor loop pattern"),
-                                                   tr("This parameter refers to the direction and the number of cycles. For example, with 1 1 0, the cursor will perform two cycles in the positive direction before stopping."),
-                                                   tr("setPattern <target> <easing> 0 <pattern>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setSpeed"),
-                                                   tr("Speed of a cursor"),
-                                                   tr("Cursors have a speed factor independent of each other. The travel time of a curve is also configurable. The cursor will evolve in the negative direction if the speed is negative, but time will continue to flow naturally."),
-                                                   tr("setSpeed <target> auto <duration>\n") +
-                                                   tr("setSpeed <target> <speed factor>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setSpeedf"),
-                                                   tr("Instantaneous speed of a cursor"),
-                                                   tr("Cursors have an instantaneous speed factor independent, very useful for real-time performances. As setSpeed, a negative speed is possible without affecting the global speed of the score."),
-                                                   tr("setSpeedF <target> <speed factor>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setOffset"),
-                                                   tr("Cursor offsets"),
-                                                   tr("You can choose to start your cursor at a certain point of the curve (marked in seconds) and limit it between certain values (also in seconds).\nFor example, the 2 4 6 offset means that your cursor will start your curve at the position t=2s then will travel to point t=6s to start again at the point t=4s."),
-                                                   tr("setOffset <target> <initial> <start> <end>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setTime"),
-                                                   tr("Instantaneous position (in seconds)"),
-                                                   tr("The position of a cursor can be modified in real time. This instruction does not work if you include it directly in your script, because at each execution, IanniX does a fastrewind."),
-                                                   tr("setTime <target> <time>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setTimePercent"),
-                                                   tr("Instantaneous position (in percentages)"),
-                                                   tr("The position of a cursor can be modified in real time. This instruction does not work if you include it directly in your script, because at each execution, IanniX does a fastrewind."),
-                                                   tr("setTimePercent <target> <time>"));
-
-    //TOTO  setBoundsSourceMode
-    Help::categories["commands"].infos << HelpInfo(QString("setBoundsSource"),
-                                                   tr("Mapping values"),
-                                                   tr("You can set your cursor to send values within a chosen interval. For example, if it is operating in a 3x3 square, it can still send coordinates as values between 0 and 1.\nUse setBoundsSource to indicate to IanniX the interval in which your cursor is located and setBoundsTarget to set the range of your sent values. Generally BoundsSource is correctly set by default.\nYou must use the variables cursor_value_x, cursor_value_y, trigger_value_x, trigger_value_y, collison_value_x or collison_value_y that values sent are those of boundsTarget."),
-                                                   tr("setBoundsSource <target> <x-start> <x-end> <y-start> <y-end> <z-start> <z-end>\n") +
-                                                   tr("setBoundsTarget <target> <x-start> <x-end> <y-start> <y-end> <z-start> <z-end>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setBoundsTarget"),
-                                                   tr("Mapping values"),
-                                                   tr("You can set your cursor to send values within a chosen interval. For example, if it is operating in a 3x3 square, it can still send coordinates as values between 0 and 1.\nUse setBoundsSource to indicate to IanniX the interval in which your cursor is located and setBoundsTarget to set the range of your sent values. Generally BoundsSource is correctly set by default.\nYou must use the variables cursor_value_x, cursor_value_y, trigger_value_x, trigger_value_y, collison_value_x or collison_value_y that values sent are those of boundsTarget."),
-                                                   tr("setBoundsSource <target> <x-start> <x-end> <y-start> <y-end> <z-start> <z-end>\n") +
-                                                   tr("setBoundsTarget <target> <x-start> <x-end> <y-start> <y-end> <z-start> <z-end>"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("shiftPoints"),
-                                                   tr("Shifting points of a curve"),
-                                                   tr("Shfit points from left to right or right to left"),
-                                                   tr("shiftPoints <target> <start point index> <-1|1>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("translatePoints"),
-                                                   tr("Translating a curve"),
-                                                   tr("Translates a curve"),
-                                                   tr("translatePoints <target> <dX> <dY> <dZ>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("translatePoint"),
-                                                   tr("Translating a point of a curve"),
-                                                   tr("Translates a point of a curve"),
-                                                   tr("translatePoint <target> <point index> <dX> <dY> <dZ>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setPointAt"),
-                                                   tr("Setting or modifying points of a curve (straight or Bezier)"),
-                                                   tr("A curve must be defined by a sequence of points. The points index starts at 0."),
-                                                   tr("setPointAt <target> <point index> <x> <y>\n") +
-                                                   tr("setPointAt <target> <point index> <x> <y> <c1x> <c1y> <c2x> <c2y>\n") +
-                                                   tr("setPointAt <target> <point index> <x> <y> <z>\n") +
-                                                   tr("setPointAt <target> <point index> <x> <y> <z> <c1x> <c1y> <c1z> <c2x> <c2y> <c2z>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setSmoothPointAt"),
-                                                   tr("Setting or modifying points of a curve (with automatic smoothing)"),
-                                                   tr("A curve must be defined by a sequence of points. The points index starts at 0."),
-                                                   tr("setSmoothPointAt <target> <point index> <x> <y>\n") +
-                                                   tr("setSmoothPointAt <target> <point index> <x> <y> <z>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setPointXAt"),
-                                                   tr("Modifying x-coordinate of a point of a curve"),
-                                                   tr("Description"),
-                                                   tr("setPointXAt <target> <point index> <x>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setPointYAt"),
-                                                   tr("Modifying y-coordinate of a point of a curve"),
-                                                   tr("Description"),
-                                                   tr("setPointYAt <target> <point index> <y>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setPointZat"),
-                                                   tr("Modifying z-coordinate of a point of a curve"),
-                                                   tr("Description"),
-                                                   tr("setPointZAt <target> <point index> <z>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("removePointAt"),
-                                                   tr("Removing a point of a curve"),
-                                                   tr("Description"),
-                                                   tr("removePointAt <point index>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setPointsEllipse"),
-                                                   tr("Elliptical or circular curves"),
-                                                   tr("Ellipses are defined by a major axis and a minor axis. To construct circles, the two axes must have the same value."),
-                                                   tr("setPointsEllipse <target> <width> <height>"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("setSize"),
-                                                   tr("Size of objects"),
-                                                   tr("This function modifies the thickness of a curve or a cursor and the size of a trigger."),
-                                                   tr("setSize <target> <size>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setResize"),
-                                                   tr("Curve size (width/height)"),
-                                                   tr("The size of objects can be changed directly."),
-                                                   tr("setResize <target> <width> <height>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setResizeF"),
-                                                   tr("Curve size (scale factor)"),
-                                                   tr("The size of objects can be changed directly."),
-                                                   tr("setResizeF <target> <scale factor>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setLine"),
-                                                   tr("Paths format"),
-                                                   tr("Sets a style dotted with dash pattern which must be a sequence of 0 and 1, dash style defines the space between each dot."),
-                                                   tr("setLine <target> <dash style> <dash pattern>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setPos"),
-                                                   tr("Space position"),
-                                                   tr("Sets an object on the score via the coordinates (x, y, z)."),
-                                                   tr("setPos <target> <x> <y> <z>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setLabel"),
-                                                   tr("Adding text"),
-                                                   tr("You can add a text description of your items on the score."),
-                                                   tr("setLabel <target> <label>"));
-
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("setMessage"),
-                                                   tr("Assigning a message"),
-                                                   tr("This command sets the message that an object must send (please refer to Messages Syntax help)."),
-                                                   tr("setMessage <target> <period>, <message1> <variables>, <message2>,message2, message3, …"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("sendOsc"),
-                                                   tr("Send a message"),
-                                                   tr("You can send manually a message (please refer to Messages Syntax help)."));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("solo"),
-                                                   tr("Solo/un-solo"),
-                                                   tr("Solo/un-solo an object or a group (exactly like in Objects of inspector tab)"),
-                                                   tr("solo <target> <0|1>\n"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("mute"),
-                                                   tr("Mute/un-mute"),
-                                                   tr("Mute/un-mute an object or a group (exactly like in Objects of inspector tab)"),
-                                                   tr("mute <target> <1|0>\n"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("registerTexture"),
-                                                   tr("Creating a variable texture"),
-                                                   tr("Save your texture as a variable. If you are using the following variables, the display is directly modified because native textures are saved under those variables. Use the tool \"restore triggers original shapes\" from the inspector \"scripts & styles\" to find the original textures."),
-                                                   tr("registerTexture <variable> <x-top-left-corner> <y-top-left-corner> <x-bottom-right-corner> <y-bottom-right-corner> <file name>"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("setTexture"),
-                                                   tr("Texture of an object"),
-                                                   tr("Modify the texture of an object or a group with a preloaded texture (refer to registerTexture)."),
-                                                   tr("setTexture <target> <variable>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setTextureActive"),
-                                                   tr("Texture of an active object that does not send any messages"),
-                                                   tr("Modify the texture of an object or a group with a preloaded texture (refer to registerTexture)."),
-                                                   tr("setTextureActive <target> <variable>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setTextureInactive"),
-                                                   tr("Texture of an inactive object that does not send any messages"),
-                                                   tr("Modify the texture of an object or a group with a preloaded texture (refer to registerTexture)."),
-                                                   tr("setTextureInactive <target> <variable>"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("registerColor"),
-                                                   tr("Creating a variable color (RGB)"),
-                                                   tr("IanniX can also save a color as a variable for reusing it more easily."),
-                                                   tr("registerColor <variable> <r> <g> <b> <a>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("registerColorHue"),
-                                                   tr("Creating a variable color (HSB)"),
-                                                   tr("IanniX can also save a color as a variable for reusing it more easily."),
-                                                   tr("registerColor <variable> <h> <s> <b> <a>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setColor"),
-                                                   tr("Color of an object (RGB)"),
-                                                   tr("Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur)."),
-                                                   tr("setColor <target> <r> <g> <b> <a>\n") +
-                                                   tr("setColor <target> <variable>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setColorHue"),
-                                                   tr("Color of an object (HSB)"),
-                                                   tr("Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur)."),
-                                                   tr("setColorHue <target> <h> <s> <b> <a>\n") +
-                                                   tr("setColorHue <target> <variable>"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("setColorActive"),
-                                                   tr("Color of an active object that does not send any messages (RGB)"),
-                                                   tr("Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur)."),
-                                                   tr("setColorActive <target> <r> <g> <b> <a>\n") +
-                                                   tr("setColorActive <target> <variable>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setColorInactive"),
-                                                   tr("Color of an inactive object that does not send any messages (RGB)"),
-                                                   tr("Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur)."),
-                                                   tr("setColorInactive <target> <r> <g> <b> <a>\n") +
-                                                   tr("setColorInactive <target> <variable>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setColorActiveHue"),
-                                                   tr("Color of an active object that does not send any messages (HSB)"),
-                                                   tr("Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur)."),
-                                                   tr("setColorActiveHue <target> <h> <s> <b> <a>\n") +
-                                                   tr("setColorActiveHue <target> <variable>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("setColorInactiveHue"),
-                                                   tr("Color of an inactive object that send messages (HSB)"),
-                                                   tr("Modify the color of an object or a group with a specific color or a preloaded color (refer to registerColor or registerColorHur)."),
-                                                   tr("setColorInactiveHue <target> <h> <s> <b> <a>\n") +
-                                                   tr("setColorInactiveHue <target> <variable>"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("zoom"),
-                                                   tr("Zoom in score"),
-                                                   tr("Adjust the zoom using the script. The factor is in percent. e.g. A factor of 200 doubles the size of the display area."),
-                                                   tr("zoom <zoom factor>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("center"),
-                                                   tr("Center score"),
-                                                   tr("Placing the point (x,y) in the center of the workspace"),
-                                                   tr("center <x> <y>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("viewport"),
-                                                   tr("Resize the viewport"),
-                                                   tr("Resize the viewport"),
-                                                   tr("viewport <width> <height>"));
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("snapshot"),
-                                                   tr("Export as an image snapshot"),
-                                                   tr("Make a snapshot of current score"),
-                                                   tr("snapshot <scale> <filename,optional>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("rotate"),
-                                                   tr("Rotate score"),
-                                                   tr("Rotate the view about the x, y and z axes"),
-                                                   tr("rotate <x-axis> <y-axis> <z-axis>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("rotate"),
-                                                   tr("Rotate score"),
-                                                   tr("Rotate the view about the x, y and z axes"),
-                                                   tr("rotate <x-axis> <y-axis> <z-axis>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("play"),
-                                                   tr("Playing the score"),
-                                                   tr("Enabling the playback"),
-                                                   tr("play <score speed>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("stop"),
-                                                   tr("Stopping the score"),
-                                                   tr("Disabling the playback"),
-                                                   tr("stop"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("fastrewind"),
-                                                   tr("Fastrewinding the score"),
-                                                   tr("Go back to the begging of score"),
-                                                   tr("fastrewind"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("speed"),
-                                                   tr("Speed of the score"),
-                                                   tr("You can set the global speed of the score. A negative speed will evolve over time in the negative direction."),
-                                                   tr("speed <speed>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("load"),
-                                                   tr("Load a score or a script"),
-                                                   tr("Load a score or a script of the current project folder"),
-                                                   tr("load <score name>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("log"),
-                                                   tr("Log information to console"),
-                                                   tr("Log information to IanniX console (network tab)"),
-                                                   tr("log <text>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("goto"),
-                                                   tr("Go to a specific timecode"),
-                                                   tr("Go to a specific timecode in seconds"),
-                                                   tr("goto <time in seconds>"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("mouse"),
-                                                   tr("Control mouse"),
-                                                   tr("Enable to move cursor of the mouse"),
-                                                   tr("mouse <x> <y>"));
-
-
-
-    Help::categories["commands"].infos << HelpInfo(QString("title"),
-                                                   tr("Get IanniX window title"),
-                                                   tr("Returns IanniX window title (scripts only)"),
-                                                   tr("title"));
-
-    Help::categories["commands"].infos << HelpInfo(QString("sleep"),
-                                                   tr("Make IanniX script sleeping (scripts only)"),
-                                                   tr("Set a sleep time. BE CAREFUL, IanniX will not respond during sleeping"),
-                                                   tr("sleep <duration>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_ADD						, tr("Objects instances"), tr("Adds an object to score"), tr("<trigger|curve|cursor> <id>\nadd <trigger|curve|cursor> auto"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_REMOVE					, tr("Objects instances"), tr("Removes an object from score"), tr("<id>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CLEAR					, tr("Objects instances"), tr("Clears the score (remove all objects)"), tr(""));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_ID						, tr(""), tr(""), tr("<old_id> <new_id>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_GROUP					, tr(""), tr(""), tr("<target> <group_id>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_TRIGGER_OFF				, tr(""), tr(""), tr("<target> <duration>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_ACTIVE					, tr(""), tr(""), tr("<target> <0|1>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_CURVE				, tr("Objects identification"), tr("Associates a cursor to a curve"), tr("<target> <curve_id>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_START				, tr(""), tr(""), tr("<target> <easing> <0> <loop_pattern>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_WIDTH				, tr(""), tr(""), tr("<target> <width>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_DEPTH				, tr(""), tr(""), tr("<target> <depth>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_SPEED				, tr(""), tr(""), tr("<target> <speed>\n<target> auto <duration>\n<target> lock <fixed_speed\n<target> autolock <fixed_duration>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_SPEEDF			, tr(""), tr(""), tr("<target> <speed_factor>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_BOUNDS_SOURCE		, tr(""), tr(""), tr("<target> <x-start> <x-end> <y-start> <y-end> <z-start> <z-end>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_BOUNDS_SOURCE_MODE, tr(""), tr(""), tr("<target> <0|1|2|3>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_BOUNDS_TARGET		, tr(""), tr(""), tr("<target> <x-start> <x-end> <y-start> <y-end> <z-start> <z-end>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_OFFSET			, tr(""), tr(""), tr("<target> <initial> <loop-start> <loop-end>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_EDITOR				, tr("Objects and 3D space"), tr("Displays curve points editor"), tr(""));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_EQUATION			, tr(""), tr(""), tr("<target> cartesian <parametric_equation_for_x> <parametric_equation_for_y> <parametric_equation_for_z>\n<target> polar <parametric_equation_for_radius> <parametric_equation_for_phi> <parametric_equation_for_theta>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_EQUATION_POINTS	, tr(""), tr(""), tr("<target> <nb_of_points>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_ELL				, tr("Objects and 3D space"), tr("Defines a curve as an ellipse"), tr("<target> <width> <height>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT				, tr("Objects and 3D space"), tr("Defines point position of a curve"), tr("<target> <point_index> <x> <y> <z>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_SMOOTH		, tr("Objects and 3D space"), tr("Defines smoothed point position of a curve"), tr("<target> <point_index> <x> <y> <z>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_RMV			, tr("Objects and 3D space"), tr("Removes point from a curve"), tr("<target> <point_index>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_SIZE						, tr(""), tr(""), tr("<target> <size>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_POS						, tr("Objects and 3D space"), tr("Changes the absolute position of object"), tr("<target> <x> <y> <z>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_POS_TRANSLATE			, tr("Objects and 3D space"), tr("Translate position of object"), tr("<target> <dx> <dy> <dz>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_POS_X					, tr(""), tr(""), tr("<target> <x>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_POS_Y					, tr(""), tr(""), tr("<target> <y>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_POS_Z					, tr(""), tr(""), tr("<target> <z>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_MESSAGE					, tr(""), tr(""), tr("<target> <interval>, <message1>, <message1>, …"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_MESSAGE_INTERVAL			, tr(""), tr(""), tr("<target> <interval>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_LABEL					, tr(""), tr(""), tr("<target> <label>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_ZOOM						, tr("Score viewport"), tr("Changes current score zoom"), tr("<zoom>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_GOTO						, tr(""), tr(""), tr("<timecode>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_PLAY						, tr("Playback"), tr("Starts the playback"), tr("<speed (optional)>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_STOP						, tr("Playback"), tr("Stops the playback"), tr(""));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_FF						, tr(""), tr(""), tr(""));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_SPEED					, tr(""), tr(""), tr("<speed>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CENTER					, tr("Score viewport"), tr("Moves the center of the score"), tr("<x> <y>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_ROTATE					, tr("Score viewport"), tr("Rotates camera point of view"), tr("<angle_along_x-axis> <angle_along_y-axis> <angle_along_z-axis>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_TRIG						, tr("Objects and messages"), tr("Forces an object to send its messages"), tr("<target>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_GLOBAL_COLOR				, tr(""), tr(""), tr("<target> <color_name> <r> <g> <b> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_ACTIVE				, tr(""), tr(""), tr("<target> <color_name>\n<target> <r> <g> <b> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_INACTIVE			, tr(""), tr(""), tr("<target> <color_name>\n<target> <r> <g> <b> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_TEXTURE					, tr(""), tr(""), tr("<target> <texture_name> <x-top-left> <y-top-left> <x-bottom-right> <y-bottom-right> <texture_filename>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_TEXTURE_ACTIVE			, tr(""), tr(""), tr("<target> <texture_name>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_TEXTURE_INACTIVE			, tr(""), tr(""), tr("<target> <texture_name>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_SOLO						, tr("Objects identification"), tr("Switch an object or a group to solo mode"), tr("<target> <0|1>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_MUTE						, tr("Objects identification"), tr("Mutes an object or a group"), tr("<target> <0|1>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_TXT				, tr("Objects and 3D space"), tr(""), tr("See examples through GUI"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_PATH				, tr("Objects and 3D space"), tr(""), tr("See examples through GUI"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_RESIZE					, tr(""), tr(""), tr("<target> <width> <height>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_TIME_PERCENT		, tr("Objects and time"), tr("Sets cursors to a specific time on curve (as percentage of total duration)"), tr("<target> <percentage>"));
+
+    Help::categories["commands"].infos << HelpInfo(COMMAND_TEXTURE_GLOBAL			, tr("Objects style"), tr("Changes the texture (image) of active and inactive objects"), tr("<target> <texture_name>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_GLOBAL_COLOR_HUE			, tr(""), tr(""), tr("<target> <color_name> <h> <s> <v> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_GLOBAL				, tr("Objects style"), tr("Changes the color of active and inactive objects by using a color in the palette or a custom color"), tr("<target> <color_name>\n<target> <r> <g> <b> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_GLOBAL_HUE			, tr("Objects style"), tr("Changes the color of active and inactive objects by using a color in the palette or a custom color"), tr("<target> <color_name>\n<target> <h> <s> <v> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_ACTIVE_HUE			, tr(""), tr(""), tr("<target> <color_name>\n<target> <h> <s> <v> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_INACTIVE_HUE		, tr(""), tr(""), tr("<target> <color_name>\n<target> <h> <s> <v> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_TIME				, tr("Objects and time"), tr("Sets cursors to a specific time on curve (absolute time)"), tr("<target> <time>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_LOG						, tr("IanniX actions"), tr("Logs information to IanniX messages log"), tr("<text>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_EQUATION_PARAM		, tr("Objects and 3D space"), tr("Sets a value to an equation parameter"), tr("<target> <param_name> <param_value>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_LINES				, tr("Objects style"), tr("Defines points of a curve as SVG polylines"), tr("See examples through GUI"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_LOAD						, tr("IanniX actions"), tr("Loads a specific score"), tr("<filename>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_MESSAGE_SEND				, tr("IanniX actions"), tr("Send a message (in IanniX format)"), tr("<message>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_MOUSE					, tr("IanniX actions"), tr("Sets mouse cursor position"), tr("<x> <y>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_SHIFT		, tr("Objects and 3D space"), tr("Shifts points of a curve in a direction"), tr("<target> <point_index> <-1|1>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_TRANSLATE	, tr("Objects and 3D space"), tr("Translates points of a curve"), tr("<target> <dx> <dy> <dz>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_TRANSLATE2	, tr("Objects and 3D space"), tr("Translates a point of a curve"), tr("<target> <point_index> <dx> <dy> <dz>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_X			, tr("Objects and 3D space"), tr("Defines point X-coordinate of a curve"), tr("<target> <point_index> <x>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_Y			, tr("Objects and 3D space"), tr("Defines point Y-coordinate of a curve"), tr("<target> <point_index> <y>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_Z			, tr("Objects and 3D space"), tr("Defines point Z-coordinate of a curve"), tr("<target> <point_index> <z>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_RESIZEF					, tr("Objects and 3D space"), tr("Apply a scale factor on objects width and height"), tr("<target> <width_scale_factor> <height_scale_factor>"));
+    //Help::categories["commands"].infos << HelpInfo(COMMAND_LINE                   , tr("Objects style"), tr("Changes the way lines are drawn (dashed, plain…)"), tr("Not yet documented"));
 
 
     foreach(const HelpInfo &info, Help::categories["values"].infos)

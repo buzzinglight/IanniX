@@ -12,7 +12,6 @@ function onConfigure() {
 function onCreate() {
 	//Viewport setup
 	run("clear");
-	run("registerTexture background");
 	run("rotate 0 -70 -10");
 	run("center 0 0");
 	run("zoom 150");

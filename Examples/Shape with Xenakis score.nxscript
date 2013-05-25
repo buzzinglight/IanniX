@@ -22,7 +22,7 @@ function onCreate() {
 	run("setColor lines     0 105 131 255");
 	run("setColor cursors 255  69  50 255");
 	run("setColor triggers 60  60  60 255");
-	run("registerTexture background -8 6.5 13 -8.5 ./Samples/background.jpg");
+	run("registerTexture background -8 6.5 13 -8.5 Nomos Alpha.jpg");
 }
 
 //Custom function

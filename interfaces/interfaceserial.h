@@ -44,7 +44,7 @@ private slots:
     void parse();
 
 public:
-    bool send(const Message & message);
+    bool send(const Message &message, QStringList *messageSent = 0);
 
 private:
     Ui::InterfaceSerial *ui;

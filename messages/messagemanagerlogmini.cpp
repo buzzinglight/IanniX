@@ -15,14 +15,16 @@ MessageManagerLogMini::~MessageManagerLogMini() {
     delete ui;
 }
 
-void MessageManagerLogMini::logSend(const MessageLog &log, bool force) {
-    if((ui->enable->isChecked()) && ((canDisplay) || (force))) {
+void MessageManagerLogMini::logSend(const MessageLog &log, QStringList *sentMessage) {
+    if((ui->enable->isChecked()) && (canDisplay)) {
         ui->log->setText(log.getVerboseMessage());
         canDisplay = false;
     }
+    if(sentMessage)
+        sentMessage->append(log.getVerboseMessage());
 }
-void MessageManagerLogMini::logReceive(const MessageLog &log, bool force) {
-    logSend(log, force);
+void MessageManagerLogMini::logReceive(const MessageLog &log, QStringList *sentMessage) {
+    logSend(log, sentMessage);
 }
 
 void MessageManagerLogMini::timerEvent(QTimerEvent *) {

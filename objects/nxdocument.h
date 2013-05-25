@@ -56,7 +56,6 @@ public:
             commands << QString(COMMAND_REMOVE) + " " + QString::number(object->getId());
         foreach(const QString & command, commands)
             Application::current->execute(command, ExecuteSourceCopyPaste);
-        groups.clear();
     }
 
 

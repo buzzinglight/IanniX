@@ -33,7 +33,7 @@ private slots:
     void parseOSC();
 
 public:
-    bool send(const Message & message);
+    bool send(const Message &message, QStringList *messageSent = 0);
 
 private:
     Ui::InterfaceUdp *ui;

@@ -120,7 +120,7 @@ void InterfaceSerial::parse() {
     }
 }
 
-bool InterfaceSerial::send(const Message & message) {
+bool InterfaceSerial::send(const Message &message, QStringList *messageSent) {
     if(!enable)
         return false;
 
@@ -128,7 +128,7 @@ bool InterfaceSerial::send(const Message & message) {
     port->write(message.getAsciiMessage() + COMMAND_END_BYTE);
 
     //Log in console
-    MessageManager::logSend(message);
+    MessageManager::logSend(message, messageSent);
 
     return true;
 }

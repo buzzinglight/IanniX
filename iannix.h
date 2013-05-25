@@ -131,6 +131,7 @@ private:
 public slots:
     const QVariant execute(const MessageIncomming & command, bool createNewObjectIfExists = false, bool needOutput = false);
     const QVariant execute(const QString & command, ExecuteSource source, bool createNewObjectIfExists = false, bool needOutput = false);
+    void executeAsScript(const QString &script);
     inline QString argvFullString(const QString &command, const QStringList &argv, quint16 index) const {
         if(index >= 1)   return command.mid(command.indexOf(argv.at(index), command.indexOf(argv.at(index-1))+argv.at(index-1).length())).trimmed();
         else             return command;
@@ -141,32 +142,10 @@ public slots:
     }
     QString incomingMessage(const MessageIncomming &source, bool needOutput = false);
     void openMessageEditor();
-    void send(const Message & message);
+    void send(const Message &message, QStringList *sentMessage = 0);
     QMainWindow* getMainWindow()        { return view; }
     UiRenderPreview* getRenderPreview() { return view->getRenderPreview(); }
     bool getPerformancePreview()        { return view->getPerformancePreview(); }
-    void syncStop() {
-        if((InterfaceMidi::syncTransport) && (schedulerActivity != SchedulerOff)) {
-            setScheduler(SchedulerOff);
-            MessageManager::networkSynchro(QString("stop"));
-        }
-    }
-    void syncStart() {
-        if((InterfaceMidi::syncTransport) && (schedulerActivity != SchedulerOn)) {
-            setScheduler(SchedulerOn);
-            MessageManager::networkSynchro(QString("play"));
-        }
-    }
-    void syncGoto(qreal time) {
-        if(InterfaceMidi::syncTransport)
-            forceGoto(time, false);
-    }
-    void syncTimer(qreal delta) {
-        if(InterfaceMidi::syncClock) {
-            Transport::timerOk = false;
-            timerTick(delta);
-        }
-    }
 
 
     //EXTERNAL INTERFACES
@@ -205,6 +184,7 @@ private:
     bool forceUpdate;
     QNetworkAccessManager *updateManager;
     QString waitForMessageValue;
+    bool waitingForMessageValue;
     QIcon iconAppPlay, iconAppPause;
 private slots:
     void checkForUpdatesFinished(QNetworkReply*);
@@ -240,7 +220,7 @@ public slots:
     void actionPaste();
     void actionCopy();
 signals:
-    void newMessageArrived();
+    void waitForMessageArrived();
 
 
     //FAST IMPORT

@@ -16,11 +16,11 @@ MessageManagerLog::~MessageManagerLog() {
     delete ui;
 }
 
-void MessageManagerLog::logSend(const MessageLog &log, bool) {
+void MessageManagerLog::logSend(const MessageLog &log, QStringList*) {
     if(logEnable)
         ui->logSend->appendPlainText(log.getVerboseMessage());
 }
-void MessageManagerLog::logReceive(const MessageLog &log, bool) {
+void MessageManagerLog::logReceive(const MessageLog &log, QStringList*) {
     if(logEnable)
         ui->logReceive->appendPlainText(log.getVerboseMessage());
 }

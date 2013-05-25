@@ -14,7 +14,7 @@ InterfaceDirect::~InterfaceDirect() {
     delete ui;
 }
 
-bool InterfaceDirect::send(const Message & message) {
+bool InterfaceDirect::send(const Message &message, QStringList *messageSent) {
     if(!enable)
         return false;
 
@@ -23,7 +23,7 @@ bool InterfaceDirect::send(const Message & message) {
 
 
     //Log in console
-    MessageManager::logSend(message);
+    MessageManager::logSend(message, messageSent);
 
     return true;
 }

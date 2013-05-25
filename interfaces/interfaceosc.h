@@ -34,7 +34,7 @@ private slots:
 
 private:
     QUdpSocket *socket;
-    QString oscMatchAdress;
+    QString oscMatchAdressIanniX, oscMatchAdressTransport;
     QList<Message> bundleMessages;
     quint64 bundleMessageId;
 private:
@@ -46,7 +46,7 @@ private slots:
     void parseOSC();
 
 public:
-    bool send(const Message & message);
+    bool send(const Message &message, QStringList *messageSent = 0);
     void networkBundle(bool start);
     void networkSynchro(bool start);
     void networkSynchro(const QString &info);

@@ -68,15 +68,10 @@ public:
 public:
     static UiTimer  *bigTimer;
     static UiEditor *editor;
+    static const QString& getTimeLocalStr();
     UiAbout *about;
 private:
     bool speedLock;
-
-public:
-    static void syncStop() {} //TODO SYNCHRO
-    static void syncStart() {} //TODO SYNCHRO
-    static void syncGoto(qreal /*time*/) {} //TODO SYNCHRO
-    static void syncTimer(qreal /*delta*/) {} //TODO SYNCHRO
 
 public:
     void refreshPerformances();

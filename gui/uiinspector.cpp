@@ -26,6 +26,63 @@ UiInspector::UiInspector(QWidget *parent) :
     toolbarButton = 0;
     lastTabBeforeRessources = 0;
 
+    Help::syncHelpWith(ui->positionX,         COMMAND_POS_X);
+    Help::syncHelpWith(ui->positionY,         COMMAND_POS_Y);
+    Help::syncHelpWith(ui->positionZ,         COMMAND_POS_Z);
+    Help::syncHelpWith(ui->activityCheck,     COMMAND_ACTIVE);
+    Help::syncHelpWith(ui->labelLine,         COMMAND_LABEL);
+    Help::syncHelpWith(ui->sizeSpin,          COMMAND_SIZE);
+    Help::syncHelpWith(ui->messagesButton,    COMMAND_MESSAGE);
+    Help::syncHelpWith(ui->messagesSpin,      COMMAND_MESSAGE_INTERVAL);
+    Help::syncHelpWith(ui->widthSpin,         COMMAND_CURSOR_WIDTH);
+    Help::syncHelpWith(ui->depthSpin,         COMMAND_CURSOR_DEPTH);
+    Help::syncHelpWith(ui->speedFSpin,        COMMAND_CURSOR_SPEEDF);
+    Help::syncHelpWith(ui->speedSpin,         COMMAND_CURSOR_SPEED);
+    Help::syncHelpWith(ui->cursorLengthSpin,  COMMAND_CURSOR_SPEED);
+    Help::syncHelpWith(ui->triggerOffSpin,    COMMAND_TRIGGER_OFF);
+    Help::syncHelpWith(ui->equationPoints,    COMMAND_CURVE_EQUATION_POINTS);
+    Help::syncHelpWith(ui->cursorSourceMode0, COMMAND_CURSOR_BOUNDS_SOURCE_MODE);
+    Help::syncHelpWith(ui->cursorSourceMode1, COMMAND_CURSOR_BOUNDS_SOURCE_MODE);
+    Help::syncHelpWith(ui->cursorSourceMode2, COMMAND_CURSOR_BOUNDS_SOURCE_MODE);
+    Help::syncHelpWith(ui->cursorSourceMode3, COMMAND_CURSOR_BOUNDS_SOURCE_MODE);
+    Help::syncHelpWith(ui->cursorSourceX1,    COMMAND_CURSOR_BOUNDS_SOURCE);
+    Help::syncHelpWith(ui->cursorSourceY1,    COMMAND_CURSOR_BOUNDS_SOURCE);
+    Help::syncHelpWith(ui->cursorSourceZ1,    COMMAND_CURSOR_BOUNDS_SOURCE);
+    Help::syncHelpWith(ui->cursorSourceX2,    COMMAND_CURSOR_BOUNDS_SOURCE);
+    Help::syncHelpWith(ui->cursorSourceY2,    COMMAND_CURSOR_BOUNDS_SOURCE);
+    Help::syncHelpWith(ui->cursorSourceZ2,    COMMAND_CURSOR_BOUNDS_SOURCE);
+    Help::syncHelpWith(ui->cursorTargetX1,    COMMAND_CURSOR_BOUNDS_TARGET);
+    Help::syncHelpWith(ui->cursorTargetY1,    COMMAND_CURSOR_BOUNDS_TARGET);
+    Help::syncHelpWith(ui->cursorTargetZ1,    COMMAND_CURSOR_BOUNDS_TARGET);
+    Help::syncHelpWith(ui->cursorTargetX2,    COMMAND_CURSOR_BOUNDS_TARGET);
+    Help::syncHelpWith(ui->cursorTargetY2,    COMMAND_CURSOR_BOUNDS_TARGET);
+    Help::syncHelpWith(ui->cursorTargetZ2,    COMMAND_CURSOR_BOUNDS_TARGET);
+    Help::syncHelpWith(ui->equationEdit,      COMMAND_CURVE_EQUATION);
+    Help::syncHelpWith(ui->groupIdButton,     COMMAND_GROUP);
+    Help::syncHelpWith(ui->newIdButton,       COMMAND_ID);
+    //Help::syncHelpWith(ui->pointsLists,     COMMAND_CURVE_EDITOR);
+
+    Help::syncHelpWith(ui->offsetInitialSpin, COMMAND_CURSOR_OFFSET);
+    Help::syncHelpWith(ui->offsetStartSpin,   COMMAND_CURSOR_OFFSET);
+    Help::syncHelpWith(ui->offsetEndSpin,     COMMAND_CURSOR_OFFSET);
+    Help::syncHelpWith(ui->sizeWSpin,         COMMAND_RESIZE);
+    Help::syncHelpWith(ui->sizeHSpin,         COMMAND_RESIZE);
+
+    Help::syncHelpWith(ui->easingCombo,       COMMAND_CURSOR_START);
+    Help::syncHelpWith(ui->patternLine,       COMMAND_CURSOR_START);
+
+    Help::syncHelpWith(ui->colorCombo1,       COMMAND_COLOR_ACTIVE);
+    Help::syncHelpWith(ui->colorCombo2,       COMMAND_COLOR_INACTIVE);
+    Help::syncHelpWith(ui->colorCombo1,       COMMAND_COLOR_ACTIVE_HUE);
+    Help::syncHelpWith(ui->colorCombo2,       COMMAND_COLOR_INACTIVE_HUE);
+    Help::syncHelpWith(ui->textureCombo1,     COMMAND_TEXTURE_ACTIVE);
+    Help::syncHelpWith(ui->textureCombo1,     COMMAND_TEXTURE_INACTIVE);
+
+    Help::syncHelpWith(ui->ressourcesTextures,COMMAND_TEXTURE);
+    Help::syncHelpWith(ui->ressourcesColors,  COMMAND_GLOBAL_COLOR);
+    Help::syncHelpWith(ui->ressourcesColors,  COMMAND_GLOBAL_COLOR_HUE);
+
+
     MessageManager::setInterfaces(0, 0, ui->spaceForMessageLog);
     ui->ressourcesTextures->showImport(true);
     ui->ressourcesTextures->showNew(false);
@@ -183,7 +240,6 @@ void UiInspector::actionInfo() {
             Application::current->execute(QString("%1 selection %2 %3 %4").arg(COMMAND_CURSOR_OFFSET).arg(ui->offsetInitialSpin->value()).arg(ui->offsetStartSpin->value()).arg(ui->offsetEndSpin->value()), ExecuteSourceGui);
         else if((ui->sizeWSpin == sender()) || (ui->sizeHSpin == sender()))
             Application::current->execute(QString("%1 selection %2 %3").arg(COMMAND_RESIZE).arg(ui->sizeWSpin->value()).arg(ui->sizeHSpin->value()), ExecuteSourceGui);
-        else if(ui->easingCombo == sender())                Application::current->execute(QString("%1 selection %1 %2 %3 %4").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetY2->value()), ExecuteSourceGui);
         else if((ui->patternLine == sender()) || (ui->easingCombo == sender()))
             Application::current->execute(QString("%1 selection %2 0 %3").arg(COMMAND_CURSOR_START).arg(ui->easingCombo->currentIndex()).arg(ui->patternLine->currentText().split(" - ").at(0)), ExecuteSourceGui);
 
@@ -427,18 +483,15 @@ void UiInspector::refresh() {
     }
 
     ui->typeLabel->setText("");
-    if(counterTriggers == 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterTriggers) + " " + tr("TRIGGER"));
-    else if(counterTriggers > 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterTriggers) + " " + tr("TRIGGERS"));
-    if(counterCurves == 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCurves) + " " + tr("CURVE"));
-    else if(counterCurves > 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCurves) + " " + tr("CURVES"));
-    if(counterCursors == 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCursors) + " " + tr("CURSOR"));
-    else if(counterCursors > 1)
-        ui->typeLabel->setText(ui->typeLabel->text() + " " + QString::number(counterCursors) + " " + tr("CURSORS"));
+    QString typeLabelText;
+    if(counterTriggers == 1)        typeLabelText += QString::number(counterTriggers) + tr(" TRIGGER, ");
+    else if(counterTriggers > 1)    typeLabelText += QString::number(counterTriggers) + tr(" TRIGGERS, ");
+    if(counterCurves == 1)          typeLabelText += QString::number(counterCurves)   + tr(" CURVE, ");
+    else if(counterCurves > 1)      typeLabelText += QString::number(counterCurves)   + tr(" CURVES, ");
+    if(counterCursors == 1)         typeLabelText += QString::number(counterCursors)  + tr(" CURSOR, ");
+    else if(counterCursors > 1)     typeLabelText += QString::number(counterCursors)  + tr(" CURSORS, ");
+    typeLabelText.chop(2);
+    ui->typeLabel->setText(typeLabelText);
 
     bool showCursorInfo = false, showTriggerInfo = false, showCurveInfo = false, showCurvePointsInfo = false, showCursorCurveInfo = false, showGenericInfo = false, showCurveEquationInfo = false;
     if(counterCurves > 0)

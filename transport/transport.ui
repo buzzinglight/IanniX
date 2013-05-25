@@ -404,10 +404,10 @@ QDialogButtonBox QPushButton {
             </size>
            </property>
            <property name="toolTip">
-            <string>Fast rewind</string>
+            <string>Rewinds the playback</string>
            </property>
            <property name="statusTip">
-            <string>Fast rewind|By pressing the button, IanniX will play or pause the score playback. If nothing happened, be sure the score speed is positive!</string>
+            <string>Playback|By pressing the button, IanniX will play or pause the score playback. If nothing happened, be sure the score speed is positive!</string>
            </property>
            <property name="text">
             <string/>
@@ -445,10 +445,10 @@ QDialogButtonBox QPushButton {
             </size>
            </property>
            <property name="toolTip">
-            <string>Play/pause</string>
+            <string>Plays or pauses the playback</string>
            </property>
            <property name="statusTip">
-            <string>Play/pause|Press this button to start or pause the playback</string>
+            <string>Playback|Press this button to start or pause the playback</string>
            </property>
            <property name="text">
             <string/>
@@ -526,10 +526,10 @@ QDialogButtonBox QPushButton {
             <enum>Qt::ClickFocus</enum>
            </property>
            <property name="toolTip">
-            <string>Elapsed time</string>
+            <string>Goes to a specific playback timecode</string>
            </property>
            <property name="statusTip">
-            <string>Elapsed time|This is the elapsed time since the beginning of the playback of the score.\n If you need to jump to a specific timecode, feel free to type directly the desired timecode in this box.</string>
+            <string>Playback|This is the elapsed time since the beginning of the playback of the score.\n If you need to jump to a specific timecode, feel free to type directly the desired timecode in this box.</string>
            </property>
            <property name="inputMask">
             <string notr="true">999:99.999; </string>
@@ -581,7 +581,7 @@ QDialogButtonBox QPushButton {
            <item>
             <widget class="QSlider" name="speedSlider">
              <property name="toolTip">
-              <string>Playback speed</string>
+              <string>Changes the global playback speed (1.00 = real time clock)</string>
              </property>
              <property name="statusTip">
               <string>Playback speed|IanniX will play your score with a classical precise clock. But you can speed up or down the playback... or reverse the time!</string>
@@ -615,7 +615,7 @@ QDialogButtonBox QPushButton {
               </size>
              </property>
              <property name="toolTip">
-              <string>Playback speed</string>
+              <string>Changes the global playback speed (1.00 = real time clock)</string>
              </property>
              <property name="statusTip">
               <string>Playback speed|IanniX will play your score with a classical precise clock. But you can speed up or down the playback... or reverse the time!</string>

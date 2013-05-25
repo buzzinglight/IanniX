@@ -23,9 +23,7 @@ NxCursor::NxCursor(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     setText(0, tr("CURSOR"));
     glListCursor = glGenLists(1);
     curve = 0;
-    setTimeLocal(0);
     nextTimeOld = 0;
-    lockPathLength = false;
     timeOld = 0;
     time = 0;
     timeLocal = 0;
@@ -44,23 +42,23 @@ NxCursor::NxCursor(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     cursorPolyOld[1] = NxPoint();
     cursorPolyOld[2] = NxPoint();
     cursorPolyOld[3] = NxPoint();
-    setNbLoop(0);
+
+    initializeCustom();
+}
+void NxCursor::initializeCustom() {
+    setSize(1.2);
+    setColorActive  ("_cursor_active");
+    setColorInactive("_cursor_inactive");
+    setOffset("0 0 end");
     setStart("0 0 1 0");
-    setTimeFactor(1);
+    setBoundsSourceMode(1);
+    setBoundsSource("-10 10 -10 10 -10 10");
+    setBoundsTarget("0 1 0 1 0 1");
+    setTimeFactorStr("1");
     setTimeFactorF(1);
     setWidth(1);
     setDepth(0.5);
-    setTime(0);
-    setSize(1.2);
-    setColorActive("_cursor_active");
-    setColorInactive("_cursor_inactive");
-    setTimeStartOffset(0);
-    setTimeEndOffset(0);
-    setTimeInitialOffset(0);
-    setEasing(0);
-    setBoundsSource("-10 10 -10 10 -10 10");
-    setBoundsTarget("0 1 0 1 0 1");
-    setBoundsSourceMode(1);
+    setTimeLocal(0);
     setMessagePatterns("20," + Global::defaultMessageCursor.val());
 }
 NxCursor::~NxCursor() {
@@ -388,7 +386,7 @@ void NxCursor::paint() {
 
             //Mapping area
             if((selectedHover) || (selected)) {
-                if(boundsSourceMode == 2) {
+                if((boundsSourceMode == 2) || (!curve)) {
                     boundsSource = Global::axisArea;
                     boundsSource.translate(-Global::axisCenter);
                 }

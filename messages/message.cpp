@@ -250,7 +250,7 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                     if(patternArgument.contains("global_time"))
                         messageScriptValue.setProperty("global_time", Transport::timeLocal);
                     if(patternArgument.contains("global_time_verbose"))
-                        messageScriptValue.setProperty("global_time_verbose", Transport::timeLocalStr);
+                        messageScriptValue.setProperty("global_time_verbose", Transport::getTimeLocalStr());
                 }
 
                 messageScriptResult = messageScriptEngine->evaluate(patternArgument);
@@ -440,7 +440,7 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                     else if(patternArgument == "global_time")
                         found = addFloat(Transport::timeLocal, patternArgument, patternIndex);
                     else if(patternArgument == "global_time_verbose")
-                        found = addString(Transport::timeLocalStr, patternArgument, patternIndex);
+                        found = addString(Transport::getTimeLocalStr(), patternArgument, patternIndex);
                 }
             }
 
@@ -477,13 +477,13 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
     return (hasAdd && !suppressSend);
 }
 
-const QByteArray Message::getVerboseMessage() const {
+const QByteArray Message::getVerboseMessage(bool) const {
     if(type == MessagesTypeHttp)
         return qPrintable(urlMessage.toString());
     else {
         QByteArray retour = urlMessageString;
         foreach(const QVariant &verboseValue, verboseValues)
-            retour += " " + verboseValue.toByteArray();
+            retour += "\t" + verboseValue.toByteArray();
         return retour;
     }
 }

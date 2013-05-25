@@ -31,7 +31,7 @@
      <item>
       <widget class="QCheckBox" name="enable">
        <property name="toolTip">
-        <string>Enable or disable MIDI messages</string>
+        <string>Enables or disables MIDI messages</string>
        </property>
        <property name="text">
         <string>ENABLE MIDI</string>
@@ -69,7 +69,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Open the folder where you can find examples of IanniX interfacing with softwares using a MIDI connexion</string>
+        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using a MIDI connexion</string>
        </property>
        <property name="text">
         <string>OPEN EXAMPLES</string>
@@ -163,7 +163,8 @@
         </size>
        </property>
        <property name="text">
-        <string>CLOCK SYNC</string>
+        <string>SEQUENCER
+SYNCHRONIZATION</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -176,25 +177,65 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_12">
        <property name="spacing">
-        <number>10</number>
+        <number>5</number>
        </property>
        <item>
-        <widget class="QCheckBox" name="syncSong">
+        <widget class="QCheckBox" name="syncTransportIn">
          <property name="toolTip">
           <string>Check this option if you want to sync transport (play, pause, stop, rewind, song position) from another sequencer</string>
          </property>
          <property name="text">
-          <string>SYNC TRANSPORT</string>
+          <string>SYNC TRANSPORT IN</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="syncClock">
+        <widget class="QCheckBox" name="syncTransportOut">
          <property name="toolTip">
-          <string>Check this option if you want to sync clock from another sequencer</string>
+          <string>Check this option if you want to sync transport (play, pause, stop, rewind, song position) to another sequencer</string>
          </property>
          <property name="text">
-          <string>SYNC CLOCK</string>
+          <string>SYNC TRANSPORT OUT</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="bpm">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Changes the BPM of the score (used by clock synchronization)</string>
+         </property>
+         <property name="statusTip">
+          <string/>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="suffix">
+          <string/>
+         </property>
+         <property name="prefix">
+          <string>BPM @ </string>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>65535</number>
          </property>
         </widget>
        </item>
@@ -209,89 +250,6 @@
         <size>
          <width>40</width>
          <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_35">
-     <property name="spacing">
-      <number>10</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="bpmLabel">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>MIDI TEMPO
-(FOR CLOCK SYNC.)</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>bpm</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="bpm">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Changes the BPM of the score (used by clock synchronization)</string>
-       </property>
-       <property name="statusTip">
-        <string/>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="suffix">
-        <string/>
-       </property>
-       <property name="prefix">
-        <string>BPM @ </string>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>65535</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_23">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>37</width>
-         <height>17</height>
         </size>
        </property>
       </spacer>

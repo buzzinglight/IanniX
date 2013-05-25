@@ -16,7 +16,6 @@ UiPathPointsItem* UiPathPointsItems::generateItem(quint16 index, const NxCurvePo
     item->point = point;
     if(doInsert)
         insert(index, point);
-    //TODO => GUI info
     return item;
 }
 

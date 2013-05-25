@@ -166,7 +166,7 @@ bool UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
         picture.save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
 #else
         picture.save(QStandardPaths::DesktopLocation + "/"IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
-#endif
+             #endif
     } else {
         QDir().mkpath(QFileInfo(filename).absoluteDir().absolutePath());
         renderPixmap(renderSize.width(), renderSize.height()).save(filename);
@@ -268,155 +268,153 @@ void UiRender::setFrustum() {
 
 //Paint event
 void UiRender::paintGL() {
-    QMapIterator<QString, UiRenderTexture*> textureIterator(*Global::textures);
-    while (textureIterator.hasNext()) {
-        textureIterator.next();
-        if((!textureIterator.value()->loaded) || (Global::forceTexture))
-            loadTexture(textureIterator.value(), true);
-    }
+    if(!isRemoving) {
+        QMapIterator<QString, UiRenderTexture*> textureIterator(*Global::textures);
+        while (textureIterator.hasNext()) {
+            textureIterator.next();
+            if((!textureIterator.value()->loaded) || (Global::forceTexture))
+                loadTexture(textureIterator.value(), true);
+        }
 
-    //Intertial system
-    Global::axisCenter = Global::axisCenter + (Global::axisCenterDest - Global::axisCenter) / 3;
-    Global::zoomLinear = Global::zoomLinear + (Global::zoomLinearDest - Global::zoomLinear) / 3;
-    Global::rotation = Global::rotation + (Global::rotationDest - Global::rotation) / 6;
-    //if(qAbs(UiRenderOptions::rotation.z() - UiRenderOptions::rotationDest.z()) > 360)
-    //    UiRenderOptions::rotation.setZ(UiRenderOptions::rotationDest.z());
-    translation = translation + (translationDest - translation) / 3;
-    scale = scale + (scaleDest - scale) / 3;
+        //Intertial system
+        Global::axisCenter = Global::axisCenter + (Global::axisCenterDest - Global::axisCenter) / 3;
+        Global::zoomLinear = Global::zoomLinear + (Global::zoomLinearDest - Global::zoomLinear) / 3;
+        Global::rotation = Global::rotation + (Global::rotationDest - Global::rotation) / 6;
+        //if(qAbs(UiRenderOptions::rotation.z() - UiRenderOptions::rotationDest.z()) > 360)
+        //    UiRenderOptions::rotation.setZ(UiRenderOptions::rotationDest.z());
+        translation = translation + (translationDest - translation) / 3;
+        scale = scale + (scaleDest - scale) / 3;
 
-    //Object sizes
-    Global::objectSize = 0.15;
-    if(Global::triggerAutosize)
-        Global::objectSize *= 0.5*Global::zoomLinear;
+        //Object sizes
+        Global::objectSize = 0.15;
+        if(Global::triggerAutosize)
+            Global::objectSize *= 0.5*Global::zoomLinear;
 
-    if(!Global::forceFrustumInInit) {
-        renderSize = size();
-        setFrustum();
-    }
+        if(!Global::forceFrustumInInit) {
+            renderSize = size();
+            setFrustum();
+        }
 
-    //Clear
-    qglClearColor(Global::colors->value(Global::colorsPrefix() + "_empty"));
-    glClear(GL_COLOR_BUFFER_BIT);
+        //Clear
+        qglClearColor(Global::colors->value(Global::colorsPrefix() + "_empty"));
+        glClear(GL_COLOR_BUFFER_BIT);
 
-    //Translation
-    Global::axisArea.translate(Global::axisCenter);
+        //Translation
+        Global::axisArea.translate(Global::axisCenter);
 
-    //Start drawing
-    glPushMatrix();
+        //Start drawing
+        glPushMatrix();
 
-    //First operations
-    glTranslatef(0.0, 0.0, -150);
+        //First operations
+        glTranslatef(0.0, 0.0, -150);
 
-    if((Global::followId > 0) && (document) && (document->objects.contains(Global::followId)) && (document->objects.value(Global::followId)->getType() == ObjectsTypeCursor)) {
-        NxCursor *object = (NxCursor*)document->objects.value(Global::followId);
-        //rotationDest.setX(-object->getCurrentAngleRoll());
-        //rotationDest.setY(-82 - object->getCurrentAnglePitch());
-        Global::rotationDest.setZ(-object->getCurrentAngle().z() + 90);
-        Global::rotation.setZ(Global::rotationDest.z());
-        translationDest = -object->getCurrentPos();
-        //scaleDest = 1 * 5;
-    }
-    glRotatef(Global::rotation.y(), 1, 0, 0);
-    glRotatef(Global::rotation.x(), 0, 1, 0);
-    glRotatef(Global::rotation.z(), 0, 0, 1);
-    glScalef(scale, scale, scale);
-    glTranslatef(translation.x(), translation.y(), translation.z());
+        if((Global::followId > 0) && (document) && (document->objects.contains(Global::followId)) && (document->objects.value(Global::followId)->getType() == ObjectsTypeCursor)) {
+            NxCursor *object = (NxCursor*)document->objects.value(Global::followId);
+            //rotationDest.setX(-object->getCurrentAngleRoll());
+            //rotationDest.setY(-82 - object->getCurrentAnglePitch());
+            Global::rotationDest.setZ(-object->getCurrentAngle().z() + 90);
+            Global::rotation.setZ(Global::rotationDest.z());
+            translationDest = -object->getCurrentPos();
+            //scaleDest = 1 * 5;
+        }
+        glRotatef(Global::rotation.y(), 1, 0, 0);
+        glRotatef(Global::rotation.x(), 0, 1, 0);
+        glRotatef(Global::rotation.z(), 0, 0, 1);
+        glScalef(scale, scale, scale);
+        glTranslatef(translation.x(), translation.y(), translation.z());
 
-    if((Global::rotationDest.x() == 0) && (Global::rotationDest.y() == 0) && (Global::rotationDest.z() == 0))
-        Global::allowSelection = true;
-    else
-        Global::allowSelection = false;
+        if((Global::rotationDest.x() == 0) && (Global::rotationDest.y() == 0) && (Global::rotationDest.z() == 0))
+            Global::allowSelection = true;
+        else
+            Global::allowSelection = false;
 
-    //Start measure
-    Transport::perfOpenGLRefreshTime += renderMeasure.elapsed() / 1000.0F;
-    Transport::perfOpenGLCounterTime++;
-    renderMeasure.start();
+        //Start measure
+        Transport::perfOpenGLRefreshTime += renderMeasure.elapsed() / 1000.0F;
+        Transport::perfOpenGLCounterTime++;
+        renderMeasure.start();
 
 
-    if(document) {
-        //Background
-        paintBackground();
+        if(document) {
+            //Background
+            paintBackground();
 
-        //Paint axis
-        paintAxisGrid();
+            //Paint axis
+            paintAxisGrid();
 
-        //Paint selection
-        paintSelection();
+            //Paint selection
+            paintSelection();
 
-        //Draw objects
-        //Browse documents
-        foreach(NxGroup *group, document->groups) {
-            if(((!Application::current->isGroupSoloActive) && (group->isNotMuted())) || ((Application::current->isGroupSoloActive) && (group->isSolo())))
-                Global::paintThisGroup = true;
-            else
-                Global::paintThisGroup = false;
+            //Draw objects
+            //Browse groups
+            foreach(NxGroup *group, document->groups) {
+                if(((!Application::current->isGroupSoloActive) && (group->isNotMuted())) || ((Application::current->isGroupSoloActive) && (group->isSolo())))
+                    Global::paintThisGroup = true;
+                else
+                    Global::paintThisGroup = false;
 
-            //Browse active/inactive objects
-            for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
-                //Browse all types of objects
-                for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-                    //Browse objects
-                    foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
-                        //Draw the object
-                        if(!isRemoving) {
+                //Browse active/inactive objects
+                for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
+                    //Browse all types of objects
+                    for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
+                        //qDebug(">> MMMM4 %s %d %d %d", qPrintable(group->getId()), activityIterator, typeIterator, group->objects[activityIterator][typeIterator].count());
+                        //Browse objects
+                        foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
+                            //Draw the object
                             bool oldPaintThisGroup = Global::paintThisGroup;
                             if(!(((!Application::current->isObjectSoloActive) && (object->isNotMuted())) || ((Application::current->isObjectSoloActive) && (object->isSolo()))))
                                 Global::paintThisGroup = false;
                             object->paint();
                             Global::paintThisGroup = oldPaintThisGroup;
                         }
-                        else
-                            break;
                     }
                 }
             }
-        }
-        isRemoving = false;
 #ifdef KINECT_INSTALLED
-        if(Application::current->kinect)
-            Application::current->kinect->paint();
+            if(Application::current->kinect)
+                Application::current->kinect->paint();
 #endif
-    }
-    glPopMatrix();
+        }
+        glPopMatrix();
 
 #ifdef FFMPEG_INSTALLED
-    if(videoEncoder.isOk())
-        qDebug("%d encode", videoEncoder.encodeImage(grabFrameBuffer()));
+        if(videoEncoder.isOk())
+            qDebug("%d encode", videoEncoder.encodeImage(grabFrameBuffer()));
 #endif
 
 #ifdef SYPHON_INSTALLED
-    if(!interfaceSyphon->serverInit) {
-        makeCurrent();
-        interfaceSyphon->createSyphonServer();
-    }
-    if(interfaceSyphon->serverEnable) {
-        glEnable(GL_TEXTURE_2D);
-        if(!interfaceSyphon->serverTexture) {
-            glGenTextures(1, &interfaceSyphon->serverTexture);
+        if(!interfaceSyphon->serverInit) {
+            makeCurrent();
+            interfaceSyphon->createSyphonServer();
         }
-        glBindTexture(GL_TEXTURE_2D, interfaceSyphon->serverTexture);
-        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
-        interfaceSyphon->publishTexture(GL_TEXTURE_2D, renderSize.width(), renderSize.height());
-        glDisable(GL_TEXTURE_2D);
-    }
+        if(interfaceSyphon->serverEnable) {
+            glEnable(GL_TEXTURE_2D);
+            if(!interfaceSyphon->serverTexture) {
+                glGenTextures(1, &interfaceSyphon->serverTexture);
+            }
+            glBindTexture(GL_TEXTURE_2D, interfaceSyphon->serverTexture);
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
+            interfaceSyphon->publishTexture(GL_TEXTURE_2D, renderSize.width(), renderSize.height());
+            glDisable(GL_TEXTURE_2D);
+        }
 #endif
 
-    if((performanceMode) && (Application::current->getPerformancePreview())) {
-        glEnable(GL_TEXTURE_2D);
-        if(!renderPreviewTextureInit) {
-            glGenTextures(1, &renderPreviewTexture);
-            renderPreviewTextureInit = true;
+        if((performanceMode) && (Application::current->getPerformancePreview())) {
+            glEnable(GL_TEXTURE_2D);
+            if(!renderPreviewTextureInit) {
+                glGenTextures(1, &renderPreviewTexture);
+                renderPreviewTextureInit = true;
+            }
+            glBindTexture(GL_TEXTURE_2D, renderPreviewTexture);
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glDisable(GL_TEXTURE_2D);
+            Application::current->getRenderPreview()->paintPreview(this, renderPreviewTexture, renderSize);
         }
-        glBindTexture(GL_TEXTURE_2D, renderPreviewTexture);
-        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glDisable(GL_TEXTURE_2D);
-        Application::current->getRenderPreview()->paintPreview(this, renderPreviewTexture, renderSize);
-    }
 
-    if(capturedFramesStart)
-        capturedFrames << grabFrameBuffer();
+        if(capturedFramesStart)
+            capturedFrames << grabFrameBuffer();
+    }
 }
 
 
@@ -999,14 +997,14 @@ void UiRender::dropEvent(QDropEvent *event) {
         event->acceptProposedAction();
 }
 
-void UiRender::selectionClear(bool hoverAussi) {
+void UiRender::selectionClear(bool hoverAlso) {
     //Clear selection
     foreach(NxObject *selected, selection)
         selected->setSelected(false);
     foreach(NxObject *selected, selectionRect)
         selected->setSelected(false);
     selection.clear();
-    if(hoverAussi) {
+    if(hoverAlso) {
         if(selectedHover)
             selectedHover->setSelectedHover(false);
         selectedHover = 0;

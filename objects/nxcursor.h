@@ -41,9 +41,9 @@ class NxCursor : public NxObject, public NxCursorAbstraction {
     Q_PROPERTY(QString setboundssource      READ getBoundsSource       WRITE setBoundsSource)
     Q_PROPERTY(QString setboundstarget      READ getBoundsTarget       WRITE setBoundsTarget)
     Q_PROPERTY(QString setspeed             READ getTimeFactorStr      WRITE setTimeFactorStr)
+    Q_PROPERTY(qreal   setspeedf            READ getTimeFactorF        WRITE setTimeFactorF)
     Q_PROPERTY(qreal   setwidth             READ getWidth              WRITE setWidth)
     Q_PROPERTY(qreal   setdepth             READ getDepth              WRITE setDepth)
-    Q_PROPERTY(qreal   setspeedf            READ getTimeFactorF        WRITE setTimeFactorF)
     Q_PROPERTY(qreal   settime              READ getTimeLocal          WRITE setTimeLocal)
     Q_PROPERTY(qreal   settimepercent       READ getTimeLocalPercent   WRITE setTimeLocalPercent)
     Q_PROPERTY(bool    trig                 READ getForceTrig          WRITE setForceTrig)
@@ -51,6 +51,7 @@ class NxCursor : public NxObject, public NxCursorAbstraction {
 
 public:
     explicit NxCursor(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
+    void initializeCustom();
     ~NxCursor();
 
 private:
@@ -243,7 +244,7 @@ public:
     }
 
     inline const NxPoint getCursorValue(const NxPoint & _pos) {
-        if(boundsSourceMode == 2) {
+        if((boundsSourceMode == 2) || (!curve)) {
             boundsSource = Global::axisArea;
             boundsSource.translate(-Global::axisCenter);
         }
@@ -350,7 +351,7 @@ public:
                 boundsSource.translate(NxPoint(-width/2, width/2));
             }
         }
-        else if(boundsSourceMode == 2) {
+        else if((boundsSourceMode == 2) || (!curve)) {
             boundsSource = Global::axisArea;
             boundsSource.translate(-Global::axisCenter);
         }

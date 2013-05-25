@@ -24,7 +24,8 @@ class UiHelp : public QWidget {
 private:
     QPlainTextEdit *currentTextEdit;
     QComboBox *currentCombo;
-    QStringList messageTexts, statusTexts;
+    QStringList statusTexts;
+    QList< QPair<QString,HelpInfo> > messageTexts;
     QString statusTextOld;
     bool statusRefresh;
 public:

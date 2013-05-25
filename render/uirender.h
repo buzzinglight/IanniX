@@ -141,7 +141,7 @@ private:
     void paintAxisGrid();
     void paintSelection();
 public:
-    void flagIsRemoving() { isRemoving = true; }
+    void flagIsRemoving(bool _val = true) { isRemoving = _val; }
     void centerOn(const NxPoint & center, bool force = false);
     void rotateTo(const NxPoint & rotation, bool force = false);
 
@@ -163,7 +163,7 @@ public:
 public:
     void setZoom(qreal axisZoom);
     void selectionAdd(NxObject *object);
-    void selectionClear(bool hoverAussi = false);
+    void selectionClear(bool hoverAlso = false);
 public slots:
     void setZoom();
     void zoomIn();

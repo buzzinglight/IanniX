@@ -66,12 +66,12 @@ private:
     QList< QPair<QComboBoxWithFocus*, QPair<QLabel*, QPushButton* > > > trees;
     QList< QPushButton > treesButton;
     quint16 patternNbValues;
-    bool wasLearning;
+    bool wasLearning, isTrigger;
 
 public:
     const QString getPattern() const;
     void setPattern(const QString &pattern, bool refreshText);
-    void setPattern(const QVector<QByteArray> &messagePatternItems, bool refreshText);
+    void setPattern(const QVector<QByteArray> &messagePatternItems, bool refreshText, bool _isTrigger);
     void setCurrentItem(QComboBox *combo, QLabel *label, const QString &value, bool forceVisible = true);
     QString getItem(QComboBox *combo, const QString &valDefault, const QString &prefix = "") const;
     QString getItem(QComboBox *combo, qint32 valDefault) const;

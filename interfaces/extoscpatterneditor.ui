@@ -294,7 +294,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Learn a message by copying next received message</string>
+             <string>Learns a message by copying next received message</string>
             </property>
             <property name="styleSheet">
              <string notr="true"/>
@@ -728,7 +728,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="styleSheet">
              <string notr="true"/>
@@ -810,7 +810,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -889,7 +889,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -968,7 +968,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1047,7 +1047,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1126,7 +1126,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1205,7 +1205,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1284,7 +1284,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1363,7 +1363,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="text">
              <string>X</string>
@@ -1442,7 +1442,7 @@ QSplitter::handle:vertical     		{	height: 4px; }
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="toolTip">
-             <string>Clear the value</string>
+             <string>Clears the value</string>
             </property>
             <property name="text">
              <string>X</string>

@@ -10,8 +10,7 @@ function onConfigure() {
 function onCreate() {
 	//Viewport setup
 	run("clear");
-	run("registerTexture background");
-	run("rotate 0 0 0");
+		run("rotate 0 0 0");
 	run("zoom 180");
 	run("center 3 7");
 	
@@ -73,7 +72,7 @@ function onCreate() {
 	//Change cursors color
 	run("setColor cursors 255 135 0 255");
 	run("setColor lines   100 200 255 255");
-	run("registerTexture background -1.85 16.3 7.4 -0.8 ./Samples/Xenakis - Metastaseis.png");
+	run("registerTexture background -1.85 16.3 7.4 -0.8 Xenakis - Metastaseis.png");
 }
 
 //Cursor index as global variable

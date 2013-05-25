@@ -492,7 +492,7 @@ QDialogButtonBox QPushButton {
                       </size>
                      </property>
                      <property name="toolTip">
-                      <string>Click here to change the object ID</string>
+                      <string>Changes the object ID</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">font: bold;</string>
@@ -565,7 +565,7 @@ QDialogButtonBox QPushButton {
                       </size>
                      </property>
                      <property name="toolTip">
-                      <string>Click here to change the group ID</string>
+                      <string>Changes the group ID</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">font: bold;</string>
@@ -854,7 +854,7 @@ if ACTIVE</string>
                       </size>
                      </property>
                      <property name="toolTip">
-                      <string>Changes the color of objects by using a color in the palette or a custom color</string>
+                      <string>Changes the color of active objects by using a color in the palette or a custom color</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QComboBox QAbstractItemView {
@@ -930,7 +930,7 @@ if INACTIVE</string>
                       </size>
                      </property>
                      <property name="toolTip">
-                      <string>Changes the color of objects by using a color in the palette or a custom color</string>
+                      <string>Changes the color of inactive objects by using a color in the palette or a custom color</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QComboBox QAbstractItemView {
@@ -1006,7 +1006,7 @@ if INACTIVE</string>
                       </size>
                      </property>
                      <property name="toolTip">
-                      <string>Changes the texture (image) of objects</string>
+                      <string>Changes the texture (image) of active objects</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QComboBox QAbstractItemView {
@@ -1082,7 +1082,7 @@ if ACTIVE</string>
                       </size>
                      </property>
                      <property name="toolTip">
-                      <string>Changes the texture (image) of objects</string>
+                      <string>Changes the texture (image) of inactive objects</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QComboBox QAbstractItemView {
@@ -1190,7 +1190,7 @@ if ACTIVE</string>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Changes the absolute position of object</string>
+                   <string>Changes the absolute X-position of object</string>
                   </property>
                   <property name="suffix">
                    <string notr="true"> s</string>
@@ -1224,7 +1224,7 @@ if ACTIVE</string>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Changes the absolute position of object</string>
+                   <string>Changes the absolute Y-position of object</string>
                   </property>
                   <property name="suffix">
                    <string notr="true"> s</string>
@@ -1258,7 +1258,7 @@ if ACTIVE</string>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Changes the absolute position of object</string>
+                   <string>Changes the absolute Z-position of object</string>
                   </property>
                   <property name="suffix">
                    <string notr="true"> s</string>
@@ -1341,7 +1341,7 @@ if ACTIVE</string>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Resizes the object</string>
+                   <string>Resizes the object width</string>
                   </property>
                   <property name="suffix">
                    <string notr="true"> s</string>
@@ -1375,7 +1375,7 @@ if ACTIVE</string>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Resizes the object</string>
+                   <string>Resizes the object height</string>
                   </property>
                   <property name="suffix">
                    <string notr="true"> s</string>
@@ -1458,7 +1458,7 @@ WIDTH / DEPTH</string>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Changes the size of cursor playhead</string>
+                   <string>Changes the width of cursor playhead</string>
                   </property>
                   <property name="suffix">
                    <string notr="true"> s</string>
@@ -1489,7 +1489,7 @@ WIDTH / DEPTH</string>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Changes the size of cursor playhead</string>
+                   <string>Changes the depth of cursor playhead</string>
                   </property>
                   <property name="suffix">
                    <string notr="true"> s</string>
@@ -2388,7 +2388,7 @@ OFFSETS</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Changes initial position/time of the cursor on the curve for each run</string>
+                       <string>Changes loop starting position/time of the cursor on the curve for each run</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"> s</string>
@@ -2444,7 +2444,7 @@ OFFSETS</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Changes maximum position/time of the cursor on the curve</string>
+                       <string>Changes loop ending position/time of the cursor on the curve for each run</string>
                       </property>
                       <property name="specialValueText">
                        <string>the end</string>
@@ -2534,7 +2534,7 @@ OFFSETS</string>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Click here to edit the sent messages</string>
+                   <string>Changes the object sent messages</string>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">font: bold;
@@ -2643,6 +2643,9 @@ margin: 0px;</string>
                      </property>
                      <item>
                       <widget class="QRadioButton" name="cursorSourceMode0">
+                       <property name="toolTip">
+                        <string>Changes the cursor mapping to match the curve bounding rectangle</string>
+                       </property>
                        <property name="text">
                         <string>Mapped on curves bounding rectangle</string>
                        </property>
@@ -2650,6 +2653,9 @@ margin: 0px;</string>
                      </item>
                      <item>
                       <widget class="QRadioButton" name="cursorSourceMode1">
+                       <property name="toolTip">
+                        <string>Changes the cursor mapping to match the curve+cursor bounding rectangle</string>
+                       </property>
                        <property name="text">
                         <string>Mapped on curves bounding rectangle including cursor size</string>
                        </property>
@@ -2657,6 +2663,9 @@ margin: 0px;</string>
                      </item>
                      <item>
                       <widget class="QRadioButton" name="cursorSourceMode2">
+                       <property name="toolTip">
+                        <string>Changes the cursor mapping to match the score bounding rectangle</string>
+                       </property>
                        <property name="text">
                         <string>Mapped on global score bounding rectangle</string>
                        </property>
@@ -2664,6 +2673,9 @@ margin: 0px;</string>
                      </item>
                      <item>
                       <widget class="QRadioButton" name="cursorSourceMode3">
+                       <property name="toolTip">
+                        <string>Changes the cursor mapping to your own coordinates mapping</string>
+                       </property>
                        <property name="text">
                         <string>Custom mapping</string>
                        </property>
@@ -2721,7 +2733,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Starting range for X absolute coordinates</string>
+                       <string>Sets starting range for X absolute coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"> s</string>
@@ -2777,7 +2789,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Starting range for X absolute coordinates</string>
+                       <string>Sets starting range for X absolute coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"> s</string>
@@ -2833,7 +2845,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Mapped range for X coordinates</string>
+                       <string>Sets mapped range for X coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"/>
@@ -2889,7 +2901,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Mapped range for X coordinates</string>
+                       <string>Sets mapped range for X coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"/>
@@ -2972,7 +2984,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Starting range for Y absolute coordinates</string>
+                       <string>Sets starting range for Y absolute coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"> s</string>
@@ -3028,7 +3040,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Starting range for Y absolute coordinates</string>
+                       <string>Sets starting range for Y absolute coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"> s</string>
@@ -3084,7 +3096,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Mapped range for Y coordinates</string>
+                       <string>Sets mapped range for Y coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"/>
@@ -3140,7 +3152,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Mapped range for Y coordinates</string>
+                       <string>Sets mapped range for Y coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"/>
@@ -3220,7 +3232,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Starting range for Z absolute coordinates</string>
+                       <string>Sets starting range for Z absolute coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"> s</string>
@@ -3276,7 +3288,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Starting range for Z absolute coordinates</string>
+                       <string>Sets starting range for Z absolute coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"> s</string>
@@ -3332,7 +3344,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Mapped range for Z coordinates</string>
+                       <string>Sets mapped range for Z coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"/>
@@ -3388,7 +3400,7 @@ GOING FROM</string>
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string>Mapped range for Z coordinates</string>
+                       <string>Sets mapped range for Z coordinates</string>
                       </property>
                       <property name="suffix">
                        <string notr="true"/>
@@ -3470,6 +3482,9 @@ GOING FROM</string>
                   <height>150</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Loads/initializes textures (images) for the current score</string>
+                </property>
                </widget>
               </item>
               <item>
@@ -3486,6 +3501,9 @@ GOING FROM</string>
                   <width>0</width>
                   <height>150</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Loads/initializes global colors (color palette) for the current score</string>
                 </property>
                </widget>
               </item>

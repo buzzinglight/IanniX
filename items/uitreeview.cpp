@@ -115,10 +115,10 @@ void UiTreeView::askNewRoot() {
 }
 void UiTreeView::askRemove() {
     QList<UiSyncItem*> items = getSelection();
-    foreach(UiSyncItem* item, items) {
+    foreach(UiSyncItem* item, items)
         if(item->parentItem)
-            item->askForDeletion(item, true);
-    }
+            if((currentDocument == item) && (item->askForDeletion(item, true)))
+                currentDocument = 0;
 }
 void UiTreeView::askCopy() {
     selectionClipboard = getSelection();

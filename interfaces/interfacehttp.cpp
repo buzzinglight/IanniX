@@ -44,17 +44,17 @@ bool InterfaceHttpServer::portChanged(quint16 port) {
 }
 
 
-bool InterfaceHttp::send(const Message & message) {
+bool InterfaceHttp::send(const Message &message, QStringList *messageSent) {
     if(!enable)
         return false;
-    return httpServer->send(message);
+    return httpServer->send(message, messageSent);
 }
-bool InterfaceHttpServer::send(const Message & message) {
+bool InterfaceHttpServer::send(const Message &message, QStringList *messageSent) {
     //Send request
     http->get(QNetworkRequest(message.getUrlMessage()));
 
     //Log in console
-    MessageManager::logSend(message);
+    MessageManager::logSend(message, messageSent);
 
     return true;
 }

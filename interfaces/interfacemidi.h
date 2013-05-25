@@ -59,7 +59,9 @@ public:
     ~InterfaceMidi();
 
 public:
-    static UiBool syncClock, syncTransport;
+    static UiBool syncTransportIn, syncTransportOut;
+    static QString midiNotes[12];
+    static QString getNoteName(quint16 noteValue);
 private:
     UiReal syncBpm;
     UiString portAlias;
@@ -69,6 +71,7 @@ private:
     QHash<QString, RtMidiIn*> portIn;
     QHash<QString, RtMidiOut*> portOut;
     QList<QPair<QString, QStringList> > receivedMessages;
+    QStringList receivedCommands;
     QMutex mutex;
     static QString portOutName, portInName;
 private:
@@ -83,7 +86,7 @@ protected:
     void timerEvent(QTimerEvent *);
 
 public:
-    bool send(const Message & message);
+    bool send(const Message &message, QStringList *messageSent = 0);
     void sendNote(const QString & portname, quint8 channel, qreal   note,       qreal velocity);
     void sendCC  (const QString & portname, quint8 channel, quint16 controller, qreal value);
     void sendPGM (const QString & portname, quint8 channel, quint16 program);

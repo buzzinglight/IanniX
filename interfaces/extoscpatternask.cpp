@@ -26,6 +26,7 @@ ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject *> *_objects)
     objects = _objects;
     QStringList messagePatterns;
     onlyCurves = true;
+    ObjectsType type;
     foreach(const NxObject *object, *objects) {
         if(object->getType() != ObjectsTypeCurve)
             onlyCurves = false;
@@ -41,7 +42,7 @@ ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject *> *_objects)
                 connect(patternEditor, SIGNAL(actionRouteFocus(QComboBox*,QPlainTextEdit*)), SLOT(actionFieldFocus(QComboBox*,QPlainTextEdit*)));
                 ui->tabs->addTab(patternEditor, tr("Message %1").arg(ui->tabs->count()+1));
                 patternLists.append(patternEditor);
-                patternEditor->setPattern(messagePatternItems, true);
+                patternEditor->setPattern(messagePatternItems, true, object->getType() == ObjectsTypeTrigger);
             }
         }
     }
@@ -86,13 +87,13 @@ const QString ExtOscPatternAsk::getMessagePatterns() const {
 }
 
 void ExtOscPatternAsk::actionAddMessage() {
-    bool isTrigger = false;
-    bool isCursor = false;
+    bool hasTrigger = false;
+    bool hasCursor = false;
     foreach(const NxObject *object, *objects) {
         if(object->getType() == ObjectsTypeCursor)
-            isCursor = true;
+            hasCursor = true;
         else if(object->getType() == ObjectsTypeTrigger)
-            isTrigger = true;
+            hasTrigger = true;
     }
     QString messagePatternItem = Global::defaultMessage;
 
@@ -103,7 +104,7 @@ void ExtOscPatternAsk::actionAddMessage() {
         ui->tabs->addTab(patternEditor, tr("Message %1").arg(ui->tabs->count()+1));
         ui->tabs->setCurrentIndex(ui->tabs->count()-1);
         patternLists.append(patternEditor);
-        patternEditor->setPattern(messagePatternItems, true);
+        patternEditor->setPattern(messagePatternItems, true, hasTrigger);
     }
     if(ui->tabs->count() > 0)
         ui->removeButton->setVisible(true);

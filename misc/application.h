@@ -45,6 +45,7 @@ public slots:
     virtual void timerTrig(void *object, bool force = false) = 0;
     virtual QString waitForMessage() = 0;
     virtual void* getObjectById(quint16 id) = 0;
+    virtual void executeAsScript(const QString &script) = 0;
 };
 
 class Render : public QGLWidget {
@@ -58,12 +59,14 @@ public:
     virtual bool loadTexture(UiRenderTexture*, bool = false) = 0;
 };
 
+
 class Application : public QObject {
     Q_OBJECT
 
 public:
     static Render *render;
     static ApplicationCurrent *current;
+    static void* synchroLoopGuard;
 
 public:
     static void setInterfaces(ApplicationCurrent *_current = 0, Render *_render = 0);

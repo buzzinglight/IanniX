@@ -76,7 +76,6 @@
 #define COMMAND_MUTE                        "setmute"
 #define COMMAND_CURVE_TXT                   "setpointstxt"
 #define COMMAND_CURVE_PATH                  "setpointspath"
-#define COMMAND_CURVE_IMG                   "setpointsimg"
 #define COMMAND_RESIZE                      "setresize"
 #define COMMAND_CURSOR_TIME_PERCENT         "settimepercent"
 
@@ -102,7 +101,7 @@
 #define COMMAND_CURVE_LINES                 "setpointslines"
 #define COMMAND_LOAD                        "load"
 #define COMMAND_CURVE_LENGTH                "setlength"
-#define COMMAND_MESSAGE_SEND                "sendosc"
+#define COMMAND_MESSAGE_SEND                "sendmessage"
 #define COMMAND_MOUSE                       "mouse"
 #define COMMAND_CURVE_POINT_SHIFT           "shiftpoints"
 #define COMMAND_CURVE_POINT_TRANSLATE       "translatepoints"
@@ -119,8 +118,6 @@
 
 
 // INTERNAL FUNCTIONS
-#define COMMAND_SNAP_PUSH                   "pushsnapshot"
-#define COMMAND_SNAP_POP                    "popsnapshot"
 #define COMMAND_SLEEP                       "sleep"
 #define COMMAND_VIEWPORT                    "viewport"
 #define COMMAND_SNAPSHOT                    "snapshot"

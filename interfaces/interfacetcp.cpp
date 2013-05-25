@@ -34,12 +34,12 @@ bool InterfaceTcpServer::portChanged(quint16 port) {
 }
 
 
-bool InterfaceTcp::send(const Message & message) {
+bool InterfaceTcp::send(const Message &message, QStringList *messageSent) {
     if(!enable)
         return false;
-    return tcpServer->send(message);
+    return tcpServer->send(message, messageSent);
 }
-bool InterfaceTcpServer::send(const Message & message) {
+bool InterfaceTcpServer::send(const Message &message, QStringList *messageSent) {
     bool ok = false;
     //Send request
     foreach(QTcpSocket *socket, sockets) {
@@ -50,7 +50,7 @@ bool InterfaceTcpServer::send(const Message & message) {
         socket->flush();
 
         //Log in console
-        MessageManager::logSend(message);
+        MessageManager::logSend(message, messageSent);
         ok = true;
     }
     return ok;

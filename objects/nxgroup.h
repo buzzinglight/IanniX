@@ -78,12 +78,11 @@ public:
     inline quint16 getCount(qint8 objectType = -1) const {
         quint16 counter = 0;
         //Browse active/inactive objects
-        for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
+        for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++)
             //Browse all types of objects
             for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++)
                 if((objectType < 0) || (typeIterator == objectType))
                     counter += objects[activityIterator][typeIterator].count();
-        }
         return counter;
     }
 

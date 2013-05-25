@@ -31,7 +31,7 @@
      <item>
       <widget class="QCheckBox" name="enable">
        <property name="toolTip">
-        <string>Enable or disable OpenSoundControl messages and control</string>
+        <string>Enables or disables OpenSoundControl messages and control</string>
        </property>
        <property name="text">
         <string>ENABLE OSC</string>
@@ -69,7 +69,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Open the folder where you can find examples of IanniX interfacing with softwares using OpenSoundControl</string>
+        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using OpenSoundControl</string>
        </property>
        <property name="text">
         <string>OPEN EXAMPLES</string>

@@ -70,6 +70,7 @@ const QString NxDocument::serialize() const {
 }
 
 void NxDocument::pushSnapshot() {
+    NxObjectDispatchProperty::source = ExecuteSourceCopyPaste;
     if(snapshotsIndex < snapshots.count())
         snapshots.replace(snapshotsIndex, Application::current->serialize());
     else
@@ -77,7 +78,6 @@ void NxDocument::pushSnapshot() {
     snapshotsIndex++;
 }
 void NxDocument::popSnapshot(bool revert) {
-    Application::Application::render->selectionClear(true);
     bool canDo = false;
     if((revert) && (snapshotsIndex < snapshots.count()-1)) {
         snapshotsIndex++;
@@ -95,10 +95,8 @@ void NxDocument::popSnapshot(bool revert) {
     }
     if(canDo) {
         clear();
-        QString snapshot = snapshots.at(snapshotsIndex);
-        QStringList snapshotCommands = snapshot.split(COMMAND_END, QString::SkipEmptyParts);
-        foreach(const QString & command, snapshotCommands)
-            Application::current->execute(command, ExecuteSourceCopyPaste);
+        NxObjectDispatchProperty::source = ExecuteSourceGui;
+        Application::current->executeAsScript(snapshots.at(snapshotsIndex));
     }
 }
 
@@ -111,6 +109,19 @@ void NxDocument::open() {
     }
 }
 bool NxDocument::open(bool configure) {
+    //Open the script
+    QScriptValue scriptFunctions = scriptEngine.newQObject(this);
+    script = scriptEngine.globalObject();
+
+    //Map specials features/keywords/functions
+    script.setProperty("mouseX",   mousePos.x());
+    script.setProperty("mouseY",   mousePos.y());
+    script.setProperty("iannix",   scriptFunctions);
+    script.setProperty("nx",       scriptFunctions);
+
+    //GUI to ask the user variables
+    variable = new ExtScriptVariableAsk(Application::current->getMainWindow());
+
     //Open the script file (if its a file)
     if(getScriptFile().exists()) {
         QFile scriptFileContent(getScriptFile().absoluteFilePath());
@@ -118,21 +129,6 @@ bool NxDocument::open(bool configure) {
             //Read file
             scriptContent = scriptFileContent.readAll();
             scriptFileContent.close();
-
-            //Open the script
-            QScriptValue scriptFunctions = scriptEngine.newQObject(this);
-            script = scriptEngine.globalObject();
-
-            //Map specials features/keywords/functions
-            script.setProperty("mouseX",   mousePos.x());
-            script.setProperty("mouseY",   mousePos.y());
-            script.setProperty("iannix",   scriptFunctions);
-            script.setProperty("nx",       scriptFunctions);
-
-            //GUI to ask the user variables
-            variable = new ExtScriptVariableAsk(Application::current->getMainWindow());
-
-
 
             //Load
             if(getScriptFile().suffix().toLower() == "nxscore") {
@@ -239,14 +235,6 @@ bool NxDocument::save() {
     }
     return false;
 }
-/*
-void NxDocument::fileWatcherChanged(const QString &) {
-    if(isSelected()) {
-        parseScript(false);
-        Application::current->execute("fastrewind", ExecuteSourceGui);
-    }
-}
-*/
 
 void NxDocument::remplaceInFunction(QString *content, const QString &delimiter, const QString &data) {
     qint32 startReplace = content->indexOf(delimiter, 0) + delimiter.length();
@@ -292,6 +280,7 @@ void NxDocument::askFileReload() {
     open();
 }
 void NxDocument::askFileClose() {
+    clear();
     qDebug("==> CLOSE %s", qPrintable(getScriptFile().absoluteFilePath()));
 }
 

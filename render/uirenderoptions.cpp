@@ -44,7 +44,7 @@ bool    Global::editingFirstPoint      = false;
 UiString Global::defaultMessageTrigger   = QString("osc://ip_out:57120/trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id, midi://midi_out/notef 1 trigger_value_y trigger_value_x 3, tcp:// trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id");
 UiString Global::defaultMessageCursor    = QString("osc://ip_out:57120/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos, tcp:// cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos");
 UiString Global::defaultMessageCurve     = QString("osc://ip_out:57120/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0, tcp:// curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0");
-UiString Global::defaultMessageTransport = QString("osc://ip_out:57120/transport status nb_triggers nb_cursors nb_curves, tcp:// transport status nb_triggers nb_cursors nb_curves");
+UiString Global::defaultMessageTransport = QString("osc://ip_out:57120/transport status global_time global_time_verbose nb_triggers nb_cursors nb_curves, tcp:// transport status nb_triggers nb_cursors nb_curves");
 UiString Global::defaultMessageSync      = QString("osc://ip_out:57120/iannix/ status");
 UiString Global::defaultMessage          = QString("osc://ip_out:57120/object trigger_id trigger_group_id cursor_id cursor_group_id");
 

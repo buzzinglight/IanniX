@@ -77,6 +77,8 @@ public:
 
 public:
     explicit NxObject(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
+    void initialize(bool firstTime = false);
+    virtual void initializeCustom() {}
 
 public:
     virtual void paint() { }
@@ -141,6 +143,9 @@ public slots:
     inline bool getLockPathLength() const               { return lockPathLength; }
     inline void setLockPathLength(bool _lockPathLength) { lockPathLength = _lockPathLength; }
 
+    inline void setInitialId(quint16 _id) {
+        id = _id;
+    }
     inline void setId(quint16 _id) {
         quint16 oldId = id;
         id = _id;
