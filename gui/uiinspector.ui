@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QTabWidget, QLabel, QCheckBox, QLineEdit, QPlainTextEdit, QPushButton, QSpinBox, QDoubleSpinBox, QTreeView, QHeaderView, QTabBar, QComboBox, QFrame#globalFrame, QTabBar::tab, QTreeView, QHeaderView, QDockWidget, QStatusBar, QRadioButton {
-	font: 						10px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+	font: 						10px &quot;Museo Sans&quot;, &quot;Museo Sans 500&quot;, &quot;Arial&quot;;
 	padding:					0px;
 	margin:					0px;
 	min-height: 				20px;
@@ -34,9 +34,6 @@ QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox {
 
 QFrame#globalFrame, QFrame#transportFrame, QFrame#timeFrame, QFrame#optionFrame, QFrame#speedFrame, QFrame#logoFrame, QFrame#perfFrame, QDialog {
 	background-color: 	rgb(40, 40, 40);
-}
-QLabel, QTabBar::tab {
-	font: 						bold;
 }
 QLabel, QCheckBox, QRadioButton {
 	color: 						rgb(210, 210, 210);
@@ -289,7 +286,7 @@ QWidget#tabProject, QWidget#tabView, QWidget#tabInfo, QWidget#tabControlCenter, 
 	background-color: 	transparent;
 }
 QWidget#equationEdit {
-	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;, &quot;Monospace&quot;;
 }
 
 /* ----- */
@@ -401,9 +398,7 @@ QDialogButtonBox QPushButton {
             </property>
             <property name="styleSheet">
              <string notr="true">	color: white;
-	font: 12px;
-	font: bold;
-</string>
+	font: 12px;</string>
             </property>
             <property name="text">
              <string>TRIGGER</string>
@@ -494,9 +489,6 @@ QDialogButtonBox QPushButton {
                      <property name="toolTip">
                       <string>Changes the object ID</string>
                      </property>
-                     <property name="styleSheet">
-                      <string notr="true">font: bold;</string>
-                     </property>
                      <property name="text">
                       <string>ID</string>
                      </property>
@@ -566,9 +558,6 @@ QDialogButtonBox QPushButton {
                      </property>
                      <property name="toolTip">
                       <string>Changes the group ID</string>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">font: bold;</string>
                      </property>
                      <property name="text">
                       <string>GROUP</string>
@@ -2537,8 +2526,7 @@ OFFSETS</string>
                    <string>Changes the object sent messages</string>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">font: bold;
-margin: 0px;</string>
+                   <string notr="true">margin: 0px;</string>
                   </property>
                   <property name="text">
                    <string>EDIT MESSAGE(S)</string>
@@ -3909,7 +3897,7 @@ GOING FROM</string>
             </widget>
             <widget class="QWidget" name="ssTabConfigArduino">
              <attribute name="title">
-              <string>HARDWARE</string>
+              <string>ARDUINO</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <property name="spacing">
@@ -3942,7 +3930,7 @@ GOING FROM</string>
             </widget>
             <widget class="QWidget" name="ssTabConfigSyphon">
              <attribute name="title">
-              <string>SOFTWARE</string>
+              <string>SYPHON &amp;&amp; RECURSIVE</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_21">
               <property name="spacing">

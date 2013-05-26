@@ -165,7 +165,7 @@ bool UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
 #ifdef QT4
         picture.save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
 #else
-        picture.save(QStandardPaths::DesktopLocation + "/"IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
+        picture.save(QStandardPaths::DesktopLocation + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
              #endif
     } else {
         QDir().mkpath(QFileInfo(filename).absoluteDir().absolutePath());

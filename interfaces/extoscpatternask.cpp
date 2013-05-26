@@ -26,7 +26,6 @@ ExtOscPatternAsk::ExtOscPatternAsk(QWidget *parent, QList<NxObject *> *_objects)
     objects = _objects;
     QStringList messagePatterns;
     onlyCurves = true;
-    ObjectsType type;
     foreach(const NxObject *object, *objects) {
         if(object->getType() != ObjectsTypeCurve)
             onlyCurves = false;
@@ -88,13 +87,11 @@ const QString ExtOscPatternAsk::getMessagePatterns() const {
 
 void ExtOscPatternAsk::actionAddMessage() {
     bool hasTrigger = false;
-    bool hasCursor = false;
-    foreach(const NxObject *object, *objects) {
-        if(object->getType() == ObjectsTypeCursor)
-            hasCursor = true;
-        else if(object->getType() == ObjectsTypeTrigger)
+    foreach(const NxObject *object, *objects)
+        if(object->getType() == ObjectsTypeTrigger) {
             hasTrigger = true;
-    }
+            break;
+        }
     QString messagePatternItem = Global::defaultMessage;
 
     QVector< QVector<QByteArray > > messagePatternItemsList = NxObject::parseMessagesPattern(messagePatternItem);

@@ -39,7 +39,6 @@
 #include <time.h>
 #include "misc/application.h"
 #include "gui/uimessagebox.h"
-#include "gui/uisplash.h"
 #include "gui/uiview.h"
 #include "gui/uiinspector.h"
 #include "gui/uihelp.h"
@@ -172,7 +171,6 @@ private slots:
     void timerTick(bool force);
     void timerTick(qreal delta);
     void timerTrig(void *object, bool force = false);
-    void closeSplash();
 
 
     //USER INTERFACE
@@ -180,7 +178,6 @@ private:
     Transport *transport;
     UiInspector *inspector;
     UiView *view;
-    UiSplash *splash;
     bool forceUpdate;
     QNetworkAccessManager *updateManager;
     QString waitForMessageValue;

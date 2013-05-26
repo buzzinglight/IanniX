@@ -5,6 +5,7 @@
 #include "misc/options.h"
 #include "messages/messagemanager.h"
 #include "qextserialport/qextserialport.h"
+#include "qextserialport/qextserialenumerator.h"
 
 namespace Ui {
 class InterfaceSerial;
@@ -18,7 +19,8 @@ public:
     ~InterfaceSerial();
 
 private:
-    UiString portStr;
+    UiString portName;
+    UiReal portBaud, portBits, portParity, portStop, portFlow;
     UiBool enable;
 private slots:
     void portChanged();
@@ -27,18 +29,15 @@ private slots:
     }
 
 private:
+    void timerEvent(QTimerEvent *);
+
+private:
     QextSerialPort *port;
-    QString portname;
-    BaudRateType baudrate;
-    DataBitsType databits;
-    ParityType parity;
-    StopBitsType stopbits;
-    FlowType flow;
-    QMap<QString, BaudRateType> baudrateEnum;
-    QMap<QString, DataBitsType> databitsEnum;
-    QMap<QString, ParityType> parityEnum;
-    QMap<QString, StopBitsType> stopbitsEnum;
-    QMap<QString, FlowType> flowEnum;
+    QList<BaudRateType> baudrateEnum;
+    QList<DataBitsType> databitsEnum;
+    QList<ParityType>   parityEnum;
+    QList<StopBitsType> stopbitsEnum;
+    QList<FlowType>     flowEnum;
     QByteArray reception;
 private slots:
     void parse();

@@ -165,8 +165,8 @@ void Transport::setSpeed(qreal _scoreSpeed) {
 void TransportCpu::run() {
     while(isRunning()) {
 #ifdef Q_OS_WIN
-        cpu = 0;
-        mem = 0;
+        Transport::perfCpu = 0;
+        Transport::perfMem = 0;
 #else
         QProcess systemCommand1, systemCommand2;
         systemCommand1.setStandardOutputProcess(&systemCommand2);

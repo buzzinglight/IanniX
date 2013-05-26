@@ -94,9 +94,8 @@ void UiTreeView::askOpen() {
             if((currentDocument) && (syncItem) && (currentDocument == syncItem))
                 currentDocument->askForOpen(currentDocument);
             else if(syncItem->canOpen(syncItem)) {
-                bool canOpen = true;
                 if(currentDocument)
-                    canOpen = currentDocument->askForClose(currentDocument);
+                    currentDocument->askForClose(currentDocument);
                 if(syncItem->askForOpen(syncItem)) {
                     currentDocument = syncItem;
                     emit(currentDocumentChanged(currentDocument));

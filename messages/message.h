@@ -65,7 +65,7 @@ private:
 public:
     inline       MessagesType   getType()         const {   return type;                }
     
-    inline const bool           isTransport()     const {   return isTransportMessage;  }
+    inline       bool           isTransport()     const {   return isTransportMessage;  }
     inline const QByteArray &   getBuffer()       const {   return buffer;              }
     inline const QHostAddress & getHost()         const {   return host;                }
     inline       quint16        getPort()         const {   return port;                }

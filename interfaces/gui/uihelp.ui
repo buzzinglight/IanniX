@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UiHelp</class>
+ <widget class="QWidget" name="UiHelp">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>530</width>
+    <height>305</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>IanniX Helper</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTextBrowser" name="html">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="openLinks">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>html</sender>
+   <signal>anchorClicked(QUrl)</signal>
+   <receiver>UiHelp</receiver>
+   <slot>linkClicked(QUrl)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>319</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>359</x>
+     <y>496</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>linkClicked(QUrl)</slot>
+ </slots>
+</ui>

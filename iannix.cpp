@@ -46,12 +46,6 @@ IanniX::IanniX(QObject *parent) :
     //Create basic workspace
     QDir().mkpath(Global::pathDocuments.absoluteFilePath() + "/");
 
-    //Display splash
-    splash = new UiSplash(0);
-    splash->show();
-    QTimer::singleShot(1500, this, SLOT(closeSplash()));
-    QCoreApplication::processEvents();
-
     //View
     view      = new UiView(0);
     render    = view->getRender();
@@ -207,6 +201,9 @@ IanniX::IanniX(QObject *parent) :
     timer->setInterval(5);
     timer->start();
     forceGoto(0);
+
+    //Show
+    view->show();
 }
 
 void IanniX::readyToStart() {
@@ -221,6 +218,8 @@ void IanniX::readyToStart() {
         timerTime = startTimer(50);
         timerPerf = startTimer(500);
         render->startRenderTimer();
+
+        Application::splash->close();
     }
 }
 
@@ -305,11 +304,6 @@ void IanniX::setScheduler(SchedulerActivity _schedulerActivity) {
         if(Transport::timerOk)  QApplication::setWindowIcon(iconAppPause);
         else                    QApplication::setWindowIcon(iconAppPlay);
     }
-}
-
-void IanniX::closeSplash() {
-    splash->close();
-    view->show();
 }
 
 const QString IanniX::serialize() const {
@@ -560,6 +554,8 @@ void IanniX::actionNew() {
 }
 
 void IanniX::currentDocumentChanged(UiSyncItem *item) {
+    if(currentDocument)
+        delete currentDocument;
     currentDocument = new NxDocument(this, (UiFileItem*)item);
     render->setDocument(currentDocument);
     qDebug("CHANGEMENBT DE DOC");
@@ -761,7 +757,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                 object->setParentObject(parentObject);
 
                 if(parentObject) {
-                    NxPoint posOffset(0.5, -0.5);
+                    NxPoint posOffset(0.5, -0.5, 0);
                     object->setPosOffset(posOffset);
                 }
                 currentDocument->objects[id] = object;

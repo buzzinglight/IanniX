@@ -3,6 +3,7 @@
 Render*             Application::render = 0;
 ApplicationCurrent* Application::current = 0;
 void*               Application::synchroLoopGuard = 0;
+QWidget*            Application::splash = 0;
 
 void Application::setInterfaces(ApplicationCurrent *_current, Render *_render) {
     if(_current)

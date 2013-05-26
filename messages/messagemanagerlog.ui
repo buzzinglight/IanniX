@@ -18,7 +18,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget#logSend, QWidget#logReceive {
-	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;, &quot;Monospace&quot;;
 	background-color: 	rgb(242, 241, 237);
 	color:						black;
 }

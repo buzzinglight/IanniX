@@ -1,0 +1,87 @@
+//Setup of the script
+function onConfigure() {
+	//Name
+	title("Fractal");
+	//Global variables
+	ask("General", "Size of shape", "size", 50);
+	ask("General", "Number of recursions", "max_recursion", 4);
+}
+
+//Creation of the score
+function onCreate() {
+	//Viewport setup
+	run("clear");
+		run("center 0 0");
+	run("rotate 0 0 0");
+	run("zoom 1100");
+	
+	
+	//First recursion
+	addCurve(0, {x: -size, y: 0}, {x: size, y: 0});
+
+	//Colors
+	run("setColor cursors 128 128 128 255");
+}
+
+
+//Global index
+var index = 0;
+//Custom function
+function addCurve(recursion, start, end) {
+	//Stop recursivity
+	if(recursion < max_recursion) {
+		index++;
+		var percent = recursion / max_recursion;
+
+		//Divide segment in 3
+		var x1 = (end.x - start.x) * 1 / 3;
+		var y1 = (end.y - start.y) * 1 / 3;
+		var x3 = (end.x - start.x) * 2 / 3;
+		var y3 = (end.y - start.y) * 2 / 3;
+		var x2 = (x1 + x3) * cos(THIRD_PI) - (y3 - y1) * sin(THIRD_PI);
+		var y2 = (y1 + y3) * cos(THIRD_PI) + (x3 - x1) * sin(THIRD_PI);
+		
+		//Add curve
+		run("add curve       " + (1000 + index));
+		run("setPos          current " + start.x + " " + start.y + " 0");
+		run("setGroup        current lines");
+		run("setPointAt      current 1 " + x1 + " " + y1);
+		run("setPointAt      current 2 " + x2 + " " + y2);
+		run("setPointAt      current 3 " + x3 + " " + y3);
+		run("setPointAt      current 4 " + (end.x - start.x) + " " + (end.y - start.y));
+		run("setSize         current 0.5");
+		run("setColorHue     current " + range(percent, 290, 360) + " 255 255 255");
+
+		run("add cursor      " + index);
+		run("setCurve        current lastCurve");
+		run("setPattern      current 0 0 1 -1");
+		run("setBoundsSource current " + (-size) + " " + size + " 0 " + (size*2/3));
+		run("setGroup        current values");
+		run("setWidth        current 1");
+		
+		//Récursivity on segments
+		addCurve(recursion + 1, {x:      start.x, y:      start.y} , {x: x1 + start.x, y: y1 + start.y});
+		addCurve(recursion + 1, {x: x1 + start.x, y: y1 + start.y} , {x: x2 + start.x, y: y2 + start.y});
+		addCurve(recursion + 1, {x: x2 + start.x, y: y2 + start.y} , {x: x3 + start.x, y: y3 + start.y});
+		addCurve(recursion + 1, {x: x3 + start.x, y: y3 + start.y} , {x:      end.x  , y:      end.y  });
+	}
+}
+
+/*
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+

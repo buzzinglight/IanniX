@@ -1,0 +1,45 @@
+function onCreate() {
+	//Clear score
+	run("clear");
+		run("rotate 0 0 0");
+	run("center -8 5");
+	
+
+	//Loop from 0 to 24 lines
+	for(var index = 0 ; index < 25 ; index++) {
+		//Add curves with ID 1000, 1001, 1002, ...
+		run("add curve " + (1000 + index));
+		//Set the first point on the current curve
+		run("setPointAt current 0 " + (-index) + " 0");
+		//Set the second point on the current curve
+		run("setPointAt current 1 0 " + (24-index) + " 0");
+		
+		//Add a cursor with ID 0, 1, 2, ...
+		run("add cursor " + index);
+		//Link cursor to previous created curve
+		run("setCurve current lastCurve");
+		//Cursor speed = 5 secondes
+		run("setSpeed current auto 5");
+		//Mapping (spatial area where cursors runs)
+		run("setBoundsSource current -25 0   0 25");
+	}
+}
+
+/*
+    IanniX ? a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 ? IanniX Association
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+

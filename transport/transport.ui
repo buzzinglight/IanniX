@@ -26,15 +26,15 @@
    <string>IanniX — Transport</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QTabWidget, QLabel, QCheckBox, QLineEdit, QPlainTextEdit, QPushButton, QSpinBox, QDoubleSpinBox, QTreeView, QHeaderView, QTabBar, QComboBox, QFrame#globalFrame, QTabBar::tab, QTreeView, QHeaderView, QDockWidget, QStatusBar {
-	font: 						10px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+   <string notr="true">QTabWidget, QLabel, QCheckBox, QLineEdit, QPlainTextEdit, QPushButton, QSpinBox, QDoubleSpinBox, QTreeView, QHeaderView, QTabBar, QComboBox, QFrame#globalFrame, QTabBar::tab, QTreeView, QHeaderView, QDockWidget, QStatusBar, QRadioButton {
+	font: 						10px &quot;Museo Sans&quot;, &quot;Museo Sans 500&quot;, &quot;Arial&quot;;
 	padding:					0px;
 	margin:					0px;
 	min-height: 				20px;
 	color: 						white;
 	border: 					0px solid black;
 }
-QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox::indicator, QTreeView::indicator, QComboBox, QTreeView, QHeaderView {
+QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox::indicator, QRadioButton::indicator, QTreeView::indicator, QComboBox, QTreeView, QHeaderView {
 	border: 					1px solid rgb(55, 55, 55);
 	border-radius: 		2px;
 	background-color: 	rgb(70, 70, 70);
@@ -47,10 +47,7 @@ QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox {
 QFrame#globalFrame, QFrame#transportFrame, QFrame#timeFrame, QFrame#optionFrame, QFrame#speedFrame, QFrame#logoFrame, QFrame#perfFrame, QDialog {
 	background-color: 	rgb(40, 40, 40);
 }
-QLabel, QTabBar::tab {
-	font: 						bold;
-}
-QLabel, QCheckBox {
+QLabel, QCheckBox, QRadioButton {
 	color: 						rgb(210, 210, 210);
 }
 
@@ -95,15 +92,15 @@ QPushButton:hover {
 	border: 					1px solid rgb(28, 124, 195);
 	background-color: 	rgb(21, 91, 143);
 }
-QPushButton::checked, QPushButton:pressed, QCheckBox::indicator:checked, QTreeView::indicator:checked {
+QPushButton::checked, QPushButton:pressed, QCheckBox::indicator:checked, QTreeView::indicator:checked, QRadioButton::indicator:checked {
 	background-color: 	rgb(0, 187, 255);
 }
 
 
-QCheckBox {
+QCheckBox, QRadioButton {
 	spacing: 					5px;
 }
-QCheckBox::indicator, QTreeView::indicator  {
+QCheckBox::indicator, QTreeView::indicator, QRadioButton::indicator  {
 	width: 						10px;
 	height: 					10px;
 }
@@ -143,10 +140,6 @@ QComboBox::drop-down {
 	background-color: 	rgb(70, 70, 70);
     image: 						url(:/icons/res_icon_down.png);
 }
-QComboBox QAbstractItemView {
-	min-height: 				50px;
-}
-
 
 
 QTreeView {
@@ -287,9 +280,7 @@ QPushButton:hover#logoButton {
 	background-color: 	rgb(21, 91, 143);
 }
 QPushButton#ffButton, QPushButton#playButton {
-	width: 				40px;
-	height: 			40px;
-	min-width: 		40px;
+	min-width:  		40px;
 	min-height: 		40px;
 	border-radius: 20px;
 }
@@ -307,7 +298,7 @@ QWidget#tabProject, QWidget#tabView, QWidget#tabInfo, QWidget#tabControlCenter, 
 	background-color: 	transparent;
 }
 QWidget#equationEdit {
-	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;, &quot;Monospace&quot;;
 }
 
 /* ----- */
@@ -350,8 +341,17 @@ QDialogButtonBox QPushButton {
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
        <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>3</number>
       </property>
       <item>
        <widget class="QFrame" name="transportFrame">

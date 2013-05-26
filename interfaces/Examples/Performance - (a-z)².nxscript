@@ -1,0 +1,373 @@
+// ---------------------------------------------------------------------------------
+// (a-z)^2
+// ---------------------------------------------------------------------------------
+// An interactive installation of 3 Days a Week (Guillaume Jacquemin / Matthieu Ranc
+// Presented the 17th of June 2012 in Gare Experimentale, Paris, France
+// ---------------------------------------------------------------------------------
+// Controled with a KorgNano (MIDI) & linked with sound server on MaxMSP
+// ---------------------------------------------------------------
+
+//Position of the curve in space
+var curvesPosition = [
+		{x:  5, y: -3, z: 0},
+		{x: -5, y: -2, z: 0},
+		{x:  0, y: -3, z: 0},
+		{x:  0, y:  2, z: 0},
+		{x: -3, y: -7, z: 0},
+		{x:  4, y:  6, z: 0},
+];
+
+//Translation while morphing
+var curvesTranslation = [
+		{x:   0, y:  0, z: 0},
+		{x: -10, y: 15, z: 0},
+		{x:   5, y: -5, z: 0},
+		{x:   0, y:  0, z: 0},
+		{x: -10, y:  0, z: 0},
+		{x:  15, y:  5, z: 0},
+];
+
+
+//Creation of score
+function onCreate() {
+	//Viewport setup
+	run("clear");
+		
+
+	//Custom colors
+	run("registerColor lighttheme_curve_active       0   0   0 255");
+	run("registerColor lighttheme_curve_inactive     0   0   0  40");
+	run("registerColor lighttheme_cursor_active    255  80  30 255");
+	run("registerColor lighttheme_cursor_inactive    0   0   0  40");
+
+	//Center on score origin
+	run("center 0 0");
+	//Zoom
+	run("zoom 400");
+	//Rotation
+	run("rotate 0 0 0");
+	var id = 0;
+
+	//Randomize z-coordinate of 2D curves
+	for(var i = 0 ; i < 6 ; i++) {
+		for(var j = 0 ; j < points[i*2].length ; j++)
+			points[i*2][j].z = random(-5, 5);
+		for(var j = 0 ; j < points[i*2+1].length ; j++)
+			points[i*2+1][j].z = random(-5, 5);
+	}
+
+	//Add curves & cursors
+	for(var id = 1 ; id < 7 ; id++) {
+		var i = id-1;
+		//Creation of the main curve
+		run("add curve " + (1000 + id));
+		run("setPos     current " + curvesPosition[i].x + " "  + curvesPosition[i].y + " "  + curvesPosition[i].z);
+
+		//Cursor on this curve
+		run("add cursor " + id);
+		run("setCurve   current lastCurve");
+		run("setPattern current 0 0 1");
+		run("setWidth   current 4");
+		run("setDepth   current 4");
+
+		//First morphing to initialize points
+		morphCurve((1000 + id), points[i*2], points[i*2+1], curvesTranslation[i], 0);
+	}
+
+	//Other triggers
+	run("add trigger 2006");
+	run("setpos current 10.3453 -14.6074 0");
+	run("setgroup current trigger1");
+	
+	run("add trigger 2001");
+	run("setpos current -11.1749 5.42303 0");
+	run("setgroup current trigger1");
+	
+	run("add trigger 2002");
+	run("setpos current 4.73532 -10.6183 0");
+	run("setgroup current trigger1");
+	
+	run("add trigger 2003");
+	run("setpos current 10.7029 5.0001 0");
+	run("setgroup current trigger1");
+	
+	run("add trigger 2004");
+	run("setpos current 1.2914 -2.15391 0");
+	run("setgroup current trigger1");
+	
+	run("add trigger 2005");
+	run("setpos current 12.9731 -5.54066 0");
+	run("setgroup current trigger1");
+	
+	run("add trigger 2017");
+	run("setpos current -11.0413 -10.3449 0");
+	run("setgroup current trigger2");
+	
+	run("add trigger 2018");
+	run("setpos current 17.3852 3.13947 0");
+	run("setgroup current trigger2");
+	
+	run("add trigger 2019");
+	run("setpos current 20.7143 -15.3036 0");
+	run("setgroup current trigger2");
+	
+	run("add trigger 2020");
+	run("setpos current 5.07184 9.38047 0");
+	run("setgroup current trigger2");
+	
+	run("add trigger 2021");
+	run("setpos current -13.1092 -0.682463 0");
+	run("setgroup current trigger2");
+	
+	run("add trigger 2022");
+	run("setpos current -7.36749 10.7507 0");
+	run("setgroup current trigger2");
+	
+
+	//Configuration of triggers & messages
+	run("setMessage trigger1 1, osc://ip_out:57120/trigger trigger_id trigger_value_x trigger_value_y, direct:// rotate {random(-20, 20)}  {random(0, -80)}  {random(-40, 40)}");
+	run("setSize    trigger1 0.5");
+	run("setMessage trigger2 1, osc://ip_out:57120/trigger trigger_id trigger_value_x trigger_value_y, direct:// rotate {random(-20, 20)}  {random(0, -80)}  {random(-40, 40)}");
+	run("setSize    trigger2 0.5");
+	run("setColorActive trigger1 0 185 255 255");
+	run("setColorActive trigger2 240 0 255 255");
+}
+
+
+//Morph between two sets of curves
+function morphCurve(id, points, points2, translation, factor) {
+	for(var i = 0 ; i < max(points.length, points2.length) ; i++) {
+		var pointsi = min(points.length-1, i);
+		var points2i = min(points2.length-1, i);
+		run("setPointAt " + id + " " + i + " " + (range(factor, points[pointsi].x, points2[points2i].x) + factor * translation.x) + " " + (range(factor, points[pointsi].y, points2[points2i].y) + factor * translation.y) + " " + (range(factor, points[pointsi].z, points2[points2i].z) + factor * translation.z) + " " + range(factor, points[pointsi].c1x, points2[points2i].c1x) + " " + range(factor, points[pointsi].c1y, points2[points2i].c1y) + " " + range(factor, points[pointsi].c1z, points2[points2i].c1z) + " " + range(factor, points[pointsi].c2x, points2[points2i].c2x) + " " + range(factor, points[pointsi].c2y, points2[points2i].c2y) + " " + range(factor, points[pointsi].c2z, points2[points2i].c2z));
+	}
+}
+
+
+//MIDI messages
+function onMessage(protocol, host, port, destination, values) {
+	if((protocol == "midi") && (destination == "cc") && (values.length > 2)) {
+		var channel = parseInt(values[0]);
+		var cc      = parseInt(values[1]);
+		var val     = parseInt(values[2]) / 127.;
+		var valN	= range(val, -1, 1);
+		if(channel < 5) {
+			//Morphing of curves (sliders)
+			if((0 < cc) && (cc < 7)) {
+				var id = cc, i = id-1;
+				morphCurve((1000 + id), points[i*2], points[i*2+1], curvesTranslation[i], val);
+			}
+			
+			//Random morphing (buttons)
+			else if(((10 < cc) && (cc < 17)) && (val == 1)) {
+				var id = cc-10, i = id-1;
+				morphCurve((1000 + id), points[i*2], points[i*2+1], curvesTranslation[i], random(0,1));
+			}
+
+			//Enable/disable curve (toggles)
+			else if((20 < cc) && (cc < 27)) {
+				var id = cc-20;
+				run("setActive " + (1000+ id) + " " + val);
+				run("setActive " + id + " " + val);
+				run("setSpeedF " + id + " " + val);
+				run("sendOsc osc://ip_out:57120/setmute " + id + " " + val);
+			}
+			//Enable/disable triggers (toggles)
+			else if(cc == 27)
+				run("setActive trigger1 " + val);
+			else if(cc == 28)
+				run("setActive trigger2 " + val);
+			//Speed of cursors (knobs)
+			else if((30 < cc) && (cc < 37)) {
+				var id = cc-30;
+				run("setSpeed " + id + " " + range(val, -2, 2));
+			}
+		}
+		else {
+			//Curve opacity
+			if((0 < cc) && (cc < 7)) {
+				var id = cc;
+				run("setColorActive " + (1000+id) + "   0   0   0 " + range(val, 32, 255));
+				run("setColorActive " + id        + " 255  80  30 " + range(val, 32, 255));
+			}
+			//Triggers opacity
+			else if(cc == 7)
+				run("setColorActive trigger1 0 185 255 " + range(val, 32, 255));
+			else if(cc == 8)
+				run("setColorActive trigger2 240 0 255 " + range(val, 32, 255));
+		}
+	}
+}
+
+//Points to draw
+var points = [
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 11, y: -8, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 4, y: 3, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 13, y: 2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 18, y: -15, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 14, y: -9, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 10, y: 8, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: 3, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 18, y: -10, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 13, y: 6, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 13, y: -5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 18, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 4, y: -15, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 8, y: -2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 6, y: 12, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: 16, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -2, y: 6, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -13, y: -4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 1, y: 14, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -5, y: 14, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 7, y: 4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -5, y: 16, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -8, y: 7, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 4, y: 6, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -13, y: 8, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -5, y: 1, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 7, y: 4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -10, y: 16, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -11, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -1, y: 16, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -1, y: 20, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 16, y: -10, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -15, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -1, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 16, y: -17, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -1, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -1, y: -16, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 8, y: -2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 15, y: 2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -4, y: -10, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 4, y: -17, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 16, y: -14, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -4, y: -17, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 15, y: -18, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 9, y: -11, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 15, y: 2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 12, y: -6, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -18, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 17, y: -9, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 4, y: -16, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -4, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -9, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 9, y: -10, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 11, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 17, y: 4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 12, y: -4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -2, y: -9, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: -7, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 18, y: -14, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: -11, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 6, y: -13, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 18, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: -13, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: 1, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 15, y: 2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -2, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 6, y: -15, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 11, y: -10, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 11, y: -4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 18, y: 1, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 17, y: -14, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 6, y: -13, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 9, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: -7, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 1, y: -5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -13, y: -13, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -5, y: -11, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -6, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 11, y: 7, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -9, y: 5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -5, y: -10, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: 2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 11, y: -5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: 15, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 19, y: 7, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 4, y: 5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 7, y: 2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: 10, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: 10, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -4, y: 12, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -5, y: 1, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 10, y: 8, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 6, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 3, y: -8, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 4, y: 4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: 4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -11, y: -9, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -3, y: 4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -15, y: -4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 5, y: -5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -4, y: 4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -12, y: -3, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -6, y: -7, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -6, y: 6, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: 4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: 4, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -3, y: 11, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 10, y: 2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -5, y: -5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -4, y: 5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 17, y: -1, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 19, y: -7, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 8, y: 5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 20, y: 8, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 2, y: -1, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+],
+[
+	{x: 0, y: 0, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -9, y: -2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -20, y: -5, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -8, y: -14, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -11, y: 2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -18, y: 6, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: 0, y: -10, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -9, y: 2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+	{x: -8, y: -2, z: 0, c1x: 0, c1y: 0, c1z: 0, c2x: 0, c2y: 0, c2z: 0},
+]
+
+];
+

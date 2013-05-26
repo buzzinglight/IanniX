@@ -13,7 +13,6 @@
         <file>res_icon_play.png</file>
         <file>res_logo.png</file>
         <file>res_splash.png</file>
-        <file>res_splash2.png</file>
     </qresource>
     <qresource prefix="/icons">
         <file>res_icon_down.png</file>

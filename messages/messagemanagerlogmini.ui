@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget#log {
-	font: 	10px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+	font: 	10px &quot;Lucida Console&quot;, &quot;Monaco&quot;, &quot;Monospace&quot;;
 	color: 	rgb(160, 160, 160);
 }
 </string>

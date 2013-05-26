@@ -7,78 +7,88 @@ InterfaceSerial::InterfaceSerial(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
 
-    baudrateEnum["BAUD50"]     = BAUD50;
-    baudrateEnum["BAUD75"]     = BAUD75;
-    baudrateEnum["BAUD110"]    = BAUD110;
-    baudrateEnum["BAUD134"]    = BAUD134;
-    baudrateEnum["BAUD150"]    = BAUD150;
-    baudrateEnum["BAUD200"]    = BAUD200;
-    baudrateEnum["BAUD300"]    = BAUD300;
-    baudrateEnum["BAUD600"]    = BAUD600;
-    baudrateEnum["BAUD1200"]   = BAUD1200;
-    baudrateEnum["BAUD1800"]   = BAUD1800;
-    baudrateEnum["BAUD2400"]   = BAUD2400;
-    baudrateEnum["BAUD4800"]   = BAUD4800;
-    baudrateEnum["BAUD9600"]   = BAUD9600;
-    baudrateEnum["BAUD19200"]  = BAUD19200;
-    baudrateEnum["BAUD38400"]  = BAUD38400;
-    baudrateEnum["BAUD57600"]  = BAUD57600;
-    baudrateEnum["BAUD76800"]  = BAUD76800;
-    baudrateEnum["BAUD115200"] = BAUD115200;
+    baudrateEnum << BAUD110;
+    baudrateEnum << BAUD300;
+    baudrateEnum << BAUD600;
+    baudrateEnum << BAUD1200;
+    baudrateEnum << BAUD2400;
+    baudrateEnum << BAUD4800;
+    baudrateEnum << BAUD9600;
+    baudrateEnum << BAUD19200;
+    baudrateEnum << BAUD38400;
+    baudrateEnum << BAUD57600;
+    baudrateEnum << BAUD115200;
 
-    databitsEnum["DATA_5"]     = DATA_5;
-    databitsEnum["DATA_6"]     = DATA_6;
-    databitsEnum["DATA_7"]     = DATA_7;
-    databitsEnum["DATA_8"]     = DATA_8;
+    databitsEnum << DATA_5;
+    databitsEnum << DATA_6;
+    databitsEnum << DATA_7;
+    databitsEnum << DATA_8;
 
-    parityEnum["PAR_NONE"]     = PAR_NONE;
-    parityEnum["PAR_ODD"]      = PAR_ODD;
-    parityEnum["PAR_EVEN"]     = PAR_EVEN;
-    parityEnum["PAR_SPACE"]    = PAR_SPACE;
+    parityEnum   << PAR_NONE;
+    parityEnum   << PAR_ODD;
+    parityEnum   << PAR_EVEN;
+    parityEnum   << PAR_SPACE;
 
-    stopbitsEnum["STOP_1"]     = STOP_1;
-    stopbitsEnum["STOP_2"]     = STOP_2;
+    stopbitsEnum << STOP_1;
+    stopbitsEnum << STOP_2;
 
-    flowEnum["FLOW_OFF"]       = FLOW_OFF;
-    flowEnum["FLOW_HARDWARE"]  = FLOW_HARDWARE;
-    flowEnum["FLOW_XONXOFF"]   = FLOW_XONXOFF;
+    flowEnum     << FLOW_OFF;
+    flowEnum     << FLOW_HARDWARE;
+    flowEnum     << FLOW_XONXOFF;
 
     //Interfaces link
     enable.setAction(ui->enable, "interfaceSerialEnable");
-    portStr.setAction(ui->port,  "interfaceSerialPort");
-    connect(&portStr, SIGNAL(triggered(QString)), SLOT(portChanged()));
+
+    portName  .setAction(ui->portCombo,   "interfaceSerialPortname");
+    portBaud  .setAction(ui->baudCombo,   "interfaceSerialBaud");
+    portBits  .setAction(ui->bitsCombo,   "interfaceSerialBits");
+    portParity.setAction(ui->parityCombo, "interfaceSerialParity");
+    portStop  .setAction(ui->stopCombo,   "interfaceSerialStop");
+    portFlow  .setAction(ui->flowCombo,   "interfaceSerialFlow");
+    connect(&portName,   SIGNAL(triggered(QString)), SLOT(portChanged()));
+    connect(&portBaud,   SIGNAL(triggered(qreal)),   SLOT(portChanged()));
+    connect(&portBits,   SIGNAL(triggered(qreal)),   SLOT(portChanged()));
+    connect(&portParity, SIGNAL(triggered(qreal)),   SLOT(portChanged()));
+    connect(&portStop,   SIGNAL(triggered(qreal)),   SLOT(portChanged()));
+    connect(&portFlow,   SIGNAL(triggered(qreal)),   SLOT(portChanged()));
+
+    portBaud   = 10;
+    portBits   = 3;
+    portParity = 0;
+    portStop   = 0;
+    portFlow   = 0;
+
     //Valeurs par défaut
-#ifdef Q_OS_WIN
+    /*
     portStr = "COM1\nBAUD115200\nDATA_8\nPAR_NONE\nSTOP_1\nFLOW_OFF";
-#else
     portStr = "/dev/tty.usbmodemfa141\nBAUD115200\nDATA_8\nPAR_NONE\nSTOP_1\nFLOW_OFF";
-#endif
+    */
+
+    timerEvent(0);
+    startTimer(5000);
+}
+
+void InterfaceSerial::timerEvent(QTimerEvent *) {
+    QList<QextPortInfo> portsInfo = QextSerialEnumerator::getPorts();
+    foreach(const QextPortInfo &portInfo, portsInfo)
+        if(ui->portCombo->findText(portInfo.portName) < 0)
+            ui->portCombo->addItem(portInfo.portName);
 }
 
 void InterfaceSerial::portChanged() {
-    QStringList ports = portStr.val().split("\n", QString::SkipEmptyParts);
-    if(ports.count() == 6) {
-        portname = ports.at(0);
-        baudrate = baudrateEnum[ports.at(1)];
-        databits = databitsEnum[ports.at(2)];
-        parity   = parityEnum[ports.at(3)];
-        stopbits = stopbitsEnum[ports.at(4)];
-        flow     = flowEnum[ports.at(5)];
+    port = new QextSerialPort(portName, QextSerialPort::EventDriven);
+    if(port) {
+        port->setBaudRate(baudrateEnum.at(portBaud.val()));
+        port->setFlowControl(flowEnum .at(portFlow.val()));
+        port->setParity(parityEnum    .at(portParity.val()));
+        port->setDataBits(databitsEnum.at(portBits.val()));
+        port->setStopBits(stopbitsEnum.at(portStop.val()));
+        port->open(QIODevice::ReadWrite);
 
-        port = new QextSerialPort(portname, QextSerialPort::EventDriven);
-        if(port) {
-            port->setBaudRate(baudrate);
-            port->setFlowControl(flow);
-            port->setParity(parity);
-            port->setDataBits(databits);
-            port->setStopBits(stopbits);
-            port->open(QIODevice::ReadWrite);
+        connect(port, SIGNAL(readyRead()), this, SLOT(parse()));
 
-            connect(port, SIGNAL(readyRead()), this, SLOT(parse()));
-
-            if(port->isOpen())  ui->port->setStyleSheet(ihmFeedbackOk);
-            else                ui->port->setStyleSheet(ihmFeedbackNok);
-        }
+        if(port->isOpen())  ui->portCombo->setStyleSheet(ihmFeedbackOk);
+        else                ui->portCombo->setStyleSheet(ihmFeedbackNok);
     }
 }
 
@@ -103,7 +113,7 @@ void InterfaceSerial::parse() {
                     command = command.remove('\r');
 
                     if(command != "")
-                        MessageManager::incomingMessage(MessageIncomming("serial", portname, 0, "", command, command.split(" ", QString::SkipEmptyParts)));
+                        MessageManager::incomingMessage(MessageIncomming("serial", portName, 0, "", command, command.split(" ", QString::SkipEmptyParts)));
                     command = "";
                 }
                 else

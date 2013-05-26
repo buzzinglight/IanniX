@@ -67,6 +67,7 @@ public:
     static Render *render;
     static ApplicationCurrent *current;
     static void* synchroLoopGuard;
+    static QWidget *splash;
 
 public:
     static void setInterfaces(ApplicationCurrent *_current = 0, Render *_render = 0);

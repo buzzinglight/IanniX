@@ -1,0 +1,1865 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UiView</class>
+ <widget class="QMainWindow" name="UiView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1054</width>
+    <height>679</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>IanniX — View</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QTabWidget, QLabel, QCheckBox, QLineEdit, QPlainTextEdit, QPushButton, QSpinBox, QDoubleSpinBox, QTreeView, QHeaderView, QTabBar, QComboBox, QFrame#globalFrame, QTabBar::tab, QTreeView, QHeaderView, QDockWidget, QStatusBar, QRadioButton {
+	font: 						10px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+	padding:					0px;
+	margin:					0px;
+	min-height: 				20px;
+	color: 						white;
+	border: 					0px solid black;
+}
+QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox::indicator, QRadioButton::indicator, QTreeView::indicator, QComboBox, QTreeView, QHeaderView {
+	border: 					1px solid rgb(55, 55, 55);
+	border-radius: 		2px;
+	background-color: 	rgb(70, 70, 70);
+}
+QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox {
+	margin-top: 			4px;
+	margin-bottom: 		4px;
+}
+
+QFrame#globalFrame, QFrame#transportFrame, QFrame#timeFrame, QFrame#optionFrame, QFrame#speedFrame, QFrame#logoFrame, QFrame#perfFrame, QDialog {
+	background-color: 	rgb(40, 40, 40);
+}
+QLabel, QCheckBox, QRadioButton {
+	color: 						rgb(210, 210, 210);
+}
+
+QTabWidget::pane {
+	border: 					1px solid rgb(50, 50, 50);
+}
+QTabWidget::tab-bar {
+	left: 							0px;
+}
+QTabWidget#tab {
+	color: red;
+}
+QTabBar::tab {
+	min-height: 							25px; /* FIX IN SS-TAB */
+	background-color: 				rgb(110, 110, 110);
+    border-top-left-radius: 		4px;
+    border-top-right-radius: 	4px;
+	margin-right:						2px;
+	padding-left: 						5px;
+	padding-right:						5px;
+	color: 									rgb(220, 220, 220);
+}
+QTabBar::tab:selected {
+	background-color: 				rgb(242, 241, 237);
+	color: 									black;
+}
+QTabBar::tab:hover {
+	color: 									black;
+}
+QTabBar::tab:!selected {
+    margin-top: 						2px;
+}
+QTabBar::tab:disabled {
+	color: 									gray;
+}
+
+
+QPushButton {
+	margin-left: 			6px;
+}
+QPushButton:hover {
+	border: 					1px solid rgb(28, 124, 195);
+	background-color: 	rgb(21, 91, 143);
+}
+QPushButton::checked, QPushButton:pressed, QCheckBox::indicator:checked, QTreeView::indicator:checked, QRadioButton::indicator:checked {
+	background-color: 	rgb(0, 187, 255);
+}
+
+
+QCheckBox, QRadioButton {
+	spacing: 					5px;
+}
+QCheckBox::indicator, QTreeView::indicator, QRadioButton::indicator  {
+	width: 						10px;
+	height: 					10px;
+}
+
+QSpinBox, QDoubleSpinBox, QLineEdit {
+	padding-left	:			5px;
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button, QSpinBox::down-button, QDoubleSpinBox::down-button {
+	width: 						5px;
+	padding: 					2px;
+	padding-left:			3px;
+	background-color: 	rgb(60, 60, 60);
+	border: 					0px solid black;
+	border-left:				1px solid rgb(70, 70, 70);
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+    image: 						url(:/icons/res_icon_plus.png);
+	border-bottom:		1px solid rgb(70, 70, 70);
+}
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    image: 						url(:/icons/res_icon_minus.png);
+}
+
+
+QComboBox {
+	background:			rgb(242, 241, 237);
+	color: 					black;
+	margin-left: 		3px;
+	border-radius: 	3px;
+	selection-color: 	black;
+	padding-left: 		5px;
+}
+QComboBox::drop-down {
+	width: 						10px;
+	padding: 					2px;
+	border: 					0px solid black;
+	background-color: 	rgb(70, 70, 70);
+    image: 						url(:/icons/res_icon_down.png);
+}
+
+
+QTreeView {
+	background:								rgb(50, 50, 50);
+	alternate-background-color: 	rgb(55, 55, 55);
+	selection-background-color: 	rgb(0, 187, 255);
+	gridline-color: 							rgb(60, 60, 60);
+}
+QHeaderView {
+	background: 							transparent;
+	border: 									0px solid black;
+	color: 										rgb(200, 200, 200);
+	min-height: 								14px;
+}
+QHeaderView::section {
+	background: 							rgb(90, 90, 90);
+	padding-left: 							5px;
+	border-top-left-radius:  			3px;
+	border-top-right-radius: 		3px;
+	margin-right:							1px;
+	font: 										9px &quot;Arial&quot;;
+}
+QTreeView::item {
+	min-height: 20px;
+}
+
+
+
+QScrollBar:vertical, QScrollBar:horizontal {
+	border: 				0px solid black;
+	background: 		rgba(255, 255, 255, 32);
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+	border: 				0px solid black;
+	background: 		rgb(161, 161, 161);
+	border-radius: 	3px;
+}
+QScrollBar:vertical {						width: 			8px;					}
+QScrollBar:horizontal {					height: 		8px;				}
+QScrollBar::handle:vertical {			min-height: 8px;		}
+QScrollBar::handle:horizontal {	min-width: 	8px;			}
+QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
+	border: 			0px solid black;
+	background: 	transparent;
+	width: 				1px;
+	height: 			1px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: 	none;
+}
+
+
+QSlider:horizontal {
+	min-width: 				100px;
+}
+QSlider::groove:horizontal {
+	border: 					0px solid transparent;
+	background-color: 	rgb(70, 70, 70);
+	height: 					3px;
+}
+QSlider::handle:horizontal {
+	width: 						11px;
+	height: 					10px;
+	border-radius: 		5px;
+	margin-top: 			-4px;
+	margin-bottom: 		-4px;
+	border: 					0px solid black;
+	background-color: 	rgb(0, 187, 250);
+}
+
+
+QSplitter::handle {
+	background: 							rgb(255, 255, 255, 30);
+}
+QSplitter::handle:pressed {
+	background: 							rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 	4px; }
+QSplitter::handle:vertical     		{	height:	4px; }
+
+QDockWidget {
+}
+QDockWidget::title {
+    text-align:				center;
+	background-color: 	rgb(70, 70, 70);
+}
+
+
+QToolButton {
+	border: 					0px solid black;
+	border-radius: 		3px;
+	margin: 					2px;
+}
+QToolButton:pressed, QToolButton:checked {
+	border: 					0px solid black;
+    background-color: 	rgba(0, 0, 0, 20);
+}
+
+
+QStatusBar {
+	color: 						rgb(210, 210, 210);
+	border-top: 				1px solid rgb(50, 50, 50);
+	background-color: 	rgb(30, 30, 30);
+}
+
+
+
+
+
+/*TRANSPORT*/
+QFrame#transportFrame, QFrame#timeFrame, QFrame#optionFrame, QFrame#speedFrame, QFrame#logoFrame, QFrame#perfFrame{
+	border: 					0px solid black;
+	border-left: 				1px solid rgb(50, 50, 50);
+}
+QWIdget {
+	margin:					0px;
+	padding:					0px;
+}
+QWidget#speedSlider {
+	margin-top: 			7px;
+}
+QWidget#timeEdit, QWidget#perfCpuEdit, QWidget#perfOpenGLEdit, QWidget#perfSchedulerEdit {
+	background-color: 	transparent;
+	border: 					0px solid black;
+	font:							9px;
+	color: 						rgb(140, 140, 140);
+}
+QLineEdit#timeEdit {
+	font: 						40px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
+	color: 						rgb(0, 187, 255);
+}
+QPushButton#logoButton {
+	border: 					0px solid black;
+	background-color: 	transparent;
+}
+QPushButton:hover#logoButton {
+	border: 					1px solid rgb(28, 124, 195);
+	background-color: 	rgb(21, 91, 143);
+}
+QPushButton#ffButton, QPushButton#playButton {
+	min-width:  		40px;
+	min-height: 		40px;
+	border-radius: 20px;
+}
+QPushButton#logoButton {
+	margin: -2px;
+}
+/* ---- */
+
+
+/* INSPECTEUR */
+QWidget#ssTabInfoGeneral, QWidget#ssTabInfoSpace, QWidget#ssTabInfoTime, QWidget#ssTabInfoMessage, QWidget#ssTabConfigLog, QWidget#ssTabConfigNetwork, QWidget#ssTabConfigMIDI, QWidget#ssTabConfigArduino, QWidget#ssTabConfigSyphon, QWidget#ssTabConfigWeb, QWidget#ssTabRessource {
+	background-color: 	rgb(50, 50, 50)
+}
+QWidget#tabProject, QWidget#tabView, QWidget#tabInfo, QWidget#tabControlCenter, QWidget#tabConfig {
+	background-color: 	transparent;
+}
+QWidget#equationEdit {
+	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+}
+
+/* ----- */
+
+
+
+/* MAIN */
+QWidget#centralwidget  {
+	background-color: black;
+}
+/* ----- */
+
+
+/* DIALOG */
+QDialogButtonBox QPushButton {
+	padding-left: 		10px;
+	padding-right: 	10px;
+	min-height:			25px;
+	margin:				5px;
+}
+/* ------ */
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="pageRender">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="UiRender" name="render" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pagePerf">
+       <property name="statusTip">
+        <string>Performance preview|While in performance mode, you can take benefits of the multiple display outputs. For example, you can make a video projection of the score on the second video output while keeping a preview and a control of your score on your laptop main display.</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,300">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="performanceLayout">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="performanceModeLabel">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font: 75 11pt &quot;Arial&quot;;</string>
+            </property>
+            <property name="text">
+             <string>PERFORMANCE MODE</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="performancePreview">
+            <property name="statusTip">
+             <string>Allows you to keep a video thumbnail in the IanniX main window</string>
+            </property>
+            <property name="text">
+             <string>PREVIEW</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="UiRenderPreview" name="renderPreview" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1054</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionDuplicate"/>
+    <addaction name="actionCut"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelect_all"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionDrawTriggers"/>
+    <addaction name="actionAddFreeCursor"/>
+    <addaction name="actionAddCircleCurve"/>
+    <addaction name="actionDrawFreeCurve"/>
+    <addaction name="actionDrawPointCurve"/>
+    <addaction name="actionAddMathCurve"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionImoprt_Text"/>
+    <addaction name="actionImoprt_SVG"/>
+    <addaction name="actionImoprt_Background"/>
+    <addaction name="separator"/>
+    <addaction name="actionReloadScript"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <widget class="QMenu" name="menuGrid_size">
+     <property name="title">
+      <string>Grid resolution</string>
+     </property>
+     <addaction name="action10Seconds"/>
+     <addaction name="action1second"/>
+     <addaction name="action500Milliseconds"/>
+     <addaction name="action100Milliseconds"/>
+     <addaction name="action10Milliseconds"/>
+     <addaction name="actionCustomValue"/>
+    </widget>
+    <addaction name="actionFullscreen"/>
+    <addaction name="actionPerformance"/>
+    <addaction name="separator"/>
+    <addaction name="actionToggle_Inspector"/>
+    <addaction name="actionToggle_Transport"/>
+    <addaction name="actionShowEditor"/>
+    <addaction name="actionShowTimer"/>
+    <addaction name="separator"/>
+    <addaction name="actionGrid"/>
+    <addaction name="actionSnapXGrid"/>
+    <addaction name="actionSnapYGrid"/>
+    <addaction name="menuGrid_size"/>
+    <addaction name="separator"/>
+    <addaction name="actionZoom_in"/>
+    <addaction name="actionZoom_initial"/>
+    <addaction name="actionZoom_out"/>
+    <addaction name="actionToggle_Autosize"/>
+    <addaction name="separator"/>
+    <addaction name="actionResize"/>
+    <addaction name="actionSnapshot"/>
+    <addaction name="separator"/>
+    <addaction name="actionLight"/>
+   </widget>
+   <widget class="QMenu" name="menuPlayback">
+    <property name="title">
+     <string>Playback</string>
+    </property>
+    <addaction name="actionPlay_pause"/>
+    <addaction name="actionFast_rewind"/>
+   </widget>
+   <widget class="QMenu" name="menuAlignment">
+    <property name="title">
+     <string>Arrange objects</string>
+    </property>
+    <widget class="QMenu" name="menuAlignH">
+     <property name="title">
+      <string>Align horizontally</string>
+     </property>
+     <addaction name="actionAlign_left"/>
+     <addaction name="actionAlign_center"/>
+     <addaction name="actionAlign_right"/>
+    </widget>
+    <widget class="QMenu" name="menuAlignV">
+     <property name="title">
+      <string>Align vertically</string>
+     </property>
+     <addaction name="actionAlign_top"/>
+     <addaction name="actionAlign_middle"/>
+     <addaction name="actionAlign_bottom"/>
+    </widget>
+    <addaction name="menuAlignH"/>
+    <addaction name="menuAlignV"/>
+    <addaction name="separator"/>
+    <addaction name="actionDistributeH"/>
+    <addaction name="actionDistributeV"/>
+    <addaction name="actionAlign_circle"/>
+    <addaction name="actionAlign_ellipse"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
+   <addaction name="menuPlayback"/>
+   <addaction name="menuAlignment"/>
+  </widget>
+  <widget class="QDockWidget" name="transportDock">
+   <property name="minimumSize">
+    <size>
+     <width>54</width>
+     <height>42</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Transport</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="Transport" name="transport"/>
+  </widget>
+  <widget class="QDockWidget" name="inspecteurDock">
+   <property name="minimumSize">
+    <size>
+     <width>370</width>
+     <height>42</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Inspector</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="UiInspector" name="inspector"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>Toolbar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>28</width>
+     <height>28</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionDrawTriggers"/>
+   <addaction name="separator"/>
+   <addaction name="actionAddCircleCurve"/>
+   <addaction name="actionDrawFreeCurve"/>
+   <addaction name="actionDrawPointCurve"/>
+   <addaction name="actionAddMathCurve"/>
+   <addaction name="actionAddFreeCursor"/>
+   <addaction name="separator"/>
+   <addaction name="actionAddTimeline"/>
+   <addaction name="actionDrawFreeCurveSimple"/>
+   <addaction name="actionDrawPointCurveSimple"/>
+   <addaction name="actionAddMathCurveSimple"/>
+   <addaction name="separator"/>
+   <addaction name="actionToggleLabel"/>
+   <addaction name="actionLockPos"/>
+   <addaction name="actionAllow_triggers_selection"/>
+   <addaction name="actionAllow_curves_selection"/>
+   <addaction name="actionAllow_cursors_selection"/>
+   <addaction name="actionPlaySelected"/>
+   <addaction name="separator"/>
+   <addaction name="actionGrid"/>
+   <addaction name="actionSnapXGrid"/>
+   <addaction name="actionSnapYGrid"/>
+   <addaction name="actionLight"/>
+   <addaction name="separator"/>
+   <addaction name="actionShowTimer"/>
+   <addaction name="actionFullscreen"/>
+   <addaction name="actionPerformance"/>
+   <addaction name="actionShowHelp"/>
+   <addaction name="separator"/>
+   <addaction name="actionPatchesFolder"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo last action</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo last action</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="toolTip">
+    <string>Copies selected objects to clipboard</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="toolTip">
+    <string>Pastes copied objects from clipboard</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="toolTip">
+    <string>Copies to clipboard and deletes selected objects</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSelect_all">
+   <property name="text">
+    <string>Select all</string>
+   </property>
+   <property name="toolTip">
+    <string>Selects all the selectable objects in the score</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Deletes selected objects</string>
+   </property>
+   <property name="shortcut">
+    <string>Backspace</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New score</string>
+   </property>
+   <property name="toolTip">
+    <string>Creates a new empty score</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open a score…</string>
+   </property>
+   <property name="toolTip">
+    <string>Opens a IanniX project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save current score</string>
+   </property>
+   <property name="toolTip">
+    <string>Saves the current score</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="toolTip">
+    <string>Quits IanniX</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionFullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_fullscreen.png</normaloff>:/actions/res_icon_fullscreen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fullscreen</string>
+   </property>
+   <property name="toolTip">
+    <string>Switches score to fullscreen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionToggle_Inspector">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_inspector.png</normaloff>:/actions/res_icon_inspector.png</iconset>
+   </property>
+   <property name="text">
+    <string>Inspector panel</string>
+   </property>
+   <property name="toolTip">
+    <string>Shows/hides the inspector panel</string>
+   </property>
+   <property name="statusTip">
+    <string>Inspector panel|The inspector panel allows you to configure your objects, scores and settings. All the actions and options are in this very important area.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+I</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionToggle_Transport">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_transport.png</normaloff>:/actions/res_icon_transport.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transport panel</string>
+   </property>
+   <property name="toolTip">
+    <string>Shows/hides the transport panel</string>
+   </property>
+   <property name="statusTip">
+    <string>Transport panel|The transport panel allows you to start, stop or set up the playback of your score.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+T</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPlay_pause">
+   <property name="text">
+    <string>Play/pause</string>
+   </property>
+   <property name="toolTip">
+    <string>Plays or pauses the playback</string>
+   </property>
+   <property name="statusTip">
+    <string>Play/pause|Press this button to start or pause the playback</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionFast_rewind">
+   <property name="text">
+    <string>Rewind score</string>
+   </property>
+   <property name="iconText">
+    <string>Rewind score</string>
+   </property>
+   <property name="toolTip">
+    <string>Rewinds the playback</string>
+   </property>
+   <property name="statusTip">
+    <string>Fast rewind|By pressing the button, IanniX will play or pause the score playback. If nothing happened, be sure the score speed is positive!</string>
+   </property>
+   <property name="shortcut">
+    <string>F</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_grid.png</normaloff>:/actions/res_icon_grid.png</iconset>
+   </property>
+   <property name="text">
+    <string>Grid &amp;&amp; axis</string>
+   </property>
+   <property name="toolTip">
+    <string>Shows/hides score grid and axis</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDuplicate">
+   <property name="text">
+    <string>Duplicate</string>
+   </property>
+   <property name="toolTip">
+    <string>Duplicates selected objects</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionToggle_Autosize">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Autoresize object</string>
+   </property>
+   <property name="toolTip">
+    <string>Rescales objects size according to zoom</string>
+   </property>
+   <property name="statusTip">
+    <string>Autoresize option|This options will adapt the size of objects according to the current zoom. When you zoom or unzoom very far, objects like triggers may be very big or invisible. This feature allows you to have a clear and homogenous vision of your score by resizing objects to a reasonable size.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionZoom_in">
+   <property name="text">
+    <string>Zoom in</string>
+   </property>
+   <property name="toolTip">
+    <string>Zooms in</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionZoom_out">
+   <property name="text">
+    <string>Zoom out</string>
+   </property>
+   <property name="toolTip">
+    <string>Zooms out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionZoom_initial">
+   <property name="text">
+    <string>Initial zoom</string>
+   </property>
+   <property name="toolTip">
+    <string>Restores initial zoom</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+0</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDrawFreeCurve">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_curveFree.png</normaloff>:/actions/res_icon_curveFree.png</iconset>
+   </property>
+   <property name="text">
+    <string>Draw a smooth curve with a cursor</string>
+   </property>
+   <property name="toolTip">
+    <string>Draws a smooth curve with a cursor</string>
+   </property>
+   <property name="statusTip">
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+F</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDrawPointCurve">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_curvePoint.png</normaloff>:/actions/res_icon_curvePoint.png</iconset>
+   </property>
+   <property name="text">
+    <string>Draw straight curve with a cursor</string>
+   </property>
+   <property name="toolTip">
+    <string>Draws straight curve with a cursor</string>
+   </property>
+   <property name="statusTip">
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDrawTriggers">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_trigger.png</normaloff>:/actions/res_icon_trigger.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add triggers</string>
+   </property>
+   <property name="toolTip">
+    <string>Adds triggers</string>
+   </property>
+   <property name="statusTip">
+    <string>Triggers|In IanniX vocabulary, a trigger is an event that is fired by cursors. It is very similar to a note in music, but of course IanniX allows you to fire any kind of event, depending on the software linked with your score.\n\nDouble click on a trigger to change the sent messages when fired.\nPress ESC or click again on the toolbar button to stop edition.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+T</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAddFreeCursor">
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_cursor.png</normaloff>:/actions/res_icon_cursor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add a cursor</string>
+   </property>
+   <property name="toolTip">
+    <string>Adds a cursor on the selected curves</string>
+   </property>
+   <property name="statusTip">
+    <string>Cursors|In IanniX vocabulary, a cursor is a playhead. While running on a curve, it can fire triggers, send its position or read curves values. If the cursor is not linked to a curve, it will not move automatically, but you can control it from an other softwares or hardwares (sensors…).\n\nDouble click on a cursor to change the sent messages.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action10Seconds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>10 seconds</string>
+   </property>
+   <property name="toolTip">
+    <string>Changes the grid base unit to 10 seconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action1second">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1 second</string>
+   </property>
+   <property name="toolTip">
+    <string>Changes the grid base unit to 1 second</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action500Milliseconds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>500 milliseconds</string>
+   </property>
+   <property name="toolTip">
+    <string>Changes the grid base unit to 500 milliseconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action100Milliseconds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>100 milliseconds</string>
+   </property>
+   <property name="toolTip">
+    <string>Changes the grid base unit to 100 milliseconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action10Milliseconds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>10 milliseconds</string>
+   </property>
+   <property name="toolTip">
+    <string>Changes the grid base unit to 10 milliseconds</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCustomValue">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Custom value</string>
+   </property>
+   <property name="toolTip">
+    <string>Changes the grid base unit to a custom value</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAddCircleCurve">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_curveCircle.png</normaloff>:/actions/res_icon_curveCircle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add circular curves with cursors</string>
+   </property>
+   <property name="toolTip">
+    <string>Adds circular curves with cursors</string>
+   </property>
+   <property name="statusTip">
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSnapXGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_grid_snapX.png</normaloff>:/actions/res_icon_grid_snapX.png</iconset>
+   </property>
+   <property name="text">
+    <string>Snap to X-grid</string>
+   </property>
+   <property name="iconText">
+    <string>Snap to X-grid</string>
+   </property>
+   <property name="toolTip">
+    <string>Snaps mouse actions on vertical grid</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionLockPos">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_lock.png</normaloff>:/actions/res_icon_lock.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lock objects position</string>
+   </property>
+   <property name="toolTip">
+    <string>Locks objects position</string>
+   </property>
+   <property name="statusTip">
+    <string>Locking objects|Activate this option if you only want to navigate safely (without moving objects accidentally) in the score.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionToggleLabel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_label.png</normaloff>:/actions/res_icon_label.png</iconset>
+   </property>
+   <property name="text">
+    <string>Objects labels</string>
+   </property>
+   <property name="iconText">
+    <string>Objects labels</string>
+   </property>
+   <property name="toolTip">
+    <string>Show/hides objects labels</string>
+   </property>
+   <property name="statusTip">
+    <string>Objects labels|Disable this option if you don't want to display objects label (if you've set labels in inspector) on the score. Displaying label may be CPU intensive so disabling them may increase video frame rate.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPatchesFolder">
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_patches_folder.png</normaloff>:/actions/res_icon_patches_folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Third party software examples</string>
+   </property>
+   <property name="toolTip">
+    <string>Opens a folder where you can find third party software examples</string>
+   </property>
+   <property name="statusTip">
+    <string>Third party software examples|IanniX only sequences events and values to other softwares or hardwares. Click on this button to open examples using third party softwares that are compatible with IanniX.\nBe aware that it is just samples, a lot of other softwares are compatible with IanniX! Have a look at configuration tab in inspector panel to see all the availables interfaces.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About IanniX</string>
+   </property>
+   <property name="toolTip">
+    <string>Opens About IanniX window</string>
+   </property>
+   <property name="statusTip">
+    <string>About IanniX|IanniX is open source and developed by volunteers. Discover who they are!</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionImoprt_SVG">
+   <property name="text">
+    <string>Import SVG file…</string>
+   </property>
+   <property name="toolTip">
+    <string>Imports SVG file to score</string>
+   </property>
+   <property name="statusTip">
+    <string>SVG files|IanniX can import SVG files (open vectorial format). Be aware that IanniX tries to make the best it can to import data from SVG, but some of SVG features are not compatible with IanniX philosophy.\nFinaly, SVG is based on print or display units whereas IanniX is based on seconds ; you may need to rescale the imported data.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionImoprt_Text">
+   <property name="text">
+    <string>Import glyphes…</string>
+   </property>
+   <property name="toolTip">
+    <string>Imports glyphes to score</string>
+   </property>
+   <property name="statusTip">
+    <string>Glyphes import|IanniX can import glyphes (characters) from fonts. Note that font sizes are based on print or display units whereas IanniX is based on seconds ; you may need to rescale the imported data.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionShowEditor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_editor.png</normaloff>:/actions/res_icon_editor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Script editor window</string>
+   </property>
+   <property name="toolTip">
+    <string>Shows/hides script editor window</string>
+   </property>
+   <property name="statusTip">
+    <string>Script editor window|The script editor window allows you to add code to your score. Scripts are based on Javascript langage and some special methods allows you to control IanniX. Have a look at examples to start working with scripts!</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionReloadScript">
+   <property name="text">
+    <string>Reload current script</string>
+   </property>
+   <property name="toolTip">
+    <string>Reloads the current script if you made changes from external editor</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionLight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_light.png</normaloff>:/actions/res_icon_light.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lighter color theme</string>
+   </property>
+   <property name="toolTip">
+    <string>Changes the color theme</string>
+   </property>
+   <property name="statusTip">
+    <string>Color themes|IanniX comes with two color themes: one is bright (for editing, with colors inspired by paper and pencil), the other is dark (for performance, not dazzling on stage, in lighting desk or sound controls)</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionImoprt_Background">
+   <property name="text">
+    <string>Import a background image…</string>
+   </property>
+   <property name="toolTip">
+    <string>Imports a background image</string>
+   </property>
+   <property name="statusTip">
+    <string>Background picture|Background picture is not only an esthetical feature, it also allows you to trace curves manually from the image.\nNote that pictures are based on pixels whereas IanniX is based on seconds ; you may need to rescale the picture in inspector panel.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAllow_triggers_selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/general/res_icon_trigger_select.png</normaloff>:/general/res_icon_trigger_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Allow triggers selection</string>
+   </property>
+   <property name="toolTip">
+    <string>Allows triggers selection</string>
+   </property>
+   <property name="statusTip">
+    <string>Objects selection|Use these options to enable or disable selection of objects regarding their nature. It can be very useful if you need to change for example all the messages of the triggers.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAllow_curves_selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/general/res_icon_curve_select.png</normaloff>:/general/res_icon_curve_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Allow curves selection</string>
+   </property>
+   <property name="toolTip">
+    <string>Allows curves selection</string>
+   </property>
+   <property name="statusTip">
+    <string>Objects selection|Use these options to enable or disable selection of objects regarding their nature. It can be very useful if you need to change for example all the messages of the triggers.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAllow_cursors_selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/general/res_icon_cursor_select.png</normaloff>:/general/res_icon_cursor_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Allow cursors selection</string>
+   </property>
+   <property name="toolTip">
+    <string>Allows cursors selection</string>
+   </property>
+   <property name="statusTip">
+    <string>Objects selection|Use these options to enable or disable selection of objects regarding their nature. It can be very useful if you need to change for example all the messages of the triggers.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSnapYGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_grid_snapY.png</normaloff>:/actions/res_icon_grid_snapY.png</iconset>
+   </property>
+   <property name="text">
+    <string>Snap to Y-grid</string>
+   </property>
+   <property name="toolTip">
+    <string>Snaps mouse actions on horizontal grid</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDistributeH">
+   <property name="text">
+    <string>Distribute horizontally</string>
+   </property>
+   <property name="toolTip">
+    <string>Distributes objects horizontally from the leftmost object to the rightmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDistributeV">
+   <property name="text">
+    <string>Distribute vertically</string>
+   </property>
+   <property name="toolTip">
+    <string>Distributes objects vertically from the topmost object to the bottommost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_left">
+   <property name="text">
+    <string>Align left</string>
+   </property>
+   <property name="toolTip">
+    <string>Aligns objects on the leftmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_center">
+   <property name="text">
+    <string>Align center</string>
+   </property>
+   <property name="toolTip">
+    <string>Aligns objects on the horizontal center of the selection</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_right">
+   <property name="text">
+    <string>Align right</string>
+   </property>
+   <property name="toolTip">
+    <string>Aligns objects on the rightmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_top">
+   <property name="text">
+    <string>Align top</string>
+   </property>
+   <property name="toolTip">
+    <string>Aligns objects on the topmost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_middle">
+   <property name="text">
+    <string>Align middle</string>
+   </property>
+   <property name="toolTip">
+    <string>Aligns objects on the vertical center of the selection</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_bottom">
+   <property name="text">
+    <string>Align bottom</string>
+   </property>
+   <property name="toolTip">
+    <string>Aligns objects on the bottommost object</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_circle">
+   <property name="text">
+    <string>Distribute circulary</string>
+   </property>
+   <property name="toolTip">
+    <string>Aligns objects as a circle</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAlign_ellipse">
+   <property name="text">
+    <string>Distribute on ellipse</string>
+   </property>
+   <property name="toolTip">
+    <string>Aligns objects as an ellipse</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSnapshot">
+   <property name="text">
+    <string>Make a high resolution snapshot</string>
+   </property>
+   <property name="toolTip">
+    <string>Generates a high resolution picture of the score on your desktop</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+P</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionResize">
+   <property name="text">
+    <string>Resize viewport</string>
+   </property>
+   <property name="toolTip">
+    <string>Resizes score viewport to specific dimensions</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionShowTimer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_timer.png</normaloff>:/actions/res_icon_timer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Timer window</string>
+   </property>
+   <property name="toolTip">
+    <string>Shows/hides the timer window</string>
+   </property>
+   <property name="statusTip">
+    <string>Timer window|The timer window is useful if you need a big readable timer on stage for performance.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPerformance">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_performance.png</normaloff>:/actions/res_icon_performance.png</iconset>
+   </property>
+   <property name="text">
+    <string>Performance mode</string>
+   </property>
+   <property name="toolTip">
+    <string>Switches to performance mode</string>
+   </property>
+   <property name="statusTip">
+    <string>Performance mode|While in performance mode, you can take benefits of the multiple display outputs. For example, you can make a video projection of the score on the second video output while keeping a preview and a control of your score on your laptop main display.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAddTimeline">
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_timeline.png</normaloff>:/actions/res_icon_timeline.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add a timeline</string>
+   </property>
+   <property name="toolTip">
+    <string>Adds a timeline</string>
+   </property>
+   <property name="statusTip">
+    <string>Timeline|A timeline is just a classical horizontal curve with a cursor reading curves values. This feature only adds a curve with a cursor that has a pre-configured message for curve value reading (intersection of cursor with the curves)</string>
+   </property>
+  </action>
+  <action name="actionPlaySelected">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_play_selected.png</normaloff>:/actions/res_icon_play_selected.png</iconset>
+   </property>
+   <property name="text">
+    <string>Only play selected objects</string>
+   </property>
+   <property name="toolTip">
+    <string>If checked, only selected objects will output messages</string>
+   </property>
+  </action>
+  <action name="actionDrawFreeCurveSimple">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_curveFree_simple.png</normaloff>:/actions/res_icon_curveFree_simple.png</iconset>
+   </property>
+   <property name="text">
+    <string>Draw a smooth curve</string>
+   </property>
+   <property name="toolTip">
+    <string>Draws a smooth curve</string>
+   </property>
+   <property name="statusTip">
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDrawPointCurveSimple">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_curvePoint_simple.png</normaloff>:/actions/res_icon_curvePoint_simple.png</iconset>
+   </property>
+   <property name="text">
+    <string>Draw straight curve</string>
+   </property>
+   <property name="toolTip">
+    <string>Draws straight curve</string>
+   </property>
+   <property name="statusTip">
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAddMathCurveSimple">
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_curveEq_simple.png</normaloff>:/actions/res_icon_curveEq_simple.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add a math curve</string>
+   </property>
+   <property name="toolTip">
+    <string>Adds a math curve</string>
+   </property>
+   <property name="statusTip">
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAddMathCurve">
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_curveEq.png</normaloff>:/actions/res_icon_curveEq.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add a math curve with a cursor</string>
+   </property>
+   <property name="toolTip">
+    <string>Adds a math curve with a cursor</string>
+   </property>
+   <property name="statusTip">
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+M</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionShowHelp">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons/IanniX.qrc">
+     <normaloff>:/actions/res_icon_help.png</normaloff>:/actions/res_icon_help.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help window</string>
+   </property>
+   <property name="toolTip">
+    <string>Shows/hides the help window</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>UiRender</class>
+   <extends>QWidget</extends>
+   <header>render/uirender.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Transport</class>
+   <extends>QWidget</extends>
+   <header>transport/transport.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>UiInspector</class>
+   <extends>QWidget</extends>
+   <header>gui/uiinspector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>UiRenderPreview</class>
+   <extends>QWidget</extends>
+   <header>render/uirenderpreview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../icons/IanniX.qrc"/>
+ </resources>
+ <connections/>
+ <slots>
+  <slot>fullscreenDisplaysSelected()</slot>
+ </slots>
+</ui>

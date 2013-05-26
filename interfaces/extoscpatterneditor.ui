@@ -21,13 +21,12 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
-	font: 						10px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+	font: 						10px &quot;Museo Sans&quot;, &quot;Museo Sans 500&quot;, &quot;Arial&quot;;
 	margin: 					0px;
 	padding: 					0px;
 }
 QLabel {
-	font: 						9px &quot;Museo Sans&quot;, &quot;Arial&quot;;
-	font:							bold;
+	font: 						9px &quot;Museo Sans&quot;, &quot;Museo Sans 500&quot;, &quot;Arial&quot;;
 	color: 						rgb(20, 20, 20);
 }
 QLineEdit {
@@ -39,7 +38,7 @@ QFrame#global {
 	background-color:	rgb(242, 241, 237);
 }
 QPlainTextEdit#patternEdit {
-	font: 11px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+	font: 11px &quot;Lucida Console&quot;, &quot;Monaco&quot;, &quot;Monospace&quot;;
 }
 
 

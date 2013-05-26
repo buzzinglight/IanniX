@@ -42,20 +42,21 @@ InterfaceMidi::InterfaceMidi(QWidget *parent) :
     }
 
     //Interfaces link
-    enable.setAction(ui->enable,          "interfaceMidiEnable");
-    syncTransportIn .setAction(ui->syncTransportIn,  "interfaceMidiSyncTransportIn");
-    syncTransportOut.setAction(ui->syncTransportOut, "interfaceMidiSyncTransportOut");
-    syncBpm.setAction(ui->bpm,            "interfaceMidiSyncBpm");
+    enable          .setAction(ui->enable,                       "interfaceMidiEnable");
+    syncTransportIn .setAction(ui->syncTransportIn,              "interfaceMidiSyncTransportIn");
+    syncTransportOut.setAction(ui->syncTransportOut,             "interfaceMidiSyncTransportOut");
+    syncBpm         .setAction(ui->bpm,                          "interfaceMidiSyncBpm");
     MessageManager::aliases["midi_out"].setAction(ui->aliasPort, "interfaceMidiPortAlias");
 
     //syncClock.setAction(ui->syncClock,    "interfaceMidiSyncClock");
 #ifdef Q_OS_WIN
-    MessageManager::aliases["midi_out"] = "Microsoft GS Wavetable Synth";
+    MessageManager::aliases["midi_out"] = QString("Microsoft GS Wavetable Synth");
 #else
     MessageManager::aliases["midi_out"] = portOutName;
 #endif
     syncBpm = 120;
 
+    timerEvent(0);
     startTimer(5000);
 }
 
@@ -373,11 +374,15 @@ qreal ExtMidiMTC::decode(quint16 msg) {
 }
 
 void InterfaceMidi::clear() {
-    foreach(RtMidiIn  *port, portIn)
+    foreach(RtMidiIn  *port, portIn) {
+        port->closePort();
         delete port;
+    }
     portIn.clear();
-    foreach(RtMidiOut *port, portOut)
+    foreach(RtMidiOut *port, portOut) {
+        port->closePort();
         delete port;
+    }
     portOut.clear();
 }
 InterfaceMidi::~InterfaceMidi() {

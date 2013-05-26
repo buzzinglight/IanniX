@@ -93,17 +93,17 @@ void UiHelp::statusHelp() {
 
         html += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">";
         html += "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">";
-        html += "body   { background-color: #EEEDE8; font-family: Museo Sans, Arial; font-size: 11px; padding: 11px }";
+        html += "body   { background-color: #EEEDE8; font-family: Museo Sans, Museo Sans 500, Arial; font-size: 11px; padding: 11px }";
         html += ".code  { font-family:Monaco, Lucida Console, Monospace; font-size: 11px; }";
-        html += ".bold  { font-weight: bold; }";
+        html += ".bold  {  }";
         html += ".titre { font-size: 14px; }";
         html += ".description { background-color: rgb(227,226,220); }";
         html += ".syntax      { background-color: rgb(227,226,220); }";
         html += ".example     { background-color: rgb(227,226,220); }";
         html += ".snippet     { background-color: rgb(227,226,220); }";
-        html += ".sstitre     { font-weight: bold;}";
+        html += ".sstitre     { }";
         html += ".action      { font-size: 9px;}";
-        html += ".category    { font-size: 16px; font-weight: bold; }";
+        html += ".category    { font-size: 16px;  }";
         html += ".hint        { color: rgb(115,159,89); }";
         html += "a	          { color: rgb(244,98,0); text-decoration: none; }";
         html += "a:hover      { text-decoration: underline; }";
@@ -199,17 +199,17 @@ void UiHelp::scriptHelp(const QString &looking, const QStringList &lookCategorie
 
         html += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">";
         html += "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">";
-        html += "body   { background-color: #EEEDE8; font-family: Museo Sans, Arial; font-size: 11px; }";
+        html += "body   { background-color: #EEEDE8; font-family: Museo Sans, Museo Sans 500, Arial; font-size: 11px; }";
         html += ".code  { font-family:Monaco, Lucida Console, Monospace; font-size: 11px; }";
-        html += ".bold  { font-weight: bold; }";
+        html += ".bold  {  }";
         html += ".titre { font-size: 14px; }";
         html += ".description { background-color: rgb(227,226,220); }";
         html += ".syntax      { background-color: rgb(227,226,220); }";
         html += ".example     { background-color: rgb(227,226,220); }";
         html += ".snippet     { background-color: rgb(227,226,220); }";
-        html += ".sstitre     { font-weight: bold;}";
+        html += ".sstitre     { }";
         html += ".action      { font-size: 9px;}";
-        html += ".category    { font-size: 16px; font-weight: bold; }";
+        html += ".category    { font-size: 16px;  }";
         html += ".hint        { color: rgb(115,159,89); }";
         html += "a	          { color: rgb(244,98,0); text-decoration: none; }";
         html += "a:hover      { text-decoration: underline; }";

@@ -63,16 +63,14 @@ public slots:
     QTreeWidgetItem *getObjectRootItem() const;
     UiTreeView* getFileWidget() const;
 
-
-public:
-    void showRessourcesTab(const QString &value);
-    void showSpaceTab();
-    void clearCCselections();
-
 private:
     void timerEvent(QTimerEvent *);
     bool needRefresh;
 public slots:
+    void showRessourcesTab(const QString &value);
+    void showSpaceTab();
+    void showConfigTab();
+    void clearCCselections();
     void refresh();
     void askRefresh() {  needRefresh = true; }
     void change(quint16 indexObject, QRadioButton   *spin, bool            val, bool            prevVal);

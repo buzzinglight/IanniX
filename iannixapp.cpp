@@ -19,6 +19,7 @@
 #include <QFontDatabase>
 #include "iannixapp.h"
 #include "misc/help.h"
+#include "gui/uisplashscreen.h"
 
 
 
@@ -69,6 +70,10 @@ IanniXApp::IanniXApp(int &argc, char **argv) :
 }
 
 void IanniXApp::launch(int &argc, char **argv) {
+    //Display splash
+    Application::splash = new UiSplashScreen(QPixmap(":/general/res_splash.png"));
+
+    //Start
     setHelp();
 
     QDir pathApplicationDir = QDir(QCoreApplication::applicationDirPath()).absolutePath();
@@ -86,6 +91,10 @@ void IanniXApp::launch(int &argc, char **argv) {
     Global::pathCurrent     = QFileInfo(QDir::currentPath());
     if((Global::pathApplication.absoluteFilePath().endsWith("/IanniX-build-64")) || (Global::pathApplication.absoluteFilePath().endsWith("/IanniX-build-32")))
         Global::pathApplication = QFileInfo(Global::pathApplication.absoluteFilePath().remove("-build-64").remove("-build-32"));
+    if(Global::pathApplication.absoluteFilePath().endsWith("/IanniX-build/release"))
+        Global::pathApplication = QFileInfo(Global::pathApplication.absoluteFilePath().remove("-build/release"));
+    if(Global::pathApplication.absoluteFilePath().endsWith("/IanniX-build"))
+        Global::pathApplication = QFileInfo(Global::pathApplication.absoluteFilePath().remove("-build"));
 
     qDebug("Pathes");
     qDebug("\tDocuments  : %s", qPrintable(Global::pathDocuments  .absoluteFilePath()));
@@ -109,8 +118,26 @@ void IanniXApp::launch(int &argc, char **argv) {
     if(argc > indexArgument)
         project = QFileInfo(Global::pathCurrent.absoluteFilePath() + "/" + argv[indexArgument]);
 
+    //Add font
     if(QFontDatabase::addApplicationFont(Global::pathApplication.absoluteFilePath() + "/Tools/Museo.ttf"))
-        qDebug("Loading IanniX font failed");
+        qDebug("Loading IanniX font failed : %s", qPrintable(Global::pathApplication.absoluteFilePath() + "/Tools/Museo.ttf"));
+    //List of fonts
+    if(false) {
+        qDebug("[FONTS]");
+        QFontDatabase fontDb;
+        QStringList fontList = fontDb.families();
+        foreach(const QString &font, fontList) {
+            qDebug("\tFamille : %s", qPrintable(font));
+            if(true) {
+                qDebug("\t\tFont : %s", qPrintable(font));
+                QStringList styleList = fontDb.styles(font);
+                foreach(const QString &style, styleList) {
+                    int weight = fontDb.weight(font, style);
+                    qDebug("\t\t\t > Style / Graisse %s %d", qPrintable(style), weight);
+                }
+            }
+        }
+    }
 
     iannix = new IanniX();
     if(project.exists()) {

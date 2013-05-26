@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QTabWidget, QLabel, QCheckBox, QLineEdit, QPlainTextEdit, QPushButton, QSpinBox, QDoubleSpinBox, QTreeView, QHeaderView, QTabBar, QComboBox, QFrame#globalFrame, QTabBar::tab, QTreeView, QHeaderView, QDockWidget, QStatusBar, QRadioButton {
-	font: 						10px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+	font: 						10px &quot;Museo Sans&quot;, &quot;Museo Sans 500&quot;, &quot;Arial&quot;;
 	padding:					0px;
 	margin:					0px;
 	min-height: 				20px;
@@ -34,9 +34,6 @@ QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox {
 
 QFrame#globalFrame, QFrame#transportFrame, QFrame#timeFrame, QFrame#optionFrame, QFrame#speedFrame, QFrame#logoFrame, QFrame#perfFrame, QDialog {
 	background-color: 	rgb(40, 40, 40);
-}
-QLabel, QTabBar::tab {
-	font: 						bold;
 }
 QLabel, QCheckBox, QRadioButton {
 	color: 						rgb(210, 210, 210);
@@ -289,7 +286,7 @@ QWidget#tabProject, QWidget#tabView, QWidget#tabInfo, QWidget#tabControlCenter, 
 	background-color: 	transparent;
 }
 QWidget#equationEdit {
-	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;, &quot;Monospace&quot;;
 }
 
 /* ----- */
@@ -465,6 +462,7 @@ QDialogButtonBox QPushButton {
     <addaction name="separator"/>
     <addaction name="actionReloadScript"/>
     <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
     <addaction name="actionAbout"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -1829,6 +1827,14 @@ QDialogButtonBox QPushButton {
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+   <property name="toolTip">
+    <string>Opens the Config tab in Inspector</string>
    </property>
   </action>
  </widget>

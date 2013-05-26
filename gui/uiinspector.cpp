@@ -797,6 +797,9 @@ void UiInspector::showRessourcesTab(const QString &) {
     ui->ssTabInfo->setTabEnabled(4, true);
     ui->ssTabInfo->setCurrentIndex(4);
 }
+void UiInspector::showConfigTab() {
+    ui->tab->setCurrentIndex(3);
+}
 
 void UiInspector::clearCCselections() {
     ui->ccView->clearSelection();

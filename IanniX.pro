@@ -61,9 +61,9 @@ SOURCES  += geometry/qmuparser/muParser.cpp geometry/qmuparser/muParserBase.cpp 
 HEADERS  += objects/nxdocument.h   objects/nxtrigger.h   objects/nxgroup.h   objects/nxcurve.h   objects/nxcursor.h   objects/nxobject.h  
 SOURCES  += objects/nxdocument.cpp objects/nxtrigger.cpp objects/nxgroup.cpp objects/nxcurve.cpp objects/nxcursor.cpp objects/nxobject.cpp
 
-HEADERS  += gui/uiinspector.h   gui/uiview.h   gui/uisplash.h   gui/uihelp.h   gui/uimessagebox.h
-SOURCES  += gui/uiinspector.cpp gui/uiview.cpp gui/uisplash.cpp gui/uihelp.cpp gui/uimessagebox.cpp
-FORMS    += gui/uiinspector.ui  gui/uiview.ui  gui/uisplash.ui  gui/uihelp.ui  gui/uimessagebox.ui
+HEADERS  += gui/uiinspector.h   gui/uiview.h   gui/uihelp.h   gui/uimessagebox.h   gui/uisplashscreen.h
+SOURCES  += gui/uiinspector.cpp gui/uiview.cpp gui/uihelp.cpp gui/uimessagebox.cpp gui/uisplashscreen.cpp
+FORMS    += gui/uiinspector.ui  gui/uiview.ui  gui/uihelp.ui  gui/uimessagebox.ui
 HEADERS  += gui/qjsedit/jsedit.h
 SOURCES  += gui/qjsedit/jsedit.cpp
 SOURCES  += items/uitreeview.cpp items/uitreeviewwidget.cpp items/uitreedelegate.cpp items/uifileitem.cpp items/uicoloritem.cpp items/uipathpointsitem.cpp items/uitextureitem.cpp
@@ -141,7 +141,6 @@ win32 {
     LIBS                += -lwinmm -lsetupapi #-ladvapi32 -luser32
     RC_FILE              = icon.rc
     SOURCES             += interfaces/qextserialport/qextserialport_win.cpp  interfaces/qextserialport/qextserialenumerator_win.cpp
-    DEFINES             += WINVER=0x0501 # needed for mingw to pull in appropriate dbt business...probably a better way to do this
 }
 unix {
     SOURCES            += interfaces/qextserialport/qextserialport_unix.cpp

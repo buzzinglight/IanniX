@@ -1,0 +1,4996 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UiInspector</class>
+ <widget class="QWidget" name="UiInspector">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>395</width>
+    <height>557</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>IanniX — Inspector</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QTabWidget, QLabel, QCheckBox, QLineEdit, QPlainTextEdit, QPushButton, QSpinBox, QDoubleSpinBox, QTreeView, QHeaderView, QTabBar, QComboBox, QFrame#globalFrame, QTabBar::tab, QTreeView, QHeaderView, QDockWidget, QStatusBar, QRadioButton {
+	font: 						10px &quot;Museo Sans&quot;, &quot;Arial&quot;;
+	padding:					0px;
+	margin:					0px;
+	min-height: 				20px;
+	color: 						white;
+	border: 					0px solid black;
+}
+QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox::indicator, QRadioButton::indicator, QTreeView::indicator, QComboBox, QTreeView, QHeaderView {
+	border: 					1px solid rgb(55, 55, 55);
+	border-radius: 		2px;
+	background-color: 	rgb(70, 70, 70);
+}
+QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox {
+	margin-top: 			4px;
+	margin-bottom: 		4px;
+}
+
+QFrame#globalFrame, QFrame#transportFrame, QFrame#timeFrame, QFrame#optionFrame, QFrame#speedFrame, QFrame#logoFrame, QFrame#perfFrame, QDialog {
+	background-color: 	rgb(40, 40, 40);
+}
+QLabel, QCheckBox, QRadioButton {
+	color: 						rgb(210, 210, 210);
+}
+
+QTabWidget::pane {
+	border: 					1px solid rgb(50, 50, 50);
+}
+QTabWidget::tab-bar {
+	left: 							0px;
+}
+QTabWidget#tab {
+	color: red;
+}
+QTabBar::tab {
+	min-height: 							25px; /* FIX IN SS-TAB */
+	background-color: 				rgb(110, 110, 110);
+    border-top-left-radius: 		4px;
+    border-top-right-radius: 	4px;
+	margin-right:						2px;
+	padding-left: 						5px;
+	padding-right:						5px;
+	color: 									rgb(220, 220, 220);
+}
+QTabBar::tab:selected {
+	background-color: 				rgb(242, 241, 237);
+	color: 									black;
+}
+QTabBar::tab:hover {
+	color: 									black;
+}
+QTabBar::tab:!selected {
+    margin-top: 						2px;
+}
+QTabBar::tab:disabled {
+	color: 									gray;
+}
+
+
+QPushButton {
+	margin-left: 			6px;
+}
+QPushButton:hover {
+	border: 					1px solid rgb(28, 124, 195);
+	background-color: 	rgb(21, 91, 143);
+}
+QPushButton::checked, QPushButton:pressed, QCheckBox::indicator:checked, QTreeView::indicator:checked, QRadioButton::indicator:checked {
+	background-color: 	rgb(0, 187, 255);
+}
+
+
+QCheckBox, QRadioButton {
+	spacing: 					5px;
+}
+QCheckBox::indicator, QTreeView::indicator, QRadioButton::indicator  {
+	width: 						10px;
+	height: 					10px;
+}
+
+QSpinBox, QDoubleSpinBox, QLineEdit {
+	padding-left	:			5px;
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button, QSpinBox::down-button, QDoubleSpinBox::down-button {
+	width: 						5px;
+	padding: 					2px;
+	padding-left:			3px;
+	background-color: 	rgb(60, 60, 60);
+	border: 					0px solid black;
+	border-left:				1px solid rgb(70, 70, 70);
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+    image: 						url(:/icons/res_icon_plus.png);
+	border-bottom:		1px solid rgb(70, 70, 70);
+}
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    image: 						url(:/icons/res_icon_minus.png);
+}
+
+
+QComboBox {
+	background:			rgb(242, 241, 237);
+	color: 					black;
+	margin-left: 		3px;
+	border-radius: 	3px;
+	selection-color: 	black;
+	padding-left: 		5px;
+}
+QComboBox::drop-down {
+	width: 						10px;
+	padding: 					2px;
+	border: 					0px solid black;
+	background-color: 	rgb(70, 70, 70);
+    image: 						url(:/icons/res_icon_down.png);
+}
+
+
+QTreeView {
+	background:								rgb(50, 50, 50);
+	alternate-background-color: 	rgb(55, 55, 55);
+	selection-background-color: 	rgb(0, 187, 255);
+	gridline-color: 							rgb(60, 60, 60);
+}
+QHeaderView {
+	background: 							transparent;
+	border: 									0px solid black;
+	color: 										rgb(200, 200, 200);
+	min-height: 								14px;
+}
+QHeaderView::section {
+	background: 							rgb(90, 90, 90);
+	padding-left: 							5px;
+	border-top-left-radius:  			3px;
+	border-top-right-radius: 		3px;
+	margin-right:							1px;
+	font: 										9px &quot;Arial&quot;;
+}
+QTreeView::item {
+	min-height: 20px;
+}
+
+
+
+QScrollBar:vertical, QScrollBar:horizontal {
+	border: 				0px solid black;
+	background: 		rgba(255, 255, 255, 32);
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+	border: 				0px solid black;
+	background: 		rgb(161, 161, 161);
+	border-radius: 	3px;
+}
+QScrollBar:vertical {						width: 			8px;					}
+QScrollBar:horizontal {					height: 		8px;				}
+QScrollBar::handle:vertical {			min-height: 8px;		}
+QScrollBar::handle:horizontal {	min-width: 	8px;			}
+QScrollBar::add-line:vertical, QScrollBar::add-line:hozirontal, QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal, QScrollBar::up-arrow:vertical, QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:vertical, QScrollBar::down-arrow:horizontal {
+	border: 			0px solid black;
+	background: 	transparent;
+	width: 				1px;
+	height: 			1px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: 	none;
+}
+
+
+QSlider:horizontal {
+	min-width: 				100px;
+}
+QSlider::groove:horizontal {
+	border: 					0px solid transparent;
+	background-color: 	rgb(70, 70, 70);
+	height: 					3px;
+}
+QSlider::handle:horizontal {
+	width: 						11px;
+	height: 					10px;
+	border-radius: 		5px;
+	margin-top: 			-4px;
+	margin-bottom: 		-4px;
+	border: 					0px solid black;
+	background-color: 	rgb(0, 187, 250);
+}
+
+
+QSplitter::handle {
+	background: 							rgb(255, 255, 255, 30);
+}
+QSplitter::handle:pressed {
+	background: 							rgb(0, 187, 255);
+ }
+QSplitter::handle:horizontal	 	{	width: 	4px; }
+QSplitter::handle:vertical     		{	height:	4px; }
+
+QDockWidget {
+}
+QDockWidget::title {
+    text-align:				center;
+	background-color: 	rgb(70, 70, 70);
+}
+
+
+QToolButton {
+	border: 					0px solid black;
+	border-radius: 		3px;
+	margin: 					2px;
+}
+QToolButton:pressed, QToolButton:checked {
+	border: 					0px solid black;
+    background-color: 	rgba(0, 0, 0, 20);
+}
+
+
+QStatusBar {
+	color: 						rgb(210, 210, 210);
+	border-top: 				1px solid rgb(50, 50, 50);
+	background-color: 	rgb(30, 30, 30);
+}
+
+
+
+
+
+/*TRANSPORT*/
+QFrame#transportFrame, QFrame#timeFrame, QFrame#optionFrame, QFrame#speedFrame, QFrame#logoFrame, QFrame#perfFrame{
+	border: 					0px solid black;
+	border-left: 				1px solid rgb(50, 50, 50);
+}
+QWIdget {
+	margin:					0px;
+	padding:					0px;
+}
+QWidget#speedSlider {
+	margin-top: 			7px;
+}
+QWidget#timeEdit, QWidget#perfCpuEdit, QWidget#perfOpenGLEdit, QWidget#perfSchedulerEdit {
+	background-color: 	transparent;
+	border: 					0px solid black;
+	font:							9px;
+	color: 						rgb(140, 140, 140);
+}
+QLineEdit#timeEdit {
+	font: 						40px &quot;Lucida Sans&quot;, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida&quot;;
+	color: 						rgb(0, 187, 255);
+}
+QPushButton#logoButton {
+	border: 					0px solid black;
+	background-color: 	transparent;
+}
+QPushButton:hover#logoButton {
+	border: 					1px solid rgb(28, 124, 195);
+	background-color: 	rgb(21, 91, 143);
+}
+QPushButton#ffButton, QPushButton#playButton {
+	min-width:  		40px;
+	min-height: 		40px;
+	border-radius: 20px;
+}
+QPushButton#logoButton {
+	margin: -2px;
+}
+/* ---- */
+
+
+/* INSPECTEUR */
+QWidget#ssTabInfoGeneral, QWidget#ssTabInfoSpace, QWidget#ssTabInfoTime, QWidget#ssTabInfoMessage, QWidget#ssTabConfigLog, QWidget#ssTabConfigNetwork, QWidget#ssTabConfigMIDI, QWidget#ssTabConfigArduino, QWidget#ssTabConfigSyphon, QWidget#ssTabConfigWeb, QWidget#ssTabRessource {
+	background-color: 	rgb(50, 50, 50)
+}
+QWidget#tabProject, QWidget#tabView, QWidget#tabInfo, QWidget#tabControlCenter, QWidget#tabConfig {
+	background-color: 	transparent;
+}
+QWidget#equationEdit {
+	font: 						10px &quot;Lucida Console&quot;, &quot;Monaco&quot;;
+}
+
+/* ----- */
+
+
+
+/* MAIN */
+QWidget#centralwidget  {
+	background-color: black;
+}
+/* ----- */
+
+
+/* DIALOG */
+QDialogButtonBox QPushButton {
+	padding-left: 		10px;
+	padding-right: 	10px;
+	min-height:			25px;
+	margin:				5px;
+}
+/* ------ */
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="globalFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="margin">
+       <number>3</number>
+      </property>
+      <item>
+       <widget class="QTabWidget" name="tab">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <widget class="QWidget" name="tabProject">
+         <property name="statusTip">
+          <string>Scores file|Scores are stored in files containing three parts:\n- objects edited through graphical user interface\n- script code\n- received messages from external software</string>
+         </property>
+         <attribute name="icon">
+          <iconset resource="../icons/IanniX.qrc">
+           <normaloff>:/general/res_icon_inspector_project.png</normaloff>:/general/res_icon_inspector_project.png</iconset>
+         </attribute>
+         <attribute name="title">
+          <string>FILES</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="margin">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="UiTreeView" name="files" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>150</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tabInfo">
+         <property name="styleSheet">
+          <string notr="true">font-size: 10px;</string>
+         </property>
+         <attribute name="icon">
+          <iconset resource="../icons/IanniX.qrc">
+           <normaloff>:/general/res_icon_inspector_info.png</normaloff>:/general/res_icon_inspector_info.png</iconset>
+         </attribute>
+         <attribute name="title">
+          <string>INFOS</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="margin">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="typeLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">	color: white;
+	font: 12px;</string>
+            </property>
+            <property name="text">
+             <string>TRIGGER</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTabWidget" name="ssTabInfo">
+            <property name="styleSheet">
+             <string notr="true">QTabBar::tab {
+	min-height: 20px;
+}
+</string>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="ssTabInfoGeneral">
+             <attribute name="title">
+              <string>GENERAL</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_17">
+              <property name="spacing">
+               <number>3</number>
+              </property>
+              <property name="margin">
+               <number>10</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="widgetID" native="true">
+                <property name="statusTip">
+                 <string>Objects identification|An object in IanniX is defined by two identifiers:\n- the ID is a unique number in the score (two objects cannot have the same ID). IDs are used in sent messages to know who was the sender; they are used in received messages to control a targer a specific object\n- the group ID is a string allowing a group control of objects in received messages. In sent messages, it can also be used as a human readable ID.\n\nIf an object is disabled (&quot;active&quot; checkbox), it will not be used in the score (no sent messages).</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_20">
+                 <property name="spacing">
+                  <number>3</number>
+                 </property>
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_24">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="IDLabel">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>ID</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                     <property name="buddy">
+                      <cstring>newIdButton</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="newIdButton">
+                     <property name="minimumSize">
+                      <size>
+                       <width>206</width>
+                       <height>22</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>206</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Changes the object ID</string>
+                     </property>
+                     <property name="text">
+                      <string>ID</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_16">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_25">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="groupIdLabel">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>GROUP ID</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                     <property name="buddy">
+                      <cstring>newIdButton</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="groupIdButton">
+                     <property name="minimumSize">
+                      <size>
+                       <width>206</width>
+                       <height>22</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>206</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Changes the group ID</string>
+                     </property>
+                     <property name="text">
+                      <string>GROUP</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_17">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_28">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="activityLabel">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>ACTIVE</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                     <property name="buddy">
+                      <cstring>activityCheck</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="activityCheck">
+                     <property name="toolTip">
+                      <string>Enables or disables the object in the socre</string>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">padding-left: 2px;</string>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widgetStyle" native="true">
+                <property name="statusTip">
+                 <string>Objects style|Objects can have differents graphical behaviours:\n - you can change the colors and texture (images - only for triggers)\n - size or thickness of the object is customisable\n - a label can be set to add human readable information to the object</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_12">
+                 <property name="spacing">
+                  <number>3</number>
+                 </property>
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_26">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="sizeLabel2">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>THICKNESS / SIZE</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                     <property name="buddy">
+                      <cstring>sizeSpin</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QDoubleSpinBox" name="sizeSpin">
+                     <property name="minimumSize">
+                      <size>
+                       <width>80</width>
+                       <height>30</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Changes the tickness or size of objects</string>
+                     </property>
+                     <property name="suffix">
+                      <string notr="true"/>
+                     </property>
+                     <property name="decimals">
+                      <number>3</number>
+                     </property>
+                     <property name="minimum">
+                      <double>0.000000000000000</double>
+                     </property>
+                     <property name="maximum">
+                      <double>999999.000000000000000</double>
+                     </property>
+                     <property name="singleStep">
+                      <double>0.100000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_11">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>1</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_27">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="labelLabel">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>LABEL</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                     <property name="buddy">
+                      <cstring>labelLine</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="labelLine">
+                     <property name="minimumSize">
+                      <size>
+                       <width>200</width>
+                       <height>30</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>200</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Changes the label of objects</string>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_18">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>1</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_32">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="colorLabel1">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>COLOR
+if ACTIVE</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                     <property name="buddy">
+                      <cstring>colorCombo1</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="colorCombo1">
+                     <property name="minimumSize">
+                      <size>
+                       <width>203</width>
+                       <height>22</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>203</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Changes the color of active objects by using a color in the palette or a custom color</string>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QComboBox QAbstractItemView {
+	min-height: 100px;
+}</string>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QComboBox::AdjustToContents</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_14">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>1</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_31">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="colorLabel2">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>COLOR
+if INACTIVE</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                     <property name="buddy">
+                      <cstring>colorCombo1</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="colorCombo2">
+                     <property name="minimumSize">
+                      <size>
+                       <width>203</width>
+                       <height>22</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>203</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Changes the color of inactive objects by using a color in the palette or a custom color</string>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QComboBox QAbstractItemView {
+	min-height: 100px;
+}</string>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QComboBox::AdjustToContents</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_15">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>1</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_35">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="textureLabel1">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>TEXTURE
+if INACTIVE</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                     <property name="buddy">
+                      <cstring>colorCombo1</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="textureCombo1">
+                     <property name="minimumSize">
+                      <size>
+                       <width>203</width>
+                       <height>22</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>203</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Changes the texture (image) of active objects</string>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QComboBox QAbstractItemView {
+	min-height: 100px;
+}</string>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QComboBox::AdjustToContents</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_28">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>1</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_34">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="textureLabel2">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>TEXTURE
+if ACTIVE</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                     <property name="buddy">
+                      <cstring>colorCombo1</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="textureCombo2">
+                     <property name="minimumSize">
+                      <size>
+                       <width>203</width>
+                       <height>22</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>203</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Changes the texture (image) of inactive objects</string>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QComboBox QAbstractItemView {
+	min-height: 100px;
+}</string>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QComboBox::AdjustToContents</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_27">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>1</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>1</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ssTabInfoSpace">
+             <property name="statusTip">
+              <string>Objects and 3D space|Objects are positionned in a 3D space. These options allows you to control how objects interact with space:\n - absolute position\n - size of curves\n - playhead cursor size\n - curve trajectory points (manual or mathematical edition)</string>
+             </property>
+             <attribute name="title">
+              <string>3D SPACE</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <property name="margin">
+               <number>10</number>
+              </property>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_5">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="positionLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>3D POSITION
+(X / Y / Z)</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>positionX</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="positionX">
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the absolute X-position of object</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="positionY">
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the absolute Y-position of object</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="positionZ">
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the absolute Z-position of object</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_8">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_16">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="sizeLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>3D CURVE SIZE
+(W / H)</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>sizeWSpin</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="sizeWSpin">
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Resizes the object width</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>0.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="sizeHSpin">
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Resizes the object height</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>0.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_9">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_18">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="widthLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>CURSOR
+WIDTH / DEPTH</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>widthSpin</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="widthSpin">
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the width of cursor playhead</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="depthSpin">
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the depth of cursor playhead</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_25">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_17">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="pointsLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>CURVE
+POINTS</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pointsLists">
+                  <property name="minimumSize">
+                   <size>
+                    <width>206</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Click here to manually edit curve points</string>
+                  </property>
+                  <property name="text">
+                   <string>EDIT POINTS</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="gridLayout">
+                <property name="horizontalSpacing">
+                 <number>10</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>0</number>
+                </property>
+                <item row="0" column="0" rowspan="4">
+                 <widget class="QLabel" name="equationLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>CURVE
+EQUATION</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <spacer name="horizontalSpacer_24">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QSpinBox" name="equationPoints">
+                  <property name="toolTip">
+                   <string>Defines the number of points used to calculate the 3D mathematical equation</string>
+                  </property>
+                  <property name="suffix">
+                   <string> points</string>
+                  </property>
+                  <property name="prefix">
+                   <string>with a precision of </string>
+                  </property>
+                  <property name="minimum">
+                   <number>2</number>
+                  </property>
+                  <property name="maximum">
+                   <number>9999</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <spacer name="horizontalSpacer_26">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>35</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="3" column="1" colspan="2">
+                 <widget class="QPlainTextEdit" name="equationEdit">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>100</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the 3D mathematical equation of the curve</string>
+                  </property>
+                  <property name="plainText">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QWidget" name="equationType" native="true">
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="equationType0">
+                     <property name="text">
+                      <string>Cartesian coordinates (x, y, z)</string>
+                     </property>
+                     <property name="checked">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="equationType1">
+                     <property name="text">
+                      <string>Polar coordinates (r, phi, theta)</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>54</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ssTabInfoTime">
+             <property name="statusTip">
+              <string>Objects and time|Cursors moves according to time. You can set up:\n - speed of progression of cursors on curves\n - how cursors loops on curve (in terms of speed and position/time)\n - variation of speed (acceleration, multiple speeds according to loops)\n\n Last option is for triggers event duration. Typically, this duration is used for MIDI notes off (duration of note).</string>
+             </property>
+             <attribute name="title">
+              <string>TIME</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_16">
+              <property name="spacing">
+               <number>3</number>
+              </property>
+              <property name="margin">
+               <number>10</number>
+              </property>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_15">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="triggerOffLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>TRIGGER
+DURATION</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>triggerOffSpin</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="triggerOffSpin">
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the duration of a trigger event</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_6">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_21">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="cursorSpeedLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>CURSOR SPEED
+or LENGTH</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>speedSpin</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="speedSpin">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the cursor speed in terms of factor of global playback speed (1.00 = score playback speed)</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"/>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="cursorSpeedLabel_2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>10</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>10</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string notr="true">=</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="cursorLengthSpin">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the duration of one run of the cursor on its curve</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="cursorSpeedLock">
+                  <property name="toolTip">
+                   <string>Locks cursor speed to a specific duration on curve (even if curve length changes in the future)</string>
+                  </property>
+                  <property name="text">
+                   <string>LOCK</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_23">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="speedFLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>CURSOR
+MASTER SPEED</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>speedFSpin</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="speedFSpin">
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Applies a last factor on cursor speed (1.00 = no changes)</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"/>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_10">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_19">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="patternLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>CURSOR
+LOOP PATTERN</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>patternLine</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="patternLine">
+                  <property name="minimumSize">
+                   <size>
+                    <width>200</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Defines the &quot;speed pattern&quot; of the cursor. Speeds are applied consecutively on each loop or run of the cursor on the curve.</string>
+                  </property>
+                  <property name="editable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="sizeAdjustPolicy">
+                   <enum>QComboBox::AdjustToContents</enum>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>1 0 - One run on curve</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1 - Loop on curve</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1 -1 0 - Single roundtrip on curve </string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1 -1 - Loop roundtrip on curve </string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1 2 0 - One normal run, another at double speed</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_12">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_20">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="easingLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>CURSOR
+EASING CURVE</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>patternLine</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="easingCombo">
+                  <property name="minimumSize">
+                   <size>
+                    <width>200</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Manages cursor acceleration on the curve (beta)</string>
+                  </property>
+                  <property name="sizeAdjustPolicy">
+                   <enum>QComboBox::AdjustToContents</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_13">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_22">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="offsetLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>CURSOR
+OFFSETS</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>offsetInitialSpin</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_15">
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_3">
+                    <property name="spacing">
+                     <number>5</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="offsetLabel1">
+                      <property name="minimumSize">
+                       <size>
+                        <width>75</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>INITIALLY STARTS FROM</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QDoubleSpinBox" name="offsetInitialSpin">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>80</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Changes initial position/time of the cursor on the curve for the first run. Negative value is a delay before starting the run.</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"> s</string>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="offsetLabel2_2">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>35</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>35</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>THEN</string>
+                      </property>
+                      <property name="wordWrap">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_2">
+                    <property name="spacing">
+                     <number>5</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="offsetLabel2">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>70</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>LOOPS FROM</string>
+                      </property>
+                      <property name="wordWrap">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QDoubleSpinBox" name="offsetStartSpin">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>80</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Changes loop starting position/time of the cursor on the curve for each run</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"> s</string>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="offsetLabel3">
+                      <property name="minimumSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>20</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>TO</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QDoubleSpinBox" name="offsetEndSpin">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>80</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Changes loop ending position/time of the cursor on the curve for each run</string>
+                      </property>
+                      <property name="specialValueText">
+                       <string>the end</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true">s</string>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>0.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>9999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>1</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>96</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ssTabInfoMessage">
+             <property name="statusTip">
+              <string>Objects and messages|Cursors emit periodically messages containing especially their position on score. This panel allows you to set up some options:\n - you can edit the messages (protocol, what kind of values are sent...) and the amount of messages sent each second\n - you can configure the mapping of coordinates. This fundamental option makes a translation between coordinates in score 3D space to the desired value ranges needed by the receiver (for example, you can translate coordinates to frequencies, or coordinates to MIDI velocities)\n\n Triggers will also emit messages each time cursor playheads will hit them.</string>
+             </property>
+             <attribute name="title">
+              <string>MESSAGES</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <property name="spacing">
+               <number>3</number>
+              </property>
+              <property name="margin">
+               <number>10</number>
+              </property>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <property name="spacing">
+                 <number>20</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="messagesButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>120</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>120</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the object sent messages</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">margin: 0px;</string>
+                  </property>
+                  <property name="text">
+                   <string>EDIT MESSAGE(S)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="messagesSpin">
+                  <property name="minimumSize">
+                   <size>
+                    <width>160</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the amount of messages sent by objects (small values may be CPU and network intensive)</string>
+                  </property>
+                  <property name="specialValueText">
+                   <string>Messages are sent immediatly</string>
+                  </property>
+                  <property name="prefix">
+                   <string>Messages are sent each </string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> ms</string>
+                  </property>
+                  <property name="decimals">
+                   <number>0</number>
+                  </property>
+                  <property name="minimum">
+                   <double>0.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>1.000000000000000</double>
+                  </property>
+                  <property name="value">
+                   <double>0.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_14">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <spacer name="verticalSpacer_6">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                     <enum>QSizePolicy::Fixed</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="cursorSourceMode" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_11">
+                     <property name="spacing">
+                      <number>5</number>
+                     </property>
+                     <property name="margin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QRadioButton" name="cursorSourceMode0">
+                       <property name="toolTip">
+                        <string>Changes the cursor mapping to match the curve bounding rectangle</string>
+                       </property>
+                       <property name="text">
+                        <string>Mapped on curves bounding rectangle</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QRadioButton" name="cursorSourceMode1">
+                       <property name="toolTip">
+                        <string>Changes the cursor mapping to match the curve+cursor bounding rectangle</string>
+                       </property>
+                       <property name="text">
+                        <string>Mapped on curves bounding rectangle including cursor size</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QRadioButton" name="cursorSourceMode2">
+                       <property name="toolTip">
+                        <string>Changes the cursor mapping to match the score bounding rectangle</string>
+                       </property>
+                       <property name="text">
+                        <string>Mapped on global score bounding rectangle</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QRadioButton" name="cursorSourceMode3">
+                       <property name="toolTip">
+                        <string>Changes the cursor mapping to your own coordinates mapping</string>
+                       </property>
+                       <property name="text">
+                        <string>Custom mapping</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_5">
+                    <property name="bottomMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="horizontalSpacing">
+                     <number>5</number>
+                    </property>
+                    <property name="verticalSpacing">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="cursorTargetLabel1">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>X-COORDINATE
+GOING FROM</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QDoubleSpinBox" name="cursorSourceX1">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets starting range for X absolute coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"> s</string>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QLabel" name="cursorTargetLabel2">
+                      <property name="minimumSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>15</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>TO</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <widget class="QDoubleSpinBox" name="cursorSourceX2">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets starting range for X absolute coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"> s</string>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="cursorTargetLabel3">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>X-OUTPUT FROM</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QDoubleSpinBox" name="cursorTargetX1">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets mapped range for X coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"/>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QLabel" name="cursorTargetLabel4">
+                      <property name="minimumSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>15</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>TO</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="3">
+                     <widget class="QDoubleSpinBox" name="cursorTargetX2">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets mapped range for X coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"/>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="4">
+                     <spacer name="horizontalSpacer_19">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_4">
+                    <property name="bottomMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="horizontalSpacing">
+                     <number>5</number>
+                    </property>
+                    <property name="verticalSpacing">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="cursorTargetLabel5">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Y-COORDINATE
+GOING FROM</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QDoubleSpinBox" name="cursorSourceY2">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets starting range for Y absolute coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"> s</string>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QLabel" name="cursorTargetLabel6">
+                      <property name="minimumSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>15</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>TO</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <widget class="QDoubleSpinBox" name="cursorSourceY1">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets starting range for Y absolute coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"> s</string>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="cursorTargetLabel7">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Y-OUTPUT FROM</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QDoubleSpinBox" name="cursorTargetY2">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets mapped range for Y coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"/>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QLabel" name="cursorTargetLabel8">
+                      <property name="minimumSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>15</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>TO</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="3">
+                     <widget class="QDoubleSpinBox" name="cursorTargetY1">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets mapped range for Y coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"/>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="4">
+                     <spacer name="horizontalSpacer_20">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_2">
+                    <property name="horizontalSpacing">
+                     <number>5</number>
+                    </property>
+                    <property name="verticalSpacing">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="cursorTargetLabel11">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Z-COORDINATE
+GOING FROM</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QDoubleSpinBox" name="cursorSourceZ1">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets starting range for Z absolute coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"> s</string>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QLabel" name="cursorTargetLabel13">
+                      <property name="minimumSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>15</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>TO</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <widget class="QDoubleSpinBox" name="cursorSourceZ2">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets starting range for Z absolute coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"> s</string>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="cursorTargetLabel12">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Z-OUTPUT FROM</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QDoubleSpinBox" name="cursorTargetZ1">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets mapped range for Z coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"/>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QLabel" name="cursorTargetLabel14">
+                      <property name="minimumSize">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>15</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>TO</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="3">
+                     <widget class="QDoubleSpinBox" name="cursorTargetZ2">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Sets mapped range for Z coordinates</string>
+                      </property>
+                      <property name="suffix">
+                       <string notr="true"/>
+                      </property>
+                      <property name="decimals">
+                       <number>3</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-999999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>999999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="4">
+                     <spacer name="horizontalSpacer_23">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>93</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ssTabRessource">
+             <property name="statusTip">
+              <string>Score ressources|These two lists allows you to add external file (image file for triggers appearance or score background) or to create a color palette for your score. Each ressource is identified by a unique string. Once edited, your new ressources will be available in the first tab if you want to apply them on objects.</string>
+             </property>
+             <attribute name="title">
+              <string>RESSOURCES</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_14">
+              <property name="spacing">
+               <number>10</number>
+              </property>
+              <property name="margin">
+               <number>10</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="ressourcesTexturesLabel">
+                <property name="text">
+                 <string>TEXTURES</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="UiTreeView" name="ressourcesTextures" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Loads/initializes textures (images) for the current score</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="ressourcesColorsLabel">
+                <property name="text">
+                 <string>COLORS</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="UiTreeView" name="ressourcesColors" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Loads/initializes global colors (color palette) for the current score</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>168</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tabView">
+         <property name="statusTip">
+          <string>Objects panel|This panel allows you to control the objects behaviour regarding to the score. You can mute some of them, turn objects in solo mode…</string>
+         </property>
+         <attribute name="icon">
+          <iconset resource="../icons/IanniX.qrc">
+           <normaloff>:/general/res_icon_inspector_view.png</normaloff>:/general/res_icon_inspector_view.png</iconset>
+         </attribute>
+         <attribute name="title">
+          <string>OBJECTS</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <property name="margin">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QSplitter" name="splitter_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <widget class="QWidget" name="layoutWidget4">
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QTreeWidget" name="ccView">
+                <property name="toolTip">
+                 <string>Lists all objects of the score</string>
+                </property>
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::ExtendedSelection</enum>
+                </property>
+                <property name="sortingEnabled">
+                 <bool>true</bool>
+                </property>
+                <property name="animated">
+                 <bool>true</bool>
+                </property>
+                <attribute name="headerShowSortIndicator" stdset="0">
+                 <bool>true</bool>
+                </attribute>
+                <column>
+                 <property name="text">
+                  <string>TYPE</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>M</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>S</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>ID</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>GROUP ID</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_6">
+                <property name="spacing">
+                 <number>15</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="unmuteObjects">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Switch on all objects</string>
+                  </property>
+                  <property name="text">
+                   <string>Switch on all objects</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="unsoloObjects">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Disable solo for all objects</string>
+                  </property>
+                  <property name="text">
+                   <string>Disable solo for all objects</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <property name="spacing">
+                 <number>15</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="unmuteGroups">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Switch on all groups</string>
+                  </property>
+                  <property name="text">
+                   <string>Switch on all groups</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="unsoloGroups">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Disable solo for all groups</string>
+                  </property>
+                  <property name="text">
+                   <string>Disable solo for all groups</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QLabel" name="followIdLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>CAMERA FOLLOWS OBJECT ID</string>
+              </property>
+              <property name="buddy">
+               <cstring>followId</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="followId">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>80</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Camera point of view can be controled by an object. Type here the ID of this object.</string>
+              </property>
+              <property name="specialValueText">
+               <string>no objects</string>
+              </property>
+              <property name="minimum">
+               <number>-1</number>
+              </property>
+              <property name="maximum">
+               <number>999999</number>
+              </property>
+              <property name="value">
+               <number>-1</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="viewCurveOpacityCheck">
+            <property name="toolTip">
+             <string>Gives a small opacity on curves which has no cursor running on</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font: 10px;</string>
+            </property>
+            <property name="text">
+             <string>LIGHT OFF UNUSED CURVES</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tabConfig">
+         <attribute name="icon">
+          <iconset resource="../icons/IanniX.qrc">
+           <normaloff>:/general/res_icon_inspector_osc.png</normaloff>:/general/res_icon_inspector_osc.png</iconset>
+         </attribute>
+         <attribute name="title">
+          <string>CONFIG</string>
+         </attribute>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>20</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="QTabWidget" name="ssTabConfig">
+            <property name="styleSheet">
+             <string notr="true">QTabBar::tab {
+	min-height: 20px;
+}
+</string>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="ssTabConfigLog">
+             <attribute name="title">
+              <string>MESSAGE LOG</string>
+             </attribute>
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <property name="margin">
+               <number>5</number>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="spaceForMessageLog">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ssTabConfigNetwork">
+             <attribute name="title">
+              <string>NETWORK</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_19">
+              <property name="spacing">
+               <number>10</number>
+              </property>
+              <property name="margin">
+               <number>10</number>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="ssTabConfigNetworkLayout">
+                <property name="spacing">
+                 <number>20</number>
+                </property>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_10">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>232</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ssTabConfigMIDI">
+             <attribute name="title">
+              <string>MIDI</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_18">
+              <property name="spacing">
+               <number>10</number>
+              </property>
+              <property name="margin">
+               <number>10</number>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="ssTabConfigMIDILayout">
+                <property name="spacing">
+                 <number>20</number>
+                </property>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>247</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ssTabConfigArduino">
+             <attribute name="title">
+              <string>ARDUINO</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <property name="spacing">
+               <number>10</number>
+              </property>
+              <property name="margin">
+               <number>10</number>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="ssTabConfigArduinoLayout">
+                <property name="spacing">
+                 <number>20</number>
+                </property>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>339</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ssTabConfigSyphon">
+             <attribute name="title">
+              <string>SYPHON &amp;&amp; RECURSIVE</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_21">
+              <property name="spacing">
+               <number>10</number>
+              </property>
+              <property name="margin">
+               <number>10</number>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="ssTabConfigSyphonLayout">
+                <property name="spacing">
+                 <number>20</number>
+                </property>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_11">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>339</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="mouseLabel">
+          <property name="toolTip">
+           <string>Current mouse position on score</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 10px &quot;Arial&quot;;
+</string>
+          </property>
+          <property name="text">
+           <string>MOUSE</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="zoomLabel">
+          <property name="toolTip">
+           <string>Current score zoom</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 10px &quot;Arial&quot;;
+</string>
+          </property>
+          <property name="text">
+           <string>ZOOM</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>UiTreeView</class>
+   <extends>QWidget</extends>
+   <header>items/uitreeview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>tab</tabstop>
+  <tabstop>newIdButton</tabstop>
+  <tabstop>groupIdButton</tabstop>
+  <tabstop>sizeSpin</tabstop>
+  <tabstop>labelLine</tabstop>
+  <tabstop>activityCheck</tabstop>
+  <tabstop>colorCombo1</tabstop>
+  <tabstop>colorCombo2</tabstop>
+  <tabstop>ccView</tabstop>
+  <tabstop>unmuteObjects</tabstop>
+  <tabstop>unsoloObjects</tabstop>
+  <tabstop>unmuteGroups</tabstop>
+  <tabstop>unsoloGroups</tabstop>
+  <tabstop>followId</tabstop>
+  <tabstop>viewCurveOpacityCheck</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../icons/IanniX.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>tab</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionTabChange(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>241</x>
+     <y>42</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>221</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>groupIdButton</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfoGroup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>33</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>activityCheck</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>186</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelLine</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>135</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>391</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ccView</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCC()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>230</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelLine</sender>
+   <signal>returnPressed()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>135</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>375</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>colorCombo1</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionColor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>375</x>
+     <y>122</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>colorCombo2</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionColor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>322</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sizeSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>135</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>375</x>
+     <y>43</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ccView</sender>
+   <signal>itemClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCC(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>187</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>newIdButton</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfoID()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>375</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unmuteObjects</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>55</x>
+     <y>505</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unsoloObjects</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>505</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unsoloGroups</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>505</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unmuteGroups</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>78</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>followId</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>89</x>
+     <y>73</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>34</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>positionX</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>178</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>positionY</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>135</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>positionZ</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sizeWSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>206</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sizeHSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>170</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widthSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>depthSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>triggerOffSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>126</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorLengthSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>84</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>speedSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>84</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>377</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>speedFSpin</sender>
+   <signal>valueChanged(QString)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>462</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternLine</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>455</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>patternLine</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>411</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>easingCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>138</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>446</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>offsetInitialSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>476</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>offsetStartSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>468</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>offsetEndSpin</sender>
+   <signal>valueChanged(QString)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>436</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>messagesButton</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionMessages()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>312</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>messagesSpin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceX1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>139</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceX2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>48</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorTargetX1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>310</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorTargetX2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>310</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>152</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceY2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>346</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>362</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceY1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>346</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorTargetY2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>376</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>440</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorTargetY1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>376</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>242</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceZ1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>412</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>490</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceZ2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>412</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>427</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorTargetZ1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>442</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorTargetZ2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>442</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>444</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSpeedLock</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>58</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationEdit</sender>
+   <signal>textChanged()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>602</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pointsLists</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>139</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>553</x>
+     <y>164</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationPoints</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>560</x>
+     <y>203</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textureCombo1</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionTexture()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>493</x>
+     <y>296</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textureCombo2</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionTexture()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>503</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationType0</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>497</x>
+     <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationType1</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>223</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceMode0</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>256</x>
+     <y>183</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>488</x>
+     <y>151</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceMode1</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>267</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>488</x>
+     <y>103</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceMode2</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>209</x>
+     <y>218</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>519</x>
+     <y>127</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cursorSourceMode3</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>118</x>
+     <y>239</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>512</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>actionTabChange(int)</slot>
+  <slot>actionViewChange()</slot>
+  <slot>actionCC()</slot>
+  <slot>actionInfo()</slot>
+  <slot>actionInfoGroup()</slot>
+  <slot>actionMessages()</slot>
+  <slot>actionGtext(QPoint)</slot>
+  <slot>actionNetwork()</slot>
+  <slot>actionColor()</slot>
+  <slot>actionInfoID()</slot>
+  <slot>actionCCButton()</slot>
+  <slot>actionCC(QTreeWidgetItem*,int)</slot>
+  <slot>actionTexture()</slot>
+ </slots>
+</ui>

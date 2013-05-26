@@ -19,7 +19,7 @@ void Message::setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine, cons
     QString scheme = urlMessage.scheme().toLower();
 
     if(aliases.contains(urlMessage.host().toLower()))
-        urlMessage.setHost(aliases.value(urlMessage.host().toLower()).val().replace(" ", "_").replace("/", "_").toLower());
+        urlMessage.setHost(qPrintable(aliases.value(urlMessage.host().toLower()).val().replace(" ", "_").replace("/", "_").toLower().trimmed()));
     urlMessageString = qPrintable(urlMessage.toString());
     address.clear();
     typetag.clear();

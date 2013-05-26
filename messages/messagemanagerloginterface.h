@@ -108,8 +108,8 @@ public:
     QString ihmFeedbackNok, ihmFeedbackOk;
 public:
     NetworkInterface(QWidget *parent = 0) : QWidget(parent) {
-        ihmFeedbackOk  = "QAbstractSpinBox, QPlainTextEdit {background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));}";
-        ihmFeedbackNok = "QAbstractSpinBox, QPlainTextEdit {background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));}";
+        ihmFeedbackOk  = "QAbstractSpinBox, QComboBox, QPlainTextEdit {background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(151, 209, 38, 255), stop:1 rgba(86, 170, 28, 255));}";
+        ihmFeedbackNok = "QAbstractSpinBox, QComboBox, QPlainTextEdit {background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));}";
     }
 public:
     virtual void clear() {}

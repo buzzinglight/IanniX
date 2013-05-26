@@ -73,6 +73,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionZoom_out,          SIGNAL(triggered()), ui->render, SLOT(zoomOut()));
     connect(ui->actionZoom_initial,      SIGNAL(triggered()), ui->render, SLOT(zoomInitial()));
     connect(ui->actionAbout,             SIGNAL(triggered()), about, SLOT(show()));
+    connect(ui->actionPreferences,       SIGNAL(triggered()), ui->inspector, SLOT(showConfigTab()));
     connect(ui->actionQuit,              SIGNAL(triggered()), SLOT(close()));
     connect(ui->actionToggle_Inspector,  SIGNAL(triggered()), SLOT(showInspector()));
     connect(ui->actionToggle_Transport,  SIGNAL(triggered()), SLOT(showTransport()));
@@ -89,11 +90,11 @@ UiView::UiView(QWidget *parent) :
     Global::allowSelectionTriggers.setAction(ui->actionAllow_triggers_selection, "guiAllowSelectionTriggers");
     Global::allowPlaySelected     .setAction(ui->actionPlaySelected,             "guiAllowPlaySelected");
 
-    connect(ui->actionFullscreen, SIGNAL(triggered()), SLOT(goToFullscreen()));
-    connect(ui->actionPerformance, SIGNAL(triggered()), SLOT(actionPerformance()));
+    connect(ui->actionFullscreen,           SIGNAL(triggered()), SLOT(goToFullscreen()));
+    connect(ui->actionPerformance,          SIGNAL(triggered()), SLOT(actionPerformance()));
 
-    connect(ui->actionPlay_pause, SIGNAL(triggered()), SLOT(actionPlay_pause()));
-    connect(ui->actionFast_rewind, SIGNAL(triggered()), SLOT(actionFast_rewind()));
+    connect(ui->actionPlay_pause,           SIGNAL(triggered()), SLOT(actionPlay_pause()));
+    connect(ui->actionFast_rewind,          SIGNAL(triggered()), SLOT(actionFast_rewind()));
 
     connect(ui->actionDrawFreeCurve,        SIGNAL(triggered()), SLOT(actionDrawFreeCurve()));
     connect(ui->actionDrawPointCurve,       SIGNAL(triggered()), SLOT(actionDrawPointCurve()));
@@ -106,27 +107,27 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionAddMathCurveSimple,   SIGNAL(triggered()), SLOT(actionAddMathCurveSimple()));
     connect(ui->actionAddTimeline,          SIGNAL(triggered()), SLOT(actionAddTimeline()));
 
-    connect(ui->actionShowEditor,     SIGNAL(triggered()), SLOT(showEditor()));
-    connect(ui->actionShowTimer,      SIGNAL(triggered()), SLOT(showTimer()));
-    connect(ui->actionReloadScript,   SIGNAL(triggered()), SLOT(actionReloadScript()));
+    connect(ui->actionShowEditor,           SIGNAL(triggered()), SLOT(showEditor()));
+    connect(ui->actionShowTimer,            SIGNAL(triggered()), SLOT(showTimer()));
+    connect(ui->actionReloadScript,         SIGNAL(triggered()), SLOT(actionReloadScript()));
 
-    connect(ui->action10Seconds, SIGNAL(triggered()), SLOT(gridChange()));
-    connect(ui->action1second, SIGNAL(triggered()), SLOT(gridChange()));
-    connect(ui->action500Milliseconds, SIGNAL(triggered()), SLOT(gridChange()));
-    connect(ui->action100Milliseconds, SIGNAL(triggered()), SLOT(gridChange()));
-    connect(ui->action10Milliseconds, SIGNAL(triggered()), SLOT(gridChange()));
-    connect(ui->actionCustomValue, SIGNAL(triggered()), SLOT(gridChange()));
+    connect(ui->action10Seconds,            SIGNAL(triggered()), SLOT(gridChange()));
+    connect(ui->action1second,              SIGNAL(triggered()), SLOT(gridChange()));
+    connect(ui->action500Milliseconds,      SIGNAL(triggered()), SLOT(gridChange()));
+    connect(ui->action100Milliseconds,      SIGNAL(triggered()), SLOT(gridChange()));
+    connect(ui->action10Milliseconds,       SIGNAL(triggered()), SLOT(gridChange()));
+    connect(ui->actionCustomValue,          SIGNAL(triggered()), SLOT(gridChange()));
 
-    connect(ui->actionAlign_bottom,  SIGNAL(triggered()), SLOT(actionAlign_bottom()));
-    connect(ui->actionAlign_center,  SIGNAL(triggered()), SLOT(actionAlign_center()));
-    connect(ui->actionAlign_left,    SIGNAL(triggered()), SLOT(actionAlign_left()));
-    connect(ui->actionAlign_middle,  SIGNAL(triggered()), SLOT(actionAlign_middle()));
-    connect(ui->actionAlign_right,   SIGNAL(triggered()), SLOT(actionAlign_right()));
-    connect(ui->actionAlign_top,     SIGNAL(triggered()), SLOT(actionAlign_top()));
-    connect(ui->actionDistributeH,   SIGNAL(triggered()), SLOT(actionDistributeH()));
-    connect(ui->actionDistributeV,   SIGNAL(triggered()), SLOT(actionDistributeV()));
-    connect(ui->actionAlign_circle,  SIGNAL(triggered()), SLOT(actionAlign_circle()));
-    connect(ui->actionAlign_ellipse, SIGNAL(triggered()), SLOT(actionAlign_ellipse()));
+    connect(ui->actionAlign_bottom,         SIGNAL(triggered()), SLOT(actionAlign_bottom()));
+    connect(ui->actionAlign_center,         SIGNAL(triggered()), SLOT(actionAlign_center()));
+    connect(ui->actionAlign_left,           SIGNAL(triggered()), SLOT(actionAlign_left()));
+    connect(ui->actionAlign_middle,         SIGNAL(triggered()), SLOT(actionAlign_middle()));
+    connect(ui->actionAlign_right,          SIGNAL(triggered()), SLOT(actionAlign_right()));
+    connect(ui->actionAlign_top,            SIGNAL(triggered()), SLOT(actionAlign_top()));
+    connect(ui->actionDistributeH,          SIGNAL(triggered()), SLOT(actionDistributeH()));
+    connect(ui->actionDistributeV,          SIGNAL(triggered()), SLOT(actionDistributeV()));
+    connect(ui->actionAlign_circle,         SIGNAL(triggered()), SLOT(actionAlign_circle()));
+    connect(ui->actionAlign_ellipse,        SIGNAL(triggered()), SLOT(actionAlign_ellipse()));
 
 
 #ifdef Q_OS_MAC
