@@ -119,9 +119,6 @@
        <property name="toolTip">
         <string>Changes the port for incoming OpenSoundControl messages</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="minimum">
         <number>1024</number>
        </property>
@@ -196,9 +193,6 @@
        <property name="toolTip">
         <string>Changes the default IP address for all outgoing IP messages</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="inputMask">
         <string notr="true">000.000.000.000;_</string>
        </property>
@@ -269,9 +263,6 @@ BUNDLE ON</string>
        </property>
        <property name="toolTip">
         <string>All the messages matching this IP + port will be packed in an OpenSoundControl bundle</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
        </property>
        <property name="inputMask">
         <string notr="true">000.000.000.000;_</string>

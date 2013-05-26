@@ -153,6 +153,14 @@ QHeaderView::section {
 QTreeView::item {
 	min-height: 20px;
 }
+QTreeView::branch:has-children:!has-siblings:closed, QTreeView::branch:closed:has-children:has-siblings {
+	border-image: 	none;
+	image: 					url(:/items/res_tree_close.png);
+}
+QTreeView::branch:open:has-children:!has-siblings, QTreeView::branch:open:has-children:has-siblings  {
+	border-image: 	none;
+	image: 					url(:/items/res_tree_open.png);
+}
 
 
 
@@ -331,9 +339,6 @@ QDialogButtonBox QPushButton {
       </property>
       <item>
        <widget class="QTabWidget" name="tab">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -374,9 +379,6 @@ QDialogButtonBox QPushButton {
          </layout>
         </widget>
         <widget class="QWidget" name="tabInfo">
-         <property name="styleSheet">
-          <string notr="true">font-size: 10px;</string>
-         </property>
          <attribute name="icon">
           <iconset resource="../icons/IanniX.qrc">
            <normaloff>:/general/res_icon_inspector_info.png</normaloff>:/general/res_icon_inspector_info.png</iconset>
@@ -397,8 +399,7 @@ QDialogButtonBox QPushButton {
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">	color: white;
-	font: 12px;</string>
+             <string notr="true">color: white; font: 12px;</string>
             </property>
             <property name="text">
              <string>TRIGGER</string>
@@ -408,9 +409,7 @@ QDialogButtonBox QPushButton {
           <item>
            <widget class="QTabWidget" name="ssTabInfo">
             <property name="styleSheet">
-             <string notr="true">QTabBar::tab {
-	min-height: 20px;
-}
+             <string notr="true">QTabBar::tab { min-height: 20px; }
 </string>
             </property>
             <property name="currentIndex">
@@ -3764,9 +3763,6 @@ GOING FROM</string>
             <property name="toolTip">
              <string>Gives a small opacity on curves which has no cursor running on</string>
             </property>
-            <property name="styleSheet">
-             <string notr="true">font: 10px;</string>
-            </property>
             <property name="text">
              <string>LIGHT OFF UNUSED CURVES</string>
             </property>
@@ -3974,10 +3970,6 @@ GOING FROM</string>
           <property name="toolTip">
            <string>Current mouse position on score</string>
           </property>
-          <property name="styleSheet">
-           <string notr="true">font: 10px &quot;Arial&quot;;
-</string>
-          </property>
           <property name="text">
            <string>MOUSE</string>
           </property>
@@ -3987,10 +3979,6 @@ GOING FROM</string>
          <widget class="QLabel" name="zoomLabel">
           <property name="toolTip">
            <string>Current score zoom</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">font: 10px &quot;Arial&quot;;
-</string>
           </property>
           <property name="text">
            <string>ZOOM</string>

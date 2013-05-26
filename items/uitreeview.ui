@@ -73,10 +73,16 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
-      <number>20</number>
+      <number>10</number>
+     </property>
+     <property name="topMargin">
+      <number>3</number>
      </property>
      <property name="rightMargin">
-      <number>15</number>
+      <number>10</number>
+     </property>
+     <property name="bottomMargin">
+      <number>3</number>
      </property>
      <item>
       <spacer name="horizontalSpacer">

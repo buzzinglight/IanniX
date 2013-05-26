@@ -11,7 +11,7 @@ UiSplashScreen::UiSplashScreen(const QPixmap &_pixmap) :
 
     QFont textFont("Arial");
     textFont.setPixelSize(13);
-    showMessage(tr("version") + " " + QString(QCoreApplication::applicationVersion()) + " " + tr("beta"), textFont, Qt::AlignHCenter | Qt::AlignBottom, QColor(255, 255, 255, 150));
+    showMessage(tr("version") + " " + QString(QCoreApplication::applicationVersion()) + " " + tr("beta"), textFont, Qt::AlignCenter, QColor(255, 255, 255, 150));
 
     show();
     QCoreApplication::processEvents();
@@ -26,8 +26,7 @@ void UiSplashScreen::showMessage(const QString& _message, const QFont &_font, in
 }
 
 void UiSplashScreen::paintEvent(QPaintEvent*) {
-    QRect textRect(rect());
-    textRect.adjust(textRect.width()*0.075, textRect.height()*0.075, -textRect.width()*0.075, -textRect.height()*0.075);
+    QRect textRect(QRect(QPoint(115, 435), QSize(285, 70)));
 
     QPainter painter(this);
     painter.drawPixmap(rect(), pixmap);

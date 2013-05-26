@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>IanniX</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>10</number>
@@ -25,9 +22,6 @@
    </property>
    <item>
     <widget class="QLabel" name="scriptTitle">
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="text">
       <string>PLEASE ENTER VALUES TO LAUNCH SCRIPT:</string>
      </property>

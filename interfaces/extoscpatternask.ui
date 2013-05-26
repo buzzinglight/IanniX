@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>IanniX — Message editor</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
     <number>5</number>

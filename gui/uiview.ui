@@ -153,6 +153,14 @@ QHeaderView::section {
 QTreeView::item {
 	min-height: 20px;
 }
+QTreeView::branch:has-children:!has-siblings:closed, QTreeView::branch:closed:has-children:has-siblings {
+	border-image: 	none;
+	image: 					url(:/items/res_tree_close.png);
+}
+QTreeView::branch:open:has-children:!has-siblings, QTreeView::branch:open:has-children:has-siblings  {
+	border-image: 	none;
+	image: 					url(:/items/res_tree_open.png);
+}
 
 
 
@@ -311,9 +319,6 @@ QDialogButtonBox QPushButton {
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="spacing">
      <number>0</number>
@@ -343,9 +348,6 @@ QDialogButtonBox QPushButton {
        <property name="statusTip">
         <string>Performance preview|While in performance mode, you can take benefits of the multiple display outputs. For example, you can make a video projection of the score on the second video output while keeping a preview and a control of your score on your laptop main display.</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <layout class="QVBoxLayout" name="verticalLayout" stretch="0,300">
         <property name="spacing">
          <number>0</number>
@@ -356,37 +358,12 @@ QDialogButtonBox QPushButton {
            <number>15</number>
           </property>
           <item>
-           <widget class="QLabel" name="performanceModeLabel">
-            <property name="minimumSize">
-             <size>
-              <width>200</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font: 75 11pt &quot;Arial&quot;;</string>
-            </property>
-            <property name="text">
-             <string>PERFORMANCE MODE</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QCheckBox" name="performancePreview">
             <property name="statusTip">
              <string>Allows you to keep a video thumbnail in the IanniX main window</string>
             </property>
             <property name="text">
-             <string>PREVIEW</string>
+             <string>REFRESH THIS PREVIEW</string>
             </property>
             <property name="checked">
              <bool>true</bool>

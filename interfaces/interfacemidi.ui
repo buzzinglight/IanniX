@@ -219,12 +219,6 @@ SYNCHRONIZATION</string>
          <property name="toolTip">
           <string>Changes the BPM of the score (used by clock synchronization)</string>
          </property>
-         <property name="statusTip">
-          <string/>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
          <property name="suffix">
           <string/>
          </property>

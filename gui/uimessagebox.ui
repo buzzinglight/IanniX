@@ -7,14 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>297</width>
-    <height>168</height>
+    <height>203</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>IanniX</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true"/>
   </property>
   <property name="modal">
    <bool>true</bool>

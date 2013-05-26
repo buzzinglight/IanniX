@@ -165,6 +165,14 @@ QHeaderView::section {
 QTreeView::item {
 	min-height: 20px;
 }
+QTreeView::branch:has-children:!has-siblings:closed, QTreeView::branch:closed:has-children:has-siblings {
+	border-image: 	none;
+	image: 					url(:/items/res_tree_close.png);
+}
+QTreeView::branch:open:has-children:!has-siblings, QTreeView::branch:open:has-children:has-siblings  {
+	border-image: 	none;
+	image: 					url(:/items/res_tree_open.png);
+}
 
 
 
@@ -361,9 +369,6 @@ QDialogButtonBox QPushButton {
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -372,7 +377,7 @@ QDialogButtonBox QPushButton {
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <property name="spacing">
-          <number>15</number>
+          <number>10</number>
          </property>
          <property name="leftMargin">
           <number>12</number>
@@ -490,6 +495,9 @@ QDialogButtonBox QPushButton {
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <property name="leftMargin">
           <number>6</number>
          </property>
@@ -650,9 +658,6 @@ QDialogButtonBox QPushButton {
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -787,9 +792,6 @@ QDialogButtonBox QPushButton {
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
         </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>

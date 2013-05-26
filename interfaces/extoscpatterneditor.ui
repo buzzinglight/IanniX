@@ -254,13 +254,26 @@ QSplitter::handle:vertical     		{	height: 4px; }
             <property name="toolTip">
              <string>Clears the message</string>
             </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
             <property name="text">
              <string>X</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>10</width>
+              <height>15</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item>
            <spacer name="verticalSpacer">
@@ -294,9 +307,6 @@ QSplitter::handle:vertical     		{	height: 4px; }
             </property>
             <property name="toolTip">
              <string>Learns a message by copying next received message</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
             </property>
             <property name="text">
              <string>learn</string>
@@ -728,9 +738,6 @@ QSplitter::handle:vertical     		{	height: 4px; }
             </property>
             <property name="toolTip">
              <string>Clears the value</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
             </property>
             <property name="text">
              <string>X</string>

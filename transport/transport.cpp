@@ -168,16 +168,22 @@ void TransportCpu::run() {
         Transport::perfCpu = 0;
         Transport::perfMem = 0;
 #else
-        QProcess systemCommand1, systemCommand2;
-        systemCommand1.setStandardOutputProcess(&systemCommand2);
-        systemCommand1.start("ps", QStringList() << "-eo pid,pcpu,pmem,command");
-        systemCommand1.waitForFinished();
-        systemCommand2.start("grep", QStringList() << QString::number(QCoreApplication::applicationPid()));
-        systemCommand2.waitForFinished();
-        QStringList columns = QString(systemCommand2.readAllStandardOutput()).remove("\n").split(" ", QString::SkipEmptyParts);
-        if(columns.count() >= 2) {
-            Transport::perfCpu = columns.at(1).toDouble();
-            Transport::perfMem = columns.at(2).toDouble();
+        QProcess process;
+        process.start("ps", QStringList() << "-eo" << "pid,pcpu,pmem,command");
+        process.waitForFinished();
+        QStringList perfs = QString(process.readAllStandardOutput()).split("\n", QString::SkipEmptyParts);
+        foreach(const QString &perf, perfs) {
+            bool isPid = false;
+            QStringList perfInfos = perf.split(" ", QString::SkipEmptyParts);
+            for(quint16 i = 0 ; i < perfInfos.count() ; i++) {
+                const QString &perfInfo = perfInfos.at(i);
+                if((i== 0) && (perfInfo.toInt() == QCoreApplication::applicationPid()))
+                    isPid = true;
+                else if((isPid) && (i == 1))    Transport::perfCpu = perfInfo.toDouble();
+                else if((isPid) && (i == 2))    Transport::perfMem = perfInfo.toDouble();
+            }
+            if(isPid)
+                break;
         }
 #endif
         sleep(3);
