@@ -143,8 +143,8 @@ void NxCurve::paint() {
 
     if(color.alpha() > 0) {
         //Mouse hover
-        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_object_hover");
-        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_object_selection");
+        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_gui_object_hover");
+        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_gui_object_selection");
 
         //Hide curve if a cursor is present but inactive
         if((Global::paintCurvesOpacity) && (cursors.count() > 0)) {
@@ -301,7 +301,8 @@ void NxCurve::paint() {
 }
 
 void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
-    NxRect mouseRect = NxRect(_mousePos - NxPoint(Global::objectSize/2, Global::objectSize/2, Global::objectSize/2), _mousePos + NxPoint(Global::objectSize/2, Global::objectSize/2, Global::objectSize/2));
+    qreal snapSize = Global::objectSize/2;
+    NxRect mouseRect = NxRect(_mousePos - NxPoint(snapSize, snapSize, snapSize), _mousePos + NxPoint(snapSize, snapSize, snapSize));
 
     for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
         if(mouseRect.contains(pos + pathPoints.at(indexPoint))) {
@@ -433,11 +434,11 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
 
     if(fromGui) {
         if(pathPoints[index].smooth)
-            Application::current->execute(QString("%1 %2  %3  %4 %5 %6").arg(COMMAND_CURVE_POINT_SMOOTH).arg(id).arg(index).arg(point.x()).arg(point.y()).arg(point.z()), ExecuteSourceInformative);
+            Application::current->execute(QString("%1 %2 %3 %4 %5 %6").arg(COMMAND_CURVE_POINT_SMOOTH).arg(id).arg(index).arg(point.x()).arg(point.y()).arg(point.z()), ExecuteSourceInformative);
         else if((pathPoints[index].c1 == NxPoint()) && (pathPoints[index].c2 == NxPoint()))
-            Application::current->execute(QString("%1 %2  %3  %4 %5 %6").arg(COMMAND_CURVE_POINT).arg(id).arg(index).arg(point.x()).arg(point.y()).arg(point.z()), ExecuteSourceInformative);
+            Application::current->execute(QString("%1 %2 %3 %4 %5 %6").arg(COMMAND_CURVE_POINT).arg(id).arg(index).arg(point.x()).arg(point.y()).arg(point.z()), ExecuteSourceInformative);
         else
-            Application::current->execute(QString("%1 %2  %3  %4 %5 %6  %7 %8 %9  %10 %11 %12").arg(COMMAND_CURVE_POINT).arg(id).arg(index).arg(point.x()).arg(point.y()).arg(point.z()).arg(c1.x()).arg(c1.y()).arg(c1.z()).arg(c2.x()).arg(c2.y()).arg(c2.z()), ExecuteSourceInformative);
+            Application::current->execute(QString("%1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12").arg(COMMAND_CURVE_POINT).arg(id).arg(index).arg(point.x()).arg(point.y()).arg(point.z()).arg(c1.x()).arg(c1.y()).arg(c1.z()).arg(c2.x()).arg(c2.y()).arg(c2.z()), ExecuteSourceInformative);
     }
 
     computeInertie();
@@ -552,7 +553,7 @@ void NxCurve::setEllipse(const NxSize & size) {
 void NxCurve::setText(const QString & text) {
     QStringList textItems = text.split(" ", QString::SkipEmptyParts);
     if(textItems.count() > 1)
-        setText(textItems.at(1), textItems[0].replace("_", " ").trimmed());
+        setText(text.mid(text.indexOf(textItems.at(1), text.indexOf(textItems.at(0))+textItems.at(0).length())).trimmed(), textItems[0].replace("_", " "));
 }
 
 void NxCurve::setText(const QString & text, const QString & family) {
@@ -848,7 +849,8 @@ void NxCurve::calcBoundingRect() {
 
 
 bool NxCurve::isMouseHover(const NxPoint &mouse) {
-    NxRect mouseRect = NxRect(mouse - NxPoint(Global::objectSize/2, Global::objectSize/2, Global::objectSize/2), mouse + NxPoint(Global::objectSize/2, Global::objectSize/2, Global::objectSize/2));
+    qreal snapSize = Global::objectSize/2;
+    NxRect mouseRect = NxRect(mouse - NxPoint(snapSize, snapSize, snapSize), mouse + NxPoint(snapSize, snapSize, snapSize));
     if(intersects(mouseRect) >= 0)
         return true;
     else if(selected) {

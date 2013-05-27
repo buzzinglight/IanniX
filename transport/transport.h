@@ -91,6 +91,7 @@ public:
 protected:
     void showEvent(QShowEvent *);
     void closeEvent(QCloseEvent *);
+    void keyPressEvent(QKeyEvent *);
 
 public:
     inline qreal getZoom() const { return Global::zoomValue; }

@@ -360,9 +360,6 @@ QDialogButtonBox QPushButton {
           <string>FILES</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0">
-          <property name="spacing">
-           <number>0</number>
-          </property>
           <property name="margin">
            <number>6</number>
           </property>
@@ -387,8 +384,11 @@ QDialogButtonBox QPushButton {
           <string>INFOS</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_3">
-          <property name="margin">
+          <property name="spacing">
            <number>10</number>
+          </property>
+          <property name="margin">
+           <number>6</number>
           </property>
           <item>
            <widget class="QLabel" name="typeLabel">
@@ -3695,7 +3695,23 @@ GOING FROM</string>
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="viewCurveOpacityCheck">
+            <property name="toolTip">
+             <string>Gives a small opacity on curves which has no cursor running on</string>
+            </property>
+            <property name="text">
+             <string>LIGHT OFF UNUSED CURVES</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <property name="spacing">
+             <number>10</number>
+            </property>
             <item>
              <widget class="QLabel" name="followIdLabel">
               <property name="sizePolicy">
@@ -3744,6 +3760,28 @@ GOING FROM</string>
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="followIdClear">
+              <property name="toolTip">
+               <string>Resets camera follow object ID</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton  {
+	min-width:  		14px;
+	min-height: 		14px;
+	max-width:  	14px;
+	max-height: 	14px;
+	width:  				14px;
+	height: 			14px;
+	border-radius: 7px;
+	margin: 			0px;
+}</string>
+              </property>
+              <property name="text">
+               <string>X</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="horizontalSpacer_4">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -3759,16 +3797,85 @@ GOING FROM</string>
            </layout>
           </item>
           <item>
-           <widget class="QCheckBox" name="viewCurveOpacityCheck">
-            <property name="toolTip">
-             <string>Gives a small opacity on curves which has no cursor running on</string>
+           <widget class="QWidget" name="widget" native="true">
+            <property name="statusTip">
+             <string>Autoresize option|This options will adapt the size of objects according to the current zoom. When you zoom or unzoom very far, objects like triggers may be very big or invisible. This feature allows you to have a clear and homogenous vision of your score by resizing objects to a reasonable size.</string>
             </property>
-            <property name="text">
-             <string>LIGHT OFF UNUSED CURVES</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_22">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="autoresizeLabel">
+               <property name="text">
+                <string>OBJECTS SIZE ACCORDING TO ZOOM</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <property name="spacing">
+                <number>10</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="autoresizeLabelLeft">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>BASIC
+SIZE</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="buddy">
+                  <cstring>followId</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSlider" name="autoresizeSlider">
+                 <property name="toolTip">
+                  <string>Rescales objects size according to zoom</string>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="autoresizeLabelRight">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>FIXED
+SIZE</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>followId</cstring>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
@@ -3783,19 +3890,19 @@ GOING FROM</string>
          </attribute>
          <layout class="QHBoxLayout" name="horizontalLayout_11">
           <property name="spacing">
-           <number>0</number>
+           <number>6</number>
           </property>
           <property name="leftMargin">
-           <number>10</number>
+           <number>6</number>
           </property>
           <property name="topMargin">
            <number>20</number>
           </property>
           <property name="rightMargin">
-           <number>10</number>
+           <number>6</number>
           </property>
           <property name="bottomMargin">
-           <number>10</number>
+           <number>6</number>
           </property>
           <item>
            <widget class="QTabWidget" name="ssTabConfig">
@@ -3964,7 +4071,10 @@ GOING FROM</string>
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="2,2,1">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QLabel" name="mouseLabel">
           <property name="toolTip">
@@ -3972,6 +4082,19 @@ GOING FROM</string>
           </property>
           <property name="text">
            <string>MOUSE</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="rotationLabel">
+          <property name="toolTip">
+           <string>Current score zoom</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 10px;</string>
+          </property>
+          <property name="text">
+           <string>ANGLES</string>
           </property>
          </widget>
         </item>
@@ -4015,7 +4138,6 @@ GOING FROM</string>
   <tabstop>unmuteGroups</tabstop>
   <tabstop>unsoloGroups</tabstop>
   <tabstop>followId</tabstop>
-  <tabstop>viewCurveOpacityCheck</tabstop>
  </tabstops>
  <resources>
   <include location="../icons/IanniX.qrc"/>
@@ -4044,8 +4166,8 @@ GOING FROM</string>
    <slot>actionInfoGroup()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>130</y>
+     <x>331</x>
+     <y>152</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4060,8 +4182,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>124</x>
-     <y>130</y>
+     <x>351</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4076,8 +4198,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>135</y>
+     <x>331</x>
+     <y>257</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4108,8 +4230,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>135</y>
+     <x>331</x>
+     <y>257</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4124,8 +4246,8 @@ GOING FROM</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>227</x>
-     <y>127</y>
+     <x>331</x>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4140,8 +4262,8 @@ GOING FROM</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>227</x>
-     <y>127</y>
+     <x>331</x>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4156,8 +4278,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>135</y>
+     <x>211</x>
+     <y>222</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4188,8 +4310,8 @@ GOING FROM</string>
    <slot>actionInfoID()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>130</y>
+     <x>331</x>
+     <y>117</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4204,8 +4326,8 @@ GOING FROM</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>119</x>
+     <y>350</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
@@ -4220,8 +4342,8 @@ GOING FROM</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>380</x>
+     <y>350</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
@@ -4236,8 +4358,8 @@ GOING FROM</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>380</x>
+     <y>377</y>
     </hint>
     <hint type="destinationlabel">
      <x>282</x>
@@ -4252,8 +4374,8 @@ GOING FROM</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>119</x>
+     <y>377</y>
     </hint>
     <hint type="destinationlabel">
      <x>78</x>
@@ -4268,8 +4390,8 @@ GOING FROM</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>73</y>
+     <x>243</x>
+     <y>455</y>
     </hint>
     <hint type="destinationlabel">
      <x>34</x>
@@ -4284,8 +4406,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>130</y>
+     <x>90</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4300,8 +4422,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>130</y>
+     <x>90</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4316,8 +4438,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>130</y>
+     <x>90</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4332,8 +4454,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>133</y>
+     <x>90</x>
+     <y>123</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4348,8 +4470,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>133</y>
+     <x>90</x>
+     <y>123</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4364,8 +4486,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>136</y>
+     <x>90</x>
+     <y>126</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4380,8 +4502,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>136</y>
+     <x>90</x>
+     <y>126</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4396,8 +4518,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>130</y>
+     <x>100</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4412,8 +4534,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
-     <y>132</y>
+     <x>80</x>
+     <y>122</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4428,8 +4550,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
-     <y>132</y>
+     <x>80</x>
+     <y>122</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4444,8 +4566,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>134</y>
+     <x>100</x>
+     <y>124</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4460,8 +4582,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>128</y>
+     <x>220</x>
+     <y>118</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4476,8 +4598,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>128</y>
+     <x>220</x>
+     <y>118</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4492,8 +4614,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>138</y>
+     <x>220</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4508,8 +4630,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>140</y>
+     <x>100</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4524,8 +4646,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>140</y>
+     <x>100</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4540,8 +4662,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>140</y>
+     <x>100</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4556,8 +4678,8 @@ GOING FROM</string>
    <slot>actionMessages()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>312</x>
-     <y>127</y>
+     <x>140</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4572,8 +4694,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>165</x>
-     <y>166</y>
+     <x>179</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4588,8 +4710,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>252</x>
-     <y>280</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4604,8 +4726,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>280</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4620,8 +4742,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>252</x>
-     <y>310</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4636,8 +4758,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>310</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4652,8 +4774,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>252</x>
-     <y>346</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4668,8 +4790,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>346</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4684,8 +4806,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>252</x>
-     <y>376</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4700,8 +4822,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>376</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4716,8 +4838,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>252</x>
-     <y>412</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4732,8 +4854,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>412</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4748,8 +4870,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>252</x>
-     <y>442</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4764,8 +4886,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>337</x>
-     <y>442</y>
+     <x>80</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4780,8 +4902,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>132</y>
+     <x>107</x>
+     <y>122</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4796,8 +4918,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>124</x>
-     <y>142</y>
+     <x>108</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>602</x>
@@ -4812,8 +4934,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>139</y>
+     <x>226</x>
+     <y>129</y>
     </hint>
     <hint type="destinationlabel">
      <x>553</x>
@@ -4828,8 +4950,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>124</x>
-     <y>142</y>
+     <x>98</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>560</x>
@@ -4844,8 +4966,8 @@ GOING FROM</string>
    <slot>actionTexture()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>227</x>
-     <y>127</y>
+     <x>331</x>
+     <y>353</y>
     </hint>
     <hint type="destinationlabel">
      <x>493</x>
@@ -4860,8 +4982,8 @@ GOING FROM</string>
    <slot>actionTexture()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>227</x>
-     <y>127</y>
+     <x>331</x>
+     <y>386</y>
     </hint>
     <hint type="destinationlabel">
      <x>503</x>
@@ -4876,8 +4998,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>124</x>
-     <y>142</y>
+     <x>98</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>497</x>
@@ -4892,8 +5014,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>124</x>
-     <y>142</y>
+     <x>98</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>499</x>
@@ -4908,8 +5030,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>256</x>
-     <y>183</y>
+     <x>107</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>488</x>
@@ -4924,8 +5046,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>267</x>
-     <y>200</y>
+     <x>107</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>488</x>
@@ -4940,8 +5062,8 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>209</x>
-     <y>218</y>
+     <x>107</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>519</x>
@@ -4956,12 +5078,60 @@ GOING FROM</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>239</y>
+     <x>107</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>512</x>
      <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ssTabConfig</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionTabChange(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>followIdClear</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>450</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>693</x>
+     <y>322</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>autoresizeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionCCButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>299</x>
+     <y>516</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>436</y>
     </hint>
    </hints>
   </connection>

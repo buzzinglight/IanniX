@@ -42,9 +42,9 @@ signals:
 public:
     static void syncWith(const QFileInfoList &files, QTreeWidget *treeWidget);
     static void configure(UiTreeView *);
+    UiFileItem* find(const QFileInfo &search);
 protected:
     void syncWith(qint16 depth);
-    UiFileItem* find(const QFileInfo &search);
     QFileSystemWatcher *watcher;
 protected:
     void populate(const QFileInfo &file);

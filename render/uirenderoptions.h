@@ -43,7 +43,8 @@ public:
     static QMap<QString, QColor> defaultColors;
     static UiFileItem      files;
     static UiBool paintAxisGrid, paintCurvesOpacity, paintThisGroup, paintLabel;
-    static UiBool allowSelection, allowSelectionCursors, allowSelectionCurves, allowSelectionTriggers, triggerAutosize, colorTheme, allowLockPos, allowPlaySelected;
+    static UiBool allowSelection, allowSelectionCursors, allowSelectionCurves, allowSelectionTriggers, colorTheme, allowLockPos, allowPlaySelected;
+    static UiReal objectsAutosize;
     static UiBool forceLists, forceTexture, forceFrustumInInit;
     static UiBool mouseSnapX, mouseSnapY, mouseSnapZ;
     static UiReal followId;

@@ -48,6 +48,7 @@ public slots:
     void addInterfaces();
     void setMousePos(const NxPoint & pos);
     void setMouseZoom(qreal zoom);
+    void setRotationAngles(const NxPoint & pos);
     void actionTabChange(int tab);
     void actionCC(QTreeWidgetItem* item,int col)            { emit(actionRouteCC(item, col)); }
     void actionCC()                                         { emit(actionRouteCC(0, 0)); }
@@ -108,6 +109,7 @@ public:
 protected:
     void showEvent(QShowEvent *);
     void closeEvent(QCloseEvent *);
+    void keyPressEvent(QKeyEvent *);
 private:
     Ui::UiInspector *ui;
 };

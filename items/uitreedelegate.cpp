@@ -22,8 +22,13 @@ QWidget *UiTreeDelegate::createEditor(QWidget *parent, const QStyleOptionViewIte
         return editor;
     }
     else if((options.type.startsWith("file")) && (options.model)) {
-        if(options.dialogFile->exec()) {
-            foreach(const QString &selectedFile, options.dialogFile->selectedFiles()) {
+        QFileDialog *dialog = new QFileDialog(0);
+        dialog->setFileMode(options.dialogFile->fileMode());
+        dialog->setNameFilters(options.dialogFile->nameFilters());
+        dialog->setDirectory(QFileInfo(index.model()->data(index, Qt::EditRole).toString()).absoluteDir());
+        dialog->selectFile(index.model()->data(index, Qt::EditRole).toString());
+        if(dialog->exec()) {
+            foreach(const QString &selectedFile, dialog->selectedFiles()) {
                 options.model->setData(index, selectedFile, Qt::EditRole);
                 break;
             }

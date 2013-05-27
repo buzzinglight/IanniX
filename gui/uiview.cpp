@@ -78,7 +78,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionToggle_Inspector,  SIGNAL(triggered()), SLOT(showInspector()));
     connect(ui->actionToggle_Transport,  SIGNAL(triggered()), SLOT(showTransport()));
     connect(ui->actionPatchesFolder,     SIGNAL(triggered()), SLOT(actionPatchesFolder()));
-    Global::triggerAutosize       .setAction(ui->actionToggle_Autosize,          "guiTriggerAutosize");
+    connect(ui->actionLockPos,           SIGNAL(triggered()), SLOT(editingStop()));
     Global::colorTheme            .setAction(ui->actionLight,                    "guiColorTheme");
     Global::paintAxisGrid         .setAction(ui->actionGrid,                     "guiPaintAxisGrid");
     Global::paintLabel            .setAction(ui->actionToggleLabel,              "guiPaintLabel");
@@ -313,7 +313,7 @@ void UiView::actionImportBackground() {
 }
 void UiView::actionImportText() {
     QString font = "";
-    QString text = (new UiMessageBox())->getText(tr("Type a glyph or text…"), tr("Type a glyphe or a text to import in IanniX:"), "");
+    QString text = (new UiMessageBox())->getText(tr("Text Import"), tr("Type a character or some text to import in IanniX:"), "");
     if(!text.isEmpty())
         emit(actionRouteImportText(font, text));
 }

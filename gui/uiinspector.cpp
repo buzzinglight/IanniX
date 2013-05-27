@@ -83,16 +83,24 @@ UiInspector::UiInspector(QWidget *parent) :
     Help::syncHelpWith(ui->ressourcesColors,  COMMAND_GLOBAL_COLOR_HUE);
 
 
+    Global::objectsAutosize.setAction(ui->autoresizeSlider, "guiObjectsAutosize");
+
     MessageManager::setInterfaces(0, 0, ui->spaceForMessageLog);
     ui->ressourcesTextures->showImport(true);
     ui->ressourcesTextures->showNew(false);
     ui->ressourcesTextures->showDuplicate(false);
     Global::textures->configure(tr("Textures"),   ui->ressourcesTextures);
     Global::colors->configure(tr("Score colors"), ui->ressourcesColors);
+    ui->ressourcesColors->showDuplicate(false);
 
     ui->files->importAsFiles = false;
     UiFileItem::configure(ui->files);
     UiFileItem::syncWith(QFileInfoList() << QFileInfo(Global::pathApplication.absoluteFilePath() + "/Examples/") << QFileInfo(Global::pathDocuments.absoluteFilePath() + "/"), ui->files->getTree());
+    for(quint16 i = 0 ; i < ui->files->getTree()->topLevelItemCount() ; i++) {
+        UiFileItem *searchItem = ((UiFileItem*)ui->files->getTree()->topLevelItem(i))->find(Global::pathApplication.absoluteFilePath() + "/Examples/");
+        if(searchItem)
+            ui->files->getTree()->collapseItem(searchItem);
+    }
     ui->files->showNewRoot(true);
     ui->files->showOpen(true);
     //UiRenderOptions::texturesWidget = ui->ressourcesTextures;
@@ -182,16 +190,21 @@ void UiInspector::changeEvent(QEvent *e) {
     }
 }
 
+void UiInspector::keyPressEvent(QKeyEvent *e) {
+    if(e->key() == Qt::Key_Escape)
+        setFocus();
+}
+
 UiTreeView* UiInspector::getFileWidget() const {
     return ui->files;
 }
 
 void UiInspector::actionCCButton() {
-    if(sender() == ui->unmuteGroups)        emit(actionUnmuteGroups());
-    else if(sender() == ui->unmuteObjects)  emit(actionUnmuteObjects());
-    else if(sender() == ui->unsoloGroups)   emit(actionUnsoloGroups());
-    else if(sender() == ui->unsoloObjects)  emit(actionUnsoloObjects());
-    actionCC();
+    if(sender() == ui->unmuteGroups)        { emit(actionUnmuteGroups());  actionCC(); }
+    else if(sender() == ui->unmuteObjects)  { emit(actionUnmuteObjects()); actionCC(); }
+    else if(sender() == ui->unsoloGroups)   { emit(actionUnsoloGroups());  actionCC(); }
+    else if(sender() == ui->unsoloObjects)  { emit(actionUnsoloObjects()); actionCC(); }
+    else if(sender() == ui->followIdClear)  ui->followId->setValue(-1);
 }
 
 void UiInspector::actionInfo() {
@@ -320,10 +333,17 @@ void UiInspector::setMousePos(const NxPoint & pos) {
 void UiInspector::setMouseZoom(qreal zoom) {
     ui->zoomLabel->setText(tr("ZOOM:") + QString(" %1%").arg(zoom, 0, 'f', 1));
 }
-void UiInspector::actionTabChange(int tab) {
-    if(tab == 1)    askRefresh();
-    if(tab == 3)    MessageManager::setLogVisibility(true);
-    else            MessageManager::setLogVisibility(false);
+void UiInspector:: setRotationAngles(const NxPoint &angles) {
+    ui->rotationLabel->setText(tr("ANGLES:") + QString(" %1° / %2°").arg(angles.y(), 0, 'f', 3).arg(angles.z(), 0, 'f', 3));
+}
+
+void UiInspector::actionTabChange(int) {
+    if(ui->tab->currentIndex() == 1)
+        askRefresh();
+    else if((ui->tab->currentIndex() == 3) && (ui->ssTabConfig->currentIndex() == 0))
+        MessageManager::setLogVisibility(true);
+    else
+        MessageManager::setLogVisibility(false);
 }
 
 void UiInspector::timerEvent(QTimerEvent *) {
@@ -753,7 +773,7 @@ void UiInspector::colorComboAdd(QComboBox *spin, QStringList values) {
         QStringList valueSplit = colorName.split(" ", QString::SkipEmptyParts);
         if(valueSplit.count() == 4) color = QColor(valueSplit.at(0).toUInt(), valueSplit.at(1).toUInt(), valueSplit.at(2).toUInt(), valueSplit.at(3).toUInt());
         else if((colorName.startsWith(Global::colorsPrefix(0))) || (colorName.startsWith(Global::colorsPrefix(1)))) {
-            if(((colorName.startsWith(Global::colorsPrefix(0))) && (Global::colorsPrefix() == Global::colorsPrefix(0))) || ((colorName.startsWith(Global::colorsPrefix(1))) && (Global::colorsPrefix() == Global::colorsPrefix(1)))) {
+            if((!colorName.contains("_gui_")) && (((colorName.startsWith(Global::colorsPrefix(0))) && (Global::colorsPrefix() == Global::colorsPrefix(0))) || ((colorName.startsWith(Global::colorsPrefix(1))) && (Global::colorsPrefix() == Global::colorsPrefix(1))))) {
                 color = Global::colors->value(colorName);
                 colorName = colorName.remove(Global::colorsPrefix());
             }

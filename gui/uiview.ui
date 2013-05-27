@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1054</width>
+    <width>1094</width>
     <height>679</height>
    </rect>
   </property>
@@ -399,7 +399,7 @@ QDialogButtonBox QPushButton {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1054</width>
+     <width>1094</width>
      <height>22</height>
     </rect>
    </property>
@@ -432,12 +432,11 @@ QDialogButtonBox QPushButton {
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
+    <addaction name="actionReloadScript"/>
     <addaction name="separator"/>
     <addaction name="actionImoprt_Text"/>
     <addaction name="actionImoprt_SVG"/>
     <addaction name="actionImoprt_Background"/>
-    <addaction name="separator"/>
-    <addaction name="actionReloadScript"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
     <addaction name="actionAbout"/>
@@ -475,7 +474,6 @@ QDialogButtonBox QPushButton {
     <addaction name="actionZoom_in"/>
     <addaction name="actionZoom_initial"/>
     <addaction name="actionZoom_out"/>
-    <addaction name="actionToggle_Autosize"/>
     <addaction name="separator"/>
     <addaction name="actionResize"/>
     <addaction name="actionSnapshot"/>
@@ -606,6 +604,7 @@ QDialogButtonBox QPushButton {
    <addaction name="actionSnapYGrid"/>
    <addaction name="actionLight"/>
    <addaction name="separator"/>
+   <addaction name="actionShowEditor"/>
    <addaction name="actionShowTimer"/>
    <addaction name="actionFullscreen"/>
    <addaction name="actionPerformance"/>
@@ -742,7 +741,7 @@ QDialogButtonBox QPushButton {
   </action>
   <action name="actionSave">
    <property name="text">
-    <string>Save current score</string>
+    <string>Save score</string>
    </property>
    <property name="toolTip">
     <string>Saves the current score</string>
@@ -918,29 +917,6 @@ QDialogButtonBox QPushButton {
     <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
-  <action name="actionToggle_Autosize">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Autoresize object</string>
-   </property>
-   <property name="toolTip">
-    <string>Rescales objects size according to zoom</string>
-   </property>
-   <property name="statusTip">
-    <string>Autoresize option|This options will adapt the size of objects according to the current zoom. When you zoom or unzoom very far, objects like triggers may be very big or invisible. This feature allows you to have a clear and homogenous vision of your score by resizing objects to a reasonable size.</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+A</string>
-   </property>
-   <property name="shortcutContext">
-    <enum>Qt::ApplicationShortcut</enum>
-   </property>
-  </action>
   <action name="actionZoom_in">
    <property name="text">
     <string>Zoom in</string>
@@ -971,7 +947,7 @@ QDialogButtonBox QPushButton {
   </action>
   <action name="actionZoom_initial">
    <property name="text">
-    <string>Initial zoom</string>
+    <string>Reset zoom (100%)</string>
    </property>
    <property name="toolTip">
     <string>Restores initial zoom</string>
@@ -1304,13 +1280,13 @@ QDialogButtonBox QPushButton {
   </action>
   <action name="actionImoprt_Text">
    <property name="text">
-    <string>Import glyphes…</string>
+    <string>Import text…</string>
    </property>
    <property name="toolTip">
-    <string>Imports glyphes to score</string>
+    <string>Imports glyphes (characters) to score</string>
    </property>
    <property name="statusTip">
-    <string>Glyphes import|IanniX can import glyphes (characters) from fonts. Note that font sizes are based on print or display units whereas IanniX is based on seconds ; you may need to rescale the imported data.</string>
+    <string>Text import|IanniX can import glyphes (characters) from fonts. Note that font sizes are based on print or display units whereas IanniX is based on seconds ; you may need to rescale the imported data.</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
@@ -1345,7 +1321,7 @@ QDialogButtonBox QPushButton {
   </action>
   <action name="actionReloadScript">
    <property name="text">
-    <string>Reload current script</string>
+    <string>Reload score</string>
    </property>
    <property name="toolTip">
     <string>Reloads the current script if you made changes from external editor</string>

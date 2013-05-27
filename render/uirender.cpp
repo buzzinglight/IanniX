@@ -186,6 +186,7 @@ void UiRender::centerOn(const NxPoint & center, bool force) {
 
 void UiRender::rotateTo(const NxPoint & rotation, bool force) {
     Global::rotationDest = rotation;
+    emit(mouseRotationChanged(Global::rotationDest));
     if(force)
         Global::rotation = Global::rotationDest;
     setZoom();
@@ -286,9 +287,7 @@ void UiRender::paintGL() {
         scale = scale + (scaleDest - scale) / 3;
 
         //Object sizes
-        Global::objectSize = 0.15;
-        if(Global::triggerAutosize)
-            Global::objectSize *= 0.5*Global::zoomLinear;
+        Global::objectSize = 0.15 * ((1. - Global::objectsAutosize/100.) + (Global::zoomLinear/1.3)*(Global::objectsAutosize/100.));
 
         if(!Global::forceFrustumInInit) {
             renderSize = size();
@@ -296,7 +295,7 @@ void UiRender::paintGL() {
         }
 
         //Clear
-        qglClearColor(Global::colors->value(Global::colorsPrefix() + "_empty"));
+        qglClearColor(Global::colors->value(Global::colorsPrefix() + "_background"));
         glClear(GL_COLOR_BUFFER_BIT);
 
         //Translation
@@ -426,7 +425,7 @@ void UiRender::paintBackground() {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, texture->texture);
             glBegin(GL_QUADS);
-            qglColor(Global::colors->value(Global::colorsPrefix() + "_background"));
+            qglColor(Global::colors->value("background_texture_tint"));
             glLineWidth(1);
             glTexCoord2d(0, 0); glVertex3f(texture->mapping.left() , texture->mapping.bottom(), 0);
             glTexCoord2d(1, 0); glVertex3f(texture->mapping.right(), texture->mapping.bottom(), 0);
@@ -455,7 +454,7 @@ void UiRender::paintAxisGrid() {
             }
             else {
                 if(Global::mouseSnapX)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gridSnap"));
+                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_gridSnap"));
                 else
                     qglColor(Global::colors->value(Global::colorsPrefix() + "_grid"));
                 glLineWidth(1);
@@ -468,14 +467,14 @@ void UiRender::paintAxisGrid() {
         for(qreal x = 0 ; x > floor(Global::axisArea.left()) ; x -= Global::axisGrid) {
             if((x == 0) && (Global::paintAxisGrid)) {
                 if(Global::mouseSnapX)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_axisSnap"));
+                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_axisSnap"));
                 else
                     qglColor(Global::colors->value(Global::colorsPrefix() + "_axis"));
                 glLineWidth(2);
             }
             else {
                 if(Global::mouseSnapX)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gridSnap"));
+                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_gridSnap"));
                 else
                     qglColor(Global::colors->value(Global::colorsPrefix() + "_grid"));
                 glLineWidth(1);
@@ -488,14 +487,14 @@ void UiRender::paintAxisGrid() {
         for(qreal y = 0 ; y < ceil(Global::axisArea.top()) ; y += Global::axisGrid) {
             if((y == 0) && (Global::paintAxisGrid)) {
                 if(Global::mouseSnapY)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_axisSnap"));
+                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_axisSnap"));
                 else
                     qglColor(Global::colors->value(Global::colorsPrefix() + "_axis"));
                 glLineWidth(2);
             }
             else {
                 if(Global::mouseSnapY)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gridSnap"));
+                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_gridSnap"));
                 else
                     qglColor(Global::colors->value(Global::colorsPrefix() + "_grid"));
                 glLineWidth(1);
@@ -508,14 +507,14 @@ void UiRender::paintAxisGrid() {
         for(qreal y = 0 ; y > floor(Global::axisArea.bottom()) ; y -= Global::axisGrid) {
             if((y == 0) && (Global::paintAxisGrid)) {
                 if(Global::mouseSnapY)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_axisSnap"));
+                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_axisSnap"));
                 else
                     qglColor(Global::colors->value(Global::colorsPrefix() + "_axis"));
                 glLineWidth(2);
             }
             else {
                 if(Global::mouseSnapY)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gridSnap"));
+                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_gridSnap"));
                 else
                     qglColor(Global::colors->value(Global::colorsPrefix() + "_grid"));
                 glLineWidth(1);
@@ -533,7 +532,7 @@ void UiRender::paintAxisGrid() {
 //Draw selection
 void UiRender::paintSelection() {
     //Axis color
-    qglColor(Global::colors->value(Global::colorsPrefix() + "_selection"));
+    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_selection"));
     glLineWidth(1);
 
     //Draw axis

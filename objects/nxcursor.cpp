@@ -51,9 +51,9 @@ void NxCursor::initializeCustom() {
     setColorInactive("_cursor_inactive");
     setOffset("0 0 end");
     setStart("0 0 1 0");
-    setBoundsSourceMode(1);
     setBoundsSource("-10 10 -10 10 -10 10");
     setBoundsTarget("0 1 0 1 0 1");
+    setBoundsSourceMode(1);
     setTimeFactorStr("1");
     setTimeFactorF(1);
     setWidth(1);
@@ -264,12 +264,9 @@ void NxCursor::paint() {
     }
 
     if(color.alpha() > 0) {
-        //Size of cursors
-        qreal cacheSize = Global::objectSize;
-
         //Mouse hover
-        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_object_hover");
-        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_object_selection");
+        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_gui_object_hover");
+        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_gui_object_selection");
 
         //Start
         if(!Global::paintThisGroup)
@@ -331,7 +328,7 @@ void NxCursor::paint() {
             glRotatef(cursorAngle.z(), 0, 0, 1);
             glRotatef(cursorAngle.y(), 0, 1, 0);
             glRotatef(cursorAngle.x(), 1, 0, 0);
-            qreal size2 = cacheSize/2 * 1.5 * qMin(1., width) * 0.7;
+            qreal size2 = Global::objectSize / 2 * qMin(1., width);
             glBegin(GL_TRIANGLE_FAN);
             glLineWidth(2);
             if(hasActivity) {

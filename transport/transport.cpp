@@ -53,6 +53,13 @@ void Transport::closeEvent(QCloseEvent *e) {
     editor->close();
     QWidget::closeEvent(e);
 }
+void Transport::keyPressEvent(QKeyEvent *e) {
+    if(e->key() == Qt::Key_Escape)
+        setFocus();
+}
+
+
+
 
 QLayout* Transport::getLogMini() const {
     return ui->spaceForLog;
@@ -126,12 +133,17 @@ void Transport::action() {
         else                            Application::current->execute(QString("%1").arg(COMMAND_STOP), ExecuteSourceGui);
     }
     else if(sender() == ui->speedSlider) {
+        ui->speedSpinReset->setEnabled((ui->speedSpin->value() != 1));
         if(!speedLock)
             Application::current->execute(QString("%1 %2").arg(COMMAND_SPEED).arg((qreal)ui->speedSlider->value()/100.0F), ExecuteSourceGui);
     }
     else if(sender() == ui->speedSpin) {
+        ui->speedSpinReset->setEnabled((ui->speedSpin->value() != 1));
         if(!speedLock)
             Application::current->execute(QString("%1 %2").arg(COMMAND_SPEED).arg(ui->speedSpin->value()), ExecuteSourceGui);
+    }
+    else if(sender() == ui->speedSpinReset) {
+        ui->speedSpin->setValue(1);
     }
     else if(sender() == ui->ffButton) {
         Application::current->execute(QString("%1").arg(COMMAND_FF), ExecuteSourceGui);

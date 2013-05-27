@@ -63,8 +63,8 @@ void NxTrigger::paint() {
     }
 
     if((color.alpha() > 0) && (cacheSize > 0)) {
-        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_object_hover");
-        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_object_selection");
+        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_gui_object_hover");
+        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_gui_object_selection");
 
         //Start
         if(!Global::allowSelectionTriggers)

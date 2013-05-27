@@ -80,6 +80,7 @@ IanniX::IanniX(QObject *parent) :
     //Render
     connect(render, SIGNAL(mousePosChanged(NxPoint)), inspector,    SLOT(setMousePos(NxPoint)));
     connect(render, SIGNAL(mouseZoomChanged(qreal)),  inspector,    SLOT(setMouseZoom(qreal)));
+    connect(render, SIGNAL(mouseRotationChanged(NxPoint)),inspector,SLOT(setRotationAngles(NxPoint)));
     connect(render, SIGNAL(selectionChanged()),       inspector,    SLOT(askRefresh()));
     connect(render, SIGNAL(escFullscreen()),          view,         SLOT(escFullscreen()));
     connect(render, SIGNAL(actionRouteNew()),                       SLOT(actionNew()));
@@ -936,7 +937,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
 
                 if(object) {
                     //String parameter
-                    if((commande == COMMAND_GROUP) || (commande == COMMAND_POS) || (commande == COMMAND_POS_TRANSLATE) || (commande == COMMAND_LABEL) || (commande == COMMAND_CURSOR_BOUNDS_SOURCE) || (commande == COMMAND_CURSOR_BOUNDS_TARGET) || (commande == COMMAND_CURVE_EQUATION_PARAM) || (commande == COMMAND_COLOR_ACTIVE) || (commande == COMMAND_COLOR_INACTIVE) || (commande == COMMAND_COLOR_ACTIVE_HUE) || (commande == COMMAND_COLOR_INACTIVE_HUE) || (commande == COMMAND_MESSAGE) || (commande == COMMAND_CURVE_ELL) || (commande == COMMAND_CURVE_POINT_SHIFT) || (commande == COMMAND_CURVE_POINT_TRANSLATE) || (commande == COMMAND_CURVE_POINT_TRANSLATE2) || (commande == COMMAND_CURVE_EQUATION) || (commande == COMMAND_TEXTURE_ACTIVE) || (commande == COMMAND_TEXTURE_INACTIVE) || (commande == COMMAND_LINE) || (commande == COMMAND_CURSOR_OFFSET) || (commande == COMMAND_CURSOR_START) || (commande == COMMAND_CURSOR_SPEED)) {
+                    if((commande == COMMAND_GROUP) || (commande == COMMAND_RESIZE) || (commande == COMMAND_POS) || (commande == COMMAND_POS_TRANSLATE) || (commande == COMMAND_LABEL) || (commande == COMMAND_CURSOR_BOUNDS_SOURCE) || (commande == COMMAND_CURSOR_BOUNDS_TARGET) || (commande == COMMAND_CURVE_EQUATION_PARAM) || (commande == COMMAND_COLOR_ACTIVE) || (commande == COMMAND_COLOR_INACTIVE) || (commande == COMMAND_COLOR_ACTIVE_HUE) || (commande == COMMAND_COLOR_INACTIVE_HUE) || (commande == COMMAND_MESSAGE) || (commande == COMMAND_CURVE_ELL) || (commande == COMMAND_CURVE_POINT_SHIFT) || (commande == COMMAND_CURVE_POINT_TRANSLATE) || (commande == COMMAND_CURVE_POINT_TRANSLATE2) || (commande == COMMAND_CURVE_EQUATION) || (commande == COMMAND_TEXTURE_ACTIVE) || (commande == COMMAND_TEXTURE_INACTIVE) || (commande == COMMAND_LINE) || (commande == COMMAND_CURSOR_OFFSET) || (commande == COMMAND_CURSOR_START) || (commande == COMMAND_CURSOR_SPEED)) {
                         if(argc > 2)    object->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 2));
                         if(needOutput)  return object->getProperty(qPrintable(commande));
                     }
@@ -950,7 +951,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                     }
 
                     //Single parameter
-                    else if((commande == COMMAND_RESIZEF) || (commande == COMMAND_CURSOR_WIDTH) || (commande == COMMAND_CURSOR_DEPTH) || (commande == COMMAND_SIZE) || (commande == COMMAND_CURSOR_SPEEDF) || (commande == COMMAND_CURSOR_BOUNDS_SOURCE_MODE) || (commande == COMMAND_CURSOR_TIME) || (commande == COMMAND_CURSOR_TIME_PERCENT) || (commande == COMMAND_CURVE_INERTIE) || (commande == COMMAND_CURVE_LENGTH) || (commande == COMMAND_POS_X) || (commande == COMMAND_POS_Y) || (commande == COMMAND_POS_Z) || (commande == COMMAND_ACTIVE) || (commande == COMMAND_MESSAGE_INTERVAL) || (commande == COMMAND_TRIGGER_OFF) || (commande == COMMAND_RESIZE) || (commande == COMMAND_CURVE_EQUATION_POINTS) || (commande == COMMAND_CURVE_POINT_RMV) || (commande == COMMAND_ID)) {
+                    else if((commande == COMMAND_RESIZEF) || (commande == COMMAND_CURSOR_WIDTH) || (commande == COMMAND_CURSOR_DEPTH) || (commande == COMMAND_SIZE) || (commande == COMMAND_CURSOR_SPEEDF) || (commande == COMMAND_CURSOR_BOUNDS_SOURCE_MODE) || (commande == COMMAND_CURSOR_TIME) || (commande == COMMAND_CURSOR_TIME_PERCENT) || (commande == COMMAND_CURVE_INERTIE) || (commande == COMMAND_CURVE_LENGTH) || (commande == COMMAND_POS_X) || (commande == COMMAND_POS_Y) || (commande == COMMAND_POS_Z) || (commande == COMMAND_ACTIVE) || (commande == COMMAND_MESSAGE_INTERVAL) || (commande == COMMAND_TRIGGER_OFF) || (commande == COMMAND_CURVE_EQUATION_POINTS) || (commande == COMMAND_CURVE_POINT_RMV) || (commande == COMMAND_ID)) {
                         if(argc > 2)    object->dispatchProperty(qPrintable(commande), argvDouble(argv, 2));
                         if(needOutput)  return object->getProperty(qPrintable(commande));
                     }

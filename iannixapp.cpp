@@ -375,7 +375,7 @@ void IanniXApp::setHelp() {
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_X			, tr("Objects and 3D space"), tr("Defines point X-coordinate of a curve"), tr("<target> <point_index> <x>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_Y			, tr("Objects and 3D space"), tr("Defines point Y-coordinate of a curve"), tr("<target> <point_index> <y>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_Z			, tr("Objects and 3D space"), tr("Defines point Z-coordinate of a curve"), tr("<target> <point_index> <z>"));
-    Help::categories["commands"].infos << HelpInfo(COMMAND_RESIZEF					, tr("Objects and 3D space"), tr("Apply a scale factor on objects width and height"), tr("<target> <width_scale_factor> <height_scale_factor>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_RESIZEF					, tr("Objects and 3D space"), tr("Apply a scale factor on objects width and height"), tr("<target> <scale_factor>"));
     //Help::categories["commands"].infos << HelpInfo(COMMAND_LINE                   , tr("Objects style"), tr("Changes the way lines are drawn (dashed, plain…)"), tr("Not yet documented"));
 
 

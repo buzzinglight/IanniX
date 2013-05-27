@@ -38,7 +38,8 @@ bool UiColorItems::update() {
     QMapIterator<QString, QColor> iterator(*this);
     while (iterator.hasNext()) {
         iterator.next();
-        generateItem(iterator.key(), iterator.value(), false, false);
+        if(!iterator.key().contains("_gui_"))
+            generateItem(iterator.key(), iterator.value(), false, false);
     }
     dataChanged();
     treeWidget()->expandItem(this);

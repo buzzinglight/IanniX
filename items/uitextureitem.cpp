@@ -119,8 +119,9 @@ QVariant UiTextureItem::data(int column, int role) const {
     if((role == Qt::DisplayRole) || (role == Qt::EditRole)) {
         if(column == 0) return name;
         if(column == 1) {
-            if(texture->filename.exists())  return texture->filename.fileName();
-            else                            return "...";
+            if(role == Qt::EditRole)             return texture->filename.absoluteFilePath();
+            else if(texture->filename.exists())  return texture->filename.fileName();
+            else                                 return "...";
         }
         if(column == 2) return  texture->mapping.center().x();
         if(column == 3) return  texture->mapping.center().y();

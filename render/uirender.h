@@ -174,6 +174,7 @@ signals:
     void objectSelected(UiRenderSelection);
     void mousePosChanged(const NxPoint &);
     void mouseZoomChanged(qreal);
+    void mouseRotationChanged(const NxPoint &);
 
 protected:
     void changeEvent(QEvent *e);

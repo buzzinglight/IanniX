@@ -116,7 +116,7 @@ void UiTreeView::askRemove() {
     QList<UiSyncItem*> items = getSelection();
     foreach(UiSyncItem* item, items)
         if(item->parentItem)
-            if((currentDocument == item) && (item->askForDeletion(item, true)))
+            if((item->askForDeletion(item, true)) && (currentDocument == item))
                 currentDocument = 0;
 }
 void UiTreeView::askCopy() {

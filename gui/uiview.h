@@ -87,7 +87,6 @@ public slots:
     void actionSnapshot();
     void actionResize();
     void actionResize(QSize size);
-    void unToogleDraw(quint16 id);
     void gridChange();
     void actionPatchesFolder() {
         QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/").absoluteFilePath()));
@@ -99,6 +98,7 @@ private:
     bool freehandCurveNeedsCursor;
     NxPoint editingStartPoint;
 public slots:
+    void unToogleDraw(quint16 id = 0);
     void actionDrawFreeCurveSimple()  { actionDrawFreeCurve (false); }
     void actionDrawPointCurveSimple() { actionDrawPointCurve(false); }
     void actionDrawFreeCurve(bool cursor = true);

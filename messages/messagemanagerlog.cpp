@@ -25,3 +25,9 @@ void MessageManagerLog::logReceive(const MessageLog &log, QStringList*) {
         ui->logReceive->appendPlainText(log.getVerboseMessage());
 }
 
+void MessageManagerLog::action() {
+    if(sender() == ui->logSendCopy)
+        QApplication::clipboard()->setText(ui->logSend->toPlainText());
+    else if(sender() == ui->logReceiveCopy)
+        QApplication::clipboard()->setText(ui->logReceive->toPlainText());
+}

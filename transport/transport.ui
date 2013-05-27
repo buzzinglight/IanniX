@@ -645,6 +645,37 @@ QDialogButtonBox QPushButton {
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QPushButton" name="speedSpinReset">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>Resets score speed to nominal speed (1.00)</string>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton  {
+	min-width:  		14px;
+	min-height: 		14px;
+	max-width:  	14px;
+	max-height: 	14px;
+	width:  				14px;
+	height: 			14px;
+	border-radius: 7px;
+	margin: 			0px;
+	margin-top:		7px;
+}
+QPushButton:disabled {
+	border:				0px solid transparent;
+	background: 	transparent;
+	color:				transparent;
+}</string>
+             </property>
+             <property name="text">
+              <string>X</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
         </layout>
@@ -869,7 +900,7 @@ QDialogButtonBox QPushButton {
    <slot>action()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>519</x>
+     <x>699</x>
      <y>16</y>
     </hint>
     <hint type="destinationlabel">
@@ -885,8 +916,8 @@ QDialogButtonBox QPushButton {
    <slot>action()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>519</x>
-     <y>33</y>
+     <x>699</x>
+     <y>45</y>
     </hint>
     <hint type="destinationlabel">
      <x>550</x>
@@ -901,8 +932,8 @@ QDialogButtonBox QPushButton {
    <slot>action()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>379</x>
-     <y>51</y>
+     <x>540</x>
+     <y>45</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -917,8 +948,8 @@ QDialogButtonBox QPushButton {
    <slot>action()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>439</x>
-     <y>50</y>
+     <x>600</x>
+     <y>53</y>
     </hint>
     <hint type="destinationlabel">
      <x>507</x>
@@ -981,12 +1012,28 @@ QDialogButtonBox QPushButton {
    <slot>action()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>585</x>
-     <y>25</y>
+     <x>765</x>
+     <y>28</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
      <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>speedSpinReset</sender>
+   <signal>released()</signal>
+   <receiver>Transport</receiver>
+   <slot>action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>614</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>620</x>
+     <y>149</y>
     </hint>
    </hints>
   </connection>

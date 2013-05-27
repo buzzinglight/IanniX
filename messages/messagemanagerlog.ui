@@ -22,7 +22,7 @@
 	background-color: 	rgb(242, 241, 237);
 	color:						black;
 }
-QPushButton {
+QPushButton#logSendClear, QPushButton#logReceiveClear  {
 	min-width:  		14px;
 	min-height: 		14px;
 	max-width:  	14px;
@@ -75,9 +75,19 @@ QPushButton {
           </spacer>
          </item>
          <item>
+          <widget class="QPushButton" name="logSendCopy">
+           <property name="toolTip">
+            <string>Copies sent messages log to clipboard</string>
+           </property>
+           <property name="text">
+            <string>Copy</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="logSendClear">
            <property name="toolTip">
-            <string>Clears sent messages</string>
+            <string>Clears sent messages log</string>
            </property>
            <property name="text">
             <string>X</string>
@@ -144,9 +154,19 @@ QPushButton {
           </spacer>
          </item>
          <item>
+          <widget class="QPushButton" name="logReceiveCopy">
+           <property name="toolTip">
+            <string>Copies received messages log to clipboard</string>
+           </property>
+           <property name="text">
+            <string>Copy</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="logReceiveClear">
            <property name="toolTip">
-            <string>Clears received messages</string>
+            <string>Clears received messages log</string>
            </property>
            <property name="text">
             <string>X</string>
@@ -192,8 +212,8 @@ QPushButton {
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>334</x>
-     <y>21</y>
+     <x>431</x>
+     <y>23</y>
     </hint>
     <hint type="destinationlabel">
      <x>184</x>
@@ -208,8 +228,8 @@ QPushButton {
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>341</x>
-     <y>161</y>
+     <x>431</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
@@ -217,5 +237,40 @@ QPushButton {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>logSendCopy</sender>
+   <signal>released()</signal>
+   <receiver>MessageManagerLog</receiver>
+   <slot>action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>383</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>556</x>
+     <y>19</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>logReceiveCopy</sender>
+   <signal>released()</signal>
+   <receiver>MessageManagerLog</receiver>
+   <slot>action()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>384</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>542</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>action()</slot>
+ </slots>
 </ui>

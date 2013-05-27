@@ -96,11 +96,12 @@ public slots:
     inline void setId(const QString & _id) {
         id = _id;
         if(_id.isEmpty()) {
-            //setHidden(true);
-
+            if(!isHidden())
+                setHidden(true);
         }
         else {
-            //setHidden(false);
+            if(isHidden())
+                setHidden(false);
             setText(3, id);
             setText(4, id);
         }

@@ -383,7 +383,7 @@ public:
     }
     inline void setResizeStr(const QString & size) {
         QStringList sizeItems = size.split(" ", QString::SkipEmptyParts);
-        if(sizeItems.count() >= 2)
+        if(sizeItems.count() > 1)
             setResize(NxSize(sizeItems.at(0).toDouble(), sizeItems.at(1).toDouble()));
     }
     inline const NxSize getResize() const {

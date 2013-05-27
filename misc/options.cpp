@@ -105,6 +105,7 @@ UiReal::UiReal(qreal _value) :
     spinBox       = 0;
     doubleSpinBox = 0;
     comboBox      = 0;
+    slider        = 0;
 }
 UiReal::UiReal(const UiReal& _value) :
     UiOption() {
@@ -112,6 +113,7 @@ UiReal::UiReal(const UiReal& _value) :
     spinBox       = 0;
     doubleSpinBox = 0;
     comboBox      = 0;
+    slider        = 0;
 }
 UiReal& UiReal::operator= (const UiReal &_value) {
     value = _value.value;
@@ -132,6 +134,8 @@ void UiReal::applyToGui() {
         doubleSpinBox->setValue(value);
     if((comboBox) && (comboBox->currentIndex() != value))
         comboBox->setCurrentIndex(value);
+    if((slider) && (slider->value() != value))
+        slider->setValue(value);
     if(syncItem)
         syncItem->dataChanged();
 }
@@ -163,6 +167,19 @@ void UiReal::setAction(QDoubleSpinBox *_doubleSpinBox, const QString &_settingNa
             guiTrigged(doubleSpinBox->value());
     }
 }
+void UiReal::setAction(QSlider *_slider, const QString &_settingName, bool trigEvent, bool changeUi) {
+    UiOptions::add(this, _settingName);
+    if(slider)
+        slider->disconnect(this, SLOT(guiTrigged(qreal)));
+    slider = _slider;
+    if(slider) {
+        if(changeUi)
+            applyToGui();
+        slider->connect(slider, SIGNAL(valueChanged(int)), this, SLOT(guiTrigged(int)));
+        if(trigEvent)
+            guiTrigged(slider->value());
+    }
+}
 void UiReal::setAction(QComboBox *_comboBox, const QString &_settingName, bool trigEvent, bool changeUi) {
     UiOptions::add(this, _settingName);
     if(comboBox)
@@ -188,8 +205,6 @@ void UiReal::guiTrigged(int _value) {
         syncItem->dataChanged();
     emit(triggered(value));
 }
-
-
 
 
 

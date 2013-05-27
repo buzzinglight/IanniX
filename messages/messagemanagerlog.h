@@ -23,6 +23,9 @@ public:
     void logSend   (const MessageLog &log, QStringList *sentMessage = 0);
     void logReceive(const MessageLog &log, QStringList *sentMessage = 0);
 
+public slots:
+    void action();
+
 private:
     Ui::MessageManagerLog *ui;
 };

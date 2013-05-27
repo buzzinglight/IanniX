@@ -285,15 +285,15 @@ void NxDocument::askFileClose() {
 }
 
 void NxDocument::restoreDefaults() {
-    Global::defaultColors.insert("darktheme_empty"                  , QColor(  0,   0,   0, 255));
-    Global::defaultColors.insert("darktheme_background"             , QColor(255, 255, 255, 255));
+    Global::defaultColors.insert("background_texture_tint"          , QColor(255, 255, 255, 255));
+    Global::defaultColors.insert("darktheme_background"             , QColor(  0,   0,   0, 255));
     Global::defaultColors.insert("darktheme_grid"                   , QColor(255, 255, 255,  43));
     Global::defaultColors.insert("darktheme_axis"                   , QColor(255, 255, 255,  28));
-    Global::defaultColors.insert("darktheme_gridSnap"               , QColor( 90,  25,  15, 255));
-    Global::defaultColors.insert("darktheme_axisSnap"               , QColor( 90,  25,  15, 255));
-    Global::defaultColors.insert("darktheme_selection"              , QColor(255, 255, 255,  40));
-    Global::defaultColors.insert("darktheme_object_selection"       , QColor(255, 240,  35, 255));
-    Global::defaultColors.insert("darktheme_object_hover"           , QColor( 35, 255, 165, 255));
+    Global::defaultColors.insert("darktheme_gui_gridSnap"           , QColor( 90,  25,  15, 255));
+    Global::defaultColors.insert("darktheme_gui_axisSnap"           , QColor( 90,  25,  15, 255));
+    Global::defaultColors.insert("darktheme_gui_selection"          , QColor(255, 255, 255,  40));
+    Global::defaultColors.insert("darktheme_gui_object_selection"   , QColor(255, 240,  35, 255));
+    Global::defaultColors.insert("darktheme_gui_object_hover"       , QColor( 35, 255, 165, 255));
     Global::defaultColors.insert("darktheme_cursor_active"          , QColor(255,  80,  30, 255));
     Global::defaultColors.insert("darktheme_cursor_inactive"        , QColor(255, 255, 255,  92));
     Global::defaultColors.insert("darktheme_trigger_active"         , QColor(  0, 185, 255, 255));
@@ -302,15 +302,14 @@ void NxDocument::restoreDefaults() {
     Global::defaultColors.insert("darktheme_curve_inactive"         , QColor(255, 255, 255,  92));
     Global::defaultColors.insert("darktheme_simple_curve_active"    , QColor(115, 159,  89, 255));
     Global::defaultColors.insert("darktheme_simple_curve_inactive"  , QColor(115, 159,  89, 255));
-    Global::defaultColors.insert("lighttheme_empty"                 , QColor(242, 241, 237, 255));
-    Global::defaultColors.insert("lighttheme_background"            , QColor(255, 255, 255, 255));
+    Global::defaultColors.insert("lighttheme_background"            , QColor(242, 241, 237, 255));
     Global::defaultColors.insert("lighttheme_grid"                  , QColor(  0,   0,   0,  20));
     Global::defaultColors.insert("lighttheme_axis"                  , QColor(  0,   0,   0,  13));
-    Global::defaultColors.insert("lighttheme_gridSnap"              , QColor(255, 190, 190, 255));
-    Global::defaultColors.insert("lighttheme_axisSnap"              , QColor(255, 190, 190, 255));
-    Global::defaultColors.insert("lighttheme_selection"             , QColor(  0,   0,   0,  40));
-    Global::defaultColors.insert("lighttheme_object_selection"      , QColor(  0,  15, 220, 255));
-    Global::defaultColors.insert("lighttheme_object_hover"          , QColor(220,   0,  90, 255));
+    Global::defaultColors.insert("lighttheme_gui_gridSnap"          , QColor(255, 190, 190, 255));
+    Global::defaultColors.insert("lighttheme_gui_axisSnap"          , QColor(255, 190, 190, 255));
+    Global::defaultColors.insert("lighttheme_gui_selection"         , QColor(  0,   0,   0,  40));
+    Global::defaultColors.insert("lighttheme_gui_object_selection"  , QColor(  0,  15, 220, 255));
+    Global::defaultColors.insert("lighttheme_gui_object_hover"      , QColor(220,   0,  90, 255));
     Global::defaultColors.insert("lighttheme_cursor_active"         , QColor(255,  80,  30, 255));
     Global::defaultColors.insert("lighttheme_cursor_inactive"       , QColor(  0,   0,   0,  92));
     Global::defaultColors.insert("lighttheme_trigger_active"        , QColor(  0, 185, 255, 255));
