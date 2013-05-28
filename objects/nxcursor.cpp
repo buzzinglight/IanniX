@@ -284,7 +284,7 @@ void NxCursor::paint() {
                 Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id) + " - " + label, Global::renderFont);
             else if(selectedHover)
                 Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id), Global::renderFont);
-            if(selectedHover) {
+            if((selectedHover) && (!isDrag)) {
                 qreal startY = -0.4;
                 foreach(const QString & messageLabelItem, messageLabel) {
                     Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + startY, cursorPos.z(), messageLabelItem, Global::renderFont);

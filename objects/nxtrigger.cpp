@@ -87,7 +87,7 @@ void NxTrigger::paint() {
             Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id) + " - " + label, Global::renderFont);
         else if(selectedHover)
             Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id), Global::renderFont);
-        if(selectedHover) {
+        if((selectedHover) && (!isDrag)) {
             qreal startY = -0.2 - cacheSize * 1.2;
             foreach(const QString & messageLabelItem, messageLabel) {
                 Application::render->renderText(cacheSize * 1.2, startY, 0, messageLabelItem, Global::renderFont);

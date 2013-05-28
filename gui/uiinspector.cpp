@@ -567,6 +567,7 @@ void UiInspector::refresh() {
     ui->offsetLabel->setVisible(showCursorCurveInfo);
     ui->offsetLabel1->setVisible(showCursorCurveInfo);
     ui->offsetLabel2->setVisible(showCursorCurveInfo);
+    ui->offsetLabel2_2->setVisible(showCursorCurveInfo);
     ui->offsetLabel3->setVisible(showCursorCurveInfo);
     ui->cursorLengthSpin->setVisible(showCursorCurveInfo);
     ui->cursorSpeedLabel->setVisible(showCursorCurveInfo);

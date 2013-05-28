@@ -5,6 +5,7 @@ InterfaceSerial::InterfaceSerial(QWidget *parent) :
     NetworkInterface(parent),
     ui(new Ui::InterfaceSerial) {
     ui->setupUi(this);
+    port = 0;
     connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
 
     baudrateEnum << BAUD110;
@@ -76,6 +77,10 @@ void InterfaceSerial::timerEvent(QTimerEvent *) {
 }
 
 void InterfaceSerial::portChanged() {
+    if(port) {
+        port->close();
+        delete port;
+    }
     port = new QextSerialPort(portName, QextSerialPort::EventDriven);
     if(port) {
         port->setBaudRate(baudrateEnum.at(portBaud.val()));
@@ -97,9 +102,9 @@ void InterfaceSerial::parse() {
     int a = port->bytesAvailable();
     receptionTmp.resize(a);
     port->read(receptionTmp.data(), receptionTmp.size());
-    reception.append(receptionTmp);
 
     if(enable) {
+        reception.append(receptionTmp);
         bool nextMessage = true;
         while(nextMessage) {
             nextMessage = false;

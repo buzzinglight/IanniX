@@ -56,6 +56,7 @@ UiRender::UiRender(QWidget *parent) :
     Global::renderFont.setPixelSize(11);
 
     setZoom(100);
+    rotateTo(NxPoint(0, 0, 0));
 
     //Refresh
     timer = new QTimer(this);

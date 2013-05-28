@@ -228,7 +228,7 @@ void InterfaceMidi::networkSynchro(bool start) {
 
 void InterfaceMidi::sendSPPStart() {
     std::vector<unsigned char> message;
-    message.push_back(MIDI_CONTINUE);
+    message.push_back(MIDI_START);
     if(message.size() > 0) {
         foreach(RtMidiOut *port, portOut) {
             try {

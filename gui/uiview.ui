@@ -705,7 +705,7 @@ QDialogButtonBox QPushButton {
     <string>Deletes selected objects</string>
    </property>
    <property name="shortcut">
-    <string>Backspace</string>
+    <string>Backspace, Del</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>

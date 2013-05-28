@@ -91,6 +91,8 @@ IanniX::IanniX(QObject *parent) :
     connect(render, SIGNAL(actionRouteRedo()),                      SLOT(actionRedo()));
     connect(view,   SIGNAL(arrangeObjects(quint16)),  render,       SLOT(arrangeObjects(quint16)));
     render->setZoom();
+    render->rotateTo(NxPoint(0, 0, 0));
+    inspector->setMousePos(NxPoint(0, 0));
 
     //Interfaces
     MessageManager::addNetworkInterface(MessagesTypeDirect, new InterfaceDirect());
