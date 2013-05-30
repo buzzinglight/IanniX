@@ -35,7 +35,7 @@ void NxTrigger::initializeCustom() {
     setColorInactive("_trigger_inactive");
     setTextureActive  ("trigger_active");
     setTextureInactive("trigger_inactive");
-    setTriggerOff(0);
+    setTriggerOff(1);
     setMessagePatterns("1," + Global::defaultMessageTrigger.val());
 }
 

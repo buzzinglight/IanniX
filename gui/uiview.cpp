@@ -29,6 +29,10 @@ UiView::UiView(QWidget *parent) :
     Help::syncHelpWith(ui->actionImoprt_Text, COMMAND_CURVE_TXT);
     Help::syncHelpWith(ui->actionImoprt_SVG,  COMMAND_CURVE_PATH);
 
+#ifndef Q_OS_MAC
+    ui->actionDelete->setShortcut(QApplication::translate("UiView", "Delete", 0, QApplication::UnicodeUTF8));
+#endif
+
     //About
     about = new UiAbout();
 

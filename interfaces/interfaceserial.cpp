@@ -77,23 +77,25 @@ void InterfaceSerial::timerEvent(QTimerEvent *) {
 }
 
 void InterfaceSerial::portChanged() {
-    if(port) {
-        port->close();
-        delete port;
-    }
-    port = new QextSerialPort(portName, QextSerialPort::EventDriven);
-    if(port) {
-        port->setBaudRate(baudrateEnum.at(portBaud.val()));
-        port->setFlowControl(flowEnum .at(portFlow.val()));
-        port->setParity(parityEnum    .at(portParity.val()));
-        port->setDataBits(databitsEnum.at(portBits.val()));
-        port->setStopBits(stopbitsEnum.at(portStop.val()));
-        port->open(QIODevice::ReadWrite);
+    if(enable) {
+        if(port) {
+            port->close();
+            delete port;
+        }
+        port = new QextSerialPort(portName, QextSerialPort::EventDriven);
+        if(port) {
+            port->setBaudRate(baudrateEnum.at(portBaud.val()));
+            port->setFlowControl(flowEnum .at(portFlow.val()));
+            port->setParity(parityEnum    .at(portParity.val()));
+            port->setDataBits(databitsEnum.at(portBits.val()));
+            port->setStopBits(stopbitsEnum.at(portStop.val()));
+            port->open(QIODevice::ReadWrite);
 
-        connect(port, SIGNAL(readyRead()), this, SLOT(parse()));
+            connect(port, SIGNAL(readyRead()), this, SLOT(parse()));
 
-        if(port->isOpen())  ui->portCombo->setStyleSheet(ihmFeedbackOk);
-        else                ui->portCombo->setStyleSheet(ihmFeedbackNok);
+            if(port->isOpen())  ui->portCombo->setStyleSheet(ihmFeedbackOk);
+            else                ui->portCombo->setStyleSheet(ihmFeedbackNok);
+        }
     }
 }
 

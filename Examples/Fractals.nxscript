@@ -13,7 +13,7 @@ function onCreate() {
 	run("clear");
 		run("center 0 0");
 	run("rotate 0 0 0");
-	run("zoom 1100");
+	run("zoom 800");
 	
 	
 	//First recursion
@@ -52,14 +52,22 @@ function addCurve(recursion, start, end) {
 		run("setSize         current 0.5");
 		run("setColorHue     current " + range(percent, 290, 360) + " 255 255 255");
 
+		//Add a cursor
 		run("add cursor      " + index);
 		run("setCurve        current lastCurve");
+		run("setSpeed        current auto " + (start.y));
 		run("setPattern      current 0 0 1 -1");
 		run("setBoundsSource current " + (-size) + " " + size + " 0 " + (size*2/3));
 		run("setGroup        current values");
-		run("setWidth        current 1");
+		run("setWidth        current 2");
+
+		//Add a trigger
+		run("add trigger     " + (2000 + index));
+		run("setSize         current 2");
+		run("setGroup        current triggers");
+		run("setPos          current " + ((end.x-start.x)/2 + start.x) + " " + ((end.y-start.y)/2 + start.y) + " 0");
 		
-		//Récursivity on segments
+		//Recursivity on segments
 		addCurve(recursion + 1, {x:      start.x, y:      start.y} , {x: x1 + start.x, y: y1 + start.y});
 		addCurve(recursion + 1, {x: x1 + start.x, y: y1 + start.y} , {x: x2 + start.x, y: y2 + start.y});
 		addCurve(recursion + 1, {x: x2 + start.x, y: y2 + start.y} , {x: x3 + start.x, y: y3 + start.y});

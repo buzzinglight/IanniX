@@ -750,7 +750,7 @@ void NxCurve::calcBoundingRect() {
             pathLength = M_PI * qSqrt(0.5 * (boundingRect.width()*boundingRect.width() + boundingRect.height()*boundingRect.height()));
     }
     else if(((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar)) && (equationIsValid) && (!equation.isEmpty()))  {
-        qreal step = 0.1;
+        qreal step = 0.05;
         if(calculatePathLength)
             step = 0.01;
         for(equationVariableT = 0 ; equationVariableT <= 1 ; equationVariableT += step) {
@@ -845,6 +845,10 @@ void NxCurve::calcBoundingRect() {
 
     if(pathLength == 0)
         pathLength = 1;
+
+    if(!Transport::timerOk)
+        calculate();
+    //qDebug("%d (%d) (%f %f %f %f) = %f", getId(), calculatePathLength, boundingRect.x(), boundingRect.y(), boundingRect.width(), boundingRect.height(), pathLength);
 }
 
 

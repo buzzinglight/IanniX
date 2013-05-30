@@ -58,7 +58,7 @@ private slots:
     void parseRequest(QNetworkReply*);
     void parseSocket(QTcpSocket*);
     void openExamples() {
-        QDesktopServices::openUrl(QUrl("http://127.0.0.1:" + QString::number(port) + "/", QUrl::TolerantMode));
+        QDesktopServices::openUrl(QUrl("http://127.0.0.1:" + QString::number(port) + "/"));
     }
 
 public:

@@ -35,6 +35,7 @@
 #include "iannix_cmd.h"
 #include "render/uirenderoptions.h"
 #include "misc/application.h"
+#include "transport/transport.h"
 
 #define ObjectsTypeLength       3
 #define ObjectsActivityLenght   2

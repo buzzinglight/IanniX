@@ -105,6 +105,9 @@ public slots:
     void openExamples() {
         QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/Ableton Live/").absoluteFilePath()));
     }
+    void downloadMidiJack() {
+        QDesktopServices::openUrl(QUrl("http://www.nerds.de/data/setuploopbe1.exe"));
+    }
 
 private:
     Ui::InterfaceMidi *ui;

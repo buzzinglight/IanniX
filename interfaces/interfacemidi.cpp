@@ -12,7 +12,9 @@ InterfaceMidi::InterfaceMidi(QWidget *parent) :
     NetworkInterface(parent),
     ui(new Ui::InterfaceMidi) {
     ui->setupUi(this);
+    ui->midiJack->setVisible(false);
     connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
+    connect(ui->download, SIGNAL(released()), SLOT(downloadMidiJack()));
 
     portOutName = "From IanniX";
     portInName  = "To IanniX";
@@ -24,14 +26,14 @@ InterfaceMidi::InterfaceMidi(QWidget *parent) :
 #if !defined(__LINUX_ALSASEQ__) && !defined(__MACOSX_CORE__)
         if (portOut.value(getPortName(portOutName))->getPortCount() == 0)
             portOut.remove(getPortName(portOutName));
-        if (portIn.value(getPortName(portInName))->getPortCount() == 0)
+        if (portIn .value(getPortName(portInName)) ->getPortCount() == 0)
             portIn.remove(getPortName(portInName));
 #endif
 #if defined(__LINUX_ALSASEQ__) || defined(__MACOSX_CORE__)
         if(portOut.value(getPortName(portOutName)) != 0)
             portOut.value(getPortName(portOutName))->openVirtualPort(portOutName.toStdString());
-        if(portIn.value(getPortName(portInName)) != 0)
-            portIn .value(getPortName(portInName))->openVirtualPort(portInName .toStdString());
+        if(portIn .value(getPortName(portInName)) != 0)
+            portIn .value(getPortName(portInName)) ->openVirtualPort(portInName .toStdString());
         if(ui->aliasPort->findText(portOutName) < 0)
             ui->aliasPort->addItem(portOutName);
 #endif
@@ -70,8 +72,8 @@ void InterfaceMidi::timerEvent(QTimerEvent*) {
     quint8 portListInCount = portListIn->getPortCount();
     for(quint8 portListInIndex = 0; portListInIndex < portListInCount ; portListInIndex++) {
         try {
-            QString portName = QString::fromStdString(portListIn->getPortName(portListInIndex));
-            if((!portIn.contains(getPortName(portName))) && (portName != portOutName)) {
+            QString portName = qPrintable(QString::fromStdString(portListIn->getPortName(portListInIndex)));
+            if((!portIn.contains(getPortName(portName))) && (portName != portOutName) && (!portName.toLower().contains("iannix"))) {
                 portIn.insert(getPortName(portName), new RtMidiIn());
                 portIn.value(getPortName(portName))->openPort(portListInIndex);
                 portIn.value(getPortName(portName))->setCallback(&midiCallback, this);
@@ -82,12 +84,15 @@ void InterfaceMidi::timerEvent(QTimerEvent*) {
     }
     delete portListIn;
 
+    bool hasMidiJack = false;
     RtMidiOut *portListOut = new RtMidiOut();
     quint8 portListOutCount = portListOut->getPortCount();
     for(quint8 portListOutIndex = 0; portListOutIndex < portListOutCount ; portListOutIndex++) {
         try {
-            QString portName = QString::fromStdString(portListOut->getPortName(portListOutIndex));
-            if((!portOut.contains(getPortName(portName))) && (portName != portInName)) {
+            QString portName = qPrintable(QString::fromStdString(portListOut->getPortName(portListOutIndex)));
+            if(portName.trimmed().toLower() == "loopbe internal midi")
+                hasMidiJack = true;
+            if((!portOut.contains(getPortName(portName))) && (portName != portInName) && (!portName.toLower().contains("iannix"))) {
                 if(ui->aliasPort->findText(portName) < 0)
                     ui->aliasPort->addItem(portName);
                 portOut.insert(getPortName(portName), new RtMidiOut());
@@ -97,6 +102,11 @@ void InterfaceMidi::timerEvent(QTimerEvent*) {
         catch(RtError &err) {}
     }
     delete portListOut;
+
+#ifdef Q_OS_WIN
+    if(!hasMidiJack)  ui->midiJack->setVisible(true);
+    else              ui->midiJack->setVisible(false);
+#endif
 }
 
 bool InterfaceMidi::send(const Message &_message, QStringList *messageSent) {
@@ -228,7 +238,7 @@ void InterfaceMidi::networkSynchro(bool start) {
 
 void InterfaceMidi::sendSPPStart() {
     std::vector<unsigned char> message;
-    message.push_back(MIDI_START);
+    message.push_back(MIDI_CONTINUE);
     if(message.size() > 0) {
         foreach(RtMidiOut *port, portOut) {
             try {

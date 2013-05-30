@@ -35,12 +35,11 @@ function addCurve(index) {
 	run("setGroup        current values");
 	run("setCurve        current lastCurve");
 	run("setWidth        current 2");
-	run("setBoundsSource current -" + indexMax + " 0 0 " + (indexMax / 2));
+	run("setBoundsSource current -" + (indexMax+3) + " 3 -3 " + (3+indexMax / 2));
 	
 	run("add trigger     " + (2000 + index));
 	run("setGroup        current triggers");
 	run("setPos          current 0 " + (index / 2) + " 0");
-	run("setSize         current 0.5");
 	run("setColorHue     current " + rangeMid(index / indexMax, 0, 40, 0) + " 255 255 255");
 }
 

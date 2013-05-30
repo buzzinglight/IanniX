@@ -126,9 +126,9 @@ function onCreate() {
 
 	//Configuration of triggers & messages
 	run("setMessage trigger1 1, osc://ip_out:57120/trigger trigger_id trigger_value_x trigger_value_y, direct:// rotate {random(-20, 20)}  {random(0, -80)}  {random(-40, 40)}");
-	run("setSize    trigger1 0.5");
+	run("setSize    trigger1 2");
 	run("setMessage trigger2 1, osc://ip_out:57120/trigger trigger_id trigger_value_x trigger_value_y, direct:// rotate {random(-20, 20)}  {random(0, -80)}  {random(-40, 40)}");
-	run("setSize    trigger2 0.5");
+	run("setSize    trigger2 2");
 	run("setColorActive trigger1 0 185 255 255");
 	run("setColorActive trigger2 240 0 255 255");
 }

@@ -36,11 +36,12 @@ function addLine(lineIndex, start, end) {
 	run("setGroup        current values");
 	run("setCurve        current lastCurve");
 	run("setSpeed        current " + (1 + lineIndex / lineMax));
-	run("setBoundsSource current -5 10 -5 5");
+	run("setBoundsSource current -7 12 -7 7");
 	
 	run("add trigger     " + (2000 + lineIndex));
 	run("setPos          current " + end.x + " " + end.y + " 0");
 	run("setGroup        current triggers");
+	run("setSize         current 0.8");
 }
 
 /*

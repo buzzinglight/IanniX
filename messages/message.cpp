@@ -101,6 +101,8 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                         messageScriptValue.setProperty("trigger_value_z", ((NxCursor*)destination.cursor)->getCursorValue(((NxTrigger*)destination.trigger)->getPos()).z());
                     if(patternArgument.contains("trigger_value"))
                         messageScriptValue.setProperty("trigger_value", ((NxTrigger*)destination.trigger)->getTrigged());
+                    if(patternArgument.contains("trigger_duration"))
+                        messageScriptValue.setProperty("trigger_duration", ((NxTrigger*)destination.trigger)->getTriggerOff());
                     if((patternArgument.contains("trigger_distance")) && (((NxCursor*)destination.cursor))) {
                         NxPoint cursorPosDelta = ((NxTrigger*)destination.trigger)->getPos() - ((NxCursor*)destination.cursor)->getCurrentPos();
                         messageScriptValue.setProperty("trigger_distance", qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()));
@@ -289,6 +291,8 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                         found = addFloat(((NxCursor*)destination.cursor)->getCursorValue(((NxTrigger*)destination.trigger)->getPos()).z(), patternArgument, patternIndex);
                     else if(patternArgument == "trigger_value")
                         found = addFloat(((NxTrigger*)destination.trigger)->getTrigged(), patternArgument, patternIndex);
+                    else if(patternArgument == "trigger_duration")
+                        found = addFloat(((NxTrigger*)destination.trigger)->getTriggerOff(), patternArgument, patternIndex);
                     else if((patternArgument == "trigger_distance") && (((NxCursor*)destination.cursor))) {
                         NxPoint cursorPosDelta = ((NxTrigger*)destination.trigger)->getPos() - ((NxCursor*)destination.cursor)->getCurrentPos();
                         found = addFloat(qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()), patternArgument, patternIndex);

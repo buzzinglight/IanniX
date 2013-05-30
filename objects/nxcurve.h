@@ -269,8 +269,8 @@ public:
     inline void setPathPoints(const UiPathPointsItems &_pathPoints) {
         pathPoints = _pathPoints;
         glListRecreate = true;
-        calculate();
         calcBoundingRect();
+        calculate();
     }
 
     inline void dragStart(const NxPoint &, bool multipleObjects) {

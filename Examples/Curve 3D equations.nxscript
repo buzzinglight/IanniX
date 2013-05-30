@@ -2,7 +2,7 @@
 function onCreate() {
 	//Viewport setup
 	run("clear");
-	run("rotate 0 -70 -10");
+	run("rotate 0 -40 0");
 	run("center 0 0");
 	run("zoom 210");
 	
@@ -20,15 +20,19 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");
 	run("setPattern current 0 0 1 -1");
-   run("setDepth   current 0.5");
+    run("setWidth   current 1.5");
+    run("setDepth   current 1.5");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_yPos");
+	//Add trigger
+	run("add trigger " + (2000 + id));
+	run("setPos      current -8 7 0");
 	id++;
 
 
 
 	//[TOP MIDDLE] Add a 2D curve based on cartesian coords
 	run("add curve   " + (1000 + id));
-	run("setPos      current -4 7 0");	
+	run("setPos      current -4 8 0");	
 	run("setEquation current cartesian t * 8, exp(-t * 3) * cos(3 * t * PI * param) - 1, 0");
 	run("setEquationParam    current param 1");
 	//Add a cursor
@@ -36,8 +40,12 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setDepth   current 0.5");
+    run("setWidth   current 1.5");
+    run("setDepth   current 1.5");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_yPos");
+	//Add trigger
+	run("add trigger " + (2000 + id));
+	run("setPos      current 0 7 0");
 	id++;
 
 
@@ -52,7 +60,11 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setDepth   current 0.5");
+    run("setWidth   current 1.5");
+    run("setDepth   current 1.5");
+	//Add trigger
+	run("add trigger " + (2000 + id));
+	run("setPos      current 8 7 0");
 	id++;
 
 
@@ -69,8 +81,12 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setDepth   current 0.5");
+    run("setWidth   current 1.5");
+    run("setDepth   current 1.5");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param1 cursor_xPos, direct:// setEquationParam 1004 param2 cursor_yPos");
+	//Add trigger
+	run("add trigger " + (2000 + id));
+	run("setPos      current -8 -6 0");
 	id++;
 
 
@@ -86,8 +102,12 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setDepth   current 0.5");
+    run("setWidth   current 1.5");
+    run("setDepth   current 1.5");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param1 cursor_xPos, direct:// setEquationParam 1005 param2 cursor_yPos");
+	//Add trigger
+	run("add trigger " + (2000 + id));
+	run("setPos      current 0 -6 0");
 	id++;
 
 
@@ -104,7 +124,11 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setDepth   current 0.5");
+    run("setWidth   current 1.5");
+    run("setDepth   current 1.5");
+	//Add trigger
+	run("add trigger " + (2000 + id));
+	run("setPos      current 8 -4 0");
 	id++;
 
 
@@ -121,8 +145,12 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setDepth   current 0.5");
+    run("setWidth   current 1.5");
+    run("setDepth   current 1.5");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_xPos");
+	//Add trigger
+	run("add trigger " + (2000 + id));
+	run("setPos      current -7 1 0");
 	id++;
 
 
@@ -138,8 +166,12 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setDepth   current 0.5");
+    run("setWidth   current 1.5");
+    run("setDepth   current 1.5");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_xPos");
+	//Add trigger
+	run("add trigger " + (2000 + id));
+	run("setPos      current 0 1 0");
 	id++;
 
 
@@ -155,7 +187,11 @@ function onCreate() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setDepth   current 0.5");
+    run("setWidth   current 1.5");
+    run("setDepth   current 1.5");
+	//Add trigger
+	run("add trigger " + (2000 + id));
+	run("setPos      current 7 3 0");
 	id++;
 }
 

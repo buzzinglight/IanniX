@@ -42,14 +42,15 @@ function addGlyph(texte, index, xPos) {
 function addTrigger(index) {
 	run("add trigger   " + (2000 + index));
 	run("setPos        current " + random(0, 15) + " " + random(-1.5, 5) + " 0");
-	run("setGroup      current events");
+	run("setGroup      current triggers");
 	run("setSize       current " + random(0.5, 1));
-	run("setTriggerOff current 1");
 
-	if(random(0, 2) > 1)
+	if(random(0, 2) > 1) {
 		run("setMessage current 1,");
-
-	run("setColorHue current 0 0 " + random(0, 192) + " 255");
+		run("setColorHue current 0 0 " + random(0, 32) + " 255");
+	}
+	else
+		run("setColorHue current 0 0 " + random(0, 192) + " 255");
 }
 
 

@@ -205,7 +205,8 @@ void IanniXApp::setHelp() {
     Help::categories["values"].infos << HelpInfo(QString("trigger_value_x"),	   tr("x mapped coordinate of the triggered trigger"));
     Help::categories["values"].infos << HelpInfo(QString("trigger_value_y"),	   tr("y mapped coordinate of the triggered trigger"));
     Help::categories["values"].infos << HelpInfo(QString("trigger_value_z"),	   tr("z mapped coordinate of the triggered trigger"));
-    Help::categories["values"].infos << HelpInfo(QString("trigger_value"),         tr("When trigger off-time is set, returns 127 when the trigger is trigged and 0 when the trigger is released"));
+    Help::categories["values"].infos << HelpInfo(QString("trigger_value"),         tr("When trigger duration is not null, returns 127 when the trigger is trigged and 0 when the trigger is released"));
+    Help::categories["values"].infos << HelpInfo(QString("trigger_duration"),      tr("Trigger duration"));
     Help::categories["values"].infos << HelpInfo(QString("trigger_distance"),	   tr("Distance between the triggered trigger and the cursor that triggers the trigger"));
     Help::categories["values"].infos << HelpInfo(QString("trigger_side"),          tr("0 if trigger is triggered from left to right and 1 for the other side"));
     Help::categories["values"].infos << HelpInfo(QString("trigger_message_id"),	   tr("ID of the message (each message generates an ascending ID)"));

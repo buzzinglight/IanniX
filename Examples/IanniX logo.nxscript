@@ -17,7 +17,15 @@ function onCreate() {
 		var curvePointIndex = 0;
 		for(var pointIndex = 0 ; pointIndex < points[curveIndex].length ; pointIndex ++) {
 			var offset = {x: -7.25, y: 4.65, z: 0};
-			run("setPointAt current " 	+ (curvePointIndex++) + " " + (points[curveIndex][pointIndex].x + offset.x) + " " + (points[curveIndex][pointIndex].y + offset.y) + " " + (points[curveIndex][pointIndex].z + offset.z)
+
+			if((0 < pointIndex) && (pointIndex < points[curveIndex].length-1)) {
+				run("add trigger " + (2000+curveIndex*50+pointIndex));
+				run("setSize  current 0.5");
+				run("setGroup current triggers");
+				run("setPos   current " + (points[curveIndex][pointIndex].x + offset.x) + " " + (points[curveIndex][pointIndex].y + offset.y) + " " + (points[curveIndex][pointIndex].z + offset.z));
+			}
+
+			run("setPointAt " + (1000+curveIndex) + " " 	+ (curvePointIndex++) + " " + (points[curveIndex][pointIndex].x + offset.x) + " " + (points[curveIndex][pointIndex].y + offset.y) + " " + (points[curveIndex][pointIndex].z + offset.z)
 									  	+ " " + points[curveIndex][pointIndex].c1x + " " + points[curveIndex][pointIndex].c1y + " " + points[curveIndex][pointIndex].c1z
 										+ " " + points[curveIndex][pointIndex].c2x + " " + points[curveIndex][pointIndex].c2y + " " + points[curveIndex][pointIndex].c2z);
 		}

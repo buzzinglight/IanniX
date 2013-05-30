@@ -1110,9 +1110,12 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
             actionSave();
     }
 
-    if(iniSettings)
+    //Save settings
+    if(iniSettings) {
         foreach(UiOption *option, UiOptions::options)
             iniSettings->setValue(option->settingName, option->variant());
+        iniSettings->setValue("appVersion", QApplication::applicationVersion());
+    }
 
     if(render)
         render->close();
