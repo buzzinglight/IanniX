@@ -194,14 +194,6 @@ void UiView::closeEvent(QCloseEvent *event) {
         help->close();
 }
 
-/*
-void UiView::tabletEvent(QTabletEvent *event) {
-    //emit(editingStart();)
-    //qDebug("%d : (%f, %f, %f) p=%f angle=%f tp=%f dx=%f dy=%f", event->uniqueId(), event->hiResGlobalPos().x(), event->hiResGlobalPos().y(), event->z(), event->pressure(), event->rotation(), event->tangentialPressure(), event->xTilt(), event->yTilt());
-    event->ignore();
-}
-*/
-
 void UiView::fullscreenDisplaysCountChanged() {
     foreach(QPushButton *fullscreenButton, fullscreenButtons)
         delete fullscreenButton;

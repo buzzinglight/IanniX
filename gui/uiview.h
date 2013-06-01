@@ -20,7 +20,6 @@
 #define UIVIEW_H
 
 #include <QMainWindow>
-#include <QTabletEvent>
 #include "uiinspector.h"
 #include "transport/uiabout.h"
 #include "gui/uihelp.h"
@@ -128,7 +127,6 @@ protected:
     void changeEvent(QEvent *e);
     void keyPressEvent(QKeyEvent *event);
     void closeEvent(QCloseEvent *);
-    //void tabletEvent(QTabletEvent *);
 
 private:
     Ui::UiView *ui;

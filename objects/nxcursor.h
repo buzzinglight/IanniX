@@ -388,7 +388,7 @@ public:
                 retour += "\trun(\"" + QString("%1 %2 %3").arg(command).arg(objectId).arg(getProperty(qPrintable(command)).toString()) + "\");\n";
         }
         if(NxObjectDispatchProperty::source == ExecuteSourceCopyPaste)
-            retour += "\trun(\"" + QString("%1 %2 %3").arg(COMMAND_CURSOR_TIME).arg(objectId).arg(getProperty(qPrintable(COMMAND_CURSOR_TIME)).toString()) + "\");\n";
+            retour += "\trun(\"" + QString("%1 %2 %3").arg(COMMAND_CURSOR_TIME).arg(objectId).arg(getProperty(COMMAND_CURSOR_TIME).toString()) + "\");\n";
         if(!retour.isEmpty())
             retour += "\n";
         return retour;

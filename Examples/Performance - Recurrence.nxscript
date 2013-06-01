@@ -1447,6 +1447,7 @@ function ajouterCurseur(info, param, control) {
 	run("setCurve current " + info.id);
 	run("setSpeed current lock " + param.speed);
 	run("setWidth current 4.5");
+	run("setDepth current 0");
 	run("setBoundsSource current " + info.bounds.xMin + " " + info.bounds.xMax + " " + (info.bounds.yMin+info.yPos) + " " + (info.bounds.yMax+info.yPos));
 	run("setBoundsTarget current "
 		+ (control.curveWidthFrom  * control.curve.bounds.xMax) + " " +
