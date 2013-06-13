@@ -59,6 +59,7 @@ InterfaceSerial::InterfaceSerial(QWidget *parent) :
     portStop   = 0;
     portFlow   = 0;
 
+    connect(ui->enable, SIGNAL(toggled(bool)), SLOT(portChanged()));
     //Valeurs par défaut
     /*
     portStr = "COM1\nBAUD115200\nDATA_8\nPAR_NONE\nSTOP_1\nFLOW_OFF";

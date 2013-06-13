@@ -1,7 +1,12 @@
-//Creation of the score
-function onCreate() {
+/*
+ *	IanniX Score File
+ */
+
+
+//Creation of the score with script commands
+function makeWithScript() {
 	run("clear");
-		run("rotate 0 0 0");
+	run("rotate 0 0 0");
 	run("center 7 1.8");
 	run("zoom 182");
 	
@@ -55,8 +60,15 @@ function addTrigger(index) {
 
 
 /*
-    IanniX — a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 — IanniX Association
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ *	Made with IanniX 0.9.0
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ */
+
+
+/*
+    IanniX - a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 - IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

@@ -36,19 +36,21 @@ namespace Ui {
 class UiEditor : public QMainWindow {
     Q_OBJECT
 
-private:
-    QFileInfo scriptFile;
-
 public:
     explicit UiEditor(QWidget *parent = 0);
     ~UiEditor();
 
 public:
-    void openFile(const QFileInfo &  _scriptFile);
+    void setContent(const QString &content);
+    const QString getContent();
 
+signals:
+    void askSave();
+    void askRefresh();
 
 public slots:
-    void save();
+    void save()     { emit(askSave()); }
+    void refresh()  { emit(askRefresh()); }
     void cursorChanged();
     void scriptError(const QStringList &errors, qint16 line);
 

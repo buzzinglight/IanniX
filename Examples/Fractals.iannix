@@ -1,5 +1,10 @@
-//Setup of the script
-function onConfigure() {
+/*
+ *	IanniX Score File
+ */
+
+
+//Ask user for parameters before creation of the score
+function askUserForParameters() {
 	//Name
 	title("Fractal");
 	//Global variables
@@ -7,8 +12,8 @@ function onConfigure() {
 	ask("General", "Number of recursions", "max_recursion", 4);
 }
 
-//Creation of the score
-function onCreate() {
+//Creation of the score with script commands
+function makeWithScript() {
 	//Viewport setup
 	run("clear");
 		run("center 0 0");
@@ -75,9 +80,17 @@ function addCurve(recursion, start, end) {
 	}
 }
 
+
 /*
-    IanniX ? a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 ? IanniX Association
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ *	Made with IanniX 0.9.0
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ */
+
+
+/*
+    IanniX - a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 - IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

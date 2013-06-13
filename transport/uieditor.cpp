@@ -28,8 +28,9 @@ UiEditor::UiEditor(QWidget *parent) :
     QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.bottomRight().x() - rect().width(), 20);
 
-    connect(ui->actionSave, SIGNAL(triggered()), SLOT(save()));
-    connect(ui->actionClose, SIGNAL(triggered()), SLOT(close()));
+    connect(ui->actionSave,        SIGNAL(triggered()), SLOT(save()));
+    connect(ui->actionClose,       SIGNAL(triggered()), SLOT(close()));
+    connect(ui->actionRefreshCode, SIGNAL(triggered()), SLOT(refresh()));
 
     ui->jsEditor->setTextWrapEnabled(false);
     ui->jsEditor->setLineNumbersVisible(true);
@@ -71,29 +72,24 @@ UiEditor::~UiEditor() {
     delete ui;
 }
 
-void UiEditor::openFile(const QFileInfo & _scriptFile) {
-    scriptFile = _scriptFile;
-
-    QFile file(scriptFile.absoluteFilePath());
-    if(file.open(QFile::ReadOnly)) {
-        QString contents = file.readAll();
-        file.close();
-        //contents.replace("\t", "  ");
-
-        ui->jsEditor->setPlainText(contents);
-        setWindowTitle(tr("IanniX") + QString(" - ") + tr("Script Editor") + QString(" - ") + scriptFile.baseName());
+void UiEditor::setContent(const QString &content) {
+    //contents.replace("\t", "  ");
+    quint16 cursorPos = ui->jsEditor->textCursor().position();
+    quint16 scrollPos = ui->jsEditor->verticalScrollBar()->sliderPosition();
+    ui->jsEditor->setPlainText(content);
+    if(!isVisible()) {
         show();
+        Application::current->getMainWindow()->raise();
     }
+    QTextCursor cursor = ui->jsEditor->textCursor();
+    cursor.setPosition(cursorPos);
+    ui->jsEditor->setTextCursor(cursor);
+    ui->jsEditor->verticalScrollBar()->setSliderPosition(scrollPos);
 }
-void UiEditor::save() {
-    QFile file(scriptFile.absoluteFilePath());
-    if(file.open(QFile::WriteOnly)) {
-        QString contents = ui->jsEditor->toPlainText();
-        //contents.replace("  ", "\t");
-        file.write(contents.toLatin1());
-        file.close();
-    }
+const QString UiEditor::getContent() {
+    return ui->jsEditor->toPlainText();
 }
+
 void UiEditor::cursorChanged() {
     ui->help->scriptHelp(ui->jsEditor, QStringList() << "commands" << "javascript" << "values");
 }
@@ -118,6 +114,9 @@ void UiEditor::scriptError(const QStringList &errors, qint16 line) {
 void UiEditor::changeEvent(QEvent *e) {
     QMainWindow::changeEvent(e);
     switch (e->type()) {
+    case QEvent::ActivationChange:
+        refresh();
+        break;
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
         break;
@@ -125,7 +124,6 @@ void UiEditor::changeEvent(QEvent *e) {
         break;
     }
 }
-
 
 void UiEditor::showEvent(QShowEvent *e) {
     if(toolbarButton)

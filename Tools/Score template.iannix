@@ -70,21 +70,6 @@ function onIncomingMessage(protocol, host, port, destination, values) {
 
 
 /*
- *	This method is called last.
- *	It allows you to modify your hand-drawn score (made through graphical user interface).
- *	
- * 	This section is never overwritten by IanniX when saving.
- */
-function alterateWithScript() {
-
-}
-
-
-
-
-
-
-/*
  *	This method stores all the operations made through the graphical user interface.
  *	You are not supposed to modify this section, but it can be useful to remove some stuff that you added accidentaly.
  *	
@@ -107,6 +92,17 @@ function madeThroughInterfaces() {
 //INTERFACES: NEVER EVER REMOVE THIS LINE
 
 //INTERFACES: NEVER EVER REMOVE THIS LINE
+}
+
+
+/*
+ *	This method is called last.
+ *	It allows you to modify your hand-drawn score (made through graphical user interface).
+ *	
+ * 	This section is never overwritten by IanniX when saving.
+ */
+function alterateWithScript() {
+	
 }
 
 

@@ -334,6 +334,7 @@ public:
         curve = _curve;
         if(curve)
             curve->addCursor(this);
+        setTimeLocal(Transport::timeLocal);
         calculate();
     }
 

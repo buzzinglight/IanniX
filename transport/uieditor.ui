@@ -47,12 +47,16 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionSave"/>
+   <addaction name="actionRefreshCode"/>
    <addaction name="actionClose"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSave">
    <property name="text">
-    <string>Save and update script</string>
+    <string>Save and refresh score</string>
+   </property>
+   <property name="toolTip">
+    <string>Save and update score</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -64,6 +68,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionRefreshCode">
+   <property name="text">
+    <string>Refresh code</string>
+   </property>
+   <property name="toolTip">
+    <string>Refresh code according to actions made through GUI</string>
    </property>
   </action>
  </widget>

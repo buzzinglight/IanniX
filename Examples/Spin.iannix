@@ -1,5 +1,10 @@
-//Setup of the script
-function onConfigure() {
+/*
+ *	IanniX Score File
+ */
+
+
+//Ask user for parameters before creation of the score
+function askUserForParameters() {
 	//Name of the script
 	title("Grid");
 	//Global variables
@@ -8,8 +13,8 @@ function onConfigure() {
 	ask("Shape", "External circle size", "circleRadius2", 5);
 }
 
-//Creation of the score
-function onCreate() {
+//Creation of the score with script commands
+function makeWithScript() {
 	//Viewport setup
 	run("clear");
 		run("rotate 0 0 0");
@@ -51,9 +56,17 @@ function addLine(lineIndex, start, end) {
 	run("setColorHue     current " + rangeMid(percent, 0, 40, 0) + " 255 255 255");
 }
 
+
 /*
-    IanniX ? a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 ? IanniX Association
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ *	Made with IanniX 0.9.0
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ */
+
+
+/*
+    IanniX - a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 - IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

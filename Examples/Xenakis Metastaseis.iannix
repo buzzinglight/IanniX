@@ -1,13 +1,18 @@
-//Setup of the script
-function onConfigure() {
+/*
+ *	IanniX Score File
+ */
+
+
+//Ask user for parameters before creation of the score
+function askUserForParameters() {
 	//Name
 	title("Xenakis Metastaseis");
 	//Global variables
 	ask("Speed", "- auto [duration]\n- [speed]", "speed", "auto 40");
 }
 
-//Creation of the score
-function onCreate() {
+//Creation of the score with script commands
+function makeWithScript() {
 	//Viewport setup
 	run("clear");
 		run("rotate 0 0 0");
@@ -15,7 +20,7 @@ function onCreate() {
 	run("center 3 7");
 	
 
-	//Draw polylines curves
+	//Draw polylines curves     
 	addPolyline("0,0.35 2.88,3.05 4.69968,5.91624 5.77802,4.82202 5.7789,4.82112,");
 	addPolyline("0,4.67 2.89,2.14 4.715,6.275 5.775,4.82376");
 	addPolyline("0.005,3.0451.8 2.905,6.455 4.71,4.475 5.77812,4.82");
@@ -69,18 +74,6 @@ function onCreate() {
 	addPolyline("0.02,9.34 2.9,10.61 4.71252,4.82416 5.77502,4.82082");
 	addPolyline("0.02,13.485 2.89,7.725 4.705,5.565 5.77102,4.82622");
 
-	//Timeline
-	run("add curve  1000");
-	run("setPointAt current 1 6 0");
-
-	run("add cursor      auto")
-	run("setWidth        current 30");
-	run("setCurve        current lastCurve");
-	run("setSpeed        current " + speed);
-	run("setGroup        current values");
-	run("setMessage      current 20, osc://ip_out:57120/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0, tcp:// curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0");
-	run("setBoundsSource current 0 6 0 14.2");
-
 	//Change cursors color
 	run("setColor cursors 255 135 0 255");
 	run("setColor lines   100 200 255 255");
@@ -88,19 +81,33 @@ function onCreate() {
 }
 
 //Cursor index as global variable
-var curve_id = 0;
+var cursor_id = 0;
 //Custom function
 function addPolyline(path) {
-	run("add curve       " + curve_id);
+	run("add curve       " + (1000 + cursor_id));
 	run("setGroup        current lines");
 	run("setPointsLines  current 1 " + path);
-	curve_id++;
+
+	run("add cursor      " + cursor_id);
+	run("setCurve        current lastCurve");
+	run("setGroup        current values");
+	run("setWidth        current 0.2");
+	run("setSpeed        current " + speed);
+	run("setBoundsSource current 0 6 0 14.2");
+	cursor_id++;
 }
 
 
 /*
-    IanniX ? a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 ? IanniX Association
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ *	Made with IanniX 0.9.0
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ */
+
+
+/*
+    IanniX - a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 - IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

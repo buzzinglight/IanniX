@@ -100,10 +100,10 @@ public:
         return scoreSpeed;
     }
     inline QString getCenterStr() const {
-        return QString("%1 %2").arg(-Global::axisCenter.x()).arg(-Global::axisCenter.y());
+        return QString("%1 %2").arg(-Global::axisCenterDest.x()).arg(-Global::axisCenterDest.y());
     }
     inline QString getRotateStr() const {
-        return QString("%1 %2 %3").arg(Global::rotation.x()).arg(Global::rotation.y()).arg(Global::rotation.z());
+        return QString("%1 %2 %3").arg(Global::rotationDest.x()).arg(Global::rotationDest.y()).arg(Global::rotationDest.z());
     }
     inline void setCenterStr(const QString & pos) {
         QStringList posItems = pos.split(" ", QString::SkipEmptyParts);

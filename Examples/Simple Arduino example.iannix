@@ -1,13 +1,18 @@
-//Setup of the script
-function onConfigure() {
+/*
+ *	IanniX Score File
+ */
+
+
+//Ask user for parameters before creation of the score
+function askUserForParameters() {
 	//Name
 	title("Serial example");
 	//Global variables
 	ask("Circles", "Quantity", "circleMax", 16);
 }
 
-//Creation of the score
-function onCreate() {
+//Creation of the score with script commands
+function makeWithScript() {
 	//Viewport setup
 	run("clear");
 		run("rotate 0 0 0");
@@ -44,9 +49,17 @@ function addCircle(circleIndex) {
 	run("setMessage       current 1, serial:// note 8 " + (circleIndex * 30 + 220) + " 30");
 }
 
+
 /*
-    IanniX ? a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 ? IanniX Association
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ *	Made with IanniX 0.9.0
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ */
+
+
+/*
+    IanniX - a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 - IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

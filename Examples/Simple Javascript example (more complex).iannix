@@ -1,10 +1,16 @@
+/*
+ *	IanniX Score File
+ */
+
+
 var number_of_lines = 24;
 var vertical_grid_dilatation = 2.;
 var fixed_duration = false;
 var speed_base = 2;
 var speed_spread = 3;
 
-function onCreate() {
+//Creation of the score with script commands
+function makeWithScript() {
 	//Clear score
 	run("clear");
 		run("rotate 0 0 0");
@@ -38,9 +44,17 @@ function onCreate() {
 	}
 }
 
+
 /*
-    IanniX — a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 — IanniX Association
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ *	Made with IanniX 0.9.0
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ */
+
+
+/*
+    IanniX - a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 - IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

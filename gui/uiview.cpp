@@ -222,10 +222,11 @@ void UiView::goToFullscreen(quint8 screenIndex) {
         if(isFullScreen) {
             setWindowState(windowState() & ~Qt::WindowFullScreen);
             ui->render->setCursor(Qt::ArrowCursor);
-            ui->toolBar->setVisible(true);
+            ui->toolBarAdd->setVisible(true);
+            ui->toolBarView->setVisible(true);
+            ui->toolBarWindow->setVisible(true);
             ui->inspector->parentWidget()->setVisible(wasInspectorVisible);
             ui->transport->parentWidget()->setVisible(wasTransportVisible);
-            ui->statusBar->setVisible(true);
             ui->menubar->setVisible(true);
             isFullScreen = false;
             toggleFullscreen(isFullScreen);
@@ -233,10 +234,11 @@ void UiView::goToFullscreen(quint8 screenIndex) {
         else {
             setWindowState(windowState() | Qt::WindowFullScreen);
             ui->render->setCursor(Qt::BlankCursor);
-            ui->toolBar->setVisible(false);
+            ui->toolBarAdd->setVisible(false);
+            ui->toolBarView->setVisible(false);
+            ui->toolBarWindow->setVisible(false);
             wasInspectorVisible = ui->inspecteurDock->isVisible();
             wasTransportVisible = ui->transportDock->isVisible();
-            ui->statusBar->setVisible(false);
             ui->menubar->setVisible(false);
             ui->inspector->parentWidget()->hide();
             ui->transport->parentWidget()->hide();

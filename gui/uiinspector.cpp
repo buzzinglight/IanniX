@@ -96,10 +96,11 @@ UiInspector::UiInspector(QWidget *parent) :
     ui->files->importAsFiles = false;
     UiFileItem::configure(ui->files);
     UiFileItem::syncWith(QFileInfoList() << QFileInfo(Global::pathApplication.absoluteFilePath() + "/Examples/") << QFileInfo(Global::pathDocuments.absoluteFilePath() + "/"), ui->files->getTree());
+    ui->files->getTree()->collapseAll();
     for(quint16 i = 0 ; i < ui->files->getTree()->topLevelItemCount() ; i++) {
-        UiFileItem *searchItem = ((UiFileItem*)ui->files->getTree()->topLevelItem(i))->find(Global::pathApplication.absoluteFilePath() + "/Examples/");
+        UiFileItem *searchItem = ((UiFileItem*)ui->files->getTree()->topLevelItem(i))->find(Global::pathApplication.absoluteFilePath() + "/IanniX/");
         if(searchItem)
-            ui->files->getTree()->collapseItem(searchItem);
+            ui->files->getTree()->expandItem(searchItem);
     }
     ui->files->showNewRoot(true);
     ui->files->showOpen(true);

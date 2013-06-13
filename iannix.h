@@ -199,6 +199,7 @@ public slots:
     void actionOpen();
     void actionSave();
     void actionSave_as();
+    void actionRefresh();
     void currentDocumentChanged(UiSyncItem*);
     void actionUndo();
     void actionRedo();

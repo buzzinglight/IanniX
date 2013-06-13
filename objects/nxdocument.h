@@ -38,11 +38,14 @@ class NxDocument : public QObject, public QTreeWidgetItem, public MessageDispatc
 public:
     ExecuteSource source;
     UiFileItem *fileItem;
+    QString initialContent;
 public slots:
     void askFileOpen();
     void askFileSave();
     void askFileReload();
     void askFileClose();
+    void open();
+    void save();
 private:
     bool isLoaded;
     QList<QString> snapshots;
@@ -62,8 +65,8 @@ public:
     const QString serialize() const;
     void pushSnapshot();
     void popSnapshot(bool revert=false);
-    void open();
-    bool save();
+    void updateCode(bool fromFile);
+    const QString getContent(bool fromFile);
     void remplaceInFunction(QString *content, const QString &delimiter, const QString &data);
     QScriptValue scriptEvaluate(const QString &script, bool _createNewObjectIfExists);
 
@@ -121,7 +124,7 @@ protected:
     QString scriptContent;
 
 public:
-    bool open(bool configure);
+    void open(bool configure);
     inline void setMousePos(const NxPoint & _pos) {
         mousePos = _pos;
     }

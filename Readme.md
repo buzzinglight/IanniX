@@ -20,14 +20,5 @@ Linux
 -----
 - You'll need to build Qt before building IanniX
 - Some libraries are needed for Qt building
-     - sudo apt-get install g++
-     - sudo apt-get install libfreetype6-dev
-     - sudo apt-get install libglib2.0-dev
-     - sudo apt-get install libsm-dev
-     - sudo apt-get install libxrender-dev
-     - sudo apt-get install mesa-common-dev
-     - sudo apt-get install libglu1-mesa-dev
-     - sudo apt-get install libasound2-dev
-     - sudo apt-get install gtk2-engines-pixbuf
-     - sudo apt-get install fontconfig
+     - sudo apt-get install g++ libfreetype6-dev libfontconfig1-dev libfontconfig-dev libglib2.0-dev libsm-dev libgtk2.0-dev libxrender-dev libsqlite3-dev libglu1-mesa-dev libasound2-dev mesa-common-dev gtk2-engines-pixbuf libjpeg62‑dev libtiff4‑dev libpng12‑dev 
 - If opengl is slow, check Graphical Card drivers.

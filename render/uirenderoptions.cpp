@@ -47,4 +47,5 @@ UiString Global::defaultMessageCurve     = QString("osc://ip_out:57120/curve col
 UiString Global::defaultMessageTransport = QString("osc://ip_out:57120/transport status global_time global_time_verbose nb_triggers nb_cursors nb_curves, tcp:// transport status nb_triggers nb_cursors nb_curves");
 UiString Global::defaultMessageSync      = QString("osc://ip_out:57120/iannix/ status");
 UiString Global::defaultMessage          = QString("osc://ip_out:57120/object trigger_id trigger_group_id cursor_id cursor_group_id");
+QStringList Global::messageTemplates;
 

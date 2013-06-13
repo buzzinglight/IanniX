@@ -21,6 +21,7 @@
 NxDocument::NxDocument(ApplicationCurrent *parent, UiFileItem *_fileItem) :
     QObject(parent) {
     fileItem = _fileItem;
+    variable = 0;
     connect(fileItem, SIGNAL(askFileClose()),  SLOT(askFileClose()));
     connect(fileItem, SIGNAL(askFileOpen()),   SLOT(askFileOpen()));
     connect(fileItem, SIGNAL(askFileReload()), SLOT(askFileReload()));
@@ -105,10 +106,15 @@ void NxDocument::open() {
     if(!isLoaded) {
         clear();
         open(true);
-        isLoaded = true;
+
+        NxObjectDispatchProperty::source = ExecuteSourceGui;
+        initialContent = Application::current->serialize();
     }
 }
-bool NxDocument::open(bool configure) {
+void NxDocument::open(bool configure) {
+    isLoaded = false;
+    Application::current->getMainWindow()->setWindowTitle(tr("IanniX") + QString(" / %1").arg(getScriptFile().baseName()));
+
     //Open the script
     QScriptValue scriptFunctions = scriptEngine.newQObject(this);
     script = scriptEngine.globalObject();
@@ -120,99 +126,111 @@ bool NxDocument::open(bool configure) {
     script.setProperty("nx",       scriptFunctions);
 
     //GUI to ask the user variables
-    variable = new ExtScriptVariableAsk(Application::current->getMainWindow());
+    if(!variable)
+        variable = new ExtScriptVariableAsk(Application::current->getMainWindow());
 
     //Open the script file (if its a file)
-    if(getScriptFile().exists()) {
-        QFile scriptFileContent(getScriptFile().absoluteFilePath());
-        if(scriptFileContent.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            //Read file
-            scriptContent = scriptFileContent.readAll();
-            scriptFileContent.close();
+    QFileInfo file = getScriptFile();
+    if(!file.exists())
+        file = QFileInfo(Global::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
+    QFile scriptFileContent(file.absoluteFilePath());
+    if(scriptFileContent.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        //Read file
+        scriptContent = scriptFileContent.readAll();
+        scriptFileContent.close();
 
-            //Load
-            if(getScriptFile().suffix().toLower() == "nxscore") {
-                QStringList paste = scriptContent.split(COMMAND_END, QString::SkipEmptyParts);
-                foreach(const QString & command, paste)
-                    Application::current->execute(command, ExecuteSourceGui);
+        //Load
+        if(getScriptFile().suffix().toLower() == "nxscore") {
+            QStringList paste = scriptContent.split(COMMAND_END, QString::SkipEmptyParts);
+            foreach(const QString & command, paste)
+                Application::current->execute(command, ExecuteSourceGui);
+        }
+        else {
+            QScriptValue scriptReturn = scriptEvaluate(scriptContent, false);
+
+            //Extract function
+            if(getScriptFile().suffix().toLower() == "iannix") {
+                scriptMakeWithScript       = script.property("makeWithScript");
+                scriptOnIncomingMessage    = script.property("onIncomingMessage");
+                scriptAskUserForParameters = script.property("askUserForParameters");
             }
             else {
-                QScriptValue scriptReturn = scriptEvaluate(scriptContent, false);
+                scriptOnIncomingMessage    = script.property("onMessage");
+                scriptMakeWithScript       = script.property("onCreate");
+                scriptAskUserForParameters = script.property("onConfigure");
+            }
+            scriptMadeThroughGUI           = script.property("madeThroughGUI");
+            scriptAlterateWithScript       = script.property("alterateWithScript");
+            scriptMadeThroughInterfaces    = script.property("madeThroughInterfaces");
 
-                //Extract function
-                if(getScriptFile().suffix().toLower() == "iannix") {
-                    scriptMakeWithScript       = script.property("makeWithScript");
-                    scriptOnIncomingMessage    = script.property("onIncomingMessage");
-                    scriptAskUserForParameters = script.property("askUserForParameters");
+
+            //Extract errors
+            QStringList errors = scriptEngine.uncaughtExceptionBacktrace();
+            if(scriptReturn.isError())
+                errors << scriptReturn.property("message").toString();
+            if(errors.count())  Transport::editor->scriptError(errors, scriptEngine.uncaughtExceptionLineNumber());
+            else                Transport::editor->scriptError(QStringList(), -1);
+
+
+            //Call the "askUserForParameters()" function
+            if(configure) {
+                scriptAskUserForParameters.call(QScriptValue(), QScriptValueList());
+                Application::current->pushSnapshot();
+            }
+
+            //Ask variables to user and sets the variable in the script
+            QList<ExtScriptVariable*> variables = variable->ask();
+            if(variable->result()) {
+                foreach(const ExtScriptVariable *variable, variables) {
+                    if(variable->isDefFloat())  script.setProperty(variable->getValue(), variable->getDefFloat());
+                    else                        script.setProperty(variable->getValue(), variable->getDefStr());
                 }
-                else {
-                    scriptOnIncomingMessage    = script.property("onMessage");
-                    scriptMakeWithScript       = script.property("onCreate");
-                    scriptAskUserForParameters = script.property("onConfigure");
-                }
-                scriptMadeThroughGUI           = script.property("madeThroughGUI");
-                scriptAlterateWithScript       = script.property("alterateWithScript");
-                scriptMadeThroughInterfaces    = script.property("madeThroughInterfaces");
 
+                //Call the functions
+                source = ExecuteSourceScript;
+                scriptMakeWithScript       .call(QScriptValue(), QScriptValueList());
+                source = ExecuteSourceGui;
+                scriptMadeThroughGUI       .call(QScriptValue(), QScriptValueList());
+                source = ExecuteSourceNetwork;
+                scriptMadeThroughInterfaces.call(QScriptValue(), QScriptValueList());
+                source = ExecuteSourceScript;
+                scriptAlterateWithScript   .call(QScriptValue(), QScriptValueList());
 
-                //Extract errors
-                QStringList errors = scriptEngine.uncaughtExceptionBacktrace();
-                if(scriptReturn.isError())
-                    errors << scriptReturn.property("message").toString();
-                if(errors.count())  Transport::editor->scriptError(errors, scriptEngine.uncaughtExceptionLineNumber());
-                else                Transport::editor->scriptError(QStringList(), -1);
-
-
-                //Call the "askUserForParameters()" function
-                if(configure) {
-                    scriptAskUserForParameters.call(QScriptValue(), QScriptValueList());
-                    Application::current->pushSnapshot();
-                }
-
-                //Ask variables to user and sets the variable in the script
-                QList<ExtScriptVariable*> variables = variable->ask();
-                if(variable->result()) {
-                    foreach(const ExtScriptVariable *variable, variables) {
-                        if(variable->isDefFloat())  script.setProperty(variable->getValue(), variable->getDefFloat());
-                        else                        script.setProperty(variable->getValue(), variable->getDefStr());
-                    }
-
-                    //Call the functions
-                    source = ExecuteSourceScript;
-                    scriptMakeWithScript       .call(QScriptValue(), QScriptValueList());
-                    source = ExecuteSourceGui;
-                    scriptMadeThroughGUI       .call(QScriptValue(), QScriptValueList());
-                    source = ExecuteSourceNetwork;
-                    scriptMadeThroughInterfaces.call(QScriptValue(), QScriptValueList());
-                    source = ExecuteSourceScript;
-                    scriptAlterateWithScript   .call(QScriptValue(), QScriptValueList());
-
-                    return true;
-                }
+                isLoaded = true;
             }
         }
     }
-    return false;
+    updateCode(true);
 }
+void NxDocument::updateCode(bool fromFile) {
+    Transport::editor->setContent(getContent(fromFile));
+}
+void NxDocument::save() {
+    QString scoreContent = getContent(false);
+    QFile scriptFileContent(getScriptFile().absoluteFilePath());
+    if(scriptFileContent.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        scriptFileContent.write(scoreContent.toLatin1());
+        scriptFileContent.close();
+    }
+    Application::current->getMainWindow()->setWindowTitle(tr("IanniX") + QString(" / %1").arg(getScriptFile().baseName()));
+}
+const QString NxDocument::getContent(bool fromFile) {
+    QString scoreContent;
 
-bool NxDocument::save() {
-    QString scoreContent = "";
-    if((!getScriptFile().exists()) || (getScriptFile().suffix().toLower() != "iannix")) {
-        //Load IanniX Score template
-        QFile scoreTemplateFile(Global::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
+    //Load IanniX Score
+    if(fromFile) {
+        QFileInfo file = getScriptFile();
+        if(!file.exists())
+            file = QFileInfo(Global::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
+
+        QFile scoreTemplateFile(file.absoluteFilePath());
         if(scoreTemplateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             scoreContent = scoreTemplateFile.readAll();
             scoreTemplateFile.close();
         }
     }
-    else {
-        //Load IanniX Score
-        QFile scoreTemplateFile(getScriptFile().absoluteFilePath());
-        if(scoreTemplateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            scoreContent = scoreTemplateFile.readAll();
-            scoreTemplateFile.close();
-        }
-    }
+    else
+        scoreContent = Transport::editor->getContent();
 
     //Locate functions
     NxObjectDispatchProperty::source = ExecuteSourceGui;
@@ -221,19 +239,7 @@ bool NxDocument::save() {
     remplaceInFunction(&scoreContent, "//INTERFACES: NEVER EVER REMOVE THIS LINE\n", Application::current->serialize());
     remplaceInFunction(&scoreContent, " *\t//APP VERSION: NEVER EVER REMOVE THIS LINE\n", QString(" *\tMade with IanniX %1").arg(QCoreApplication::applicationVersion()));
 
-    qDebug("%s", qPrintable(scoreContent));
-    qDebug("SAVED TO %s", qPrintable(getScriptFile().absoluteFilePath()));
-
-    QFile scriptFileContent(getScriptFile().absoluteFilePath());
-    if(!scriptFileContent.exists()) {
-        if(scriptFileContent.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            qDebug("%s", qPrintable(scoreContent));
-            scriptFileContent.write(scoreContent.toLatin1());
-            scriptFileContent.close();
-            return true;
-        }
-    }
-    return false;
+    return scoreContent;
 }
 
 void NxDocument::remplaceInFunction(QString *content, const QString &delimiter, const QString &data) {
@@ -272,18 +278,20 @@ void NxDocument::askFileOpen() {
     open();
 }
 void NxDocument::askFileSave() {
-    qDebug("==> SAVE %s", qPrintable(getScriptFile().absoluteFilePath()));
     save();
 }
 void NxDocument::askFileReload() {
-    qDebug("==> RELOAD %s", qPrintable(getScriptFile().absoluteFilePath()));
     open();
 }
 void NxDocument::askFileClose() {
+    NxObjectDispatchProperty::source = ExecuteSourceGui;
+    if(initialContent != Application::current->serialize()) {
+        int rep = (new UiMessageBox())->display(tr("Score file"), tr("Do you want to save changes before closing score?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
+        if(rep)
+            fileItem->askForSave(fileItem, false);
+    }
     clear();
-    qDebug("==> CLOSE %s", qPrintable(getScriptFile().absoluteFilePath()));
 }
-
 void NxDocument::restoreDefaults() {
     Global::defaultColors.insert("background_texture_tint"          , QColor(255, 255, 255, 255));
     Global::defaultColors.insert("darktheme_background"             , QColor(  0,   0,   0, 255));

@@ -135,6 +135,7 @@ void InterfaceHttp::parseSocket(QTcpSocket *socket) {
                   "Access-Control-Allow-Origin: *\r\n"
                   "\r\n";
 
+            NxObjectDispatchProperty::source = ExecuteSourceCopyPaste;
             os << Application::current->serialize();
         }
         else if(isPic) {

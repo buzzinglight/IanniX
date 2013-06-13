@@ -22,6 +22,12 @@
 	width:  				20px;
 	height: 			20px;
 	border-radius: 10px;
+	padding:			0px;
+}
+QPushButton#actionDuplicate, QPushButton#actionAddRoot, QPushButton#actionSave {
+	min-width:  		70px;
+	max-width:  	70px;
+	width:  				70px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -103,7 +109,7 @@
         <string>Save</string>
        </property>
        <property name="text">
-        <string>S</string>
+        <string>SAVE</string>
        </property>
       </widget>
      </item>
@@ -113,7 +119,7 @@
         <string>Duplicate</string>
        </property>
        <property name="text">
-        <string>D</string>
+        <string>DUPLICATE</string>
        </property>
       </widget>
      </item>
@@ -123,7 +129,7 @@
         <string>Add a folder</string>
        </property>
        <property name="text">
-        <string>/</string>
+        <string>NEW FOLDER</string>
        </property>
       </widget>
      </item>
@@ -153,7 +159,7 @@
         <string>Delete</string>
        </property>
        <property name="text">
-        <string>-</string>
+        <string>–</string>
        </property>
       </widget>
      </item>

@@ -30,6 +30,15 @@ IanniX::IanniX(QObject *parent) :
     Global::textures = new UiTextureItems();
     Global::colors   = new UiColorItems();
 
+    Global::messageTemplates << tr("osc://ip_out:57120/trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id - Default OSC message for triggers");
+    Global::messageTemplates << tr("osc://ip_out:57120/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors");
+    Global::messageTemplates << tr("osc://ip_out:57120/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0 - Default OSC message for classical playhead");
+    Global::messageTemplates << tr("midi://midi_out/notef 1 trigger_value_y trigger_value_x 3 - Default MIDI message for triggers");
+    Global::messageTemplates << tr("midi://midi_out/note 1 69 127 5 - Play a MIDI note #69 (A - 440Hz) during 5 seconds on channel #1 with maximum velocity");
+    Global::messageTemplates << tr("midi://midi_out/ccf 1 0 cursor_value_y - Send a MIDI control change on controler #0 on channel #1 depending on cursor position (as float value between 0 and 1)");
+    Global::messageTemplates << tr("direct:// goto 2 - Make score go back to timecode 000:02.000");
+    Global::messageTemplates << tr("direct:// setSpeedF 10 1 - Make the cursor #10 start (please set its Master Speed to 0 before)");
+
     //Updates
     forceUpdate = false;
 
@@ -68,6 +77,9 @@ IanniX::IanniX(QObject *parent) :
     //Transport
     connect(transport, SIGNAL(forceOpenGLtimer(qreal)),             SLOT(forceOpenGLTimer(qreal)));
     connect(transport, SIGNAL(forceSchedulerTimer(qreal)),          SLOT(forceSchedulerTimer(qreal)));
+    connect(Transport::editor, SIGNAL(askSave()),    SLOT(actionSave()));
+    connect(Transport::editor, SIGNAL(askSave()),    SLOT(actionReloadScript()));
+    connect(Transport::editor, SIGNAL(askRefresh()), SLOT(actionRefresh()));
 
     //Inspector
     connect(inspector, SIGNAL(actionRouteCC(QTreeWidgetItem*,int)), SLOT(actionCC(QTreeWidgetItem*,int)));
@@ -153,8 +165,19 @@ IanniX::IanniX(QObject *parent) :
         foreach(UiOption *option, UiOptions::options)
             iniSettings->setValue(option->settingName, option->variant());
 
+        //Messages
+        int messageTemplatesCount = iniSettings->beginReadArray("Messages Templates");
+        if(messageTemplatesCount > 0) {
+            Global::messageTemplates.clear();
+            for(quint16 i = 0 ; i < messageTemplatesCount ; i++) {
+                iniSettings->setArrayIndex(i);
+                Global::messageTemplates << iniSettings->value("messageTemplates").toString();
+            }
+        }
+        iniSettings->endArray();
+
         //Colors
-        iniSettings->beginGroup("colors");
+        iniSettings->beginGroup("Colors");
         QMapIterator<QString, QColor> colorIterator(*Global::colors);
         while (colorIterator.hasNext()) {
             colorIterator.next();
@@ -175,8 +198,16 @@ IanniX::IanniX(QObject *parent) :
             if(iniSettings->childKeys().contains(option->settingName))
                 option->setVariant(iniSettings->value(option->settingName));
 
+        //Messages
+        iniSettings->beginWriteArray("Messages Templates", Global::messageTemplates.count());
+        for(quint16 i = 0 ; i < Global::messageTemplates.count() ; i++) {
+            iniSettings->setArrayIndex(i);
+            iniSettings->setValue("messageTemplates", Global::messageTemplates.at(i));
+        }
+        iniSettings->endArray();
+
         //Colors
-        iniSettings->beginGroup("colors");
+        iniSettings->beginGroup("Colors");
         QStringList settingsKeys = iniSettings->childKeys();
         foreach(const QString &settingsKey, settingsKeys)
             Global::colors->insert(settingsKey, iniSettings->value(settingsKey).value<QColor>());
@@ -561,8 +592,6 @@ void IanniX::currentDocumentChanged(UiSyncItem *item) {
         delete currentDocument;
     currentDocument = new NxDocument(this, (UiFileItem*)item);
     render->setDocument(currentDocument);
-    qDebug("CHANGEMENBT DE DOC");
-    view->setWindowTitle(tr("IanniX") + QString(" / %1").arg(currentDocument->getScriptFile().baseName()));
     currentDocument->askFileOpen();
 }
 void IanniX::actionOpen() {
@@ -575,6 +604,9 @@ void IanniX::actionSave() {
 }
 void IanniX::actionSave_as() {
     inspector->getFileWidget()->askSave(true);
+}
+void IanniX::actionRefresh() {
+    currentDocument->updateCode(false);
 }
 void IanniX::loadProject(const QString & projectFile) {
     if(QFileInfo(projectFile).exists()) {

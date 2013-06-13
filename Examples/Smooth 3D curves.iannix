@@ -1,5 +1,10 @@
-//If a message is received
-function onMessage(protocol, host, port, destination, values) {
+/*
+ *	IanniX Score File
+ */
+
+
+//When an incoming message is received, this method is called.
+function onIncomingMessage(protocol, host, port, destination, values) {
 	//Message reception
 	if((protocol == "midi") && (destination == "cc") && (values.length > 2)) {
 		//Control Change ID
@@ -39,8 +44,8 @@ var points = [
 var rotate = {x: 0, y: -80, z:-10};
 var options = {nb: 10, factor: 0, finefactor: 0.2};
 
-//Creation of the score
-function onCreate() {
+//Creation of the score with script commands
+function makeWithScript() {
 	//Viewport setup
 	run("clear");
 		run("center 0 0");
@@ -105,12 +110,16 @@ function update(pts, thick) {
 }
 
 
-//Modification of points
+/*
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ *	Made with IanniX 0.9.0
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ */
 
 
 /*
-    IanniX ? a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2012 ? IanniX Association
+    IanniX - a graphical real-time open-source sequencer for digital art
+    Copyright (C) 2010-2012 - IanniX Association
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

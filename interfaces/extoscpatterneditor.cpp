@@ -28,6 +28,8 @@ ExtOscPatternEditor::ExtOscPatternEditor(QWidget *parent) :
     isTrigger = false;
     patternNbValues = 0;
 
+    ui->templates->addItems(Global::messageTemplates);
+
     trees.clear();
     trees << qMakePair(ui->argument1Combo, qMakePair(ui->argument1Label, ui->argument1Clear));
     trees << qMakePair(ui->argument2Combo, qMakePair(ui->argument2Label, ui->argument2Clear));

@@ -175,46 +175,6 @@ QSplitter::handle:vertical     		{	height: 4px; }
           <string>Templates</string>
          </property>
         </item>
-        <item>
-         <property name="text">
-          <string>osc://ip_out:57120/trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id - Default OSC message for triggers</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>osc://ip_out:57120/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>osc://ip_out:57120/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0 - Default OSC message for classical playhead</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>midi://midi_out/notef 1 trigger_value_y trigger_value_x 3 - Default MIDI message for triggers</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>midi://midi_out/note 1 69 127 5 - Play a MIDI note #69 (A - 440Hz) during 5 seconds on channel #1 with maximum velocity</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>midi://midi_out/ccf 1 0 cursor_value_y - Send a MIDI control change on controler #0 on channel #1 depending on cursor position (as float value between 0 and 1)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>direct:// goto 2 - Make score go back to timecode 000:02.000</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>direct:// setSpeedF 10 1 - Make the cursor #10 start (please set its Master Speed to 0 before)</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>

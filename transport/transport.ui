@@ -26,7 +26,7 @@
    <string>IanniX — Transport</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QTabWidget, QLabel, QCheckBox, QLineEdit, QPlainTextEdit, QPushButton, QSpinBox, QDoubleSpinBox, QTreeView, QHeaderView, QTabBar, QComboBox, QFrame#globalFrame, QTabBar::tab, QTreeView, QHeaderView, QDockWidget, QStatusBar, QRadioButton {
+   <string notr="true">QTabWidget, QLabel, QCheckBox, QLineEdit, QPlainTextEdit, QPushButton, QSpinBox, QDoubleSpinBox, QTreeView, QHeaderView, QTabBar, QComboBox, QFrame#globalFrame, QTabBar::tab, QTreeView, QHeaderView, QDockWidget, QStatusBar, QRadioButton, QToolButton {
 	font: 						10px &quot;Museo Sans&quot;, &quot;Museo Sans 500&quot;, &quot;Arial&quot;;
 	padding:					0px;
 	margin:					0px;
@@ -87,6 +87,8 @@ QTabBar::tab:disabled {
 
 QPushButton {
 	margin-left: 			6px;
+	padding-left: 			3px;
+	padding-right: 		3px;
 }
 QPushButton:hover {
 	border: 					1px solid rgb(28, 124, 195);
@@ -235,15 +237,19 @@ QDockWidget::title {
 	background-color: 	rgb(70, 70, 70);
 }
 
-
+QToolBar {
+	background:				qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(247, 247, 247, 255), stop:1 rgba(222, 222, 222, 255));
+	border: 					1px solid rgba(202, 202, 202, 255);
+	spacing:					0px; 
+}
 QToolButton {
 	border: 					0px solid black;
+	color:						black;
 	border-radius: 		3px;
-	margin: 					2px;
+	margin:					3px;
 }
 QToolButton:pressed, QToolButton:checked {
-	border: 					0px solid black;
-    background-color: 	rgba(0, 0, 0, 20);
+    background-color:  rgba(0, 0, 0, 20);
 }
 
 
@@ -291,6 +297,7 @@ QPushButton#ffButton, QPushButton#playButton {
 	min-width:  		40px;
 	min-height: 		40px;
 	border-radius: 20px;
+	padding:			0px;
 }
 QPushButton#logoButton {
 	margin: -2px;
@@ -664,6 +671,7 @@ QDialogButtonBox QPushButton {
 	border-radius: 7px;
 	margin: 			0px;
 	margin-top:		7px;
+	padding:			0px;
 }
 QPushButton:disabled {
 	border:				0px solid transparent;

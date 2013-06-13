@@ -2,18 +2,13 @@
 
 QIcon UiFileItem::iconFile;
 QIcon UiFileItem::iconFolder;
-bool  UiFileItem::showDateTime = true;
-QStringList UiFileItem::forbiddenDirs;
-QStringList UiFileItem::allowedExtensions;
+QStringList UiFileItem::allowedExtensions = QStringList() << "nxscore" << "nxscript" << "nxstyle" << "iannix";
 
 UiFileItem::UiFileItem(const QFileInfo &file, UiFileItem *_parent, QFileSystemWatcher *_watcher) :
     QObject(_parent), UiSyncItem(_parent) {
     isOpened = false;
     currentDepth = -1;
     watcher = _watcher;
-
-    allowedExtensions << "nxscore" << "nxscript" << "nxstyle" << "iannix";
-
     if(!watcher) {
         watcher = new QFileSystemWatcher(this);
         connect(watcher, SIGNAL(directoryChanged(QString)), SLOT(fileWatcherDirChanged(QString)));
@@ -25,36 +20,21 @@ UiFileItem::UiFileItem(const QFileInfo &file, UiFileItem *_parent, QFileSystemWa
     highlight();
 }
 
-const QString UiFileItem::dateToString(const QDateTime &date) {
-    quint16 daysTo = date.daysTo(QDateTime::currentDateTime());
-
-    if(daysTo > 7)
-        return date.toString("yyyy-MM-dd hh:mm");
-    else if(daysTo > 1)
-        return date.toString("dddd, hh:mm");
-    else
-        return tr("Today, ") + date.toString("hh:mm");
-}
-
 QVariant UiFileItem::data(int column, int role) const {
     if((role == Qt::DisplayRole) || (role == Qt::EditRole)) {
         if(column == 0) return filename.variant();
-        if(showDateTime) {
-            if(column == 1) {
-                if(filename.file.exists()) return dateToString(filename.file.lastModified());
-                else                        return "-";
-            }
-            if(column == 2) return openInFinder.variant();
+        if(column == 1) {
+            if(filename.file.exists())  return filename.file.lastModified().toString("yyyy-MM-dd hh:mm");
+            else                        return "-";
         }
-        else
-            if(column == 1) return openInFinder.variant();
+        if(column == 2) return openInFinder.variant();
     }
     return QTreeWidgetItem::data(column, role);
 }
 void UiFileItem::setData(int column, int role, const QVariant &value) {
     if((role == Qt::DisplayRole) || (role == Qt::EditRole)) {
         if(column == 0) return filename.setVariant(value);
-        if(((!showDateTime) && (column == 1)) || ((showDateTime) && (column == 2))) return openInFinder.setVariant(value);
+        if(column == 2) return openInFinder.setVariant(value);
     }
     return QTreeWidgetItem::setData(column, role, value);
 }
@@ -120,10 +100,7 @@ UiSyncItem* UiFileItem::askForNewChild(UiSyncItem*, bool isRoot) {
             return creationItem;
         }
         else {
-            QString prefix = filename.file.absolutePath() + "/";
-            if(filename.file.isDir())
-                prefix = filename.file.absoluteFilePath() + "/";
-            QFileInfo file(prefix + "New score.iannix");
+            QFileInfo file(filename.file.absolutePath() + "/New Score.iannix");
             item = new UiFileItem(file, creationItem, watcher);
             treeWidget()->setCurrentItem(item);
             treeWidget()->scrollToItem(item);
@@ -159,7 +136,7 @@ bool UiFileItem::askForClose(UiSyncItem*) {
         if(watcher->files().count())
             watcher->removePaths(watcher->files());
     }
-    setFont(0, font(1));
+    setForeground(0, Qt::white);
     isOpened = false;
     fileClose();
     return true;
@@ -176,9 +153,7 @@ bool UiFileItem::askForOpen(UiSyncItem*) {
             watcher->addPath(filename.file.absoluteFilePath());
         }
         */
-        QFont currentFont = font(1);
-        currentFont.setBold(true);
-        setFont(0, currentFont);
+        setForeground(0, QColor(0, 187, 255));
         isOpened = true;
         fileOpen();
     }
@@ -186,11 +161,10 @@ bool UiFileItem::askForOpen(UiSyncItem*) {
 }
 bool UiFileItem::askForSave(UiSyncItem*, bool as) {
     if((!filename.file.exists()) || (as)) {
-        QString file = QFileDialog::getSaveFileName(0, "Save score", filename.file.absoluteFilePath(), QString("IanniX score (*.iannix)"));
+        QString file = QFileDialog::getSaveFileName(0, "Save file", filename.file.absoluteFilePath(), QString("IanniX Score (*.iannix)"));
         if(!file.isEmpty()) {
             filename = QFileInfo(file);
             fileSave();
-            setIcon(0, iconFile);
             syncWith(QFileInfoList() << filename.file, treeWidget());
             return true;
         }
@@ -199,10 +173,8 @@ bool UiFileItem::askForSave(UiSyncItem*, bool as) {
         fileSave();
     return false;
 }
-bool UiFileItem::askForImport(UiSyncItem*, const QFileInfoList &list) {
-    syncWith(list, treeWidget());
-    return true;
-}
+
+
 
 
 
@@ -244,14 +216,6 @@ bool UiFileItem::fileRename(const QFileInfo &source, const QFileInfo &destinatio
 }
 
 
-UiFileItem* UiFileItem::find(const QFileInfo &search, QTreeWidget *tree) {
-    for(quint16 i = 0 ; i < tree->topLevelItemCount() ; i++) {
-        UiFileItem *item = ((UiFileItem*)tree->topLevelItem(i))->find(search);
-        if(item)
-            return item;
-    }
-    return 0;
-}
 UiFileItem* UiFileItem::find(const QFileInfo &search) {
     if(filename.file == search)
         return this;
@@ -279,21 +243,19 @@ void UiFileItem::syncWith(const QFileInfoList &files, QTreeWidget *treeWidget) {
             }
         }
         if((!existingItem) && (file.exists())) {
-            if(conformFile(file)) {
+            if((file.isDir()) || ((file.isFile()) && (allowedExtensions.contains(file.suffix().toLower())))) {
                 UiFileItem *baseItem = new UiFileItem(file, 0, 0);
                 treeWidget->addTopLevelItem(baseItem);
                 treeWidget->sortItems(0, Qt::AscendingOrder);
-                baseItem->syncWith(5);
+                baseItem->syncWith(1);
                 baseItem->highlight();
             }
         }
     }
 
-    /*
     treeWidget->collapseAll();
     for(quint16 i = 0 ; i < treeWidget->topLevelItemCount() ; i++)
         treeWidget->expandItem(treeWidget->topLevelItem(i));
-    */
 }
 void UiFileItem::syncWith(qint16 depth) {
     QStringList directories;
@@ -336,7 +298,7 @@ QStringList UiFileItem::syncWith(const QDir &dir, qint16 depth) {
                 item->fileWatcherDirChanged(QString());
         }
         else {
-            if(conformFile(file)) {
+            if((file.isDir()) || ((file.isFile()) && (allowedExtensions.contains(file.suffix().toLower())))) {
                 item = new UiFileItem(file, this, watcher);
                 if( file.isDir())                   directories.append(file.absoluteFilePath());
                 if((file.isDir()) && (depth > 0))   directories.append(item->syncWith(QDir(fileAbsolutePath + "/"), currentDepth-1));
@@ -418,37 +380,18 @@ void UiFileItem::fileShowInFinder() {
     QProcess::execute("/usr/bin/osascript", scriptArgs);
 #endif
 }
-void UiFileItem::fileShowInOS() {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(filename.file.absoluteFilePath()));
-}
 
-void UiFileItem::configure(UiTreeView *tree, bool _showDateTime) {
-    iconFolder   = QIcon(":/items/res_item_folder.png");
-    iconFile     = QIcon(":/items/res_item_file.png");
-    showDateTime = _showDateTime;
+void UiFileItem::configure(UiTreeView *tree) {
+    iconFolder = QIcon(":/items/res_item_folder.png");
+    iconFile   = QIcon(":/items/res_item_file.png");
 
     tree->getTree()->setEditTriggers(QAbstractItemView::SelectedClicked | QAbstractItemView::EditKeyPressed);
     tree->getTree()->setIndentation(15);
     tree->getTree()->setHeaderHidden(false);
 
-    quint16 columnIndex = 0;
-    tree->configureColumns(    UiTreeViewOptions(columnIndex++, "Filename", "edit"     , "margin:0px;", QHeaderView::Stretch, 410, 20, 20));
-    if(showDateTime)
-        tree->configureColumns(UiTreeViewOptions(columnIndex++, "Date"    , ""         , ""           , QHeaderView::Fixed,   120, 20, 20));
-    UiTreeViewOptions col3 =   UiTreeViewOptions(columnIndex++, ""        , "checkboxS", ""           , QHeaderView::Fixed,   30 , 20, 20);
+    tree->configureColumns(  UiTreeViewOptions(0, "Filename", "edit"     , "margin:0px;", QHeaderView::Stretch, 410, 20, 20));
+    tree->configureColumns(  UiTreeViewOptions(1, "Date"    , ""         , ""           , QHeaderView::Fixed,   100, 20, 20));
+    UiTreeViewOptions col3 = UiTreeViewOptions(2, ""        , "checkboxS", ""           , QHeaderView::Fixed,   30 , 20, 20);
     col3.iconCheckedOn = col3.iconCheckedOff = QPixmap(":/items/res_item_reveal.png");
     tree->configureColumns(col3);
-}
-
-
-bool UiFileItem::conformFile(const QFileInfo &file) {
-    if(file.isDir())
-        return !forbiddenDirs.contains(file.baseName());
-    else if(file.isFile()) {
-        if(allowedExtensions.count())
-            return allowedExtensions.contains(file.suffix());
-        else
-            return true;
-    }
-    return false;
 }
