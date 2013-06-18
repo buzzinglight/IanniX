@@ -27,6 +27,7 @@ class IanniXApp : public QApplication {
 
 private:
     IanniX *iannix;
+    QFileInfo project;
 
 public:
     explicit IanniXApp(int &argc, char **argv);

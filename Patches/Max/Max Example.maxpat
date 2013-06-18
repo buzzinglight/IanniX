@@ -37,7 +37,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 469.954071, 85.0, 112.556122, 20.0 ],
-					"presentation_rect" : [ 464.816345, 86.0, 0.0, 0.0 ],
 					"text" : "Transport timecode"
 				}
 
@@ -2085,28 +2084,28 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "iannix.maxpat",
-				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/MaxMSP",
+				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/Max",
 				"patcherrelativepath" : "",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "sampler.maxpat",
-				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/MaxMSP",
+				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/Max",
 				"patcherrelativepath" : "",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "iannix_object.maxpat",
-				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/MaxMSP",
+				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/Max",
 				"patcherrelativepath" : "",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "synthetizer.maxpat",
-				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/MaxMSP",
+				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/Max",
 				"patcherrelativepath" : "",
 				"type" : "JSON",
 				"implicit" : 1

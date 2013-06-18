@@ -1,4 +1,4 @@
-Processing
+Pure Data
 ----------
 - Open any IanniX score
-- Play! Cursors and curves will move cubes according to their score spatial coordinates.
+- Play and have a look with GEM or print messages

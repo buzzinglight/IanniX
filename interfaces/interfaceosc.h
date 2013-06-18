@@ -7,6 +7,7 @@
 #include "misc/options.h"
 #include "messages/messagemanager.h"
 #include "gui/uihelp.h"
+//#include "qzeroconf/servicebrowser.h"
 
 namespace Ui {
 class InterfaceOsc;

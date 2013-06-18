@@ -18,8 +18,10 @@
 
 #include "iannix.h"
 
-IanniX::IanniX(QObject *parent) :
+IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     ApplicationCurrent(parent) {
+    projectToLoad = _projectToLoad;
+    projectIsLoaded = false;
     iconAppPlay  = QIcon(":icons/res_appicon_pause.png");
     iconAppPause = QIcon(":icons/res_appicon_play.png");
     NxObject::widgetIconActiveOff = QIcon(":gui/res_icon_check_active_off.png");
@@ -246,7 +248,7 @@ void IanniX::readyToStart() {
         qDebug("Ready to start!");
 
         //Projet par défault
-        loadProject();
+        loadProject(projectToLoad);
         forceGoto(0);
 
         timerTime = startTimer(50);
@@ -479,7 +481,7 @@ void IanniX::checkForUpdatesFinished(QNetworkReply *reply) {
         if((info.length() > 0) || (forceUpdate)) {
             int rep = (new UiMessageBox())->display(tr("IanniX Update Center"), tr("A new version of IanniX is available"), info, tr("Would you like to update IanniX with the new version ?"), QPixmap(":/infos/res_info_update.png"), QDialogButtonBox::Yes | QDialogButtonBox::No);
             if(rep)
-                QDesktopServices::openUrl(QUrl("http://www.iannix.org/en/download.php", QUrl::TolerantMode));
+                QDesktopServices::openUrl(QUrl("http://www.iannix.org/", QUrl::TolerantMode));
         }
     }
 }
@@ -595,9 +597,9 @@ void IanniX::currentDocumentChanged(UiSyncItem *item) {
     currentDocument->askFileOpen();
 }
 void IanniX::actionOpen() {
-    QString fileName = QFileDialog::getOpenFileName(0, tr("Open IanniX Score"), Global::pathDocuments.absoluteFilePath() + "/");
-    if(!fileName.isEmpty())
-        inspector->getFileWidget()->askImport(QStringList() << fileName);
+    QString filename = QFileDialog::getOpenFileName(0, tr("Open IanniX Score"), Global::pathDocuments.absoluteFilePath() + "/");
+    if(!filename.isEmpty())
+        loadProject(filename);
 }
 void IanniX::actionSave() {
     inspector->getFileWidget()->askSave();
@@ -608,12 +610,18 @@ void IanniX::actionSave_as() {
 void IanniX::actionRefresh() {
     currentDocument->updateCode(false);
 }
-void IanniX::loadProject(const QString & projectFile) {
-    if(QFileInfo(projectFile).exists()) {
-
+void IanniX::loadProject(const QString & _projectFile) {
+    QFileInfo projectFile(_projectFile);
+    if(projectFile.isDir())
+        UiFileItem::syncWith(QFileInfoList() << QFileInfo(projectFile.absoluteFilePath() + "/"), inspector->getFileWidget()->getTree());
+    else if(projectFile.isFile()) {
+        UiFileItem::syncWith(QFileInfoList() << QFileInfo(projectFile.absolutePath() + "/"), inspector->getFileWidget()->getTree());
+        inspector->getFileWidget()->askImport(QStringList() << projectFile.absoluteFilePath());
+        inspector->getFileWidget()->askOpen();
     }
     else
         inspector->getFileWidget()->askNew();
+     projectIsLoaded = true;
 }
 
 
@@ -1072,7 +1080,9 @@ QString IanniX::incomingMessage(const MessageIncomming &source, bool needOutput)
     if(needOutput) {
         QString retour;
         retour += execute(source, false, true).toString();
-        retour += currentDocument->incomingMessage(source, true);
+        QString retourScript = currentDocument->incomingMessage(source, true);
+        if(retourScript != "undefined")
+            retourScript += retourScript;
         return retour;
     }
     else {

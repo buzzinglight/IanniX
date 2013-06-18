@@ -67,6 +67,7 @@ int main(int argc, char *argv[]) {
 
 IanniXApp::IanniXApp(int &argc, char **argv) :
     QApplication(argc, argv) {
+    iannix = 0;
 }
 
 void IanniXApp::launch(int &argc, char **argv) {
@@ -109,10 +110,9 @@ void IanniXApp::launch(int &argc, char **argv) {
         generateHelp();
     */
 
-    QFileInfo project;
     quint16 indexArgument = 1;
 #ifdef Q_OS_WIN
- //TOTO
+    //TOTO
     indexArgument = 0;
 #endif
     if(argc > indexArgument)
@@ -139,17 +139,24 @@ void IanniXApp::launch(int &argc, char **argv) {
         }
     }
 
-    iannix = new IanniX();
     if(project.exists()) {
         qDebug("Loading project %s", qPrintable(project.absoluteFilePath()));
-        iannix->loadProject(project.absoluteFilePath());
+        iannix = new IanniX(project.absoluteFilePath());
     }
+    else
+        iannix = new IanniX();
 }
 
 bool IanniXApp::event(QEvent *event) {
     switch (event->type()) {
     case QEvent::FileOpen:
-        iannix->loadProject(static_cast<QFileOpenEvent*>(event)->file());
+        project = QFileInfo(static_cast<QFileOpenEvent*>(event)->file());
+        if(iannix) {
+            if(iannix->projectIsLoaded)
+                iannix->loadProject(project.absoluteFilePath());
+            else
+                iannix->projectToLoad = project.absoluteFilePath();
+        }
         return true;
     default:
         return QApplication::event(event);

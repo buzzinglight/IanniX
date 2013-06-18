@@ -90,12 +90,16 @@ void UiFileItem::populate(const QFileInfo &file) {
 
 
 bool UiFileItem::askForDeletion(UiSyncItem *, bool dialog) {
-    //qDebug("[DELETE FILE] %s", qPrintable(filename.file.absoluteFilePath()));
     if(dialog) {
+        int rep = (new UiMessageBox())->display(tr("Score deletion"), tr("You are about to delete this file. Are you sure?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
+        if(rep) {
 #ifdef Q_OS_MAC
-        fileRename(filename.file, QFileInfo(QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + "/.Trash/" + filename.file.fileName()));
+            fileRename(filename.file, QFileInfo(QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + "/.Trash/" + filename.file.fileName()));
+#else
+            QFile::remove(filename.file.absoluteFilePath());
 #endif
-        delete this;
+            delete this;
+        }
     }
     else if(!isOpened) {
         if(dialog) {
@@ -176,9 +180,6 @@ bool UiFileItem::askForOpen(UiSyncItem*) {
             watcher->addPath(filename.file.absoluteFilePath());
         }
         */
-        QFont currentFont = font(1);
-        currentFont.setBold(true);
-        setFont(0, currentFont);
         isOpened = true;
         fileOpen();
     }
@@ -288,12 +289,6 @@ void UiFileItem::syncWith(const QFileInfoList &files, QTreeWidget *treeWidget) {
             }
         }
     }
-
-    /*
-    treeWidget->collapseAll();
-    for(quint16 i = 0 ; i < treeWidget->topLevelItemCount() ; i++)
-        treeWidget->expandItem(treeWidget->topLevelItem(i));
-    */
 }
 void UiFileItem::syncWith(qint16 depth) {
     QStringList directories;

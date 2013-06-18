@@ -9,8 +9,7 @@ namespace Ui {
 class InterfaceDirect;
 }
 
-class InterfaceDirect : public NetworkInterface
-{
+class InterfaceDirect : public NetworkInterface {
     Q_OBJECT
     
 public:

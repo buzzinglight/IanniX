@@ -1,4 +1,4 @@
-#N canvas 652 81 551 467 10;
+#N canvas 652 81 592 559 10;
 #X obj 54 116 inlet;
 #X obj 184 116 inlet;
 #X msg 184 165 /iannix/stop;
@@ -26,16 +26,18 @@
 #X msg 281 408 0;
 #X obj 332 433 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X obj 253 434 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+#X obj 253 434 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 253 455 outlet;
 #X obj 332 455 outlet;
-#X obj 402 455 outlet;
-#X obj 444 455 outlet;
-#X obj 486 455 outlet;
+#X obj 482 455 outlet;
+#X obj 524 455 outlet;
+#X obj 566 455 outlet;
 #X msg 384 165 /iannix/fastrewind;
-#X obj 230 346 unpack s f f f;
 #X msg 230 367 \$1;
+#X obj 382 455 outlet;
+#X obj 432 455 outlet;
+#X obj 230 346 unpack s f s f f f;
 #X connect 0 0 7 0;
 #X connect 1 0 3 0;
 #X connect 2 0 7 0;
@@ -46,7 +48,7 @@
 #X connect 6 0 19 0;
 #X connect 6 1 20 0;
 #X connect 6 2 21 0;
-#X connect 6 3 33 0;
+#X connect 6 3 36 0;
 #X connect 7 0 12 0;
 #X connect 8 0 13 0;
 #X connect 8 0 16 0;
@@ -68,8 +70,10 @@
 #X connect 25 0 28 0;
 #X connect 26 0 27 0;
 #X connect 32 0 7 0;
-#X connect 33 0 34 0;
-#X connect 33 1 29 0;
-#X connect 33 2 30 0;
-#X connect 33 3 31 0;
-#X connect 34 0 22 0;
+#X connect 33 0 22 0;
+#X connect 36 0 33 0;
+#X connect 36 1 34 0;
+#X connect 36 2 35 0;
+#X connect 36 3 29 0;
+#X connect 36 4 30 0;
+#X connect 36 5 31 0;

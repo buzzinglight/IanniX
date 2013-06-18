@@ -98,6 +98,10 @@ void InterfaceSerial::portChanged() {
             else                ui->portCombo->setStyleSheet(ihmFeedbackNok);
         }
     }
+    else {
+        if((port) && (port->isOpen()))
+            port->close();
+    }
 }
 
 void InterfaceSerial::parse() {

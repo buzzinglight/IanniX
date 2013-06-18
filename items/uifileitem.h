@@ -9,6 +9,7 @@
 #include <QTreeWidgetItem>
 #include "uitreeview.h"
 #include "misc/options.h"
+#include "gui/uimessagebox.h"
 
 class UiFileItem : public QObject, public UiSyncItem {
     Q_OBJECT

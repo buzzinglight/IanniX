@@ -33,8 +33,10 @@ macx {
     CONFIG  += x86 x86_64
 }
 
+
 TARGET    = IanniX
 TEMPLATE  = app
+
 
 HEADERS  += iannix.h   iannixapp.h   iannix_spec.h  iannix_cmd.h
 SOURCES  += iannix.cpp iannixapp.cpp iannix_spec.cpp
@@ -82,6 +84,11 @@ SOURCES  += interfaces/qextserialport/qextserialport.cpp interfaces/qextserialpo
 HEADERS  += interfaces/qrtmidi/RtMidi.h   interfaces/qrtmidi/RtError.h
 SOURCES  += interfaces/qrtmidi/RtMidi.cpp
 debug:DEFINES += __RTMIDI_DEBUG__
+
+
+#Zeroconf
+#HEADERS  +=
+#SOURCES  +=
 
 #Syphon
 macx {

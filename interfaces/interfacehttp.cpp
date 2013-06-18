@@ -107,9 +107,8 @@ void InterfaceHttp::parseSocket(QTcpSocket *socket) {
                 picFormat.first  = first;
                 picFormat.second = url.queryItems().at(index).second.toInt();
             }
-            else if(first == "sync") {
+            else if(first == "sync")
                 isSync = true;
-            }
             else
                 commands.append(url.queryItems().at(index).second);
         }
@@ -123,9 +122,10 @@ void InterfaceHttp::parseSocket(QTcpSocket *socket) {
                   "Access-Control-Allow-Origin: *\r\n"
                   "\r\n";
 
-            QString response = "";
+            QString response;
             foreach(const QString & command, commands)
-                response += MessageManager::incomingMessage(MessageIncomming("http", socket->peerAddress().toString(), socket->peerPort(), url.path(), command, command.split(" ", QString::SkipEmptyParts)), true);
+                response += MessageManager::incomingMessage(MessageIncomming("http", socket->peerAddress().toString(), socket->peerPort(), url.path(), command, command.split(" ", QString::SkipEmptyParts)), true) + "\n";
+
             os << response;
         }
         else if(isSync) {

@@ -22,7 +22,7 @@
 	background-color: 	rgb(242, 241, 237);
 	color:						black;
 }
-QPushButton#logSendClear, QPushButton#logReceiveClear  {
+QPushButton  {
 	min-width:  		14px;
 	min-height: 		14px;
 	max-width:  	14px;
@@ -31,6 +31,11 @@ QPushButton#logSendClear, QPushButton#logReceiveClear  {
 	height: 			14px;
 	padding:			0px;
 	border-radius: 7px;
+}
+QPushButton#logSendCopy, QPushButton#logReceiveCopy {
+	min-width:  		40px;
+	max-width:  	40px;
+	width:  				40px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">

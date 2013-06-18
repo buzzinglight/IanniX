@@ -64,7 +64,7 @@ private:
     QString updateAnonymousId;
     QSettings *iniSettings, *globalSettings;
 public:
-    explicit IanniX(QObject *parent = 0);
+    explicit IanniX(const QString &_projectToLoad = "", QObject *parent = 0);
     void readyToStart();
     inline void dispatchProperty(const QString &_property, const QVariant &value)  {    dispatchProperty(qPrintable(_property), value); }
     inline const QVariant getProperty(const QString &_property) const              {    return getProperty(qPrintable(_property));      }
@@ -153,6 +153,8 @@ private:
     ExtWacomManager  *wacom;
 #endif
 public:
+    bool projectIsLoaded;
+    QString projectToLoad;
     void loadProject(const QString & projectFile = "");
 
     //TIME MANAGEMENT
