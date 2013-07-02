@@ -87,8 +87,14 @@ debug:DEFINES += __RTMIDI_DEBUG__
 
 
 #Zeroconf
-#HEADERS  +=
-#SOURCES  +=
+macx {
+    DEFINES     += ZEROCONF_INSTALLED
+    #SOURCES     += interfaces/zeroconf/servicebrowser.cpp interfaces/zeroconf/mdnsderived.cpp interfaces/zeroconf/embeddedLib.cpp   interfaces/zeroconf/nativeLib.cpp  interfaces/zeroconf/avahiLib.cpp
+    #HEADERS     += interfaces/zeroconf/servicebrowser.h   interfaces/zeroconf/mdnsderived.h   interfaces/zeroconf/zeroconf_global.h interfaces/zeroconf/dns_sd_types.h interfaces/zeroconf/servicebrowser_p.h
+    INCLUDEPATH += interfaces/zeroconf
+    SOURCES     += interfaces/zeroconf/bonjourserviceregister.cpp interfaces/zeroconf/bonjourserviceresolver.cpp interfaces/zeroconf/bonjourservicebrowser.cpp
+    HEADERS     += interfaces/zeroconf/bonjourserviceregister.h   interfaces/zeroconf/bonjourserviceresolver.h   interfaces/zeroconf/bonjourservicebrowser.h   interfaces/zeroconf/bonjourrecord.h
+}
 
 #Syphon
 macx {

@@ -213,6 +213,7 @@ UiString::UiString(const QString &_value) :
     UiOption() {
     value         = _value;
     edit          = 0;
+    spin          = 0;
     combo         = 0;
     plainTextEdit = 0;
 }
@@ -220,6 +221,7 @@ UiString::UiString(const UiString &_value) :
     UiOption() {
     value = _value.value;
     edit          = 0;
+    spin          = 0;
     combo         = 0;
     plainTextEdit = 0;
 }
@@ -238,6 +240,8 @@ UiString& UiString::operator= (const QString &_value) {
 void UiString::applyToGui() {
     if((edit) && (edit->text() != value))
         edit->setText(value);
+    if((spin) && (QString::number(spin->value()) != value))
+        spin->setValue(value.toInt());
     if((plainTextEdit) && (plainTextEdit->toPlainText() != value))
         plainTextEdit->setPlainText(value);
     if(combo)
@@ -248,6 +252,19 @@ void UiString::applyToGui() {
 
 UiString::operator QString() const {     return value;    }
 QString UiString::val()      const {     return value;    }
+void UiString::setAction(QSpinBox *_spin, const QString &_settingName, bool trigEvent, bool changeUi) {
+    UiOptions::add(this, _settingName);
+    if(spin)
+        spin->disconnect(this, SLOT(guiTrigged(QString)));
+    spin = _spin;
+    if(spin) {
+        if(changeUi)
+            applyToGui();
+        spin->connect(spin, SIGNAL(valueChanged(QString)), this, SLOT(guiTrigged(QString)));
+        if(trigEvent)
+            guiTrigged();
+    }
+}
 void UiString::setAction(QLineEdit *_edit, const QString &_settingName, bool trigEvent, bool changeUi) {
     UiOptions::add(this, _settingName);
     if(edit)
@@ -291,6 +308,8 @@ void UiString::setAction(QComboBox *_combo, const QString &_settingName, bool tr
 void UiString::guiTrigged() {
     if(edit)
         value = edit->text();
+    if(spin)
+        value = QString::number(spin->value());
     if(plainTextEdit)
         value = plainTextEdit->toPlainText();
     if(combo)

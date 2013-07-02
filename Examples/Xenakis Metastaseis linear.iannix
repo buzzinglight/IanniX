@@ -83,7 +83,7 @@ function makeWithScript() {
 	run("setCurve        current lastCurve");
 	run("setSpeed        current " + speed);
 	run("setGroup        current values");
-	run("setMessage      current 20, osc://ip_out:57120/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0, tcp:// curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0");
+	run("setMessage      current 20, osc://ip_out:port_out/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0, tcp:// curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0");
 	run("setBoundsSource current 0 6 0 14.2");
 
 	//Change cursors color

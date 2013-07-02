@@ -48,7 +48,8 @@ private:
 public:
     Message();
 public:
-    void setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine, const QHash<QString, UiString> &aliases);
+    void setUrl(QString url, QScriptEngine *_messageScriptEngine, const QHash<QString, UiString> &aliases);
+    void setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine);
     bool parse(const QVector<QByteArray> & patternItems, const MessageManagerDestination &destination);
     
 private:

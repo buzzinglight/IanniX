@@ -4,14 +4,31 @@
 #include <QWidget>
 #include <QByteArray>
 #include <QNetworkInterface>
+#include <QHostInfo>
 #include "misc/options.h"
 #include "messages/messagemanager.h"
 #include "gui/uihelp.h"
-//#include "qzeroconf/servicebrowser.h"
+#ifdef ZEROCONF_INSTALLED
+#include "zeroconf/bonjourserviceresolver.h"
+#include "zeroconf/bonjourservicebrowser.h"
+#include "zeroconf/bonjourserviceregister.h"
+#endif
 
 namespace Ui {
 class InterfaceOsc;
 }
+
+class BonjourService {
+public:
+    explicit BonjourService(const BonjourRecord &_record) { reset(); setAction(); record = _record; }
+    void reset()                         { port = 0; }
+    void setAction(QAction *_action = 0) { action = _action; }
+public:
+    BonjourRecord record;
+    QHostAddress host;
+    quint16 port;
+    QAction *action;
+};
 
 class InterfaceOsc : public NetworkInterface {
     Q_OBJECT
@@ -21,12 +38,28 @@ public:
     ~InterfaceOsc();
 
 private:
-    UiReal bundlePort;
-    UiReal port;
+    UiReal port, bundlePort;
     UiString bundleHost;
     UiBool enable;
+#ifdef ZEROCONF_INSTALLED
+    QMenu *bonjourMenu;
+    qint16 bonjourListCurrent;
+    QList<BonjourService> bonjourServices;
+    BonjourServiceRegister *bonjourRegisterIn, *bonjourRegisterOut;
+    BonjourServiceBrowser  *bonjourBrowser;
+    BonjourServiceResolver *bonjourResolver;
+    bool bonjourIsScanning;
+private slots:
+    void currentBonjourRecordsChanged(const QList<BonjourRecord> &);
+    void bonjourRecordResolved();
+    void bonjourRecordResolved(const QHostInfo &, int);
+    void bonjourScan();
+    void openBonjour();
+#endif
+
 private slots:
     void portChanged();
+    void portOutChanged();
     void openExamples() {
         QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/MaxMSP/").absoluteFilePath()));
         QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/PureData/").absoluteFilePath()));

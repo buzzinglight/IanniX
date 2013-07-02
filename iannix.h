@@ -60,7 +60,6 @@ class IanniX : public ApplicationCurrent, public NxObjectDispatchProperty, publi
 
 private:
     QDir scriptDir;
-    bool hasStarted;
     QString updateAnonymousId;
     QSettings *iniSettings, *globalSettings;
 public:

@@ -113,7 +113,7 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
             if((urlMessage.scheme().toLower() == "osc") || (urlMessage.scheme().toLower() == "http")) {
                 if(wasLearning) setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    "ip_out");
                 else            setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    urlMessage.host());
-                if(wasLearning) setCurrentItem(ui->portCombo,       ui->portLabel,       "57120");
+                if(wasLearning) setCurrentItem(ui->portCombo,       ui->portLabel,       "port_out");
                 else            setCurrentItem(ui->portCombo,       ui->portLabel,       QString::number(urlMessage.port()));
                 setCurrentItem(ui->addressOscCombo, ui->addressOSCLabel, urlMessage.path());
 

@@ -32,9 +32,9 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     Global::textures = new UiTextureItems();
     Global::colors   = new UiColorItems();
 
-    Global::messageTemplates << tr("osc://ip_out:57120/trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id - Default OSC message for triggers");
-    Global::messageTemplates << tr("osc://ip_out:57120/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors");
-    Global::messageTemplates << tr("osc://ip_out:57120/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0 - Default OSC message for classical playhead");
+    Global::messageTemplates << tr("osc://ip_out:port_out/trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id - Default OSC message for triggers");
+    Global::messageTemplates << tr("osc://ip_out:port_out/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors");
+    Global::messageTemplates << tr("osc://ip_out:port_out/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0 - Default OSC message for classical playhead");
     Global::messageTemplates << tr("midi://midi_out/notef 1 trigger_value_y trigger_value_x 3 - Default MIDI message for triggers");
     Global::messageTemplates << tr("midi://midi_out/note 1 69 127 5 - Play a MIDI note #69 (A - 440Hz) during 5 seconds on channel #1 with maximum velocity");
     Global::messageTemplates << tr("midi://midi_out/ccf 1 0 cursor_value_y - Send a MIDI control change on controler #0 on channel #1 depending on cursor position (as float value between 0 and 1)");
@@ -45,7 +45,6 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     forceUpdate = false;
 
     //Default values
-    hasStarted = false;
     currentDocument = 0;
     iniSettings  = 0;
     updateManager   = 0;
@@ -195,16 +194,20 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     if(QFile(settingsFilename).exists()) {
         iniSettings = new QSettings(settingsFilename, QSettings::IniFormat);
 
-        //UiOptions
-        foreach(UiOption *option, UiOptions::options)
-            if(iniSettings->childKeys().contains(option->settingName))
-                option->setVariant(iniSettings->value(option->settingName));
+        QString iniAppVersion = iniSettings->value("appVersion").toString();
+        if(iniAppVersion == QApplication::applicationVersion()) {
+            //UiOptions
+            foreach(UiOption *option, UiOptions::options)
+                if(iniSettings->childKeys().contains(option->settingName))
+                    option->setVariant(iniSettings->value(option->settingName));
+        }
 
         //Messages
-        iniSettings->beginWriteArray("Messages Templates", Global::messageTemplates.count());
-        for(quint16 i = 0 ; i < Global::messageTemplates.count() ; i++) {
+        Global::messageTemplates.clear();
+        int count = iniSettings->beginReadArray("Messages Templates");
+        for(quint16 i = 0 ; i < count ; i++) {
             iniSettings->setArrayIndex(i);
-            iniSettings->setValue("messageTemplates", Global::messageTemplates.at(i));
+            Global::messageTemplates.append(iniSettings->value("messageTemplates").toString());
         }
         iniSettings->endArray();
 
@@ -621,7 +624,7 @@ void IanniX::loadProject(const QString & _projectFile) {
     }
     else
         inspector->getFileWidget()->askNew();
-     projectIsLoaded = true;
+    projectIsLoaded = true;
 }
 
 

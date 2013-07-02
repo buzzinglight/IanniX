@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
-    <height>136</height>
+    <width>345</width>
+    <height>166</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -131,6 +131,38 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="bonjourPortIn">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="toolTip">
+        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using OpenSoundControl</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">margin-top: 6px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../icons/IanniX.qrc">
+         <normaloff>:/actions/res_icon_bonjour.png</normaloff>:/actions/res_icon_bonjour.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_25">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -172,32 +204,86 @@
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
-        <cstring>aliasPort</cstring>
+        <cstring>aliasIp</cstring>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="aliasPort">
+      <widget class="QLineEdit" name="aliasIp">
        <property name="minimumSize">
         <size>
-         <width>125</width>
+         <width>100</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>125</width>
+         <width>100</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="toolTip">
         <string>Changes the default IP address for all outgoing IP messages</string>
        </property>
-       <property name="inputMask">
-        <string notr="true">000.000.000.000;_</string>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="maxLength">
+        <number>15</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="aliasPort">
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>All the messages matching this IP + port will be packed in an OpenSoundControl bundle</string>
+       </property>
+       <property name="minimum">
+        <number>1024</number>
+       </property>
+       <property name="maximum">
+        <number>65535</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bonjour">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="toolTip">
+        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using OpenSoundControl</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">margin-top: 4px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../icons/IanniX.qrc">
+         <normaloff>:/actions/res_icon_bonjour.png</normaloff>:/actions/res_icon_bonjour.png</iconset>
        </property>
       </widget>
      </item>
@@ -251,24 +337,27 @@ BUNDLE ON</string>
       <widget class="QLineEdit" name="bundleIp">
        <property name="minimumSize">
         <size>
-         <width>125</width>
+         <width>100</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>125</width>
+         <width>100</width>
          <height>20</height>
         </size>
        </property>
        <property name="toolTip">
         <string>All the messages matching this IP + port will be packed in an OpenSoundControl bundle</string>
        </property>
-       <property name="inputMask">
-        <string notr="true">000.000.000.000;_</string>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="maxLength">
+        <number>15</number>
        </property>
       </widget>
      </item>
@@ -292,6 +381,38 @@ BUNDLE ON</string>
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="bonjourBundle">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="toolTip">
+        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using OpenSoundControl</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">margin-top: 4px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../icons/IanniX.qrc">
+         <normaloff>:/actions/res_icon_bonjour.png</normaloff>:/actions/res_icon_bonjour.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_29">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -308,6 +429,8 @@ BUNDLE ON</string>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../icons/IanniX.qrc"/>
+ </resources>
  <connections/>
 </ui>

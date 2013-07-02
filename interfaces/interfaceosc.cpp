@@ -7,6 +7,22 @@ InterfaceOsc::InterfaceOsc(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
 
+#ifdef ZEROCONF_INSTALLED
+    bonjourListCurrent = -1;
+    bonjourMenu = new QMenu(this);
+    connect(ui->bonjour,       SIGNAL(released()), SLOT(openBonjour()));
+    connect(ui->bonjourBundle, SIGNAL(released()), SLOT(openBonjour()));
+    connect(ui->bonjourPortIn, SIGNAL(released()), SLOT(openBonjour()));
+    bonjourResolver = 0;
+    bonjourRegisterIn = bonjourRegisterOut = 0;
+    bonjourBrowser = 0;
+    bonjourScan();
+#else
+    ui->bonjour->setVisible(false);
+    ui->bonjourBundle->setVisible(false);
+    ui->bonjourPortIn->setVisible(false);
+#endif
+
     //OSC adress of IanniX
     oscMatchAdressIanniX    = "/iannix/";
     oscMatchAdressTransport = "/transport/";
@@ -25,11 +41,14 @@ InterfaceOsc::InterfaceOsc(QWidget *parent) :
     port.setAction(ui->port,             "interfaceOscPort");
     bundleHost.setAction(ui->bundleIp,   "interfaceOscBundleHost");
     connect(&port, SIGNAL(triggered(qreal)), SLOT(portChanged()));
-    MessageManager::aliases["ip_out"].setAction(ui->aliasPort, "interfaceOscPortAlias");
-    MessageManager::aliases["ip_out"]  = "127.000.000.001";
+    MessageManager::aliases["ip_out"]  .setAction(ui->aliasIp,   "interfaceOscOutIp");
+    MessageManager::aliases["port_out"].setAction(ui->aliasPort, "interfaceOscOutPort");
+    connect(&MessageManager::aliases["port_out"], SIGNAL(triggered(QString)), SLOT(portOutChanged()));
+    MessageManager::aliases["ip_out"]   = "127.0.0.1";
+    MessageManager::aliases["port_out"] = "57120";
     port = 1234;
     bundlePort = 57130;
-    bundleHost = "127.000.000.001";
+    bundleHost = "127.0.0.1";
 }
 
 void InterfaceOsc::portChanged() {
@@ -37,7 +56,123 @@ void InterfaceOsc::portChanged() {
     if(socket->bind(port))  ui->port->setStyleSheet(ihmFeedbackOk);
     else                    ui->port->setStyleSheet(ihmFeedbackNok);
     UiHelp::oscPort = port;
+
+#ifdef ZEROCONF_INSTALLED
+    if(bonjourRegisterIn) delete bonjourRegisterIn;
+    bonjourRegisterIn = new BonjourServiceRegister(this);
+    bonjourRegisterIn->registerService(BonjourRecord(tr("To IanniX"), "_osc._udp", ""), port);
+#endif
 }
+void InterfaceOsc::portOutChanged() {
+#ifdef ZEROCONF_INSTALLED
+    if(bonjourRegisterOut) delete bonjourRegisterOut;
+    bonjourRegisterOut = new BonjourServiceRegister(this);
+    bonjourRegisterOut->registerService(BonjourRecord(tr("From IanniX"), "_osc._udp", ""), MessageManager::aliases["port_out"].val().toDouble());
+#endif
+}
+
+#ifdef ZEROCONF_INSTALLED
+void InterfaceOsc::currentBonjourRecordsChanged(const QList<BonjourRecord> &list) {
+    foreach(const BonjourRecord &record, list) {
+        bool toAdd = true;
+        for(quint16 i = 0 ; i < bonjourServices.count() ; i++) {
+            if((bonjourServices.at(i).record == record)) {
+                toAdd = false;
+                bonjourServices[i].reset();
+            }
+        }
+        if(toAdd)
+            bonjourServices.append(BonjourService(record));
+    }
+    bonjourIsScanning = false;
+    bonjourRecordResolved();
+}
+void InterfaceOsc::bonjourRecordResolved() {
+    if(bonjourListCurrent < 0) {
+        for(quint16 i = 0 ; i < bonjourServices.count() ; i++) {
+            if(bonjourServices.at(i).port == 0) {
+                bonjourListCurrent = i;
+                //qDebug(">%s (%d)", qPrintable(bonjourServices.at(bonjourListCurrent).record.serviceName), bonjourServices.at(bonjourListCurrent).port);
+                bonjourResolver = new BonjourServiceResolver(this);
+                connect(bonjourResolver, SIGNAL(bonjourRecordResolved(const QHostInfo &, int)), this, SLOT(bonjourRecordResolved(const QHostInfo &, int)));
+                bonjourResolver->resolveBonjourRecord(bonjourServices.at(i).record);
+                return;
+            }
+        }
+    }
+}
+void InterfaceOsc::bonjourRecordResolved(const QHostInfo &info, int port) {
+    //qDebug("> %d Scan RES", QDateTime::currentDateTime().currentMSecsSinceEpoch());
+    if((bonjourListCurrent >= 0) && (info.addresses().count())) {
+        bonjourServices[bonjourListCurrent].host = info.addresses().first();
+        bonjourServices[bonjourListCurrent].port = port;
+        //qDebug(">>%s (%d)", qPrintable(bonjourServices.at(bonjourListCurrent).record.serviceName), bonjourServices.at(bonjourListCurrent).port);
+        bonjourListCurrent = -1;
+    }
+    bonjourRecordResolved();
+}
+void InterfaceOsc::bonjourScan() {
+    if(!bonjourBrowser) delete bonjourBrowser;
+    if(!bonjourIsScanning) {
+        //qDebug("> %d Scan Bonjour", QDateTime::currentDateTime().currentMSecsSinceEpoch());
+        bonjourBrowser = new BonjourServiceBrowser(this);
+        connect(bonjourBrowser, SIGNAL(currentBonjourRecordsChanged(const QList<BonjourRecord> &)), SLOT(currentBonjourRecordsChanged(const QList<BonjourRecord> &)));
+        bonjourBrowser->browseForServiceType("_osc._udp");
+        bonjourIsScanning = true;
+        QTimer::singleShot(5000, this, SLOT(bonjourScan()));
+    }
+}
+void InterfaceOsc::openBonjour() {
+    bonjourMenu->clear();
+    bonjourMenu->addAction(tr("Refresh list"));
+    bonjourMenu->addAction(tr("Reset to default"));
+    for(quint16 i = 0 ; i < bonjourServices.count() ; i++) {
+        QString hostname = bonjourServices.at(i).host.toString();
+        if(hostname == "::1")
+            hostname = "127.0.0.1";
+        bonjourServices[i].setAction(bonjourMenu->addAction(QString("%1 on %2:%3").arg(bonjourServices.at(i).record.serviceName).arg(hostname).arg(bonjourServices.at(i).port)));
+        if(!((hostname.contains(".")) && (bonjourServices.at(i).port > 0)))
+            bonjourServices[i].action->setEnabled(false);
+    }
+    QAction *retour = bonjourMenu->exec(QCursor::pos());
+    if(retour) {
+        if(retour->text().toLower().contains("refresh"))
+            bonjourScan();
+        else if(retour->text().toLower().contains("reset")) {
+            if(sender() == ui->bonjour) {
+                MessageManager::aliases["ip_out"]   = "127.0.0.1";
+                MessageManager::aliases["port_out"] = "57120";
+            }
+            if(sender() == ui->bonjourBundle) {
+                bundleHost = "127.0.0.1";
+                bundlePort = 57130;
+            }
+            if(sender() == ui->bonjourPortIn)
+                port = 1234;
+        }
+        else {
+            foreach(const BonjourService &service, bonjourServices) {
+                if(service.action == retour) {
+                    QString hostname = service.host.toString();
+                    if(hostname == "::1")
+                        hostname = "127.0.0.1";
+                    if(sender() == ui->bonjour) {
+                        MessageManager::aliases["ip_out"]   = hostname;
+                        MessageManager::aliases["port_out"] = QString::number(service.port);
+                    }
+                    if(sender() == ui->bonjourBundle) {
+                        bundleHost = hostname;
+                        bundlePort = service.port;
+                    }
+                    if(sender() == ui->bonjourPortIn)
+                        port = service.port;
+                    return;
+                }
+            }
+        }
+    }
+}
+#endif
 
 
 void InterfaceOsc::parseOSC() {

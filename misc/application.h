@@ -18,7 +18,9 @@ class ApplicationCurrent : public QObject {
     Q_OBJECT
 
 public:
+    bool hasStarted;
     explicit ApplicationCurrent(QObject *parent) : QObject(parent) {
+        hasStarted = false;
     }
 
 //KINECT

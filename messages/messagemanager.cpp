@@ -76,13 +76,13 @@ QString MessageManager::incomingMessage(const MessageIncomming &source, bool nee
 }
 
 void MessageManager::outgoingMessage(const MessageManagerDestination &destination) {
-    if(destination.object) {
+    if((destination.object) && (Application::current->hasStarted)) {
         QStringList sentMessages;
         foreach(const QVector<QByteArray> &messagePattern, ((NxObject*)destination.object)->getMessagePatterns()) {
             if(messagesCache.contains(messagePattern.at(0)))
                 message = messagesCache.value(messagePattern.at(0));
             else {
-                message.setUrl(QUrl(messagePattern.at(0), QUrl::TolerantMode), scriptEngine, aliases);
+                message.setUrl(messagePattern.at(0), scriptEngine, aliases);
                 messagesCache.insert(messagePattern.at(0), message);
             }
             if(message.parse(messagePattern, destination)) {

@@ -1456,9 +1456,9 @@ function ajouterCurseur(info, param, control) {
 		+ (control.curveHeightTo   * control.curve.bounds.yMax));
 
 	if(control != undefined)
-		run("setMessage current 20, osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y, direct:// setResize " + control.curve.id + " cursor_value_x cursor_value_y");
+		run("setMessage current 20, osc://ip_out:port_out/cursor cursor_id cursor_value_x cursor_value_y, direct:// setResize " + control.curve.id + " cursor_value_x cursor_value_y");
 	else
-		run("setMessage current 20, osc://ip_out:57120/cursor cursor_id cursor_value_x cursor_value_y");
+		run("setMessage current 20, osc://ip_out:port_out/cursor cursor_id cursor_value_x cursor_value_y");
 }
 
 

@@ -219,6 +219,7 @@ class UiString : public UiOption {
 protected:
     QString value;
     QLineEdit *edit;
+    QSpinBox *spin;
     QPlainTextEdit *plainTextEdit;
     QComboBox *combo;
 public:
@@ -238,6 +239,7 @@ signals:
 
 public:
     void setAction(QLineEdit*,      const QString &_settingName = "", bool trigEvent = true, bool changeUi = false);
+    void setAction(QSpinBox*,       const QString &_settingName = "", bool trigEvent = true, bool changeUi = false);
     void setAction(QPlainTextEdit*, const QString &_settingName = "", bool trigEvent = true, bool changeUi = false);
     void setAction(QComboBox*,      const QString &_settingName = "", bool trigEvent = true, bool changeUi = false);
     QVariant variant() const {

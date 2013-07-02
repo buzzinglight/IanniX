@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
     //iannixApp.installTranslator(&translator);
 
     QString appName    = "IanniX ";
-    QString appVersion = "0.9.0";
+    QString appVersion = "0.9.1";
 
 #ifdef Q_OS_MAC
     appName += "Mac";
@@ -183,7 +183,8 @@ void IanniXApp::setHelp() {
     Help::categories["hostMidi"].infos << HelpInfo(QString("from_IanniX"),         tr("MIDI device created by IanniX (Mac & Linux only)"));
 
     Help::categories["port"].category = tr("Messages IP ports");
-    Help::categories["port"].infos << HelpInfo(QString("57120"),                   tr("Default port used by IanniX"));
+    Help::categories["port"].infos << HelpInfo(QString("port_out"),                tr("Default port set in \"Network\" tab"));
+    Help::categories["port"].infos << HelpInfo(QString("57120"),                   tr("Basic output port used by IanniX"));
     Help::categories["port"].infos << HelpInfo(QString("1234"),                    tr("IanniX OSC default input"));
 
     Help::categories["addressOsc"].category = tr("Messages OSC addresses");

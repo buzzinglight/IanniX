@@ -10,16 +10,21 @@ Message::Message() {
     isTransportMessage = false;
 }
 
-void Message::setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine, const QHash<QString,UiString> &aliases) {
+void Message::setUrl(QString url, QScriptEngine *_messageScriptEngine, const QHash<QString,UiString> &aliases) {
+    QHashIterator<QString,UiString> aliasIterator(aliases);
+    while (aliasIterator.hasNext()) {
+        aliasIterator.next();
+        url = url.replace(aliasIterator.key(), aliasIterator.value().val().replace(" ", "_").replace("/", "_").toLower().trimmed());
+    }
+    setUrl(QUrl(url, QUrl::TolerantMode), _messageScriptEngine);
+}
+void Message::setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine) {
     messageScriptEngine = _messageScriptEngine;
     messageScriptValue = messageScriptEngine->globalObject();
     hasAdd = false;
     urlMessage = url;
 
     QString scheme = urlMessage.scheme().toLower();
-
-    if(aliases.contains(urlMessage.host().toLower()))
-        urlMessage.setHost(qPrintable(aliases.value(urlMessage.host().toLower()).val().replace(" ", "_").replace("/", "_").toLower().trimmed()));
     urlMessageString = qPrintable(urlMessage.toString());
     address.clear();
     typetag.clear();
