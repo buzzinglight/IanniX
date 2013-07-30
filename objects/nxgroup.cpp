@@ -47,7 +47,7 @@ const QString NxGroup::serialize() const {
     QString retour;
 
     foreach(const QString &command, propertiesToSerialize.value(NxObjectDispatchProperty::source)) {
-        qDebug("%s ==> %s", qPrintable(command), qPrintable(getPropertyFromGroup(qPrintable(command)).toString()));
+        //qDebug("%s ==> %s", qPrintable(command), qPrintable(getPropertyFromGroup(qPrintable(command)).toString()));
         retour += "\trun(\"" + QString("%1 %2 %3").arg(command).arg(getId()).arg(getPropertyFromGroup(qPrintable(command)).toString()) + "\");\n";
     }
     if(!retour.isEmpty())

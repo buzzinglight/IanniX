@@ -201,8 +201,9 @@ QVector< QVector<QByteArray> > NxObject::parseMessagesPattern(const QString & me
 
 void NxObject::dispatchProperty(const char *_property, const QVariant & value) {
     QStringList asCurvePoints = QStringList() << COMMAND_CURVE_POINT_RMV << COMMAND_CURVE_TXT << COMMAND_CURVE_LINES << COMMAND_CURVE_POINT << COMMAND_CURVE_POINT_TRANSLATE << COMMAND_CURVE_POINT_SHIFT << COMMAND_CURVE_EDITOR << COMMAND_CURVE_PATH << COMMAND_CURVE_POINT_SMOOTH << COMMAND_CURVE_POINT_X << COMMAND_CURVE_POINT_Y << COMMAND_CURVE_POINT_Z << COMMAND_CURVE_POINT_TRANSLATE2;
-    if(asCurvePoints.contains(QString(_property))) propertyChanged(COMMAND_CURVE_POINT);
-    else                                           propertyChanged(_property);
+    QStringList forbiddenActions = QStringList() << COMMAND_POS_TRANSLATE;
+    if(asCurvePoints.contains(QString(_property)))              propertyChanged(COMMAND_CURVE_POINT);
+    else if(!forbiddenActions.contains(QString(_property)))     propertyChanged(_property);
     setProperty(_property, value);
 }
 
