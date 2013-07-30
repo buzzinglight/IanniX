@@ -18,6 +18,7 @@ namespace Ui {
 class InterfaceOsc;
 }
 
+#ifdef ZEROCONF_INSTALLED
 class BonjourService {
 public:
     explicit BonjourService(const BonjourRecord &_record) { reset(); setAction(); record = _record; }
@@ -29,6 +30,7 @@ public:
     quint16 port;
     QAction *action;
 };
+#endif
 
 class InterfaceOsc : public NetworkInterface {
     Q_OBJECT
