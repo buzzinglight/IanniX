@@ -571,30 +571,48 @@ void UiView::editingStart(const NxPoint & point) {
 }
 void UiView::editingStop() {
     if((Global::editing) && ((Global::editingMode == EditingModeFree) || (Global::editingMode == EditingModePoint))) {
-        if(freehandCurveIndex > 1) {
+        if(freehandCurveIndex > 0) {
             Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURVE_POINT_RMV).arg(freehandCurveId).arg(freehandCurveIndex), ExecuteSourceSystem);
-            if(freehandCurveNeedsCursor) {
-                quint16 cursorId = Application::current->execute(QString("add cursor auto"), ExecuteSourceGui).toUInt();
-                Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURSOR_CURVE).arg(cursorId).arg(freehandCurveId), ExecuteSourceGui);
-            }
+            freehandCurveIndex--;
         }
-        else if(freehandCurveId > 0)
-            Application::current->execute(QString("%1 %2").arg(COMMAND_REMOVE).arg(freehandCurveId), ExecuteSourceSystem);
     }
+    editingStopWithoutRemoval();
+}
+void UiView::editingStopWithoutRemoval(bool isLoop) {
+    if(freehandCurveIndex > 0) {
+        if(freehandCurveNeedsCursor) {
+            quint16 cursorId = Application::current->execute(QString("add cursor auto"), ExecuteSourceGui).toUInt();
+            Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURSOR_CURVE).arg(cursorId).arg(freehandCurveId), ExecuteSourceGui);
+            if(isLoop)
+                Application::current->execute(QString("%1 %2 0 0 1").arg(COMMAND_CURSOR_START).arg(cursorId), ExecuteSourceGui);
+        }
+    }
+    else
+        Application::current->execute(QString("%1 %2").arg(COMMAND_REMOVE).arg(freehandCurveId), ExecuteSourceSystem);
     unToogleDraw(0);
     ui->render->unsetEditing();
 }
+
 void UiView::editingMove(const NxPoint & point, bool add) {
+    bool isLoop = false;
+    NxPoint newPoint = point - editingStartPoint;
+    if((freehandCurveIndex > 1) && ((qAbs(newPoint.x()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint.y()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint.z()) < (0.25 * Global::zoomLinear)))) {
+        isLoop = true;
+        newPoint = NxPoint();
+    }
+
     if((Global::editing) && (Global::editingMode == EditingModeFree)) {
-        NxPoint newPoint = point - editingStartPoint;
         Application::current->execute(QString("%1 %2 %3 %4 %5").arg(COMMAND_CURVE_POINT_SMOOTH).arg(freehandCurveId).arg(freehandCurveIndex).arg(newPoint.x()).arg(newPoint.y()), ExecuteSourceGui);
         if(add)
             freehandCurveIndex++;
     }
     else if((Global::editing) && (Global::editingMode == EditingModePoint)) {
-        NxPoint newPoint = point - editingStartPoint;
         Application::current->execute(QString("%1 %2 %3 %4 %5").arg(COMMAND_CURVE_POINT).arg(freehandCurveId).arg(freehandCurveIndex).arg(newPoint.x()).arg(newPoint.y()), ExecuteSourceGui);
         if(add)
             freehandCurveIndex++;
+    }
+    if((isLoop) && (add)) {
+        freehandCurveIndex--;
+        editingStopWithoutRemoval(isLoop);
     }
 }

@@ -93,7 +93,8 @@ public slots:
 
 
 private:
-    quint16 freehandCurveId, freehandCurveIndex;
+    quint16 freehandCurveId;
+    qint16 freehandCurveIndex;
     bool freehandCurveNeedsCursor;
     NxPoint editingStartPoint;
 public slots:
@@ -110,6 +111,7 @@ public slots:
     void actionAddMathCurveSimple();
     void editingStart(const NxPoint &);
     void editingStop();
+    void editingStopWithoutRemoval(bool isLoop = false);
     void editingMove(const NxPoint &, bool add);
 
 

@@ -277,20 +277,23 @@ public:
         isDrag = true;
         if(multipleObjects)
             selectedPathPointPoint = selectedPathPointControl1 = selectedPathPointControl2 = -1;
-        if(selectedPathPointPoint >= 0)
-            posDrag = getPathPointsAt(selectedPathPointPoint);
-        else if(selectedPathPointControl1 >= 0)
-            posDrag = getPathPointsAt(selectedPathPointControl1).c1;
-        else if(selectedPathPointControl2 >= 0)
-            posDrag = getPathPointsAt(selectedPathPointControl2).c2;
-        else
-            posDrag = pos;
+        if(selectedPathPointPoint >= 0)             posDrag = getPathPointsAt(selectedPathPointPoint);
+        else if(selectedPathPointControl1 >= 0)     posDrag = getPathPointsAt(selectedPathPointControl1).c1;
+        else if(selectedPathPointControl2 >= 0)     posDrag = getPathPointsAt(selectedPathPointControl2).c2;
+        else                                        posDrag = pos;
     }
     inline void drag(const NxPoint & translation, const NxPoint &, bool multipleObjects) {
         if(multipleObjects)
             selectedPathPointPoint = selectedPathPointControl1 = selectedPathPointControl2 = -1;
         if(selectedPathPointPoint >= 0) {
-            setPointAt(selectedPathPointPoint, posDrag + translation, pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth, true, true);
+            NxPoint newPoint1 = posDrag + translation - getPathPointsAt(0);
+            NxPoint newPoint2 = posDrag + translation - getPathPointsAt(pathPoints.count()-1);
+            if((selectedPathPointPoint == pathPoints.count()-1) && ((qAbs(newPoint1.x()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint1.y()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint1.z()) < (0.25 * Global::zoomLinear))))
+                setPointAt(selectedPathPointPoint, getPathPointsAt(0), pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth, true, true);
+            else if((selectedPathPointPoint == 0) && ((qAbs(newPoint2.x()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint2.y()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint2.z()) < (0.25 * Global::zoomLinear))))
+                setPointAt(selectedPathPointPoint, getPathPointsAt(pathPoints.count()-1), pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth, true, true);
+            else
+                setPointAt(selectedPathPointPoint, posDrag + translation, pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth, true, true);
         }
         else if(selectedPathPointControl1 >= 0) {
             if(selectedPathPointControl1 > 0)

@@ -447,6 +447,10 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
 
     computeInertie();
 
+    bool isLoop = false;
+    if((pathPoints.count() > 0) && ((NxPoint)getPathPointsAt(0) == (NxPoint)getPathPointsAt(pathPoints.count()-1)))
+        isLoop = true;
+
     //Inside curve point
     if(pathPoints.count() > 1) {
         for(quint16 indexPathPoint = 0 ; indexPathPoint < pathPoints.count() ; indexPathPoint++) {
@@ -455,11 +459,17 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
                 if(indexPathPoint == 0) {
                     NxPoint ptBefore = getPathPointsAt(indexPathPoint);
                     NxPoint ptAfter  = getPathPointsAt(indexPathPoint+1);
+                    if((isLoop) && (pathPoints.count() > 2))
+                        ptBefore = getPathPointsAt(pathPoints.count()-2);
+
                     pathPoints[indexPathPoint+1].c1 =  (ptAfter - ptBefore) / factor;
                 }
                 else if(indexPathPoint == pathPoints.count() - 1) {
                     NxPoint ptBefore = getPathPointsAt(indexPathPoint-1);
                     NxPoint ptAfter  = getPathPointsAt(indexPathPoint);
+                    if((isLoop) && (pathPoints.count() > 1))
+                        ptAfter = getPathPointsAt(1);
+
                     pathPoints[indexPathPoint  ].c2 = -(ptAfter - ptBefore) / factor;
                 }
                 else {
