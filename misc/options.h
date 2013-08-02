@@ -38,6 +38,7 @@ public:
     GLuint    texture;
     bool      loaded;
     NxRect    mapping;
+    QSizeF    originalSize;
 public:
     explicit UiRenderTexture() { loaded = false; }
     explicit UiRenderTexture(const QString & _name, const QFileInfo & _filename, const NxRect & _mapping) {

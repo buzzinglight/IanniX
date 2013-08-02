@@ -564,6 +564,8 @@ void UiInspector::refresh() {
                 change(indexObject, ui->cursorSourceMode1, cursor->getBoundsSourceMode()==1, prevCursor->getBoundsSourceMode()==1);
                 change(indexObject, ui->cursorSourceMode2, cursor->getBoundsSourceMode()==2, prevCursor->getBoundsSourceMode()==2);
                 change(indexObject, ui->cursorSourceMode3, cursor->getBoundsSourceMode()==3, prevCursor->getBoundsSourceMode()==3);
+                change(indexObject, ui->textureCombo1, cursor->getTextureActive(),    prevCursor->getTextureActive(), false);
+                change(indexObject, ui->textureCombo2, cursor->getTextureInactive(), prevCursor->getTextureInactive(), false);
 
                 change(indexObject, ui->messagesSpin, object->getMessageTimeInterval(), prevObject->getMessageTimeInterval());
 
@@ -649,10 +651,10 @@ void UiInspector::refresh() {
     ui->colorCombo1->setVisible(showGenericInfo);
     ui->colorCombo2->setVisible(showGenericInfo);
     ui->colorComboMultiply->setVisible(showGenericInfo);
-    ui->textureLabel1->setVisible(showTriggerInfo);
-    ui->textureLabel2->setVisible(showTriggerInfo);
-    ui->textureCombo1->setVisible(showTriggerInfo);
-    ui->textureCombo2->setVisible(showTriggerInfo);
+    ui->textureLabel1->setVisible(showCursorInfo | showTriggerInfo);
+    ui->textureLabel2->setVisible(showCursorInfo | showTriggerInfo);
+    ui->textureCombo1->setVisible(showCursorInfo | showTriggerInfo);
+    ui->textureCombo2->setVisible(showCursorInfo | showTriggerInfo);
 
     ui->widthSpin->setVisible(showCursorInfo);
     ui->depthSpin->setVisible(showCursorInfo);
@@ -842,11 +844,15 @@ void UiInspector::change(quint16 indexObject, QComboBox *spin, const QString & v
     if(indexObject == 0) {
         qint16 indexVal = spin->findText(val);
         if(!spin->hasFocus()) {
-            if(indexVal < 0) {
-                colorComboAdd(spin, QStringList() << val);
-                indexVal = spin->count()-1;
+            if(isColor) {
+                if(indexVal < 0) {
+                    colorComboAdd(spin, QStringList() << val);
+                    indexVal = spin->count()-1;
+                }
+                spin->setCurrentIndex(indexVal);
             }
-            spin->setCurrentIndex(indexVal);
+            else
+                spin->setEditText(val);
         }
     }
     else if(prevVal != val) {

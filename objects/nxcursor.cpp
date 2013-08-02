@@ -56,6 +56,8 @@ void NxCursor::initializeCustom() {
     setColorInactive("_cursor_inactive");
     setOffset("0 0 end");
     setStart("0 0 1 0");
+    setTextureActive  ("cursor_active");
+    setTextureInactive("cursor_inactive");
     setBoundsSource("-10 10 -10 10 -10 10");
     setBoundsTarget("0 1 0 1 0 1");
     setBoundsSourceMode(1);
@@ -302,19 +304,38 @@ void NxCursor::paint() {
                 }
             }
 
-            //Debug
-            if(false) {
-                glColor4f(0, 0, 0, 1);
-                glBegin(GL_LINE_STRIP);
-                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
-                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
-                glEnd();
-                glBegin(GL_LINE_STRIP);
-                glVertex3f(cursorPolyOld.at(1).x(), cursorPolyOld.at(1).y(), cursorPolyOld.at(1).z());
-                glVertex3f(cursorPolyOld.at(2).x(), cursorPolyOld.at(2).y(), cursorPolyOld.at(2).z());
-                glEnd();
+
+            //Draw
+            bool textureOk = false;
+            QString textureName = (active)?(textureActive):(textureInactive);
+            if(Global::textures->contains(textureName)) {
+                UiRenderTexture *texture = Global::textures->value(textureName);
+                if((texture) && (texture->loaded) && (texture->mapping.width() != 0 ) && (texture->mapping.height() != 0)) {
+                    textureOk = true;
+
+                    glPushMatrix();
+                    glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
+                    glRotatef(cursorAngle.z(), 0, 0, 1);
+                    glRotatef(cursorAngle.y(), 0, 1, 0);
+                    glRotatef(cursorAngle.x(), 1, 0, 0);
+                    glEnable(GL_TEXTURE_2D);
+                    glBindTexture(GL_TEXTURE_2D, texture->texture);
+
+                    qreal widthRatio = width/2 * texture->originalSize.width() / texture->originalSize.height();
+
+                    glBegin(GL_QUADS);
+                    glTexCoord2d(0, 0); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.bottom(), 0);
+                    glTexCoord2d(1, 0); glVertex3f(widthRatio * texture->mapping.right(), width/2 * texture->mapping.bottom(), 0);
+                    glTexCoord2d(1, 1); glVertex3f(widthRatio * texture->mapping.right(), width/2 * texture->mapping.top(), 0);
+                    glTexCoord2d(0, 1); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.top(), 0);
+                    glEnd();
+
+                    glEnd();
+                    glPopMatrix();
+                    glDisable(GL_TEXTURE_2D);
+                }
             }
-            else {
+            if(!textureOk) {
                 //Cursor
                 glLineWidth(size);
                 glEnable(GL_LINE_STIPPLE);
@@ -363,46 +384,61 @@ void NxCursor::paint() {
                 glLineWidth(1);
                 glEnd();
                 glPopMatrix();
+
+                //Special feature YEOSU
+                if((true) && ((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz()))) {
+                    glPushMatrix();
+                    glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
+                    glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 8.F);
+                    if(curve)
+                        glLineWidth(curve->getSize());
+                    else
+                        glLineWidth(1);
+
+                    if((glListRecreate) || (Global::forceLists)) {
+                        glNewList(glListCursor, GL_COMPILE_AND_EXECUTE);
+                        qreal lats = 40, longs = 40;
+                        qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
+                        glBegin(GL_LINE_STRIP);
+                        for(quint16 i = 0; i <= lats; i++) {
+                            qreal lat0 = M_PI * (-0.5 + (qreal)(i - 1) / lats);
+                            qreal lat1 = M_PI * (-0.5 + (qreal)(i    ) / lats);
+                            qreal z0  = qSin(lat0) * rz, zr0 = qCos(lat0);
+                            qreal z1  = qSin(lat1) * rz, zr1 = qCos(lat1);
+
+                            for(quint16 j = 0; j <= longs; j++) {
+                                qreal lng = 2 * M_PI * (qreal)(j - 1) / longs;
+                                qreal x = qCos(lng) * rx;
+                                qreal y = qSin(lng) * ry;
+                                glNormal3f(x * zr0, y * zr0, z0);
+                                glVertex3f(x * zr0, y * zr0, z0);
+                                glNormal3f(x * zr1, y * zr1, z1);
+                                glVertex3f(x * zr1, y * zr1, z1);
+                            }
+                        }
+                        glEnd();
+                        glEndList();
+                        glListRecreate = false;
+                    }
+                    else
+                        glCallList(glListCursor);
+                    glPopMatrix();
+                }
+
             }
 
-            //Special feature YEOSU
-            if((true) && ((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz()))) {
-                glPushMatrix();
-                glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
-                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 8.F);
-                if(curve)
-                    glLineWidth(curve->getSize());
-                else
-                    glLineWidth(1);
 
-                if((glListRecreate) || (Global::forceLists)) {
-                    glNewList(glListCursor, GL_COMPILE_AND_EXECUTE);
-                    qreal lats = 40, longs = 40;
-                    qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
-                    glBegin(GL_LINE_STRIP);
-                    for(quint16 i = 0; i <= lats; i++) {
-                        qreal lat0 = M_PI * (-0.5 + (qreal)(i - 1) / lats);
-                        qreal lat1 = M_PI * (-0.5 + (qreal)(i    ) / lats);
-                        qreal z0  = qSin(lat0) * rz, zr0 = qCos(lat0);
-                        qreal z1  = qSin(lat1) * rz, zr1 = qCos(lat1);
-
-                        for(quint16 j = 0; j <= longs; j++) {
-                            qreal lng = 2 * M_PI * (qreal)(j - 1) / longs;
-                            qreal x = qCos(lng) * rx;
-                            qreal y = qSin(lng) * ry;
-                            glNormal3f(x * zr0, y * zr0, z0);
-                            glVertex3f(x * zr0, y * zr0, z0);
-                            glNormal3f(x * zr1, y * zr1, z1);
-                            glVertex3f(x * zr1, y * zr1, z1);
-                        }
-                    }
-                    glEnd();
-                    glEndList();
-                    glListRecreate = false;
-                }
-                else
-                    glCallList(glListCursor);
-                glPopMatrix();
+            //Debug
+            if(false) {
+                glColor4f(0, 0, 0, 1);
+                glBegin(GL_LINE_STRIP);
+                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                glEnd();
+                glBegin(GL_LINE_STRIP);
+                glVertex3f(cursorPolyOld.at(1).x(), cursorPolyOld.at(1).y(), cursorPolyOld.at(1).z());
+                glVertex3f(cursorPolyOld.at(2).x(), cursorPolyOld.at(2).y(), cursorPolyOld.at(2).z());
+                glEnd();
             }
 
             //Mapping area

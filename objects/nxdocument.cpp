@@ -336,4 +336,6 @@ void NxDocument::restoreDefaults() {
     Application::render->loadTexture(new UiRenderTexture("background",       QFileInfo("filename"), NxRect(-4, 4, 8, -8)));
     Application::render->loadTexture(new UiRenderTexture("trigger_active",   QFileInfo("filename"), NxRect(-1, 1, 2, -2)));
     Application::render->loadTexture(new UiRenderTexture("trigger_inactive", QFileInfo("filename"), NxRect(-1, 1, 2, -2)));
+    Application::render->loadTexture(new UiRenderTexture("cursor_active",    QFileInfo("filename"), NxRect(-1, 1, 2, -2)));
+    Application::render->loadTexture(new UiRenderTexture("cursor_inactive",  QFileInfo("filename"), NxRect(-1, 1, 2, -2)));
 }

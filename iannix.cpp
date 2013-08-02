@@ -560,9 +560,6 @@ void IanniX::actionCC(QTreeWidgetItem *item, int col) {
     }
 }
 
-void IanniX::actionNew() {
-
-}
 
 void IanniX::currentDocumentChanged(UiSyncItem *item) {
     if(currentDocument)
@@ -570,6 +567,9 @@ void IanniX::currentDocumentChanged(UiSyncItem *item) {
     currentDocument = new NxDocument(this, (UiFileItem*)item);
     render->setDocument(currentDocument);
     currentDocument->askFileOpen();
+}
+void IanniX::actionNew() {
+    inspector->getFileWidget()->askNew();
 }
 void IanniX::actionOpen() {
     QString filename = QFileDialog::getOpenFileName(0, tr("Open IanniX Score"), Global::pathDocuments.absoluteFilePath() + "/");

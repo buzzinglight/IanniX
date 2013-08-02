@@ -47,6 +47,8 @@ class NxCursor : public NxObject, public NxCursorAbstraction {
     Q_PROPERTY(qreal   settime              READ getTimeLocal          WRITE setTimeLocal)
     Q_PROPERTY(qreal   settimepercent       READ getTimeLocalPercent   WRITE setTimeLocalPercent)
     Q_PROPERTY(bool    trig                 READ getForceTrig          WRITE setForceTrig)
+    Q_PROPERTY(QString settextureactive   READ getTextureActive   WRITE setTextureActive)
+    Q_PROPERTY(QString settextureinactive READ getTextureInactive WRITE setTextureInactive)
 
 
 public:
@@ -57,6 +59,7 @@ public:
 private:
     NxCurve *curve;
 private:
+    QString textureActive, textureInactive;
     qreal factors, timeLocal, timeLocalOld, timeLocalAbsolute, time, timeOld, nextTimeOld;
     qreal timeLocalLastSend, timeLastSend;
     qreal timeStartOffset, timeEndOffset, timeInitialOffset;
@@ -98,6 +101,18 @@ public:
         }
         else if(!curve)
             dragParent(translation);
+    }
+    inline void setTextureActive(const QString & _textureActive) {
+        textureActive = _textureActive;
+    }
+    inline const QString & getTextureActive() const {
+        return textureActive;
+    }
+    inline void setTextureInactive(const QString & _textureInactive) {
+        textureInactive = _textureInactive;
+    }
+    inline const QString & getTextureInactive() const {
+        return textureInactive;
     }
 
     inline QString getPosStr() const {

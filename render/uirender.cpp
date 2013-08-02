@@ -89,6 +89,7 @@ bool UiRender::loadTexture(UiRenderTexture *texture, bool gl) {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glDisable(GL_TEXTURE_2D);
+            texture->originalSize = tex.size();
             texture->loaded = true;
             Global::textures->update();
             return true;

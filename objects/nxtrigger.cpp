@@ -102,12 +102,12 @@ void NxTrigger::paint() {
 
 
         //Draw
-        bool ok = false;
+        bool textureOk = false;
         QString textureName = (active)?(textureActive):(textureInactive);
         if(Global::textures->contains(textureName)) {
             UiRenderTexture *texture = Global::textures->value(textureName);
             if((texture) && (texture->loaded) && (texture->mapping.width() != 0 ) && (texture->mapping.height() != 0)) {
-                ok = true;
+                textureOk = true;
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, texture->texture);
                 glBegin(GL_QUADS);
@@ -119,7 +119,7 @@ void NxTrigger::paint() {
                 glDisable(GL_TEXTURE_2D);
             }
         }
-        if(!ok) {
+        if(!textureOk) {
             glScalef(cacheSize, cacheSize, cacheSize);
             if(glListTrigger == 0) {
                 glListTrigger = glGenLists(1);
