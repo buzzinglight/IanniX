@@ -192,6 +192,7 @@ UiInspector::UiInspector(QWidget *parent) :
     startTimer(100);
 
     refresh();
+    refreshIp();
 }
 void UiInspector::addEquationTemplate(QString text, bool enabled) {
     if(text.trimmed() == "--")      ui->equationTemplate->insertSeparator(ui->equationTemplate->count());
@@ -405,10 +406,39 @@ void UiInspector::actionTabChange(int) {
         MessageManager::setLogVisibility(false);
 }
 
-void UiInspector::timerEvent(QTimerEvent *) {
+void UiInspector::timerEvent(QTimerEvent *event) {
     if(needRefresh)
         refresh();
 }
+void UiInspector::refreshIp() {
+    //IPs
+    QStringList ipsName;
+    foreach(const QNetworkInterface &interface, QNetworkInterface::allInterfaces()) {
+        foreach(const QNetworkAddressEntry &addressEntry, interface.addressEntries()) {
+            bool ok = false;
+            QString ipName;
+            if(addressEntry.ip().toIPv4Address() > 0)                    {  ipName += QString("     - %1 (%2)").arg(addressEntry.ip().toString()).arg(interface.humanReadableName()); ok = true; }
+            if((ok) && (addressEntry.broadcast().toIPv4Address() > 0))      ipName += QString(", broadcast on %1").arg(addressEntry.broadcast().toString());
+            if(ok)                                                       {  ipsName << ipName; }
+        }
+    }
+    if(ipsName.count()) {
+        QString ipNameTotal;
+        foreach(const QString &ipName, ipsName)
+            ipNameTotal += ipName + "\n";
+        ipNameTotal.chop(1);
+        if(!ui->myIP->hasFocus())
+            ui->myIP->setPlainText(ipNameTotal);
+        ui->myIP->setVisible(true);
+        ui->myIPLabel->setVisible(true);
+    }
+    else {
+        ui->myIP->setVisible(false);
+        ui->myIPLabel->setVisible(false);
+    }
+    QTimer::singleShot(5000, this, SLOT(refreshIp()));
+}
+
 void UiInspector::refresh() {
     needRefresh = false;
     if(!Application::current)

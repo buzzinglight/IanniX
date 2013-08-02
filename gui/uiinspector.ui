@@ -4073,7 +4073,7 @@ SIZE</string>
               <item>
                <layout class="QVBoxLayout" name="spaceForMessageLog">
                 <property name="spacing">
-                 <number>10</number>
+                 <number>5</number>
                 </property>
                </layout>
               </item>
@@ -4085,15 +4085,56 @@ SIZE</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_19">
               <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
                <number>10</number>
               </property>
-              <property name="margin">
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
                <number>10</number>
               </property>
+              <property name="bottomMargin">
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="myIPLabel">
+                <property name="text">
+                 <string>My IP:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPlainTextEdit" name="myIP">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: transparent;
+border: 0px solid transparent;
+margin: 0px;
+padding: 0px;</string>
+                </property>
+                <property name="lineWrapMode">
+                 <enum>QPlainTextEdit::NoWrap</enum>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+                <property name="plainText">
+                 <string/>
+                </property>
+               </widget>
+              </item>
               <item>
                <layout class="QVBoxLayout" name="ssTabConfigNetworkLayout">
                 <property name="spacing">
-                 <number>20</number>
+                 <number>5</number>
                 </property>
                </layout>
               </item>
@@ -4105,7 +4146,7 @@ SIZE</string>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>20</width>
-                  <height>232</height>
+                  <height>40</height>
                  </size>
                 </property>
                </spacer>

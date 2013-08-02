@@ -20,6 +20,7 @@
 #define INSPECTOR_H
 
 #include <QWidget>
+#include <QNetworkInterface>
 #include "misc/application.h"
 #include "objects/nxdocument.h"
 #include "gui/uimessagebox.h"
@@ -69,6 +70,7 @@ private:
     void addEquationTemplate(QString text, bool enabled = false);
     bool needRefresh;
 public slots:
+    void refreshIp();
     void showRessourcesTab(const QString &value);
     void showSpaceTab();
     void showConfigTab();

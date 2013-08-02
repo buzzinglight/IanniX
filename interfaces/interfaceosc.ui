@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
-    <height>166</height>
+    <width>320</width>
+    <height>157</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>3</number>
+    <number>0</number>
    </property>
    <property name="margin">
     <number>0</number>
@@ -49,7 +49,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>146</width>
-         <height>19</height>
+         <height>5</height>
         </size>
        </property>
       </spacer>
@@ -151,7 +151,7 @@
         <string>Displays a list of applications with their OSC port</string>
        </property>
        <property name="styleSheet">
-        <string notr="true">margin-top: 6px;</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string/>
@@ -170,7 +170,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
-         <height>20</height>
+         <height>5</height>
         </size>
        </property>
       </spacer>
@@ -276,7 +276,7 @@
         <string>Displays a list of applications with their OSC port</string>
        </property>
        <property name="styleSheet">
-        <string notr="true">margin-top: 4px;</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string/>
@@ -295,7 +295,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>37</width>
-         <height>22</height>
+         <height>5</height>
         </size>
        </property>
       </spacer>
@@ -351,7 +351,7 @@ BUNDLE ON</string>
         <string>All the messages matching this IP + port will be packed in an OpenSoundControl bundle</string>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">margin-top: 0px;</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -401,7 +401,7 @@ BUNDLE ON</string>
         <string>Displays a list of applications with their OSC port</string>
        </property>
        <property name="styleSheet">
-        <string notr="true">margin-top: 4px;</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string/>
@@ -420,7 +420,7 @@ BUNDLE ON</string>
        <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
-         <height>20</height>
+         <height>5</height>
         </size>
        </property>
       </spacer>

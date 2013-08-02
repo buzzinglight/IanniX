@@ -165,11 +165,11 @@ void InterfaceOsc::bonjourScan() {
         connect(bonjourBrowser, SIGNAL(currentBonjourRecordsChanged(const QList<BonjourRecord> &)), SLOT(currentBonjourRecordsChanged(const QList<BonjourRecord> &)));
         bonjourBrowser->browseForServiceType("_osc._udp");
         bonjourIsScanning = true;
-        QTimer::singleShot(5000, this, SLOT(bonjourScan()));
     }
 #endif
 
     qSort(bonjourServices.begin(), bonjourServices.end(), BonjourService::sort);
+    QTimer::singleShot(5000, this, SLOT(bonjourScan()));
 }
 void InterfaceOsc::openBonjour() {
     bonjourMenu->clear();
