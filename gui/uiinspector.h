@@ -66,6 +66,7 @@ public slots:
 
 private:
     void timerEvent(QTimerEvent *);
+    void addEquationTemplate(QString text, bool enabled = false);
     bool needRefresh;
 public slots:
     void showRessourcesTab(const QString &value);

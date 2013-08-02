@@ -50,6 +50,7 @@ void NxObject::initialize(bool firstTime) {
     setMessageTimeInterval(1);
     setMessagePatterns("");
     setLabel("");
+    setColorMultiply("255 255 255 255");
 }
 
 

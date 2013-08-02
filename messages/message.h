@@ -49,7 +49,7 @@ public:
     Message();
 public:
     void setUrl(QString url, QScriptEngine *_messageScriptEngine, const QHash<QString, UiString> &aliases);
-    void setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine);
+    void setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine = 0);
     bool parse(const QVector<QByteArray> & patternItems, const MessageManagerDestination &destination);
     
 private:

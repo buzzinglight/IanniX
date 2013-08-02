@@ -28,8 +28,6 @@ ExtOscPatternEditor::ExtOscPatternEditor(QWidget *parent) :
     isTrigger = false;
     patternNbValues = 0;
 
-    ui->templates->addItems(Global::messageTemplates);
-
     trees.clear();
     trees << qMakePair(ui->argument1Combo, qMakePair(ui->argument1Label, ui->argument1Clear));
     trees << qMakePair(ui->argument2Combo, qMakePair(ui->argument2Label, ui->argument2Clear));
@@ -64,6 +62,47 @@ ExtOscPatternEditor::ExtOscPatternEditor(QWidget *parent) :
         completer->setCaseSensitivity(Qt::CaseInsensitive);
         trees.at(treeIndex).first->setCompleter(completer);
     }
+
+
+    //Templates
+    ui->templates->clear();
+    addTemplate("Templates", true);
+    addTemplate("--");
+    QFileInfoList files = QDir(Global::pathApplication.absoluteFilePath() + "/Tools/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    files <<              QDir(Global::pathDocuments.absoluteFilePath()   + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    bool firstTemplate = true;
+    QString title;
+    foreach(const QFileInfo &file, files) {
+        QString header;
+        QHash<QString, QString> params;
+        QFile templateFile(file.absoluteFilePath());
+        if(templateFile.open(QFile::ReadOnly)) {
+            QStringList templatesLong = QString(templateFile.readAll()).split("\n", QString::SkipEmptyParts);
+            foreach(const QString &templateLong, templatesLong) {
+                if(templateLong.startsWith("["))
+                    header = templateLong.toLower();
+                else if(header == "[general]") {
+                    QStringList templateLongSplit = templateLong.split("=");
+                    if(templateLongSplit.count() > 1) {
+                        QString key = templateLongSplit.at(0).toLower(), value = templateLongSplit.at(1);
+                        params.insert(key, value);
+                        if(key == "name")
+                            title = value;
+                    }
+                }
+                else if(header == "[messages]") {
+                    if(!title.isEmpty()) {
+                        if(!firstTemplate)
+                            addTemplate("--");
+                        firstTemplate = false;
+                        addTemplate(title);
+                        title.clear();
+                    }
+                    addTemplate("          " + templateLong.trimmed(), true);
+                }
+            }
+        }
+    }
 }
 
 ExtOscPatternEditor::~ExtOscPatternEditor() {
@@ -75,9 +114,9 @@ const QString ExtOscPatternEditor::getPattern() const {
     QString protocol = getItem(ui->protocolCombo, "osc");
     messagePattern += protocol + "://";
     if((protocol == "osc") || (protocol == "http"))
-        messagePattern += getItem(ui->hostIpCombo, "ip_out") + ":" + getItem(ui->portCombo, 57120) + getItem(ui->addressOscCombo, "/iannix", "/");
+        messagePattern += getItem(ui->hostIpCombo, "ip_out") + ":" + getItem(ui->portCombo, "port_out") + getItem(ui->addressOscCombo, "/iannix", "/");
     else if(protocol == "udp")
-        messagePattern += getItem(ui->hostIpCombo, "ip_out") + ":" + getItem(ui->portCombo, 57120);
+        messagePattern += getItem(ui->hostIpCombo, "ip_out") + ":" + getItem(ui->portCombo, "port_out");
     else if(protocol == "midi")
         messagePattern += getItem(ui->hostMidiCombo, "midi_out") + getItem(ui->addressMidiCombo, "/ccf", "/");
 
@@ -104,7 +143,10 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
     patternNbValues = trees.count();
     foreach(const QByteArray & messagePatternItem, messagePatternItems) {
         if(first) {
-            QUrl urlMessage = QUrl(messagePatternItem, QUrl::TolerantMode);
+            QString messagePatternItemCpy = messagePatternItem.trimmed();
+            messagePatternItemCpy.replace("port_out", "1");
+
+            QUrl urlMessage = QUrl(messagePatternItemCpy, QUrl::TolerantMode);
             if(urlMessage.isValid())    ui->patternEdit->setStyleSheet("");
             else                        ui->patternEdit->setStyleSheet("background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgb(248, 31, 29), stop:1 rgb(179, 33, 32));");
 
@@ -113,8 +155,8 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
             if((urlMessage.scheme().toLower() == "osc") || (urlMessage.scheme().toLower() == "http")) {
                 if(wasLearning) setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    "ip_out");
                 else            setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    urlMessage.host());
-                if(wasLearning) setCurrentItem(ui->portCombo,       ui->portLabel,       "port_out");
-                else            setCurrentItem(ui->portCombo,       ui->portLabel,       QString::number(urlMessage.port()));
+                if((wasLearning) || (urlMessage.port() < 10))   setCurrentItem(ui->portCombo, ui->portLabel, "port_out");
+                else                                            setCurrentItem(ui->portCombo, ui->portLabel, QString::number(urlMessage.port()));
                 setCurrentItem(ui->addressOscCombo, ui->addressOSCLabel, urlMessage.path());
 
                 ui->hostMidiCombo->setVisible(false);
@@ -132,7 +174,8 @@ void ExtOscPatternEditor::setPattern(const QVector<QByteArray > & messagePattern
             else if(urlMessage.scheme() == "udp") {
                 if(wasLearning) setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    "ip_out");
                 else            setCurrentItem(ui->hostIpCombo,     ui->hostOSCLabel,    urlMessage.host());
-                setCurrentItem(ui->portCombo,   ui->portLabel, QString::number(urlMessage.port()));
+                if(urlMessage.port() < 10)  setCurrentItem(ui->portCombo, ui->portLabel, "port_out");
+                else                        setCurrentItem(ui->portCombo, ui->portLabel, QString::number(urlMessage.port()));
                 ui->addressOscCombo->setVisible(false);
                 ui->addressOSCLabel->setVisible(false);
                 ui->hostMidiCombo->setVisible(false);
@@ -265,6 +308,12 @@ QString ExtOscPatternEditor::getItem(QComboBox *combo, qint32 valDefault) const 
     if(val > 0) return QString::number(val);
     else        return QString::number(valDefault);
 }
+void ExtOscPatternEditor::addTemplate(QString text, bool enabled) {
+    if(text.trimmed() == "--")      ui->templates->insertSeparator(ui->templates->count());
+    else                            ui->templates->addItem(text);
+    if(!enabled)
+        qobject_cast<QStandardItemModel*>(ui->templates->model())->item(ui->templates->count()-1)->setEnabled(false);
+}
 
 void ExtOscPatternEditor::currentItemChanged() {
     if(!itemLock) {
@@ -358,7 +407,9 @@ void ExtOscPatternEditor::learn() {
 }
 
 void ExtOscPatternEditor::applyTemplate() {
-    QStringList temp = ui->templates->currentText().split(" - ");
-    if(temp.count() > 1)
-        ui->patternEdit->setPlainText(temp.at(0));
+    if(ui->templates->currentText().length()) {
+        QStringList temp = ui->templates->currentText().split(" | ");
+        if(temp.count() > 1)
+            ui->patternEdit->setPlainText(temp.first().trimmed());
+    }
 }

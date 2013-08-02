@@ -87,8 +87,9 @@ debug:DEFINES += __RTMIDI_DEBUG__
 
 
 #Zeroconf
-false {
+macx {
     DEFINES     += ZEROCONF_INSTALLED
+    #DEFINES     += ZEROCONF_AS_SERVICE
     INCLUDEPATH += interfaces/zeroconf
     SOURCES     += interfaces/zeroconf/bonjourserviceregister.cpp interfaces/zeroconf/bonjourserviceresolver.cpp interfaces/zeroconf/bonjourservicebrowser.cpp
     HEADERS     += interfaces/zeroconf/bonjourserviceregister.h   interfaces/zeroconf/bonjourserviceresolver.h   interfaces/zeroconf/bonjourservicebrowser.h   interfaces/zeroconf/bonjourrecord.h

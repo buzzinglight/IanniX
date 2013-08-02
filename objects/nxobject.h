@@ -64,6 +64,8 @@ class NxObject : public QObject, public NxObjectDispatchProperty, public QTreeWi
     Q_PROPERTY(QString setcolorinactive    READ getColorInactiveVerbose WRITE setColorInactive)
     Q_PROPERTY(QString setcoloractivehue   READ getColorActiveVerbose   WRITE setColorActiveHue)
     Q_PROPERTY(QString setcolorinactivehue READ getColorInactiveVerbose WRITE setColorInactiveHue)
+    Q_PROPERTY(QString setcolormultiply    READ getColorMultiplyVerbose WRITE setColorMultiply)
+    Q_PROPERTY(QString setcolormultiplyhue READ getColorMultiplyVerbose WRITE setColorMultiplyHue)
 
 
 
@@ -94,8 +96,8 @@ protected:
     NxPoint pos, posDrag, posOffset;
     qreal size;
     quint16 lineFactor, lineStipple;
-    QColor  color, colorActiveColor, colorInactiveColor, colorActiveColorMessage, colorInactiveColorMessage;
-    QString colorActive, colorInactive;
+    QColor  color, colorActiveColor, colorInactiveColor, colorMultiplyColor;
+    QString colorActive, colorInactive, colorMultiply;
     bool colorGlobal;
     NxRect boundingRect;
     QString label;
@@ -321,6 +323,39 @@ public slots:
         else
             return QString("%1 %2 %3 %4").arg(colorActiveColor.red()).arg(colorActiveColor.green()).arg(colorActiveColor.blue()).arg(colorActiveColor.alpha());
     }
+
+    inline void setColorMultiply(const QString & _color) {
+        QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
+        if(colorItem.count() == 4) {
+            colorMultiply = "";
+            colorMultiplyColor = QColor(colorItem.at(0).toDouble(), colorItem.at(1).toDouble(), colorItem.at(2).toDouble(), colorItem.at(3).toDouble());
+        }
+        else {
+            colorMultiply = _color;
+        }
+    }
+    inline void setColorMultiplyHue(const QString & _color) {
+        QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
+        if(colorItem.count() == 4) {
+            colorMultiply = "";
+            QColor color;
+            color.setHsv(colorItem.at(0).toDouble(), colorItem.at(1).toDouble(), colorItem.at(2).toDouble(), colorItem.at(3).toDouble());
+            colorMultiplyColor = color;
+        }
+        else {
+            colorMultiply = _color;
+        }
+    }
+    inline const QColor & getColorMultiplyColor() const {
+        return colorMultiplyColor;
+    }
+    inline const QString getColorMultiplyVerbose() const {
+        if(!colorMultiply.isEmpty())
+            return colorMultiply;
+        else
+            return QString("%1 %2 %3 %4").arg(colorMultiplyColor.red()).arg(colorMultiplyColor.green()).arg(colorMultiplyColor.blue()).arg(colorMultiplyColor.alpha());
+    }
+
     inline void setColorInactive(const QString & _color) {
         QStringList colorItem = _color.split(" ", QString::SkipEmptyParts);
         if(colorItem.count() == 4) {

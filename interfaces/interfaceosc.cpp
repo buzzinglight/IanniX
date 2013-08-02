@@ -7,21 +7,17 @@ InterfaceOsc::InterfaceOsc(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
 
-#ifdef ZEROCONF_INSTALLED
-    bonjourListCurrent = -1;
     bonjourMenu = new QMenu(this);
     connect(ui->bonjour,       SIGNAL(released()), SLOT(openBonjour()));
     connect(ui->bonjourBundle, SIGNAL(released()), SLOT(openBonjour()));
     connect(ui->bonjourPortIn, SIGNAL(released()), SLOT(openBonjour()));
+#ifdef ZEROCONF_AS_BROWSER
+    bonjourListCurrent = -1;
     bonjourResolver = 0;
     bonjourRegisterIn = bonjourRegisterOut = 0;
     bonjourBrowser = 0;
-    bonjourScan();
-#else
-    ui->bonjour->setVisible(false);
-    ui->bonjourBundle->setVisible(false);
-    ui->bonjourPortIn->setVisible(false);
 #endif
+    bonjourScan();
 
     //OSC adress of IanniX
     oscMatchAdressIanniX    = "/iannix/";
@@ -57,21 +53,21 @@ void InterfaceOsc::portChanged() {
     else                    ui->port->setStyleSheet(ihmFeedbackNok);
     UiHelp::oscPort = port;
 
-#ifdef ZEROCONF_INSTALLED
+#ifdef ZEROCONF_AS_SERVICE
     if(bonjourRegisterIn) delete bonjourRegisterIn;
     bonjourRegisterIn = new BonjourServiceRegister(this);
     bonjourRegisterIn->registerService(BonjourRecord(tr("To IanniX"), "_osc._udp", ""), port);
 #endif
 }
 void InterfaceOsc::portOutChanged() {
-#ifdef ZEROCONF_INSTALLED
+#ifdef ZEROCONF_AS_SERVICE
     if(bonjourRegisterOut) delete bonjourRegisterOut;
     bonjourRegisterOut = new BonjourServiceRegister(this);
     bonjourRegisterOut->registerService(BonjourRecord(tr("From IanniX"), "_osc._udp", ""), MessageManager::aliases["port_out"].val().toDouble());
 #endif
 }
 
-#ifdef ZEROCONF_INSTALLED
+#ifdef ZEROCONF_AS_BROWSER
 void InterfaceOsc::currentBonjourRecordsChanged(const QList<BonjourRecord> &list) {
     foreach(const BonjourRecord &record, list) {
         bool toAdd = true;
@@ -92,7 +88,6 @@ void InterfaceOsc::bonjourRecordResolved() {
         for(quint16 i = 0 ; i < bonjourServices.count() ; i++) {
             if(bonjourServices.at(i).port == 0) {
                 bonjourListCurrent = i;
-                //qDebug(">%s (%d)", qPrintable(bonjourServices.at(bonjourListCurrent).record.serviceName), bonjourServices.at(bonjourListCurrent).port);
                 bonjourResolver = new BonjourServiceResolver(this);
                 connect(bonjourResolver, SIGNAL(bonjourRecordResolved(const QHostInfo &, int)), this, SLOT(bonjourRecordResolved(const QHostInfo &, int)));
                 bonjourResolver->resolveBonjourRecord(bonjourServices.at(i).record);
@@ -111,7 +106,55 @@ void InterfaceOsc::bonjourRecordResolved(const QHostInfo &info, int port) {
     }
     bonjourRecordResolved();
 }
+#endif
 void InterfaceOsc::bonjourScan() {
+    //Templates
+    QFileInfoList files = QDir(Global::pathApplication.absoluteFilePath() + "/Tools/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    files <<              QDir(Global::pathDocuments.absoluteFilePath()   + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    foreach(const QFileInfo &file, files) {
+        QString header;
+        QMultiHash<QString, QString> params;
+        QFile templateFile(file.absoluteFilePath());
+        if(templateFile.open(QFile::ReadOnly)) {
+            QStringList templatesLong = QString(templateFile.readAll()).split("\n", QString::SkipEmptyParts);
+            foreach(const QString &templateLong, templatesLong) {
+                if(templateLong.startsWith("["))
+                    header = templateLong.toLower();
+                else if(header == "[general]") {
+                    QStringList templateLongSplit = templateLong.split("=");
+                    if(templateLongSplit.count() > 1) {
+                        QString key = templateLongSplit.at(0).toLower(), value = templateLongSplit.at(1);
+                        params.insert(key, value);
+                    }
+                }
+            }
+        }
+
+        //Interfaces
+        if(params.contains("name")) {
+            QHashIterator<QString, QString> paramsIterator(params);
+            while (paramsIterator.hasNext()) {
+                paramsIterator.next();
+                if(paramsIterator.key() == "interface") {
+                    bool toAdd = true;
+                    QStringList paramsSplit = paramsIterator.value().split(" | ");
+                    if(paramsSplit.count() > 1) {
+                        QString serviceName = QString("%1 (%2)").arg(params.value("name")).arg(paramsSplit.at(1).trimmed());
+                        for(quint16 i = 0 ; i < bonjourServices.count() ; i++)
+                            if((bonjourServices.at(i).name == serviceName))
+                                toAdd = false;
+                        if(toAdd) {
+                            QStringList paramsSplit2 = paramsSplit.at(0).trimmed().split(":");
+                            if(paramsSplit2.count() > 1)
+                                bonjourServices.append(BonjourService(serviceName, QHostAddress(paramsSplit2.at(0).trimmed()), paramsSplit2.at(1).toUInt()));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+#ifdef ZEROCONF_AS_BROWSER
     if(!bonjourBrowser) delete bonjourBrowser;
     if(!bonjourIsScanning) {
         //qDebug("> %d Scan Bonjour", QDateTime::currentDateTime().currentMSecsSinceEpoch());
@@ -121,19 +164,32 @@ void InterfaceOsc::bonjourScan() {
         bonjourIsScanning = true;
         QTimer::singleShot(5000, this, SLOT(bonjourScan()));
     }
+#endif
+
+    qSort(bonjourServices.begin(), bonjourServices.end(), BonjourService::sort);
 }
 void InterfaceOsc::openBonjour() {
     bonjourMenu->clear();
-    bonjourMenu->addAction(tr("Refresh list"));
-    bonjourMenu->addAction(tr("Reset to default"));
+    QAction *lastAction = 0;
     for(quint16 i = 0 ; i < bonjourServices.count() ; i++) {
         QString hostname = bonjourServices.at(i).host.toString();
         if(hostname == "::1")
             hostname = "127.0.0.1";
-        bonjourServices[i].setAction(bonjourMenu->addAction(QString("%1 on %2:%3").arg(bonjourServices.at(i).record.serviceName).arg(hostname).arg(bonjourServices.at(i).port)));
-        if(!((hostname.contains(".")) && (bonjourServices.at(i).port > 0)))
-            bonjourServices[i].action->setEnabled(false);
+
+        if((!bonjourServices.at(i).host.isNull()) && (bonjourServices.at(i).port > 0))
+            lastAction = bonjourServices[i].setAction(bonjourMenu->addAction(QString("%1 on %2:%3").arg(bonjourServices.at(i).name).arg(bonjourServices.at(i).host.toString()).arg(bonjourServices.at(i).port)));
+        else if((!bonjourServices.at(i).host.isNull()) && (sender() != ui->bonjourPortIn))
+            lastAction = bonjourServices[i].setAction(bonjourMenu->addAction(QString("%1 on %2").arg(bonjourServices.at(i).name).arg(bonjourServices.at(i).host.toString())));
+        else if(bonjourServices.at(i).port > 0)
+            lastAction = bonjourServices[i].setAction(bonjourMenu->addAction(QString("%1 on %2").arg(bonjourServices.at(i).name).arg(bonjourServices.at(i).port)));
+
+        if((lastAction) && (bonjourServices.at(i).isBonjour) && (!((hostname.contains(".")) && (bonjourServices.at(i).port > 0))))
+            lastAction->setEnabled(false);
     }
+    if(sender() == ui->bonjour)         bonjourMenu->insertSeparator(bonjourMenu->addAction(tr("Reset to localhost on 57120")));
+    if(sender() == ui->bonjourBundle)   bonjourMenu->insertSeparator(bonjourMenu->addAction(tr("Reset to localhost on 57130")));
+    if(sender() == ui->bonjourPortIn)   bonjourMenu->insertSeparator(bonjourMenu->addAction(tr("Reset to 1234")));
+    bonjourMenu->insertSeparator(bonjourMenu->addAction(tr("Refresh list")));
     QAction *retour = bonjourMenu->exec(QCursor::pos());
     if(retour) {
         if(retour->text().toLower().contains("refresh"))
@@ -157,22 +213,26 @@ void InterfaceOsc::openBonjour() {
                     if(hostname == "::1")
                         hostname = "127.0.0.1";
                     if(sender() == ui->bonjour) {
-                        MessageManager::aliases["ip_out"]   = hostname;
-                        MessageManager::aliases["port_out"] = QString::number(service.port);
+                        if(!service.host.isNull())
+                            MessageManager::aliases["ip_out"] = hostname;
+                        if(service.port > 0)
+                            MessageManager::aliases["port_out"] = QString::number(service.port);
                     }
                     if(sender() == ui->bonjourBundle) {
-                        bundleHost = hostname;
-                        bundlePort = service.port;
+                        if(!service.host.isNull())
+                            bundleHost = hostname;
+                        if(service.port > 0)
+                            bundlePort = service.port;
                     }
                     if(sender() == ui->bonjourPortIn)
-                        port = service.port;
+                        if(service.port > 0)
+                            port = service.port;
                     return;
                 }
             }
         }
     }
 }
-#endif
 
 
 void InterfaceOsc::parseOSC() {

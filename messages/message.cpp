@@ -20,7 +20,8 @@ void Message::setUrl(QString url, QScriptEngine *_messageScriptEngine, const QHa
 }
 void Message::setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine) {
     messageScriptEngine = _messageScriptEngine;
-    messageScriptValue = messageScriptEngine->globalObject();
+    if(messageScriptEngine)
+        messageScriptValue = messageScriptEngine->globalObject();
     hasAdd = false;
     urlMessage = url;
 

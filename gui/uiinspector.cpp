@@ -72,9 +72,11 @@ UiInspector::UiInspector(QWidget *parent) :
     Help::syncHelpWith(ui->patternLine,       COMMAND_CURSOR_START);
 
     Help::syncHelpWith(ui->colorCombo1,       COMMAND_COLOR_ACTIVE);
-    Help::syncHelpWith(ui->colorCombo2,       COMMAND_COLOR_INACTIVE);
     Help::syncHelpWith(ui->colorCombo1,       COMMAND_COLOR_ACTIVE_HUE);
+    Help::syncHelpWith(ui->colorCombo2,       COMMAND_COLOR_INACTIVE);
     Help::syncHelpWith(ui->colorCombo2,       COMMAND_COLOR_INACTIVE_HUE);
+    Help::syncHelpWith(ui->colorComboMultiply,COMMAND_COLOR_MULTIPLY);
+    Help::syncHelpWith(ui->colorComboMultiply,COMMAND_COLOR_MULTIPLY_HUE);
     Help::syncHelpWith(ui->textureCombo1,     COMMAND_TEXTURE_ACTIVE);
     Help::syncHelpWith(ui->textureCombo1,     COMMAND_TEXTURE_INACTIVE);
 
@@ -132,6 +134,7 @@ UiInspector::UiInspector(QWidget *parent) :
 
     ui->colorCombo1->clear();
     ui->colorCombo2->clear();
+    ui->colorComboMultiply->clear();
     ui->textureCombo1->clear();
     ui->textureCombo2->clear();
 
@@ -144,11 +147,59 @@ UiInspector::UiInspector(QWidget *parent) :
         ui->easingCombo->addItem(QIcon(easing.getPixmap()), tr("Easing") + QString(" %1").arg(type));
     }
 
+
+    //Templates
+    ui->equationTemplate->clear();
+    addEquationTemplate("Templates", true);
+    addEquationTemplate("--");
+    QFileInfoList files = QDir(Global::pathApplication.absoluteFilePath() + "/Tools/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    files <<              QDir(Global::pathDocuments.absoluteFilePath()   + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    bool firstTemplate = true;
+    QString title;
+    foreach(const QFileInfo &file, files) {
+        QString header;
+        QHash<QString, QString> params;
+        QFile templateFile(file.absoluteFilePath());
+        if(templateFile.open(QFile::ReadOnly)) {
+            QStringList templatesLong = QString(templateFile.readAll()).split("\n", QString::SkipEmptyParts);
+            foreach(const QString &templateLong, templatesLong) {
+                if(templateLong.startsWith("["))
+                    header = templateLong.toLower();
+                else if(header == "[general]") {
+                    QStringList templateLongSplit = templateLong.split("=");
+                    if(templateLongSplit.count() > 1) {
+                        QString key = templateLongSplit.at(0).toLower(), value = templateLongSplit.at(1);
+                        params.insert(key, value);
+                        if(key == "name")
+                            title = value;
+                    }
+                }
+                else if(header == "[equations]") {
+                    if(!title.isEmpty()) {
+                        if(!firstTemplate)
+                            addEquationTemplate("--");
+                        firstTemplate = false;
+                        addEquationTemplate(title);
+                        title.clear();
+                    }
+                    addEquationTemplate("          " + templateLong.trimmed(), true);
+                }
+            }
+        }
+    }
+
     //needRefresh = true;
     startTimer(100);
 
     refresh();
 }
+void UiInspector::addEquationTemplate(QString text, bool enabled) {
+    if(text.trimmed() == "--")      ui->equationTemplate->insertSeparator(ui->equationTemplate->count());
+    else                            ui->equationTemplate->addItem(text);
+    if(!enabled)
+        qobject_cast<QStandardItemModel*>(ui->equationTemplate->model())->item(ui->equationTemplate->count()-1)->setEnabled(false);
+}
+
 void UiInspector::addInterfaces() {
     QHashIterator<MessagesType, NetworkInterface*> interfacesIterator(MessageManager::interfaces);
     while (interfacesIterator.hasNext()) {
@@ -257,6 +308,12 @@ void UiInspector::actionInfo() {
         else if((ui->patternLine == sender()) || (ui->easingCombo == sender()))
             Application::current->execute(QString("%1 selection %2 0 %3").arg(COMMAND_CURSOR_START).arg(ui->easingCombo->currentIndex()).arg(ui->patternLine->currentText().split(" - ").at(0)), ExecuteSourceGui);
 
+        else if((ui->equationTemplate == sender()) && (ui->equationTemplate->currentText().length())) {
+            QStringList temp = ui->equationTemplate->currentText().split(" | ");
+            if(temp.count() > 1)
+                Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURVE_EQUATION).arg(temp.at(0).trimmed()), ExecuteSourceGui);
+        }
+
         refresh();
     }
 }
@@ -265,7 +322,7 @@ void UiInspector::actionColor() {
         QComboBox *combo = (QComboBox*)sender();
         QString val = combo->currentText();
         QStringList oldValStr = combo->currentText().split(" ", QString::SkipEmptyParts);
-        if((combo->currentText() == "Custom") || (oldValStr.count() == 4)) {
+        if(combo->currentText() == tr("Choose…")) {
             QColor oldVal = Qt::white;
             if(oldValStr.count() == 4)
                 oldVal = QColor(oldValStr.at(0).toUInt(), oldValStr.at(1).toUInt(), oldValStr.at(2).toUInt(), oldValStr.at(3).toUInt());
@@ -274,8 +331,9 @@ void UiInspector::actionColor() {
         }
         Application::current->pushSnapshot();
 
-        if(ui->colorCombo1 == sender())         Application::current->execute(QString("%1 selection %2").arg(COMMAND_COLOR_ACTIVE).arg(val), ExecuteSourceGui);
-        else if(ui->colorCombo2 == sender())    Application::current->execute(QString("%1 selection %2").arg(COMMAND_COLOR_INACTIVE).arg(val), ExecuteSourceGui);
+        if(ui->colorCombo1 == sender())                 Application::current->execute(QString("%1 selection %2").arg(COMMAND_COLOR_ACTIVE).arg(val), ExecuteSourceGui);
+        else if(ui->colorCombo2 == sender())            Application::current->execute(QString("%1 selection %2").arg(COMMAND_COLOR_INACTIVE).arg(val), ExecuteSourceGui);
+        else if(ui->colorComboMultiply == sender())     Application::current->execute(QString("%1 selection %2").arg(COMMAND_COLOR_MULTIPLY).arg(val), ExecuteSourceGui);
 
         refresh();
     }
@@ -374,12 +432,21 @@ void UiInspector::refresh() {
         NxObject  *prevObject = 0;
         NxCurve   *prevCurve = 0;
 
-        ui->colorCombo1->clear();
-        ui->colorCombo2->clear();
-        colorComboAdd(ui->colorCombo1, Global::colors->keys());
-        colorComboAdd(ui->colorCombo2, Global::colors->keys());
-        colorComboAdd(ui->colorCombo1, QStringList() << "Custom");
-        colorComboAdd(ui->colorCombo2, QStringList() << "Custom");
+        if(!ui->colorCombo1->hasFocus()) {
+            ui->colorCombo1->clear();
+            colorComboAdd(ui->colorCombo1,          Global::colors->keys());
+            colorComboAdd(ui->colorCombo1,          QStringList() << tr("Choose…"));
+        }
+        if(!ui->colorCombo2->hasFocus()) {
+            ui->colorCombo2->clear();
+            colorComboAdd(ui->colorCombo2,          Global::colors->keys());
+            colorComboAdd(ui->colorCombo2,          QStringList() << tr("Choose…"));
+        }
+        if(!ui->colorComboMultiply->hasFocus()) {
+            ui->colorComboMultiply->clear();
+            colorComboAdd(ui->colorComboMultiply,   QStringList() << tr("Choose…"));
+        }
+
         ui->textureCombo1->clear();
         ui->textureCombo2->clear();
         textureComboAdd(ui->textureCombo1, QStringList() << "");
@@ -432,6 +499,7 @@ void UiInspector::refresh() {
             change(indexObject, ui->labelLine, object->getLabel(), prevObject->getLabel());
             change(indexObject, ui->colorCombo1, object->getColorActiveVerbose(), prevObject->getColorActiveVerbose(), true);
             change(indexObject, ui->colorCombo2, object->getColorInactiveVerbose(), prevObject->getColorInactiveVerbose(), true);
+            change(indexObject, ui->colorComboMultiply, object->getColorMultiplyVerbose(), prevObject->getColorMultiplyVerbose(), true);
             change(indexObject, ui->sizeSpin, object->getSize(), prevObject->getSize());
 
             if(object->getType() == ObjectsTypeCursor) {
@@ -550,6 +618,7 @@ void UiInspector::refresh() {
     ui->colorLabel2->setVisible(showGenericInfo);
     ui->colorCombo1->setVisible(showGenericInfo);
     ui->colorCombo2->setVisible(showGenericInfo);
+    ui->colorComboMultiply->setVisible(showGenericInfo);
     ui->textureLabel1->setVisible(showTriggerInfo);
     ui->textureLabel2->setVisible(showTriggerInfo);
     ui->textureCombo1->setVisible(showTriggerInfo);
@@ -633,6 +702,7 @@ void UiInspector::refresh() {
     ui->sizeLabel->setVisible(showCurveInfo);
     ui->pointsLabel->setVisible(showCurvePointsInfo);
     ui->pointsLists->setVisible(showCurvePointsInfo);
+    ui->equationTemplate->setVisible(showCurveEquationInfo);
     ui->equationLabel->setVisible(showCurveEquationInfo);
     ui->equationType->setVisible(showCurveEquationInfo);
     ui->equationPoints->setVisible(showCurveEquationInfo);
@@ -734,21 +804,19 @@ void UiInspector::change(quint16 indexObject, QPlainTextEdit *spin, const QStrin
     }
 }
 void UiInspector::change(quint16 indexObject, QComboBox *spin, const QString & val, const QString & prevVal, bool isColor) {
-    if(isColor) {
-    }
-    else {
+    if(!isColor) {
         if((!spin->hasFocus()) && (spin->isEditable()))
             spin->setEditText(val);
     }
 
     if(indexObject == 0) {
         qint16 indexVal = spin->findText(val);
-        if((indexVal < 0) && (isColor))
-            colorComboAdd(spin, QStringList() << val);
-
         if(!spin->hasFocus()) {
-            if(spin->isEditable()) spin->setEditText(val);
-            else                   spin->setCurrentIndex(indexVal);
+            if(indexVal < 0) {
+                colorComboAdd(spin, QStringList() << val);
+                indexVal = spin->count()-1;
+            }
+            spin->setCurrentIndex(indexVal);
         }
     }
     else if(prevVal != val) {
@@ -785,10 +853,8 @@ void UiInspector::colorComboAdd(QComboBox *spin, QStringList values) {
         else
             color = Global::colors->value(colorName);
         icon.fill(color);
-        if(colorName != "Custom")
-            spin->addItem(QIcon(icon), colorName);
-        else
-            spin->addItem(colorName);
+        if(colorName != tr("Choose…"))  spin->addItem(QIcon(icon), colorName);
+        else                            spin->addItem(colorName);
     }
 }
 void UiInspector::textureComboAdd(QComboBox *spin, QStringList values) {

@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <QPlainTextEdit>
+#include <QDir>
 #include "gui/uimessagebox.h"
 #include "misc/application.h"
 #include "objects/nxobject.h"
@@ -75,6 +76,7 @@ public:
     void setCurrentItem(QComboBox *combo, QLabel *label, const QString &value, bool forceVisible = true);
     QString getItem(QComboBox *combo, const QString &valDefault, const QString &prefix = "") const;
     QString getItem(QComboBox *combo, qint32 valDefault) const;
+    void addTemplate(QString text, bool enabled = false);
 
 signals:
     void actionRouteRemove(ExtOscPatternEditor*);

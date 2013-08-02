@@ -8,9 +8,11 @@
 #include "misc/options.h"
 #include "messages/messagemanager.h"
 #include "gui/uihelp.h"
-#ifdef ZEROCONF_INSTALLED
+#ifdef ZEROCONF_AS_BROWSER
 #include "zeroconf/bonjourserviceresolver.h"
 #include "zeroconf/bonjourservicebrowser.h"
+#endif
+#ifdef ZEROCONF_AS_SERVICE
 #include "zeroconf/bonjourserviceregister.h"
 #endif
 
@@ -18,19 +20,29 @@ namespace Ui {
 class InterfaceOsc;
 }
 
-#ifdef ZEROCONF_INSTALLED
 class BonjourService {
+#ifdef ZEROCONF_AS_BROWSER
 public:
-    explicit BonjourService(const BonjourRecord &_record) { reset(); setAction(); record = _record; }
-    void reset()                         { port = 0; }
-    void setAction(QAction *_action = 0) { action = _action; }
+    explicit BonjourService(const BonjourRecord &_record) { reset(); setAction(); record = _record; name = record.serviceName; isBonjour = true }
 public:
     BonjourRecord record;
+#endif
+
+public:
+    bool isBonjour;
+    explicit BonjourService(const QString &_name, QHostAddress _host, quint16 _port)   { reset(); setAction(); isBonjour = false; name = _name; host = _host; port = _port; }
+    void reset()                         { port = 0;  }
+    QAction* setAction(QAction *_action = 0) { action = _action; return action; }
+public:
+    QString name;
     QHostAddress host;
     quint16 port;
     QAction *action;
+public:
+    static bool sort(const BonjourService &first, const BonjourService &second) {
+        return first.name < second.name;
+    }
 };
-#endif
 
 class InterfaceOsc : public NetworkInterface {
     Q_OBJECT
@@ -43,11 +55,16 @@ private:
     UiReal port, bundlePort;
     UiString bundleHost;
     UiBool enable;
-#ifdef ZEROCONF_INSTALLED
+
+private:
     QMenu *bonjourMenu;
-    qint16 bonjourListCurrent;
     QList<BonjourService> bonjourServices;
-    BonjourServiceRegister *bonjourRegisterIn, *bonjourRegisterOut;
+private slots:
+    void openBonjour();
+    void bonjourScan();
+#ifdef ZEROCONF_AS_BROWSER
+private:
+    qint16 bonjourListCurrent;
     BonjourServiceBrowser  *bonjourBrowser;
     BonjourServiceResolver *bonjourResolver;
     bool bonjourIsScanning;
@@ -55,8 +72,10 @@ private slots:
     void currentBonjourRecordsChanged(const QList<BonjourRecord> &);
     void bonjourRecordResolved();
     void bonjourRecordResolved(const QHostInfo &, int);
-    void bonjourScan();
-    void openBonjour();
+#endif
+#ifdef ZEROCONF_AS_SERVICE
+public:
+    BonjourServiceRegister *bonjourRegisterIn, *bonjourRegisterOut;
 #endif
 
 private slots:

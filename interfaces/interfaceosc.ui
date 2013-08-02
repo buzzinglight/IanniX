@@ -148,7 +148,7 @@
         <enum>Qt::CustomContextMenu</enum>
        </property>
        <property name="toolTip">
-        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using OpenSoundControl</string>
+        <string>Displays a list of applications with their OSC port</string>
        </property>
        <property name="styleSheet">
         <string notr="true">margin-top: 6px;</string>
@@ -273,7 +273,7 @@
         <enum>Qt::CustomContextMenu</enum>
        </property>
        <property name="toolTip">
-        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using OpenSoundControl</string>
+        <string>Displays a list of applications with their OSC port</string>
        </property>
        <property name="styleSheet">
         <string notr="true">margin-top: 4px;</string>
@@ -398,7 +398,7 @@ BUNDLE ON</string>
         <enum>Qt::CustomContextMenu</enum>
        </property>
        <property name="toolTip">
-        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using OpenSoundControl</string>
+        <string>Displays a list of applications with their OSC port</string>
        </property>
        <property name="styleSheet">
         <string notr="true">margin-top: 4px;</string>
@@ -433,4 +433,7 @@ BUNDLE ON</string>
   <include location="../icons/IanniX.qrc"/>
  </resources>
  <connections/>
+ <slots>
+  <slot>openBonjour()</slot>
+ </slots>
 </ui>

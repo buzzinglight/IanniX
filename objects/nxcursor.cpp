@@ -42,6 +42,11 @@ NxCursor::NxCursor(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     cursorPolyOld[1] = NxPoint();
     cursorPolyOld[2] = NxPoint();
     cursorPolyOld[3] = NxPoint();
+    cursorPolyOldOld    = NxPolygon(4);
+    cursorPolyOldOld[0] = NxPoint();
+    cursorPolyOldOld[1] = NxPoint();
+    cursorPolyOldOld[2] = NxPoint();
+    cursorPolyOldOld[3] = NxPoint();
 
     initializeCustom();
 }
@@ -213,6 +218,7 @@ void NxCursor::calculate() {
     cursorRelativePos = getCursorValue(cursorPos);
 
     //Cursor
+    cursorPolyOldOld = cursorPolyOld;
     cursorPolyOld = cursorPoly;
     cursorPoly.replace(0, NxPoint(0, -width/2, -depth/2));
     cursorPoly.replace(1, NxPoint(0, -width/2,  depth/2));
@@ -262,6 +268,10 @@ void NxCursor::paint() {
         else if(Global::colors->contains(colorInactive))                                                                color = Global::colors->value(colorInactive);
         else                                                                                                            color = Qt::gray;
     }
+    color.setRgb (qBound(0., color.red()   * colorMultiplyColor.redF(),   255.),
+                  qBound(0., color.green() * colorMultiplyColor.greenF(), 255.),
+                  qBound(0., color.blue()  * colorMultiplyColor.blueF(),  255.),
+                  qBound(0., color.alpha() * colorMultiplyColor.alphaF(), 255.));
 
     if(color.alpha() > 0) {
         //Mouse hover
@@ -292,54 +302,68 @@ void NxCursor::paint() {
                 }
             }
 
-            glLineWidth(size);
-            glEnable(GL_LINE_STIPPLE);
-            glLineStipple(lineFactor, lineStipple);
-            if(depth == 0) {
+            //Debug
+            if(false) {
+                glColor4f(0, 0, 0, 1);
                 glBegin(GL_LINE_STRIP);
                 glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
                 glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
                 glEnd();
+                glBegin(GL_LINE_STRIP);
+                glVertex3f(cursorPolyOld.at(1).x(), cursorPolyOld.at(1).y(), cursorPolyOld.at(1).z());
+                glVertex3f(cursorPolyOld.at(2).x(), cursorPolyOld.at(2).y(), cursorPolyOld.at(2).z());
+                glEnd();
             }
             else {
-                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF()/5.);
-                glBegin(GL_QUADS);
-                glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
-                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
-                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
-                glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
+                //Cursor
+                glLineWidth(size);
+                glEnable(GL_LINE_STIPPLE);
+                glLineStipple(lineFactor, lineStipple);
+                if(depth == 0) {
+                    glBegin(GL_LINE_STRIP);
+                    glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                    glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                    glEnd();
+                }
+                else {
+                    glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF()/5.);
+                    glBegin(GL_QUADS);
+                    glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
+                    glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                    glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                    glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
+                    glEnd();
+
+                    glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+                    glBegin(GL_LINE_LOOP);
+                    glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
+                    glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                    glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                    glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
+                    glEnd();
+                }
+                glDisable(GL_LINE_STIPPLE);
+                glLineWidth(1);
+
+                //Cursor reader
+                glPushMatrix();
+                glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
+                glRotatef(cursorAngle.z(), 0, 0, 1);
+                glRotatef(cursorAngle.y(), 0, 1, 0);
+                glRotatef(cursorAngle.x(), 1, 0, 0);
+                qreal size2 = Global::objectSize / 2 * qMin(1., width);
+                glBegin(GL_TRIANGLE_FAN);
+                glLineWidth(2);
+                if(hasActivity) {
+                    if((time - timeOld) >= 0)  glVertex3f(size2, 0, 0);
+                    else                       glVertex3f(-size2, 0, 0);
+                }
+                glVertex3f(0, -size2, 0);
+                glVertex3f(0, size2, 0);
+                glLineWidth(1);
                 glEnd();
-
-                glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
-                glBegin(GL_LINE_LOOP);
-                glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
-                glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
-                glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
-                glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
-                glEnd();
+                glPopMatrix();
             }
-            glDisable(GL_LINE_STIPPLE);
-            glLineWidth(1);
-
-
-            //Cursor reader
-            glPushMatrix();
-            glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
-            glRotatef(cursorAngle.z(), 0, 0, 1);
-            glRotatef(cursorAngle.y(), 0, 1, 0);
-            glRotatef(cursorAngle.x(), 1, 0, 0);
-            qreal size2 = Global::objectSize / 2 * qMin(1., width);
-            glBegin(GL_TRIANGLE_FAN);
-            glLineWidth(2);
-            if(hasActivity) {
-                if((time - timeOld) >= 0)  glVertex3f(size2, 0, 0);
-                else                       glVertex3f(-size2, 0, 0);
-            }
-            glVertex3f(0, -size2, 0);
-            glVertex3f(0, size2, 0);
-            glLineWidth(1);
-            glEnd();
-            glPopMatrix();
 
             //Special feature YEOSU
             if((true) && ((cursorPos.sx()) || (cursorPos.sy()) || (cursorPos.sz()))) {
@@ -448,9 +472,9 @@ bool NxCursor::contains(NxTrigger *trigger) const {
         NxPoint centre1 = trigger->getPos() - NxPoint(  (cursorPoly.at(0).x() + cursorPoly.at(1).x() + cursorPoly.at(2).x() + cursorPoly.at(3).x()) / 4.,
                                                         (cursorPoly.at(0).y() + cursorPoly.at(1).y() + cursorPoly.at(2).y() + cursorPoly.at(3).y()) / 4.,
                                                         (cursorPoly.at(0).z() + cursorPoly.at(1).z() + cursorPoly.at(2).z() + cursorPoly.at(3).z()) / 4.);
-        NxPoint centre2 = trigger->getPos() - NxPoint(  (cursorPolyOld.at(0).x() + cursorPolyOld.at(1).x() + cursorPolyOld.at(2).x() + cursorPolyOld.at(3).x()) / 4.,
-                                                        (cursorPolyOld.at(0).y() + cursorPolyOld.at(1).y() + cursorPolyOld.at(2).y() + cursorPolyOld.at(3).y()) / 4.,
-                                                        (cursorPolyOld.at(0).z() + cursorPolyOld.at(1).z() + cursorPolyOld.at(2).z() + cursorPolyOld.at(3).z()) / 4.);
+        NxPoint centre2 = trigger->getPos() - NxPoint(  (cursorPolyOldOld.at(0).x() + cursorPolyOldOld.at(1).x() + cursorPolyOldOld.at(2).x() + cursorPolyOldOld.at(3).x()) / 4.,
+                                                        (cursorPolyOldOld.at(0).y() + cursorPolyOldOld.at(1).y() + cursorPolyOldOld.at(2).y() + cursorPolyOldOld.at(3).y()) / 4.,
+                                                        (cursorPolyOldOld.at(0).z() + cursorPolyOldOld.at(1).z() + cursorPolyOldOld.at(2).z() + cursorPolyOldOld.at(3).z()) / 4.);
         //Rotations + translations
         qreal angleSin, angleCos;
         //angle = -cursorAngle.z() * M_PI / 180., angleSin = qSin(angle), angleCos = qCos(angle);
@@ -481,6 +505,8 @@ bool NxCursor::contains(NxTrigger *trigger) const {
         bool isInWidth = (qAbs(centre1.y()) <= width/2.) && (qAbs(centre2.y()) <= width/2.);
         bool isInDepth = (qAbs(centre1.z()) <= depth/2.) && (qAbs(centre2.z()) <= depth/2.);
         bool isInside  = ((centre1.x() >= 0) && (centre2.x() <= 0)) || ((centre1.x() <= 0) && (centre2.x() >= 0));
+
+        //qDebug("%d\t=\t%f\t%f", isInside, centre1.x(), centre2.x());
 
         if(depth > 0) {
             //qDebug("%d %d %d", isInWidth, isInDepth, isInside);

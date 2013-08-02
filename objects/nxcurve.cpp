@@ -140,6 +140,10 @@ void NxCurve::paint() {
         else if(Global::colors->contains(colorInactive))                                                                color = Global::colors->value(colorInactive);
         else                                                                                                            color = Qt::gray;
     }
+    color.setRgb (qBound(0., color.red()   * colorMultiplyColor.redF(),   255.),
+                  qBound(0., color.green() * colorMultiplyColor.greenF(), 255.),
+                  qBound(0., color.blue()  * colorMultiplyColor.blueF(),  255.),
+                  qBound(0., color.alpha() * colorMultiplyColor.alphaF(), 255.));
 
     if(color.alpha() > 0) {
         //Mouse hover

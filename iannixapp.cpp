@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
     //iannixApp.installTranslator(&translator);
 
     QString appName    = "IanniX ";
-    QString appVersion = "0.9.1";
+    QString appVersion = "0.9.11";
 
 #ifdef Q_OS_MAC
     appName += "Mac";
@@ -354,6 +354,7 @@ void IanniXApp::setHelp() {
     Help::categories["commands"].infos << HelpInfo(COMMAND_TRIG						, tr("Objects and messages"), tr("Forces an object to send its messages"), tr("<target>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_GLOBAL_COLOR				, tr(""), tr(""), tr("<target> <color_name> <r> <g> <b> <a>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_ACTIVE				, tr(""), tr(""), tr("<target> <color_name>\n<target> <r> <g> <b> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_MULTIPLY			, tr(""), tr(""), tr("<target> <color_name>\n<target> <r> <g> <b> <a>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_INACTIVE			, tr(""), tr(""), tr("<target> <color_name>\n<target> <r> <g> <b> <a>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_TEXTURE					, tr(""), tr(""), tr("<target> <texture_name> <x-top-left> <y-top-left> <x-bottom-right> <y-bottom-right> <texture_filename>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_TEXTURE_ACTIVE			, tr(""), tr(""), tr("<target> <texture_name>"));
@@ -371,6 +372,7 @@ void IanniXApp::setHelp() {
     Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_GLOBAL_HUE			, tr("Objects style"), tr("Changes the color of active and inactive objects by using a color in the palette or a custom color"), tr("<target> <color_name>\n<target> <h> <s> <v> <a>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_ACTIVE_HUE			, tr(""), tr(""), tr("<target> <color_name>\n<target> <h> <s> <v> <a>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_INACTIVE_HUE		, tr(""), tr(""), tr("<target> <color_name>\n<target> <h> <s> <v> <a>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_MULTIPLY_HUE		, tr(""), tr(""), tr("<target> <color_name>\n<target> <h> <s> <v> <a>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_TIME				, tr("Objects and time"), tr("Sets cursors to a specific time on curve (absolute time)"), tr("<target> <time>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_LOG						, tr("IanniX actions"), tr("Logs information to IanniX messages log"), tr("<text>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_EQUATION_PARAM		, tr("Objects and 3D space"), tr("Sets a value to an equation parameter"), tr("<target> <param_name> <param_value>"));

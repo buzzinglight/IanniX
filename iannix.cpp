@@ -32,15 +32,6 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     Global::textures = new UiTextureItems();
     Global::colors   = new UiColorItems();
 
-    Global::messageTemplates << tr("osc://ip_out:port_out/trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id - Default OSC message for triggers");
-    Global::messageTemplates << tr("osc://ip_out:port_out/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos - Default OSC message for cursors");
-    Global::messageTemplates << tr("osc://ip_out:port_out/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0 - Default OSC message for classical playhead");
-    Global::messageTemplates << tr("midi://midi_out/notef 1 trigger_value_y trigger_value_x 3 - Default MIDI message for triggers");
-    Global::messageTemplates << tr("midi://midi_out/note 1 69 127 5 - Play a MIDI note #69 (A - 440Hz) during 5 seconds on channel #1 with maximum velocity");
-    Global::messageTemplates << tr("midi://midi_out/ccf 1 0 cursor_value_y - Send a MIDI control change on controler #0 on channel #1 depending on cursor position (as float value between 0 and 1)");
-    Global::messageTemplates << tr("direct:// goto 2 - Make score go back to timecode 000:02.000");
-    Global::messageTemplates << tr("direct:// setSpeedF 10 1 - Make the cursor #10 start (please set its Master Speed to 0 before)");
-
     //Updates
     forceUpdate = false;
 
@@ -55,6 +46,7 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
 
     //Create basic workspace
     QDir().mkpath(Global::pathDocuments.absoluteFilePath() + "/");
+    QDir().mkpath(Global::pathDocuments.absoluteFilePath() + "/Templates/");
 
     //View
     view      = new UiView(0);
@@ -166,17 +158,6 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
         foreach(UiOption *option, UiOptions::options)
             iniSettings->setValue(option->settingName, option->variant());
 
-        //Messages
-        int messageTemplatesCount = iniSettings->beginReadArray("Messages Templates");
-        if(messageTemplatesCount > 0) {
-            Global::messageTemplates.clear();
-            for(quint16 i = 0 ; i < messageTemplatesCount ; i++) {
-                iniSettings->setArrayIndex(i);
-                Global::messageTemplates << iniSettings->value("messageTemplates").toString();
-            }
-        }
-        iniSettings->endArray();
-
         //Colors
         iniSettings->beginGroup("Colors");
         QMapIterator<QString, QColor> colorIterator(*Global::colors);
@@ -201,15 +182,6 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
                 if(iniSettings->childKeys().contains(option->settingName))
                     option->setVariant(iniSettings->value(option->settingName));
         }
-
-        //Messages
-        Global::messageTemplates.clear();
-        int count = iniSettings->beginReadArray("Messages Templates");
-        for(quint16 i = 0 ; i < count ; i++) {
-            iniSettings->setArrayIndex(i);
-            Global::messageTemplates.append(iniSettings->value("messageTemplates").toString());
-        }
-        iniSettings->endArray();
 
         //Colors
         iniSettings->beginGroup("Colors");
@@ -982,7 +954,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
 
                 if(object) {
                     //String parameter
-                    if((commande == COMMAND_GROUP) || (commande == COMMAND_RESIZE) || (commande == COMMAND_POS) || (commande == COMMAND_POS_TRANSLATE) || (commande == COMMAND_LABEL) || (commande == COMMAND_CURSOR_BOUNDS_SOURCE) || (commande == COMMAND_CURSOR_BOUNDS_TARGET) || (commande == COMMAND_CURVE_EQUATION_PARAM) || (commande == COMMAND_COLOR_ACTIVE) || (commande == COMMAND_COLOR_INACTIVE) || (commande == COMMAND_COLOR_ACTIVE_HUE) || (commande == COMMAND_COLOR_INACTIVE_HUE) || (commande == COMMAND_MESSAGE) || (commande == COMMAND_CURVE_ELL) || (commande == COMMAND_CURVE_POINT_SHIFT) || (commande == COMMAND_CURVE_POINT_TRANSLATE) || (commande == COMMAND_CURVE_POINT_TRANSLATE2) || (commande == COMMAND_CURVE_EQUATION) || (commande == COMMAND_TEXTURE_ACTIVE) || (commande == COMMAND_TEXTURE_INACTIVE) || (commande == COMMAND_LINE) || (commande == COMMAND_CURSOR_OFFSET) || (commande == COMMAND_CURSOR_START) || (commande == COMMAND_CURSOR_SPEED)) {
+                    if((commande == COMMAND_GROUP) || (commande == COMMAND_RESIZE) || (commande == COMMAND_POS) || (commande == COMMAND_POS_TRANSLATE) || (commande == COMMAND_LABEL) || (commande == COMMAND_CURSOR_BOUNDS_SOURCE) || (commande == COMMAND_CURSOR_BOUNDS_TARGET) || (commande == COMMAND_CURVE_EQUATION_PARAM) || (commande == COMMAND_COLOR_ACTIVE) || (commande == COMMAND_COLOR_INACTIVE) || (commande == COMMAND_COLOR_ACTIVE_HUE) || (commande == COMMAND_COLOR_INACTIVE_HUE) || (commande == COMMAND_COLOR_MULTIPLY) || (commande == COMMAND_COLOR_MULTIPLY_HUE) || (commande == COMMAND_MESSAGE) || (commande == COMMAND_CURVE_ELL) || (commande == COMMAND_CURVE_POINT_SHIFT) || (commande == COMMAND_CURVE_POINT_TRANSLATE) || (commande == COMMAND_CURVE_POINT_TRANSLATE2) || (commande == COMMAND_CURVE_EQUATION) || (commande == COMMAND_TEXTURE_ACTIVE) || (commande == COMMAND_TEXTURE_INACTIVE) || (commande == COMMAND_LINE) || (commande == COMMAND_CURSOR_OFFSET) || (commande == COMMAND_CURSOR_START) || (commande == COMMAND_CURSOR_SPEED)) {
                         if(argc > 2)    object->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 2));
                         if(needOutput)  return object->getProperty(qPrintable(commande));
                     }

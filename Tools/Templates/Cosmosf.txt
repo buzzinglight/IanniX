@@ -1,0 +1,216 @@
+[General]
+name=Cosmosƒ
+interface=:7001 | control of instance #1
+interface=:7002 | control of instance #2
+interface=:7003 | control of instance #3
+
+[Messages]
+osc://ip_out:port_out/Cosmos /macroEVL cursor_value_x | value between 0-10000 
+osc://ip_out:port_out/Cosmos /CellLMod cursor_value_x | value between 0-2 
+osc://ip_out:port_out/Cosmos /LoopAcc cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /CellFeedback cursor_value_x | value between 0-8 
+osc://ip_out:port_out/Cosmos /mesoDensity cursor_value_x | value between 0-6 
+osc://ip_out:port_out/Cosmos /mesoDensityMod cursor_value_x | value between 0-3 
+osc://ip_out:port_out/Cosmos /mesoCellScale cursor_value_x | value between 0-6 
+osc://ip_out:port_out/Cosmos /mesoOnsetDist cursor_value_x | value between 0-8 
+osc://ip_out:port_out/Cosmos /mesoDurDist cursor_value_x | value between 0-8 
+osc://ip_out:port_out/Cosmos /microDensity cursor_value_x | value between 0-6 
+osc://ip_out:port_out/Cosmos /microDensityMod cursor_value_x | value between 0-3 
+osc://ip_out:port_out/Cosmos /microOnsetDist cursor_value_x | value between 0-8 
+osc://ip_out:port_out/Cosmos /microDurDist cursor_value_x | value between 0-8 
+osc://ip_out:port_out/Cosmos /microCellScale cursor_value_x | value between 0-6 
+-- 
+osc://ip_out:port_out/Cosmos /mesOnset /regular cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /mesOnset /uniform cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /mesOnset /gaussian cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesOnset /cauchy cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesOnset /exponential cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /mesOnset /arcsine cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesOnset /weibull cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesOnset /lognormal cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesOnset /triangular cursor_value_x cursor_value_y cursor_value_z | 3 values between 0-1 0-1 0-1
+-- 
+osc://ip_out:port_out/Cosmos /micOnset /regular cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /micOnset /uniform cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /micOnset /gaussian cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micOnset /cauchy cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micOnset /exponential cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /micOnset /arcsine cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micOnset /weibull cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micOnset /lognormal cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micOnset /triangular cursor_value_x cursor_value_y cursor_value_z | 3 values between 0-1 0-1 0-1
+-- 
+osc://ip_out:port_out/Cosmos /mesDur /regular cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /mesDur /uniform cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /mesDur /gaussian cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesDur /cauchy cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesDur /exponential cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /mesDur /arcsine cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesDur /weibull cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesDur /lognormal cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesDur /triangular cursor_value_x cursor_value_y cursor_value_z | 3 values between 0-1 0-1 0-1
+-- 
+osc://ip_out:port_out/Cosmos /micDur /regular cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /micDur /uniform cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /micDur /gaussian cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micDur /cauchy cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micDur /exponential cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /micDur /arcsine cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micDur /weibull cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micDur /lognormal cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micDur /triangular cursor_value_x cursor_value_y cursor_value_z | 3 values between 0-1 0-1 0-1
+-- 
+osc://ip_out:port_out/Cosmos /microAmpGainP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoAmpGainP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /microAmpModP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoAmpModP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /microPBModP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoPBModP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /sampStartP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /pbDirectionP cursor_value_x | value between 0-2 
+osc://ip_out:port_out/Cosmos /pulseDutyP cursor_value_x | value between 0-100 
+osc://ip_out:port_out/Cosmos /microWindowP cursor_value_x | value between 0-4 
+osc://ip_out:port_out/Cosmos /mesoWindowP cursor_value_x | value between 0-4 
+osc://ip_out:port_out/Cosmos /microPBrateP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoPBrateP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /engTypeP cursor_value_x | value between 0-6 
+-- 
+osc://ip_out:port_out/Cosmos /microCutOffP cursor_value_x | value between 0-15000 
+osc://ip_out:port_out/Cosmos /mesoCutOffP cursor_value_x | value between 0-15000 
+osc://ip_out:port_out/Cosmos /microFiltModP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoFiltModP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /microFiltTypeP cursor_value_x | value between 0-3 
+osc://ip_out:port_out/Cosmos /mesoFiltTypeP cursor_value_x | value between 0-3 
+osc://ip_out:port_out/Cosmos /microFiltResP cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /mesoFiltResP cursor_value_x | value between 0-10 
+-- 
+osc://ip_out:port_out/Cosmos /GrnModP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /GrnPBSpeedP cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /GrnSizeP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /GrnInputP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /GrnFeedbackP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /GrnPosMovP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /RingModP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /RingModFreqP cursor_value_x | value between 0-2000 
+osc://ip_out:port_out/Cosmos /RingModMP cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /RingModFreqMP cursor_value_x | value between 0-2000 
+-- 
+osc://ip_out:port_out/Cosmos /microAmpGain cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoAmpGain cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /microAmpMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoAmpMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /microPBMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoPBMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /sampStart cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /pbDirection cursor_value_x | value between 0-2 
+osc://ip_out:port_out/Cosmos /pulseDuty cursor_value_x | value between 0-100 
+osc://ip_out:port_out/Cosmos /microWindow cursor_value_x | value between 0-4 
+osc://ip_out:port_out/Cosmos /mesoWindow cursor_value_x | value between 0-4 
+osc://ip_out:port_out/Cosmos /microPBrate cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoPBrate cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /engType cursor_value_x | value between 0-6 
+-- 
+osc://ip_out:port_out/Cosmos /microCutOff cursor_value_x | value between 0-15000 
+osc://ip_out:port_out/Cosmos /mesoCutOff cursor_value_x | value between 0-15000 
+osc://ip_out:port_out/Cosmos /microFiltMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesoFiltMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /microFiltType cursor_value_x | value between 0-3 
+osc://ip_out:port_out/Cosmos /mesoFiltType cursor_value_x | value between 0-3 
+osc://ip_out:port_out/Cosmos /microFiltRes cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /mesoFiltRes cursor_value_x | value between 0-10 
+-- 
+osc://ip_out:port_out/Cosmos /GrnMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /GrnPBSpeed cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /GrnSize cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /GrnInput cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /GrnFeedback cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /GrnPosMov cursor_value_x | value between 0-1 
+-- 
+osc://ip_out:port_out/Cosmos /RingMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /RingModFreq cursor_value_x | value between 0-2000 
+osc://ip_out:port_out/Cosmos /RingModM cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /RingModFreqM cursor_value_x | value between 0-2000 
+-- 
+osc://ip_out:port_out/Cosmos /LFO(number) cursor_value_x | value between on-off 
+osc://ip_out:port_out/Cosmos /LFO(number) /modamt cursor_value_x | value between (-1)-1 
+osc://ip_out:port_out/Cosmos /LFO(number) /modrate cursor_value_x | value between 0-20 
+osc://ip_out:port_out/Cosmos /LFO(number) /stochmod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFO(number) /LFOcateg cursor_value_x cursor_value_y | 2 values between 0-6 0-6 
+osc://ip_out:port_out/Cosmos /LFO(number) /arcsine cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFO(number) /weibull cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFO(number) /stochdistrate cursor_value_x | value between 0-200 
+osc://ip_out:port_out/Cosmos /LFO(number) /regular cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /LFO(number) /uniform cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /LFO(number) /gaussian cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFO(number) /cauchy cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFO(number) /exponential cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /LFO(number) /arcsine cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFO(number) /weibull cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFO(number) /lognormal cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFO(number) /triangular cursor_value_x cursor_value_y cursor_value_z | 3 values between 0-1 0-1 0-1
+-- 
+osc://ip_out:port_out/Cosmos /LFOm(number) on-off cursor_value_x | value between 
+osc://ip_out:port_out/Cosmos /LFOm(number) /modamt cursor_value_x | value between (-1)-1 
+osc://ip_out:port_out/Cosmos /LFOm(number) /modrate cursor_value_x | value between 0-20 
+osc://ip_out:port_out/Cosmos /LFOm(number) /stochmod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFOm(number) /LFOcateg cursor_value_x cursor_value_y | 2 values between 0-6 0-6 
+osc://ip_out:port_out/Cosmos /LFOm(number) /LFOwave cursor_value_x | value between 0-6 
+osc://ip_out:port_out/Cosmos /LFOm(number) /regular cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /LFOm(number) /uniform cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /LFOm(number) /gaussian cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFOm(number) /cauchy cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFOm(number) /exponential cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /LFOm(number) /arcsine cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFOm(number) /weibull cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFOm(number) /lognormal cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LFOm(number) /triangular cursor_value_x cursor_value_y cursor_value_z | 3 values between 0-1 0-1 0-1
+-- 
+osc://ip_out:port_out/Cosmos /LinG(number) cursor_value_x | value between on-off 
+osc://ip_out:port_out/Cosmos /LinG(number) /offsetModType cursor_value_x | value between 0-8 
+osc://ip_out:port_out/Cosmos /LinG(number) /speedModType cursor_value_x | value between 0-8 
+osc://ip_out:port_out/Cosmos /LinG(number) /offsetMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinG(number) /speedMod cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /LinG(number) /stochdistrate cursor_value_x | value between 0-20 
+osc://ip_out:port_out/Cosmos /LinG(number) /regular cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /LinG(number) /uniform cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /LinG(number) /gaussian cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinG(number) /cauchy cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinG(number) /exponential cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /LinG(number) /arcsine cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinG(number) /weibull cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinG(number) /lognormal cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinG(number) /triangular cursor_value_x cursor_value_y cursor_value_z | 3 values between 0-1 0-1 0-1
+-- 
+osc://ip_out:port_out/Cosmos /LinGm(number) cursor_value_x | value between on-off 
+osc://ip_out:port_out/Cosmos /LinGm(number) /offsetModType cursor_value_x | value between 0-8 
+osc://ip_out:port_out/Cosmos /LinGm(number) /speedModType cursor_value_x | value between 0-8 
+osc://ip_out:port_out/Cosmos /LinGm(number) /offsetMod cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinGm(number) /speedMod cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /LinGm(number) /stochdistrate cursor_value_x | value between 0-20 
+osc://ip_out:port_out/Cosmos /LinGm(number) /regular cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /LinGm(number) /uniform cursor_value_x | value between 0 
+osc://ip_out:port_out/Cosmos /LinGm(number) /gaussian cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinGm(number) /cauchy cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinGm(number) /exponential cursor_value_x | value between 0-10 
+osc://ip_out:port_out/Cosmos /LinGm(number) /arcsine cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinGm(number) /weibull cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinGm(number) /lognormal cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LinGm(number) /triangular cursor_value_x cursor_value_y cursor_value_z | 3 values between 0-1 0-1 0-1
+-- 
+osc://ip_out:port_out/Cosmos /mesOnsetFreeze cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /mesDurFreeze cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micOnsetFreeze cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /micDurFreeze cursor_value_x | value between 0-1 
+-- 
+osc://ip_out:port_out/Cosmos /mesoMute cursor_value_x cursor_value_y | 2 values between 0-6 0-1 
+osc://ip_out:port_out/Cosmos /microMute cursor_value_x cursor_value_y | 2 values between 0-6 0-1 
+-- 
+osc://ip_out:port_out/Cosmos /morph1 cursor_value_x cursor_value_y | 2 values between 0-1 0-1 
+osc://ip_out:port_out/Cosmos /morph2 cursor_value_x cursor_value_y | 2 values between 0-1 0-1 
+osc://ip_out:port_out/Cosmos /morphrandspeed cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /morphinterp cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /ellipse1 cursor_value_x cursor_value_y | 2 values between 0-200 0-155
+osc://ip_out:port_out/Cosmos /ellipse2 cursor_value_x cursor_value_y | 2 values between 0-200 0-155
+osc://ip_out:port_out/Cosmos /Running cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /LiveIPlay cursor_value_x | value between 0-1 
+osc://ip_out:port_out/Cosmos /BufSelect cursor_value_x | value between 0-1-2

@@ -565,6 +565,7 @@ void UiView::editingStart(const NxPoint & point) {
             Application::current->execute(QString("%1 %2 2 2").arg(COMMAND_CURVE_ELL).arg(curveId), ExecuteSourceGui);
             quint16 cursorId = Application::current->execute(QString("add cursor auto"), ExecuteSourceGui).toUInt();
             Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURSOR_CURVE).arg(cursorId).arg(curveId), ExecuteSourceGui);
+            Application::current->execute(QString("%1 %2 0 0 1").arg(COMMAND_CURSOR_START).arg(cursorId), ExecuteSourceGui);
         }
     }
 }

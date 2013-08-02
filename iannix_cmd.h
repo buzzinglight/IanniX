@@ -70,6 +70,7 @@
 #define COMMAND_GLOBAL_COLOR                "registercolor"
 #define COMMAND_COLOR_ACTIVE                "setcoloractive"
 #define COMMAND_COLOR_INACTIVE              "setcolorinactive"
+#define COMMAND_COLOR_MULTIPLY              "setcolormultiply"
 #define COMMAND_TEXTURE                     "registertexture"
 #define COMMAND_TEXTURE_ACTIVE              "settextureactive"
 #define COMMAND_TEXTURE_INACTIVE            "settextureinactive"
@@ -89,6 +90,7 @@
 #define COMMAND_COLOR_GLOBAL_HUE            "setcolorhue"
 #define COMMAND_COLOR_ACTIVE_HUE            "setcoloractivehue"
 #define COMMAND_COLOR_INACTIVE_HUE          "setcolorinactivehue"
+#define COMMAND_COLOR_MULTIPLY_HUE          "setcolormultiplyhue"
 #define COMMAND_CURSOR_TIME                 "settime"
 
 

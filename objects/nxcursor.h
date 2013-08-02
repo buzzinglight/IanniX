@@ -68,7 +68,7 @@ private:
     bool previousCursorReliable, previousPreviousCursorReliable;
     QVector<qreal> start;
     //NxLine cursor, cursorOld;
-    NxPolygon cursorPoly, cursorPolyOld;
+    NxPolygon cursorPoly, cursorPolyOld, cursorPolyOldOld;
     NxPoint cursorPosOld, cursorAngleOld;
     NxPoint cursorPos, cursorRelativePos, cursorAngle;
     NxPoint cursorPosLastSend, cursorRelativePosLastSend, cursorAngleLastSend;

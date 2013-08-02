@@ -56,7 +56,6 @@ public:
     static EditingMode editingMode;
     static bool editing, editingFirstPoint;
     static UiString defaultMessageTrigger, defaultMessageCursor, defaultMessageCurve, defaultMessageTransport, defaultMessageSync, defaultMessage;
-    static QStringList messageTemplates;
     static const QString colorsPrefix(qint16 i = -1) {
         if(i < 0) {
             if(colorTheme)   return "lighttheme";
