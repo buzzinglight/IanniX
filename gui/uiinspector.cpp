@@ -427,7 +427,7 @@ void UiInspector::refreshIp() {
         foreach(const QString &ipName, ipsName)
             ipNameTotal += ipName + "\n";
         ipNameTotal.chop(1);
-        if(!ui->myIP->hasFocus())
+        if(ui->myIP->toPlainText() != ipNameTotal)
             ui->myIP->setPlainText(ipNameTotal);
         ui->myIP->setVisible(true);
         ui->myIPLabel->setVisible(true);

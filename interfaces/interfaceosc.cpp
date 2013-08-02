@@ -157,6 +157,23 @@ void InterfaceOsc::bonjourScan() {
         }
     }
 
+    //IPs
+    QList<BonjourService> toAddServices;
+    foreach(const QNetworkInterface &interface, QNetworkInterface::allInterfaces()) {
+        foreach(const QNetworkAddressEntry &addressEntry, interface.addressEntries()) {
+            if(addressEntry.ip().toIPv4Address() > 0)           toAddServices.append(BonjourService(tr("Network %1 (my IP))").arg(interface.humanReadableName()), addressEntry.ip(), 0));
+            if(addressEntry.broadcast().toIPv4Address() > 0)    toAddServices.append(BonjourService(tr("Network %1 (broadcast))").arg(interface.humanReadableName()), addressEntry.broadcast(), 0));
+        }
+    }
+    foreach(const BonjourService &toAddService, toAddServices) {
+        bool toAdd = true;
+        for(quint16 i = 0 ; i < bonjourServices.count() ; i++)
+            if((bonjourServices.at(i).name == toAddService.name))
+                toAdd = false;
+        if(toAdd)
+            bonjourServices.append(toAddService);
+    }
+
 #ifdef ZEROCONF_AS_BROWSER
     if(!bonjourBrowser) delete bonjourBrowser;
     if(!bonjourIsScanning) {
