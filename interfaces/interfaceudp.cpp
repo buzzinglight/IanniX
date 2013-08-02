@@ -6,10 +6,7 @@ InterfaceUdp::InterfaceUdp(QWidget *parent) :
     ui(new Ui::InterfaceUdp) {
     ui->setupUi(this);
     connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
-
-    //Create a new UDP socket and bind signals
-    socket = new QUdpSocket(this);
-    connect(socket, SIGNAL(readyRead()), SLOT(parseOSC()));
+    socket = 0;
 
     //Interfaces link
     enable.setAction(ui->enable, "interfaceUdpEnable");
@@ -19,7 +16,12 @@ InterfaceUdp::InterfaceUdp(QWidget *parent) :
 }
 
 void InterfaceUdp::portChanged() {
-    socket->close();
+    //Create a new UDP socket and bind signals
+    if(socket)
+        delete socket;
+    socket = new QUdpSocket(this);
+    connect(socket, SIGNAL(readyRead()), SLOT(parseOSC()));
+
     if(socket->bind(port))  ui->port->setStyleSheet(ihmFeedbackOk);
     else                    ui->port->setStyleSheet(ihmFeedbackNok);
 }

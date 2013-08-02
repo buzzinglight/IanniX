@@ -6,6 +6,7 @@ InterfaceOsc::InterfaceOsc(QWidget *parent) :
     ui(new Ui::InterfaceOsc) {
     ui->setupUi(this);
     connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
+    socket = 0;
 
     bonjourMenu = new QMenu(this);
     connect(ui->bonjour,       SIGNAL(released()), SLOT(openBonjour()));
@@ -27,10 +28,6 @@ InterfaceOsc::InterfaceOsc(QWidget *parent) :
     bundlePort = 0;
     bundleMessageId = 0;
 
-    //Create a new UDP socket and bind signals
-    socket = new QUdpSocket(this);
-    connect(socket, SIGNAL(readyRead()), SLOT(parseOSC()));
-
     //Interfaces link
     enable.setAction(ui->enable,         "interfaceOscEnable");
     bundlePort.setAction(ui->bundlePort, "interfaceOscBundlePort");
@@ -48,9 +45,15 @@ InterfaceOsc::InterfaceOsc(QWidget *parent) :
 }
 
 void InterfaceOsc::portChanged() {
-    socket->close();
+    //Create a new UDP socket and bind signals
+    if(socket)
+        delete socket;
+    socket = new QUdpSocket(this);
+    connect(socket, SIGNAL(readyRead()), SLOT(parseOSC()));
+
     if(socket->bind(port))  ui->port->setStyleSheet(ihmFeedbackOk);
     else                    ui->port->setStyleSheet(ihmFeedbackNok);
+
     UiHelp::oscPort = port;
 
 #ifdef ZEROCONF_AS_SERVICE
