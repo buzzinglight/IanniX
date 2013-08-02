@@ -14,5 +14,11 @@ direct:// goto 2 | Make score go back to timecode 000:02.000
 direct:// setSpeedF 10 1 | Make the cursor #10 start (please set its Master Speed to 0 before)
 
 [Equations]
+cartesian 3*cos(2*PI*t), 3*sin(2*PI*t), 0 | Simple circle
+cartesian 5*cos(2*PI*t), 3*sin(10*t*PI), sin(6*t*PI) | Super-8
 cartesian 5*t, sin(10*t*PI) * exp(1-4*t), cos(4*t*PI) | 3D Damped sine
+cartesian 8-16*(1-t), 2*sin((8-16*(1-t))*4)/(8-16*(1-t))-3, 0 | Sinus cardinalis
+cartesian 8-16*(1-t), 2*sin((8-16*(1-t))*4)/(8-16*(1-t))-3, sin((8-16*(1-t))*2) | Coiled sinus cardinalis 
 polar 6*cos(5*PI*t), cos(10*PI*t), t | Super-S
+polar 5*cos(20*PI*t), 2*sin(1*PI*t), sin(5*PI*t) | Flower
+

@@ -161,8 +161,8 @@ void InterfaceOsc::bonjourScan() {
     QList<BonjourService> toAddServices;
     foreach(const QNetworkInterface &interface, QNetworkInterface::allInterfaces()) {
         foreach(const QNetworkAddressEntry &addressEntry, interface.addressEntries()) {
-            if(addressEntry.ip().toIPv4Address() > 0)           toAddServices.append(BonjourService(tr("Network %1 (my IP))").arg(interface.humanReadableName()), addressEntry.ip(), 0));
-            if(addressEntry.broadcast().toIPv4Address() > 0)    toAddServices.append(BonjourService(tr("Network %1 (broadcast))").arg(interface.humanReadableName()), addressEntry.broadcast(), 0));
+            if(addressEntry.ip().toIPv4Address() > 0)           toAddServices.append(BonjourService(tr("Network %1 (my IP)").arg(interface.humanReadableName()), addressEntry.ip(), 0));
+            if(addressEntry.broadcast().toIPv4Address() > 0)    toAddServices.append(BonjourService(tr("Network %1 (broadcast)").arg(interface.humanReadableName()), addressEntry.broadcast(), 0));
         }
     }
     foreach(const BonjourService &toAddService, toAddServices) {
