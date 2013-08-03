@@ -61,6 +61,9 @@ UiRender::UiRender(QWidget *parent) :
     //Refresh
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
+
+    snapBeforeKeyX = Global::mouseSnapX;
+    snapBeforeKeyY = Global::mouseSnapY;
 }
 UiRender::~UiRender() {
     delete ui;
@@ -698,6 +701,12 @@ void UiRender::mouseReleaseEvent(QMouseEvent *event) {
     }
 }
 void UiRender::mouseMoveEvent(QMouseEvent *event) {
+    /*
+    if((event->modifiers() & Qt::AltModifier) & (event->modifiers() & Qt::AltModifier)) {
+        Global::mouseSnapY = Global::mouseSnapX = ;
+    }
+    */
+
     //Mouse position
     bool mouse3D = event->modifiers() & Qt::AltModifier;
     NxPoint mousePosNoCenter = NxPoint((event->pos().x() - (qreal)size().width()/2) / (qreal)size().width() * Global::axisArea.width(), (event->pos().y() - (qreal)size().height()/2) / (qreal)size().height() * Global::axisArea.height());
@@ -900,6 +909,13 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
 void UiRender::keyPressEvent(QKeyEvent *event) {
     qreal translationUnit = 0.1;
 
+    if(((event->modifiers() & Qt::AltModifier) == Qt::AltModifier) && ((event->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier)) {
+        snapBeforeKeyX = Global::mouseSnapX;
+        snapBeforeKeyY = Global::mouseSnapY;
+        Global::mouseSnapY = Global::mouseSnapX = true;
+    }
+
+
     if((event->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
         translationUnit = 1;
         //setCursor(Qt::CrossCursor);
@@ -935,6 +951,11 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
             Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CENTER).arg(newCenter.x()).arg(newCenter.y()), ExecuteSourceGui);
     }
 }
+void UiRender::keyReleaseEvent(QKeyEvent *) {
+    Global::mouseSnapX = snapBeforeKeyX;
+    Global::mouseSnapY = snapBeforeKeyY;
+}
+
 bool UiRender::event(QEvent *event) {
     switch (event->type()) {
     case QEvent::Gesture: {

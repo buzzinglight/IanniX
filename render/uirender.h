@@ -149,6 +149,7 @@ private:
     NxPoint mousePressedRawPos, mousePressedAreaPos, mousePressedAreaPosNoCenter, mousePressedAxisCenter;
     bool mousePressed, mouseCommand, mouseShift, mouseObjectDrag;
     qreal pinchValue;
+    bool snapBeforeKeyX, snapBeforeKeyY;
 public:
     void wheelEvent(QWheelEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -160,6 +161,7 @@ public:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 public:
     void setZoom(qreal axisZoom);
     void selectionAdd(NxObject *object);
