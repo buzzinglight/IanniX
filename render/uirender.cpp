@@ -39,7 +39,7 @@ UiRender::UiRender(QWidget *parent) :
     performanceMode = false;
 
     //Initialisations
-    document = 0;
+    documentToRender = 0;
     setDocument(0);
     setMouseTracking(true);
     isRemoving = false;
@@ -309,8 +309,8 @@ void UiRender::paintGL() {
         //First operations
         glTranslatef(0.0, 0.0, -150);
 
-        if((Global::followId > 0) && (document) && (document->objects.contains(Global::followId)) && (document->objects.value(Global::followId)->getType() == ObjectsTypeCursor)) {
-            NxCursor *object = (NxCursor*)document->objects.value(Global::followId);
+        if((Global::followId > 0) && (documentToRender) && (documentToRender->objects.contains(Global::followId)) && (documentToRender->objects.value(Global::followId)->getType() == ObjectsTypeCursor)) {
+            NxCursor *object = (NxCursor*)documentToRender->objects.value(Global::followId);
             //rotationDest.setX(-object->getCurrentAngleRoll());
             //rotationDest.setY(-82 - object->getCurrentAnglePitch());
             Global::rotationDest.setZ(-object->getCurrentAngle().z() + 90);
@@ -335,7 +335,7 @@ void UiRender::paintGL() {
         renderMeasure.start();
 
 
-        if(document) {
+        if(documentToRender) {
             //Background
             paintBackground();
 
@@ -347,7 +347,7 @@ void UiRender::paintGL() {
 
             //Draw objects
             //Browse groups
-            foreach(NxGroup *group, document->groups) {
+            foreach(NxGroup *group, documentToRender->groups) {
                 if(((!Application::current->isGroupSoloActive) && (group->isNotMuted())) || ((Application::current->isGroupSoloActive) && (group->isSolo())))
                     Global::paintThisGroup = true;
                 else
@@ -761,11 +761,11 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
         }
 
         mousePos = mousePosBackup;
-        if((document) && (cursor().shape() != Qt::BlankCursor) && (Global::allowSelection) && (!Global::allowLockPos)) {
+        if((documentToRender) && (cursor().shape() != Qt::BlankCursor) && (Global::allowSelection) && (!Global::allowLockPos)) {
             UiRenderSelection eligibleSelection;
 
             //Browse documents
-            foreach(NxGroup *group, document->groups) {
+            foreach(NxGroup *group, documentToRender->groups) {
                 //Is groups visible ?
                 if((((!Application::current->isGroupSoloActive) && (group->isNotMuted())) || ((Application::current->isGroupSoloActive) && (group->isSolo())))) {
                     //Browse active/inactive objects
@@ -1060,11 +1060,11 @@ void UiRender::actionCut() {
 }
 
 void UiRender::actionSelect_all() {
-    if(document) {
+    if(documentToRender) {
         selectionClear();
 
         //Browse documents
-        foreach(NxGroup *group, document->groups) {
+        foreach(NxGroup *group, documentToRender->groups) {
             //Is groups visible ?
             if((((!Application::current->isGroupSoloActive) && (group->isNotMuted())) || ((Application::current->isGroupSoloActive) && (group->isSolo())))) {
 

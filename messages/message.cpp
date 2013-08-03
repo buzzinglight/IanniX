@@ -31,6 +31,7 @@ void Message::setUrl(const QUrl & url, QScriptEngine *_messageScriptEngine) {
     typetag.clear();
     arguments.clear();
     asciiMessage.clear();
+    asciiMessageXml.clear();
 
     if(scheme == "osc") {
         type = MessagesTypeOsc;
@@ -538,7 +539,8 @@ bool Message::addString(QString str, const QString & name, quint16) {
 #endif
     }
     else if(type == MessagesTypeTcp) {
-        asciiMessage = asciiMessage + qPrintable("<ARGUMENT TYPE=\"s\" VALUE=\"" + str + "\"/>");
+        asciiMessage    = asciiMessage + " " + qPrintable(str);
+        asciiMessageXml = asciiMessageXml + qPrintable("<ARGUMENT TYPE=\"s\" VALUE=\"" + str + "\"/>");
         return true;
     }
     else if((type == MessagesTypeSerial) || (type == MessagesTypeUdp) || (type == MessagesTypeDirect)) {
@@ -569,7 +571,8 @@ bool Message::addFloat(float f, const QString & name, quint16) {
 #endif
     }
     else if(type == MessagesTypeTcp) {
-        asciiMessage = asciiMessage + qPrintable("<ARGUMENT TYPE=\"f\" VALUE=\"" + QString::number(f) + "\"/>");
+        asciiMessage    = asciiMessage    + " " + QByteArray::number(f);
+        asciiMessageXml = asciiMessageXml + qPrintable("<ARGUMENT TYPE=\"f\" VALUE=\"" + QString::number(f) + "\"/>");
         return true;
     }
     else if(type == MessagesTypeMidi) {
@@ -608,7 +611,8 @@ bool Message::addTimeTag(qint64 t, const QString & name, quint16) {
 #endif
     }
     else if(type == MessagesTypeTcp) {
-        asciiMessage = asciiMessage + qPrintable("<ARGUMENT TYPE=\"t\" VALUE=\"" + QString::number(t) + "\"/>");
+        asciiMessage    = asciiMessage    + " " + QByteArray::number(t);
+        asciiMessageXml = asciiMessageXml + qPrintable("<ARGUMENT TYPE=\"t\" VALUE=\"" + QString::number(t) + "\"/>");
         return true;
     }
     else if(type == MessagesTypeMidi) {

@@ -321,12 +321,12 @@ void NxCursor::paint() {
                     glEnable(GL_TEXTURE_2D);
                     glBindTexture(GL_TEXTURE_2D, texture->texture);
 
-                    qreal widthRatio = width/2 * texture->originalSize.width() / texture->originalSize.height();
+                    qreal widthRatio = width * texture->originalSize.width() / texture->originalSize.height();
 
                     glBegin(GL_QUADS);
                     glTexCoord2d(0, 0); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.bottom(), 0);
-                    glTexCoord2d(1, 0); glVertex3f(widthRatio * texture->mapping.right(), width/2 * texture->mapping.bottom(), 0);
-                    glTexCoord2d(1, 1); glVertex3f(widthRatio * texture->mapping.right(), width/2 * texture->mapping.top(), 0);
+                    glTexCoord2d(1, 0); glVertex3f(0, width/2 * texture->mapping.bottom(), 0);
+                    glTexCoord2d(1, 1); glVertex3f(0, width/2 * texture->mapping.top(), 0);
                     glTexCoord2d(0, 1); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.top(), 0);
                     glEnd();
 

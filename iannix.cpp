@@ -36,9 +36,9 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     forceUpdate = false;
 
     //Default values
-    currentDocument = 0;
-    iniSettings  = 0;
-    updateManager   = 0;
+    setCurrentDocument(0);
+    iniSettings        = 0;
+    updateManager      = 0;
     isGroupSoloActive  = false;
     isObjectSoloActive = false;
     waitingForMessageValue = false;
@@ -256,12 +256,12 @@ void IanniX::actionImportSVG(const QDomElement &xmlElement, qreal scale) {
         if((!xmlData.isNull()) && (xmlData.tagName() == "path")) {
             quint16 id = execute(QString(COMMAND_ADD) + " curve auto", ExecuteSourceGui).toUInt();
             execute(QString(COMMAND_CURVE_PATH) + " " + QString::number(id) + " " + QString::number(scale) + " " + xmlData.attribute("d"), ExecuteSourceGui);
-            render->selectionAdd(currentDocument->getObject(id));
+            render->selectionAdd(getCurrentDocument()->getObject(id));
         }
         else if((!xmlData.isNull()) && (xmlData.tagName() == "polyline")) {
             quint16 id = execute(QString(COMMAND_ADD) + " curve auto", ExecuteSourceGui).toUInt();;
             execute(QString(COMMAND_CURVE_LINES) + " " + QString::number(id) + " " + QString::number(scale) + " " + xmlData.attribute("points"), ExecuteSourceGui);
-            render->selectionAdd(currentDocument->getObject(id));
+            render->selectionAdd(getCurrentDocument()->getObject(id));
         }
         actionImportSVG(xmlData, scale);
         xmlNode = xmlNode.nextSibling();
@@ -294,7 +294,7 @@ void IanniX::actionImportText(const QString &font, const QString &text) {
     Application::render->selectionClear(true);
     quint16 id = execute(QString(COMMAND_ADD) + " curve auto", ExecuteSourceGui).toUInt();
     execute(QString(COMMAND_CURVE_TXT) + " " + QString::number(id) + " " + QString::number(scale) + " " + fontReal + " " + text, ExecuteSourceGui);
-    render->selectionAdd(currentDocument->getObject(id));
+    render->selectionAdd(getCurrentDocument()->getObject(id));
     inspector->showSpaceTab();
 }
 
@@ -318,7 +318,7 @@ void IanniX::setScheduler(SchedulerActivity _schedulerActivity) {
 }
 
 const QString IanniX::serialize() const {
-    return transport->serialize() + currentDocument->serialize();
+    return transport->serialize() + getCurrentDocument()->serialize();
 }
 
 void IanniX::timerEvent(QTimerEvent *event) {
@@ -367,10 +367,10 @@ void IanniX::timerTick(qreal delta) {
     MessageManager::networkBundle(true);
 
     //Browse documents
-    //QHashIterator<QString, NxDocument*> documentIterator(documents);
-    /*while (documentIterator.hasNext())*/ {
-        //documentIterator.next();
-        NxDocument *document = currentDocument; //documentIterator.value();
+    QHashIterator<QString, NxDocument*> documentIterator(documents);
+    while (documentIterator.hasNext()) {
+        documentIterator.next();
+        NxDocument *document = documentIterator.value();
 
         //Browse groups
         if(document) {
@@ -415,28 +415,34 @@ void IanniX::timerTrig(void *object, bool force) {
     if((!Global::allowPlaySelected) || (!render->isSelection()) || ((Global::allowPlaySelected) && (cursor->getSelected())))
         cursor->trig(force);
 
-    //Browse groups
-    foreach(const NxGroup *group, currentDocument->groups) {
-        //Browse active triggers
-        foreach(const NxObject *objectTrigger, group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
-            NxTrigger *trigger = (NxTrigger*)objectTrigger;
+    //Browse documents
+    QHashIterator<QString, NxDocument*> documentIterator(documents);
+    while (documentIterator.hasNext()) {
+        documentIterator.next();
+        NxDocument *document = documentIterator.value();
 
-            //Check the collision
-            if((cursor->contains(trigger)) && (((!isObjectSoloActive) && (trigger->isNotMuted())) || ((isObjectSoloActive) && (trigger->isSolo()))) && ((!Global::allowPlaySelected) || (!render->isSelection()) || ((Global::allowPlaySelected) && (trigger->getSelected()))))
-                trigger->trig(cursor);
-        }
+        //Browse groups
+        foreach(const NxGroup *group, document->groups) {
+            //Browse active triggers
+            foreach(const NxObject *objectTrigger, group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
+                NxTrigger *trigger = (NxTrigger*)objectTrigger;
 
-        //Browse active curbes
-        if(cursor->getPerformCollision()) {
-            foreach(const NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
                 //Check the collision
-                if((!Global::allowPlaySelected) || (!render->isSelection()) || ((Global::allowPlaySelected) && (objectCurve->getSelected())))
-                    cursor->trig((NxCurve*)objectCurve);
+                if((cursor->contains(trigger)) && (((!isObjectSoloActive) && (trigger->isNotMuted())) || ((isObjectSoloActive) && (trigger->isSolo()))) && ((!Global::allowPlaySelected) || (!render->isSelection()) || ((Global::allowPlaySelected) && (trigger->getSelected()))))
+                    trigger->trig(cursor);
+            }
+
+            //Browse active curbes
+            if(cursor->getPerformCollision()) {
+                foreach(const NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
+                    //Check the collision
+                    if((!Global::allowPlaySelected) || (!render->isSelection()) || ((Global::allowPlaySelected) && (objectCurve->getSelected())))
+                        cursor->trig((NxCurve*)objectCurve);
+                }
             }
         }
     }
 }
-
 
 
 void IanniX::checkForUpdates() {
@@ -535,14 +541,14 @@ void IanniX::actionCC(QTreeWidgetItem *item, int col) {
     //Is solo active ?
     isGroupSoloActive  = false;
     isObjectSoloActive = false;
-    if(currentDocument) {
+    if(getCurrentDocument()) {
         //Is solo active ?
-        foreach(const NxGroup *group, currentDocument->groups)
+        foreach(const NxGroup *group, getCurrentDocument()->groups)
             if(group->isSolo()) {
                 isGroupSoloActive = true;
                 break;
             }
-        foreach(const NxGroup* group, currentDocument->groups) {
+        foreach(const NxGroup* group, getCurrentDocument()->groups) {
             //Browse active/inactive objects
             for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
                 //Browse all types of objects
@@ -564,9 +570,9 @@ void IanniX::actionCC(QTreeWidgetItem *item, int col) {
 void IanniX::currentDocumentChanged(UiSyncItem *item) {
     if(currentDocument)
         delete currentDocument;
-    currentDocument = new NxDocument(this, (UiFileItem*)item);
-    render->setDocument(currentDocument);
-    currentDocument->askFileOpen();
+    setCurrentDocument(new NxDocument(this, (UiFileItem*)item));
+    render->setDocument(getCurrentDocument());
+    getCurrentDocument()->askFileOpen();
 }
 void IanniX::actionNew() {
     inspector->getFileWidget()->askNew();
@@ -583,7 +589,7 @@ void IanniX::actionSave_as() {
     inspector->getFileWidget()->askSave(true);
 }
 void IanniX::actionRefresh() {
-    currentDocument->updateCode(false);
+    getCurrentDocument()->updateCode(false);
 }
 void IanniX::loadProject(const QString & _projectFile) {
     QFileInfo projectFile(_projectFile);
@@ -600,24 +606,31 @@ void IanniX::loadProject(const QString & _projectFile) {
 }
 
 
+void IanniX::setCurrentDocument(NxDocument *_currentDocument) {
+    documents.clear();
+    currentDocument = _currentDocument;
+    documents.insert("current", currentDocument);
+}
 
 
 
 
 NxGroup* IanniX::addGroup(const QString & groupId) {
-    if(currentDocument->groups.contains(groupId))
-        return currentDocument->groups.value(groupId);
+    NxDocument *document = getCurrentDocument();
+    if(document->groups.contains(groupId))
+        return document->groups.value(groupId);
     else {
         NxGroup *group = new NxGroup(this, inspector->getObjectRootItem());
         group->setId(groupId);
-        currentDocument->groups.insert(groupId, group);
-        currentDocument->setCurrentGroup(group);
+        document->groups.insert(groupId, group);
+        document->setCurrentGroup(group);
         return group;
     }
 }
 
 void IanniX::setObjectActivity(void *_object, quint8 activeOld) {
-    if(!currentDocument)
+    NxDocument *document = getCurrentDocument();
+    if(!document)
         return;
 
     //Extract object
@@ -629,7 +642,8 @@ void IanniX::setObjectActivity(void *_object, quint8 activeOld) {
     group->objects[object->getActive()][object->getType()].insert(object->getId(), object);
 }
 void IanniX::setObjectGroupId(void *_object, const QString & groupIdOld) {
-    if(!currentDocument)
+    NxDocument *document = getCurrentDocument();
+    if(!document)
         return;
 
     //Extract object
@@ -638,8 +652,8 @@ void IanniX::setObjectGroupId(void *_object, const QString & groupIdOld) {
 
     //Move object
     group->objects[object->getActive()][object->getType()].insert(object->getId(), object);
-    if(currentDocument->groups.contains(groupIdOld))
-        currentDocument->groups[groupIdOld]->objects[object->getActive()][object->getType()].remove(object->getId());
+    if(document->groups.contains(groupIdOld))
+        document->groups[groupIdOld]->objects[object->getActive()][object->getType()].remove(object->getId());
 
     //Remove a group if empty
     /*
@@ -652,14 +666,15 @@ void IanniX::setObjectGroupId(void *_object, const QString & groupIdOld) {
 }
 void IanniX::setObjectId(void *_object, quint16 idOld) {
     //Extract object
+    NxDocument *document = getCurrentDocument();
     NxObject *object = (NxObject*)_object;
     NxGroup *group = addGroup(object->getGroupId());
 
     //Move object
     group->objects[object->getActive()][object->getType()].insert(object->getId(), object);
     group->objects[object->getActive()][object->getType()].remove(idOld);
-    currentDocument->objects.insert(object->getId(), object);
-    currentDocument->objects.remove(idOld);
+    document->objects.insert(object->getId(), object);
+    document->objects.remove(idOld);
 }
 
 
@@ -667,28 +682,30 @@ void IanniX::setObjectId(void *_object, quint16 idOld) {
 
 quint16 IanniX::getCount(qint8 objectType) {
     quint16 count = 0;
-    if(currentDocument) {
+    NxDocument *document = getCurrentDocument();
+    if(document) {
         if(objectType == -2)
-            return currentDocument->groups.count();
+            return document->groups.count();
         else
-            foreach(NxGroup *group, currentDocument->groups)
+            foreach(NxGroup *group, document->groups)
                 count += group->getCount(objectType);
     }
     return count;
 }
 void IanniX::removeObject(NxObject *object) {
+    NxDocument *document = getCurrentDocument();
     if(object) {
         if(render)
             render->flagIsRemoving();
 
         //Remove the object
-        currentDocument->groups[object->getGroupId()]->objects[object->getActive()][object->getType()].remove(object->getId());
-        currentDocument->objects.remove(object->getId());
+        document->groups[object->getGroupId()]->objects[object->getActive()][object->getType()].remove(object->getId());
+        document->objects.remove(object->getId());
 
         //Clear selection
         inspector->clearCCselections();
-        if(currentDocument->getCurrentObject() == object)
-            currentDocument->setCurrentObject(0);
+        if(document->getCurrentObject() == object)
+            document->setCurrentObject(0);
         Application::render->selectionClear(true);
 
         if(object->getType() == ObjectsTypeCurve) {
@@ -706,9 +723,9 @@ void IanniX::removeObject(NxObject *object) {
         }
 
         //Remove groups
-        if((currentDocument->groups.contains(object->getGroupId())) && (currentDocument->groups.value(object->getGroupId())->getCount() == 0)) {
-            NxGroup *group = currentDocument->groups[object->getGroupId()];
-            currentDocument->groups.remove(object->getGroupId());
+        if((document->groups.contains(object->getGroupId())) && (document->groups.value(object->getGroupId())->getCount() == 0)) {
+            NxGroup *group = document->groups[object->getGroupId()];
+            document->groups.remove(object->getGroupId());
             delete group;
         }
         delete object;
@@ -735,6 +752,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
         return QVariant();
 
     NxObjectDispatchProperty::source = source;
+    NxDocument *document = getCurrentDocument();
 
     QStringList argv = command.split(" ", QString::SkipEmptyParts);
     quint16 argc = argv.count();
@@ -745,10 +763,10 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
             qint16 id = argv.at(2).toUInt(&ok);
             NxObject *parentObject = 0;
             if(ok) {
-                parentObject = currentDocument->getObject(id);
+                parentObject = document->getObject(id);
                 if(parentObject) {
                     if(createNewObjectIfExists) {
-                        id = currentDocument->nextAvailableId();
+                        id = document->nextAvailableId();
                     }
                     else {
                         id = parentObject->getId();
@@ -758,7 +776,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                 }
             }
             else
-                id = currentDocument->nextAvailableId();
+                id = document->nextAvailableId();
 
             NxObject *object = 0;
             QString type = argv.at(1).toLower();
@@ -778,8 +796,8 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                     NxPoint posOffset(0.5, -0.5, 0);
                     object->setPosOffset(posOffset);
                 }
-                currentDocument->objects[id] = object;
-                currentDocument->setCurrentObject(object);
+                document->objects[id] = object;
+                document->setCurrentObject(object);
                 return object->getId();
             }
             return 0;
@@ -804,7 +822,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                     bool isObject = false;
                     quint16 objectId = key.toUInt(&isObject);
                     if(isObject) {
-                        NxObject *object = currentDocument->getObject(objectId);
+                        NxObject *object = document->getObject(objectId);
                         if(object) {
                             if(argc > 2) {
                                 object->dispatchProperty(qPrintable(commande), argvDouble(argv, 2));
@@ -815,7 +833,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                         }
                     }
                     else {
-                        NxGroup *group = currentDocument->getGroup(key);
+                        NxGroup *group = document->getGroup(key);
                         if(group) {
                             if(argc > 2) {
                                 group->dispatchPropertyToGroup(qPrintable(commande), argvDouble(argv, 2));
@@ -833,8 +851,8 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
             else if((commande == COMMAND_TEXTURE) && (argc > 1)) {
                 if(argc > 6) {
                     QString filename = argvFullString(command, argv, 6);
-                    if(!QFile().exists(filename))
-                        filename = scriptDir.absoluteFilePath(currentDocument->fileItem->filename.file.absolutePath() + "/" + filename);
+                    if((!QFile().exists(filename)) && (document->fileItem))
+                        filename = scriptDir.absoluteFilePath(document->fileItem->filename.file.absolutePath() + "/" + filename);
                     return render->loadTexture(new UiRenderTexture(argv.at(1).trimmed(), QFileInfo(filename), NxRect(NxPoint(argvDouble(argv, 2), argvDouble(argv, 3)), NxPoint(argvDouble(argv, 4), argvDouble(argv, 5)))));
                 }
                 else
@@ -928,8 +946,8 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                 sleep.wait(&mutex, argvDouble(argv, 1));
             }
             else if(commande == COMMAND_CLEAR) {
-                currentDocument->pushSnapshot();
-                currentDocument->clear();
+                document->pushSnapshot();
+                document->clear();
             }
             else if(commande == COMMAND_MOUSE) {
                 if(argc > 1)    QCursor::setPos(argvDouble(argv, 1), argvDouble(argv, 2));
@@ -1040,7 +1058,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
     return false;
 }
 void IanniX::executeAsScript(const QString &script) {
-    currentDocument->scriptEvaluate(script, false);
+    getCurrentDocument()->scriptEvaluate(script, false);
 }
 
 void IanniX::send(const Message &message, QStringList *sentMessage) {
@@ -1055,14 +1073,14 @@ QString IanniX::incomingMessage(const MessageIncomming &source, bool needOutput)
     if(needOutput) {
         QString retour;
         retour += execute(source, false, true).toString();
-        QString retourScript = currentDocument->incomingMessage(source, true);
+        QString retourScript = getCurrentDocument()->incomingMessage(source, true);
         if(retourScript != "undefined")
             retourScript += retourScript;
         return retour;
     }
     else {
         execute(source, ExecuteSourceNetwork);
-        currentDocument->incomingMessage(source);
+        getCurrentDocument()->incomingMessage(source);
     }
     return QString();
 }
@@ -1072,17 +1090,18 @@ void IanniX::openMessageEditor() {
 }
 
 void IanniX::actionReloadScript() {
-    currentDocument->open(false);
+    setCurrentDocument(getCurrentDocument());
+    getCurrentDocument()->open(false);
 }
 
 void IanniX::actionUnmuteGroups() {
-    foreach(NxGroup *group, currentDocument->groups)
+    foreach(NxGroup *group, getCurrentDocument()->groups)
         if(group->isMuted())
             group->setMute(0);
 }
 void IanniX::actionUnmuteObjects() {
     //Browse documents
-    foreach(NxGroup *group, currentDocument->groups)
+    foreach(NxGroup *group, getCurrentDocument()->groups)
         //Browse active/inactive objects
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++)
             //Browse all types of objects
@@ -1093,13 +1112,13 @@ void IanniX::actionUnmuteObjects() {
                         object->setMute(0);
 }
 void IanniX::actionUnsoloGroups() {
-    foreach(NxGroup *group, currentDocument->groups)
+    foreach(NxGroup *group, getCurrentDocument()->groups)
         if(group->isSolo())
             group->setSolo(0);
 }
 void IanniX::actionUnsoloObjects() {
     //Browse documents
-    foreach(NxGroup *group, currentDocument->groups)
+    foreach(NxGroup *group, getCurrentDocument()->groups)
         //Browse active/inactive objects
         for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++)
             //Browse all types of objects
@@ -1146,10 +1165,10 @@ void IanniX::actionCloseEvent(QCloseEvent *event) {
 
 
 void IanniX::actionUndo() {
-    currentDocument->popSnapshot();
+    getCurrentDocument()->popSnapshot();
 }
 void IanniX::actionRedo() {
-    currentDocument->popSnapshot(true);
+    getCurrentDocument()->popSnapshot(true);
 }
 
 
@@ -1162,14 +1181,14 @@ QString IanniX::waitForMessage() {
 }
 
 void IanniX::pushSnapshot() {
-    currentDocument->pushSnapshot();
+    getCurrentDocument()->pushSnapshot();
 }
 
 void IanniX::actionPaste() {
-    currentDocument->pushSnapshot();
+    getCurrentDocument()->pushSnapshot();
     QString paste = QApplication::clipboard()->text();
-    currentDocument->source = ExecuteSourceGui;
-    currentDocument->scriptEvaluate(paste, true);
+    getCurrentDocument()->source = ExecuteSourceGui;
+    getCurrentDocument()->scriptEvaluate(paste, true);
 }
 void IanniX::actionCopy() {
     QString copy = "";

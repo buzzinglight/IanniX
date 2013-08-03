@@ -9,6 +9,7 @@
 #include <QDoubleSpinBox>
 #include <QPlainTextEdit>
 #include <QComboBox>
+#include <QRadioButton>
 #include <QGLWidget>
 #include <QLineEdit>
 #include <QDesktopServices>
@@ -182,6 +183,7 @@ protected:
     QDoubleSpinBox *doubleSpinBox;
     QComboBox *comboBox;
     QSlider *slider;
+    QList<QRadioButton*> radios;
 public:
     UiReal(qreal _value = 0);
     UiReal(const UiReal&);
@@ -194,6 +196,7 @@ public:
 private slots:
     void guiTrigged(double);
     void guiTrigged(int);
+    void guiTrigged(bool);
 signals:
     void triggered(qreal);
 
@@ -202,6 +205,7 @@ public:
     void setAction(QDoubleSpinBox*, const QString &_settingName = "", bool trigEvent = true, bool changeUi = false);
     void setAction(QSlider*,        const QString &_settingName = "", bool trigEvent = true, bool changeUi = false);
     void setAction(QComboBox*,      const QString &_settingName = "", bool trigEvent = true, bool changeUi = false);
+    void setAction(const QList<QRadioButton*> &, const QString &_settingName = "", bool trigEvent = true, bool changeUi = false);
     QVariant variant() const {
         return val();
     }

@@ -17,6 +17,7 @@ public:
     InterfaceTcpServer(QObject *parent);
 
 public:
+    bool xmlMode;
     QList<QTcpSocket*> sockets;
     bool send(const Message &message, QStringList *messageSent = 0);
 public:
@@ -42,8 +43,10 @@ private:
     InterfaceTcpServer *tcpServer;
     UiReal port;
     UiBool enable;
+    UiReal type;
 private slots:
     void portChanged();
+    void typeChanged();
     void updateConnectedClients();
     void parseXml(const QDomDocument&, QTcpSocket*);
     void openExamples() {

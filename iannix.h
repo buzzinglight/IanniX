@@ -68,10 +68,15 @@ public:
     inline void dispatchProperty(const QString &_property, const QVariant &value)  {    dispatchProperty(qPrintable(_property), value); }
     inline const QVariant getProperty(const QString &_property) const              {    return getProperty(qPrintable(_property));      }
     inline void dispatchProperty(const char *_property, const QVariant &value) {
-        currentDocument->dispatchProperty(_property, value);
+        QHashIterator<QString, NxDocument*> documentIterator(documents);
+        while (documentIterator.hasNext()) {
+            documentIterator.next();
+            documentIterator.value()->dispatchProperty(_property, value);
+        }
     }
     inline const QVariant getProperty(const char *_property) const {
-        return currentDocument->getProperty(_property);
+        NxDocument *document = getCurrentDocument();
+        return document->getProperty(_property);
     }
     inline quint8 getType() const {
         return ObjectsTypeScheduler;
@@ -84,6 +89,9 @@ public:
     //OBJECT MANAGEMENT
 private:
     NxDocument *currentDocument;
+    QHash<QString, NxDocument*> documents;
+    inline NxDocument* getCurrentDocument() const { return currentDocument; }
+    void setCurrentDocument(NxDocument *_currentDocument);
 public:
     NxGroup* addGroup(const QString & groupId);
     void setObjectActivity(void *_object, quint8 activeOld);
@@ -92,30 +100,32 @@ public:
     void removeObject(NxObject *object);
     quint16 getCount(qint8 objectType = -1);
     void* getObjectById(quint16 id) {
-        return currentDocument->getObject(id);
+        NxDocument *document = getCurrentDocument();
+        return document->getObject(id);
     }
 
 public:
     inline NxObjectDispatchProperty* getObject(const QString & objectIdStr, bool saveObject = true) const {
+        NxDocument *document = getCurrentDocument();
         bool ok = false;
         quint16 objectId = objectIdStr.toUInt(&ok);
         if(ok) {
-            NxObject *object = currentDocument->getObject(objectId);
+            NxObject *object = document->getObject(objectId);
             if(saveObject)
-                currentDocument->setCurrentObject(object);
+                document->setCurrentObject(object);
             return object;
         }
         else if(objectIdStr.toLower() == "all")
-            return currentDocument;
+            return document;
         else if(objectIdStr.toLower() == "current")
-            return currentDocument->getCurrentObject();
+            return document->getCurrentObject();
         else if(objectIdStr.toLower() == "selection")
             return render->getSelection();
         else if(objectIdStr.toLower() == "lastcurve")
-            return currentDocument->getCurrentCurve();
+            return document->getCurrentCurve();
         else {
-            if(currentDocument->groups.contains(objectIdStr))
-                return currentDocument->groups.value(objectIdStr);
+            if(document->groups.contains(objectIdStr))
+                return document->groups.value(objectIdStr);
         }
         return 0;
     }

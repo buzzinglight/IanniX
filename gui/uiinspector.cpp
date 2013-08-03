@@ -406,7 +406,7 @@ void UiInspector::actionTabChange(int) {
         MessageManager::setLogVisibility(false);
 }
 
-void UiInspector::timerEvent(QTimerEvent *event) {
+void UiInspector::timerEvent(QTimerEvent *) {
     if(needRefresh)
         refresh();
 }
@@ -844,15 +844,13 @@ void UiInspector::change(quint16 indexObject, QComboBox *spin, const QString & v
     if(indexObject == 0) {
         qint16 indexVal = spin->findText(val);
         if(!spin->hasFocus()) {
-            if(isColor) {
-                if(indexVal < 0) {
-                    colorComboAdd(spin, QStringList() << val);
-                    indexVal = spin->count()-1;
-                }
-                spin->setCurrentIndex(indexVal);
+            if(indexVal < 0) {
+                if(isColor) colorComboAdd(spin, QStringList() << val);
+                else        spin->addItem(val);
+                indexVal = spin->count()-1;
             }
-            else
-                spin->setEditText(val);
+            spin->setCurrentIndex(indexVal);
+            //spin->setEditText(val);
         }
     }
     else if(prevVal != val) {

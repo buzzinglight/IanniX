@@ -72,7 +72,7 @@ public:
 public:
     QString defaultStatusTip, cursorStatusTip, curveStatusTip, triggerStatusTip;
 private:
-    NxDocument *document;
+    NxDocument *documentToRender;
     QTime renderMeasure;
     UiRenderSelection selectionRect;
     NxObject *selectedHover;
@@ -110,7 +110,7 @@ public:
         setStatusTip(defaultStatusTip);
     }
 
-    void setDocument(NxDocument *_document) { document = _document; }
+    void setDocument(NxDocument *_documentToRender) { documentToRender = _documentToRender; }
 
 signals:
     void escFullscreen();

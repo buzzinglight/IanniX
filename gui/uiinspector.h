@@ -22,7 +22,6 @@
 #include <QWidget>
 #include <QNetworkInterface>
 #include "misc/application.h"
-#include "objects/nxdocument.h"
 #include "gui/uimessagebox.h"
 #include "render/uirender.h"
 #include "interfaces/extoscpatternask.h"

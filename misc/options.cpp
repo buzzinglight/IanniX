@@ -106,6 +106,7 @@ UiReal::UiReal(qreal _value) :
     doubleSpinBox = 0;
     comboBox      = 0;
     slider        = 0;
+    radios.clear();
 }
 UiReal::UiReal(const UiReal& _value) :
     UiOption() {
@@ -114,6 +115,7 @@ UiReal::UiReal(const UiReal& _value) :
     doubleSpinBox = 0;
     comboBox      = 0;
     slider        = 0;
+    radios.clear();
 }
 UiReal& UiReal::operator= (const UiReal &_value) {
     value = _value.value;
@@ -136,6 +138,8 @@ void UiReal::applyToGui() {
         comboBox->setCurrentIndex(value);
     if((slider) && (slider->value() != value))
         slider->setValue(value);
+    if((radios.count()) && (value < radios.count()))
+        radios.at(value)->setChecked(true);
     if(syncItem)
         syncItem->dataChanged();
 }
@@ -193,6 +197,29 @@ void UiReal::setAction(QComboBox *_comboBox, const QString &_settingName, bool t
             guiTrigged(comboBox->currentIndex());
     }
 }
+void UiReal::setAction(const QList<QRadioButton*> &_radios, const QString &_settingName, bool trigEvent, bool changeUi) {
+    UiOptions::add(this, _settingName);
+    foreach(QRadioButton *radio, radios)
+        radio->disconnect(this, SLOT(guiTrigged(qreal)));
+    radios = _radios;
+    if(radios.count()) {
+        if(changeUi)
+            applyToGui();
+        foreach(QRadioButton *radio, radios)
+            radio->connect(radio, SIGNAL(toggled(bool)), this, SLOT(guiTrigged(bool)));
+
+        if(trigEvent) {
+            qreal tmpVal = 0;
+            for(quint16 i = 0 ; i < radios.count() ; i++)
+                if(radios.at(i)->isChecked()) {
+                    tmpVal = i;
+                    break;
+                }
+            guiTrigged(tmpVal);
+        }
+    }
+}
+
 void UiReal::guiTrigged(double _value) {
     value = _value;
     if(syncItem)
@@ -201,6 +228,17 @@ void UiReal::guiTrigged(double _value) {
 }
 void UiReal::guiTrigged(int _value) {
     value = _value;
+    if(syncItem)
+        syncItem->dataChanged();
+    emit(triggered(value));
+}
+void UiReal::guiTrigged(bool) {
+    value = 0;
+    for(quint16 i = 0 ; i < radios.count() ; i++)
+        if(radios.at(i)->isChecked()) {
+            value = i;
+            break;
+        }
     if(syncItem)
         syncItem->dataChanged();
     emit(triggered(value));

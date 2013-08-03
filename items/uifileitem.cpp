@@ -13,7 +13,7 @@ UiFileItem::UiFileItem(const QFileInfo &file, UiFileItem *_parent, QFileSystemWa
     watcher = _watcher;
 
     allowedExtensions << "nxscore" << "nxscript" << "nxstyle" << "iannix";
-    forbiddenDirs << "Software Templates";
+    forbiddenDirs << "Templates";
 
     if(!watcher) {
         watcher = new QFileSystemWatcher(this);

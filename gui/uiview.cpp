@@ -512,6 +512,7 @@ void UiView::actionAddFreeCursor() {
     unToogleDraw(2);
     unToogleDraw(3);
     unToogleDraw(4);
+    freehandCurveNeedsCursor = false;
     editingStop();
     Application::current->pushSnapshot();
     foreach(const NxObject *object, *(ui->render->getSelection())) {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>334</width>
-    <height>66</height>
+    <width>381</width>
+    <height>88</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,7 @@
         <string>Enables or disables TCP/XML messages and control</string>
        </property>
        <property name="text">
-        <string>ENABLE TCP/XML (Flash)</string>
+        <string>ENABLE TCP (Flash, hardware…)</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -79,6 +79,55 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>DATA FORMAT</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>port</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="typeRaw">
+       <property name="text">
+        <string>Raw format</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="typeXml">
+       <property name="text">
+        <string>XML format</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
       <number>10</number>
@@ -98,7 +147,7 @@
         </size>
        </property>
        <property name="text">
-        <string>TCP/XML
+        <string>TCP
 SERVER PORT</string>
        </property>
        <property name="alignment">

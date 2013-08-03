@@ -33,7 +33,7 @@ private:
     QString         midiCommand, midiPort;
     QUrl            urlMessage;
     QByteArray      urlMessageString;
-    QByteArray      asciiMessage;
+    QByteArray      asciiMessage, asciiMessageXml;
 private:
     bool            hasAdd, isTransportMessage;
     QScriptValue    messageScriptValue, messageScriptResult;
@@ -73,7 +73,8 @@ public:
     
     inline const QString &      getMidiCommand()  const {   return midiCommand;         }
     inline const QString &      getMidiPort()     const {   return midiPort;            }
-    inline const QByteArray &   getAsciiMessage() const {   return asciiMessage;        }
+    inline const QByteArray &   getAsciiMessage()    const {   return asciiMessage;        }
+    inline const QByteArray &   getAsciiMessageXml() const {   return asciiMessageXml;        }
     inline const QByteArray &   getAddress()      const {   return address;             }
     inline const QUrl &         getUrlMessage()   const {   return urlMessage;          }
 

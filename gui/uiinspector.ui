@@ -1058,7 +1058,7 @@ MULTIPLICATION</string>
                      </property>
                      <property name="text">
                       <string>TEXTURE
-if INACTIVE</string>
+if ACTIVE</string>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1134,7 +1134,7 @@ if INACTIVE</string>
                      </property>
                      <property name="text">
                       <string>TEXTURE
-if ACTIVE</string>
+if INACTIVE</string>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -4111,7 +4111,7 @@ SIZE</string>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
-                  <height>40</height>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="styleSheet">

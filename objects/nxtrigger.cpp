@@ -111,10 +111,11 @@ void NxTrigger::paint() {
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, texture->texture);
                 glBegin(GL_QUADS);
-                glTexCoord2d(0, 0); glVertex3f(cacheSize * texture->mapping.left(),  cacheSize * texture->mapping.bottom(), 0);
-                glTexCoord2d(1, 0); glVertex3f(cacheSize * texture->mapping.right(), cacheSize * texture->mapping.bottom(), 0);
-                glTexCoord2d(1, 1); glVertex3f(cacheSize * texture->mapping.right(), cacheSize * texture->mapping.top(), 0);
-                glTexCoord2d(0, 1); glVertex3f(cacheSize * texture->mapping.left(),  cacheSize * texture->mapping.top(), 0);
+                qreal widthRatio = cacheSize * texture->originalSize.width() / texture->originalSize.height();
+                glTexCoord2d(0, 0); glVertex3f(widthRatio * texture->mapping.left(),  cacheSize * texture->mapping.bottom(), 0);
+                glTexCoord2d(1, 0); glVertex3f(widthRatio * texture->mapping.right(), cacheSize * texture->mapping.bottom(), 0);
+                glTexCoord2d(1, 1); glVertex3f(widthRatio * texture->mapping.right(), cacheSize * texture->mapping.top(), 0);
+                glTexCoord2d(0, 1); glVertex3f(widthRatio * texture->mapping.left(),  cacheSize * texture->mapping.top(), 0);
                 glEnd();
                 glDisable(GL_TEXTURE_2D);
             }

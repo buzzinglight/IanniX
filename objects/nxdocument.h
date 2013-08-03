@@ -51,7 +51,7 @@ private:
     QList<QString> snapshots;
     quint16 snapshotsIndex;
 public:
-    explicit NxDocument(ApplicationCurrent *parent, UiFileItem *_fileItem);
+    explicit NxDocument(ApplicationCurrent *parent, UiFileItem *_fileItem = 0);
 
     inline void clear() {
         QStringList commands;

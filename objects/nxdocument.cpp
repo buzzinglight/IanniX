@@ -21,11 +21,13 @@
 NxDocument::NxDocument(ApplicationCurrent *parent, UiFileItem *_fileItem) :
     QObject(parent) {
     fileItem = _fileItem;
+    if(fileItem) {
+        connect(fileItem, SIGNAL(askFileClose()),  SLOT(askFileClose()));
+        connect(fileItem, SIGNAL(askFileOpen()),   SLOT(askFileOpen()));
+        connect(fileItem, SIGNAL(askFileReload()), SLOT(askFileReload()));
+        connect(fileItem, SIGNAL(askFileSave()),   SLOT(askFileSave()));
+    }
     variable = 0;
-    connect(fileItem, SIGNAL(askFileClose()),  SLOT(askFileClose()));
-    connect(fileItem, SIGNAL(askFileOpen()),   SLOT(askFileOpen()));
-    connect(fileItem, SIGNAL(askFileReload()), SLOT(askFileReload()));
-    connect(fileItem, SIGNAL(askFileSave()),   SLOT(askFileSave()));
     setCurrentObject(0);
     setCurrentGroup(0);
     currentCurve = 0;
@@ -284,13 +286,15 @@ void NxDocument::askFileReload() {
     open();
 }
 void NxDocument::askFileClose() {
-    NxObjectDispatchProperty::source = ExecuteSourceGui;
-    if(initialContent != Application::current->serialize()) {
-        int rep = (new UiMessageBox())->display(tr("Score file"), tr("Do you want to save changes before closing score?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
-        if(rep)
-            fileItem->askForSave(fileItem, false);
+    if(fileItem) {
+        NxObjectDispatchProperty::source = ExecuteSourceGui;
+        if(initialContent != Application::current->serialize()) {
+            int rep = (new UiMessageBox())->display(tr("Score file"), tr("Do you want to save changes before closing score?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
+            if(rep)
+                fileItem->askForSave(fileItem, false);
+        }
+        clear();
     }
-    clear();
 }
 void NxDocument::restoreDefaults() {
     Global::defaultColors.insert("background_texture_tint"          , QColor(255, 255, 255, 255));
