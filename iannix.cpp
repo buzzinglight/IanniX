@@ -608,7 +608,7 @@ void IanniX::loadProject(const QString & _projectFile) {
 
 void IanniX::setCurrentDocument(NxDocument *_currentDocument) {
     documents.clear();
-    currentDocument = _currentDocument;
+    workingDocument = currentDocument = _currentDocument;
     documents.insert("current", currentDocument);
 }
 
@@ -616,7 +616,7 @@ void IanniX::setCurrentDocument(NxDocument *_currentDocument) {
 
 
 NxGroup* IanniX::addGroup(const QString & groupId) {
-    NxDocument *document = getCurrentDocument();
+    NxDocument *document = getWorkingDocument();
     if(document->groups.contains(groupId))
         return document->groups.value(groupId);
     else {
@@ -629,7 +629,7 @@ NxGroup* IanniX::addGroup(const QString & groupId) {
 }
 
 void IanniX::setObjectActivity(void *_object, quint8 activeOld) {
-    NxDocument *document = getCurrentDocument();
+    NxDocument *document = getWorkingDocument();
     if(!document)
         return;
 
@@ -642,7 +642,7 @@ void IanniX::setObjectActivity(void *_object, quint8 activeOld) {
     group->objects[object->getActive()][object->getType()].insert(object->getId(), object);
 }
 void IanniX::setObjectGroupId(void *_object, const QString & groupIdOld) {
-    NxDocument *document = getCurrentDocument();
+    NxDocument *document = getWorkingDocument();
     if(!document)
         return;
 
@@ -666,7 +666,7 @@ void IanniX::setObjectGroupId(void *_object, const QString & groupIdOld) {
 }
 void IanniX::setObjectId(void *_object, quint16 idOld) {
     //Extract object
-    NxDocument *document = getCurrentDocument();
+    NxDocument *document = getWorkingDocument();
     NxObject *object = (NxObject*)_object;
     NxGroup *group = addGroup(object->getGroupId());
 
@@ -682,7 +682,7 @@ void IanniX::setObjectId(void *_object, quint16 idOld) {
 
 quint16 IanniX::getCount(qint8 objectType) {
     quint16 count = 0;
-    NxDocument *document = getCurrentDocument();
+    NxDocument *document = getWorkingDocument();
     if(document) {
         if(objectType == -2)
             return document->groups.count();
@@ -693,7 +693,7 @@ quint16 IanniX::getCount(qint8 objectType) {
     return count;
 }
 void IanniX::removeObject(NxObject *object) {
-    NxDocument *document = getCurrentDocument();
+    NxDocument *document = getWorkingDocument();
     if(object) {
         if(render)
             render->flagIsRemoving();
@@ -752,7 +752,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
         return QVariant();
 
     NxObjectDispatchProperty::source = source;
-    NxDocument *document = getCurrentDocument();
+    NxDocument *document = getWorkingDocument();
 
     QStringList argv = command.split(" ", QString::SkipEmptyParts);
     quint16 argc = argv.count();
@@ -806,13 +806,17 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
             // ---- GLOBAL COMMANDS ----
             //String parameter
             if((commande == COMMAND_ROTATE) || (commande == COMMAND_CENTER)) {
-                if(argc > 1)    transport->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 1));
-                if(needOutput)  return transport->getProperty(qPrintable(commande));
+                if(workingDocument == currentDocument) {
+                    if(argc > 1)    transport->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 1));
+                    if(needOutput)  return transport->getProperty(qPrintable(commande));
+                }
             }
             //Single parameter
             else if((commande == COMMAND_ZOOM) || (commande == COMMAND_SPEED)) {
-                if(argc > 1)    transport->dispatchProperty(qPrintable(commande), argvDouble(argv, 1));
-                if(needOutput)  return transport->getProperty(qPrintable(commande));
+                if(workingDocument == currentDocument) {
+                    if(argc > 1)    transport->dispatchProperty(qPrintable(commande), argvDouble(argv, 1));
+                    if(needOutput)  return transport->getProperty(qPrintable(commande));
+                }
             }
 
             //Solo & mute
@@ -826,7 +830,8 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                         if(object) {
                             if(argc > 2) {
                                 object->dispatchProperty(qPrintable(commande), argvDouble(argv, 2));
-                                actionCC(object, 3);
+                                if(currentDocument == workingDocument)
+                                    actionCC(object, 3);
                             }
                             else if(needOutput)
                                 return object->getProperty(qPrintable(commande)).toInt();
@@ -837,7 +842,8 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                         if(group) {
                             if(argc > 2) {
                                 group->dispatchPropertyToGroup(qPrintable(commande), argvDouble(argv, 2));
-                                actionCC(group, 3);
+                                if(currentDocument == workingDocument)
+                                    actionCC(group, 3);
                             }
                             else if(needOutput)
                                 return group->getPropertyFromGroup(qPrintable(commande)).toInt();
@@ -849,7 +855,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
 
             //Other type
             else if((commande == COMMAND_TEXTURE) && (argc > 1)) {
-                if(argc > 6) {
+                if((argc > 6) && (currentDocument == workingDocument)) {
                     QString filename = argvFullString(command, argv, 6);
                     if((!QFile().exists(filename)) && (document->fileItem))
                         filename = scriptDir.absoluteFilePath(document->fileItem->filename.file.absolutePath() + "/" + filename);
@@ -859,42 +865,79 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                     return render->removeTexture(argv.at(1).trimmed());
             }
             else if((commande == COMMAND_GLOBAL_COLOR) && (argc > 5)) {
-                Global::colors->insert(argv.at(1), QColor(argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)));
+                if(currentDocument == workingDocument)
+                    Global::colors->insert(argv.at(1), QColor(argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)));
                 return Global::colors->update();
             }
             else if((commande == COMMAND_GLOBAL_COLOR_HUE) && (argc > 5)) {
                 QColor color;
                 color.setHsv(argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5));
-                Global::colors->insert(argv.at(1), color);
+                if(currentDocument == workingDocument)
+                    Global::colors->insert(argv.at(1), color);
                 return Global::colors->update();
             }
 
 
 
             //No undo or specific commands
-            else if(commande == COMMAND_LOAD) {
+            else if((commande == COMMAND_LOAD) || (commande == COMMAND_OPEN) || (commande == COMMAND_CLOSE)) {
                 if(argc > 1) {
-                    //TODO
-                    /*
-                    QString filename = argvFullString(command, argv, 1);
-                    bool ok = false;
-                    ok = inspector->setProjectFiles(filename);
-                    if(inspector->setProjectFiles(filename))
-                        actionProjectFiles();
-                    else if(inspector->setProjectScripts(filename))
-                        actionProjectScripts();
-                    */
-                    return true;
+                    QString filenameFinal = argvFullString(command, argv, 1);
+                    if((!filenameFinal.toLower().endsWith(".ianniX")) || (!filenameFinal.toLower().endsWith(".nxscore")) || (!filenameFinal.toLower().endsWith(".nxscript")))
+                        filenameFinal.append(".iannix");
+                    QString filename1 = filenameFinal;
+                    if(!QFileInfo(filename1).exists()) {
+                        QString filename2 = getCurrentDocument()->getScriptFile().absoluteDir().absolutePath() + "/" + filenameFinal;
+                        if(!QFileInfo(filename2).exists()) {
+                            QString filename3 = Global::pathDocuments.absoluteFilePath() + "/" + filenameFinal;
+                            if(!QFileInfo(filename3).exists()) {
+                                qDebug("Score not found %s, %s or %s", qPrintable(filename1), qPrintable(filename2), qPrintable(filename3));
+                                return false;
+                            }
+                            else filenameFinal = filename3;
+                        }
+                        else filenameFinal = filename2;
+                    }
+                    else filenameFinal = filename1;
+
+                    if(commande == COMMAND_LOAD) {
+                        getCurrentDocument()->skipClose = true;
+                        loadProject(filenameFinal);
+                    }
+                    else if(commande == COMMAND_OPEN) {
+                        NxDocument *document = new NxDocument(this);
+                        document->setHiddenFilename(QFileInfo(filenameFinal));
+                        documents.insert(filenameFinal, document);
+                        workingDocument = document;
+                        document->askFileOpen(false);
+                        workingDocument = currentDocument;
+                    }
+                    else if(commande == COMMAND_CLOSE) {
+                        if(documents.contains(filenameFinal)) {
+                            NxDocument *document = documents.value(filenameFinal);
+                            workingDocument = document;
+                            documents.remove(filenameFinal);
+                            if(document) {
+                                document->askFileClose();
+                                delete document;
+                            }
+                            workingDocument = currentDocument;
+                        }
+                    }
                 }
                 return view->windowTitle();
             }
+
+
             else if((commande == COMMAND_SNAPSHOT) && (argc > 1)) {
                 if(argc > 2)        return render->captureFrame(argvDouble(argv, 1), argvFullString(command, argv, 2));
                 else                return render->captureFrame(argvDouble(argv, 1));
             }
             else if(commande == COMMAND_VIEWPORT) {
-                if(argc > 2)        view->actionResize(QSize(argvDouble(argv, 1), argvDouble(argv, 2)));
-                if(needOutput)      return QString("%1 %2").arg(render->size().width()).arg(render->size().height());
+                if(currentDocument == workingDocument) {
+                    if(argc > 2)        view->actionResize(QSize(argvDouble(argv, 1), argvDouble(argv, 2)));
+                    if(needOutput)      return QString("%1 %2").arg(render->size().width()).arg(render->size().height());
+                }
             }
             else if(commande == COMMAND_PLAY) {
                 if(argc > 1) {

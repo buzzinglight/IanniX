@@ -39,8 +39,10 @@ public:
     ExecuteSource source;
     UiFileItem *fileItem;
     QString initialContent;
+    bool skipClose;
 public slots:
     void askFileOpen();
+    void askFileOpen(bool mode);
     void askFileSave();
     void askFileReload();
     void askFileClose();
@@ -50,6 +52,7 @@ private:
     bool isLoaded;
     QList<QString> snapshots;
     quint16 snapshotsIndex;
+    QFileInfo hiddenFilename;
 public:
     explicit NxDocument(ApplicationCurrent *parent, UiFileItem *_fileItem = 0);
 
@@ -61,6 +64,7 @@ public:
             Application::current->execute(command, ExecuteSourceCopyPaste);
     }
 
+    void setHiddenFilename(const QFileInfo &_hiddenFilename) { hiddenFilename = _hiddenFilename; }
 
     const QString serialize() const;
     void pushSnapshot();
@@ -144,9 +148,8 @@ public:
     }
 
     inline const QFileInfo getScriptFile() const {
-        if(fileItem)
-            return fileItem->filename.file;
-        return QFileInfo();
+        if(fileItem)    return fileItem->filename.file;
+        else            return hiddenFilename;
     }
 
 public:

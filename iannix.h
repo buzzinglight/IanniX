@@ -75,7 +75,7 @@ public:
         }
     }
     inline const QVariant getProperty(const char *_property) const {
-        NxDocument *document = getCurrentDocument();
+        NxDocument *document = getWorkingDocument();
         return document->getProperty(_property);
     }
     inline quint8 getType() const {
@@ -88,9 +88,10 @@ public:
 
     //OBJECT MANAGEMENT
 private:
-    NxDocument *currentDocument;
+    NxDocument *currentDocument, *workingDocument;
     QHash<QString, NxDocument*> documents;
     inline NxDocument* getCurrentDocument() const { return currentDocument; }
+    inline NxDocument* getWorkingDocument() const { return workingDocument; }
     void setCurrentDocument(NxDocument *_currentDocument);
 public:
     NxGroup* addGroup(const QString & groupId);
@@ -100,13 +101,12 @@ public:
     void removeObject(NxObject *object);
     quint16 getCount(qint8 objectType = -1);
     void* getObjectById(quint16 id) {
-        NxDocument *document = getCurrentDocument();
-        return document->getObject(id);
+        return getWorkingDocument()->getObject(id);
     }
 
 public:
     inline NxObjectDispatchProperty* getObject(const QString & objectIdStr, bool saveObject = true) const {
-        NxDocument *document = getCurrentDocument();
+        NxDocument *document = getWorkingDocument();
         bool ok = false;
         quint16 objectId = objectIdStr.toUInt(&ok);
         if(ok) {

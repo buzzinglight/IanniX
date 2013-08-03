@@ -103,6 +103,8 @@
 #define COMMAND_CURVE_EQUATION_PARAM        "setequationparam"
 #define COMMAND_CURVE_LINES                 "setpointslines"
 #define COMMAND_LOAD                        "load"
+#define COMMAND_OPEN                        "open"
+#define COMMAND_CLOSE                       "close"
 #define COMMAND_CURVE_LENGTH                "setlength"
 #define COMMAND_MESSAGE_SEND                "sendmessage"
 #define COMMAND_MOUSE                       "mouse"

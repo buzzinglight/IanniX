@@ -27,6 +27,7 @@ NxDocument::NxDocument(ApplicationCurrent *parent, UiFileItem *_fileItem) :
         connect(fileItem, SIGNAL(askFileReload()), SLOT(askFileReload()));
         connect(fileItem, SIGNAL(askFileSave()),   SLOT(askFileSave()));
     }
+    skipClose = false;
     variable = 0;
     setCurrentObject(0);
     setCurrentGroup(0);
@@ -115,7 +116,8 @@ void NxDocument::open() {
 }
 void NxDocument::open(bool configure) {
     isLoaded = false;
-    Application::current->getMainWindow()->setWindowTitle(tr("IanniX") + QString(" / %1").arg(getScriptFile().baseName()));
+    if(!skipClose)
+        Application::current->getMainWindow()->setWindowTitle(tr("IanniX") + QString(" / %1").arg(getScriptFile().baseName()));
 
     //Open the script
     QScriptValue scriptFunctions = scriptEngine.newQObject(this);
@@ -205,7 +207,8 @@ void NxDocument::open(bool configure) {
     updateCode(true);
 }
 void NxDocument::updateCode(bool fromFile) {
-    Transport::editor->setContent(getContent(fromFile));
+    if(!skipClose)
+        Transport::editor->setContent(getContent(fromFile));
 }
 void NxDocument::save() {
     QString scoreContent = getContent(false);
@@ -275,8 +278,12 @@ QScriptValue NxDocument::scriptEvaluate(const QString &scriptContent, bool _crea
 }
 
 void NxDocument::askFileOpen() {
-    qDebug("==> OPEN %s", qPrintable(getScriptFile().absoluteFilePath()));
-    restoreDefaults();
+    askFileOpen(true);
+}
+void NxDocument::askFileOpen(bool mode) {
+    qDebug("==> OPEN (mode %d) %s", mode, qPrintable(getScriptFile().absoluteFilePath()));
+    if(mode)    restoreDefaults();
+    else        skipClose = true;
     open();
 }
 void NxDocument::askFileSave() {
@@ -286,15 +293,15 @@ void NxDocument::askFileReload() {
     open();
 }
 void NxDocument::askFileClose() {
-    if(fileItem) {
+    if((fileItem) && (!skipClose)) {
         NxObjectDispatchProperty::source = ExecuteSourceGui;
         if(initialContent != Application::current->serialize()) {
             int rep = (new UiMessageBox())->display(tr("Score file"), tr("Do you want to save changes before closing score?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
             if(rep)
                 fileItem->askForSave(fileItem, false);
         }
-        clear();
     }
+    clear();
 }
 void NxDocument::restoreDefaults() {
     Global::defaultColors.insert("background_texture_tint"          , QColor(255, 255, 255, 255));
