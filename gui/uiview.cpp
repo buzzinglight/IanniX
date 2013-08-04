@@ -590,6 +590,10 @@ void UiView::editingStopWithoutRemoval(bool isLoop) {
     }
     else
         Application::current->execute(QString("%1 %2").arg(COMMAND_REMOVE).arg(freehandCurveId), ExecuteSourceSystem);
+    freehandCurveId = 0;
+    freehandCurveIndex = 0;
+    freehandCurveNeedsCursor = false;
+
     unToogleDraw(0);
     ui->render->unsetEditing();
 }

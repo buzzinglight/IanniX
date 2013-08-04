@@ -186,6 +186,7 @@ void NxCurve::paint() {
 
         //Draw
         if((glListRecreate) || (glListRecreateFromEditor) || (Render::forceLists)) {
+            setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
             glNewList(glListCurve, GL_COMPILE_AND_EXECUTE);
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);

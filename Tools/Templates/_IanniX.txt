@@ -21,4 +21,8 @@ cartesian 8-16*(1-t), 2*sin((8-16*(1-t))*4)/(8-16*(1-t))-3, 0 | Sinus cardinalis
 cartesian 8-16*(1-t), 2*sin((8-16*(1-t))*4)/(8-16*(1-t))-3, sin((8-16*(1-t))*2) | Coiled sinus cardinalis 
 polar 6*cos(5*PI*t), cos(10*PI*t), t | Super-S
 polar 5*cos(20*PI*t), 2*sin(1*PI*t), sin(5*PI*t) | Flower
-
+cartesian 2*cos(t*PI)+2*cos(3*t*PI), 2*sin(t*PI)-2*sin(3*t*PI), 3*sin(2*t*PI) | Stroke
+cartesian 6*cos(t*2*PI), 6*sin(3*t*2*PI), 6*sin(7*t*2*PI) | 3D Lissajoussche curve
+cartesian 5*sin(10*t*2*PI)*cos(t*2*PI), 5*sin(10*t*2*PI)*sin(t*2*PI), 5*cos(10*t*2*PI) | 2D rosette or 3D sphere?
+cartesian 5*t*cos(5*t*2*PI), 5*t*sin(5*t*2*PI), 5*t | Conical spiral of Pappus
+cartesian (2+4*cos(6*t*2*PI))*cos(t*2*PI), (2+4*cos(6*t*2*PI))*sin(t*2*PI), 4*sin(6*t*2*PI) | An other 3D flower
