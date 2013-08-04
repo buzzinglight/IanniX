@@ -7,14 +7,19 @@
 #include <QVariant>
 #include <QMainWindow>
 #include <QPixmap>
+#include "applicationexecute.h"
 #include "gui/uihelp.h"
 #include "render/uirenderpreview.h"
 #ifdef KINECT_INSTALLED
 #include "interfaces/extkinectmanager.h"
 #endif
-#include "iannix_spec.h"
+#include "items/uitextureitem.h"
+#include "items/uicoloritem.h"
+#include "items/uifileitem.h"
+#include "items/uipathpointsitem.h"
+#include "misc/options.h"
 
-class ApplicationCurrent : public QObject {
+class ApplicationCurrent : public QObject, public ApplicationExecute {
     Q_OBJECT
 
 public:
@@ -36,7 +41,6 @@ public:
     bool isGroupSoloActive, isObjectSoloActive;
 public slots:
     virtual void openMessageEditor() = 0;
-    virtual const QVariant execute(const QString & command, ExecuteSource source, bool createNewObjectIfExists = false, bool needOutput = false) = 0;
     virtual void pushSnapshot() = 0;
     virtual quint16 getCount(qint8 objectType = -1) = 0;
     virtual const QString serialize() const = 0;
@@ -50,35 +54,69 @@ public slots:
     virtual void executeAsScript(const QString &script) = 0;
 };
 
+
+
+enum EditingMode { EditingModeFree, EditingModePoint, EditingModeTriggers, EditingModeCircle };
+
 class Render : public QGLWidget {
 public:
-    explicit Render(QWidget *parent) : QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent) {}
+    explicit Render(QWidget *parent = 0, QGLWidget *share = 0) : QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent, share) {}
 public:
     virtual void selectionClear(bool) = 0;
     virtual void setZoom(qreal axisZoom) = 0;
     virtual void centerOn(const NxPoint & center, bool force = false) = 0;
     virtual void rotateTo(const NxPoint & rotation, bool force = false) = 0;
     virtual bool loadTexture(UiRenderTexture*, bool = false) = 0;
+
+public:
+    static qreal objectSize;
+    static NxRect selectionArea;
+    static UiTextureItems* textures;
+    static UiColorItems*   colors;
+    static QMap<QString, QColor> defaultColors;
+    static UiFileItem      files;
+    static UiBool paintThisGroup;
+    static UiBool forceLists, forceTexture, forceFrustumInInit;
+    static NxRect axisArea;
+    static qreal zoomValue, zoomLinear, zoomLinearDest, axisGrid;
+    static NxPoint axisCenter, axisCenterDest;
+    static NxPoint rotation, rotationDest;
+    static EditingMode editingMode;
+    static bool editing, editingFirstPoint;
 };
+
 
 
 class Application : public QObject {
     Q_OBJECT
 
 public:
+    static QFileInfo pathApplication, pathDocuments, pathCurrent;
     static Render *render;
     static ApplicationCurrent *current;
     static void* synchroLoopGuard;
     static QWidget *splash;
+    static UiString defaultMessageTrigger, defaultMessageCursor, defaultMessageCurve, defaultMessageTransport, defaultMessageSync, defaultMessage;
+    static QFont renderFont;
+    static UiBool allowSelection, allowSelectionCursors, allowSelectionCurves, allowSelectionTriggers, colorTheme, allowLockPos, allowPlaySelected;
+    static UiBool paintAxisGrid, paintCurvesOpacity, paintLabel;
+    static UiReal objectsAutosize;
+    static UiBool mouseSnapX, mouseSnapY, mouseSnapZ;
+    static UiReal followId;
+    static const QString colorsPrefix(qint16 i = -1) {
+        if(i < 0) {
+            if(colorTheme)   return "lighttheme";
+            else             return "darktheme";
+        }
+        else if(i == 0)      return "darktheme";
+        else                 return "lighttheme";
+
+        return "";
+    }
 
 public:
     static void setInterfaces(ApplicationCurrent *_current = 0, Render *_render = 0);
     static QImage takeScreenshot();
-    
-signals:
-    
-public slots:
-    
 };
 
 #endif // APPLICATION_H

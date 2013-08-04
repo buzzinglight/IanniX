@@ -40,7 +40,7 @@ UiTextureItem* UiTextureItems::generateItem(const QString &name, UiRenderTexture
     if(doInsert)
         insert(item->name, item->texture);
     if(fromGui)
-        Application::current->execute(QString("%1 %2 %3  %4 %5 %6 %7").arg(COMMAND_TEXTURE).arg(item->name).arg(item->texture->mapping.topLeft().x()).arg(item->texture->mapping.topLeft().y()).arg(item->texture->mapping.bottomRight().x()).arg(item->texture->mapping.bottomRight().y()).arg(item->texture->filename.fileName()), ExecuteSourceInformative);
+        ApplicationExecute::current->execute(QString("%1 %2 %3  %4 %5 %6 %7").arg(COMMAND_TEXTURE).arg(item->name).arg(item->texture->mapping.topLeft().x()).arg(item->texture->mapping.topLeft().y()).arg(item->texture->mapping.bottomRight().x()).arg(item->texture->mapping.bottomRight().y()).arg(item->texture->filename.fileName()), ExecuteSourceInformative);
     return item;
 }
 void UiTextureItems::update() {
@@ -99,7 +99,7 @@ const QString UiTextureItems::renameKey(const QString &oldKey, const QString &ne
 }
 UiRenderTexture* UiTextureItems::setValue(const QString &key, UiRenderTexture *texture) {
     (*this)[key] = texture;
-    Application::current->execute(QString("%1 %2 %3  %4 %5 %6 %7").arg(COMMAND_TEXTURE).arg(key).arg(texture->mapping.topLeft().x()).arg(texture->mapping.topLeft().y()).arg(texture->mapping.bottomRight().x()).arg(texture->mapping.bottomRight().y()).arg(texture->filename.fileName()), ExecuteSourceInformative);
+    ApplicationExecute::current->execute(QString("%1 %2 %3  %4 %5 %6 %7").arg(COMMAND_TEXTURE).arg(key).arg(texture->mapping.topLeft().x()).arg(texture->mapping.topLeft().y()).arg(texture->mapping.bottomRight().x()).arg(texture->mapping.bottomRight().y()).arg(texture->filename.fileName()), ExecuteSourceInformative);
     dataChanged();
     return texture;
 }

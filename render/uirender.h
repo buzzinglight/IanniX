@@ -24,13 +24,14 @@
 #include <QFile>
 #include <QTime>
 #include <QWheelEvent>
+#include <QGesture>
 #include <QtCore/qmath.h>
 #include <QDir>
 #include <QClipboard>
 #include "interfaces/interfacesyphon.h"
 #include "objects/nxdocument.h"
 #include "misc/application.h"
-#include "render/uirenderoptions.h"
+
 #include "render/uirenderpreview.h"
 #ifdef QT5
 #include <QStandardPaths>
@@ -66,7 +67,7 @@ class UiRender : public Render, public NxEventsPropagation {
     Q_OBJECT
 
 public:
-    explicit UiRender(QWidget *parent = 0);
+    explicit UiRender(QWidget *parent = 0, QGLWidget *share = 0);
     ~UiRender();
 
 public:
@@ -79,7 +80,6 @@ private:
     UiRenderSelection selection;
     NxPoint translation, translationDest, rotationDrag, translationDrag;
     qreal scale, scaleDest;
-    bool firstLaunch;
     QList<QImage> capturedFrames;
     bool capturedFramesStart;
 
@@ -99,14 +99,14 @@ public:
 
 
     inline void setEditingMode(EditingMode _editingMode) {
-        Global::editingMode = _editingMode;
-        Global::editing = true;
-        Global::editingFirstPoint = true;
-        if(Global::editing)
+        Render::editingMode = _editingMode;
+        Render::editing = true;
+        Render::editingFirstPoint = true;
+        if(Render::editing)
             setCursor(Qt::CrossCursor);
     }
     inline void unsetEditing() {
-        Global::editing = false;
+        Render::editing = false;
         setStatusTip(defaultStatusTip);
     }
 
@@ -116,7 +116,7 @@ signals:
     void escFullscreen();
     void editingStart(const NxPoint &);
     void editingStop();
-    void editingMove(const NxPoint &, bool add);
+    void editingMove(const NxPoint &, bool add, bool mouseState);
 
 private:
     QTimer *timer;
@@ -147,7 +147,7 @@ public:
 
 private:
     NxPoint mousePressedRawPos, mousePressedAreaPos, mousePressedAreaPosNoCenter, mousePressedAxisCenter;
-    bool mousePressed, mouseCommand, mouseShift, mouseObjectDrag;
+    bool mousePressed, mouseControl, mouseShift, mouseObjectDrag;
     qreal pinchValue;
     bool snapBeforeKeyX, snapBeforeKeyY;
 public:

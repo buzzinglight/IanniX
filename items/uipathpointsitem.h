@@ -3,7 +3,6 @@
 
 #include "uitreeview.h"
 #include "misc/options.h"
-#include "misc/application.h"
 #include "iannix_cmd.h"
 
 class UiPathPointsItem : public UiSyncItem {

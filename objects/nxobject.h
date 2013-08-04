@@ -33,7 +33,7 @@
 #include <QtCore/qmath.h>
 #include "iannix_spec.h"
 #include "iannix_cmd.h"
-#include "render/uirenderoptions.h"
+
 #include "misc/application.h"
 #include "transport/transport.h"
 

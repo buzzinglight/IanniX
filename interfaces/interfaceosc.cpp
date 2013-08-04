@@ -112,8 +112,8 @@ void InterfaceOsc::bonjourRecordResolved(const QHostInfo &info, int port) {
 #endif
 void InterfaceOsc::bonjourScan() {
     //Templates
-    QFileInfoList files = QDir(Global::pathApplication.absoluteFilePath() + "/Tools/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
-    files <<              QDir(Global::pathDocuments.absoluteFilePath()   + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    QFileInfoList files = QDir(Application::pathApplication.absoluteFilePath() + "/Tools/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    files <<              QDir(Application::pathDocuments.absoluteFilePath()   + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
     foreach(const QFileInfo &file, files) {
         QString header;
         QMultiHash<QString, QString> params;

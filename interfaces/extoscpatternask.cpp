@@ -92,7 +92,7 @@ void ExtOscPatternAsk::actionAddMessage() {
             hasTrigger = true;
             break;
         }
-    QString messagePatternItem = Global::defaultMessage;
+    QString messagePatternItem = Application::defaultMessage;
 
     QVector< QVector<QByteArray > > messagePatternItemsList = NxObject::parseMessagesPattern(messagePatternItem);
     foreach(const QVector<QByteArray > & messagePatternItems, messagePatternItemsList) {

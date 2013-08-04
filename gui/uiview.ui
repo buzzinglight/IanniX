@@ -578,7 +578,7 @@ QDialogButtonBox QPushButton {
   </widget>
   <widget class="QToolBar" name="toolBarAdd">
    <property name="windowTitle">
-    <string>Toolbar</string>
+    <string>Objects creation</string>
    </property>
    <property name="iconSize">
     <size>
@@ -611,7 +611,7 @@ QDialogButtonBox QPushButton {
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBarView">
    <property name="windowTitle">
-    <string>toolBar_2</string>
+    <string>View options</string>
    </property>
    <property name="iconSize">
     <size>
@@ -640,7 +640,7 @@ QDialogButtonBox QPushButton {
   </widget>
   <widget class="QToolBar" name="toolBarWindow">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>Window options</string>
    </property>
    <property name="iconSize">
     <size>
@@ -1035,7 +1035,7 @@ QDialogButtonBox QPushButton {
     <string>Draws a smooth curve with a cursor</string>
    </property>
    <property name="statusTip">
-    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+double click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+double click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n\nPress ESC or click again on the toolbar button to stop edition.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+F</string>
@@ -1224,7 +1224,7 @@ QDialogButtonBox QPushButton {
     <string>Adds circular curves with cursors</string>
    </property>
    <property name="statusTip">
-    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+double click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n\nPress ESC or click again on the toolbar button to stop edition.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+R</string>
@@ -1804,7 +1804,7 @@ QDialogButtonBox QPushButton {
     <string>Draws a smooth curve</string>
    </property>
    <property name="statusTip">
-    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+double click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n\nPress ESC or click again on the toolbar button to stop edition.</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
@@ -1828,7 +1828,7 @@ QDialogButtonBox QPushButton {
     <string>Draws straight curve</string>
    </property>
    <property name="statusTip">
-    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+double click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n\nPress ESC or click again on the toolbar button to stop edition.</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
@@ -1849,7 +1849,7 @@ QDialogButtonBox QPushButton {
     <string>Adds a math curve</string>
    </property>
    <property name="statusTip">
-    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+double click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n\nPress ESC or click again on the toolbar button to stop edition.</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
@@ -1870,7 +1870,7 @@ QDialogButtonBox QPushButton {
     <string>Adds a math curve with a cursor</string>
    </property>
    <property name="statusTip">
-    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n- Shift+double-click to resample curve (it means you transform the curve into many segments)\n\nPress ESC or click again on the toolbar button to stop edition.</string>
+    <string>Curves|In IanniX vocabulary, a curve is a spatial trajectory. A curve can have two functions: first, it is a support for cursors, defining where they are going on; secondly, it can be a variation of values read by cursors (intersection of cursor with the curve). Curves can be circular, segments of lines, Bézier curves or math equations.\n\nAfter creating a curve, you can edit it:\n- Double click on the path to add a point\n- Control+double click on a point of the curve to remove it (Command key for Mac users)\n- Double-click on a point to enable or disable smoothing\n\nPress ESC or click again on the toolbar button to stop edition.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+M</string>

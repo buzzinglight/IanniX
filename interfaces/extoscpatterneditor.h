@@ -19,6 +19,7 @@
 #ifndef EXTOSCPATTERNEDITOR_H
 #define EXTOSCPATTERNEDITOR_H
 
+#include <QCompleter>
 #include <QWidget>
 #include <QPlainTextEdit>
 #include <QDir>

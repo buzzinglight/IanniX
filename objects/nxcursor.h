@@ -92,7 +92,7 @@ public:
     }
     inline void drag(const NxPoint & translation, const NxPoint & mousePos, bool multipleObjects) {
         if((curve) && (!multipleObjects)) {
-            qreal snapSize = Global::objectSize;
+            qreal snapSize = Render::objectSize;
             qreal pos = curve->intersects(NxRect(mousePos - NxPoint(snapSize, snapSize), mousePos + NxPoint(snapSize, snapSize)));
             if(pos > 0) {
                 Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURSOR_TIME_PERCENT).arg(id).arg(pos), ExecuteSourceGui);
@@ -261,8 +261,8 @@ public:
 
     inline const NxPoint getCursorValue(const NxPoint & _pos) {
         if((boundsSourceMode == 2) || (!curve)) {
-            boundsSource = Global::axisArea;
-            boundsSource.translate(-Global::axisCenter);
+            boundsSource = Render::axisArea;
+            boundsSource.translate(-Render::axisCenter);
         }
         NxRect _boundsSource = boundsSource;
         if(_boundsSource.width() == 0)  _boundsSource.setWidth(0.0001);
@@ -370,12 +370,12 @@ public:
             }
         }
         else if((boundsSourceMode == 2) || (!curve)) {
-            boundsSource = Global::axisArea;
-            boundsSource.translate(-Global::axisCenter);
+            boundsSource = Render::axisArea;
+            boundsSource.translate(-Render::axisCenter);
         }
     }
     inline bool isMouseHover(const NxPoint & mouse) {
-        qreal snapSize = Global::objectSize;
+        qreal snapSize = Render::objectSize;
         NxRect mouseAdjusted = NxRect(mouse - NxPoint(snapSize, snapSize), mouse + NxPoint(snapSize, snapSize));
         if(mouseAdjusted.contains(cursorPos))
             return true;

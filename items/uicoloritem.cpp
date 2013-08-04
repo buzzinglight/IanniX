@@ -30,7 +30,7 @@ UiColorItem* UiColorItems::generateItem(const QString &name, const QColor &color
     if(doInsert)
         insert(item->name, item->color);
     if(fromGui)
-        Application::current->execute(QString("%1 %2 %3 %4 %5 %6").arg(COMMAND_GLOBAL_COLOR).arg(item->name).arg(item->color.red()).arg(item->color.green()).arg(item->color.blue()).arg(item->color.alpha()), ExecuteSourceInformative);
+        ApplicationExecute::current->execute(QString("%1 %2 %3 %4 %5 %6").arg(COMMAND_GLOBAL_COLOR).arg(item->name).arg(item->color.red()).arg(item->color.green()).arg(item->color.blue()).arg(item->color.alpha()), ExecuteSourceInformative);
     return item;
 }
 bool UiColorItems::update() {
@@ -91,7 +91,7 @@ const QVariant UiColorItems::setValue(const QString &key, const QVariant &valeur
     QColor color = valeur.value<QColor>();
     (*this)[key] = color;
     changes << key;
-    Application::current->execute(QString("%1 %2 %3 %4 %5 %6").arg(COMMAND_GLOBAL_COLOR).arg(key).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()), ExecuteSourceInformative);
+    ApplicationExecute::current->execute(QString("%1 %2 %3 %4 %5 %6").arg(COMMAND_GLOBAL_COLOR).arg(key).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()), ExecuteSourceInformative);
     dataChanged();
     return valeur;
 }

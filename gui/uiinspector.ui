@@ -1635,7 +1635,7 @@ POINTS</string>
                  <widget class="QPushButton" name="pointsLists">
                   <property name="minimumSize">
                    <size>
-                    <width>206</width>
+                    <width>103</width>
                     <height>22</height>
                    </size>
                   </property>
@@ -1644,6 +1644,22 @@ POINTS</string>
                   </property>
                   <property name="text">
                    <string>EDIT POINTS</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pointsResample">
+                  <property name="minimumSize">
+                   <size>
+                    <width>103</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Click here to manually edit curve points</string>
+                  </property>
+                  <property name="text">
+                   <string>RESAMPLE</string>
                   </property>
                  </widget>
                 </item>
@@ -4402,8 +4418,8 @@ padding: 0px;</string>
    <slot>actionCC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>93</x>
+     <y>56</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4482,8 +4498,8 @@ padding: 0px;</string>
    <slot>actionCC(QTreeWidgetItem*,int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>93</x>
+     <y>56</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -4514,8 +4530,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>50</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
@@ -4530,8 +4546,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>93</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
@@ -4546,8 +4562,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>93</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>282</x>
@@ -4562,8 +4578,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>63</y>
+     <x>50</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>78</x>
@@ -4594,8 +4610,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>120</y>
+     <x>186</x>
+     <y>121</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4610,8 +4626,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>120</y>
+     <x>266</x>
+     <y>121</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4626,8 +4642,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>120</y>
+     <x>346</x>
+     <y>121</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4642,8 +4658,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>123</y>
+     <x>186</x>
+     <y>158</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4658,8 +4674,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>123</y>
+     <x>266</x>
+     <y>158</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4674,8 +4690,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>126</y>
+     <x>186</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4690,8 +4706,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>126</y>
+     <x>266</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4802,8 +4818,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>128</y>
+     <x>257</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5090,8 +5106,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>122</y>
+     <x>98</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5106,8 +5122,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>132</y>
+     <x>221</x>
+     <y>436</y>
     </hint>
     <hint type="destinationlabel">
      <x>602</x>
@@ -5122,8 +5138,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>129</y>
+     <x>213</x>
+     <y>230</y>
     </hint>
     <hint type="destinationlabel">
      <x>553</x>
@@ -5138,8 +5154,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>204</x>
-     <y>132</y>
+     <x>305</x>
+     <y>339</y>
     </hint>
     <hint type="destinationlabel">
      <x>560</x>
@@ -5186,8 +5202,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>132</y>
+     <x>221</x>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
      <x>497</x>
@@ -5202,8 +5218,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>132</y>
+     <x>221</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
      <x>499</x>
@@ -5298,7 +5314,7 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>25</x>
+     <x>89</x>
      <y>65</y>
     </hint>
     <hint type="destinationlabel">
@@ -5314,8 +5330,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>86</y>
+     <x>141</x>
+     <y>56</y>
     </hint>
     <hint type="destinationlabel">
      <x>520</x>
@@ -5330,8 +5346,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>182</x>
-     <y>132</y>
+     <x>280</x>
+     <y>264</y>
     </hint>
     <hint type="destinationlabel">
      <x>702</x>
@@ -5400,6 +5416,22 @@ padding: 0px;</string>
     <hint type="destinationlabel">
      <x>815</x>
      <y>105</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pointsResample</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>242</x>
+     <y>221</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>677</x>
+     <y>195</y>
     </hint>
    </hints>
   </connection>

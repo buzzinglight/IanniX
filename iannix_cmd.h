@@ -43,6 +43,7 @@
 #define COMMAND_CURSOR_BOUNDS_TARGET        "setboundstarget"
 #define COMMAND_CURSOR_OFFSET               "setoffset"
 #define COMMAND_CURVE_EDITOR                "displaycurveeditor"
+#define COMMAND_CURVE_RESAMPLE              "displaycurveresample"
 #define COMMAND_CURVE_EQUATION              "setequation"
 #define COMMAND_CURVE_EQUATION_POINTS       "setequationnbpoints"
 #define COMMAND_CURVE_ELL                   "setpointsellipse"

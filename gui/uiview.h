@@ -112,7 +112,7 @@ public slots:
     void editingStart(const NxPoint &);
     void editingStop();
     void editingStopWithoutRemoval(bool isLoop = false);
-    void editingMove(const NxPoint &, bool add);
+    void editingMove(const NxPoint &, bool add, bool mouseState);
 
 
 signals:

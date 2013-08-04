@@ -28,7 +28,7 @@
 #include "misc/application.h"
 #include "objects/nxgroup.h"
 #include "interfaces/extscriptvariableask.h"
-#include "render/uirenderoptions.h"
+
 #include "gui/uimessagebox.h"
 #include "messages/messagemanagerloginterface.h"
 

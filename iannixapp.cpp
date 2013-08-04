@@ -17,6 +17,7 @@
 */
 
 #include <QFontDatabase>
+#include <QTextCodec>
 #include "iannixapp.h"
 #include "misc/help.h"
 #include "gui/uisplashscreen.h"
@@ -84,29 +85,29 @@ void IanniXApp::launch(int &argc, char **argv) {
     pathApplicationDir.cdUp();
 #endif
 #ifdef QT4
-    Global::pathDocuments   = QFileInfo(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + "/IanniX");
+    Application::pathDocuments   = QFileInfo(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + "/IanniX");
 #else
     UiRenderOptions::pathDocuments   = QFileInfo(QStandardPaths::DocumentsLocation + "/IanniX");
 #endif
-    Global::pathApplication = QFileInfo(pathApplicationDir.absolutePath());
-    Global::pathCurrent     = QFileInfo(QDir::currentPath());
-    if((Global::pathApplication.absoluteFilePath().endsWith("/IanniX-build-64")) || (Global::pathApplication.absoluteFilePath().endsWith("/IanniX-build-32")))
-        Global::pathApplication = QFileInfo(Global::pathApplication.absoluteFilePath().remove("-build-64").remove("-build-32"));
-    if(Global::pathApplication.absoluteFilePath().endsWith("/IanniX-build/release"))
-        Global::pathApplication = QFileInfo(Global::pathApplication.absoluteFilePath().remove("-build/release"));
-    if(Global::pathApplication.absoluteFilePath().endsWith("/IanniX-build"))
-        Global::pathApplication = QFileInfo(Global::pathApplication.absoluteFilePath().remove("-build"));
+    Application::pathApplication = QFileInfo(pathApplicationDir.absolutePath());
+    Application::pathCurrent     = QFileInfo(QDir::currentPath());
+    if((Application::pathApplication.absoluteFilePath().endsWith("/IanniX-build-64")) || (Application::pathApplication.absoluteFilePath().endsWith("/IanniX-build-32")))
+        Application::pathApplication = QFileInfo(Application::pathApplication.absoluteFilePath().remove("-build-64").remove("-build-32"));
+    if(Application::pathApplication.absoluteFilePath().endsWith("/IanniX-build/release"))
+        Application::pathApplication = QFileInfo(Application::pathApplication.absoluteFilePath().remove("-build/release"));
+    if(Application::pathApplication.absoluteFilePath().endsWith("/IanniX-build"))
+        Application::pathApplication = QFileInfo(Application::pathApplication.absoluteFilePath().remove("-build"));
 
     qDebug("Pathes");
-    qDebug("\tDocuments  : %s", qPrintable(Global::pathDocuments  .absoluteFilePath()));
-    qDebug("\tApplication: %s", qPrintable(Global::pathApplication.absoluteFilePath()));
-    qDebug("\tCurrent    : %s", qPrintable(Global::pathCurrent    .absoluteFilePath()));
+    qDebug("\tDocuments  : %s", qPrintable(Application::pathDocuments  .absoluteFilePath()));
+    qDebug("\tApplication: %s", qPrintable(Application::pathApplication.absoluteFilePath()));
+    qDebug("\tCurrent    : %s", qPrintable(Application::pathCurrent    .absoluteFilePath()));
     qDebug("Arguments");
     for(quint16 i = 0 ; i < argc ; i++) {
         qDebug("\t%2d=\t%s", i, argv[i]);
     }
     /*
-    if(Global::pathCurrent.absoluteFilePath().startsWith("/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX"))
+    if(Application::pathCurrent.absoluteFilePath().startsWith("/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX"))
         generateHelp();
     */
 
@@ -116,11 +117,11 @@ void IanniXApp::launch(int &argc, char **argv) {
     indexArgument = 0;
 #endif
     if(argc > indexArgument)
-        project = QFileInfo(Global::pathCurrent.absoluteFilePath() + "/" + argv[indexArgument]);
+        project = QFileInfo(Application::pathCurrent.absoluteFilePath() + "/" + argv[indexArgument]);
 
     //Add font
-    if(QFontDatabase::addApplicationFont(Global::pathApplication.absoluteFilePath() + "/Tools/Museo.ttf"))
-        qDebug("Loading IanniX font failed : %s", qPrintable(Global::pathApplication.absoluteFilePath() + "/Tools/Museo.ttf"));
+    if(QFontDatabase::addApplicationFont(Application::pathApplication.absoluteFilePath() + "/Tools/Museo.ttf"))
+        qDebug("Loading IanniX font failed : %s", qPrintable(Application::pathApplication.absoluteFilePath() + "/Tools/Museo.ttf"));
     //List of fonts
     if(false) {
         qDebug("[FONTS]");

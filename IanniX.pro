@@ -40,8 +40,8 @@ TEMPLATE  = app
 
 HEADERS  += iannix.h   iannixapp.h   iannix_spec.h  iannix_cmd.h
 SOURCES  += iannix.cpp iannixapp.cpp iannix_spec.cpp
-HEADERS  += misc/help.h   misc/application.h   misc/options.h
-SOURCES  += misc/help.cpp misc/application.cpp misc/options.cpp
+HEADERS  += misc/help.h   misc/application.h   misc/options.h   misc/applicationexecute.h
+SOURCES  += misc/help.cpp misc/application.cpp misc/options.cpp misc/applicationexecute.cpp
 
 HEADERS  += messages/messagemanagerlogmini.h   messages/messagemanagerlog.h   messages/messagemanager.h   messages/message.h   messages/messagemanagerloginterface.h
 SOURCES  += messages/messagemanagerlogmini.cpp messages/messagemanagerlog.cpp messages/messagemanager.cpp messages/message.cpp
@@ -51,8 +51,8 @@ HEADERS  += transport/transport.h   transport/uitimer.h   transport/uiabout.h   
 SOURCES  += transport/transport.cpp transport/uitimer.cpp transport/uiabout.cpp transport/uieditor.cpp
 FORMS    += transport/transport.ui  transport/uitimer.ui  transport/uiabout.ui  transport/uieditor.ui
 
-HEADERS  += render/uirender.h   render/uirenderpreview.h   render/uirenderoptions.h  
-SOURCES  += render/uirender.cpp render/uirenderpreview.cpp render/uirenderoptions.cpp
+HEADERS  += render/uirender.h   render/uirenderpreview.h
+SOURCES  += render/uirender.cpp render/uirenderpreview.cpp
 FORMS    += render/uirender.ui
 
 HEADERS  += geometry/nxpoint.h   geometry/nxrect.h   geometry/nxsize.h   geometry/nxline.h   geometry/nxpolygon.h   geometry/nxeasing.h

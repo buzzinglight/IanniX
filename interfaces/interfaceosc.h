@@ -1,6 +1,7 @@
 #ifndef INTERFACEOSC_H
 #define INTERFACEOSC_H
 
+#include <QTimer>
 #include <QWidget>
 #include <QByteArray>
 #include <QNetworkInterface>

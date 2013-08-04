@@ -1,9 +1,9 @@
 #ifndef UITEXTUREITEM_H
 #define UITEXTUREITEM_H
 
+#include "misc/applicationexecute.h"
 #include "uitreeview.h"
 #include "misc/options.h"
-#include "misc/application.h"
 #include "iannix_cmd.h"
 
 class UiTextureItem : public UiSyncItem {

@@ -36,7 +36,7 @@ void NxTrigger::initializeCustom() {
     setTextureActive  ("trigger_active");
     setTextureInactive("trigger_inactive");
     setTriggerOff(1);
-    setMessagePatterns("1," + Global::defaultMessageTrigger.val());
+    setMessagePatterns("1," + Application::defaultMessageTrigger.val());
 }
 
 void NxTrigger::paint() {
@@ -45,14 +45,14 @@ void NxTrigger::paint() {
         color = colorTrigged;
     else if(active) {
         if(colorActive.isEmpty())                                                                                   color = colorActiveColor;
-        else if((colorActive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorActive)))  color = Global::colors->value(Global::colorsPrefix() + colorActive);
-        else if(Global::colors->contains(colorActive))                                                              color = Global::colors->value(colorActive);
+        else if((colorActive.startsWith("_")) && (Render::colors->contains(Application::colorsPrefix() + colorActive)))  color = Render::colors->value(Application::colorsPrefix() + colorActive);
+        else if(Render::colors->contains(colorActive))                                                              color = Render::colors->value(colorActive);
         else                                                                                                        color = Qt::gray;
     }
     else {
         if(colorInactive.isEmpty())                                                                                     color = colorInactiveColor;
-        else if((colorInactive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorInactive)))  color = Global::colors->value(Global::colorsPrefix() + colorInactive);
-        else if(Global::colors->contains(colorInactive))                                                                color = Global::colors->value(colorInactive);
+        else if((colorInactive.startsWith("_")) && (Render::colors->contains(Application::colorsPrefix() + colorInactive)))  color = Render::colors->value(Application::colorsPrefix() + colorInactive);
+        else if(Render::colors->contains(colorInactive))                                                                color = Render::colors->value(colorInactive);
         else                                                                                                            color = Qt::gray;
     }
     color.setRgb (qBound(0., color.red()   * colorMultiplyColor.redF(),   255.),
@@ -61,20 +61,20 @@ void NxTrigger::paint() {
                   qBound(0., color.alpha() * colorMultiplyColor.alphaF(), 255.));
 
     //Size of trigger
-    if(cacheSize != Global::objectSize*size) {
-        cacheSize = Global::objectSize*size;
+    if(cacheSize != Render::objectSize*size) {
+        cacheSize = Render::objectSize*size;
         calcBoundingRect();
     }
 
     if((color.alpha() > 0) && (cacheSize > 0)) {
-        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_gui_object_hover");
-        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_gui_object_selection");
+        if(selectedHover)   color = Render::colors->value(Application::colorsPrefix() + "_gui_object_hover");
+        if(selected)        color = Render::colors->value(Application::colorsPrefix() + "_gui_object_selection");
 
         //Start
-        if(!Global::allowSelectionTriggers)
+        if(!Application::allowSelectionTriggers)
             color.setAlphaF(color.alphaF()/3);
 
-        if(Global::paintThisGroup)
+        if(Render::paintThisGroup)
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
@@ -82,19 +82,19 @@ void NxTrigger::paint() {
 
         glPushMatrix();
         glTranslatef(pos.x(), pos.y(), pos.z());
-        glRotatef(Global::rotation.z(), 0, 0, -1);
-        glRotatef(Global::rotation.x(), 0, -1, 0);
-        glRotatef(Global::rotation.y(), -1, 0, 0);
+        glRotatef(Render::rotation.z(), 0, 0, -1);
+        glRotatef(Render::rotation.x(), 0, -1, 0);
+        glRotatef(Render::rotation.y(), -1, 0, 0);
 
         //Label
-        if((Global::paintThisGroup) && (Global::paintLabel) && (!label.isEmpty()))
-            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id) + " - " + label, Global::renderFont);
+        if((Render::paintThisGroup) && (Application::paintLabel) && (!label.isEmpty()))
+            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id) + " - " + label, Application::renderFont);
         else if(selectedHover)
-            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id), Global::renderFont);
+            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id), Application::renderFont);
         if((selectedHover) && (!isDrag)) {
             qreal startY = -0.2 - cacheSize * 1.2;
             foreach(const QString & messageLabelItem, messageLabel) {
-                Application::render->renderText(cacheSize * 1.2, startY, 0, messageLabelItem, Global::renderFont);
+                Application::render->renderText(cacheSize * 1.2, startY, 0, messageLabelItem, Application::renderFont);
                 startY -= 0.4;
             }
         }
@@ -104,8 +104,8 @@ void NxTrigger::paint() {
         //Draw
         bool textureOk = false;
         QString textureName = (active)?(textureActive):(textureInactive);
-        if(Global::textures->contains(textureName)) {
-            UiRenderTexture *texture = Global::textures->value(textureName);
+        if(Render::textures->contains(textureName)) {
+            UiRenderTexture *texture = Render::textures->value(textureName);
             if((texture) && (texture->loaded) && (texture->mapping.width() != 0 ) && (texture->mapping.height() != 0)) {
                 textureOk = true;
                 glEnable(GL_TEXTURE_2D);

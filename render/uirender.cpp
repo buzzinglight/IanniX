@@ -19,10 +19,9 @@
 #include "uirender.h"
 #include "ui_uirender.h"
 
-UiRender::UiRender(QWidget *parent) :
-    Render(parent),
+UiRender::UiRender(QWidget *parent, QGLWidget *share) :
+    Render(parent, share),
     ui(new Ui::UiRender) {
-    firstLaunch = true;
     capturedFramesStart = false;
 
     setFocusPolicy(Qt::StrongFocus);
@@ -50,20 +49,12 @@ UiRender::UiRender(QWidget *parent) :
     scale = 1;
     scaleDest = 3;
 
-    //Render options
-    Application::render = this;
-    Global::renderFont = QFont("Arial");
-    Global::renderFont.setPixelSize(11);
-
-    setZoom(100);
-    rotateTo(NxPoint(0, 0, 0));
-
     //Refresh
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
 
-    snapBeforeKeyX = Global::mouseSnapX;
-    snapBeforeKeyY = Global::mouseSnapY;
+    snapBeforeKeyX = Application::mouseSnapX;
+    snapBeforeKeyY = Application::mouseSnapY;
 }
 UiRender::~UiRender() {
     delete ui;
@@ -94,24 +85,24 @@ bool UiRender::loadTexture(UiRenderTexture *texture, bool gl) {
             glDisable(GL_TEXTURE_2D);
             texture->originalSize = tex.size();
             texture->loaded = true;
-            Global::textures->update();
+            Render::textures->update();
             return true;
         }
     }
     else {
-        Global::textures->insert(texture->name, texture);
-        Global::textures->update();
+        Render::textures->insert(texture->name, texture);
+        Render::textures->update();
         return true;
     }
     return false;
 }
 bool UiRender::removeTexture(const QString &name) {
-    if(Global::textures->contains(name)) {
-        delete Global::textures->value(name);
-        Global::textures->remove(name);
+    if(Render::textures->contains(name)) {
+        delete Render::textures->value(name);
+        Render::textures->remove(name);
         return true;
     }
-    Global::textures->update();
+    Render::textures->update();
     return false;
 }
 
@@ -157,9 +148,9 @@ void UiRender::capture(qreal scaleFactor) {
 }
 bool UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
     renderSize = size() * scaleFactor;
-    Global::forceLists         = true;
-    Global::forceTexture       = true;
-    Global::forceFrustumInInit = true;
+    Render::forceLists         = true;
+    Render::forceTexture       = true;
+    Render::forceFrustumInInit = true;
 
     if(filename.isEmpty()) {
         QPixmap picture = renderPixmap(renderSize.width(), renderSize.height());
@@ -176,24 +167,24 @@ bool UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
         QDir().mkpath(QFileInfo(filename).absoluteDir().absolutePath());
         renderPixmap(renderSize.width(), renderSize.height()).save(filename);
     }
-    Global::forceLists         = false;
-    Global::forceTexture       = false;
-    Global::forceFrustumInInit = false;
+    Render::forceLists         = false;
+    Render::forceTexture       = false;
+    Render::forceFrustumInInit = false;
     return true;
 }
 
 void UiRender::centerOn(const NxPoint & center, bool force) {
-    Global::axisCenterDest = -center;
+    Render::axisCenterDest = -center;
     if(force)
-        Global::axisCenter = Global::axisCenterDest;
+        Render::axisCenter = Render::axisCenterDest;
     setZoom();
 }
 
 void UiRender::rotateTo(const NxPoint & rotation, bool force) {
-    Global::rotationDest = rotation;
-    emit(mouseRotationChanged(Global::rotationDest));
+    Render::rotationDest = rotation;
+    emit(mouseRotationChanged(Render::rotationDest));
     if(force)
-        Global::rotation = Global::rotationDest;
+        Render::rotation = Render::rotationDest;
     setZoom();
 }
 
@@ -238,7 +229,7 @@ void UiRender::resizeGL(int width, int height) {
     //Set viewport
     glViewport(0, 0, (GLint)width, (GLint)height);
 
-    if(Global::forceFrustumInInit)
+    if(Render::forceFrustumInInit)
         setFrustum();
 }
 
@@ -246,28 +237,28 @@ void UiRender::setFrustum() {
     qreal width  = renderSize.width();
     qreal height = renderSize.height();
     //Calculate area
-    Global::axisArea = NxRect(NxPoint(), NxSize(10, 10));
+    Render::axisArea = NxRect(NxPoint(), NxSize(10, 10));
     if(width > height) {
-        if(Global::axisArea.width() > -Global::axisArea.height())
-            Global::axisArea.setHeight(-Global::axisArea.width() * height/width);
+        if(Render::axisArea.width() > -Render::axisArea.height())
+            Render::axisArea.setHeight(-Render::axisArea.width() * height/width);
         else
-            Global::axisArea.setWidth(-Global::axisArea.height() * width/height);
+            Render::axisArea.setWidth(-Render::axisArea.height() * width/height);
     }
     else {
-        if(Global::axisArea.width() > -Global::axisArea.height())
-            Global::axisArea.setHeight(-Global::axisArea.width() * height/width);
+        if(Render::axisArea.width() > -Render::axisArea.height())
+            Render::axisArea.setHeight(-Render::axisArea.width() * height/width);
         else
-            Global::axisArea.setWidth(-Global::axisArea.height() * width/height);
+            Render::axisArea.setWidth(-Render::axisArea.height() * width/height);
     }
-    Global::axisArea.setWidth(Global::axisArea.width()   * Global::zoomLinear);
-    Global::axisArea.setHeight(Global::axisArea.height() * Global::zoomLinear);
-    Global::axisArea.translate(-NxPoint(Global::axisArea.size().width()/2, Global::axisArea.size().height()/2));
-    Global::axisArea.translate(-Global::axisCenter);
+    Render::axisArea.setWidth(Render::axisArea.width()   * Render::zoomLinear);
+    Render::axisArea.setHeight(Render::axisArea.height() * Render::zoomLinear);
+    Render::axisArea.translate(-NxPoint(Render::axisArea.size().width()/2, Render::axisArea.size().height()/2));
+    Render::axisArea.translate(-Render::axisCenter);
 
     //Set axis
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(Global::axisArea.left(), Global::axisArea.right(), Global::axisArea.bottom(), Global::axisArea.top(), 50, 650.0);
+    glFrustum(Render::axisArea.left(), Render::axisArea.right(), Render::axisArea.bottom(), Render::axisArea.top(), 50, 650.0);
     glMatrixMode(GL_MODELVIEW);
     //glLoadIdentity();
 }
@@ -275,36 +266,36 @@ void UiRender::setFrustum() {
 //Paint event
 void UiRender::paintGL() {
     if(!isRemoving) {
-        QMapIterator<QString, UiRenderTexture*> textureIterator(*Global::textures);
+        QMapIterator<QString, UiRenderTexture*> textureIterator(*Render::textures);
         while (textureIterator.hasNext()) {
             textureIterator.next();
-            if((!textureIterator.value()->loaded) || (Global::forceTexture))
+            if((!textureIterator.value()->loaded) || (Render::forceTexture))
                 loadTexture(textureIterator.value(), true);
         }
 
         //Intertial system
-        Global::axisCenter = Global::axisCenter + (Global::axisCenterDest - Global::axisCenter) / 3;
-        Global::zoomLinear = Global::zoomLinear + (Global::zoomLinearDest - Global::zoomLinear) / 3;
-        Global::rotation = Global::rotation + (Global::rotationDest - Global::rotation) / 6;
+        Render::axisCenter = Render::axisCenter + (Render::axisCenterDest - Render::axisCenter) / 3;
+        Render::zoomLinear = Render::zoomLinear + (Render::zoomLinearDest - Render::zoomLinear) / 3;
+        Render::rotation = Render::rotation + (Render::rotationDest - Render::rotation) / 6;
         //if(qAbs(UiRenderOptions::rotation.z() - UiRenderOptions::rotationDest.z()) > 360)
         //    UiRenderOptions::rotation.setZ(UiRenderOptions::rotationDest.z());
         translation = translation + (translationDest - translation) / 3;
         scale = scale + (scaleDest - scale) / 3;
 
         //Object sizes
-        Global::objectSize = 0.15 * ((1. - Global::objectsAutosize/100.) + (Global::zoomLinear/1.3)*(Global::objectsAutosize/100.));
+        Render::objectSize = 0.15 * ((1. - Application::objectsAutosize/100.) + (Render::zoomLinear/1.3)*(Application::objectsAutosize/100.));
 
-        if(!Global::forceFrustumInInit) {
+        if(!Render::forceFrustumInInit) {
             renderSize = size();
             setFrustum();
         }
 
         //Clear
-        qglClearColor(Global::colors->value(Global::colorsPrefix() + "_background"));
+        qglClearColor(Render::colors->value(Application::colorsPrefix() + "_background"));
         glClear(GL_COLOR_BUFFER_BIT);
 
         //Translation
-        Global::axisArea.translate(Global::axisCenter);
+        Render::axisArea.translate(Render::axisCenter);
 
         //Start drawing
         glPushMatrix();
@@ -312,25 +303,25 @@ void UiRender::paintGL() {
         //First operations
         glTranslatef(0.0, 0.0, -150);
 
-        if((Global::followId > 0) && (documentToRender) && (documentToRender->objects.contains(Global::followId)) && (documentToRender->objects.value(Global::followId)->getType() == ObjectsTypeCursor)) {
-            NxCursor *object = (NxCursor*)documentToRender->objects.value(Global::followId);
+        if((Application::followId > 0) && (documentToRender) && (documentToRender->objects.contains(Application::followId)) && (documentToRender->objects.value(Application::followId)->getType() == ObjectsTypeCursor)) {
+            NxCursor *object = (NxCursor*)documentToRender->objects.value(Application::followId);
             //rotationDest.setX(-object->getCurrentAngleRoll());
             //rotationDest.setY(-82 - object->getCurrentAnglePitch());
-            Global::rotationDest.setZ(-object->getCurrentAngle().z() + 90);
-            Global::rotation.setZ(Global::rotationDest.z());
+            Render::rotationDest.setZ(-object->getCurrentAngle().z() + 90);
+            Render::rotation.setZ(Render::rotationDest.z());
             translationDest = -object->getCurrentPos();
             //scaleDest = 1 * 5;
         }
-        glRotatef(Global::rotation.y(), 1, 0, 0);
-        glRotatef(Global::rotation.x(), 0, 1, 0);
-        glRotatef(Global::rotation.z(), 0, 0, 1);
+        glRotatef(Render::rotation.y(), 1, 0, 0);
+        glRotatef(Render::rotation.x(), 0, 1, 0);
+        glRotatef(Render::rotation.z(), 0, 0, 1);
         glScalef(scale, scale, scale);
         glTranslatef(translation.x(), translation.y(), translation.z());
 
-        if((Global::rotationDest.x() == 0) && (Global::rotationDest.y() == 0) && (Global::rotationDest.z() == 0))
-            Global::allowSelection = true;
+        if((Render::rotationDest.x() == 0) && (Render::rotationDest.y() == 0) && (Render::rotationDest.z() == 0))
+            Application::allowSelection = true;
         else
-            Global::allowSelection = false;
+            Application::allowSelection = false;
 
         //Start measure
         Transport::perfOpenGLRefreshTime += renderMeasure.elapsed() / 1000.0F;
@@ -352,9 +343,9 @@ void UiRender::paintGL() {
             //Browse groups
             foreach(NxGroup *group, documentToRender->groups) {
                 if(((!Application::current->isGroupSoloActive) && (group->isNotMuted())) || ((Application::current->isGroupSoloActive) && (group->isSolo())))
-                    Global::paintThisGroup = true;
+                    Render::paintThisGroup = true;
                 else
-                    Global::paintThisGroup = false;
+                    Render::paintThisGroup = false;
 
                 //Browse active/inactive objects
                 for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
@@ -364,11 +355,11 @@ void UiRender::paintGL() {
                         //Browse objects
                         foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                             //Draw the object
-                            bool oldPaintThisGroup = Global::paintThisGroup;
+                            bool oldPaintThisGroup = Render::paintThisGroup;
                             if(!(((!Application::current->isObjectSoloActive) && (object->isNotMuted())) || ((Application::current->isObjectSoloActive) && (object->isSolo()))))
-                                Global::paintThisGroup = false;
+                                Render::paintThisGroup = false;
                             object->paint();
-                            Global::paintThisGroup = oldPaintThisGroup;
+                            Render::paintThisGroup = oldPaintThisGroup;
                         }
                     }
                 }
@@ -424,13 +415,13 @@ void UiRender::paintGL() {
 
 //Draw background
 void UiRender::paintBackground() {
-    if(Global::textures->contains("background")) {
-        UiRenderTexture *texture = Global::textures->value("background");
+    if(Render::textures->contains("background")) {
+        UiRenderTexture *texture = Render::textures->value("background");
         if((texture) && (texture->loaded) && (texture->mapping.width() != 0) && (texture->mapping.height() != 0)) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, texture->texture);
             glBegin(GL_QUADS);
-            qglColor(Global::colors->value("background_texture_tint"));
+            qglColor(Render::colors->value("background_texture_tint"));
             glLineWidth(1);
             glTexCoord2d(0, 0); glVertex3f(texture->mapping.left() , texture->mapping.bottom(), 0);
             glTexCoord2d(1, 0); glVertex3f(texture->mapping.right(), texture->mapping.bottom(), 0);
@@ -445,176 +436,176 @@ void UiRender::paintBackground() {
 
 //Draw grid axis
 void UiRender::paintAxisGrid() {
-    if(Global::paintAxisGrid) {
+    if(Application::paintAxisGrid) {
         //Draw axis
-        Global::axisArea.translate(-Global::axisCenter);
+        Render::axisArea.translate(-Render::axisCenter);
 
-        for(qreal x = 0 ; x < ceil(Global::axisArea.right()) ; x += Global::axisGrid) {
-            if((x == 0) && (Global::paintAxisGrid)) {
-                if(Global::mouseSnapX)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_axisSnap"));
+        for(qreal x = 0 ; x < ceil(Render::axisArea.right()) ; x += Render::axisGrid) {
+            if((x == 0) && (Application::paintAxisGrid)) {
+                if(Application::mouseSnapX)
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_axisSnap"));
                 else
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_axis"));
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_axis"));
                 glLineWidth(2);
             }
             else {
-                if(Global::mouseSnapX)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_gridSnap"));
+                if(Application::mouseSnapX)
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_gridSnap"));
                 else
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_grid"));
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_grid"));
                 glLineWidth(1);
             }
             glBegin(GL_LINES);
-            glVertex3f(x, Global::axisArea.bottom(), 0);
-            glVertex3f(x, Global::axisArea.top(), 0);
+            glVertex3f(x, Render::axisArea.bottom(), 0);
+            glVertex3f(x, Render::axisArea.top(), 0);
             glEnd();
         }
-        for(qreal x = 0 ; x > floor(Global::axisArea.left()) ; x -= Global::axisGrid) {
-            if((x == 0) && (Global::paintAxisGrid)) {
-                if(Global::mouseSnapX)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_axisSnap"));
+        for(qreal x = 0 ; x > floor(Render::axisArea.left()) ; x -= Render::axisGrid) {
+            if((x == 0) && (Application::paintAxisGrid)) {
+                if(Application::mouseSnapX)
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_axisSnap"));
                 else
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_axis"));
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_axis"));
                 glLineWidth(2);
             }
             else {
-                if(Global::mouseSnapX)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_gridSnap"));
+                if(Application::mouseSnapX)
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_gridSnap"));
                 else
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_grid"));
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_grid"));
                 glLineWidth(1);
             }
             glBegin(GL_LINES);
-            glVertex3f(x, Global::axisArea.bottom(), 0);
-            glVertex3f(x, Global::axisArea.top(), 0);
+            glVertex3f(x, Render::axisArea.bottom(), 0);
+            glVertex3f(x, Render::axisArea.top(), 0);
             glEnd();
         }
-        for(qreal y = 0 ; y < ceil(Global::axisArea.top()) ; y += Global::axisGrid) {
-            if((y == 0) && (Global::paintAxisGrid)) {
-                if(Global::mouseSnapY)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_axisSnap"));
+        for(qreal y = 0 ; y < ceil(Render::axisArea.top()) ; y += Render::axisGrid) {
+            if((y == 0) && (Application::paintAxisGrid)) {
+                if(Application::mouseSnapY)
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_axisSnap"));
                 else
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_axis"));
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_axis"));
                 glLineWidth(2);
             }
             else {
-                if(Global::mouseSnapY)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_gridSnap"));
+                if(Application::mouseSnapY)
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_gridSnap"));
                 else
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_grid"));
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_grid"));
                 glLineWidth(1);
             }
             glBegin(GL_LINES);
-            glVertex3f(Global::axisArea.left(), y, 0);
-            glVertex3f(Global::axisArea.right(), y, 0);
+            glVertex3f(Render::axisArea.left(), y, 0);
+            glVertex3f(Render::axisArea.right(), y, 0);
             glEnd();
         }
-        for(qreal y = 0 ; y > floor(Global::axisArea.bottom()) ; y -= Global::axisGrid) {
-            if((y == 0) && (Global::paintAxisGrid)) {
-                if(Global::mouseSnapY)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_axisSnap"));
+        for(qreal y = 0 ; y > floor(Render::axisArea.bottom()) ; y -= Render::axisGrid) {
+            if((y == 0) && (Application::paintAxisGrid)) {
+                if(Application::mouseSnapY)
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_axisSnap"));
                 else
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_axis"));
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_axis"));
                 glLineWidth(2);
             }
             else {
-                if(Global::mouseSnapY)
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_gridSnap"));
+                if(Application::mouseSnapY)
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_gridSnap"));
                 else
-                    qglColor(Global::colors->value(Global::colorsPrefix() + "_grid"));
+                    qglColor(Render::colors->value(Application::colorsPrefix() + "_grid"));
                 glLineWidth(1);
             }
             glBegin(GL_LINES);
-            glVertex3f(Global::axisArea.left(), y, 0);
-            glVertex3f(Global::axisArea.right(), y, 0);
+            glVertex3f(Render::axisArea.left(), y, 0);
+            glVertex3f(Render::axisArea.right(), y, 0);
             glEnd();
         }
 
-        Global::axisArea.translate(Global::axisCenter);
+        Render::axisArea.translate(Render::axisCenter);
     }
 }
 
 //Draw selection
 void UiRender::paintSelection() {
     //Axis color
-    qglColor(Global::colors->value(Global::colorsPrefix() + "_gui_selection"));
+    qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_selection"));
     glLineWidth(1);
 
     //Draw axis
     glBegin(GL_QUADS);
-    glVertex3f(Global::selectionArea.left(),  Global::selectionArea.top(), 0);
-    glVertex3f(Global::selectionArea.right(), Global::selectionArea.top(), 0);
-    glVertex3f(Global::selectionArea.right(), Global::selectionArea.bottom(), 0);
-    glVertex3f(Global::selectionArea.left(),  Global::selectionArea.bottom(), 0);
-    glVertex3f(Global::selectionArea.left(),  Global::selectionArea.top(), 0);
+    glVertex3f(Render::selectionArea.left(),  Render::selectionArea.top(), 0);
+    glVertex3f(Render::selectionArea.right(), Render::selectionArea.top(), 0);
+    glVertex3f(Render::selectionArea.right(), Render::selectionArea.bottom(), 0);
+    glVertex3f(Render::selectionArea.left(),  Render::selectionArea.bottom(), 0);
+    glVertex3f(Render::selectionArea.left(),  Render::selectionArea.top(), 0);
     glEnd();
 }
 
 
 void UiRender::wheelEvent(QWheelEvent *event) {
-    bool mouse3D = event->modifiers() & Qt::AltModifier;
+    bool mouse3D = ((event->modifiers() & Qt::AltModifier) == Qt::AltModifier) && !((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier);
 
     //Zoom calculation
     if(mouse3D) {
         scaleDest = qMax((qreal)0, scale - (qreal)event->delta() / 150.0F);
         //refresh();
     }
-    else if(event->modifiers() & Qt::ShiftModifier) Application::current->execute(QString("%1 %2").arg(COMMAND_ZOOM).arg(Global::zoomValue - (qreal)event->delta() / 3.0F), ExecuteSourceGui);
-    else                                            Application::current->execute(QString("%1 %2").arg(COMMAND_ZOOM).arg(Global::zoomValue - (qreal)event->delta() / 15.0F), ExecuteSourceGui);
+    else if(event->modifiers() & Qt::ShiftModifier) Application::current->execute(QString("%1 %2").arg(COMMAND_ZOOM).arg(Render::zoomValue - (qreal)event->delta() / 3.0F), ExecuteSourceGui);
+    else                                            Application::current->execute(QString("%1 %2").arg(COMMAND_ZOOM).arg(Render::zoomValue - (qreal)event->delta() / 15.0F), ExecuteSourceGui);
 }
 void UiRender::mousePressEvent(QMouseEvent *event) {
     //Save state when pressed
     mousePressedRawPos = NxPoint(event->pos().x(), event->pos().y());
     //Mouse position
-    mousePressedAreaPosNoCenter = NxPoint((event->pos().x() - (qreal)size().width()/2) / (qreal)size().width() * Global::axisArea.width(), (event->pos().y() - (qreal)size().height()/2) / (qreal)size().height() * Global::axisArea.height());
-    mousePressedAreaPos = mousePressedAreaPosNoCenter - Global::axisCenter;
-    if(Global::mouseSnapX) {
-        mousePressedAreaPosNoCenter.setX(qRound(mousePressedAreaPosNoCenter.x() / Global::axisGrid) * Global::axisGrid);
-        mousePressedAreaPos.setX(qRound(mousePressedAreaPos.x() / Global::axisGrid) * Global::axisGrid);
+    mousePressedAreaPosNoCenter = NxPoint((event->pos().x() - (qreal)size().width()/2) / (qreal)size().width() * Render::axisArea.width(), (event->pos().y() - (qreal)size().height()/2) / (qreal)size().height() * Render::axisArea.height());
+    mousePressedAreaPos = mousePressedAreaPosNoCenter - Render::axisCenter;
+    if(Application::mouseSnapX) {
+        mousePressedAreaPosNoCenter.setX(qRound(mousePressedAreaPosNoCenter.x() / Render::axisGrid) * Render::axisGrid);
+        mousePressedAreaPos.setX(qRound(mousePressedAreaPos.x() / Render::axisGrid) * Render::axisGrid);
     }
-    if(Global::mouseSnapY) {
-        mousePressedAreaPosNoCenter.setY(qRound(mousePressedAreaPosNoCenter.y() / Global::axisGrid) * Global::axisGrid);
-        mousePressedAreaPos.setY(qRound(mousePressedAreaPos.y() / Global::axisGrid) * Global::axisGrid);
+    if(Application::mouseSnapY) {
+        mousePressedAreaPosNoCenter.setY(qRound(mousePressedAreaPosNoCenter.y() / Render::axisGrid) * Render::axisGrid);
+        mousePressedAreaPos.setY(qRound(mousePressedAreaPos.y() / Render::axisGrid) * Render::axisGrid);
     }
 
     mousePressed = true;
-    mousePressedAxisCenter = Global::axisCenter;
-    mouseCommand = (event->modifiers() & Qt::ControlModifier);
+    mousePressedAxisCenter = Render::axisCenter;
+    mouseControl = (event->modifiers() & Qt::ControlModifier);
     mouseShift = (event->modifiers() & Qt::ShiftModifier);
-    rotationDrag = Global::rotation;
+    rotationDrag = Render::rotation;
     translationDrag = translation;
 
     if(cursor().shape() == Qt::BlankCursor)
         return;
 
     //Start area selection
-    if((Global::editing) && (Global::allowSelection)) {
+    if((Render::editing) && (Application::allowSelection)) {
         foreach(NxObject *selected, selection)
             selected->setSelected(false);
         selection.clear();
         //selectedHover->setSelected(true);   /// select this one
         //selectionAdd(selectedHover);
-        if(Global::editingMode == EditingModeFree) {
+        if(Render::editingMode == EditingModeFree) {
             //emit(editingStart(mousePressedAreaPos));
-            if(Global::editingFirstPoint)
+            if(Render::editingFirstPoint)
                 emit(editingStart(mousePressedAreaPos));
             else
-                emit(editingMove(mousePressedAreaPos, true));
+                emit(editingMove(mousePressedAreaPos, true, false));
         }
-        else if(Global::editingMode == EditingModePoint) {
-            if(Global::editingFirstPoint)
+        else if(Render::editingMode == EditingModePoint) {
+            if(Render::editingFirstPoint)
                 emit(editingStart(mousePressedAreaPos));
             else
-                emit(editingMove(mousePressedAreaPos, true));
+                emit(editingMove(mousePressedAreaPos, true, false));
         }
-        else if(Global::editingMode == EditingModeTriggers)
+        else if(Render::editingMode == EditingModeTriggers)
             emit(editingStart(mousePressedAreaPos));
-        else if(Global::editingMode == EditingModeCircle)
+        else if(Render::editingMode == EditingModeCircle)
             emit(editingStart(mousePressedAreaPos));
-        Global::editingFirstPoint = false;
+        Render::editingFirstPoint = false;
     }
     /*
-    else if(!Global::allowSelection) {
+    else if(!Application::allowSelection) {
         foreach(NxObject *selected, selection)
             selected->setSelected(false);
         selection.clear();
@@ -626,8 +617,8 @@ void UiRender::mousePressEvent(QMouseEvent *event) {
     */
     else {
         if(mouseShift) {
-            Global::selectionArea.setTopLeft(mousePressedAreaPos);
-            Global::selectionArea.setBottomRight(mousePressedAreaPos);
+            Render::selectionArea.setTopLeft(mousePressedAreaPos);
+            Render::selectionArea.setBottomRight(mousePressedAreaPos);
             if(cursor().shape() != Qt::BlankCursor)
                 setCursor(Qt::CrossCursor);
         } else if (selectedHover) {
@@ -645,7 +636,7 @@ void UiRender::mousePressEvent(QMouseEvent *event) {
 }
 void UiRender::mouseReleaseEvent(QMouseEvent *event) {
     //Edition
-    if((Global::editing) && (Global::allowSelection) && (cursor().shape() != Qt::BlankCursor)) {
+    if((Render::editing) && (Application::allowSelection) && (cursor().shape() != Qt::BlankCursor)) {
         /*
         if(editingMode == EditingModeFree) {
             emit(editingStop());
@@ -653,7 +644,7 @@ void UiRender::mouseReleaseEvent(QMouseEvent *event) {
         }
         */
     }
-    else if((cursor().shape() != Qt::BlankCursor) && (Global::allowSelection)) {
+    else if((cursor().shape() != Qt::BlankCursor) && (Application::allowSelection)) {
         //Copy area selection
         foreach(NxObject *selected, selectionRect)
             selectionAdd(selected);
@@ -692,8 +683,8 @@ void UiRender::mouseReleaseEvent(QMouseEvent *event) {
     mousePressed = false;
     mouseShift = false;
     mouseObjectDrag = false;
-    Global::selectionArea.setSize(NxSize(0, 0));
-    if((cursor().shape() != Qt::BlankCursor) && !((Global::editing) && ((Global::editingMode == EditingModeFree) || (Global::editingMode == EditingModePoint) || (Global::editingMode == EditingModeTriggers) || (Global::editingMode == EditingModeCircle)))) {
+    Render::selectionArea.setSize(NxSize(0, 0));
+    if((cursor().shape() != Qt::BlankCursor) && !((Render::editing) && ((Render::editingMode == EditingModeFree) || (Render::editingMode == EditingModePoint) || (Render::editingMode == EditingModeTriggers) || (Render::editingMode == EditingModeCircle)))) {
         if(mouseShift)
             setCursor(Qt::CrossCursor);
         else
@@ -701,33 +692,27 @@ void UiRender::mouseReleaseEvent(QMouseEvent *event) {
     }
 }
 void UiRender::mouseMoveEvent(QMouseEvent *event) {
-    /*
-    if((event->modifiers() & Qt::AltModifier) & (event->modifiers() & Qt::AltModifier)) {
-        Global::mouseSnapY = Global::mouseSnapX = ;
-    }
-    */
-
     //Mouse position
-    bool mouse3D = event->modifiers() & Qt::AltModifier;
-    NxPoint mousePosNoCenter = NxPoint((event->pos().x() - (qreal)size().width()/2) / (qreal)size().width() * Global::axisArea.width(), (event->pos().y() - (qreal)size().height()/2) / (qreal)size().height() * Global::axisArea.height());
-    NxPoint mousePos = mousePosNoCenter - Global::axisCenter, mousePosBackup = mousePos;
+    bool mouse3D = ((event->modifiers() & Qt::AltModifier) == Qt::AltModifier) && !((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier);
+    NxPoint mousePosNoCenter = NxPoint((event->pos().x() - (qreal)size().width()/2) / (qreal)size().width() * Render::axisArea.width(), (event->pos().y() - (qreal)size().height()/2) / (qreal)size().height() * Render::axisArea.height());
+    NxPoint mousePos = mousePosNoCenter - Render::axisCenter, mousePosBackup = mousePos;
     NxPoint deltaMouseRaw = NxPoint(event->pos().x(), event->pos().y()) - mousePressedRawPos;
 
-    if(Global::mouseSnapX)  mousePos.setX(qRound(mousePos.x() / Global::axisGrid) * Global::axisGrid);
-    if(Global::mouseSnapY)  mousePos.setY(qRound(mousePos.y() / Global::axisGrid) * Global::axisGrid);
+    if(Application::mouseSnapX)  mousePos.setX(qRound(mousePos.x() / Render::axisGrid) * Render::axisGrid);
+    if(Application::mouseSnapY)  mousePos.setY(qRound(mousePos.y() / Render::axisGrid) * Render::axisGrid);
     bool noSelection = true;
     emit(mousePosChanged(mousePos));
 
-    if((Global::editing) && (cursor().shape() != Qt::BlankCursor) && (Global::allowSelection)) {
-        if((mousePressed) && (Global::editingMode == EditingModeFree))
-            emit(editingMove(mousePos, true));
-        else if((!Global::editingFirstPoint) && ((Global::editingMode == EditingModeFree) || (Global::editingMode == EditingModePoint))){
-            emit(editingMove(mousePos, false));
+    if((Render::editing) && (cursor().shape() != Qt::BlankCursor) && (Application::allowSelection)) {
+        if((mousePressed) && (Render::editingMode == EditingModeFree))
+            emit(editingMove(mousePos, true, mousePressed));
+        else if((!Render::editingFirstPoint) && ((Render::editingMode == EditingModeFree) || (Render::editingMode == EditingModePoint))){
+            emit(editingMove(mousePos, false, mousePressed));
         }
     }
     else {
         //Cursor
-        if((cursor().shape() != Qt::BlankCursor) && (Global::allowSelection)) {
+        if((cursor().shape() != Qt::BlankCursor) && (Application::allowSelection)) {
             if((mouseShift) && (mousePressed))              setCursor(Qt::CrossCursor);
             else if((selectedHover) && (!mousePressed))     setCursor(Qt::PointingHandCursor);
             else if((!selectedHover) && (mousePressed))     setCursor(Qt::ClosedHandCursor);
@@ -743,10 +728,10 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                     Application::current->execute(QString("%1 %2 %3 %4").arg(COMMAND_ROTATE).arg(newRotation.x()).arg(newRotation.y()).arg(newRotation.z()), ExecuteSourceGui);
                 }
             }
-            else if((mouseShift) && (Global::allowSelection) && (cursor().shape() != Qt::BlankCursor)) {
-                Global::selectionArea.setBottomRight(mousePos);
+            else if((mouseShift) && (Application::allowSelection) && (cursor().shape() != Qt::BlankCursor)) {
+                Render::selectionArea.setBottomRight(mousePos);
             }
-            else if((!Global::allowLockPos) && (Global::allowSelection) && ((selection.contains(selectedHover)) || (selectedHover) || (mouseObjectDrag)) && (!mouseCommand) && (cursor().shape() != Qt::BlankCursor)) {
+            else if((!Application::allowLockPos) && (Application::allowSelection) && ((selection.contains(selectedHover)) || (selectedHover) || (mouseObjectDrag)) && (cursor().shape() != Qt::BlankCursor)) {
                 if(!mouseObjectDrag) {
                     mouseObjectDrag = true;
                     Application::current->pushSnapshot();
@@ -756,8 +741,8 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                 }
                 NxPoint dragTranslation = mousePos - mousePressedAreaPos;
                 if(selectedHover) {
-                    if(Global::mouseSnapX)  dragTranslation.setX(qRound((selectedHover->getPosDrag().x() + dragTranslation.x()) / Global::axisGrid) * Global::axisGrid - selectedHover->getPosDrag().x());
-                    if(Global::mouseSnapY)  dragTranslation.setY(qRound((selectedHover->getPosDrag().y() + dragTranslation.y()) / Global::axisGrid) * Global::axisGrid - selectedHover->getPosDrag().y());
+                    if(Application::mouseSnapX)  dragTranslation.setX(qRound((selectedHover->getPosDrag().x() + dragTranslation.x()) / Render::axisGrid) * Render::axisGrid - selectedHover->getPosDrag().x());
+                    if(Application::mouseSnapY)  dragTranslation.setY(qRound((selectedHover->getPosDrag().y() + dragTranslation.y()) / Render::axisGrid) * Render::axisGrid - selectedHover->getPosDrag().y());
                 }
                 foreach(NxObject* object, selection)
                     object->drag(dragTranslation, mousePos, selection.count() > 1);
@@ -770,7 +755,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
         }
 
         mousePos = mousePosBackup;
-        if((documentToRender) && (cursor().shape() != Qt::BlankCursor) && (Global::allowSelection) && (!Global::allowLockPos)) {
+        if((documentToRender) && (cursor().shape() != Qt::BlankCursor) && (Application::allowSelection) && (!Application::allowLockPos)) {
             UiRenderSelection eligibleSelection;
 
             //Browse documents
@@ -782,7 +767,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                         //Browse all types of objects
                         for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
                             //Are objects visible ?
-                            if(((typeIterator == ObjectsTypeCursor) && (Global::allowSelectionCursors)) || ((typeIterator == ObjectsTypeCurve) && (Global::allowSelectionCurves)) || ((typeIterator == ObjectsTypeTrigger) && (Global::allowSelectionTriggers))) {
+                            if(((typeIterator == ObjectsTypeCursor) && (Application::allowSelectionCursors)) || ((typeIterator == ObjectsTypeCurve) && (Application::allowSelectionCurves)) || ((typeIterator == ObjectsTypeTrigger) && (Application::allowSelectionTriggers))) {
                                 //Browse objects
                                 foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                                     //Is Z visible ?
@@ -796,11 +781,11 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                                         }
 
                                         //Add the object to selection if click+shift
-                                        if((mouseShift) || (mouseCommand)) {
+                                        if((mouseShift) || (mouseControl)) {
                                             NxRect objectBoundingRect = object->getBoundingRect();
                                             if(objectBoundingRect.width() == 0)  objectBoundingRect.setWidth(0.001);
                                             if(objectBoundingRect.height() == 0) objectBoundingRect.setHeight(0.001);
-                                            if(Global::selectionArea.intersects(objectBoundingRect)) {
+                                            if(Render::selectionArea.intersects(objectBoundingRect)) {
                                                 selectionRect.append(object);
                                                 object->setSelected(true);
                                             }
@@ -824,7 +809,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
                     if(curve->isMouseHover(mousePos)) {
                         selected = true;
                         if(curve->getSelected()) {
-                            qreal squareSize = (0.15 * Global::zoomLinear) / 2;
+                            qreal squareSize = (0.15 * Render::zoomLinear) / 2;
                             curve->isOnPathPoint(NxRect(mousePos - NxPoint(squareSize, squareSize, squareSize) - curve->getPos(), mousePos + NxPoint(squareSize, squareSize, squareSize) - curve->getPos()));
                         }
                     }
@@ -849,11 +834,11 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
         }
     }
 
-    if(((selectedHover) && (selectedHover->getType() == ObjectsTypeCurve)) || ((Global::editing) && ((Global::editingMode == EditingModeFree) || (Global::editingMode == EditingModePoint) || (Global::editingMode == EditingModeCircle))))
+    if(((selectedHover) && (selectedHover->getType() == ObjectsTypeCurve)) || ((Render::editing) && ((Render::editingMode == EditingModeFree) || (Render::editingMode == EditingModePoint) || (Render::editingMode == EditingModeCircle))))
         changeStatus(curveStatusTip);
     else if((selectedHover) && (selectedHover->getType() == ObjectsTypeCursor))
         changeStatus(cursorStatusTip);
-    else if(((selectedHover) && (selectedHover->getType() == ObjectsTypeTrigger)) || ((Global::editing) && (Global::editingMode == EditingModeTriggers)))
+    else if(((selectedHover) && (selectedHover->getType() == ObjectsTypeTrigger)) || ((Render::editing) && (Render::editingMode == EditingModeTriggers)))
         changeStatus(triggerStatusTip);
     else
         changeStatus(defaultStatusTip);
@@ -866,7 +851,7 @@ void UiRender::changeStatus(const QString &_statusTip) {
 }
 
 void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
-    bool mouse3D      = event->modifiers() & Qt::AltModifier;
+    bool mouse3D = ((event->modifiers() & Qt::AltModifier) == Qt::AltModifier) && !((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier);
     bool mouseControl = event->modifiers() & Qt::ControlModifier;
     bool mouseShift   = event->modifiers() & Qt::ShiftModifier;
 
@@ -880,21 +865,12 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
         if(cursor().shape() == Qt::BlankCursor)
             return;
 
-        else if((Global::editing) && (Global::allowSelection)) {
+        else if((Render::editing) && (Application::allowSelection)) {
             emit(editingStop());
-            Global::editing = false;
-        }
-        else if((selectedHover) && (event->modifiers() & Qt::ShiftModifier) && (selectedHover->getType() == ObjectsTypeCurve)) {
-            bool ok = false;
-            NxCurve *curve = (NxCurve*)selectedHover;
-            quint16 nbPoints = (new UiMessageBox())->getDouble(tr("IanniX Curve Resample"), tr("Number of points:"), QPixmap(":/infos/res_info_curve.png"), 50, 0, 32767, 1, 0, "", &ok);
-            if(ok) {
-                Application::current->pushSnapshot();
-                curve->resample(nbPoints);
-            }
+            Render::editing = false;
         }
         else if(selectedHover) {
-            if((Global::allowSelection) && (selectedHover->getType() == ObjectsTypeCurve)) {
+            if((Application::allowSelection) && (selectedHover->getType() == ObjectsTypeCurve)) {
                 NxCurve *curve = (NxCurve*)selectedHover;
                 curve->addMousePointAt(mousePressedAreaPos, mouseControl);
             }
@@ -909,17 +885,14 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
 void UiRender::keyPressEvent(QKeyEvent *event) {
     qreal translationUnit = 0.1;
 
-    if(((event->modifiers() & Qt::AltModifier) == Qt::AltModifier) && ((event->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier)) {
-        snapBeforeKeyX = Global::mouseSnapX;
-        snapBeforeKeyY = Global::mouseSnapY;
-        Global::mouseSnapY = Global::mouseSnapX = true;
+    if(((event->modifiers() & Qt::AltModifier) == Qt::AltModifier) && ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)) {
+        snapBeforeKeyX = Application::mouseSnapX;
+        snapBeforeKeyY = Application::mouseSnapY;
+        Application::mouseSnapY = Application::mouseSnapX = true;
     }
 
-
-    if((event->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
+    if((event->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier)
         translationUnit = 1;
-        //setCursor(Qt::CrossCursor);
-    }
 
     NxPoint translation;
     if(event->key() == Qt::Key_Left)
@@ -937,7 +910,7 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
     }
     else if(event->key() == Qt::Key_Escape) {
         emit(editingStop());
-        Global::editing = false;
+        Render::editing = false;
     }
 
     if((selection.count() > 0) && ((translation.x() != 0) || (translation.y() != 0))) {
@@ -946,14 +919,14 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
         emit(selectionChanged());
     }
     else {
-        NxPoint newCenter = -(Global::axisCenterDest + translation);
-        if(newCenter != -Global::axisCenterDest)
+        NxPoint newCenter = -(Render::axisCenterDest + translation);
+        if(newCenter != -Render::axisCenterDest)
             Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CENTER).arg(newCenter.x()).arg(newCenter.y()), ExecuteSourceGui);
     }
 }
 void UiRender::keyReleaseEvent(QKeyEvent *) {
-    Global::mouseSnapX = snapBeforeKeyX;
-    Global::mouseSnapY = snapBeforeKeyY;
+    Application::mouseSnapX = snapBeforeKeyX;
+    Application::mouseSnapY = snapBeforeKeyY;
 }
 
 bool UiRender::event(QEvent *event) {
@@ -965,7 +938,7 @@ bool UiRender::event(QEvent *event) {
             if(gesture->gestureType() == Qt::PinchGesture) {
                 QPinchGesture *pinch = (QPinchGesture*)gesture;
                 if(pinch->state() == Qt::GestureStarted)
-                    pinchValue = Global::zoomValue;
+                    pinchValue = Render::zoomValue;
                 setZoom(pinchValue * 1.0F / pinch->scaleFactor());
             }
         }
@@ -1043,19 +1016,19 @@ void UiRender::selectionAdd(NxObject *object) {
 }
 
 void UiRender::setZoom() {
-    Global::zoomLinearDest = qMax((qreal)0.01, Global::zoomValue / 100.F);
-    emit(mouseZoomChanged(100.0F / Global::zoomLinearDest));
-    Global::zoomLinearDest *= 1.3;
+    Render::zoomLinearDest = qMax((qreal)0.01, Render::zoomValue / 100.F);
+    emit(mouseZoomChanged(100.0F / Render::zoomLinearDest));
+    Render::zoomLinearDest *= 1.3;
 }
 void UiRender::setZoom(qreal axisZoom) {
-    Global::zoomValue = qMax((qreal)0, axisZoom);
+    Render::zoomValue = qMax((qreal)0, axisZoom);
     setZoom();
 }
 void UiRender::zoomIn() {
-    setZoom(Global::zoomValue - 5);
+    setZoom(Render::zoomValue - 5);
 }
 void UiRender::zoomOut() {
-    setZoom(Global::zoomValue + 5);
+    setZoom(Render::zoomValue + 5);
 }
 void UiRender::zoomInitial() {
     setZoom(100);
@@ -1096,7 +1069,7 @@ void UiRender::actionSelect_all() {
                     for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
 
                         //Are objects visible ?
-                        if(((typeIterator == ObjectsTypeCursor) && (Global::allowSelectionCursors)) || ((typeIterator == ObjectsTypeCurve) && (Global::allowSelectionCurves)) || ((typeIterator == ObjectsTypeTrigger) && (Global::allowSelectionTriggers))) {
+                        if(((typeIterator == ObjectsTypeCursor) && (Application::allowSelectionCursors)) || ((typeIterator == ObjectsTypeCurve) && (Application::allowSelectionCurves)) || ((typeIterator == ObjectsTypeTrigger) && (Application::allowSelectionTriggers))) {
                             //Browse objects
                             foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                                 //Is Z visible ?

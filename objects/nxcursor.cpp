@@ -66,7 +66,7 @@ void NxCursor::initializeCustom() {
     setWidth(1);
     setDepth(0.5);
     setTimeLocal(0);
-    setMessagePatterns("20," + Global::defaultMessageCursor.val());
+    setMessagePatterns("20," + Application::defaultMessageCursor.val());
 }
 NxCursor::~NxCursor() {
     glDeleteLists(glListCursor, 1);
@@ -260,14 +260,14 @@ void NxCursor::paint() {
     //Color
     if(active) {
         if(colorActive.isEmpty())                                                                                       color = colorActiveColor;
-        else if((colorActive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorActive)))      color = Global::colors->value(Global::colorsPrefix() + colorActive);
-        else if(Global::colors->contains(colorActive))                                                                  color = Global::colors->value(colorActive);
+        else if((colorActive.startsWith("_")) && (Render::colors->contains(Application::colorsPrefix() + colorActive)))      color = Render::colors->value(Application::colorsPrefix() + colorActive);
+        else if(Render::colors->contains(colorActive))                                                                  color = Render::colors->value(colorActive);
         else                                                                                                            color = Qt::gray;
     }
     else {
         if(colorInactive.isEmpty())                                                                                     color = colorInactiveColor;
-        else if((colorInactive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorInactive)))  color = Global::colors->value(Global::colorsPrefix() + colorInactive);
-        else if(Global::colors->contains(colorInactive))                                                                color = Global::colors->value(colorInactive);
+        else if((colorInactive.startsWith("_")) && (Render::colors->contains(Application::colorsPrefix() + colorInactive)))  color = Render::colors->value(Application::colorsPrefix() + colorInactive);
+        else if(Render::colors->contains(colorInactive))                                                                color = Render::colors->value(colorInactive);
         else                                                                                                            color = Qt::gray;
     }
     color.setRgb (qBound(0., color.red()   * colorMultiplyColor.redF(),   255.),
@@ -277,14 +277,14 @@ void NxCursor::paint() {
 
     if(color.alpha() > 0) {
         //Mouse hover
-        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_gui_object_hover");
-        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_gui_object_selection");
+        if(selectedHover)   color = Render::colors->value(Application::colorsPrefix() + "_gui_object_hover");
+        if(selected)        color = Render::colors->value(Application::colorsPrefix() + "_gui_object_selection");
 
         //Start
-        if(!Global::paintThisGroup)
+        if(!Render::paintThisGroup)
             color.setAlphaF(0.1);
 
-        if(!Global::allowSelectionCursors)
+        if(!Application::allowSelectionCursors)
             color.setAlphaF(color.alphaF()/3);
 
         glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
@@ -292,14 +292,14 @@ void NxCursor::paint() {
         //Cursor chasse-neige
         if((0.0F <= time) && (time <= 1.0F) && (start.count()) && (start.at(nbLoop % start.count()) != 0)) {
             //Label
-            if((Global::paintThisGroup) && (Global::paintLabel) && (!label.isEmpty()))
-                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id) + " - " + label, Global::renderFont);
+            if((Render::paintThisGroup) && (Application::paintLabel) && (!label.isEmpty()))
+                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id) + " - " + label, Application::renderFont);
             else if(selectedHover)
-                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id), Global::renderFont);
+                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id), Application::renderFont);
             if((selectedHover) && (!isDrag)) {
                 qreal startY = -0.4;
                 foreach(const QString & messageLabelItem, messageLabel) {
-                    Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + startY, cursorPos.z(), messageLabelItem, Global::renderFont);
+                    Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + startY, cursorPos.z(), messageLabelItem, Application::renderFont);
                     startY -= 0.6;
                 }
             }
@@ -308,8 +308,8 @@ void NxCursor::paint() {
             //Draw
             bool textureOk = false;
             QString textureName = (active)?(textureActive):(textureInactive);
-            if(Global::textures->contains(textureName)) {
-                UiRenderTexture *texture = Global::textures->value(textureName);
+            if(Render::textures->contains(textureName)) {
+                UiRenderTexture *texture = Render::textures->value(textureName);
                 if((texture) && (texture->loaded) && (texture->mapping.width() != 0 ) && (texture->mapping.height() != 0)) {
                     textureOk = true;
 
@@ -372,7 +372,7 @@ void NxCursor::paint() {
                 glRotatef(cursorAngle.z(), 0, 0, 1);
                 glRotatef(cursorAngle.y(), 0, 1, 0);
                 glRotatef(cursorAngle.x(), 1, 0, 0);
-                qreal size2 = Global::objectSize / 2 * qMin(1., width);
+                qreal size2 = Render::objectSize / 2 * qMin(1., width);
                 glBegin(GL_TRIANGLE_FAN);
                 glLineWidth(2);
                 if(hasActivity) {
@@ -395,7 +395,7 @@ void NxCursor::paint() {
                     else
                         glLineWidth(1);
 
-                    if((glListRecreate) || (Global::forceLists)) {
+                    if((glListRecreate) || (Render::forceLists)) {
                         glNewList(glListCursor, GL_COMPILE_AND_EXECUTE);
                         qreal lats = 40, longs = 40;
                         qreal rx = cursorPos.sx(), ry = cursorPos.sy(), rz = cursorPos.sz();
@@ -444,8 +444,8 @@ void NxCursor::paint() {
             //Mapping area
             if((selectedHover) || (selected)) {
                 if((boundsSourceMode == 2) || (!curve)) {
-                    boundsSource = Global::axisArea;
-                    boundsSource.translate(-Global::axisCenter);
+                    boundsSource = Render::axisArea;
+                    boundsSource.translate(-Render::axisCenter);
                 }
                 glPushMatrix();
                 glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 2.F);
@@ -477,13 +477,13 @@ void NxCursor::paint() {
                     glEnd();
                 }
                 glDisable(GL_LINE_STIPPLE);
-                Application::render->renderText(boundsSource.topLeft().x()     - 0.50, boundsSource.topLeft().y()     - 0.12, boundsSource.topLeft().z(),   QString::number(boundsTarget.topLeft().y(),     'f', 3), Global::renderFont);
-                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.50, boundsSource.bottomLeft().y()  - 0.00, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().y(),  'f', 3), Global::renderFont);
-                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.00, boundsSource.bottomLeft().y()  - 0.22, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().x(),  'f', 3), Global::renderFont);
-                Application::render->renderText(boundsSource.bottomRight().x() - 0.40, boundsSource.bottomRight().y() - 0.22, boundsSource.topRight().z(),  QString::number(boundsTarget.bottomRight().x(), 'f', 3), Global::renderFont);
+                Application::render->renderText(boundsSource.topLeft().x()     - 0.50, boundsSource.topLeft().y()     - 0.12, boundsSource.topLeft().z(),   QString::number(boundsTarget.topLeft().y(),     'f', 3), Application::renderFont);
+                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.50, boundsSource.bottomLeft().y()  - 0.00, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().y(),  'f', 3), Application::renderFont);
+                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.00, boundsSource.bottomLeft().y()  - 0.22, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().x(),  'f', 3), Application::renderFont);
+                Application::render->renderText(boundsSource.bottomRight().x() - 0.40, boundsSource.bottomRight().y() - 0.22, boundsSource.topRight().z(),  QString::number(boundsTarget.bottomRight().x(), 'f', 3), Application::renderFont);
                 if(boundsSource.length() != 0) {
-                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.bottomRight().z(),     QString::number(boundsTarget.bottomRight().z(), 'f', 3), Global::renderFont);
-                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.topRight().z() - 0.50, QString::number(boundsTarget.topRight().z(),    'f', 3), Global::renderFont);
+                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.bottomRight().z(),     QString::number(boundsTarget.bottomRight().z(), 'f', 3), Application::renderFont);
+                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.topRight().z() - 0.50, QString::number(boundsTarget.topRight().z(),    'f', 3), Application::renderFont);
                 }
                 glPopMatrix();
             }

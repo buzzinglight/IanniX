@@ -43,7 +43,7 @@ const QString NxDocument::serialize() const {
 
     if(NxObjectDispatchProperty::source == ExecuteSourceGui) {
         //Textures
-        QMapIterator<QString, UiRenderTexture*> textureIterator(*Global::textures);
+        QMapIterator<QString, UiRenderTexture*> textureIterator(*Render::textures);
         while (textureIterator.hasNext()) {
             textureIterator.next();
             UiRenderTexture *texture = textureIterator.value();
@@ -54,10 +54,10 @@ const QString NxDocument::serialize() const {
         }
 
         //Colors
-        QMapIterator<QString, QColor> colorIterator(*Global::colors);
+        QMapIterator<QString, QColor> colorIterator(*Render::colors);
         while (colorIterator.hasNext()) {
             colorIterator.next();
-            if(!((Global::defaultColors.contains(colorIterator.key())) && (Global::defaultColors.value(colorIterator.key()) == colorIterator.value()))) {
+            if(!((Render::defaultColors.contains(colorIterator.key())) && (Render::defaultColors.value(colorIterator.key()) == colorIterator.value()))) {
                 QColor color = colorIterator.value();
                 retour += prefix + QString("%1 %2  %3 %4 %5 %6").arg(COMMAND_GLOBAL_COLOR).arg(colorIterator.key()).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()) + postfix;
             }
@@ -136,7 +136,7 @@ void NxDocument::open(bool configure) {
     //Open the script file (if its a file)
     QFileInfo file = getScriptFile();
     if(!file.exists())
-        file = QFileInfo(Global::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
+        file = QFileInfo(Application::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
     QFile scriptFileContent(file.absoluteFilePath());
     if(scriptFileContent.open(QIODevice::ReadOnly | QIODevice::Text)) {
         //Read file
@@ -226,7 +226,7 @@ const QString NxDocument::getContent(bool fromFile) {
     if(fromFile) {
         QFileInfo file = getScriptFile();
         if(!file.exists())
-            file = QFileInfo(Global::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
+            file = QFileInfo(Application::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
 
         QFile scoreTemplateFile(file.absoluteFilePath());
         if(scoreTemplateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -260,7 +260,7 @@ void NxDocument::remplaceInFunction(QString *content, const QString &delimiter, 
 const QString NxDocument::loadLibrary() {
     QString scriptContent = "";
 
-    QFileInfoList scriptDirs = QDir(Global::pathApplication.absoluteFilePath() + "/Tools/").entryInfoList(QStringList() << "*.js", QDir::Files | QDir::NoDotAndDotDot);
+    QFileInfoList scriptDirs = QDir(Application::pathApplication.absoluteFilePath() + "/Tools/").entryInfoList(QStringList() << "*.js", QDir::Files | QDir::NoDotAndDotDot);
     foreach(const QFileInfo & scriptFile, scriptDirs) {
         QFile scriptFileContent(scriptFile.absoluteFilePath());
         if(scriptFileContent.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -304,44 +304,44 @@ void NxDocument::askFileClose() {
     clear();
 }
 void NxDocument::restoreDefaults() {
-    Global::defaultColors.insert("background_texture_tint"          , QColor(255, 255, 255, 255));
-    Global::defaultColors.insert("darktheme_background"             , QColor(  0,   0,   0, 255));
-    Global::defaultColors.insert("darktheme_grid"                   , QColor(255, 255, 255,  43));
-    Global::defaultColors.insert("darktheme_axis"                   , QColor(255, 255, 255,  28));
-    Global::defaultColors.insert("darktheme_gui_gridSnap"           , QColor( 90,  25,  15, 255));
-    Global::defaultColors.insert("darktheme_gui_axisSnap"           , QColor( 90,  25,  15, 255));
-    Global::defaultColors.insert("darktheme_gui_selection"          , QColor(255, 255, 255,  40));
-    Global::defaultColors.insert("darktheme_gui_object_selection"   , QColor(255, 240,  35, 255));
-    Global::defaultColors.insert("darktheme_gui_object_hover"       , QColor( 35, 255, 165, 255));
-    Global::defaultColors.insert("darktheme_cursor_active"          , QColor(255,  80,  30, 255));
-    Global::defaultColors.insert("darktheme_cursor_inactive"        , QColor(255, 255, 255,  92));
-    Global::defaultColors.insert("darktheme_trigger_active"         , QColor(  0, 185, 255, 255));
-    Global::defaultColors.insert("darktheme_trigger_inactive"       , QColor(255, 255, 255, 92));
-    Global::defaultColors.insert("darktheme_curve_active"           , QColor(255, 255, 255, 175));
-    Global::defaultColors.insert("darktheme_curve_inactive"         , QColor(255, 255, 255,  92));
-    Global::defaultColors.insert("darktheme_simple_curve_active"    , QColor(115, 159,  89, 255));
-    Global::defaultColors.insert("darktheme_simple_curve_inactive"  , QColor(115, 159,  89, 255));
-    Global::defaultColors.insert("lighttheme_background"            , QColor(242, 241, 237, 255));
-    Global::defaultColors.insert("lighttheme_grid"                  , QColor(  0,   0,   0,  20));
-    Global::defaultColors.insert("lighttheme_axis"                  , QColor(  0,   0,   0,  13));
-    Global::defaultColors.insert("lighttheme_gui_gridSnap"          , QColor(255, 190, 190, 255));
-    Global::defaultColors.insert("lighttheme_gui_axisSnap"          , QColor(255, 190, 190, 255));
-    Global::defaultColors.insert("lighttheme_gui_selection"         , QColor(  0,   0,   0,  40));
-    Global::defaultColors.insert("lighttheme_gui_object_selection"  , QColor(  0,  15, 220, 255));
-    Global::defaultColors.insert("lighttheme_gui_object_hover"      , QColor(220,   0,  90, 255));
-    Global::defaultColors.insert("lighttheme_cursor_active"         , QColor(255,  80,  30, 255));
-    Global::defaultColors.insert("lighttheme_cursor_inactive"       , QColor(  0,   0,   0,  92));
-    Global::defaultColors.insert("lighttheme_trigger_active"        , QColor(  0, 185, 255, 255));
-    Global::defaultColors.insert("lighttheme_trigger_inactive"      , QColor(  0,   0,   0,  92));
-    Global::defaultColors.insert("lighttheme_curve_active"          , QColor(  0,   0,   0, 175));
-    Global::defaultColors.insert("lighttheme_curve_inactive"        , QColor(  0,   0,   0,  92));
-    Global::defaultColors.insert("lighttheme_simple_curve_active"   , QColor(115, 159,  89, 255));
-    Global::defaultColors.insert("lighttheme_simple_curve_inactive" , QColor(115, 159,  89, 255));
-    Global::colors->clear();
-    QMapIterator<QString, QColor> colorIterator(Global::defaultColors);
+    Render::defaultColors.insert("background_texture_tint"          , QColor(255, 255, 255, 255));
+    Render::defaultColors.insert("darktheme_background"             , QColor(  0,   0,   0, 255));
+    Render::defaultColors.insert("darktheme_grid"                   , QColor(255, 255, 255,  43));
+    Render::defaultColors.insert("darktheme_axis"                   , QColor(255, 255, 255,  28));
+    Render::defaultColors.insert("darktheme_gui_gridSnap"           , QColor( 90,  25,  15, 255));
+    Render::defaultColors.insert("darktheme_gui_axisSnap"           , QColor( 90,  25,  15, 255));
+    Render::defaultColors.insert("darktheme_gui_selection"          , QColor(255, 255, 255,  40));
+    Render::defaultColors.insert("darktheme_gui_object_selection"   , QColor(255, 240,  35, 255));
+    Render::defaultColors.insert("darktheme_gui_object_hover"       , QColor( 35, 255, 165, 255));
+    Render::defaultColors.insert("darktheme_cursor_active"          , QColor(255,  80,  30, 255));
+    Render::defaultColors.insert("darktheme_cursor_inactive"        , QColor(255, 255, 255,  92));
+    Render::defaultColors.insert("darktheme_trigger_active"         , QColor(  0, 185, 255, 255));
+    Render::defaultColors.insert("darktheme_trigger_inactive"       , QColor(255, 255, 255, 92));
+    Render::defaultColors.insert("darktheme_curve_active"           , QColor(255, 255, 255, 175));
+    Render::defaultColors.insert("darktheme_curve_inactive"         , QColor(255, 255, 255,  92));
+    Render::defaultColors.insert("darktheme_simple_curve_active"    , QColor(115, 159,  89, 255));
+    Render::defaultColors.insert("darktheme_simple_curve_inactive"  , QColor(115, 159,  89, 255));
+    Render::defaultColors.insert("lighttheme_background"            , QColor(242, 241, 237, 255));
+    Render::defaultColors.insert("lighttheme_grid"                  , QColor(  0,   0,   0,  20));
+    Render::defaultColors.insert("lighttheme_axis"                  , QColor(  0,   0,   0,  13));
+    Render::defaultColors.insert("lighttheme_gui_gridSnap"          , QColor(255, 190, 190, 255));
+    Render::defaultColors.insert("lighttheme_gui_axisSnap"          , QColor(255, 190, 190, 255));
+    Render::defaultColors.insert("lighttheme_gui_selection"         , QColor(  0,   0,   0,  40));
+    Render::defaultColors.insert("lighttheme_gui_object_selection"  , QColor(  0,  15, 220, 255));
+    Render::defaultColors.insert("lighttheme_gui_object_hover"      , QColor(220,   0,  90, 255));
+    Render::defaultColors.insert("lighttheme_cursor_active"         , QColor(255,  80,  30, 255));
+    Render::defaultColors.insert("lighttheme_cursor_inactive"       , QColor(  0,   0,   0,  92));
+    Render::defaultColors.insert("lighttheme_trigger_active"        , QColor(  0, 185, 255, 255));
+    Render::defaultColors.insert("lighttheme_trigger_inactive"      , QColor(  0,   0,   0,  92));
+    Render::defaultColors.insert("lighttheme_curve_active"          , QColor(  0,   0,   0, 175));
+    Render::defaultColors.insert("lighttheme_curve_inactive"        , QColor(  0,   0,   0,  92));
+    Render::defaultColors.insert("lighttheme_simple_curve_active"   , QColor(115, 159,  89, 255));
+    Render::defaultColors.insert("lighttheme_simple_curve_inactive" , QColor(115, 159,  89, 255));
+    Render::colors->clear();
+    QMapIterator<QString, QColor> colorIterator(Render::defaultColors);
     while (colorIterator.hasNext()) {
         colorIterator.next();
-        Global::colors->insert(colorIterator.key(), colorIterator.value());
+        Render::colors->insert(colorIterator.key(), colorIterator.value());
     }
 
     Application::render->loadTexture(new UiRenderTexture("background",       QFileInfo("filename"), NxRect(-4, 4, 8, -8)));

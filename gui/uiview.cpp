@@ -51,7 +51,7 @@ UiView::UiView(QWidget *parent) :
     QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.center() - rect().center());
 
-    connect(ui->render, SIGNAL(editingMove(NxPoint,bool)), SLOT(editingMove(NxPoint,bool)));
+    connect(ui->render, SIGNAL(editingMove(NxPoint,bool,bool)), SLOT(editingMove(NxPoint,bool,bool)));
     connect(ui->render, SIGNAL(editingStart(NxPoint)),     SLOT(editingStart(NxPoint)));
     connect(ui->render, SIGNAL(editingStop()),             SLOT(editingStop()));
 
@@ -83,16 +83,16 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionToggle_Transport,  SIGNAL(triggered()), SLOT(showTransport()));
     connect(ui->actionPatchesFolder,     SIGNAL(triggered()), SLOT(actionPatchesFolder()));
     connect(ui->actionLockPos,           SIGNAL(triggered()), SLOT(editingStop()));
-    Global::colorTheme            .setAction(ui->actionLight,                    "guiColorTheme");
-    Global::paintAxisGrid         .setAction(ui->actionGrid,                     "guiPaintAxisGrid");
-    Global::paintLabel            .setAction(ui->actionToggleLabel,              "guiPaintLabel");
-    Global::mouseSnapX            .setAction(ui->actionSnapXGrid,                "guiMouseSnapX");
-    Global::mouseSnapY            .setAction(ui->actionSnapYGrid,                "guiMouseSnapY");
-    Global::allowLockPos          .setAction(ui->actionLockPos,                  "guiAllowLockPos");
-    Global::allowSelectionCursors .setAction(ui->actionAllow_cursors_selection,  "guiAllowSelectionCursors");
-    Global::allowSelectionCurves  .setAction(ui->actionAllow_curves_selection,   "guiAllowSelectionCurves");
-    Global::allowSelectionTriggers.setAction(ui->actionAllow_triggers_selection, "guiAllowSelectionTriggers");
-    Global::allowPlaySelected     .setAction(ui->actionPlaySelected,             "guiAllowPlaySelected");
+    Application::colorTheme            .setAction(ui->actionLight,                    "guiColorTheme");
+    Application::paintAxisGrid         .setAction(ui->actionGrid,                     "guiPaintAxisGrid");
+    Application::paintLabel            .setAction(ui->actionToggleLabel,              "guiPaintLabel");
+    Application::mouseSnapX            .setAction(ui->actionSnapXGrid,                "guiMouseSnapX");
+    Application::mouseSnapY            .setAction(ui->actionSnapYGrid,                "guiMouseSnapY");
+    Application::allowLockPos          .setAction(ui->actionLockPos,                  "guiAllowLockPos");
+    Application::allowSelectionCursors .setAction(ui->actionAllow_cursors_selection,  "guiAllowSelectionCursors");
+    Application::allowSelectionCurves  .setAction(ui->actionAllow_curves_selection,   "guiAllowSelectionCurves");
+    Application::allowSelectionTriggers.setAction(ui->actionAllow_triggers_selection, "guiAllowSelectionTriggers");
+    Application::allowPlaySelected     .setAction(ui->actionPlaySelected,             "guiAllowPlaySelected");
 
     connect(ui->actionFullscreen,           SIGNAL(triggered()), SLOT(goToFullscreen()));
     connect(ui->actionPerformance,          SIGNAL(triggered()), SLOT(actionPerformance()));
@@ -269,7 +269,7 @@ void UiView::goToFullscreen(quint8 screenIndex) {
         ui->render->show();
         //ui->render->activateWindow();
     }
-    Application::render->selectionClear(true);
+    ui->render->selectionClear(true);
 }
 void UiView::escFullscreen() {
     if(isFullScreen)
@@ -384,20 +384,20 @@ void UiView::gridChange() {
     QAction *action = (QAction*)sender();
     bool ok = true;
     if(action == ui->action10Seconds)
-        Global::axisGrid = 10;
+        Render::axisGrid = 10;
     else if(action == ui->action1second)
-        Global::axisGrid = 1;
+        Render::axisGrid = 1;
     else if(action == ui->action500Milliseconds)
-        Global::axisGrid = 0.5;
+        Render::axisGrid = 0.5;
     else if(action == ui->action100Milliseconds)
-        Global::axisGrid = 0.1;
+        Render::axisGrid = 0.1;
     else if(action == ui->action10Milliseconds)
-        Global::axisGrid = 0.01;
+        Render::axisGrid = 0.01;
     else if(action == ui->actionCustomValue) {
         qreal val = (new UiMessageBox())->getDouble(tr("Custom grid value"), tr("Enter the desired grid time value in seconds:"), 0.500, 0.001, 999, 0.1, 3, "seconds", &ok);
         if(ok) {
             ui->actionCustomValue->setText(tr("Custom value:") + QString(" %1 ").arg(val) + tr("sec"));
-            Global::axisGrid = val;
+            Render::axisGrid = val;
         }
     }
     if(ok) {
@@ -432,7 +432,7 @@ void UiView::actionResize(QSize newSize) {
 
 
 void UiView::actionDrawFreeCurve(bool cursor) {
-    if((Global::editingMode == EditingModeFree) && (Global::editing))
+    if((Render::editingMode == EditingModeFree) && (Render::editing))
         editingStop();
     else {
         freehandCurveId = freehandCurveIndex = 0;
@@ -444,7 +444,7 @@ void UiView::actionDrawFreeCurve(bool cursor) {
     }
 }
 void UiView::actionDrawPointCurve(bool cursor) {
-    if((Global::editingMode == EditingModePoint) && (Global::editing))
+    if((Render::editingMode == EditingModePoint) && (Render::editing))
         editingStop();
     else {
         freehandCurveId = freehandCurveIndex = 0;
@@ -456,7 +456,7 @@ void UiView::actionDrawPointCurve(bool cursor) {
     }
 }
 void UiView::actionDrawTriggers() {
-    if((Global::editingMode == EditingModeTriggers) && (Global::editing))
+    if((Render::editingMode == EditingModeTriggers) && (Render::editing))
         editingStop();
     else {
         unToogleDraw(1);
@@ -470,7 +470,7 @@ void UiView::actionAddTimeline() {
     unToogleDraw(2);
     unToogleDraw(3);
     unToogleDraw(4);
-    Application::render->selectionClear(true);
+    ui->render->selectionClear(true);
     quint16 id1 = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
     Application::current->execute("setpointat " + QString::number(id1) + " 0 -5 0", ExecuteSourceGui);
     Application::current->execute("setpointat " + QString::number(id1) + " 1  5 0", ExecuteSourceGui);
@@ -478,7 +478,7 @@ void UiView::actionAddTimeline() {
     Application::current->execute("setwidth " + QString::number(id2) + " 5", ExecuteSourceGui);
     Application::current->execute("setcurve " + QString::number(id2) + " lastCurve", ExecuteSourceGui);
     Application::current->execute("setboundssourcemode " + QString::number(id2) + " 1", ExecuteSourceGui);
-    Application::current->execute("setmessage " + QString::number(id2) + " 20, " + Global::defaultMessageCurve, ExecuteSourceGui);
+    Application::current->execute("setmessage " + QString::number(id2) + " 20, " + Application::defaultMessageCurve, ExecuteSourceGui);
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id1));
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id2));
 }
@@ -487,7 +487,7 @@ void UiView::actionAddMathCurve() {
     unToogleDraw(2);
     unToogleDraw(3);
     unToogleDraw(4);
-    Application::render->selectionClear(true);
+    ui->render->selectionClear(true);
     quint16 id = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
     Application::current->execute("setequation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), cos(4*t*PI)", ExecuteSourceGui);
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id));
@@ -500,7 +500,7 @@ void UiView::actionAddMathCurveSimple() {
     unToogleDraw(2);
     unToogleDraw(3);
     unToogleDraw(4);
-    Application::render->selectionClear(true);
+    ui->render->selectionClear(true);
     quint16 id = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
     Application::current->execute("setequation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), 0", ExecuteSourceGui);
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id));
@@ -530,7 +530,7 @@ void UiView::actionAddFreeCursor() {
 
 
 void UiView::actionCircleCurve() {
-    if((Global::editingMode == EditingModeCircle) && (Global::editing))
+    if((Render::editingMode == EditingModeCircle) && (Render::editing))
         editingStop();
     else {
         unToogleDraw(1);
@@ -541,25 +541,25 @@ void UiView::actionCircleCurve() {
 }
 
 void UiView::editingStart(const NxPoint & point) {
-    if(Global::editing) {
-        if((Global::editingMode == EditingModeFree) || (Global::editingMode == EditingModePoint)) {
+    if(Render::editing) {
+        if((Render::editingMode == EditingModeFree) || (Render::editingMode == EditingModePoint)) {
             editingStartPoint = point;
             freehandCurveIndex = 1;
             Application::current->pushSnapshot();
             freehandCurveId = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
             Application::current->execute(QString("%1 %2 %3 %4 0").arg(COMMAND_POS).arg(freehandCurveId).arg(editingStartPoint.x()).arg(editingStartPoint.y()), ExecuteSourceGui);
-            if(Global::editingMode == EditingModeFree)
+            if(Render::editingMode == EditingModeFree)
                 Application::current->execute(QString("%1 %2 0 0 0 0").arg(COMMAND_CURVE_POINT_SMOOTH).arg(freehandCurveId), ExecuteSourceGui);
             else
                 Application::current->execute(QString("%1 %2 0 0 0 0").arg(COMMAND_CURVE_POINT).arg(freehandCurveId), ExecuteSourceGui);
 
         }
-        else if(Global::editingMode == EditingModeTriggers) {
+        else if(Render::editingMode == EditingModeTriggers) {
             Application::current->pushSnapshot();
             quint16 triggerId = Application::current->execute("add trigger auto", ExecuteSourceGui).toUInt();
             Application::current->execute(QString("%1 %2 %3 %4 0").arg(COMMAND_POS).arg(triggerId).arg(point.x()).arg(point.y()), ExecuteSourceGui);
         }
-        else if(Global::editingMode == EditingModeCircle) {
+        else if(Render::editingMode == EditingModeCircle) {
             Application::current->pushSnapshot();
             quint16 curveId = Application::current->execute(QString("add curve auto"), ExecuteSourceGui).toUInt();
             Application::current->execute(QString("%1 %2 %3 %4 0").arg(COMMAND_POS).arg(curveId).arg(point.x()).arg(point.y()), ExecuteSourceGui);
@@ -571,7 +571,7 @@ void UiView::editingStart(const NxPoint & point) {
     }
 }
 void UiView::editingStop() {
-    if((Global::editing) && ((Global::editingMode == EditingModeFree) || (Global::editingMode == EditingModePoint))) {
+    if((Render::editing) && ((Render::editingMode == EditingModeFree) || (Render::editingMode == EditingModePoint))) {
         if(freehandCurveIndex > 0) {
             Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CURVE_POINT_RMV).arg(freehandCurveId).arg(freehandCurveIndex), ExecuteSourceSystem);
             freehandCurveIndex--;
@@ -594,20 +594,20 @@ void UiView::editingStopWithoutRemoval(bool isLoop) {
     ui->render->unsetEditing();
 }
 
-void UiView::editingMove(const NxPoint & point, bool add) {
+void UiView::editingMove(const NxPoint & point, bool add, bool mouseState) {
     bool isLoop = false;
     NxPoint newPoint = point - editingStartPoint;
-    if((freehandCurveIndex > 1) && ((qAbs(newPoint.x()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint.y()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint.z()) < (0.25 * Global::zoomLinear)))) {
+    if((!mouseState) && (freehandCurveIndex > 1) && ((qAbs(newPoint.x()) < (0.25 * Render::zoomLinear)) && (qAbs(newPoint.y()) < (0.25 * Render::zoomLinear)) && (qAbs(newPoint.z()) < (0.25 * Render::zoomLinear)))) {
         isLoop = true;
         newPoint = NxPoint();
     }
 
-    if((Global::editing) && (Global::editingMode == EditingModeFree)) {
+    if((Render::editing) && (Render::editingMode == EditingModeFree)) {
         Application::current->execute(QString("%1 %2 %3 %4 %5").arg(COMMAND_CURVE_POINT_SMOOTH).arg(freehandCurveId).arg(freehandCurveIndex).arg(newPoint.x()).arg(newPoint.y()), ExecuteSourceGui);
         if(add)
             freehandCurveIndex++;
     }
-    else if((Global::editing) && (Global::editingMode == EditingModePoint)) {
+    else if((Render::editing) && (Render::editingMode == EditingModePoint)) {
         Application::current->execute(QString("%1 %2 %3 %4 %5").arg(COMMAND_CURVE_POINT).arg(freehandCurveId).arg(freehandCurveIndex).arg(newPoint.x()).arg(newPoint.y()), ExecuteSourceGui);
         if(add)
             freehandCurveIndex++;

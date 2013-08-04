@@ -12,7 +12,6 @@
 #include "uitimer.h"
 #include "uiabout.h"
 #include "uieditor.h"
-#include "render/uirenderoptions.h"
 
 namespace Ui {
 class Transport;
@@ -94,16 +93,16 @@ protected:
     void keyPressEvent(QKeyEvent *);
 
 public:
-    inline qreal getZoom() const { return Global::zoomValue; }
+    inline qreal getZoom() const { return Render::zoomValue; }
     inline void setZoom(qreal val) { Application::render->setZoom(val); }
     inline qreal getSpeed() const {
         return scoreSpeed;
     }
     inline QString getCenterStr() const {
-        return QString("%1 %2").arg(-Global::axisCenterDest.x()).arg(-Global::axisCenterDest.y());
+        return QString("%1 %2").arg(-Render::axisCenterDest.x()).arg(-Render::axisCenterDest.y());
     }
     inline QString getRotateStr() const {
-        return QString("%1 %2 %3").arg(Global::rotationDest.x()).arg(Global::rotationDest.y()).arg(Global::rotationDest.z());
+        return QString("%1 %2 %3").arg(Render::rotationDest.x()).arg(Render::rotationDest.y()).arg(Render::rotationDest.z());
     }
     inline void setCenterStr(const QString & pos) {
         QStringList posItems = pos.split(" ", QString::SkipEmptyParts);

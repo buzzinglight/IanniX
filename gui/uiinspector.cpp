@@ -85,22 +85,22 @@ UiInspector::UiInspector(QWidget *parent) :
     Help::syncHelpWith(ui->ressourcesColors,  COMMAND_GLOBAL_COLOR_HUE);
 
 
-    Global::objectsAutosize.setAction(ui->autoresizeSlider, "guiObjectsAutosize");
+    Application::objectsAutosize.setAction(ui->autoresizeSlider, "guiObjectsAutosize");
 
     MessageManager::setInterfaces(0, 0, ui->spaceForMessageLog);
     ui->ressourcesTextures->showImport(true);
     ui->ressourcesTextures->showNew(false);
     ui->ressourcesTextures->showDuplicate(false);
-    Global::textures->configure(tr("Textures"),   ui->ressourcesTextures);
-    Global::colors->configure(tr("Score colors"), ui->ressourcesColors);
+    Render::textures->configure(tr("Textures"),   ui->ressourcesTextures);
+    Render::colors->configure(tr("Score colors"), ui->ressourcesColors);
     ui->ressourcesColors->showDuplicate(false);
 
     ui->files->importAsFiles = false;
     UiFileItem::configure(ui->files);
-    UiFileItem::syncWith(QFileInfoList() << QFileInfo(Global::pathApplication.absoluteFilePath() + "/Examples/") << QFileInfo(Global::pathDocuments.absoluteFilePath() + "/"), ui->files->getTree());
+    UiFileItem::syncWith(QFileInfoList() << QFileInfo(Application::pathApplication.absoluteFilePath() + "/Examples/") << QFileInfo(Application::pathDocuments.absoluteFilePath() + "/"), ui->files->getTree());
     ui->files->getTree()->collapseAll();
     for(quint16 i = 0 ; i < ui->files->getTree()->topLevelItemCount() ; i++) {
-        UiFileItem *searchItem = ((UiFileItem*)ui->files->getTree()->topLevelItem(i))->find(Global::pathApplication.absoluteFilePath() + "/IanniX/");
+        UiFileItem *searchItem = ((UiFileItem*)ui->files->getTree()->topLevelItem(i))->find(Application::pathApplication.absoluteFilePath() + "/IanniX/");
         if(searchItem)
             ui->files->getTree()->expandItem(searchItem);
     }
@@ -125,8 +125,8 @@ UiInspector::UiInspector(QWidget *parent) :
 
     render = 0;
 
-    Global::followId          .setAction(ui->followId,              "scoreFollowId");
-    Global::paintCurvesOpacity.setAction(ui->viewCurveOpacityCheck, "guiPaintCurvesOpacity");
+    Application::followId          .setAction(ui->followId,              "scoreFollowId");
+    Application::paintCurvesOpacity.setAction(ui->viewCurveOpacityCheck, "guiPaintCurvesOpacity");
 
     ui->followId->setValue(-1);
     ui->ccView->expandAll();
@@ -152,8 +152,8 @@ UiInspector::UiInspector(QWidget *parent) :
     ui->equationTemplate->clear();
     addEquationTemplate("Templates", true);
     addEquationTemplate("--");
-    QFileInfoList files = QDir(Global::pathApplication.absoluteFilePath() + "/Tools/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
-    files <<              QDir(Global::pathDocuments.absoluteFilePath()   + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    QFileInfoList files = QDir(Application::pathApplication.absoluteFilePath() + "/Tools/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    files <<              QDir(Application::pathDocuments.absoluteFilePath()   + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
     bool firstTemplate = true;
     QString title;
     foreach(const QFileInfo &file, files) {
@@ -277,6 +277,7 @@ void UiInspector::actionInfo() {
         else if(ui->speedSpin == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_SPEED).arg(ui->speedSpin->value()), ExecuteSourceGui);
         else if(ui->triggerOffSpin == sender())             Application::current->execute(QString("%1 selection %2").arg(COMMAND_TRIGGER_OFF).arg(ui->triggerOffSpin->value()), ExecuteSourceGui);
         else if(ui->pointsLists == sender())                Application::current->execute(QString("%1 selection 1").arg(COMMAND_CURVE_EDITOR), ExecuteSourceGui);
+        else if(ui->pointsResample == sender())             Application::current->execute(QString("%1 selection 1").arg(COMMAND_CURVE_RESAMPLE), ExecuteSourceGui);
         else if(ui->cursorSourceX1 == sender())             Application::current->execute(QString("%1 selection 0 %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE).arg(ui->cursorSourceX1->value()), ExecuteSourceGui);
         else if(ui->cursorSourceY1 == sender())             Application::current->execute(QString("%1 selection 1 %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE).arg(ui->cursorSourceY1->value()), ExecuteSourceGui);
         else if(ui->cursorSourceZ1 == sender())             Application::current->execute(QString("%1 selection 2 %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE).arg(ui->cursorSourceZ1->value()), ExecuteSourceGui);
@@ -464,12 +465,12 @@ void UiInspector::refresh() {
 
         if(!ui->colorCombo1->hasFocus()) {
             ui->colorCombo1->clear();
-            colorComboAdd(ui->colorCombo1,          Global::colors->keys());
+            colorComboAdd(ui->colorCombo1,          Render::colors->keys());
             colorComboAdd(ui->colorCombo1,          QStringList() << tr("Choose…"));
         }
         if(!ui->colorCombo2->hasFocus()) {
             ui->colorCombo2->clear();
-            colorComboAdd(ui->colorCombo2,          Global::colors->keys());
+            colorComboAdd(ui->colorCombo2,          Render::colors->keys());
             colorComboAdd(ui->colorCombo2,          QStringList() << tr("Choose…"));
         }
         if(!ui->colorComboMultiply->hasFocus()) {
@@ -481,8 +482,8 @@ void UiInspector::refresh() {
         ui->textureCombo2->clear();
         textureComboAdd(ui->textureCombo1, QStringList() << "");
         textureComboAdd(ui->textureCombo2, QStringList() << "");
-        textureComboAdd(ui->textureCombo1, Global::textures->keys());
-        textureComboAdd(ui->textureCombo2, Global::textures->keys());
+        textureComboAdd(ui->textureCombo1, Render::textures->keys());
+        textureComboAdd(ui->textureCombo2, Render::textures->keys());
 
         for(quint16 indexObject = 0 ; indexObject < objects->count()+1 ; indexObject++) {
             NxObject *object = 0;
@@ -734,6 +735,7 @@ void UiInspector::refresh() {
     ui->sizeLabel->setVisible(showCurveInfo);
     ui->pointsLabel->setVisible(showCurvePointsInfo);
     ui->pointsLists->setVisible(showCurvePointsInfo);
+    ui->pointsResample->setVisible(showCurvePointsInfo);
     ui->equationTemplate->setVisible(showCurveEquationInfo);
     ui->equationLabel->setVisible(showCurveEquationInfo);
     ui->equationType->setVisible(showCurveEquationInfo);
@@ -876,16 +878,16 @@ void UiInspector::colorComboAdd(QComboBox *spin, QStringList values) {
         QColor color = Qt::gray;
         QStringList valueSplit = colorName.split(" ", QString::SkipEmptyParts);
         if(valueSplit.count() == 4) color = QColor(valueSplit.at(0).toUInt(), valueSplit.at(1).toUInt(), valueSplit.at(2).toUInt(), valueSplit.at(3).toUInt());
-        else if((colorName.startsWith(Global::colorsPrefix(0))) || (colorName.startsWith(Global::colorsPrefix(1)))) {
-            if((!colorName.contains("_gui_")) && (((colorName.startsWith(Global::colorsPrefix(0))) && (Global::colorsPrefix() == Global::colorsPrefix(0))) || ((colorName.startsWith(Global::colorsPrefix(1))) && (Global::colorsPrefix() == Global::colorsPrefix(1))))) {
-                color = Global::colors->value(colorName);
-                colorName = colorName.remove(Global::colorsPrefix());
+        else if((colorName.startsWith(Application::colorsPrefix(0))) || (colorName.startsWith(Application::colorsPrefix(1)))) {
+            if((!colorName.contains("_gui_")) && (((colorName.startsWith(Application::colorsPrefix(0))) && (Application::colorsPrefix() == Application::colorsPrefix(0))) || ((colorName.startsWith(Application::colorsPrefix(1))) && (Application::colorsPrefix() == Application::colorsPrefix(1))))) {
+                color = Render::colors->value(colorName);
+                colorName = colorName.remove(Application::colorsPrefix());
             }
             else
                 continue;
         }
         else
-            color = Global::colors->value(colorName);
+            color = Render::colors->value(colorName);
         icon.fill(color);
         if(colorName != tr("Choose…"))  spin->addItem(QIcon(icon), colorName);
         else                            spin->addItem(colorName);
@@ -893,7 +895,7 @@ void UiInspector::colorComboAdd(QComboBox *spin, QStringList values) {
 }
 void UiInspector::textureComboAdd(QComboBox *spin, QStringList values) {
     foreach(const QString & value, values) {
-        if((value.isEmpty()) || (Global::textures->value(value)->loaded))
+        if((value.isEmpty()) || (Render::textures->value(value)->loaded))
             spin->addItem(value);
     }
 }

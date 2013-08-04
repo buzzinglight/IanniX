@@ -30,6 +30,9 @@
 #include <QFileSystemWatcher>
 #include <QApplication>
 #include <QHostInfo>
+#include <QSettings>
+#include <QFontDialog>
+#include <QWaitCondition>
 #include <QDomDocument>
 #include <QFileOpenEvent>
 #include <QDesktopServices>

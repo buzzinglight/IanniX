@@ -130,14 +130,14 @@ void NxCurve::paint() {
     //Color
     if(active) {
         if(colorActive.isEmpty())                                                                                   color = colorActiveColor;
-        else if((colorActive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorActive)))  color = Global::colors->value(Global::colorsPrefix() + colorActive);
-        else if(Global::colors->contains(colorActive))                                                              color = Global::colors->value(colorActive);
+        else if((colorActive.startsWith("_")) && (Render::colors->contains(Application::colorsPrefix() + colorActive)))  color = Render::colors->value(Application::colorsPrefix() + colorActive);
+        else if(Render::colors->contains(colorActive))                                                              color = Render::colors->value(colorActive);
         else                                                                                                        color = Qt::gray;
     }
     else {
         if(colorInactive.isEmpty())                                                                                     color = colorInactiveColor;
-        else if((colorInactive.startsWith("_")) && (Global::colors->contains(Global::colorsPrefix() + colorInactive)))  color = Global::colors->value(Global::colorsPrefix() + colorInactive);
-        else if(Global::colors->contains(colorInactive))                                                                color = Global::colors->value(colorInactive);
+        else if((colorInactive.startsWith("_")) && (Render::colors->contains(Application::colorsPrefix() + colorInactive)))  color = Render::colors->value(Application::colorsPrefix() + colorInactive);
+        else if(Render::colors->contains(colorInactive))                                                                color = Render::colors->value(colorInactive);
         else                                                                                                            color = Qt::gray;
     }
     color.setRgb (qBound(0., color.red()   * colorMultiplyColor.redF(),   255.),
@@ -147,11 +147,11 @@ void NxCurve::paint() {
 
     if(color.alpha() > 0) {
         //Mouse hover
-        if(selectedHover)   color = Global::colors->value(Global::colorsPrefix() + "_gui_object_hover");
-        if(selected)        color = Global::colors->value(Global::colorsPrefix() + "_gui_object_selection");
+        if(selectedHover)   color = Render::colors->value(Application::colorsPrefix() + "_gui_object_hover");
+        if(selected)        color = Render::colors->value(Application::colorsPrefix() + "_gui_object_selection");
 
         //Hide curve if a cursor is present but inactive
-        if((Global::paintCurvesOpacity) && (cursors.count() > 0)) {
+        if((Application::paintCurvesOpacity) && (cursors.count() > 0)) {
             bool display = false;
             foreach(const NxObject *cursor, cursors)
                 if(cursor->getHasActivity()) {
@@ -163,10 +163,10 @@ void NxCurve::paint() {
         }
 
         //Start
-        if(!Global::allowSelectionCurves)
+        if(!Application::allowSelectionCurves)
             color.setAlphaF(color.alphaF()/3);
 
-        if(Global::paintThisGroup)
+        if(Render::paintThisGroup)
             glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
@@ -175,17 +175,17 @@ void NxCurve::paint() {
         glTranslatef(pos.x(), pos.y(), pos.z());
 
         //Label
-        if((Global::paintThisGroup) && (Global::paintLabel) && (!label.isEmpty())) {
+        if((Render::paintThisGroup) && (Application::paintLabel) && (!label.isEmpty())) {
             NxPoint pt = getPointAt(0);
-            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id) + " - " + label, Global::renderFont);
+            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id) + " - " + label, Application::renderFont);
         }
         else if(selectedHover) {
             NxPoint pt = getPointAt(0);
-            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id), Global::renderFont);
+            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id), Application::renderFont);
         }
 
         //Draw
-        if((glListRecreate) || (glListRecreateFromEditor) || (Global::forceLists)) {
+        if((glListRecreate) || (glListRecreateFromEditor) || (Render::forceLists)) {
             glNewList(glListCurve, GL_COMPILE_AND_EXECUTE);
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
@@ -265,7 +265,7 @@ void NxCurve::paint() {
                 else
                     glColor4f(color.redF(), color.greenF(), color.blueF(), 0.5);
                 glBegin(GL_QUADS);
-                qreal squareSize = (0.15 * Global::zoomLinear) / 4;
+                qreal squareSize = (0.15 * Render::zoomLinear) / 4;
                 glVertex3f(p1.x() - squareSize, p1.y() - squareSize, p1.z());
                 glVertex3f(p1.x() + squareSize, p1.y() - squareSize, p1.z());
                 glVertex3f(p1.x() + squareSize, p1.y() + squareSize, p1.z());
@@ -305,7 +305,7 @@ void NxCurve::paint() {
 }
 
 void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
-    qreal snapSize = Global::objectSize/2;
+    qreal snapSize = Render::objectSize/2;
     NxRect mouseRect = NxRect(_mousePos - NxPoint(snapSize, snapSize, snapSize), _mousePos + NxPoint(snapSize, snapSize, snapSize));
 
     for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
@@ -867,7 +867,7 @@ void NxCurve::calcBoundingRect() {
 
 
 bool NxCurve::isMouseHover(const NxPoint &mouse) {
-    qreal snapSize = Global::objectSize/2;
+    qreal snapSize = Render::objectSize/2;
     NxRect mouseRect = NxRect(mouse - NxPoint(snapSize, snapSize, snapSize), mouse + NxPoint(snapSize, snapSize, snapSize));
     if(intersects(mouseRect) >= 0)
         return true;
@@ -954,7 +954,7 @@ qreal NxCurve::intersects(const NxRect &rect, NxPoint* collisionPoint) {
     return -1;
 }
 
-void NxCurve::resample(quint16 nbPoints) {
+void NxCurve::resample(quint16 nbPoints, bool smooth) {
     qreal percentStep = 1.0 / (qreal)nbPoints;
     QList<NxPoint> pts;
     for(qreal percent = 0 ; percent <= 1 ; percent += percentStep)
@@ -965,8 +965,10 @@ void NxCurve::resample(quint16 nbPoints) {
         cPt.setX(pt.x());
         cPt.setY(pt.y());
         cPt.setZ(pt.z());
+        cPt.smooth = smooth;
         pathPoints.append(cPt);
     }
+    setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
     curveType = CurveTypePoints;
     calcBoundingRect();
     glListRecreate = true;

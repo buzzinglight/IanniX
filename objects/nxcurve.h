@@ -21,6 +21,8 @@
 
 #include <QScriptEngine>
 #include <QScriptValue>
+#include <QVarLengthArray>
+#include <QBitmap>
 #include "geometry/qmuparser/muParser.h"
 #include "nxobject.h"
 #include "qmath.h"
@@ -39,7 +41,8 @@ class NxCurve : public NxObject {
 
     Q_PROPERTY(CurveType curveType            READ getCurveType)
 
-    Q_PROPERTY(bool      displaycurveeditor   READ getShowPathPointsEditor  WRITE setShowPathPointsEditor)
+    Q_PROPERTY(bool      displaycurveeditor   READ getShowPathPointsEditor   WRITE setShowPathPointsEditor)
+    Q_PROPERTY(bool      displaycurveresample READ getShowPathPointsResample WRITE setShowPathPointsResample)
     Q_PROPERTY(qreal     setinertia           READ getInertie               WRITE setInertie)
     Q_PROPERTY(qreal     setlength            READ getPathLength            WRITE setPathLength)
     Q_PROPERTY(QString   setresize            READ getResizeStr             WRITE setResizeStr)
@@ -240,7 +243,7 @@ public:
 
     inline quint16 getPathPointsCount() const { return pathPoints.count(); }
 
-    void resample(quint16 nbPoints);
+    void resample(quint16 nbPoints, bool smooth);
 
     void isOnPathPoint();
     void isOnPathPoint(const NxRect & point);
@@ -265,7 +268,15 @@ public:
         if(show)    pathPointsEditor->show();
         else        pathPointsEditor->hide();
     }
-    inline bool getShowPathPointsEditor() const { return true; }
+    inline void setShowPathPointsResample(bool = true) {
+        bool ok = false;
+        quint16 nbPoints = (new UiMessageBox())->getDouble(tr("IanniX Curve Resample"), tr("Number of points:"), QPixmap(":/infos/res_info_curve.png"), 50, 0, 32767, 1, 0, "", &ok);
+        bool smooth = (new UiMessageBox())->display(tr("IanniX Curve Resample"), tr("Do you want to smooth the curve?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
+        if(ok)
+            resample(nbPoints, smooth);
+    }
+    inline bool getShowPathPointsEditor() const   { return true; }
+    inline bool getShowPathPointsResample() const { return true; }
     inline void setPathPoints(const UiPathPointsItems &_pathPoints) {
         pathPoints = _pathPoints;
         glListRecreate = true;
@@ -288,9 +299,9 @@ public:
         if(selectedPathPointPoint >= 0) {
             NxPoint newPoint1 = posDrag + translation - getPathPointsAt(0);
             NxPoint newPoint2 = posDrag + translation - getPathPointsAt(pathPoints.count()-1);
-            if((selectedPathPointPoint == pathPoints.count()-1) && ((qAbs(newPoint1.x()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint1.y()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint1.z()) < (0.25 * Global::zoomLinear))))
+            if((selectedPathPointPoint == pathPoints.count()-1) && ((qAbs(newPoint1.x()) < (0.25 * Render::zoomLinear)) && (qAbs(newPoint1.y()) < (0.25 * Render::zoomLinear)) && (qAbs(newPoint1.z()) < (0.25 * Render::zoomLinear))))
                 setPointAt(selectedPathPointPoint, getPathPointsAt(0), pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth, true, true);
-            else if((selectedPathPointPoint == 0) && ((qAbs(newPoint2.x()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint2.y()) < (0.25 * Global::zoomLinear)) && (qAbs(newPoint2.z()) < (0.25 * Global::zoomLinear))))
+            else if((selectedPathPointPoint == 0) && ((qAbs(newPoint2.x()) < (0.25 * Render::zoomLinear)) && (qAbs(newPoint2.y()) < (0.25 * Render::zoomLinear)) && (qAbs(newPoint2.z()) < (0.25 * Render::zoomLinear))))
                 setPointAt(selectedPathPointPoint, getPathPointsAt(pathPoints.count()-1), pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth, true, true);
             else
                 setPointAt(selectedPathPointPoint, posDrag + translation, pathPoints.value(selectedPathPointPoint).c1, pathPoints.value(selectedPathPointPoint).c2, pathPoints.value(selectedPathPointPoint).smooth, true, true);

@@ -1,9 +1,9 @@
 #ifndef UICOLORITEM_H
 #define UICOLORITEM_H
 
+#include "misc/applicationexecute.h"
 #include "uitreeview.h"
 #include "misc/options.h"
-#include "misc/application.h"
 #include "iannix_cmd.h"
 
 class UiColorItem : public UiSyncItem {

@@ -29,8 +29,10 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     NxObject::widgetIconSoloOff   = QIcon(":gui/res_icon_check_solo_off.png");
     NxObject::widgetIconSoloOn    = QIcon(":gui/res_icon_check_solo_on.png");
 
-    Global::textures = new UiTextureItems();
-    Global::colors   = new UiColorItems();
+    Render::textures   = new UiTextureItems();
+    Render::colors     = new UiColorItems();
+    Application::renderFont = QFont("Arial");
+    Application::renderFont.setPixelSize(11);
 
     //Updates
     forceUpdate = false;
@@ -45,12 +47,16 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     scriptDir = QDir::current();
 
     //Create basic workspace
-    QDir().mkpath(Global::pathDocuments.absoluteFilePath() + "/");
-    QDir().mkpath(Global::pathDocuments.absoluteFilePath() + "/Templates/");
+    QDir().mkpath(Application::pathDocuments.absoluteFilePath() + "/");
+    QDir().mkpath(Application::pathDocuments.absoluteFilePath() + "/Templates/");
 
     //View
     view      = new UiView(0);
     render    = view->getRender();
+    Application::render = render;
+    Application::render->setZoom(100);
+    Application::render->rotateTo(NxPoint(0, 0, 0));
+
     inspector = view->getInspector();
     inspector->setRender(render);
     transport = view->getTransport();
@@ -131,12 +137,12 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
 #endif
 
     //Special settings
-    UiOptions::add(&Global::defaultMessage,          "defaultMessage");
-    UiOptions::add(&Global::defaultMessageCursor,    "defaultMessageCursor");
-    UiOptions::add(&Global::defaultMessageCurve,     "defaultMessageCurve");
-    UiOptions::add(&Global::defaultMessageSync,      "defaultMessageSync");
-    UiOptions::add(&Global::defaultMessageTransport, "defaultMessageTransport");
-    UiOptions::add(&Global::defaultMessageTrigger,   "defaultMessageTrigger");
+    UiOptions::add(&Application::defaultMessage,          "defaultMessage");
+    UiOptions::add(&Application::defaultMessageCursor,    "defaultMessageCursor");
+    UiOptions::add(&Application::defaultMessageCurve,     "defaultMessageCurve");
+    UiOptions::add(&Application::defaultMessageSync,      "defaultMessageSync");
+    UiOptions::add(&Application::defaultMessageTransport, "defaultMessageTransport");
+    UiOptions::add(&Application::defaultMessageTrigger,   "defaultMessageTrigger");
     NxDocument::restoreDefaults();
 
 
@@ -150,7 +156,7 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
         globalSettings->setValue("lastUpdate",   QDateTime(QDate(2000, 01, 01)));
     }
     //Local settings creation if needed
-    QString settingsFilename = Global::pathDocuments.absoluteFilePath() + "/Settings.ini";
+    QString settingsFilename = Application::pathDocuments.absoluteFilePath() + "/Settings.ini";
     if(!QFile(settingsFilename).exists()) {
         iniSettings = new QSettings(settingsFilename, QSettings::IniFormat);
 
@@ -160,7 +166,7 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
 
         //Colors
         iniSettings->beginGroup("Colors");
-        QMapIterator<QString, QColor> colorIterator(*Global::colors);
+        QMapIterator<QString, QColor> colorIterator(*Render::colors);
         while (colorIterator.hasNext()) {
             colorIterator.next();
             iniSettings->setValue(colorIterator.key(), colorIterator.value());
@@ -187,10 +193,10 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
         iniSettings->beginGroup("Colors");
         QStringList settingsKeys = iniSettings->childKeys();
         foreach(const QString &settingsKey, settingsKeys)
-            Global::colors->insert(settingsKey, iniSettings->value(settingsKey).value<QColor>());
+            Render::colors->insert(settingsKey, iniSettings->value(settingsKey).value<QColor>());
         iniSettings->endGroup();
     }
-    Global::colors->update();
+    Render::colors->update();
 
     //Update management
     if((globalSettings) && (globalSettings->childKeys().contains("id"))) {
@@ -203,8 +209,8 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     }
 
     //Apply specials settings
-    ((NxTrigger*)MessageManager::transportObject)->setMessagePatterns("1," + Global::defaultMessageTransport);
-    ((NxTrigger*)MessageManager::syncObject)     ->setMessagePatterns("1," + Global::defaultMessageSync);
+    ((NxTrigger*)MessageManager::transportObject)->setMessagePatterns("1," + Application::defaultMessageTransport);
+    ((NxTrigger*)MessageManager::syncObject)     ->setMessagePatterns("1," + Application::defaultMessageSync);
 
     //Scheduler
     timer = new QTimer(this);
@@ -242,7 +248,7 @@ void IanniX::actionImportSVG(const QString &filename) {
     QDomDocument xmlDoc;
     QFile svgFile(filename);
     if(svgFile.open(QFile::ReadOnly)) {
-        Application::render->selectionClear(true);
+        render->selectionClear(true);
         xmlDoc.setContent(svgFile.readAll());
         actionImportSVG(xmlDoc.documentElement(), scale);
         svgFile.close();
@@ -291,7 +297,7 @@ void IanniX::actionImportText(const QString &font, const QString &text) {
     }
 
     fontReal = fontReal.replace(" ", "_");
-    Application::render->selectionClear(true);
+    render->selectionClear(true);
     quint16 id = execute(QString(COMMAND_ADD) + " curve auto", ExecuteSourceGui).toUInt();
     execute(QString(COMMAND_CURVE_TXT) + " " + QString::number(id) + " " + QString::number(scale) + " " + fontReal + " " + text, ExecuteSourceGui);
     render->selectionAdd(getCurrentDocument()->getObject(id));
@@ -412,7 +418,7 @@ void IanniX::timerTrig(void *object, bool force) {
     NxCursor *cursor = (NxCursor*)object;
 
     //Messages
-    if((!Global::allowPlaySelected) || (!render->isSelection()) || ((Global::allowPlaySelected) && (cursor->getSelected())))
+    if((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (cursor->getSelected())))
         cursor->trig(force);
 
     //Browse documents
@@ -428,7 +434,7 @@ void IanniX::timerTrig(void *object, bool force) {
                 NxTrigger *trigger = (NxTrigger*)objectTrigger;
 
                 //Check the collision
-                if((cursor->contains(trigger)) && (((!isObjectSoloActive) && (trigger->isNotMuted())) || ((isObjectSoloActive) && (trigger->isSolo()))) && ((!Global::allowPlaySelected) || (!render->isSelection()) || ((Global::allowPlaySelected) && (trigger->getSelected()))))
+                if((cursor->contains(trigger)) && (((!isObjectSoloActive) && (trigger->isNotMuted())) || ((isObjectSoloActive) && (trigger->isSolo()))) && ((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (trigger->getSelected()))))
                     trigger->trig(cursor);
             }
 
@@ -436,7 +442,7 @@ void IanniX::timerTrig(void *object, bool force) {
             if(cursor->getPerformCollision()) {
                 foreach(const NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
                     //Check the collision
-                    if((!Global::allowPlaySelected) || (!render->isSelection()) || ((Global::allowPlaySelected) && (objectCurve->getSelected())))
+                    if((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (objectCurve->getSelected())))
                         cursor->trig((NxCurve*)objectCurve);
                 }
             }
@@ -514,7 +520,7 @@ void IanniX::actionCC(QTreeWidgetItem *item, int col) {
         NxPoint center;
         quint16 centerCounter = 0;
 
-        Application::render->selectionClear(true);
+        render->selectionClear(true);
         foreach(NxObject* object, elements.second) {
             render->selectionAdd(object);
             center += object->getPos();
@@ -578,7 +584,7 @@ void IanniX::actionNew() {
     inspector->getFileWidget()->askNew();
 }
 void IanniX::actionOpen() {
-    QString filename = QFileDialog::getOpenFileName(0, tr("Open IanniX Score"), Global::pathDocuments.absoluteFilePath() + "/");
+    QString filename = QFileDialog::getOpenFileName(0, tr("Open IanniX Score"), Application::pathDocuments.absoluteFilePath() + "/");
     if(!filename.isEmpty())
         loadProject(filename);
 }
@@ -706,7 +712,7 @@ void IanniX::removeObject(NxObject *object) {
         inspector->clearCCselections();
         if(document->getCurrentObject() == object)
             document->setCurrentObject(0);
-        Application::render->selectionClear(true);
+        render->selectionClear(true);
 
         if(object->getType() == ObjectsTypeCurve) {
             NxCurve *curve = (NxCurve*)object;
@@ -866,15 +872,15 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
             }
             else if((commande == COMMAND_GLOBAL_COLOR) && (argc > 5)) {
                 if(currentDocument == workingDocument)
-                    Global::colors->insert(argv.at(1), QColor(argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)));
-                return Global::colors->update();
+                    Render::colors->insert(argv.at(1), QColor(argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5)));
+                return Render::colors->update();
             }
             else if((commande == COMMAND_GLOBAL_COLOR_HUE) && (argc > 5)) {
                 QColor color;
                 color.setHsv(argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4), argvDouble(argv, 5));
                 if(currentDocument == workingDocument)
-                    Global::colors->insert(argv.at(1), color);
-                return Global::colors->update();
+                    Render::colors->insert(argv.at(1), color);
+                return Render::colors->update();
             }
 
 
@@ -889,7 +895,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                     if(!QFileInfo(filename1).exists()) {
                         QString filename2 = getCurrentDocument()->getScriptFile().absoluteDir().absolutePath() + "/" + filenameFinal;
                         if(!QFileInfo(filename2).exists()) {
-                            QString filename3 = Global::pathDocuments.absoluteFilePath() + "/" + filenameFinal;
+                            QString filename3 = Application::pathDocuments.absoluteFilePath() + "/" + filenameFinal;
                             if(!QFileInfo(filename3).exists()) {
                                 qDebug("Score not found %s, %s or %s", qPrintable(filename1), qPrintable(filename2), qPrintable(filename3));
                                 return false;
@@ -911,6 +917,11 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                         workingDocument = document;
                         document->askFileOpen(false);
                         workingDocument = currentDocument;
+
+                        UiRender *newRender = new UiRender(0, render);
+                        newRender->setDocument(document);
+                        newRender->startRenderTimer();
+                        newRender->show();
                     }
                     else if(commande == COMMAND_CLOSE) {
                         if(documents.contains(filenameFinal)) {
@@ -1035,7 +1046,9 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                     }
 
                     //Activation
-                    else if((commande == COMMAND_TRIG) || (commande == COMMAND_CURVE_EDITOR)) {
+                    else if((commande == COMMAND_TRIG) || (commande == COMMAND_CURVE_EDITOR) || (commande == COMMAND_CURVE_RESAMPLE)) {
+                        if(commande == COMMAND_CURVE_RESAMPLE)
+                            pushSnapshot();
                         object->dispatchProperty(qPrintable(commande), true);
                     }
 
