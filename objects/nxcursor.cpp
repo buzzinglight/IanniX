@@ -292,18 +292,17 @@ void NxCursor::paint() {
         //Cursor chasse-neige
         if((0.0F <= time) && (time <= 1.0F) && (start.count()) && (start.at(nbLoop % start.count()) != 0)) {
             //Label
-            if((Render::paintThisGroup) && (Application::paintLabel) && (!label.isEmpty()))
-                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id) + " - " + label, Application::renderFont);
+            if((Render::paintThisGroup) && (Application::paintLabel || selectedHover) && (!label.isEmpty()))
+                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id) + " - " + label.toUpper(), Application::renderFont);
             else if(selectedHover)
                 Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id), Application::renderFont);
             if((selectedHover) && (!isDrag)) {
                 qreal startY = -0.4;
                 foreach(const QString & messageLabelItem, messageLabel) {
-                    Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + startY, cursorPos.z(), messageLabelItem, Application::renderFont);
-                    startY -= 0.6;
+                    Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + startY, cursorPos.z(), messageLabelItem.trimmed(), Application::renderFont);
+                    startY -= 0.2 * Render::zoomLinear;
                 }
             }
-
 
             //Draw
             bool textureOk = false;
@@ -504,7 +503,8 @@ void NxCursor::trig(bool force) {
 }
 
 bool NxCursor::contains(NxTrigger *trigger) const {
-    if((previousCursorReliable) && (trigger->getActive())) {
+    qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
+    if((previousCursorReliable) && (trigger->getActive()) && ((timestamp - trigger->lastTrigTime) > 20)) {
         NxPoint centre1 = trigger->getPos() - NxPoint(  (cursorPoly.at(0).x() + cursorPoly.at(1).x() + cursorPoly.at(2).x() + cursorPoly.at(3).x()) / 4.,
                                                         (cursorPoly.at(0).y() + cursorPoly.at(1).y() + cursorPoly.at(2).y() + cursorPoly.at(3).y()) / 4.,
                                                         (cursorPoly.at(0).z() + cursorPoly.at(1).z() + cursorPoly.at(2).z() + cursorPoly.at(3).z()) / 4.);
@@ -546,15 +546,19 @@ bool NxCursor::contains(NxTrigger *trigger) const {
 
         if(depth > 0) {
             //qDebug("%d %d %d", isInWidth, isInDepth, isInside);
-            if(isInDepth && isInWidth && isInside)
+            if(isInDepth && isInWidth && isInside) {
+                trigger->lastTrigTime = timestamp;
                 return true;
+            }
             else
                 return false;
         }
         else {
             //qDebug("%d %d", isInWidth, isInside);
-            if(isInWidth && isInside)
+            if(isInWidth && isInside) {
+                trigger->lastTrigTime = timestamp;
                 return true;
+            }
             else
                 return false;
         }

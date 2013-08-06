@@ -19,6 +19,7 @@
 #include "items/uipathpointsitem.h"
 #include "misc/options.h"
 
+
 class ApplicationCurrent : public QObject, public ApplicationExecute {
     Q_OBJECT
 

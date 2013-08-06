@@ -25,15 +25,15 @@
 
 
 int main(int argc, char *argv[]) {
-    IanniXApp iannixApp(argc, argv);
-
 #ifdef QT4
     QTextCodec::setCodecForTr      (QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForLocale  (QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 
-    QString locale = QLocale::system().name();
+    IanniXApp iannixApp(argc, argv);
+
+    //QString locale = QLocale::system().name();
     //QTranslator translator;
     //translator.load("Translation_" + locale, "Tools");
     //iannixApp.installTranslator(&translator);

@@ -31,8 +31,12 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
 
     Render::textures   = new UiTextureItems();
     Render::colors     = new UiColorItems();
-    Application::renderFont = QFont("Arial");
-    Application::renderFont.setPixelSize(11);
+#ifdef Q_OS_MAC
+    Application::renderFont = QFont("Museo Sans");
+#else
+    Application::renderFont = QFont("Museo Sans 500");
+#endif
+    Application::renderFont.setPixelSize(10);
 
     //Updates
     forceUpdate = false;

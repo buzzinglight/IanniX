@@ -17,12 +17,12 @@ MessageManagerLogMini::~MessageManagerLogMini() {
 
 void MessageManagerLogMini::logSend(const MessageLog &log, QStringList *sentMessage) {
     if((ui->enable->isChecked()) && (canDisplay)) {
-        QString logged = log.getVerboseMessage();
+        QString logged = Transport::timeLocalStr + " : " + log.getVerboseMessage();
         ui->log->setText(logged.replace("\t", " "));
         canDisplay = false;
     }
     if(sentMessage) {
-        QString logged = log.getVerboseMessage();
+        QString logged = Transport::timeLocalStr + " : " + log.getVerboseMessage();
         sentMessage->append(logged.replace("\t", " "));
     }
 }

@@ -156,7 +156,7 @@ bool UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
         QPixmap picture = renderPixmap(renderSize.width(), renderSize.height());
         if(picture.isNull()) {
             picture = QPixmap::fromImage(grabFrameBuffer(false));
-            (new UiMessageBox())->display(tr("Graphical card error"), tr("Due to hardware issue, the high resolution snapshot creation failed.\nA classical snapshot has been saved on your desktop."), QDialogButtonBox::Ok);
+            (new UiMessageBox())->display(tr("Graphical card error"), tr("Due to hardware issue, the high resolution snapshot creation failed.\nA classical snapshot has been saved on your desktop."));
         }
 #ifdef QT4
         picture.save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
@@ -351,7 +351,6 @@ void UiRender::paintGL() {
                 for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
                     //Browse all types of objects
                     for(quint16 typeIterator = 0 ; typeIterator < ObjectsTypeLength ; typeIterator++) {
-                        //qDebug(">> MMMM4 %s %d %d %d", qPrintable(group->getId()), activityIterator, typeIterator, group->objects[activityIterator][typeIterator].count());
                         //Browse objects
                         foreach(NxObject *object, group->objects[activityIterator][typeIterator]) {
                             //Draw the object

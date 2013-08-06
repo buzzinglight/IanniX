@@ -14,15 +14,14 @@ direct:// goto 2 | Make score go back to timecode 000:02.000
 direct:// setSpeedF 10 1 | Make the cursor #10 start (please set its Master Speed to 0 before)
 
 [Equations]
-cartesian 3*cos(2*PI*t), 3*sin(2*PI*t), 0 | Simple circle
-cartesian 5*cos(2*PI*t), 3*sin(10*t*PI), sin(6*t*PI) | Super-8
-cartesian 5*t, sin(10*t*PI) * exp(1-4*t), cos(4*t*PI) | 3D Damped sine
-cartesian 8-16*(1-t), 2*sin((8-16*(1-t))*4)/(8-16*(1-t))-3, 0 | Sinus cardinalis
-cartesian 8-16*(1-t), 2*sin((8-16*(1-t))*4)/(8-16*(1-t))-3, sin((8-16*(1-t))*2) | Coiled sinus cardinalis 
-polar 6*cos(5*PI*t), cos(10*PI*t), t | Super-S
-polar 5*cos(20*PI*t), 2*sin(1*PI*t), sin(5*PI*t) | Flower
-cartesian 2*cos(t*PI)+2*cos(3*t*PI), 2*sin(t*PI)-2*sin(3*t*PI), 3*sin(2*t*PI) | Stroke
-cartesian 6*cos(t*2*PI), 6*sin(3*t*2*PI), 6*sin(7*t*2*PI) | 3D Lissajoussche curve
-cartesian 5*sin(10*t*2*PI)*cos(t*2*PI), 5*sin(10*t*2*PI)*sin(t*2*PI), 5*cos(10*t*2*PI) | 2D rosette or 3D sphere?
-cartesian 5*t*cos(5*t*2*PI), 5*t*sin(5*t*2*PI), 5*t | Conical spiral of Pappus
-cartesian (2+4*cos(6*t*2*PI))*cos(t*2*PI), (2+4*cos(6*t*2*PI))*sin(t*2*PI), 4*sin(6*t*2*PI) | An other 3D flower
+cartesian 3*param1*cos(param3*4*PI*t) , 3*param2*sin(param4*4*PI*t) , cos(param5*4*PI*t) | 3D circle
+cartesian 5*cos(4*param4*param1*2*PI*t) , 3*sin(4*param4*param2*10*t*PI) , param5*sin(4*param4*param3*6*t*PI) | Super-8
+cartesian 10*param1*t , sin(param2*20*t*PI) * exp(1-4*param3*t) , 2*param5*cos(8*param4*t*PI) | 3D Damped sine
+cartesian 2*param1*(8-16*(1-t)) , param2*2*sin(3*param3*(8-16*(1-t))*4)/(8-16*(1-t))-3 , param5*sin((8-16*(1-t))*4*param4) | Coiled sinus cardinalis 
+polar 6*cos(20*param1*param4*PI*t) , cos(40*param2*param4*PI*t) , 2*param3*param4*t | Super-S
+polar 5*cos(80*param1*param4*PI*t) , 4*sin(4*param2*param4*PI*t) , param5*sin(10*param3*param4*PI*t) | Flower
+cartesian 2*cos(2*param1*t*PI)+2*cos(6*param2*t*PI) , 2*sin(2*param3*t*PI)-2*sin(6*param4*t*PI) , 3*sin(4*param5*t*PI) | Lasso
+cartesian 6*cos(8*param1*param4*t*PI) , 6*sin(24*param2*param4*t*PI) , 12*param5*sin(56*param3*param4*t*PI) | 3D Lissajoussche curve
+cartesian 5*sin(80*param1*param5*t*PI)*cos(8*param2*param5*t*PI) , 5*sin(80*param3*param5*t*PI)*sin(8*param4*param5*t*PI) , 5*cos(40*param5*t*PI) | 2D rosette or 3D sphere?
+cartesian 10*param2*t*cos(40*param4*param1*t*PI) , 10*param2*t*sin(40*param4*param1*t*PI) , 20*param3*param4*t-5*param5 | Conical spiral of Pappus
+cartesian (2+4*cos(48*param1*param4*t*PI))*cos(8*param2*param4*t*PI) , (2+4*cos(48*param1*param4*t*PI))*sin(8*param2*param4*t*PI) , 4*param5*sin(48*param3*param4*t*PI) | An other 3D flower

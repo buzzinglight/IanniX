@@ -20,7 +20,6 @@ UiFileItem::UiFileItem(const QFileInfo &file, UiFileItem *_parent, QFileSystemWa
         connect(watcher, SIGNAL(directoryChanged(QString)), SLOT(fileWatcherDirChanged(QString)));
         connect(watcher, SIGNAL(fileChanged(QString)),      SLOT(fileWatcherFileChanged(QString)));
     }
-    //qDebug("[CREATION FILE] %s", qPrintable(file.absoluteFilePath()));
     isFile = true;
     populate(file);
     highlight();
@@ -175,12 +174,8 @@ bool UiFileItem::askForOpen(UiSyncItem*) {
             fileReload();
     }
     else {
-        /*
-        if((filename.file.exists()) && (!watcher->files().contains(filename.file.absoluteFilePath()))) {
-            qDebug("WATCHING %s %d %d", qPrintable(filename.file.absoluteFilePath()), watcher->files().count(), watcher->directories().count());
+        if((filename.file.exists()) && (!watcher->files().contains(filename.file.absoluteFilePath())))
             watcher->addPath(filename.file.absoluteFilePath());
-        }
-        */
         isOpened = true;
         fileOpen();
     }

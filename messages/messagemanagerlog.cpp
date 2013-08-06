@@ -18,11 +18,11 @@ MessageManagerLog::~MessageManagerLog() {
 
 void MessageManagerLog::logSend(const MessageLog &log, QStringList*) {
     if(logEnable)
-        ui->logSend->appendPlainText(log.getVerboseMessage());
+        ui->logSend->appendPlainText(Transport::timeLocalStr + " : " + log.getVerboseMessage());
 }
 void MessageManagerLog::logReceive(const MessageLog &log, QStringList*) {
     if(logEnable)
-        ui->logReceive->appendPlainText(log.getVerboseMessage());
+        ui->logReceive->appendPlainText(Transport::timeLocalStr + " : " + log.getVerboseMessage());
 }
 
 void MessageManagerLog::action() {

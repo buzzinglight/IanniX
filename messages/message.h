@@ -42,8 +42,9 @@ private:
     quint16         port;
     MessagesType    type;
     QList<qreal>    midiValues;
-    QList<QVariant> verboseValues;
     QScriptEngine  *messageScriptEngine;
+public:
+    QList<QVariant> verboseValues;
 
 public:
     Message();
@@ -64,19 +65,19 @@ private:
     }
     
 public:
-    inline       MessagesType   getType()         const {   return type;                }
+    inline       MessagesType   getType()            const { return type;               }
     
-    inline       bool           isTransport()     const {   return isTransportMessage;  }
-    inline const QByteArray &   getBuffer()       const {   return buffer;              }
-    inline const QHostAddress & getHost()         const {   return host;                }
-    inline       quint16        getPort()         const {   return port;                }
+    inline       bool           isTransport()        const { return isTransportMessage; }
+    inline const QByteArray &   getBuffer()          const { return buffer;             }
+    inline const QHostAddress & getHost()            const { return host;               }
+    inline       quint16        getPort()            const { return port;               }
     
-    inline const QString &      getMidiCommand()  const {   return midiCommand;         }
-    inline const QString &      getMidiPort()     const {   return midiPort;            }
-    inline const QByteArray &   getAsciiMessage()    const {   return asciiMessage;        }
-    inline const QByteArray &   getAsciiMessageXml() const {   return asciiMessageXml;        }
-    inline const QByteArray &   getAddress()      const {   return address;             }
-    inline const QUrl &         getUrlMessage()   const {   return urlMessage;          }
+    inline const QString &      getMidiCommand()     const { return midiCommand;        }
+    inline const QString &      getMidiPort()        const { return midiPort;           }
+    inline const QByteArray &   getAddress()         const { return address;            }
+    inline const QUrl &         getUrlMessage()      const { return urlMessage;         }
+    inline const QByteArray &   getAsciiMessage()    const { return asciiMessage;       }
+    inline const QByteArray &   getAsciiMessageXml() const { return asciiMessageXml;    }
 
     const QByteArray getVerboseMessage(bool withDestination=false) const;
     inline qreal getMidiValue(quint8 index) const {

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>395</width>
-    <height>557</height>
+    <height>562</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1686,134 +1686,9 @@ POINTS</string>
                 <property name="verticalSpacing">
                  <number>0</number>
                 </property>
-                <item row="2" column="2">
-                 <spacer name="horizontalSpacer_24">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="6" column="1" colspan="2">
-                 <widget class="QPlainTextEdit" name="equationEdit">
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>100</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Changes the 3D mathematical equation of the curve</string>
-                  </property>
-                  <property name="plainText">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QSpinBox" name="equationPoints">
-                  <property name="minimumSize">
-                   <size>
-                    <width>203</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>203</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Defines the number of points used to calculate the 3D mathematical equation</string>
-                  </property>
-                  <property name="suffix">
-                   <string> points</string>
-                  </property>
-                  <property name="prefix">
-                   <string>with a precision of </string>
-                  </property>
-                  <property name="minimum">
-                   <number>2</number>
-                  </property>
-                  <property name="maximum">
-                   <number>9999</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="2">
-                 <spacer name="horizontalSpacer_26">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>35</width>
-                    <height>17</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="2" column="0" rowspan="5">
-                 <widget class="QLabel" name="equationLabel">
-                  <property name="minimumSize">
-                   <size>
-                    <width>85</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>85</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>CURVE
-EQUATION</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QWidget" name="equationType" native="true">
-                  <layout class="QVBoxLayout" name="verticalLayout_8">
-                   <property name="spacing">
-                    <number>5</number>
-                   </property>
-                   <property name="margin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QRadioButton" name="equationType0">
-                     <property name="text">
-                      <string>Cartesian coordinates (x, y, z)</string>
-                     </property>
-                     <property name="checked">
-                      <bool>true</bool>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QRadioButton" name="equationType1">
-                     <property name="text">
-                      <string>Polar coordinates (r, phi, theta)</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
                 <item row="0" column="1" colspan="2">
                  <widget class="QComboBox" name="equationTemplate">
                   <property name="minimumSize">
@@ -1855,6 +1730,589 @@ EQUATION</string>
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item row="4" column="2">
+                 <spacer name="horizontalSpacer_26">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>35</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="2" column="2">
+                 <spacer name="horizontalSpacer_24">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="2" column="0" rowspan="5">
+                 <widget class="QLabel" name="equationLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>CURVE
+EQUATION</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1" colspan="2">
+                 <widget class="QPlainTextEdit" name="equationEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>120</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Changes the 3D mathematical equation of the curve</string>
+                  </property>
+                  <property name="plainText">
+                   <string>1
+,
+3
+,
+5
+</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QWidget" name="equationType" native="true">
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="equationType0">
+                     <property name="text">
+                      <string>Cartesian coordinates (x, y, z)</string>
+                     </property>
+                     <property name="checked">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="equationType1">
+                     <property name="text">
+                      <string>Polar coordinates (r, phi, theta)</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="7" column="1" colspan="2">
+                 <widget class="QFrame" name="frame">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QFrame#frame {
+	border: 0px solid black;
+}
+QWidget {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-top: -2px;
+	margin-bottom: -2px;
+}</string>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_24">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_8">
+                     <property name="spacing">
+                      <number>10</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="equationParam1Label">
+                       <property name="minimumSize">
+                        <size>
+                         <width>45</width>
+                         <height>16</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>54</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>PARAM1</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                       <property name="buddy">
+                        <cstring>positionX</cstring>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSlider" name="equationParam1Slider">
+                       <property name="maximum">
+                        <number>1000</number>
+                       </property>
+                       <property name="pageStep">
+                        <number>50</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QDoubleSpinBox" name="equationParam1Value">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>18</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>50</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Changes the absolute Y-position of object</string>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true"/>
+                       </property>
+                       <property name="decimals">
+                        <number>3</number>
+                       </property>
+                       <property name="minimum">
+                        <double>-999999.000000000000000</double>
+                       </property>
+                       <property name="maximum">
+                        <double>999999.000000000000000</double>
+                       </property>
+                       <property name="singleStep">
+                        <double>0.100000000000000</double>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_29">
+                     <property name="spacing">
+                      <number>10</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="equationParam2Label">
+                       <property name="minimumSize">
+                        <size>
+                         <width>45</width>
+                         <height>16</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>54</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>PARAM2</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                       <property name="buddy">
+                        <cstring>positionX</cstring>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSlider" name="equationParam2Slider">
+                       <property name="maximum">
+                        <number>1000</number>
+                       </property>
+                       <property name="pageStep">
+                        <number>50</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QDoubleSpinBox" name="equationParam2Value">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>18</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>50</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Changes the absolute Y-position of object</string>
+                       </property>
+                       <property name="decimals">
+                        <number>3</number>
+                       </property>
+                       <property name="minimum">
+                        <double>-999999.000000000000000</double>
+                       </property>
+                       <property name="maximum">
+                        <double>999999.000000000000000</double>
+                       </property>
+                       <property name="singleStep">
+                        <double>0.100000000000000</double>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_30">
+                     <property name="spacing">
+                      <number>10</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="equationParam3Label">
+                       <property name="minimumSize">
+                        <size>
+                         <width>45</width>
+                         <height>16</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>54</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>PARAM3</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                       <property name="buddy">
+                        <cstring>positionX</cstring>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSlider" name="equationParam3Slider">
+                       <property name="maximum">
+                        <number>1000</number>
+                       </property>
+                       <property name="pageStep">
+                        <number>50</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QDoubleSpinBox" name="equationParam3Value">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>18</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>50</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Changes the absolute Y-position of object</string>
+                       </property>
+                       <property name="decimals">
+                        <number>3</number>
+                       </property>
+                       <property name="minimum">
+                        <double>-999999.000000000000000</double>
+                       </property>
+                       <property name="maximum">
+                        <double>999999.000000000000000</double>
+                       </property>
+                       <property name="singleStep">
+                        <double>0.100000000000000</double>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_36">
+                     <property name="spacing">
+                      <number>10</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="equationParam4Label">
+                       <property name="minimumSize">
+                        <size>
+                         <width>45</width>
+                         <height>16</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>54</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>PARAM4</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                       <property name="buddy">
+                        <cstring>positionX</cstring>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSlider" name="equationParam4Slider">
+                       <property name="maximum">
+                        <number>1000</number>
+                       </property>
+                       <property name="pageStep">
+                        <number>50</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QDoubleSpinBox" name="equationParam4Value">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>18</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>50</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Changes the absolute Y-position of object</string>
+                       </property>
+                       <property name="decimals">
+                        <number>3</number>
+                       </property>
+                       <property name="minimum">
+                        <double>-999999.000000000000000</double>
+                       </property>
+                       <property name="maximum">
+                        <double>999999.000000000000000</double>
+                       </property>
+                       <property name="singleStep">
+                        <double>0.100000000000000</double>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_37">
+                     <property name="spacing">
+                      <number>10</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="equationParam5Label">
+                       <property name="minimumSize">
+                        <size>
+                         <width>45</width>
+                         <height>16</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>54</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>PARAM5</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                       <property name="buddy">
+                        <cstring>positionX</cstring>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSlider" name="equationParam5Slider">
+                       <property name="maximum">
+                        <number>1000</number>
+                       </property>
+                       <property name="pageStep">
+                        <number>50</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QDoubleSpinBox" name="equationParam5Value">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>18</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>50</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Changes the absolute Y-position of object</string>
+                       </property>
+                       <property name="decimals">
+                        <number>3</number>
+                       </property>
+                       <property name="minimum">
+                        <double>-999999.000000000000000</double>
+                       </property>
+                       <property name="maximum">
+                        <double>999999.000000000000000</double>
+                       </property>
+                       <property name="singleStep">
+                        <double>0.100000000000000</double>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="equationParamReset">
+                     <property name="styleSheet">
+                      <string notr="true">margin-top:5px;
+margin-bottom:0px;</string>
+                     </property>
+                     <property name="text">
+                      <string>RESET PARAMETERS TO DEFAULT</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QSpinBox" name="equationPoints">
+                  <property name="minimumSize">
+                   <size>
+                    <width>203</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>203</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Defines the number of points used to calculate the 3D mathematical equation</string>
+                  </property>
+                  <property name="suffix">
+                   <string> points</string>
+                  </property>
+                  <property name="prefix">
+                   <string>with a precision of </string>
+                  </property>
+                  <property name="minimum">
+                   <number>2</number>
+                  </property>
+                  <property name="maximum">
+                   <number>9999</number>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -4386,7 +4844,7 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>351</x>
+     <x>214</x>
      <y>188</y>
     </hint>
     <hint type="destinationlabel">
@@ -4514,8 +4972,8 @@ padding: 0px;</string>
    <slot>actionInfoID()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>331</x>
-     <y>117</y>
+     <x>260</x>
+     <y>112</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -4530,8 +4988,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>50</x>
-     <y>58</y>
+     <x>64</x>
+     <y>352</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
@@ -4546,8 +5004,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>58</y>
+     <x>301</x>
+     <y>352</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
@@ -4562,8 +5020,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>60</y>
+     <x>301</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
      <x>282</x>
@@ -4578,8 +5036,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>50</x>
-     <y>60</y>
+     <x>64</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
      <x>78</x>
@@ -4594,8 +5052,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>79</y>
+     <x>245</x>
+     <y>455</y>
     </hint>
     <hint type="destinationlabel">
      <x>34</x>
@@ -4722,8 +5180,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>120</y>
+     <x>196</x>
+     <y>121</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4738,8 +5196,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>122</y>
+     <x>266</x>
+     <y>158</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4754,8 +5212,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>122</y>
+     <x>176</x>
+     <y>158</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4770,8 +5228,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>124</y>
+     <x>196</x>
+     <y>196</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4786,8 +5244,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>118</y>
+     <x>313</x>
+     <y>226</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4802,8 +5260,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>118</y>
+     <x>313</x>
+     <y>226</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4818,8 +5276,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>120</y>
+     <x>313</x>
+     <y>259</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4834,8 +5292,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>130</y>
+     <x>330</x>
+     <y>299</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4850,8 +5308,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>130</y>
+     <x>254</x>
+     <y>331</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4866,8 +5324,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>130</y>
+     <x>344</x>
+     <y>331</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4898,8 +5356,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>179</x>
-     <y>120</y>
+     <x>372</x>
+     <y>124</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4914,8 +5372,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>188</x>
+     <y>265</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4930,8 +5388,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>278</x>
+     <y>265</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4946,8 +5404,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>188</x>
+     <y>295</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4962,8 +5420,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>278</x>
+     <y>295</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4978,8 +5436,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>188</x>
+     <y>331</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -4994,8 +5452,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>278</x>
+     <y>331</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5010,8 +5468,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>188</x>
+     <y>361</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5026,8 +5484,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>278</x>
+     <y>361</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5042,8 +5500,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>188</x>
+     <y>397</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5058,8 +5516,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>278</x>
+     <y>397</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5074,8 +5532,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>188</x>
+     <y>427</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5090,8 +5548,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>125</y>
+     <x>278</x>
+     <y>427</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5106,8 +5564,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>120</y>
+     <x>318</x>
+     <y>157</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5123,7 +5581,7 @@ padding: 0px;</string>
    <hints>
     <hint type="sourcelabel">
      <x>221</x>
-     <y>436</y>
+     <y>359</y>
     </hint>
     <hint type="destinationlabel">
      <x>602</x>
@@ -5154,8 +5612,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>305</x>
-     <y>339</y>
+     <x>319</x>
+     <y>329</y>
     </hint>
     <hint type="destinationlabel">
      <x>560</x>
@@ -5219,7 +5677,7 @@ padding: 0px;</string>
    <hints>
     <hint type="sourcelabel">
      <x>221</x>
-     <y>309</y>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>499</x>
@@ -5234,8 +5692,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>117</y>
+     <x>105</x>
+     <y>177</y>
     </hint>
     <hint type="destinationlabel">
      <x>488</x>
@@ -5250,8 +5708,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>118</y>
+     <x>105</x>
+     <y>196</y>
     </hint>
     <hint type="destinationlabel">
      <x>488</x>
@@ -5266,8 +5724,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>119</y>
+     <x>105</x>
+     <y>215</y>
     </hint>
     <hint type="destinationlabel">
      <x>519</x>
@@ -5282,8 +5740,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>120</y>
+     <x>105</x>
+     <y>234</y>
     </hint>
     <hint type="destinationlabel">
      <x>512</x>
@@ -5314,8 +5772,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>65</y>
+     <x>265</x>
+     <y>470</y>
     </hint>
     <hint type="destinationlabel">
      <x>693</x>
@@ -5330,8 +5788,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>141</x>
-     <y>56</y>
+     <x>197</x>
+     <y>536</y>
     </hint>
     <hint type="destinationlabel">
      <x>520</x>
@@ -5346,7 +5804,7 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>280</x>
+     <x>316</x>
      <y>264</y>
     </hint>
     <hint type="destinationlabel">
@@ -5362,8 +5820,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>218</x>
-     <y>342</y>
+     <x>331</x>
+     <y>353</y>
     </hint>
     <hint type="destinationlabel">
      <x>698</x>
@@ -5378,8 +5836,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>270</x>
-     <y>273</y>
+     <x>331</x>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>656</x>
@@ -5394,8 +5852,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>275</x>
-     <y>316</y>
+     <x>331</x>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>773</x>
@@ -5410,8 +5868,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>294</x>
-     <y>340</y>
+     <x>331</x>
+     <y>353</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -5426,12 +5884,188 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>221</y>
+     <x>314</x>
+     <y>230</y>
     </hint>
     <hint type="destinationlabel">
      <x>677</x>
      <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam1Slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>381</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1157</x>
+     <y>275</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam2Slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>411</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1160</x>
+     <y>326</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam3Slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>303</x>
+     <y>437</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1125</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam4Slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>303</x>
+     <y>461</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1147</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam5Slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>303</x>
+     <y>484</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1112</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam1Value</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>363</x>
+     <y>394</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>859</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam2Value</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>363</x>
+     <y>418</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>825</x>
+     <y>34</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam3Value</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>363</x>
+     <y>442</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>755</x>
+     <y>65</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam4Value</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>363</x>
+     <y>466</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>665</x>
+     <y>46</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParam5Value</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>363</x>
+     <y>490</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>624</x>
+     <y>513</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>equationParamReset</sender>
+   <signal>released()</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>318</x>
+     <y>506</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>400</y>
     </hint>
    </hints>
   </connection>

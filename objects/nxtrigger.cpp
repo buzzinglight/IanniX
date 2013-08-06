@@ -24,6 +24,7 @@ NxTrigger::NxTrigger(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) 
     NxObject(parent, ccParentItem) {
     cacheSize = 0;
     cursorTrigged = 0;
+    lastTrigTime = 0;
     setText(0, tr("TRIGGER"));
 
     initializeCustom();
@@ -87,15 +88,15 @@ void NxTrigger::paint() {
         glRotatef(Render::rotation.y(), -1, 0, 0);
 
         //Label
-        if((Render::paintThisGroup) && (Application::paintLabel) && (!label.isEmpty()))
-            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id) + " - " + label, Application::renderFont);
+        if((Render::paintThisGroup) && (Application::paintLabel || selectedHover) && (!label.isEmpty()))
+            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id) + " - " + label.toUpper(), Application::renderFont);
         else if(selectedHover)
             Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id), Application::renderFont);
         if((selectedHover) && (!isDrag)) {
             qreal startY = -0.2 - cacheSize * 1.2;
             foreach(const QString & messageLabelItem, messageLabel) {
-                Application::render->renderText(cacheSize * 1.2, startY, 0, messageLabelItem, Application::renderFont);
-                startY -= 0.4;
+                Application::render->renderText(cacheSize * 1.2, startY, 0, messageLabelItem.trimmed(), Application::renderFont);
+                startY -= 0.2 * Render::zoomLinear;
             }
         }
 

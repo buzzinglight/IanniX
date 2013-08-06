@@ -23,6 +23,7 @@ UiInspector::UiInspector(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UiInspector) {
     ui->setupUi(this);
+    slidersLock = false;
     toolbarButton = 0;
     lastTabBeforeRessources = 0;
 
@@ -261,6 +262,33 @@ void UiInspector::actionCCButton() {
 }
 
 void UiInspector::actionInfo() {
+    if(!slidersLock) {
+        slidersLock = true;
+        if(sender() == ui->equationParamReset)  {
+            ui->equationParam1Value ->setValue(0.5);
+            ui->equationParam2Value ->setValue(0.5);
+            ui->equationParam3Value ->setValue(0.5);
+            ui->equationParam4Value ->setValue(0.5);
+            ui->equationParam5Value ->setValue(0.5);
+            ui->equationParam1Slider->setValue(500);
+            ui->equationParam2Slider->setValue(500);
+            ui->equationParam3Slider->setValue(500);
+            ui->equationParam4Slider->setValue(500);
+            ui->equationParam5Slider->setValue(500);
+        }
+        if(sender() == ui->equationParam1Slider) ui->equationParam1Value->setValue(ui->equationParam1Slider->value() / 1000.);
+        if(sender() == ui->equationParam2Slider) ui->equationParam2Value->setValue(ui->equationParam2Slider->value() / 1000.);
+        if(sender() == ui->equationParam3Slider) ui->equationParam3Value->setValue(ui->equationParam3Slider->value() / 1000.);
+        if(sender() == ui->equationParam4Slider) ui->equationParam4Value->setValue(ui->equationParam4Slider->value() / 1000.);
+        if(sender() == ui->equationParam5Slider) ui->equationParam5Value->setValue(ui->equationParam5Slider->value() / 1000.);
+        if(sender() == ui->equationParam1Value)  ui->equationParam1Slider->setValue(ui->equationParam1Value->value() * 1000.);
+        if(sender() == ui->equationParam2Value)  ui->equationParam2Slider->setValue(ui->equationParam2Value->value() * 1000.);
+        if(sender() == ui->equationParam3Value)  ui->equationParam3Slider->setValue(ui->equationParam3Value->value() * 1000.);
+        if(sender() == ui->equationParam4Value)  ui->equationParam4Slider->setValue(ui->equationParam4Value->value() * 1000.);
+        if(sender() == ui->equationParam5Value)  ui->equationParam5Slider->setValue(ui->equationParam5Value->value() * 1000.);
+        slidersLock = false;
+    }
+
     if(!actionInfoLock) {
         Application::current->pushSnapshot();
 
@@ -291,6 +319,11 @@ void UiInspector::actionInfo() {
         else if(ui->cursorTargetY2 == sender())             Application::current->execute(QString("%1 selection 4 %2").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetY2->value()), ExecuteSourceGui);
         else if(ui->cursorTargetZ2 == sender())             Application::current->execute(QString("%1 selection 5 %2").arg(COMMAND_CURSOR_BOUNDS_TARGET).arg(ui->cursorTargetZ2->value()), ExecuteSourceGui);
         else if(ui->equationPoints == sender())             Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURVE_EQUATION_POINTS).arg(ui->equationPoints->value()), ExecuteSourceGui);
+        else if(ui->equationParam1Value == sender())        Application::current->execute(QString("%1 selection param1 %2").arg(COMMAND_CURVE_EQUATION_PARAM).arg(ui->equationParam1Value->value()), ExecuteSourceGui);
+        else if(ui->equationParam2Value == sender())        Application::current->execute(QString("%1 selection param2 %2").arg(COMMAND_CURVE_EQUATION_PARAM).arg(ui->equationParam2Value->value()), ExecuteSourceGui);
+        else if(ui->equationParam3Value == sender())        Application::current->execute(QString("%1 selection param3 %2").arg(COMMAND_CURVE_EQUATION_PARAM).arg(ui->equationParam3Value->value()), ExecuteSourceGui);
+        else if(ui->equationParam4Value == sender())        Application::current->execute(QString("%1 selection param4 %2").arg(COMMAND_CURVE_EQUATION_PARAM).arg(ui->equationParam4Value->value()), ExecuteSourceGui);
+        else if(ui->equationParam5Value == sender())        Application::current->execute(QString("%1 selection param5 %2").arg(COMMAND_CURVE_EQUATION_PARAM).arg(ui->equationParam5Value->value()), ExecuteSourceGui);
         else if(ui->cursorSourceMode0 == sender())          Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE_MODE).arg(0), ExecuteSourceGui);
         else if(ui->cursorSourceMode1 == sender())          Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE_MODE).arg(1), ExecuteSourceGui);
         else if(ui->cursorSourceMode2 == sender())          Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_BOUNDS_SOURCE_MODE).arg(2), ExecuteSourceGui);
@@ -359,7 +392,7 @@ void UiInspector::actionInfoID() {
     quint16 newId = (new UiMessageBox())->getDouble(tr("Object ID"), tr("Enter the new ID:"), oldId, 0, 32767, 1, 0, "", &ok);
     if((ok) && (oldId != newId)) {
         if(Application::current->getObjectById(newId))
-            (new UiMessageBox())->display(tr("Object ID"), tr("Another object has this ID.\nTry deleting that object, or change its ID."), QDialogButtonBox::Ok);
+            (new UiMessageBox())->display(tr("Object ID"), tr("Another object has this ID.\nTry deleting that object, or change its ID."));
         else {
             Application::current->pushSnapshot();
             Application::current->execute(QString("%1 %2 %3").arg(COMMAND_ID).arg(oldId).arg(newId), ExecuteSourceGui);
@@ -587,6 +620,11 @@ void UiInspector::refresh() {
                 change(indexObject, ui->equationType0,  curve->getEquationType()==0, prevCurve->getEquationType()==0);
                 change(indexObject, ui->equationType1,  curve->getEquationType()==1, prevCurve->getEquationType()==1);
                 change(indexObject, ui->equationEdit,   curve->getEquation(true), prevCurve->getEquation(true));
+                change(indexObject, ui->equationParam1Value, curve->getEquationParam("param1"), prevCurve->getEquationParam("param1"));
+                change(indexObject, ui->equationParam2Value, curve->getEquationParam("param2"), prevCurve->getEquationParam("param2"));
+                change(indexObject, ui->equationParam3Value, curve->getEquationParam("param3"), prevCurve->getEquationParam("param3"));
+                change(indexObject, ui->equationParam4Value, curve->getEquationParam("param4"), prevCurve->getEquationParam("param4"));
+                change(indexObject, ui->equationParam5Value, curve->getEquationParam("param5"), prevCurve->getEquationParam("param5"));
 
                 prevCurve = curve;
             }
@@ -741,6 +779,22 @@ void UiInspector::refresh() {
     ui->equationType->setVisible(showCurveEquationInfo);
     ui->equationPoints->setVisible(showCurveEquationInfo);
     ui->equationEdit->setVisible(showCurveEquationInfo);
+    ui->equationParam1Label->setVisible(showCurveEquationInfo);
+    ui->equationParam1Slider->setVisible(showCurveEquationInfo);
+    ui->equationParam1Value->setVisible(showCurveEquationInfo);
+    ui->equationParam2Label->setVisible(showCurveEquationInfo);
+    ui->equationParam2Slider->setVisible(showCurveEquationInfo);
+    ui->equationParam2Value->setVisible(showCurveEquationInfo);
+    ui->equationParam3Label->setVisible(showCurveEquationInfo);
+    ui->equationParam3Slider->setVisible(showCurveEquationInfo);
+    ui->equationParam3Value->setVisible(showCurveEquationInfo);
+    ui->equationParam4Label->setVisible(showCurveEquationInfo);
+    ui->equationParam4Slider->setVisible(showCurveEquationInfo);
+    ui->equationParam4Value->setVisible(showCurveEquationInfo);
+    ui->equationParam5Label->setVisible(showCurveEquationInfo);
+    ui->equationParam5Slider->setVisible(showCurveEquationInfo);
+    ui->equationParam5Value->setVisible(showCurveEquationInfo);
+    ui->equationParamReset->setVisible(showCurveEquationInfo);
 
     if((!showGenericInfo) && (ui->ssTabInfo->currentIndex() != 4))
         lastTabBeforeRessources = ui->ssTabInfo->currentIndex();

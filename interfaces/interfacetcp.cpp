@@ -46,27 +46,36 @@ bool InterfaceTcp::send(const Message &message, QStringList *messageSent) {
 }
 bool InterfaceTcpServer::send(const Message &message, QStringList *messageSent) {
     bool ok = false;
+    QByteArray bytes;
+    if(xmlMode) {
+        //bytes += "<OSCPACKET ADDRESS=\"" + socket->localAddress().toString() + "\" PORT=\"" + QByteArray::number(socket->localPort()) + "\" TIME=\"" + QByteArray::number(Transport::timeLocal) + "\"><MESSAGE NAME=\"/" + message.getAddress() + "\">" + message.getAsciiMessageXml() + "</MESSAGE></OSCPACKET>";
+        bytes += "<OSCPACKET TIME=\"" + QByteArray::number(Transport::timeLocal) + "\"><MESSAGE NAME=\"/" + message.getAddress() + "\">" + message.getAsciiMessageXml() + "</MESSAGE></OSCPACKET>";
+        bytes += (char)0;
+    }
+    else {
+        foreach(const QVariant &valeur, message.verboseValues) {
+            bool isFloat = false;
+            union { float f; char ch[4]; } u;
+            u.f = valeur.toFloat(&isFloat);
+            if(!isFloat)
+                bytes.append(valeur.toString());
+            else {
+                bytes.append(u.ch[0]);
+                bytes.append(u.ch[1]);
+                bytes.append(u.ch[2]);
+                bytes.append(u.ch[3]);
+            }
+        }
+    }
+
     //Send request
     foreach(QTcpSocket *socket, sockets) {
-        if(xmlMode) {
-            QByteArray xml;
-            xml += "<OSCPACKET ADDRESS=\"" + socket->localAddress().toString() + "\" PORT=\"" + QByteArray::number(socket->localPort()) + "\" TIME=\"" + QByteArray::number(Transport::timeLocal) + "\"><MESSAGE NAME=\"/" + message.getAddress() + "\">" + message.getAsciiMessageXml() + "</MESSAGE></OSCPACKET>";
-            xml += (char)0;
-            socket->write(xml);
-            socket->flush();
+        socket->write(bytes);
+        socket->flush();
 
-            //Log in console
-            MessageManager::logSend(message, messageSent);
-            ok = true;
-        }
-        else {
-            socket->write(message.getAsciiMessage());
-            QString dataSent = message.getAsciiMessage();
-
-            //Log in console
-            MessageManager::logSend(message, messageSent);
-            ok = true;
-        }
+        //Log in console
+        MessageManager::logSend(message, messageSent);
+        ok = true;
     }
     return ok;
 }
@@ -96,10 +105,10 @@ void InterfaceTcpServer::readClient() {
             QStringList arguments;
             for(quint16 indexBuffer = 0 ; indexBuffer < dataReceived.count() ; indexBuffer += 4) {
                 union { float f; char ch[4]; } u;
-                u.ch[3] = dataReceived[indexBuffer + 3];
-                u.ch[2] = dataReceived[indexBuffer + 2];
-                u.ch[1] = dataReceived[indexBuffer + 1];
                 u.ch[0] = dataReceived[indexBuffer + 0];
+                u.ch[1] = dataReceived[indexBuffer + 1];
+                u.ch[2] = dataReceived[indexBuffer + 2];
+                u.ch[3] = dataReceived[indexBuffer + 3];
                 qreal val = u.f;
                 arguments << QString::number(val);
             }

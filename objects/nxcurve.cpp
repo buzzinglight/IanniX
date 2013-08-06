@@ -31,7 +31,6 @@ NxCurve::NxCurve(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     equationNbEval = 3;
     pathLength = 0;
     pathPointsEditor = 0;
-
     initializeCustom();
 }
 void NxCurve::initializeCustom() {
@@ -41,6 +40,11 @@ void NxCurve::initializeCustom() {
     setInertie(1);
     setEquationStr("");
     setEquationPoints(400);
+    setEquationParam("param1", 0.5);
+    setEquationParam("param2", 0.5);
+    setEquationParam("param3", 0.5);
+    setEquationParam("param4", 0.5);
+    setEquationParam("param5", 0.5);
     pathPoints.clear();
     setPointAt(0, NxPoint(), NxPoint(), NxPoint(), false);
 }
@@ -175,9 +179,9 @@ void NxCurve::paint() {
         glTranslatef(pos.x(), pos.y(), pos.z());
 
         //Label
-        if((Render::paintThisGroup) && (Application::paintLabel) && (!label.isEmpty())) {
+        if((Render::paintThisGroup) && (Application::paintLabel || selectedHover) && (!label.isEmpty())) {
             NxPoint pt = getPointAt(0);
-            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id) + " - " + label, Application::renderFont);
+            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id) + " - " + label.toUpper(), Application::renderFont);
         }
         else if(selectedHover) {
             NxPoint pt = getPointAt(0);
@@ -186,7 +190,8 @@ void NxCurve::paint() {
 
         //Draw
         if((glListRecreate) || (glListRecreateFromEditor) || (Render::forceLists)) {
-            setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
+            if(pathPoints.count())
+                setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
             glNewList(glListCurve, GL_COMPILE_AND_EXECUTE);
             glLineWidth(size);
             glEnable(GL_LINE_STIPPLE);
@@ -324,6 +329,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
                 }
                 else
                     pathPoints[indexPoint].smooth = true;
+                if(pathPoints.count())
                 setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
             }
             return;
@@ -354,6 +360,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
                     pathPoints.append(pt);
                     pathPoints[indexPoint].smooth = pathPoints.at(indexPoint-1).smooth;
                 }
+                if(pathPoints.count())
                 setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
                 calcBoundingRect();
                 return;
@@ -969,6 +976,7 @@ void NxCurve::resample(quint16 nbPoints, bool smooth) {
         cPt.smooth = smooth;
         pathPoints.append(cPt);
     }
+    if(pathPoints.count())
     setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
     curveType = CurveTypePoints;
     calcBoundingRect();

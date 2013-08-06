@@ -138,7 +138,7 @@ void UiHelp::statusHelp() {
                         messageTextsArgument.toDouble(&ok);
                         if(ok) {
                             if(((messageTextsArgumentIndex == 1) && (messageTextsArgumentIndex == (messageTextsArguments.count()-1))) ||
-                               ((messageTextsArgumentIndex == 2) && (messageTextsArgumentIndex == (messageTextsArguments.count()-1))) || (messageTextsArgumentIndex > 2)) {
+                                    ((messageTextsArgumentIndex == 2) && (messageTextsArgumentIndex == (messageTextsArguments.count()-1))) || (messageTextsArgumentIndex > 2)) {
                                 parametersMessage += "$1 ";
                                 added = true;
                                 paramOk = true;
@@ -163,9 +163,9 @@ void UiHelp::statusHelp() {
                 html += QString("<span class='action'>%1</span><br/>").arg(messageDescription.replace("\n", "<br/>"));
                 html += messageVerbose;
                 html += "<span class='action'>";
-                html += QString("  &nbsp;<a href='%1'>&gt;&nbsp;Copy</a>").arg(messageText);
-                html += QString(" /&nbsp;<a href='%1'>&gt;&nbsp;for MaxMSP</a>").arg(QString("{ \"boxes\" : [ { \"box\" : { \"maxclass\" : \"flonum\", \"outlettype\" : [ \"float\", \"bang\" ], \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 58.0, 50.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-5\", \"numoutlets\" : 2, \"parameter_enable\" : 0 }  } , { \"box\" : { \"maxclass\" : \"message\", \"text\" : \"/iannix/%1\", \"outlettype\" : [ \"\" ], \"fontname\" : \"Arial\", \"numinlets\" : 2, \"patching_rect\" : [ 37.0, 85.0, 95.0, 18.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-3\", \"numoutlets\" : 1 }  } , { \"box\" : { \"maxclass\" : \"newobj\", \"text\" : \"udpsend 127.0.0.1 %2\", \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 110.0, 140.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-1\", \"numoutlets\" : 0 }  }  ], \"lines\" : [ { \"patchline\" : { \"source\" : [ \"obj-5\", 0 ], \"destination\" : [ \"obj-3\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  } , { \"patchline\" : { \"source\" : [ \"obj-3\", 0 ], \"destination\" : [ \"obj-1\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  }  ], \"appversion\" : { \"major\" : 6, \"minor\" : 0, \"revision\" : 8 }  } ").arg(parametersMessage).arg(oscPort));
-                html += QString(" /&nbsp;<a href='%1'>&gt;&nbsp;for Processing</a>").arg(QString("iannix.send(%1);").arg(codeMessage));
+                html += QString("  &nbsp;<a href='%1 | Copied to clipboard! You can now paste this message in a script (through run() function) or in an OSC message.'>&gt;&nbsp;Copy</a>").arg(messageText);
+                html += QString(" /&nbsp;<a href='%1 | Copied to clipboard! Open a Max patch and choose Edit > Paste. It will automatically create objects to interact with IanniX.'>&gt;&nbsp;for MaxMSP</a>").arg(QString("{ \"boxes\" : [ { \"box\" : { \"maxclass\" : \"flonum\", \"outlettype\" : [ \"float\", \"bang\" ], \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 58.0, 50.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-5\", \"numoutlets\" : 2, \"parameter_enable\" : 0 }  } , { \"box\" : { \"maxclass\" : \"message\", \"text\" : \"/iannix/%1\", \"outlettype\" : [ \"\" ], \"fontname\" : \"Arial\", \"numinlets\" : 2, \"patching_rect\" : [ 37.0, 85.0, 95.0, 18.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-3\", \"numoutlets\" : 1 }  } , { \"box\" : { \"maxclass\" : \"newobj\", \"text\" : \"udpsend 127.0.0.1 %2\", \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 110.0, 140.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-1\", \"numoutlets\" : 0 }  }  ], \"lines\" : [ { \"patchline\" : { \"source\" : [ \"obj-5\", 0 ], \"destination\" : [ \"obj-3\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  } , { \"patchline\" : { \"source\" : [ \"obj-3\", 0 ], \"destination\" : [ \"obj-1\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  }  ], \"appversion\" : { \"major\" : 6, \"minor\" : 0, \"revision\" : 8 }  } ").arg(parametersMessage).arg(oscPort));
+                html += QString(" /&nbsp;<a href='%1 | Copied to clipboard! Open a Processing sketch with IanniX class (provided with IanniX). Paste the code where you want to interact with IanniX.'>&gt;&nbsp;for Processing</a>").arg(QString("iannix.send(%1);").arg(codeMessage));
                 html += "</span><br/>";
                 html += QString("<span class='action'>%1 %2</span><br/>").arg(messageTexts.at(i).second.keyword).arg(messageSyntax.replace(">", "&gt;").replace("<", "&lt;").replace("\n", "<br/>"));
                 html += "<br/>";
@@ -278,13 +278,19 @@ void UiHelp::scriptHelp(const QString &looking, const QStringList &lookCategorie
 
 
 void UiHelp::linkClicked(QUrl url) {
-    if((currentTextEdit) || (currentCombo)) {
-        if(currentTextEdit)
-            currentTextEdit->textCursor().insertText(url.toString());
-        if(currentCombo)
-            currentCombo->setEditText(currentCombo->currentText() + url.toString());
-    }
-    else {
-        QApplication::clipboard()->setText(url.toString());
+    QStringList urls = url.toString().split(" | ");
+
+    if(urls.count()) {
+        if((currentTextEdit) || (currentCombo)) {
+            if(currentTextEdit)
+                currentTextEdit->textCursor().insertText(urls.first());
+            if(currentCombo)
+                currentCombo->setEditText(currentCombo->currentText() + urls.first());
+        }
+        else
+            QApplication::clipboard()->setText(urls.first());
+
+        if(urls.count() > 1)
+            (new UiMessageBox())->display(tr("Help Center"), urls.at(1));
     }
 }

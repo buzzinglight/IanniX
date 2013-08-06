@@ -42,6 +42,7 @@ private:
     qreal triggerOff;
     static GLuint glListTrigger;
 public:
+    qint64 lastTrigTime;
     inline quint8 getType() const {
         return ObjectsTypeTrigger;
     }

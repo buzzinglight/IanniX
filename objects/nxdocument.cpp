@@ -106,7 +106,7 @@ void NxDocument::popSnapshot(bool revert) {
 
 
 void NxDocument::open() {
-    if(!isLoaded) {
+    if(true) {
         clear();
         open(true);
 
@@ -124,10 +124,10 @@ void NxDocument::open(bool configure) {
     script = scriptEngine.globalObject();
 
     //Map specials features/keywords/functions
-    script.setProperty("mouseX",   mousePos.x());
-    script.setProperty("mouseY",   mousePos.y());
-    script.setProperty("iannix",   scriptFunctions);
-    script.setProperty("nx",       scriptFunctions);
+    script.setProperty("mouseX", mousePos.x());
+    script.setProperty("mouseY", mousePos.y());
+    script.setProperty("iannix", scriptFunctions);
+    script.setProperty("nx",     scriptFunctions);
 
     //GUI to ask the user variables
     if(!variable)
@@ -214,7 +214,7 @@ void NxDocument::save() {
     QString scoreContent = getContent(false);
     QFile scriptFileContent(getScriptFile().absoluteFilePath());
     if(scriptFileContent.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        scriptFileContent.write(scoreContent.toLatin1());
+        scriptFileContent.write(qPrintable(scoreContent));
         scriptFileContent.close();
     }
     Application::current->getMainWindow()->setWindowTitle(tr("IanniX") + QString(" / %1").arg(getScriptFile().baseName()));
@@ -290,7 +290,7 @@ void NxDocument::askFileSave() {
     save();
 }
 void NxDocument::askFileReload() {
-    open();
+    open(false);
 }
 void NxDocument::askFileClose() {
     if((fileItem) && (!skipClose)) {

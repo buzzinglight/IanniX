@@ -11,6 +11,7 @@
 #include <QPlainTextEdit>
 #include <QScrollBar>
 #include <QClipboard>
+#include "gui/uimessagebox.h"
 #include "misc/help.h"
 #include "misc/options.h"
 

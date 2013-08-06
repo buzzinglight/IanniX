@@ -30,10 +30,10 @@ protected:
     QVariant data(int column, int role) const;
     void setData(int column, int role, const QVariant &value);
 public:
-    virtual void fileOpen()   { emit(askFileOpen());  /*qDebug("Ouverture du fichier %s", qPrintable(filename.file.absoluteFilePath()));*/  }
-    virtual void fileSave()   { emit(askFileSave());  /*qDebug("Sauvegarde du fichier %s", qPrintable(filename.file.absoluteFilePath()));*/ }
-    virtual void fileReload() { emit(askFileReload());/*qDebug("Reload du fichier %s", qPrintable(filename.file.absoluteFilePath()));*/     }
-    virtual void fileClose()  { emit(askFileClose()); /*qDebug("Fermeture du fichier %s", qPrintable(filename.file.absoluteFilePath()));*/  }
+    virtual void fileOpen()   { emit(askFileOpen());   }
+    virtual void fileSave()   { emit(askFileSave());   }
+    virtual void fileReload() { emit(askFileReload()); }
+    virtual void fileClose()  { emit(askFileClose());  }
 signals:
     void askFileOpen();
     void askFileSave();

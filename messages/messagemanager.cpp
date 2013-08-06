@@ -63,7 +63,6 @@ void MessageManager::logReceive(const MessageLog &message, QStringList *sentMess
         log->logReceive(message, sentMessage);
 }
 void MessageManager::logInfo(const QString &message) {
-    qDebug("%s", qPrintable(message));
     foreach(MessageManagerLogInterface *log, logs)
         log->logInfo(message);
 }

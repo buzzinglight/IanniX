@@ -203,6 +203,10 @@ public:
     inline QString getEquationParamStr() const {
         return QString();
     }
+    inline qreal getEquationParam(const QString &param) const {
+        if(equationVariables.contains(param))   return equationVariables.value(param);
+        else                                    return 0;
+    }
     inline void setEquationParamStr(const QString &params) {
         QStringList paramsList = params.split(" ");
         if(paramsList.count() > 1)
@@ -460,6 +464,13 @@ public:
         foreach(const QString &command, propertiesToSerialize.value(NxObjectDispatchProperty::source)) {
             if(command == COMMAND_ID) {
                 retour += "\trun(\"" + QString("%1 %2 %3").arg(COMMAND_ADD).arg(getTypeStr()).arg(objectId) + "\");\n"; objectId = "current";
+            }
+            else if(command == COMMAND_CURVE_EQUATION_PARAM) {
+                QHashIterator<QString, qreal> equationVariablesIterator(equationVariables);
+                while(equationVariablesIterator.hasNext()) {
+                    equationVariablesIterator.next();
+                    retour += "\trun(\"" + QString("%1 current %2 %3").arg(COMMAND_CURVE_EQUATION_PARAM).arg(equationVariablesIterator.key()).arg(equationVariablesIterator.value()) + "\");\n";
+                }
             }
             else if(command == COMMAND_CURVE_POINT) {
                 QString idStr = QString::number(id);

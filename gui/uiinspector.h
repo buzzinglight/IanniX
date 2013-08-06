@@ -43,6 +43,7 @@ protected:
 
 private:
     bool actionInfoLock;
+    bool slidersLock;
 
 public slots:
     void addInterfaces();
