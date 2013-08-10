@@ -335,6 +335,7 @@ void IanniXApp::setHelp() {
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT				, tr("Objects and 3D space"), tr("Defines point position of a curve"), tr("<target> <point_index> <x> <y> <z>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_SMOOTH		, tr("Objects and 3D space"), tr("Defines smoothed point position of a curve"), tr("<target> <point_index> <x> <y> <z>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_POINT_RMV			, tr("Objects and 3D space"), tr("Removes point from a curve"), tr("<target> <point_index>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_INERTIE        	, tr(""), tr(""), tr("<target> <elasticity>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_SIZE						, tr(""), tr(""), tr("<target> <size>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_POS						, tr("Objects and 3D space"), tr("Changes the absolute position of object"), tr("<target> <x> <y> <z>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_POS_TRANSLATE			, tr("Objects and 3D space"), tr("Translate position of object"), tr("<target> <dx> <dy> <dz>"));

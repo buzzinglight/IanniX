@@ -17,7 +17,7 @@ UiTreeView::UiTreeView(QWidget *parent) :
     showImport   (false);
     showOpen     (false);
     showSave     (false);
-    showSaveAs   (false);
+    showSaveAs   (true);
     importAsFiles = true;
 }
 

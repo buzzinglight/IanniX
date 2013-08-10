@@ -4,6 +4,7 @@
 #include <QVariant>
 #include "iannix_spec.h"
 
+
 class ApplicationExecute {
 public:
     static ApplicationExecute *current;

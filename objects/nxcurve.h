@@ -43,7 +43,7 @@ class NxCurve : public NxObject {
 
     Q_PROPERTY(bool      displaycurveeditor   READ getShowPathPointsEditor   WRITE setShowPathPointsEditor)
     Q_PROPERTY(bool      displaycurveresample READ getShowPathPointsResample WRITE setShowPathPointsResample)
-    Q_PROPERTY(qreal     setinertia           READ getInertie               WRITE setInertie)
+    Q_PROPERTY(qreal     setelasticity        READ getInertie               WRITE setInertie)
     Q_PROPERTY(qreal     setlength            READ getPathLength            WRITE setPathLength)
     Q_PROPERTY(QString   setresize            READ getResizeStr             WRITE setResizeStr)
     Q_PROPERTY(qreal     setresizef           READ getResizeF               WRITE setResizeF)

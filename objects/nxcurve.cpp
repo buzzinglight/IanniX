@@ -330,7 +330,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
                 else
                     pathPoints[indexPoint].smooth = true;
                 if(pathPoints.count())
-                setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
+                    setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
             }
             return;
         }
@@ -361,7 +361,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
                     pathPoints[indexPoint].smooth = pathPoints.at(indexPoint-1).smooth;
                 }
                 if(pathPoints.count())
-                setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
+                    setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
                 calcBoundingRect();
                 return;
             }
@@ -416,11 +416,22 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
         pointStruct.c2 = c2;
         pointStruct.smooth = smooth;
         pathPoints.append(pointStruct);
-        pathPointsDest.append(pointStruct);
         hasCreate = true;
     }
     else {
-        if(inertie == 1) {
+        if((inertie != 1) && (inertie > 0)) {
+            while(pathPointsDest.count() <= index)
+                pathPointsDest.append(pathPoints.at(index));
+            pathPointsDest[index].setX(point.x());
+            pathPointsDest[index].setY(point.y());
+            pathPointsDest[index].setZ(point.z());
+            pathPointsDest[index].setSx(point.sx());
+            pathPointsDest[index].setSy(point.sy());
+            pathPointsDest[index].setSz(point.sz());
+            pathPointsDest[index].c1 = c1;
+            pathPointsDest[index].c2 = c2;
+        }
+        else {
             pathPoints[index].setX(point.x());
             pathPoints[index].setY(point.y());
             pathPoints[index].setZ(point.z());
@@ -430,17 +441,6 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
             pathPoints[index].c1 = c1;
             pathPoints[index].c2 = c2;
             pathPoints[index].smooth = smooth;
-        }
-        else {
-            pathPointsDest[index].setX(point.x());
-            pathPointsDest[index].setY(point.y());
-            pathPointsDest[index].setZ(point.z());
-            pathPointsDest[index].setSx(point.sx());
-            pathPointsDest[index].setSy(point.sy());
-            pathPointsDest[index].setSz(point.sz());
-            pathPointsDest[index].c1 = c1;
-            pathPointsDest[index].c2 = c2;
-            pathPointsDest[index].smooth = smooth;
         }
     }
 
@@ -501,9 +501,11 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
 void NxCurve::computeInertie() {
     if((inertie != 1) && (inertie > 0)) {
         for(quint16 index = 0 ; index < pathPoints.count() ; index++) {
-            pathPoints[index].setX (pathPoints.at(index).x()   + (pathPointsDest.at(index).x()  - pathPoints.at(index).x())  / inertie);
-            pathPoints[index].setY (pathPoints.at(index).y()   + (pathPointsDest.at(index).y()  - pathPoints.at(index).y())  / inertie);
-            pathPoints[index].setZ (pathPoints.at(index).z()   + (pathPointsDest.at(index).z()  - pathPoints.at(index).z())  / inertie);
+            while(pathPointsDest.count() <= index)
+                pathPointsDest.append(pathPoints.at(index));
+            pathPoints[index].setX (pathPoints.at(index).x()  + (pathPointsDest.at(index).x()  - pathPoints.at(index).x())  / inertie);
+            pathPoints[index].setY (pathPoints.at(index).y()  + (pathPointsDest.at(index).y()  - pathPoints.at(index).y())  / inertie);
+            pathPoints[index].setZ (pathPoints.at(index).z()  + (pathPointsDest.at(index).z()  - pathPoints.at(index).z())  / inertie);
             pathPoints[index].setSx(pathPoints.at(index).sx() + (pathPointsDest.at(index).sx() - pathPoints.at(index).sx()) / inertie);
             pathPoints[index].setSy(pathPoints.at(index).sy() + (pathPointsDest.at(index).sy() - pathPoints.at(index).sy()) / inertie);
             pathPoints[index].setSz(pathPoints.at(index).sz() + (pathPointsDest.at(index).sz() - pathPoints.at(index).sz()) / inertie);
@@ -977,7 +979,7 @@ void NxCurve::resample(quint16 nbPoints, bool smooth) {
         pathPoints.append(cPt);
     }
     if(pathPoints.count())
-    setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
+        setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
     curveType = CurveTypePoints;
     calcBoundingRect();
     glListRecreate = true;

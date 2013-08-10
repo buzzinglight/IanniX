@@ -56,8 +56,10 @@ UiView::UiView(QWidget *parent) :
     connect(ui->render, SIGNAL(editingStop()),             SLOT(editingStop()));
 
     connect(ui->actionNew,               SIGNAL(triggered()), ui->render, SLOT(actionNew()));
+    connect(ui->actionClose_score,       SIGNAL(triggered()), ui->render, SLOT(actionNew()));
     connect(ui->actionOpen,              SIGNAL(triggered()), ui->render, SLOT(actionOpen()));
     connect(ui->actionSave,              SIGNAL(triggered()), ui->render, SLOT(actionSave()));
+    connect(ui->actionSave_score_as,     SIGNAL(triggered()), ui->render, SLOT(actionSave_as()));
     connect(ui->actionImoprt_SVG,        SIGNAL(triggered()), SLOT(actionImportSVG()));
     connect(ui->actionImoprt_Background, SIGNAL(triggered()), SLOT(actionImportBackground()));
     connect(ui->actionImoprt_Text,       SIGNAL(triggered()), SLOT(actionImportText()));
@@ -489,7 +491,7 @@ void UiView::actionAddMathCurve() {
     unToogleDraw(4);
     ui->render->selectionClear(true);
     quint16 id = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
-    Application::current->execute("setequation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), cos(4*t*PI)", ExecuteSourceGui);
+    Application::current->execute("setequation " + QString::number(id) + " cartesian 10*param1*t , sin(param2*20*t*PI) * exp(1-4*param3*t) , 2*param5*cos(8*param4*t*PI)", ExecuteSourceGui);
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id));
     ui->inspector->showSpaceTab();
     id = Application::current->execute("add cursor auto", ExecuteSourceGui).toUInt();
@@ -502,7 +504,7 @@ void UiView::actionAddMathCurveSimple() {
     unToogleDraw(4);
     ui->render->selectionClear(true);
     quint16 id = Application::current->execute("add curve auto", ExecuteSourceGui).toUInt();
-    Application::current->execute("setequation " + QString::number(id) + " cartesian 5*t, sin(10*t*PI) * exp(1-4*t), 0", ExecuteSourceGui);
+    Application::current->execute("setequation " + QString::number(id) + " cartesian 10*param1*t , sin(param2*20*t*PI) * exp(1-4*param3*t) , 0", ExecuteSourceGui);
     ui->render->selectionAdd((NxObject*)Application::current->getObjectById(id));
     ui->inspector->showSpaceTab();
 }

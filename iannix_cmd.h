@@ -119,7 +119,7 @@
 
 
 // BETA FUNCTIONS
-#define COMMAND_CURVE_INERTIE               "setinertia"
+#define COMMAND_CURVE_INERTIE               "setelasticity"
 #define COMMAND_LINE                        "setline"
 
 

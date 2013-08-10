@@ -445,7 +445,9 @@ QDialogButtonBox QPushButton {
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
+    <addaction name="actionSave_score_as"/>
     <addaction name="actionReloadScript"/>
+    <addaction name="actionClose_score"/>
     <addaction name="separator"/>
     <addaction name="actionImoprt_Text"/>
     <addaction name="actionImoprt_SVG"/>
@@ -1912,6 +1914,22 @@ QDialogButtonBox QPushButton {
    </property>
    <property name="toolTip">
     <string>Opens the Config tab in Inspector</string>
+   </property>
+  </action>
+  <action name="actionSave_score_as">
+   <property name="text">
+    <string>Save score as…</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionClose_score">
+   <property name="text">
+    <string>Close score</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>

@@ -160,13 +160,17 @@ void NxTrigger::trig(NxObject *cursor) {
     //}
 }
 void NxTrigger::trigEnd() {
-    NxObject *cursorTriggedTmp = cursorTrigged;
-    bool isMidiMessage = false;
-    foreach(const QVector<QByteArray> & messagePattern, this->getMessagePatterns()) {
-        if(messagePattern.at(0).startsWith("midi"))
-            isMidiMessage = true;
+    if(triggerOff > 0) {
+        NxObject *cursorTriggedTmp = cursorTrigged;
+        bool sendMessage = false;
+        foreach(const QVector<QByteArray> & messagePattern, this->getMessagePatterns()) {
+            foreach(const QByteArray &messageArgument, messagePattern) {
+                if(messageArgument == "trigger_value")
+                    sendMessage = true;
+            }
+        }
+        cursorTrigged = 0;
+        if(sendMessage)
+            MessageManager::outgoingMessage(MessageManagerDestination(this, this, cursorTriggedTmp));
     }
-    cursorTrigged = 0;
-    if(triggerOff > 0 && !isMidiMessage)
-        MessageManager::outgoingMessage(MessageManagerDestination(this, this, cursorTriggedTmp));
 }

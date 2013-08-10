@@ -29,8 +29,7 @@ NxCursor::NxCursor(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     timeLocal = 0;
     timeLocalOld = 0;
     timeLocalAbsolute = 0;
-    previousCursorReliable = false;
-    previousPreviousCursorReliable = false;
+    previousCursorReliable = previousPreviousCursorReliable = false;
     cursorAngleCacheSinZ = cursorAngleCacheCosZ = cursorAngleCacheSinY = cursorAngleCacheCosY = 0;
     cursorPoly       = NxPolygon(4);
     cursorPoly[0]    = NxPoint();
@@ -72,6 +71,8 @@ NxCursor::~NxCursor() {
     glDeleteLists(glListCursor, 1);
 }
 void NxCursor::setTime(qreal delta) {
+    previousPreviousCursorReliable = previousCursorReliable;
+
     if((curve) && (start.count())) {
         //toto += delta;
 
@@ -132,10 +133,8 @@ void NxCursor::setTime(qreal delta) {
         }
 
         //Preparation of time difference
-        if(!previousCursorReliable)
-            timeOld = nextTimeOld;
-        else
-            timeOld = time;
+        if(!previousCursorReliable) timeOld = nextTimeOld;
+        else                        timeOld = time;
         nextTimeOld = timeOld;
         previousCursorReliable = true;
 
@@ -208,7 +207,6 @@ void NxCursor::calculate() {
 
         NxPoint cursorPosDelta = cursorPosOld - cursorPos;
         previousCursorReliable = true;
-        previousPreviousCursorReliable = true;
 
         qreal angleZ = -qAtan2(cursorPosDelta.x(), cursorPosDelta.y()) * 180.0F / M_PI + 90;
         qreal angleY =  qAtan2(qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y()), cursorPosDelta.z()) * 180.0F / M_PI + 90;
@@ -242,6 +240,10 @@ void NxCursor::calculate() {
         cursorPoly.replace(i, NxPoint(cursorPos.x() + cursorPoly.at(i).x() * angleCos - cursorPoly.at(i).y() * angleSin,
                                       cursorPos.y() + cursorPoly.at(i).x() * angleSin + cursorPoly.at(i).y() * angleCos,
                                       cursorPos.z() + cursorPoly.at(i).z()));
+
+    if((!previousCursorReliable) || (!previousPreviousCursorReliable))
+        cursorPolyOld = cursorPolyOldOld = cursorPoly;
+
 
     calcBoundingRect();
 
@@ -504,7 +506,7 @@ void NxCursor::trig(bool force) {
 
 bool NxCursor::contains(NxTrigger *trigger) const {
     qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
-    if((previousCursorReliable) && (trigger->getActive()) && ((timestamp - trigger->lastTrigTime) > 20)) {
+    if((previousPreviousCursorReliable) && (trigger->getActive()) && ((timestamp - trigger->lastTrigTime) > 10)) {
         NxPoint centre1 = trigger->getPos() - NxPoint(  (cursorPoly.at(0).x() + cursorPoly.at(1).x() + cursorPoly.at(2).x() + cursorPoly.at(3).x()) / 4.,
                                                         (cursorPoly.at(0).y() + cursorPoly.at(1).y() + cursorPoly.at(2).y() + cursorPoly.at(3).y()) / 4.,
                                                         (cursorPoly.at(0).z() + cursorPoly.at(1).z() + cursorPoly.at(2).z() + cursorPoly.at(3).z()) / 4.);

@@ -39,6 +39,7 @@ UiInspector::UiInspector(QWidget *parent) :
     Help::syncHelpWith(ui->depthSpin,         COMMAND_CURSOR_DEPTH);
     Help::syncHelpWith(ui->speedFSpin,        COMMAND_CURSOR_SPEEDF);
     Help::syncHelpWith(ui->speedSpin,         COMMAND_CURSOR_SPEED);
+    Help::syncHelpWith(ui->intertiaSpin,      COMMAND_CURVE_INERTIE);
     Help::syncHelpWith(ui->cursorLengthSpin,  COMMAND_CURSOR_SPEED);
     Help::syncHelpWith(ui->triggerOffSpin,    COMMAND_TRIGGER_OFF);
     Help::syncHelpWith(ui->equationPoints,    COMMAND_CURVE_EQUATION_POINTS);
@@ -303,6 +304,7 @@ void UiInspector::actionInfo() {
         else if(ui->depthSpin == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_DEPTH).arg(ui->depthSpin->value()), ExecuteSourceGui);
         else if(ui->speedFSpin == sender())                 Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_SPEEDF).arg(ui->speedFSpin->value()), ExecuteSourceGui);
         else if(ui->speedSpin == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_SPEED).arg(ui->speedSpin->value()), ExecuteSourceGui);
+        else if(ui->intertiaSpin == sender())               Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURVE_INERTIE).arg(ui->intertiaSpin->value()), ExecuteSourceGui);
         else if(ui->triggerOffSpin == sender())             Application::current->execute(QString("%1 selection %2").arg(COMMAND_TRIGGER_OFF).arg(ui->triggerOffSpin->value()), ExecuteSourceGui);
         else if(ui->pointsLists == sender())                Application::current->execute(QString("%1 selection 1").arg(COMMAND_CURVE_EDITOR), ExecuteSourceGui);
         else if(ui->pointsResample == sender())             Application::current->execute(QString("%1 selection 1").arg(COMMAND_CURVE_RESAMPLE), ExecuteSourceGui);
@@ -616,6 +618,7 @@ void UiInspector::refresh() {
 
                 change(indexObject, ui->sizeWSpin,      curve->getResize().width(), prevCurve->getResize().width());
                 change(indexObject, ui->sizeHSpin,      curve->getResize().height(), prevCurve->getResize().height());
+                change(indexObject, ui->intertiaSpin,   curve->getInertie(), prevCurve->getInertie());
                 change(indexObject, ui->equationPoints, curve->getEquationPoints(), prevCurve->getEquationPoints());
                 change(indexObject, ui->equationType0,  curve->getEquationType()==0, prevCurve->getEquationType()==0);
                 change(indexObject, ui->equationType1,  curve->getEquationType()==1, prevCurve->getEquationType()==1);
@@ -768,9 +771,11 @@ void UiInspector::refresh() {
     ui->triggerOffLabel->setVisible(showTriggerInfo);
     ui->triggerOffSpin->setVisible(showTriggerInfo);
 
-    ui->sizeHSpin->setVisible(showCurveInfo);
-    ui->sizeWSpin->setVisible(showCurveInfo);
-    ui->sizeLabel->setVisible(showCurveInfo);
+    ui->sizeHSpin->setVisible(showCurvePointsInfo);
+    ui->sizeWSpin->setVisible(showCurvePointsInfo);
+    ui->sizeLabel->setVisible(showCurvePointsInfo);
+    ui->intertiaSpin->setVisible(showCurvePointsInfo);
+    ui->intertiaLabel->setVisible(showCurvePointsInfo);
     ui->pointsLabel->setVisible(showCurvePointsInfo);
     ui->pointsLists->setVisible(showCurvePointsInfo);
     ui->pointsResample->setVisible(showCurvePointsInfo);
