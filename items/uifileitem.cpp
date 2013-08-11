@@ -1,6 +1,7 @@
 #include "uifileitem.h"
 
 QIcon UiFileItem::iconFile;
+QIcon UiFileItem::iconFileOpened;
 QIcon UiFileItem::iconFolder;
 bool  UiFileItem::showDateTime = true;
 QStringList UiFileItem::forbiddenDirs;
@@ -186,8 +187,8 @@ bool UiFileItem::askForSave(UiSyncItem*, bool as) {
         QString file = QFileDialog::getSaveFileName(0, "Save score", filename.file.absoluteFilePath(), QString("IanniX score (*.iannix)"));
         if(!file.isEmpty()) {
             filename = QFileInfo(file);
-            fileSave();
             setIcon(0, iconFile);
+            fileSave();
             syncWith(QFileInfoList() << filename.file, treeWidget());
             return true;
         }
@@ -414,8 +415,9 @@ void UiFileItem::fileShowInOS() {
 }
 
 void UiFileItem::configure(UiTreeView *tree, bool _showDateTime) {
-    iconFolder   = QIcon(":/items/res_item_folder.png");
-    iconFile     = QIcon(":/items/res_item_file.png");
+    iconFolder     = QIcon(":/items/res_item_folder.png");
+    iconFile       = QIcon(":/items/res_item_file.png");
+    iconFileOpened = QIcon(":/items/res_item_file_opened.png");
     showDateTime = _showDateTime;
 
     tree->getTree()->setEditTriggers(QAbstractItemView::SelectedClicked | QAbstractItemView::EditKeyPressed);

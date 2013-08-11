@@ -116,6 +116,7 @@ void NxDocument::open() {
 }
 void NxDocument::open(bool configure) {
     isLoaded = false;
+
     if(!skipClose)
         Application::current->getMainWindow()->setWindowTitle(tr("IanniX") + QString(" / %1").arg(getScriptFile().baseName()));
 
@@ -204,6 +205,9 @@ void NxDocument::open(bool configure) {
             }
         }
     }
+
+    if(fileItem)
+        fileItem->setIcon(0, UiFileItem::iconFileOpened);
     updateCode(true);
 }
 void NxDocument::updateCode(bool fromFile) {
@@ -218,6 +222,8 @@ void NxDocument::save() {
         scriptFileContent.close();
     }
     Application::current->getMainWindow()->setWindowTitle(tr("IanniX") + QString(" / %1").arg(getScriptFile().baseName()));
+    if(fileItem)
+        fileItem->setIcon(0, UiFileItem::iconFileOpened);
 }
 const QString NxDocument::getContent(bool fromFile) {
     QString scoreContent;
@@ -301,6 +307,8 @@ void NxDocument::askFileClose() {
                 fileItem->askForSave(fileItem, false);
         }
     }
+    if(fileItem)
+            fileItem->setIcon(0, UiFileItem::iconFile);
     clear();
 }
 void NxDocument::restoreDefaults() {

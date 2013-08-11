@@ -68,5 +68,6 @@
         <file>res_tree_open.png</file>
         <file>res_item_folder.png</file>
         <file>res_item_reveal.png</file>
+        <file>res_item_file_opened.png</file>
     </qresource>
 </RCC>

@@ -418,8 +418,10 @@ void UiInspector::actionMessages() {
         Application::current->pushSnapshot();
         ExtOscPatternAsk *ask = new ExtOscPatternAsk(Application::current->getMainWindow(), render->getSelection());
         if(!ask->onlyCurves)
-            if(ask->exec())
-                Application::current->execute(QString("%1 selection %2").arg(COMMAND_MESSAGE).arg(ask->getMessagePatterns()), ExecuteSourceGui);
+            if(ask->exec()) {
+                if(ask->getMessagePatterns().length())  Application::current->execute(QString("%1 selection %2").arg(COMMAND_MESSAGE).arg(ask->getMessagePatterns()), ExecuteSourceGui);
+                else                                    Application::current->execute(QString("%1 selection -").arg(COMMAND_MESSAGE), ExecuteSourceGui);
+            }
     }
 }
 

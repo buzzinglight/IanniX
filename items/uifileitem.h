@@ -21,7 +21,7 @@ public:
     UiFile filename;
     bool isFile;
     bool isOpened;
-    static QIcon iconFile, iconFolder;
+    static QIcon iconFile, iconFileOpened, iconFolder;
     static bool showDateTime;
 
 public:

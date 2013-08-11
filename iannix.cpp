@@ -755,7 +755,8 @@ const QVariant IanniX::execute(const MessageIncomming &command, bool createNewOb
     return execute(command.command, ExecuteSourceNetwork, createNewObjectIfExists, needOutput);
 }
 const QVariant IanniX::execute(const QString &command, ExecuteSource source, bool createNewObjectIfExists, bool needOutput) {
-    //qDebug(">> %s", qPrintable(command));
+    //qDebug("=> (%d) %s", source, qPrintable(command));
+
     if(((source == ExecuteSourceGui) || (source == ExecuteSourceInformative)) && (view->help))
         view->help->messageHelp(command);
     if(source == ExecuteSourceInformative)
@@ -780,7 +781,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                     }
                     else {
                         id = parentObject->getId();
-                        removeObject(parentObject);
+                        //removeObject(parentObject);
                         parentObject = 0;
                     }
                 }
@@ -798,6 +799,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                 object->setInitialId(id);
                 setObjectGroupId(object, "");
                 object->dispatchProperty(COMMAND_ID, id);
+                //qDebug("=> COMMAND_ID %d", id);
                 setObjectActivity(object, ObjectsActivityInactive);
                 object->dispatchProperty(COMMAND_POS, "0 0");
                 object->setParentObject(parentObject);
