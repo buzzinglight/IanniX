@@ -119,7 +119,7 @@ QPushButton#actionDuplicate, QPushButton#actionAddRoot, QPushButton#actionSave {
         <string>Duplicate</string>
        </property>
        <property name="text">
-        <string>DUPLICATE</string>
+        <string>BACKUP</string>
        </property>
       </widget>
      </item>

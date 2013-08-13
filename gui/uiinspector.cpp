@@ -451,11 +451,11 @@ void UiInspector::timerEvent(QTimerEvent *) {
 void UiInspector::refreshIp() {
     //IPs
     QStringList ipsName;
-    foreach(const QNetworkInterface &interface, QNetworkInterface::allInterfaces()) {
-        foreach(const QNetworkAddressEntry &addressEntry, interface.addressEntries()) {
+    foreach(const QNetworkInterface &interf, QNetworkInterface::allInterfaces()) {
+        foreach(const QNetworkAddressEntry &addressEntry, interf.addressEntries()) {
             bool ok = false;
             QString ipName;
-            if(addressEntry.ip().toIPv4Address() > 0)                    {  ipName += QString("     - %1 (%2)").arg(addressEntry.ip().toString()).arg(interface.humanReadableName()); ok = true; }
+            if(addressEntry.ip().toIPv4Address() > 0)                    {  ipName += QString("     - %1 (%2)").arg(addressEntry.ip().toString()).arg(interf.humanReadableName()); ok = true; }
             if((ok) && (addressEntry.broadcast().toIPv4Address() > 0))      ipName += QString(", broadcast on %1").arg(addressEntry.broadcast().toString());
             if(ok)                                                       {  ipsName << ipName; }
         }

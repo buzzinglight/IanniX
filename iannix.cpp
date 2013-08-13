@@ -80,8 +80,8 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     //Transport
     connect(transport, SIGNAL(forceOpenGLtimer(qreal)),             SLOT(forceOpenGLTimer(qreal)));
     connect(transport, SIGNAL(forceSchedulerTimer(qreal)),          SLOT(forceSchedulerTimer(qreal)));
-    connect(Transport::editor, SIGNAL(askSave()),    SLOT(actionSave()));
-    connect(Transport::editor, SIGNAL(askSave()),    SLOT(actionReloadScript()));
+    connect(Transport::editor, SIGNAL(askSave()),    SLOT(actionSaveAndReload()));
+    //connect(Transport::editor, SIGNAL(askSave()),    SLOT(actionReloadScript()));
     connect(Transport::editor, SIGNAL(askRefresh()), SLOT(actionRefresh()));
 
     //Inspector
@@ -594,6 +594,10 @@ void IanniX::actionOpen() {
 }
 void IanniX::actionSave() {
     inspector->getFileWidget()->askSave();
+}
+void IanniX::actionSaveAndReload() {
+    inspector->getFileWidget()->askSave();
+    actionReloadScript();
 }
 void IanniX::actionSave_as() {
     inspector->getFileWidget()->askSave(true);
