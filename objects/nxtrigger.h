@@ -37,11 +37,11 @@ public:
 private:
     qreal cacheSize;
     QString textureActive, textureInactive;
-    NxObject *cursorTrigged;
     QColor colorTrigged;
     qreal triggerOff;
     static GLuint glListTrigger;
 public:
+    NxObject *cursorTrigged;
     qint64 lastTrigTime;
     inline quint8 getType() const {
         return ObjectsTypeTrigger;

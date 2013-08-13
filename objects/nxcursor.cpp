@@ -506,7 +506,7 @@ void NxCursor::trig(bool force) {
 
 bool NxCursor::contains(NxTrigger *trigger) const {
     qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
-    if((previousPreviousCursorReliable) && (trigger->getActive()) && ((timestamp - trigger->lastTrigTime) > 10)) {
+    if((previousPreviousCursorReliable) && (trigger->getActive()) && (!trigger->cursorTrigged)/* && ((timestamp - trigger->lastTrigTime) > 0)*/) {
         NxPoint centre1 = trigger->getPos() - NxPoint(  (cursorPoly.at(0).x() + cursorPoly.at(1).x() + cursorPoly.at(2).x() + cursorPoly.at(3).x()) / 4.,
                                                         (cursorPoly.at(0).y() + cursorPoly.at(1).y() + cursorPoly.at(2).y() + cursorPoly.at(3).y()) / 4.,
                                                         (cursorPoly.at(0).z() + cursorPoly.at(1).z() + cursorPoly.at(2).z() + cursorPoly.at(3).z()) / 4.);
@@ -544,11 +544,10 @@ bool NxCursor::contains(NxTrigger *trigger) const {
         bool isInDepth = (qAbs(centre1.z()) <= depth/2.) && (qAbs(centre2.z()) <= depth/2.);
         bool isInside  = ((centre1.x() >= 0) && (centre2.x() <= 0)) || ((centre1.x() <= 0) && (centre2.x() >= 0));
 
-        //qDebug("%d\t=\t%f\t%f", isInside, centre1.x(), centre2.x());
-
         if(depth > 0) {
-            //qDebug("%d %d %d", isInWidth, isInDepth, isInside);
             if(isInDepth && isInWidth && isInside) {
+                qDebug("A > %f %d %d %d", timeLocal, isInDepth, isInWidth, isInside);
+                qDebug("%d\t=\t%f\t%f => BY %d", isInside, centre1.x(), centre2.x(), trigger->cursorTrigged);
                 trigger->lastTrigTime = timestamp;
                 return true;
             }
@@ -556,7 +555,6 @@ bool NxCursor::contains(NxTrigger *trigger) const {
                 return false;
         }
         else {
-            //qDebug("%d %d", isInWidth, isInside);
             if(isInWidth && isInside) {
                 trigger->lastTrigTime = timestamp;
                 return true;

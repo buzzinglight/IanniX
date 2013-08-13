@@ -149,15 +149,14 @@ void NxTrigger::paint() {
 }
 
 void NxTrigger::trig(NxObject *cursor) {
-    /*if((!cursor) || (!cursorTrigged)) {*/
     if(cursor) {
         colorTrigged = cursor->getCurrentColor();
         colorTrigged.setAlpha(255);
     }
     cursorTrigged = cursor;
-    QTimer::singleShot(qMax(triggerOff*1000, (qreal)80), this, SLOT(trigEnd()));
     MessageManager::outgoingMessage(MessageManagerDestination(this, this, cursorTrigged));
-    //}
+    if(triggerOff > 0)  QTimer::singleShot(triggerOff*1000, this, SLOT(trigEnd()));
+    else                trigEnd();
 }
 void NxTrigger::trigEnd() {
     if(triggerOff > 0) {
@@ -169,8 +168,8 @@ void NxTrigger::trigEnd() {
                     sendMessage = true;
             }
         }
-        cursorTrigged = 0;
         if(sendMessage)
             MessageManager::outgoingMessage(MessageManagerDestination(this, this, cursorTriggedTmp));
     }
+    cursorTrigged = 0;
 }
