@@ -546,8 +546,8 @@ bool NxCursor::contains(NxTrigger *trigger) const {
 
         if(depth > 0) {
             if(isInDepth && isInWidth && isInside) {
-                qDebug("A > %f %d %d %d", timeLocal, isInDepth, isInWidth, isInside);
-                qDebug("%d\t=\t%f\t%f => BY %d", isInside, centre1.x(), centre2.x(), trigger->cursorTrigged);
+                //qDebug("A > %f %d %d %d", timeLocal, isInDepth, isInWidth, isInside);
+                //qDebug("%d\t=\t%f\t%f => BY %d", isInside, centre1.x(), centre2.x(), trigger->cursorTrigged);
                 trigger->lastTrigTime = timestamp;
                 return true;
             }

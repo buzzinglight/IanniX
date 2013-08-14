@@ -488,7 +488,7 @@ void UiInspector::refresh() {
     MessageManager::transportNbGroups   = Application::current->getCount(-2);
     actionInfoLock = true;
 
-    quint16 counterTriggers = 0, counterCurves = 0, counterCurvePoints = 0, counterCurveEquation = 0, counterCursors = 0, counterCursorsCurve = 0;
+    quint16 counterTriggers = 0, counterCurves = 0, counterCurvePoints = 0, counterCurveEllipse = 0, counterCurveEquation = 0, counterCursors = 0, counterCursorsCurve = 0;
 
     if((render) && (ui->tab->currentIndex() == 1)) {
         UiRenderSelection *objects = render->getSelection();
@@ -545,8 +545,11 @@ void UiInspector::refresh() {
                 counterCursorsCurve++;
             if((object->getType() == ObjectsTypeCurve) && (((NxCurve*)object)->getCurveType() == CurveTypePoints))
                 counterCurvePoints++;
+            if((object->getType() == ObjectsTypeCurve) && (((NxCurve*)object)->getCurveType() == CurveTypeEllipse))
+                counterCurveEllipse++;
             if((object->getType() == ObjectsTypeCurve) && ((((NxCurve*)object)->getCurveType() == CurveTypeEquationCartesian) || (((NxCurve*)object)->getCurveType() == CurveTypeEquationPolar)))
                 counterCurveEquation++;
+
 
 
             if (objects->count() > 1)  ////CG//// Don't allow ID change if more than one object selected
@@ -658,13 +661,15 @@ void UiInspector::refresh() {
     typeLabelText.chop(2);
     ui->typeLabel->setText(typeLabelText);
 
-    bool showCursorInfo = false, showTriggerInfo = false, showCurveInfo = false, showCurvePointsInfo = false, showCursorCurveInfo = false, showGenericInfo = false, showCurveEquationInfo = false;
+    bool showCursorInfo = false, showTriggerInfo = false, showCurveInfo = false, showCurvePointsInfo = false, showCurveEllipseInfo = false, showCursorCurveInfo = false, showGenericInfo = false, showCurveEquationInfo = false;
     if(counterCurves > 0)
         showCurveInfo = true;
     if(counterCursors > 0)
         showCursorInfo = true;
     if(counterTriggers > 0)
         showTriggerInfo = true;
+    if(counterCurveEllipse > 0)
+        showCurveEllipseInfo = true;
     if(counterCursorsCurve > 0)
         showCursorCurveInfo = true;
     if(counterCurvePoints > 0)
@@ -773,9 +778,9 @@ void UiInspector::refresh() {
     ui->triggerOffLabel->setVisible(showTriggerInfo);
     ui->triggerOffSpin->setVisible(showTriggerInfo);
 
-    ui->sizeHSpin->setVisible(showCurvePointsInfo);
-    ui->sizeWSpin->setVisible(showCurvePointsInfo);
-    ui->sizeLabel->setVisible(showCurvePointsInfo);
+    ui->sizeHSpin->setVisible(showCurvePointsInfo || showCurveEllipseInfo);
+    ui->sizeWSpin->setVisible(showCurvePointsInfo || showCurveEllipseInfo);
+    ui->sizeLabel->setVisible(showCurvePointsInfo || showCurveEllipseInfo);
     ui->intertiaSpin->setVisible(showCurvePointsInfo);
     ui->intertiaLabel->setVisible(showCurvePointsInfo);
     ui->pointsLabel->setVisible(showCurvePointsInfo);

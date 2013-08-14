@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
     //iannixApp.installTranslator(&translator);
 
     QString appName    = "IanniX ";
-    QString appVersion = "0.9.12";
+    QString appVersion = "0.9.13";
 
 #ifdef Q_OS_MAC
     appName += "Mac";
