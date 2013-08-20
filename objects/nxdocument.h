@@ -133,16 +133,14 @@ public:
         mousePos = _pos;
     }
 
-    inline QString incomingMessage(const MessageIncomming &source, bool needOutput = false) {
+    inline QString incomingMessage(const MessageIncomming &source, bool needOutput = false, bool needToScript = true) {
         if(scriptOnIncomingMessage.isValid()) {
             QString argumentsStr;
             foreach(const QString &argument, source.arguments)
                 argumentsStr += "\"" + argument + "\",";
             argumentsStr.chop(1);
-            if(needOutput)
-                return scriptOnIncomingMessage.call(QScriptValue(), QScriptValueList() << source.protocol << source.host << source.port.toString() << source.destination << scriptEngine.evaluate(QString("[%5]").arg(argumentsStr))).toString();
-            else
-                scriptOnIncomingMessage.call(QScriptValue(), QScriptValueList() << source.protocol << source.host << source.port.toString() << source.destination << scriptEngine.evaluate(QString("[%5]").arg(argumentsStr)));
+            if(needOutput)  return scriptOnIncomingMessage.call(QScriptValue(), QScriptValueList() << source.protocol << source.host << source.port.toString() << source.destination << scriptEngine.evaluate(QString("[%5]").arg(argumentsStr))).toString();
+            else            scriptOnIncomingMessage.call(QScriptValue(), QScriptValueList() << source.protocol << source.host << source.port.toString() << source.destination << scriptEngine.evaluate(QString("[%5]").arg(argumentsStr)));
         }
         return QString();
     }

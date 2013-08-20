@@ -66,11 +66,13 @@ void MessageManager::logInfo(const QString &message) {
     foreach(MessageManagerLogInterface *log, logs)
         log->logInfo(message);
 }
-QString MessageManager::incomingMessage(const MessageIncomming &source, bool needOutput) {
-    foreach(MessageManagerLogInterface *log, logs)
-        log->logReceive(source);
+QString MessageManager::incomingMessage(const MessageIncomming &source, bool needOutput, bool needToScript) {
+    if(needToScript) {
+        foreach(MessageManagerLogInterface *log, logs)
+            log->logReceive(source);
+    }
     if(dispatcher)
-        return dispatcher->incomingMessage(source, needOutput);
+        return dispatcher->incomingMessage(source, needOutput, needToScript);
     return QString();
 }
 

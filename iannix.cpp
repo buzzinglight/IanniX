@@ -1135,18 +1135,21 @@ void IanniX::send(const Message &message, QStringList *sentMessage) {
     MessageManager::logReceive(message, sentMessage);
 }
 
-QString IanniX::incomingMessage(const MessageIncomming &source, bool needOutput) {
+QString IanniX::incomingMessage(const MessageIncomming &source, bool needOutput, bool needToScript) {
     if(needOutput) {
         QString retour;
         retour += execute(source, false, true).toString();
-        QString retourScript = getCurrentDocument()->incomingMessage(source, true);
-        if(retourScript != "undefined")
-            retourScript += retourScript;
+        if(needToScript) {
+            QString retourScript = getCurrentDocument()->incomingMessage(source, true);
+            if(retourScript != "undefined")
+                retour += retourScript;
+        }
         return retour;
     }
     else {
         execute(source, ExecuteSourceNetwork);
-        getCurrentDocument()->incomingMessage(source);
+        if(needToScript)
+            getCurrentDocument()->incomingMessage(source);
     }
     return QString();
 }

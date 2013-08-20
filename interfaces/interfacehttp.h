@@ -12,6 +12,9 @@
 #include <QApplication>
 #include "misc/options.h"
 #include "messages/messagemanager.h"
+#include "qwebsockets/websocketserver.h"
+#include "qwebsockets/websocket.h"
+
 
 namespace Ui {
 class InterfaceHttp;
@@ -41,6 +44,8 @@ signals:
     void parseSocket(QTcpSocket*);
 };
 
+
+
 class InterfaceHttp : public NetworkInterface {
     Q_OBJECT
     
@@ -50,19 +55,36 @@ public:
 
 private:
     InterfaceHttpServer *httpServer;
-    UiReal port;
-    UiBool enable;
-    QString htmlTemplate;
 private slots:
     void portChanged();
     void parseRequest(QNetworkReply*);
     void parseSocket(QTcpSocket*);
+
+private:
+    WebSocketServer*  webSocketServer;
+    QList<WebSocket*> webSocketClients;
+private slots:
+    void portWebSocketsChanged();
+    void webSocketsNewConnection();
+    void webSocketsProcessMessage(const QString &message);
+    void webSocketsProcessBinaryMessage(const QByteArray &message);
+    void webSocketsSocketDisconnected();
+    void webSocketsUpdateConnectedClients();
+
+
+private:
+    UiReal port, webSocketsPort;
+    UiBool enable;
+    QString htmlTemplate;
+private slots:
     void openExamples() {
         QDesktopServices::openUrl(QUrl("http://127.0.0.1:" + QString::number(port) + "/"));
     }
 
+
 public:
     bool send(const Message &message, QStringList *messageSent = 0);
+
 
 private:
     Ui::InterfaceHttp *ui;

@@ -91,7 +91,7 @@ public:
 
 class MessageDispatcher {
 public:
-    virtual QString incomingMessage(const MessageIncomming &source, bool needOutput = false) = 0;
+    virtual QString incomingMessage(const MessageIncomming &source, bool needOutput = false, bool needToScript = true) = 0;
 };
 
 /*

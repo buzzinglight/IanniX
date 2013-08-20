@@ -72,23 +72,34 @@ SOURCES  += items/uitreeview.cpp items/uitreeviewwidget.cpp items/uitreedelegate
 HEADERS  += items/uitreeview.h   items/uitreeviewwidget.h   items/uitreedelegate.h   items/uifileitem.h   items/uicoloritem.h   items/uipathpointsitem.h   items/uitextureitem.h
 FORMS    += items/uitreeview.ui
 
-HEADERS  += interfaces/interfacehttp.h   interfaces/interfacemidi.h   interfaces/interfaceosc.h   interfaces/interfaceserial.h   interfaces/interfacetcp.h   interfaces/interfaceudp.h   interfaces/interfacedirect.h   interfaces/interfacesyphon.h
-SOURCES  += interfaces/interfacehttp.cpp interfaces/interfacemidi.cpp interfaces/interfaceosc.cpp interfaces/interfaceserial.cpp interfaces/interfacetcp.cpp interfaces/interfaceudp.cpp interfaces/interfacedirect.cpp
-FORMS    += interfaces/interfacehttp.ui  interfaces/interfacemidi.ui  interfaces/interfaceosc.ui  interfaces/interfaceserial.ui  interfaces/interfacetcp.ui  interfaces/interfaceudp.ui  interfaces/interfacedirect.ui  interfaces/interfacesyphon.ui
 HEADERS  += interfaces/extscriptvariableask.h   interfaces/extoscpatternask.h   interfaces/extoscpatterneditor.h
 SOURCES  += interfaces/extscriptvariableask.cpp interfaces/extoscpatternask.cpp interfaces/extoscpatterneditor.cpp
 FORMS    += interfaces/extscriptvariableask.ui  interfaces/extoscpatternask.ui  interfaces/extoscpatterneditor.ui
 
+
+#Native interfaces
+HEADERS  += interfaces/interfacehttp.h   interfaces/interfacemidi.h   interfaces/interfaceosc.h   interfaces/interfaceserial.h   interfaces/interfacetcp.h   interfaces/interfaceudp.h   interfaces/interfacedirect.h   interfaces/interfacesyphon.h
+SOURCES  += interfaces/interfacehttp.cpp interfaces/interfacemidi.cpp interfaces/interfaceosc.cpp interfaces/interfaceserial.cpp interfaces/interfacetcp.cpp interfaces/interfaceudp.cpp interfaces/interfacedirect.cpp
+FORMS    += interfaces/interfacehttp.ui  interfaces/interfacemidi.ui  interfaces/interfaceosc.ui  interfaces/interfaceserial.ui  interfaces/interfacetcp.ui  interfaces/interfaceudp.ui  interfaces/interfacedirect.ui  interfaces/interfacesyphon.ui
+
+#Serial
 HEADERS  += interfaces/qextserialport/qextserialport.h   interfaces/qextserialport/qextserialenumerator.h   interfaces/qextserialport/qextserialport_global.h interfaces/qextserialport/qextserialport_p.h interfaces/qextserialport/qextserialenumerator_p.h
 SOURCES  += interfaces/qextserialport/qextserialport.cpp interfaces/qextserialport/qextserialenumerator.cpp
+
+#MIDI
 HEADERS  += interfaces/qrtmidi/RtMidi.h   interfaces/qrtmidi/RtError.h
 SOURCES  += interfaces/qrtmidi/RtMidi.cpp
 debug:DEFINES += __RTMIDI_DEBUG__
 
+#Websockets
+SOURCES  += interfaces/qwebsockets/websocket.cpp interfaces/qwebsockets/websocketserver.cpp interfaces/qwebsockets/websocketprotocol.cpp interfaces/qwebsockets/handshakerequest.cpp interfaces/qwebsockets/handshakeresponse.cpp interfaces/qwebsockets/dataprocessor.cpp
+HEADERS  += interfaces/qwebsockets/websocket.h   interfaces/qwebsockets/websocketserver.h   interfaces/qwebsockets/websocketprotocol.h   interfaces/qwebsockets/handshakerequest.h   interfaces/qwebsockets/handshakeresponse.h   interfaces/qwebsockets/dataprocessor.h
+
+
+
 
 #Zeroconf
 macx {
-    DEFINES     += ZEROCONF_INSTALLED
     #DEFINES     += ZEROCONF_AS_SERVICE
     INCLUDEPATH += interfaces/zeroconf
     SOURCES     += interfaces/zeroconf/bonjourserviceregister.cpp interfaces/zeroconf/bonjourserviceresolver.cpp interfaces/zeroconf/bonjourservicebrowser.cpp

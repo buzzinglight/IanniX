@@ -38,7 +38,7 @@ public:
     static void logSend   (const MessageLog &message, QStringList *sentMessage = 0);
     static void logReceive(const MessageLog &message, QStringList *sentMessage = 0);
     static void logInfo   (const QString &message);
-    static QString incomingMessage(const MessageIncomming &source, bool needOutput = false);
+    static QString incomingMessage(const MessageIncomming &source, bool needOutput = false, bool needToScript = true);
     static void outgoingMessage(const MessageManagerDestination &destination);
 
 signals:

@@ -151,7 +151,7 @@ public slots:
         if(index < argv.count())    return argv.at(index).toDouble();
         else                        return 0;
     }
-    QString incomingMessage(const MessageIncomming &source, bool needOutput = false);
+    QString incomingMessage(const MessageIncomming &source, bool needOutput = false, bool needToScript = true);
     void openMessageEditor();
     void send(const Message &message, QStringList *sentMessage = 0);
     QMainWindow* getMainWindow()        { return view; }
