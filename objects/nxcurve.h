@@ -247,7 +247,7 @@ public:
 
     inline quint16 getPathPointsCount() const { return pathPoints.count(); }
 
-    void resample(quint16 nbPoints, bool smooth);
+    void resample(quint16 nbPoints, bool smooth = true, bool triggers = false);
 
     void isOnPathPoint();
     void isOnPathPoint(const NxRect & point);
@@ -272,13 +272,7 @@ public:
         if(show)    pathPointsEditor->show();
         else        pathPointsEditor->hide();
     }
-    inline void setShowPathPointsResample(bool = true) {
-        bool ok = false;
-        quint16 nbPoints = (new UiMessageBox())->getDouble(tr("IanniX Curve Resample"), tr("Number of points:"), QPixmap(":/infos/res_info_curve.png"), 50, 0, 32767, 1, 0, "", &ok);
-        bool smooth = (new UiMessageBox())->display(tr("IanniX Curve Resample"), tr("Do you want to smooth the curve?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
-        if(ok)
-            resample(nbPoints, smooth);
-    }
+    void setShowPathPointsResample(bool = true);
     inline bool getShowPathPointsEditor() const   { return true; }
     inline bool getShowPathPointsResample() const { return true; }
     inline void setPathPoints(const UiPathPointsItems &_pathPoints) {

@@ -152,8 +152,8 @@ UiInspector::UiInspector(QWidget *parent) :
 
     //Templates
     ui->equationTemplate->clear();
-    addEquationTemplate("Templates", true);
-    addEquationTemplate("--");
+    addEquationTemplate("Templates", "", true);
+    addEquationTemplate("--", "");
     QFileInfoList files = QDir(Application::pathApplication.absoluteFilePath() + "/Tools/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
     files <<              QDir(Application::pathDocuments.absoluteFilePath()   + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
     bool firstTemplate = true;
@@ -179,12 +179,13 @@ UiInspector::UiInspector(QWidget *parent) :
                 else if(header == "[equations]") {
                     if(!title.isEmpty()) {
                         if(!firstTemplate)
-                            addEquationTemplate("--");
+                            addEquationTemplate("--", "");
                         firstTemplate = false;
-                        addEquationTemplate(title);
+                        addEquationTemplate(title, "");
                         title.clear();
                     }
-                    addEquationTemplate("          " + templateLong.trimmed(), true);
+                    QStringList templateLongSplited = templateLong.trimmed().split(" | ");
+                    addEquationTemplate("          " + templateLongSplited.at(qMax(1, templateLongSplited.count()-1)), templateLongSplited.first(), true);
                 }
             }
         }
@@ -196,9 +197,9 @@ UiInspector::UiInspector(QWidget *parent) :
     refresh();
     refreshIp();
 }
-void UiInspector::addEquationTemplate(QString text, bool enabled) {
+void UiInspector::addEquationTemplate(const QString &text, const QString &valeur, bool enabled) {
     if(text.trimmed() == "--")      ui->equationTemplate->insertSeparator(ui->equationTemplate->count());
-    else                            ui->equationTemplate->addItem(text);
+    else                            ui->equationTemplate->addItem(text, valeur);
     if(!enabled)
         qobject_cast<QStandardItemModel*>(ui->equationTemplate->model())->item(ui->equationTemplate->count()-1)->setEnabled(false);
 }
@@ -345,11 +346,8 @@ void UiInspector::actionInfo() {
         else if((ui->patternLine == sender()) || (ui->easingCombo == sender()))
             Application::current->execute(QString("%1 selection %2 0 %3").arg(COMMAND_CURSOR_START).arg(ui->easingCombo->currentIndex()).arg(ui->patternLine->currentText().split(" - ").at(0)), ExecuteSourceGui);
 
-        else if((ui->equationTemplate == sender()) && (ui->equationTemplate->currentText().length())) {
-            QStringList temp = ui->equationTemplate->currentText().split(" | ");
-            if(temp.count() > 1)
-                Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURVE_EQUATION).arg(temp.at(0).trimmed()), ExecuteSourceGui);
-        }
+        else if((ui->equationTemplate == sender()) && (!ui->equationTemplate->itemData(ui->equationTemplate->currentIndex()).toString().isEmpty()))
+            Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURVE_EQUATION).arg(ui->equationTemplate->itemData(ui->equationTemplate->currentIndex()).toString()), ExecuteSourceGui);
 
         refresh();
     }
@@ -783,9 +781,9 @@ void UiInspector::refresh() {
     ui->sizeLabel->setVisible(showCurvePointsInfo || showCurveEllipseInfo);
     ui->intertiaSpin->setVisible(showCurvePointsInfo);
     ui->intertiaLabel->setVisible(showCurvePointsInfo);
-    ui->pointsLabel->setVisible(showCurvePointsInfo);
+    ui->pointsLabel->setVisible(showCurveInfo);
+    ui->pointsResample->setVisible(showCurveInfo);
     ui->pointsLists->setVisible(showCurvePointsInfo);
-    ui->pointsResample->setVisible(showCurvePointsInfo);
     ui->equationTemplate->setVisible(showCurveEquationInfo);
     ui->equationLabel->setVisible(showCurveEquationInfo);
     ui->equationType->setVisible(showCurveEquationInfo);

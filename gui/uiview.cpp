@@ -320,7 +320,7 @@ void UiView::actionImportText() {
 
 void UiView::actionSnapshot() {
     bool ok = false;
-    qreal scaleFactor = (new UiMessageBox())->getDouble(tr("Score Snapshot"), tr("Snapshot will be saved on your desktop.\nPlease enter a scale factor:"), QPixmap(":/infos/res_info_export.png"), 4, 0.1, 30, 0.25, 2, "times current screen size", &ok);
+    qreal scaleFactor = (new UiMessageBox())->getDouble(tr("Score Snapshot"), tr("Snapshot will be saved on your desktop.\nPlease enter a scale factor:"), QPixmap(":/infos/res_info_export.png"), 4, 0.1, 30, 0.25, 2, "times current screen size", false, &ok);
     if(ok)
         ui->render->capture(scaleFactor);
 }

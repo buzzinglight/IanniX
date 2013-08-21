@@ -964,25 +964,45 @@ qreal NxCurve::intersects(const NxRect &rect, NxPoint* collisionPoint) {
     return -1;
 }
 
-void NxCurve::resample(quint16 nbPoints, bool smooth) {
+void NxCurve::setShowPathPointsResample(bool) {
+    bool ok = false;
+    UiMessageBox *messageBox = new UiMessageBox();
+    quint16 nbPoints = messageBox->getDouble(tr("IanniX Curve Resample"), tr("Number of points:"), QPixmap(":/infos/res_info_curve.png"), 50, 0, 32767, 1, 0, "", true, &ok);
+    QPair<bool, bool> checkboxes = messageBox->getCheckboxes();
+    delete messageBox;
+    if(ok)
+        resample(nbPoints, checkboxes.first, checkboxes.second);
+}
+
+
+void NxCurve::resample(quint16 nbPoints, bool smooth, bool triggers) {
     qreal percentStep = 1.0 / (qreal)nbPoints;
     QList<NxPoint> pts;
     for(qreal percent = 0 ; percent <= 1 ; percent += percentStep)
         pts.append(getPointAt(percent));
-    pathPoints.clear();
-    foreach(const NxPoint &pt, pts) {
-        NxCurvePoint cPt;
-        cPt.setX(pt.x());
-        cPt.setY(pt.y());
-        cPt.setZ(pt.z());
-        cPt.smooth = smooth;
-        pathPoints.append(cPt);
+    if(triggers) {
+        foreach(NxPoint pt, pts) {
+            pt += pos;
+            Application::current->execute("add trigger auto", ExecuteSourceGui);
+            Application::current->execute(QString("%1 current %2 %3 %4").arg(COMMAND_POS).arg(pt.x()).arg(pt.y()).arg(pt.z()), ExecuteSourceGui);
+        }
     }
-    if(pathPoints.count())
-        setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
-    curveType = CurveTypePoints;
-    calcBoundingRect();
-    glListRecreate = true;
+    else {
+        pathPoints.clear();
+        foreach(const NxPoint &pt, pts) {
+            NxCurvePoint cPt;
+            cPt.setX(pt.x());
+            cPt.setY(pt.y());
+            cPt.setZ(pt.z());
+            cPt.smooth = smooth;
+            pathPoints.append(cPt);
+        }
+        if(pathPoints.count())
+            setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
+        curveType = CurveTypePoints;
+        calcBoundingRect();
+        glListRecreate = true;
+    }
 }
 
 void NxCurve::isOnPathPoint() {

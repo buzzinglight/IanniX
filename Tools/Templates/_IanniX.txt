@@ -25,3 +25,5 @@ cartesian 6*cos(8*param1*param4*t*PI) , 6*sin(24*param2*param4*t*PI) , 12*param5
 cartesian 5*sin(80*param1*param5*t*PI)*cos(8*param2*param5*t*PI) , 5*sin(80*param3*param5*t*PI)*sin(8*param4*param5*t*PI) , 5*cos(40*param5*t*PI) | 2D rosette or 3D sphere?
 cartesian 10*param2*t*cos(40*param4*param1*t*PI) , 10*param2*t*sin(40*param4*param1*t*PI) , 20*param3*param4*t-5*param5 | Conical spiral of Pappus
 cartesian (2+4*cos(48*param1*param4*t*PI))*cos(8*param2*param4*t*PI) , (2+4*cos(48*param1*param4*t*PI))*sin(8*param2*param4*t*PI) , 4*param5*sin(48*param3*param4*t*PI) | An other 3D flower
+cartesian (5*param1+5*param2)*cos(50*param4*t*2*PI) + (5*param3)*cos((5*param1+5*param2)*50*param4*t*2*PI/(5*param2)), (5*param1+5*param2)*sin(50*param4*t*2*PI) + (5*param3)*sin((5*param1+5*param2)*50*param4*t*2*PI/(5*param2)), 0 | Base for 2D spirography
+cartesian (5*param1+5*param2)*cos(50*param4*t*2*PI) + (5*param3)*cos((5*param1+5*param2)*50*param4*t*2*PI/(5*param2)), (5*param1+5*param2)*sin(50*param4*t*2*PI) + (5*param3)*sin((5*param1+5*param2)*50*param4*t*2*PI/(5*param2)), (5*param1+5*param2)*cos(500*param5*t*2*PI)*sin(50*param4*t*2*PI) | Base for 3D spirography

@@ -100,6 +100,7 @@ void NxDocument::popSnapshot(bool revert) {
     if(canDo) {
         clear();
         NxObjectDispatchProperty::source = ExecuteSourceGui;
+        source = NxObjectDispatchProperty::source;
         Application::current->executeAsScript(snapshots.at(snapshotsIndex));
     }
 }
@@ -111,6 +112,7 @@ void NxDocument::open() {
         open(true);
 
         NxObjectDispatchProperty::source = ExecuteSourceGui;
+        source = NxObjectDispatchProperty::source;
         initialContent = Application::current->serialize();
     }
 }

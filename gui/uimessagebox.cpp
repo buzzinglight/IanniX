@@ -13,6 +13,11 @@ UiMessageBox::~UiMessageBox() {
     delete ui;
 }
 
+QPair<bool, bool> UiMessageBox::getCheckboxes() {
+    return qMakePair(ui->checkSmooth->isChecked(), ui->checkTrigger->isChecked());
+}
+
+
 qreal UiMessageBox::getDouble(const QString &title, const QString &description, qreal value, qreal min, qreal max, qreal step, quint16 decimals, const QString &suffix, bool *ok) {
     setUpdatesEnabled(false);
     ui->choices->setCurrentIndex(0);
@@ -40,9 +45,11 @@ qreal UiMessageBox::getDouble(const QString &title, const QString &description, 
     delete this;
     return ret;
 }
-qreal UiMessageBox::getDouble(const QString &title, const QString &description, const QPixmap &pixmap, qreal value, qreal min, qreal max, qreal step, quint16 decimals, const QString &suffix, bool *ok) {
+qreal UiMessageBox::getDouble(const QString &title, const QString &description, const QPixmap &pixmap, qreal value, qreal min, qreal max, qreal step, quint16 decimals, const QString &suffix, bool resample, bool *ok) {
     setUpdatesEnabled(false);
     ui->choices->setCurrentIndex(1);
+    ui->checkSmooth->setVisible(resample);
+    ui->checkTrigger->setVisible(resample);
     ui->spinpLabel->setText(description);
     setWindowTitle(title);
     ui->spinpSpin->setMinimum(min);
@@ -67,7 +74,8 @@ qreal UiMessageBox::getDouble(const QString &title, const QString &description, 
         else            *ok = false;
     }
     qreal ret = ui->spinpSpin->value();
-    delete this;
+    if(!resample)
+        delete this;
     return ret;
 }
 int UiMessageBox::display(const QString &title, const QString &description, QDialogButtonBox::StandardButtons buttons, bool *ok) {

@@ -67,7 +67,7 @@ public slots:
 
 private:
     void timerEvent(QTimerEvent *);
-    void addEquationTemplate(QString text, bool enabled = false);
+    void addEquationTemplate(const QString &text, const QString &valeur, bool enabled = false);
     bool needRefresh;
 public slots:
     void refreshIp();

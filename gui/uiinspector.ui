@@ -1715,22 +1715,6 @@ POINTS</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pointsLists">
-                  <property name="minimumSize">
-                   <size>
-                    <width>103</width>
-                    <height>22</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Click here to manually edit curve points</string>
-                  </property>
-                  <property name="text">
-                   <string>EDIT POINTS</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QPushButton" name="pointsResample">
                   <property name="minimumSize">
                    <size>
@@ -1743,6 +1727,22 @@ POINTS</string>
                   </property>
                   <property name="text">
                    <string>RESAMPLE</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pointsLists">
+                  <property name="minimumSize">
+                   <size>
+                    <width>103</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Click here to manually edit curve points</string>
+                  </property>
+                  <property name="text">
+                   <string>EDIT POINTS</string>
                   </property>
                  </widget>
                 </item>
