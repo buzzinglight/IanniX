@@ -48,7 +48,7 @@ void NxObject::initialize(bool firstTime) {
     setMute(0);
     setPos(NxPoint());
     setMessageTimeInterval(1);
-    setMessagePatterns("");
+    //setMessagePatterns("");
     setLabel("");
     setColorMultiply("255 255 255 255");
 }
@@ -63,7 +63,6 @@ void NxObject::setMessagePatterns(const QString & messagePatternsStr) {
 
     QVector<QByteArray> messagePattern;
     QString messagePatternItem = "";
-    QString messageLabelItem = "";
     quint16 messagePatternItemJS = 0;
     bool first = true;
 
@@ -76,7 +75,6 @@ void NxObject::setMessagePatterns(const QString & messagePatternsStr) {
             if(messagePatternItem.count() > 0)
                 messagePattern.append(qPrintable(messagePatternItem));
 
-            messageLabelItem.append(qPrintable(QString(messagePatternItem + " ")));
             if(messagePatternItem.contains("collision_"))
                 performCollision = true;
             messagePatternItem = "";
@@ -86,7 +84,6 @@ void NxObject::setMessagePatterns(const QString & messagePatternsStr) {
             if(!messagePatternItemJS) {
                 if(messagePatternItem.count() > 0) {
                     messagePattern.append(qPrintable(QString("{" + messagePatternItem + "}")));
-                    messageLabelItem.append(qPrintable(QString("{" + messagePatternItem + "}")));
                     if(messagePatternItem.contains("collision_"))
                         performCollision = true;
                 }
@@ -106,7 +103,6 @@ void NxObject::setMessagePatterns(const QString & messagePatternsStr) {
                 }
                 else {
                     messagePattern.append(qPrintable(messagePatternItem));
-                    messageLabel.append(messageLabelItem);
                 }
             }
             first = false;
@@ -114,7 +110,6 @@ void NxObject::setMessagePatterns(const QString & messagePatternsStr) {
                 messagePatterns.append(messagePattern);
             messagePatternItem = "";
             messagePattern.clear();
-            messageLabelItem = "";
             messagePatternItemJS = 0;
         }
         else if(messagePatternsStrChar == '{') {
@@ -130,15 +125,18 @@ void NxObject::setMessagePatterns(const QString & messagePatternsStr) {
     }
 
     if (messagePatternItem.count() > 0) {   //Should only get here if curly brackets are unbalanced to the left
-        messageLabelItem.append(qPrintable(QString("{" + messagePatternItem)));
         messagePattern.append(qPrintable(QString("{" + messagePatternItem)));
     }
 
-    if (messageLabelItem.count() > 0)
-        messageLabel.append(qPrintable(messageLabelItem));
-
     if(messagePattern.count() > 0)
         messagePatterns.append(messagePattern);
+
+    foreach(const QVector<QByteArray> &messagePatternItems, messagePatterns) {
+        QString messageLabelStr;
+        foreach(const QByteArray &messagePatternItem, messagePatternItems)
+            messageLabelStr.append(messagePatternItem + " ");
+        messageLabel.append(messageLabelStr.trimmed());
+    }
 }
 
 QVector< QVector<QByteArray> > NxObject::parseMessagesPattern(const QString & messagePatternsStr, quint16 *messageInterval) {

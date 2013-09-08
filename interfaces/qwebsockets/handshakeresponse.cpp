@@ -127,7 +127,7 @@ QTextStream &HandshakeResponse::writeToStream(QTextStream &textStream) const
 	}
 	else
 	{
-		textStream.setStatus(QTextStream::WriteFailed);
+        textStream.setStatus(QTextStream::ReadCorruptData);
 	}
 	return textStream;
 }

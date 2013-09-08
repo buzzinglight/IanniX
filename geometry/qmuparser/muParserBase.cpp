@@ -1607,8 +1607,8 @@ namespace mu
 
       This function is used for debugging only.
   */
-  void ParserBase::StackDump(const ParserStack<token_type> &a_stVal, 
-                             const ParserStack<token_type> &a_stOprt) const
+  void ParserBase::StackDump(const ParserStack<token_type> &,
+                             const ParserStack<token_type> &) const
   {
       /*
     ParserStack<token_type> stOprt(a_stOprt), 

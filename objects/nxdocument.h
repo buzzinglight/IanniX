@@ -133,7 +133,7 @@ public:
         mousePos = _pos;
     }
 
-    inline QString incomingMessage(const MessageIncomming &source, bool needOutput = false, bool needToScript = true) {
+    inline QString incomingMessage(const MessageIncomming &source, bool needOutput = false, bool = true) {
         if(scriptOnIncomingMessage.isValid()) {
             QString argumentsStr;
             foreach(const QString &argument, source.arguments)

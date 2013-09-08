@@ -76,7 +76,7 @@ void InterfaceHttp::webSocketsProcessMessage(const QString &message) {
             webSocket->send(response);
     }
 }
-void InterfaceHttp::webSocketsProcessBinaryMessage(const QByteArray &message) {
+void InterfaceHttp::webSocketsProcessBinaryMessage(const QByteArray &) {
     WebSocket *webSocket = qobject_cast<WebSocket *>(sender());
     if(webSocket) {
     }

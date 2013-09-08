@@ -363,7 +363,7 @@ struct CoreMidiData {
 //  Class Definitions: MidiInCore
 //*********************************************************************//
 
-void midiInputCallback( const MIDIPacketList *list, void *procRef, void *srcRef )
+void midiInputCallback( const MIDIPacketList *list, void *procRef, void *)
 {
   MidiInApi::RtMidiInData *data = static_cast<MidiInApi::RtMidiInData *> (procRef);
   CoreMidiData *apiData = static_cast<CoreMidiData *> (data->apiData);
@@ -934,7 +934,7 @@ void MidiOutCore :: openVirtualPort( std::string portName )
 
 char *sysexBuffer = 0;
 
-void sysexCompletionProc( MIDISysexSendRequest * sreq )
+void sysexCompletionProc( MIDISysexSendRequest *)
 {
   //std::cout << "Completed SysEx send\n";
  delete sysexBuffer;
