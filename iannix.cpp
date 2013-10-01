@@ -899,7 +899,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
             else if((commande == COMMAND_LOAD) || (commande == COMMAND_OPEN) || (commande == COMMAND_CLOSE)) {
                 if(argc > 1) {
                     QString filenameFinal = argvFullString(command, argv, 1);
-                    if((!filenameFinal.toLower().endsWith(".ianniX")) || (!filenameFinal.toLower().endsWith(".nxscore")) || (!filenameFinal.toLower().endsWith(".nxscript")))
+                    if(!((filenameFinal.toLower().endsWith(".iannix")) || (filenameFinal.toLower().endsWith(".nxscore")) || (filenameFinal.toLower().endsWith(".nxscript"))))
                         filenameFinal.append(".iannix");
                     QString filename1 = filenameFinal;
                     if(!QFileInfo(filename1).exists()) {
