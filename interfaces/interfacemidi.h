@@ -17,8 +17,10 @@
 
 #define STATUS_NOTEOFF    0x80
 #define STATUS_NOTEON     0x90
+#define STATUS_AFTERTOUCH 0xA0
 #define STATUS_CTLCHG     0xB0
 #define STATUS_PROGRAM    0xC0
+#define STATUS_PRESSURE   0xD0
 #define STATUS_BEND       0xE0
 
 #define MIDI_CLOCK        0xF8

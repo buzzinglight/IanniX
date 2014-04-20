@@ -289,6 +289,7 @@ void UiView::actionFast_rewind() {
 
 void UiView::actionPerformance() {
     if(ui->actionPerformance->isChecked()) {
+        fullscreenDisplaysCountChanged();
         ui->render->setPerformanceMode(true);
         ui->stackedWidget->setCurrentIndex(1);
     }

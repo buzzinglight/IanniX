@@ -72,12 +72,12 @@ UiEditor::~UiEditor() {
     delete ui;
 }
 
-void UiEditor::setContent(const QString &content) {
+void UiEditor::setContent(const QString &content, bool raiseWindow) {
     //contents.replace("\t", "  ");
     quint16 cursorPos = ui->jsEditor->textCursor().position();
     quint16 scrollPos = ui->jsEditor->verticalScrollBar()->sliderPosition();
     ui->jsEditor->setPlainText(content);
-    if(!isVisible()) {
+    if((!isVisible()) && (raiseWindow)) {
         show();
         Application::current->getMainWindow()->raise();
     }

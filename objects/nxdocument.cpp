@@ -210,11 +210,11 @@ void NxDocument::open(bool configure) {
 
     if(fileItem)
         fileItem->setIcon(0, UiFileItem::iconFileOpened);
-    updateCode(true);
+    updateCode(true, configure);
 }
-void NxDocument::updateCode(bool fromFile) {
+void NxDocument::updateCode(bool fromFile, bool raiseWindow) {
     if(!skipClose)
-        Transport::editor->setContent(getContent(fromFile));
+        Transport::editor->setContent(getContent(fromFile), raiseWindow);
 }
 void NxDocument::save() {
     QString scoreContent = getContent(false);

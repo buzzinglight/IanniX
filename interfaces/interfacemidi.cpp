@@ -435,6 +435,12 @@ void midiCallback(double, std::vector< unsigned char > *receivedMessage, void *u
                 midi->receivedMessage("note", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)) << QString::number(velocity));
         }
             break;
+        case STATUS_AFTERTOUCH:
+            midi->receivedMessage("after", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)) << QString::number(receivedMessage->at(2)));
+            break;
+        case STATUS_PRESSURE:
+            midi->receivedMessage("pressure", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)));
+            break;
         case STATUS_BEND:
             midi->receivedMessage("bend", QStringList() << QString::number(channel) << QString::number(receivedMessage->at(1)));
             break;

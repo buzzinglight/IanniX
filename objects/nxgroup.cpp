@@ -23,6 +23,7 @@ NxGroup::NxGroup(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     setText(0, tr("GROUP"));
     setSolo(0);
     setMute(0);
+    scale = scaleDest = 1;
 }
 
 

@@ -69,7 +69,7 @@ public:
     const QString serialize() const;
     void pushSnapshot();
     void popSnapshot(bool revert=false);
-    void updateCode(bool fromFile);
+    void updateCode(bool fromFile, bool raiseWindow);
     const QString getContent(bool fromFile);
     void remplaceInFunction(QString *content, const QString &delimiter, const QString &data);
     QScriptValue scriptEvaluate(const QString &script, bool _createNewObjectIfExists);

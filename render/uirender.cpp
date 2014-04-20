@@ -312,6 +312,8 @@ void UiRender::paintGL() {
             translationDest = -object->getCurrentPos();
             //scaleDest = 1 * 5;
         }
+
+
         glRotatef(Render::rotation.y(), 1, 0, 0);
         glRotatef(Render::rotation.x(), 0, 1, 0);
         glRotatef(Render::rotation.z(), 0, 0, 1);
@@ -323,11 +325,11 @@ void UiRender::paintGL() {
         else
             Application::allowSelection = false;
 
+
         //Start measure
         Transport::perfOpenGLRefreshTime += renderMeasure.elapsed() / 1000.0F;
         Transport::perfOpenGLCounterTime++;
         renderMeasure.start();
-
 
         if(documentToRender) {
             //Background
@@ -342,6 +344,18 @@ void UiRender::paintGL() {
             //Draw objects
             //Browse groups
             foreach(NxGroup *group, documentToRender->groups) {
+                glPushMatrix();
+
+                //Group specific
+                group->rotation    = group->rotation + (group->rotationDest - group->rotation) / 6;
+                group->translation = group->translation + (group->translationDest - group->translation) / 3;
+                group->scale       = group->scale + (group->scaleDest - group->scale) / 3;
+                glTranslatef(group->translation.x(), group->translation.y(), group->translation.z());
+                glRotatef(group->rotation.y(), 1, 0, 0);
+                glRotatef(group->rotation.x(), 0, 1, 0);
+                glRotatef(group->rotation.z(), 0, 0, 1);
+                glScalef (group->scale, group->scale, group->scale);
+
                 if(((!Application::current->isGroupSoloActive) && (group->isNotMuted())) || ((Application::current->isGroupSoloActive) && (group->isSolo())))
                     Render::paintThisGroup = true;
                 else
@@ -362,6 +376,8 @@ void UiRender::paintGL() {
                         }
                     }
                 }
+
+                glPopMatrix();
             }
 #ifdef KINECT_INSTALLED
             if(Application::current->kinect)
@@ -749,7 +765,7 @@ void UiRender::mouseMoveEvent(QMouseEvent *event) {
             else if(!mouseObjectDrag) {
                 //New center
                 NxPoint newCenter = -(mousePressedAxisCenter + NxPoint((mousePosNoCenter - mousePressedAreaPosNoCenter).x(), (mousePosNoCenter - mousePressedAreaPosNoCenter).y()));
-                Application::current->execute(QString("%1 %2 %3").arg(COMMAND_CENTER).arg(newCenter.x()).arg(newCenter.y()), ExecuteSourceGui);
+                Application::current->execute(QString("%1 %2 %3 0").arg(COMMAND_CENTER).arg(newCenter.x()).arg(newCenter.y()), ExecuteSourceGui);
             }
         }
 

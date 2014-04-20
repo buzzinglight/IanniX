@@ -385,9 +385,10 @@ bool InterfaceOsc::send(const Message &message, QStringList *messageSent) {
     if(!enable)
         return false;
 
-    if((message.getPort() == bundlePort) && (message.getHost() == QHostAddress(bundleHost)))
+    if((message.getPort() == bundlePort) && (message.getHost() == QHostAddress(bundleHost))) {
         //Add message to bundle
         bundleMessages.append(message);
+    }
     else {
         //Write a message on the opened socket
         socket->writeDatagram(message.getBuffer(), message.getHost(), message.getPort());
@@ -431,7 +432,7 @@ void InterfaceOsc::networkBundle(bool start) {
             MessageManager::logSend(bundleMessage);
         }
         bundleMessages.clear();
-        socket->writeDatagram(messageBuffer, QHostAddress("127.0.0.1"), 57120);
+        socket->writeDatagram(messageBuffer, QHostAddress(bundleHost), bundlePort);
     }
 }
 

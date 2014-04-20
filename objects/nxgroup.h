@@ -89,6 +89,8 @@ public:
 public:
     //activity + type + objectID = object !
     QHash< quint16, NxObject* > objects[ObjectsActivityLenght][ObjectsTypeLength];
+    NxPoint rotation, rotationDest, translation, translationDest;
+    qreal   scale, scaleDest;
 
 protected:
     QString id;

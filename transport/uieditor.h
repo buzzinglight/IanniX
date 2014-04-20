@@ -41,7 +41,7 @@ public:
     ~UiEditor();
 
 public:
-    void setContent(const QString &content);
+    void setContent(const QString &content, bool raiseWindow);
     const QString getContent();
 
 signals:

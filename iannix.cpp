@@ -603,7 +603,7 @@ void IanniX::actionSave_as() {
     inspector->getFileWidget()->askSave(true);
 }
 void IanniX::actionRefresh() {
-    getCurrentDocument()->updateCode(false);
+    getCurrentDocument()->updateCode(false, false);
 }
 void IanniX::loadProject(const QString & _projectFile) {
     QFileInfo projectFile(_projectFile);
@@ -823,14 +823,29 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
             //String parameter
             if((commande == COMMAND_ROTATE) || (commande == COMMAND_CENTER)) {
                 if(workingDocument == currentDocument) {
-                    if(argc > 1)    transport->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 1));
+                    if(argc == 4)    transport->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 1));
+                    else if((argc > 4) && (commande == COMMAND_ROTATE)) {
+                        NxGroup *group = document->getGroup(argv.at(1));
+                        if(group)
+                            group->rotationDest = NxPoint(argv.at(2).toDouble(), argv.at(3).toDouble(), argv.at(4).toDouble());
+                    }
+                    else if((argc > 4) && (commande == COMMAND_CENTER)) {
+                        NxGroup *group = document->getGroup(argv.at(1));
+                        if(group)
+                            group->translationDest = NxPoint(argv.at(2).toDouble(), argv.at(3).toDouble(), argv.at(4).toDouble());
+                    }
                     if(needOutput)  return transport->getProperty(qPrintable(commande));
                 }
             }
             //Single parameter
             else if((commande == COMMAND_ZOOM) || (commande == COMMAND_SPEED)) {
                 if(workingDocument == currentDocument) {
-                    if(argc > 1)    transport->dispatchProperty(qPrintable(commande), argvDouble(argv, 1));
+                    if(argc == 2)    transport->dispatchProperty(qPrintable(commande), argvDouble(argv, 1));
+                    else if((argc > 2) && (commande == COMMAND_ZOOM)) {
+                        NxGroup *group = document->getGroup(argv.at(1));
+                        if(group)
+                            group->scaleDest = argv.at(2).toDouble();
+                    }
                     if(needOutput)  return transport->getProperty(qPrintable(commande));
                 }
             }
