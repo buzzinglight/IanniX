@@ -3,8 +3,9 @@
 		"fileversion" : 1,
 		"appversion" : 		{
 			"major" : 6,
-			"minor" : 0,
-			"revision" : 8
+			"minor" : 1,
+			"revision" : 6,
+			"architecture" : "x86"
 		}
 ,
 		"rect" : [ 157.0, 59.0, 972.0, 350.0 ],
@@ -28,6 +29,21 @@
 		"tags" : "",
 		"boxes" : [ 			{
 				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"frgb" : 0.0,
+					"id" : "obj-9",
+					"linecount" : 20,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 11.0, 357.0, 507.0, 275.0 ],
+					"text" : "    This file is part of IanniX, a graphical real-time open-source sequencer for digital art\n    Copyright (C) 2010-2014 — IanniX Association\n\n    Project Manager: Thierry Coduys (http://www.le-hub.org)\n    Development:     Guillaume Jacquemin (http://www.buzzinglight.com)\n\n    This file was written by Guillaume Jacquemin.\n\n    IanniX is a free software: you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation, either version 3 of the License, or\n    any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    GNU General Public License for more details.\n\n    You should have received a copy of the GNU General Public License\n    along with this program.  If not, see <http://www.gnu.org/licenses/>."
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"bgcolor" : [ 1.0, 1.0, 1.0, 0.81 ],
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
@@ -38,7 +54,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 204.31633, 298.5, 106.0, 33.0 ],
-					"presentation_rect" : [ 203.31633, 307.0, 0.0, 0.0 ],
 					"text" : "Trigger with ID=3\nwas trigged",
 					"textcolor" : [ 0.151806, 0.586629, 0.819895, 1.0 ]
 				}
@@ -80,8 +95,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 179.31633, 216.0, 145.0, 33.0 ],
-					"presentation_rect" : [ 47.408173, 218.0, 0.0, 0.0 ],
+					"patching_rect" : [ 179.31633, 216.0, 146.0, 33.0 ],
 					"text" : "Type here the triggers' ID you want to get",
 					"textcolor" : [ 0.151806, 0.586629, 0.819895, 1.0 ]
 				}
@@ -111,7 +125,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 505.520386, 305.0, 267.0, 20.0 ],
-					"presentation_rect" : [ 509.954071, 304.0, 0.0, 0.0 ],
 					"text" : "<x, y, z> (mapped range) of cursor with ID=1",
 					"textcolor" : [ 0.969221, 0.371465, 0.033424, 1.0 ]
 				}
@@ -127,8 +140,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "float", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 451.020416, 305.0, 50.0, 20.0 ],
-					"presentation_rect" : [ 446.464294, 305.0, 0.0, 0.0 ]
+					"patching_rect" : [ 451.020416, 305.0, 50.0, 20.0 ]
 				}
 
 			}
@@ -142,8 +154,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "float", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 398.464294, 305.0, 50.0, 20.0 ],
-					"presentation_rect" : [ 395.050964, 304.0, 0.0, 0.0 ]
+					"patching_rect" : [ 398.464294, 305.0, 50.0, 20.0 ]
 				}
 
 			}
@@ -171,7 +182,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 461.954071, 279.0, 486.0, 20.0 ],
-					"presentation_rect" : [ 475.816345, 277.0, 0.0, 0.0 ],
 					"text" : "Group ID, <x, y, z> (mapped range), <x, y, z> (absolute range), Curve ID, Curve Group ID",
 					"textcolor" : [ 0.969221, 0.371465, 0.033424, 1.0 ]
 				}
@@ -918,15 +928,15 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "iannix.maxpat",
-				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/Max",
-				"patcherrelativepath" : "",
+				"bootpath" : "/Users/guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/Max",
+				"patcherrelativepath" : ".",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "iannix_object.maxpat",
-				"bootpath" : "/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/Max",
-				"patcherrelativepath" : "",
+				"bootpath" : "/Users/guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX/Patches/Max",
+				"patcherrelativepath" : ".",
 				"type" : "JSON",
 				"implicit" : 1
 			}

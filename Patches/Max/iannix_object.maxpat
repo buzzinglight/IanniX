@@ -3,8 +3,9 @@
 		"fileversion" : 1,
 		"appversion" : 		{
 			"major" : 6,
-			"minor" : 0,
-			"revision" : 8
+			"minor" : 1,
+			"revision" : 6,
+			"architecture" : "x86"
 		}
 ,
 		"rect" : [ 239.0, 190.0, 484.0, 430.0 ],
@@ -27,6 +28,21 @@
 		"digest" : "",
 		"tags" : "",
 		"boxes" : [ 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"frgb" : 0.0,
+					"id" : "obj-12",
+					"linecount" : 20,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 467.0, 12.0, 507.0, 275.0 ],
+					"text" : "    This file is part of IanniX, a graphical real-time open-source sequencer for digital art\n    Copyright (C) 2010-2014 — IanniX Association\n\n    Project Manager: Thierry Coduys (http://www.le-hub.org)\n    Development:     Guillaume Jacquemin (http://www.buzzinglight.com)\n\n    This file was written by Guillaume Jacquemin.\n\n    IanniX is a free software: you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation, either version 3 of the License, or\n    any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    GNU General Public License for more details.\n\n    You should have received a copy of the GNU General Public License\n    along with this program.  If not, see <http://www.gnu.org/licenses/>."
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"comment" : "(Triggers only) Curve Group ID",
 					"id" : "obj-11",

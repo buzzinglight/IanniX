@@ -1,10 +1,10 @@
-#N canvas 497 149 921 483 10;
+#N canvas 311 149 921 483 10;
 #X declare -lib mrpeach;
 #X text 371 59 arguments : <IP where IanniX runs> <OSC port in of IanniX>
 <OSC port out of IanniX>;
 #X obj 273 34 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X obj 353 34 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+#X obj 353 33 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X text 373 33 Fastrewind;
 #X text 192 34 Play / pause;
