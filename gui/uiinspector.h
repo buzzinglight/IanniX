@@ -49,6 +49,8 @@ protected:
 private:
     bool actionInfoLock;
     bool slidersLock;
+    bool mouseDisplay;
+    QString mousePos, mouseZoom, rotationAngles;
 
 public slots:
     void addInterfaces();

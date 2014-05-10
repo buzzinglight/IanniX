@@ -31,6 +31,7 @@ UiInspector::UiInspector(QWidget *parent) :
     slidersLock = false;
     toolbarButton = 0;
     lastTabBeforeRessources = 0;
+    mouseDisplay = false;
 
     Help::syncHelpWith(ui->positionX,         COMMAND_POS_X);
     Help::syncHelpWith(ui->positionY,         COMMAND_POS_Y);
@@ -429,13 +430,16 @@ void UiInspector::actionMessages() {
 }
 
 void UiInspector::setMousePos(const NxPoint & pos) {
-    ui->mouseLabel->setText(tr("MOUSE:") + QString(" %1 s. / %2 s.").arg(pos.x(), 0, 'f', 3).arg(pos.y(), 0, 'f', 3));
+    mousePos = tr("MOUSE:") + QString(" %1 s. / %2 s.").arg(pos.x(), 0, 'f', 3).arg(pos.y(), 0, 'f', 3);
+    mouseDisplay = true;
 }
 void UiInspector::setMouseZoom(qreal zoom) {
-    ui->zoomLabel->setText(tr("ZOOM:") + QString(" %1%").arg(zoom, 0, 'f', 1));
+    mouseZoom = tr("ZOOM:") + QString(" %1%").arg(zoom, 0, 'f', 1);
+    mouseDisplay = true;
 }
 void UiInspector:: setRotationAngles(const NxPoint &angles) {
-    ui->rotationLabel->setText(tr("ANGLES:") + QString(" %1° / %2°").arg(angles.y(), 0, 'f', 3).arg(angles.z(), 0, 'f', 3));
+    rotationAngles = tr("ANGLES:") + QString(" %1° / %2°").arg(angles.y(), 0, 'f', 3).arg(angles.z(), 0, 'f', 3);
+    mouseDisplay = true;
 }
 
 void UiInspector::actionTabChange(int) {
@@ -450,6 +454,12 @@ void UiInspector::actionTabChange(int) {
 void UiInspector::timerEvent(QTimerEvent *) {
     if(needRefresh)
         refresh();
+    if(mouseDisplay) {
+        ui->mouseLabel->setText(mousePos);
+        ui->zoomLabel->setText(mouseZoom);
+        ui->rotationLabel->setText(rotationAngles);
+        mouseDisplay = false;
+    }
 }
 void UiInspector::refreshIp() {
     //IPs

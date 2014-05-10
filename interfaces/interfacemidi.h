@@ -104,6 +104,14 @@ private:
     const QString getPortName(QString port) {
         return qPrintable(port.replace(" ", "_").replace("/", "_").toLower().trimmed());
     }
+    const QString getPortNameStd(std::string string) {
+        QString retour;
+        for(quint16 i = 0 ; i < string.size() ; i++) {
+            if(string.data()[i] > 0)
+                retour += QChar(string.data()[i]);
+        }
+        return qPrintable(retour);
+    }
 
 public:
     ExtMidiMTC midiMtc;

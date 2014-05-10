@@ -72,6 +72,10 @@
 	<key>CFBundleSignature</key>
 	<string>INNX</string>
 	<key>CFBundleVersion</key>
-	<string>0.9.15</string>
+	<string>0.9.16</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSHighResolutionCapable</key>
+	<string>True</string>
 </dict>
 </plist>

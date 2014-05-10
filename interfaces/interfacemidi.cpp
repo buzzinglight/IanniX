@@ -95,7 +95,7 @@ void InterfaceMidi::timerEvent(QTimerEvent*) {
     quint8 portListInCount = portListIn->getPortCount();
     for(quint8 portListInIndex = 0; portListInIndex < portListInCount ; portListInIndex++) {
         try {
-            QString portName = qPrintable(QString::fromStdString(portListIn->getPortName(portListInIndex)));
+            QString portName = getPortNameStd(portListIn->getPortName(portListInIndex));
             if((!portIn.contains(getPortName(portName))) && (portName != portOutName) && (!portName.toLower().contains("iannix"))) {
                 portIn.insert(getPortName(portName), new RtMidiIn());
                 portIn.value(getPortName(portName))->openPort(portListInIndex);
@@ -112,7 +112,7 @@ void InterfaceMidi::timerEvent(QTimerEvent*) {
     quint8 portListOutCount = portListOut->getPortCount();
     for(quint8 portListOutIndex = 0; portListOutIndex < portListOutCount ; portListOutIndex++) {
         try {
-            QString portName = qPrintable(QString::fromStdString(portListOut->getPortName(portListOutIndex)));
+            QString portName = getPortNameStd(portListOut->getPortName(portListOutIndex));
             if(portName.trimmed().toLower() == "loopbe internal midi")
                 hasMidiJack = true;
             if((!portOut.contains(getPortName(portName))) && (portName != portInName) && (!portName.toLower().contains("iannix"))) {
