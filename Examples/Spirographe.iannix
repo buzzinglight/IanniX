@@ -1,0 +1,350 @@
+/*
+	IanniX score example: Spirographe (c) by IanniX Association
+	This file was written by Guillaume Jacquemin.
+	
+	This IanniX score example is licensed under a
+	Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+	
+	You should have received a copy of the license along with this
+	work. If not, see <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+*/
+
+/*
+ *	IanniX Score File
+ */
+
+
+/*
+ *	This method is called first.
+ *	It is the good section for asking user for script global variables (parameters).
+ *	
+ * 	This section is never overwritten by IanniX when saving.
+ */
+function askUserForParameters() {
+	//title("The title of the parameter box");
+	//ask("Group name of the parameter (only for display purposes)", "Parameter label", "myGlobalVar", "theDefaultValue");
+}
+
+
+/*
+ *	This method stores all the operations made through IanniX scripts.
+ *	You can add some commands here to make your own scripts!
+ *	Scripts are written in Javascript but even with a limited knowledge of Javascript, many types of useful scripts can be created.
+ *	
+ *	Beyond the standard javascript commands, the run() function is used to send commands to IanniX.
+ *	Commands must be provided to run() as a single string.
+ *	For example, run("zoom 100"); sets the display zoom to 100%.
+ *	
+ *	To combine numeric parameters with text commands to produce a string, use the concatenation operator.
+ *	In the following example center_x and center_y are in numeric variables and must be concatenated to the command string.
+ *	Example: run("setPos current " + center_x + " " + center_y + " 0");
+ *	
+ *	To learn IanniX commands, perform an manipulation in IanniX graphical user interface, and see the Helper window.
+ *	You'll see the syntax of the command-equivalent action.
+ *	
+ *	And finally, remember that most of commands must target an object.
+ *	Global syntax is always run("<command name> <target> <arguments>");
+ *	Targets can be an ID (number) or a Group ID (string name of group) (please see "Info" tab in Inspector panel).
+ *	Special targets are "current" (last used ID), "all" (all the objects) and "lastCurve" (last used curve).
+ *	
+ * 	This section is never overwritten by IanniX when saving.
+ */
+function makeWithScript() {
+	//Clears the score
+	run("clear");
+	//Resets rotation
+	run("rotate 0 0 0");
+	//Resets score viewport center
+	run("center 0 0");
+	//Resets score zoom
+	run("zoom 100");
+}
+
+
+/*
+ *	When an incoming message is received, this method is called.
+ *		- <protocol> tells information about the nature of message ("osc", "midi", "direct…)
+ *		- <host> and <port> gives the origin of message, specially for IP protocols (for OpenSoundControl, UDP or TCP, it is the IP and port of the application that sends the message)
+ *		- <destination> is the supposed destination of message (for OpenSoundControl it is the path, for MIDI it is Control Change or Note on/off…)
+ *		- <values> are an array of arguments contained in the message
+ *	
+ * 	This section is never overwritten by IanniX when saving.
+ */
+function onIncomingMessage(protocol, host, port, destination, values) {
+	//Logs a message in the console (open "Config" tab from Inspector panel and see "Message log")
+	console("Received on '" + protocol + "' (" + host + ":" + port + ") to '" + destination + "', " + values.length + " values : ");
+	
+	//Browses all the arguments and displays them in log window
+	for(var valueIndex = 0 ; valueIndex < values.length ; valueIndex++)
+		console("- arg " + valueIndex + " = " + values[valueIndex]);
+}
+
+
+/*
+ *	This method stores all the operations made through the graphical user interface.
+ *	You are not supposed to modify this section, but it can be useful to remove some stuff that you added accidentaly.
+ *	
+ * 	Be very careful! This section is automaticaly overwritten when saving a score.
+ */
+function madeThroughGUI() {
+//GUI: NEVER EVER REMOVE THIS LINE
+
+	run("add curve 3");
+	run("setpos current 0 0 0");
+	run("setequation current cartesian (5*param1+5*param2)*cos(50*param4*t*2*PI) + (5*param3)*cos((5*param1+5*param2)*50*param4*t*2*PI/(5*param2)),(5*param1+5*param2)*sin(50*param4*t*2*PI) + (5*param3)*sin((5*param1+5*param2)*50*param4*t*2*PI/(5*param2)),0");
+	run("setequationparam current param1 0.54");
+	run("setequationparam current param2 0.276");
+	run("setequationparam current param3 0.351");
+	run("setequationparam current param4 0.46");
+	run("setequationparam current param5 0");
+	run("setequationnbpoints current 2000");
+	run("setcoloractive current 44 167 218 128");
+	run("add cursor 54");
+	run("setcurve current lastCurve");
+	run("setpos current 5.835 0 0");
+	run("setoffset current 0 0 end");
+	run("setspeed current lock 1.05343");
+	run("setpattern current 0 0 1");
+	run("setwidth current 1");
+
+
+	run("add trigger 4");
+	run("setpos current 5.835 0 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 5");
+	run("setpos current -5.19205 2.1805 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 6");
+	run("setpos current 3.59959 -3.53704 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 7");
+	run("setpos current -1.86317 3.72553 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 8");
+	run("setpos current 0.771448 -3.06821 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 9");
+	run("setpos current -0.625905 2.33335 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 10");
+	run("setpos current 1.07448 -2.2448 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 11");
+	run("setpos current -1.3503 3.02345 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 12");
+	run("setpos current 0.767797 -4.24306 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 13");
+	run("setpos current 0.829902 5.08945 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 14");
+	run("setpos current -2.94836 -4.86391 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 15");
+	run("setpos current 4.72076 3.42154 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 16");
+	run("setpos current -5.41822 -1.27466 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 17");
+	run("setpos current 4.87918 -0.702816 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 18");
+	run("setpos current -3.59507 1.78957 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 19");
+	run("setpos current 2.40025 -1.83481 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 20");
+	run("setpos current -1.95718 1.32456 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 21");
+	run("setpos current 2.35313 -1.05695 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 22");
+	run("setpos current -3.05599 1.62725 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 23");
+	run("setpos current 3.25585 -3.04027 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 24");
+	run("setpos current -2.38177 4.68929 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 25");
+	run("setpos current 0.475309 -5.71548 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 26");
+	run("setpos current 1.80974 5.52754 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 27");
+	run("setpos current -3.58263 -4.163 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 28");
+	run("setpos current 4.23667 2.26908 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 29");
+	run("setpos current -3.79732 -0.714869 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 30");
+	run("setpos current 2.88481 0.072475 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 31");
+	run("setpos current -2.31527 -0.285077 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 32");
+	run("setpos current 2.58641 0.724831 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 33");
+	run("setpos current -3.56425 -0.603864 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 34");
+	run("setpos current 4.56377 -0.515377 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 35");
+	run("setpos current -4.77397 2.42528 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 36");
+	run("setpos current 3.76611 -4.37614 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 37");
+	run("setpos current -1.77231 5.51511 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 38");
+	run("setpos current -0.437292 -5.39248 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 39");
+	run("setpos current 2.00448 4.22517 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 40");
+	run("setpos current -2.4847 -2.75629 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 41");
+	run("setpos current 2.09372 1.79733 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 42");
+	run("setpos current -1.54909 -1.73432 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 43");
+	run("setpos current 1.60506 2.30103 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 44");
+	run("setpos current -2.56786 -2.75808 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 45");
+	run("setpos current 4.09026 2.36701 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 46");
+	run("setpos current -5.37241 -0.867228 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 47");
+	run("setpos current 5.64629 -1.33839 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 48");
+	run("setpos current -4.64644 3.40459 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 49");
+	run("setpos current 2.77803 -4.53696 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 50");
+	run("setpos current -0.878599 4.45575 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 51");
+	run("setpos current -0.280634 -3.54652 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 52");
+	run("setpos current 0.448322 2.6062 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 53");
+	run("setpos current -0.0239291 -2.3414 0");
+	run("settriggeroff current 1");
+
+
+
+//GUI: NEVER EVER REMOVE THIS LINE
+}
+
+
+/*
+ *	This method stores all the operations made by other softwares through one of the IanniX interfaces.
+ *	You are not supposed to modify this section, but it can be useful to remove some stuff that you or a third party software added accidentaly.
+ *	
+ * 	Be very careful! This section is automaticaly overwritten when saving a score.
+ */
+function madeThroughInterfaces() {
+//INTERFACES: NEVER EVER REMOVE THIS LINE
+	run("speed 1");
+
+
+//INTERFACES: NEVER EVER REMOVE THIS LINE
+}
+
+
+/*
+ *	This method is called last.
+ *	It allows you to modify your hand-drawn score (made through graphical user interface).
+ *	
+ * 	This section is never overwritten by IanniX when saving.
+ */
+function alterateWithScript() {
+	
+}
+
+
+/*
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ *	Made with IanniX 0.9.16
+ *	//APP VERSION: NEVER EVER REMOVE THIS LINE
+ */
+
+
+
