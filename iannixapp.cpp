@@ -59,10 +59,10 @@ int main(int argc, char *argv[]) {
     qDebug("Command line syntax : ./IanniX <file path>");
 #endif
 
-    QCoreApplication::setApplicationName   (appName);
-    QCoreApplication::setApplicationVersion(appVersion);
-    QCoreApplication::setOrganizationName  ("IanniX");
-    QCoreApplication::setOrganizationDomain("org.iannix");
+    QCoreApplication::setApplicationName   (appName.trimmed());
+    QCoreApplication::setApplicationVersion(appVersion.trimmed());
+    QCoreApplication::setOrganizationName  ("buzzing light");
+    QCoreApplication::setOrganizationDomain("org.iannix.desktop");
 
     iannixApp.launch(argc, argv);
 
