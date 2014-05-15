@@ -33,14 +33,14 @@ void UiRenderPreview::initializeGL() {
     //OpenGL options
     glEnable(GL_POINT_SMOOTH);
     glEnable(GL_LINE_SMOOTH);
-    glEnable(GL_POLYGON_SMOOTH);
+    //glEnable(GL_POLYGON_SMOOTH);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT,  GL_NICEST);
+    //glHint(GL_PERSPECTIVE_CORRECTION_HINT,  GL_NICEST);
     glHint(GL_POINT_SMOOTH_HINT,            GL_NICEST);
     glHint(GL_LINE_SMOOTH_HINT,             GL_NICEST);
-    glHint(GL_POLYGON_SMOOTH_HINT,          GL_NICEST);
+    //glHint(GL_POLYGON_SMOOTH_HINT,          GL_NICEST);
 }
 
 void UiRenderPreview::resizeGL(int width, int height) {
