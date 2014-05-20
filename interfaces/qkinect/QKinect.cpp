@@ -99,6 +99,7 @@ void QKinect::init()
     if (freenect_init(&m_ctx, NULL) < 0)
     {
         qDebug()<<"freenect_init() failed\n";
+		return;
         exit(EXIT_FAILURE);
     }
     /// set loggin level make this programmable at some stage
@@ -118,6 +119,7 @@ void QKinect::init()
     if (freenect_open_device(m_ctx, &m_dev, m_userDeviceNumber) < 0)
     {
         qDebug()<<"Could not open device\n";
+		return;
         exit(EXIT_FAILURE);
     }
 

@@ -50,7 +50,7 @@ function makeWithScript() {
 	run("registerColor lighttheme_cursor_inactive    0   0   0  40");
 
 	//Center on score origin
-	run("center 0 0");
+	run("center 0 0 0");
 	//Zoom
 	run("zoom 400");
 	//Rotation

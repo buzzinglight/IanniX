@@ -59,7 +59,7 @@ var options = {nb: 10, factor: 0, finefactor: 0.2};
 function makeWithScript() {
 	//Viewport setup
 	run("clear");
-		run("center 0 0");
+		run("center 0 0 0");
 	run("zoom 110");
 	
 	

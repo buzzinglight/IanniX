@@ -26,8 +26,8 @@ function askUserForParameters() {
 function makeWithScript() {
 	//Viewport setup
 	run("clear");
-		run("rotate 0 0 0");
-	run("center 3 0");
+	run("rotate 0 0 0");
+	run("center 3 0 0");
 	run("zoom 75");
 	
 	

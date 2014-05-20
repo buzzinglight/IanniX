@@ -30,7 +30,7 @@ function makeWithScript() {
 	run("clear");
 		run("rotate 0 0 0");
 
-	run("center 0 0");
+	run("center 0 0 0");
 	run("zoom 130");
 	
 	

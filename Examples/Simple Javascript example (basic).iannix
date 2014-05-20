@@ -18,8 +18,8 @@
 function makeWithScript() {
 	//Clear score
 	run("clear");
-		run("rotate 0 0 0");
-	run("center -8 5");
+	run("rotate 0 0 0");
+	run("center -8 5 0");
 	
 
 	//Loop from 0 to 24 lines
