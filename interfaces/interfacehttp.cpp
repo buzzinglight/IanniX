@@ -41,7 +41,7 @@ InterfaceHttp::InterfaceHttp(QWidget *parent) :
     connect(webSocketServer, SIGNAL(newConnection()), SLOT(webSocketsNewConnection()));
 
     //Html template
-    QFile htmlTemplateFile("Tools/HTML Template.html");
+    QFile htmlTemplateFile(Application::pathApplication.absoluteFilePath() + "/Tools/HTML Template.html");
     if(htmlTemplateFile.open(QFile::ReadOnly)) {
         htmlTemplate = htmlTemplateFile.readAll();
         htmlTemplateFile.close();
