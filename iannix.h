@@ -68,7 +68,6 @@ class IanniX : public ApplicationCurrent, public NxObjectDispatchProperty, publi
 
 private:
     QDir scriptDir;
-    QString updateAnonymousId;
     QSettings *iniSettings, *globalSettings;
 public:
     explicit IanniX(const QString &_projectToLoad = "", QObject *parent = 0);
@@ -197,11 +196,13 @@ private:
     Transport *transport;
     UiInspector *inspector;
     UiView *view;
-    bool forceUpdate;
-    QNetworkAccessManager *updateManager;
     QString waitForMessageValue;
     bool waitingForMessageValue;
     QIcon iconAppPlay, iconAppPause;
+private:
+    QString updateAnonymousId;
+    bool forceUpdate;
+    QNetworkAccessManager *updateManager;
 private slots:
     void checkForUpdatesFinished(QNetworkReply*);
 public:
