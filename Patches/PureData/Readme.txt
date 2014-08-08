@@ -5,7 +5,7 @@
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
 
-    This file was written by Guillaume Jacquemin.
+    These files were written by Guillaume Jacquemin and Alexandros Drymonitis.
 
     IanniX is a free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

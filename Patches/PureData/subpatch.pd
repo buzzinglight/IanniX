@@ -1,5 +1,5 @@
-#N canvas 840 191 316 244 10;
-#X obj 12 -6 inlet;
+#N canvas 913 22 316 244 10;
+#X obj 30 -6 inlet;
 #X obj 24 41 gemhead;
 #X obj 24 163 cube;
 #X msg 108 146 draw line;
@@ -13,7 +13,7 @@
 #X obj 12 119 unpack f f;
 #X obj 168 106 r reset;
 #X msg 218 146 -5 -5;
-#X obj 12 17 route values;
+#X obj 30 17 unpack s f f f f f f f s;
 #X connect 0 0 13 0;
 #X connect 1 0 8 0;
 #X connect 3 0 2 0;
@@ -29,4 +29,5 @@
 #X connect 10 1 9 2;
 #X connect 11 0 5 0;
 #X connect 12 0 10 0;
-#X connect 13 0 10 0;
+#X connect 13 1 9 1;
+#X connect 13 2 9 2;

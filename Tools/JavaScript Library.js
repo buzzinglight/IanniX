@@ -72,15 +72,21 @@ function log(x) 		{	return Math.log(x);		}
 function min(x,y) 		{	return Math.min(x,y);	}
 function max(x,y) 		{	return Math.max(x,y);	}
 function pow(x,y) 		{	return Math.pow(x,y);	}
-function round(x) 		{	return Math.round(x);	}
 function sin(x) 		{	return Math.sin(x);		}
 function sqrt(x) 		{	return Math.sqrt(x);	}
 function sq(x)			{	return x*x;				}
 function tan(x) 		{	return Math.tan(x);		}
 function degrees(value) {	return value * 180. / pi;  }
 function radians(value) {	return value * pi / 180.;  }
+function round(x, y) 	{
+	if(y == undefined)	return Math.round(x);
+	else 				return Math.round(x*Math.pow(10, y)) / Math.pow(10, y);
+}
 function random(low, high) {
-	return range(Math.random(), low, high);
+	if((low == undefined) || (high == undefined))
+		return Math.random();
+	else
+		return range(Math.random(), low, high);
 }
 
 //Useful functions
