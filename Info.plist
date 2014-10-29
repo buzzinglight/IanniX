@@ -87,5 +87,7 @@
 			<string>Editor</string>
 		</dict>
 	</array>
+	<key>LSAppNapIsDisabled</key>
+	<true/>
 </dict>
 </plist>

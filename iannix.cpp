@@ -44,7 +44,8 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     Application::renderFont.setPixelSize(10);
 
     //Updates
-    forceUpdate = false;
+    forceUpdate  = false;
+    forbidUpdate = !projectToLoad.isEmpty();
 
     //Default values
     setCurrentDocument(0);
@@ -62,6 +63,7 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     //View
     view      = new UiView(0);
     render    = view->getRender();
+    Application::setInterfaces(this, render);
     Application::render = render;
     Application::render->setZoom(100);
     Application::render->rotateTo(NxPoint(0, 0, 0));
@@ -132,7 +134,6 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     messageScript = messageScriptEngine.evaluate(NxDocument::loadLibrary());
 
     //Special objects
-    Application   ::setInterfaces(this, render);
     MessageManager::setInterfaces(this, &messageScriptEngine, 0, transport->getLogMini());
     MessageManager::transportObject = new NxTrigger(this, 0);
     MessageManager::syncObject      = new NxTrigger(this, 0);
@@ -146,6 +147,7 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
 #endif
 
     //Special settings
+    UiOptions::add(&Render::axisGrid,                     "guiGrid");
     UiOptions::add(&Application::defaultMessage,          "defaultMessage");
     UiOptions::add(&Application::defaultMessageCursor,    "defaultMessageCursor");
     UiOptions::add(&Application::defaultMessageCurve,     "defaultMessageCurve");
@@ -213,7 +215,7 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
         quint16   updatePeriod    = globalSettings->value("updatePeriod").toUInt();
         updateAnonymousId         = globalSettings->value("id")          .toString();
         qDebug("Last update : %s (should update each %d day(s))", qPrintable(updateLastDate.toString("dd/MM/yyyy hh:mm:ss")), updatePeriod);
-        if((updateLastDate.daysTo(QDateTime::currentDateTime()) >= updatePeriod) || (forceUpdate))
+        if((!forbidUpdate) && ((updateLastDate.daysTo(QDateTime::currentDateTime()) >= updatePeriod) || (forceUpdate)))
             checkForUpdates();
     }
 
@@ -230,6 +232,9 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
 
     //Show
     view->show();
+
+    if(Application::current)
+        Application::current->readyToStart();
 }
 
 void IanniX::readyToStart() {

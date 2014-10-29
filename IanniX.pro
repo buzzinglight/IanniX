@@ -122,7 +122,7 @@ macx {
 }
 
 #Syphon
-macx {
+false {
     DEFINES           += SYPHON_INSTALLED
     OBJECTIVE_SOURCES += interfaces/interfacesyphon.mm
     LIBS              += -framework Cocoa -framework Syphon

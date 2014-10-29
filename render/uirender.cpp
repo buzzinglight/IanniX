@@ -134,7 +134,7 @@ void UiRender::capture(qreal scaleFactor) {
 #ifdef QT4
             QString basePath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + "/";
 #else
-            QString basePath = QStandardPaths::DesktopLocation + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + "/");
+            QString basePath = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first() + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + "/";
 #endif
             QDir().mkpath(basePath);
             quint16 index = 0;
@@ -166,7 +166,7 @@ bool UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
 #ifdef QT4
         picture.save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
 #else
-        picture.save(QStandardPaths::DesktopLocation + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
+        picture.save(QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first() + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
              #endif
     } else {
         QDir().mkpath(QFileInfo(filename).absoluteDir().absolutePath());
@@ -226,7 +226,6 @@ void UiRender::initializeGL() {
 
     //Force resize
     //resizeGL();
-    Application::current->readyToStart();
 }
 
 //Resize event

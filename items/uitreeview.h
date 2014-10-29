@@ -28,6 +28,7 @@
 #include <QDropEvent>
 #include <QTreeWidget>
 #include <QUrl>
+#include <QMimeData>
 #include <QComboBox>
 #include "uitreeviewwidget.h"
 #include "uitreedelegate.h"

@@ -179,7 +179,11 @@ UiTreeViewWidget *UiTreeView::getTree() const {
 
 void UiTreeView::configureColumns(const UiTreeViewOptions &options) {
     ui->view->headerItem()->setText(options.index, options.name);
+#ifdef QT4
     ui->view->header()->setResizeMode(options.index, options.resizeMode);
+#else
+    ui->view->header()->setSectionResizeMode(options.index, options.resizeMode);
+#endif
     ui->view->setItemDelegateForColumn(options.index, new UiTreeDelegate(options, ui->view->model(), this));
     if(options.width > 0)
         ui->view->setColumnWidth(options.index, options.width);

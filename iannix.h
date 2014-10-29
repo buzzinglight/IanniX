@@ -201,11 +201,11 @@ private:
     QIcon iconAppPlay, iconAppPause;
 private:
     QString updateAnonymousId;
-    bool forceUpdate;
     QNetworkAccessManager *updateManager;
 private slots:
     void checkForUpdatesFinished(QNetworkReply*);
 public:
+    bool forceUpdate, forbidUpdate;
     void checkForUpdates();
     const QString serialize() const;
 public slots:

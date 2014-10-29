@@ -102,7 +102,8 @@ public:
     static UiBool paintThisGroup;
     static UiBool forceLists, forceTexture, forceFrustumInInit;
     static NxRect axisArea;
-    static qreal zoomValue, zoomLinear, zoomLinearDest, axisGrid;
+    static qreal zoomValue, zoomLinear, zoomLinearDest;
+    static UiReal axisGrid;
     static NxPoint axisCenter, axisCenterDest;
     static NxPoint rotation, rotationDest;
     static EditingMode editingMode;

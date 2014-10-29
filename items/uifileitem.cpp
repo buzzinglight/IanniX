@@ -118,7 +118,11 @@ bool UiFileItem::askForDeletion(UiSyncItem *, bool dialog) {
         int rep = (new UiMessageBox())->display(tr("Score deletion"), tr("You are about to delete this file. Are you sure?"), QDialogButtonBox::Yes | QDialogButtonBox::No);
         if(rep) {
 #ifdef Q_OS_MAC
+#ifdef QT4
             fileRename(filename.file, QFileInfo(QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + "/.Trash/" + filename.file.fileName()));
+#else
+            fileRename(filename.file, QFileInfo(QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first() + "/.Trash/" + filename.file.fileName()));
+#endif
 #else
             QFile::remove(filename.file.absoluteFilePath());
 #endif

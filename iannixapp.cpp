@@ -92,7 +92,7 @@ void IanniXApp::launch(int &argc, char **argv) {
 #ifdef QT4
     Application::pathDocuments   = QFileInfo(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + "/IanniX");
 #else
-    UiRenderOptions::pathDocuments   = QFileInfo(QStandardPaths::DocumentsLocation + "/IanniX");
+    Application::pathDocuments   = QFileInfo(QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first() + "/IanniX");
 #endif
     Application::pathApplication = QFileInfo(pathApplicationDir.absolutePath());
     Application::pathCurrent     = QFileInfo(QDir::currentPath());
@@ -116,13 +116,24 @@ void IanniXApp::launch(int &argc, char **argv) {
         generateHelp();
     */
 
-    quint16 indexArgument = 1;
-#ifdef Q_OS_WIN
-    //TOTO
-    indexArgument = 0;
-#endif
-    if(argc > indexArgument)
-        project = QFileInfo(Application::pathCurrent.absoluteFilePath() + "/" + argv[indexArgument]);
+    QFileInfo file;
+    for(quint16 i = 0 ; i < argc ; i++) {
+        file = QFileInfo(argv[i]);
+        if((file.exists()) && (file.suffix().toLower().contains("iannix"))) {
+            project = file;
+            break;
+        }
+        file = QFileInfo(Application::pathCurrent.absoluteFilePath() + "/" + argv[i]);
+        if((file.exists()) && (file.suffix().toLower().contains("iannix"))) {
+            project = file;
+            break;
+        }
+        file = QFileInfo(Application::pathDocuments.absoluteFilePath() + "/" + argv[i]);
+        if((file.exists()) && (file.suffix().toLower().contains("iannix"))) {
+            project = file;
+            break;
+        }
+    }
 
     //Add font
     if(QFontDatabase::addApplicationFont(Application::pathApplication.absoluteFilePath() + "/Tools/Museo.ttf"))

@@ -27,6 +27,7 @@
 #include <QObject>
 #include <QColor>
 #include <QFile>
+#include <QMimeData>
 #include <QTime>
 #include <QWheelEvent>
 #include <QGesture>
