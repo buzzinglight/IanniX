@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -833,7 +833,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
             //String parameter
             if((commande == COMMAND_ROTATE) || (commande == COMMAND_CENTER)) {
                 if(workingDocument == currentDocument) {
-                    if(argc == 4)    transport->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 1));
+                    if((argc == 4) || (argc == 7)) transport->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 1));
                     else if((argc > 4) && (commande == COMMAND_ROTATE)) {
                         NxGroup *group = document->getGroup(argv.at(1));
                         if(group)

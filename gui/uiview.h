@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -93,7 +93,7 @@ public slots:
     void actionResize(QSize size);
     void gridChange();
     void actionPatchesFolder() {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/").absoluteFilePath()));
     }
 
 

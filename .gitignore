@@ -1,4 +1,6 @@
-*.user
 *.DS_Store
-
+*.user
 *.7pre1
+*.app/
+*.mov
+*-build

@@ -1,5 +1,5 @@
 #    This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-#    Copyright (C) 2010-2014 — IanniX Association
+#    Copyright (C) 2010-2015 — IanniX Association
 #
 #    Project Manager: Thierry Coduys (http://www.le-hub.org)
 #    Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -26,7 +26,7 @@ contains(QT_VERSION, "^4.*") {
     DEFINES += QT4
     QT      += core gui opengl network script xml
 } else {
-    message("IanniX For QT5 (very experimental)")
+    message("IanniX For QT5")
     DEFINES += QT5
     QT      += widgets core gui opengl network script xml
 }

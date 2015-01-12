@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -134,8 +134,10 @@ public:
     }
     inline void setRotateStr(const QString & pos) {
         QStringList posItems = pos.split(" ", QString::SkipEmptyParts);
-        if(posItems.count() > 2)
-            Application::render->rotateTo(NxPoint(posItems.at(0).toDouble(), posItems.at(1).toDouble(), posItems.at(2).toDouble()));
+        if(posItems.count() > 5)
+            Application::render->rotateTo(NxPoint(posItems.at(0).toDouble(), posItems.at(1).toDouble(), posItems.at(2).toDouble()), NxPoint(posItems.at(3).toDouble(), posItems.at(4).toDouble(), posItems.at(5).toDouble()));
+        else if(posItems.count() > 2)
+            Application::render->rotateTo(NxPoint(posItems.at(0).toDouble(), posItems.at(1).toDouble(), posItems.at(2).toDouble()), Render::rotationCenterDest);
     }
 
 

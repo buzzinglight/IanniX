@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -106,9 +106,9 @@ private slots:
     void portChanged();
     void portOutChanged();
     void openExamples() {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/MaxMSP/").absoluteFilePath()));
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/PureData/").absoluteFilePath()));
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/Processing/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/MaxMSP/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/PureData/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/Processing/").absoluteFilePath()));
     }
 
 private:

@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -136,7 +136,7 @@ public slots:
     void receivedMidiRealtime(quint8 type, quint8 val1, quint8 val2);
     void networkManualParsing();
     void openExamples() {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("Patches/Ableton Live/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/Ableton Live/").absoluteFilePath()));
     }
     void downloadMidiJack() {
         QDesktopServices::openUrl(QUrl("http://www.nerds.de/data/setuploopbe1.exe"));

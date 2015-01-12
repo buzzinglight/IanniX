@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -185,11 +185,14 @@ void UiRender::centerOn(const NxPoint & center, bool force) {
     setZoom();
 }
 
-void UiRender::rotateTo(const NxPoint & rotation, bool force) {
+void UiRender::rotateTo(const NxPoint & rotation, const NxPoint & rotationCenter, bool force) {
     Render::rotationDest = rotation;
+    Render::rotationCenterDest = rotationCenter;
     emit(mouseRotationChanged(Render::rotationDest));
-    if(force)
+    if(force) {
         Render::rotation = Render::rotationDest;
+        Render::rotationCenter = Render::rotationCenterDest;
+    }
     setZoom();
 }
 
@@ -281,6 +284,7 @@ void UiRender::paintGL() {
         Render::axisCenter = Render::axisCenter + (Render::axisCenterDest - Render::axisCenter) / 3;
         Render::zoomLinear = Render::zoomLinear + (Render::zoomLinearDest - Render::zoomLinear) / 3;
         Render::rotation = Render::rotation + (Render::rotationDest - Render::rotation) / 6;
+        Render::rotationCenter = Render::rotationCenter + (Render::rotationCenterDest - Render::rotationCenter) / 6;
         //if(qAbs(UiRenderOptions::rotation.z() - UiRenderOptions::rotationDest.z()) > 360)
         //    UiRenderOptions::rotation.setZ(UiRenderOptions::rotationDest.z());
         translation = translation + (translationDest - translation) / 3;
@@ -317,11 +321,14 @@ void UiRender::paintGL() {
             //scaleDest = 1 * 5;
         }
 
+        glScalef(scale, scale, scale);
 
+        glTranslatef(Render::rotationCenter.x(), Render::rotationCenter.y(), Render::rotationCenter.z());
         glRotatef(Render::rotation.y(), 1, 0, 0);
         glRotatef(Render::rotation.x(), 0, 1, 0);
         glRotatef(Render::rotation.z(), 0, 0, 1);
-        glScalef(scale, scale, scale);
+        glTranslatef(-Render::rotationCenter.x(), -Render::rotationCenter.y(), -Render::rotationCenter.z());
+
         glTranslatef(translation.x(), translation.y(), translation.z());
 
         if((Render::rotationDest.x() == 0) && (Render::rotationDest.y() == 0) && (Render::rotationDest.z() == 0))

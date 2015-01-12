@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -368,7 +368,7 @@ void IanniXApp::setHelp() {
     Help::categories["commands"].infos << HelpInfo(COMMAND_FF						, tr(""), tr(""), tr(""));
     Help::categories["commands"].infos << HelpInfo(COMMAND_SPEED					, tr(""), tr(""), tr("<speed>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CENTER					, tr("Score viewport"), tr("Moves the center of the score"), tr("<x> <y>"));
-    Help::categories["commands"].infos << HelpInfo(COMMAND_ROTATE					, tr("Score viewport"), tr("Rotates camera point of view"), tr("<angle_along_x-axis> <angle_along_y-axis> <angle_along_z-axis>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_ROTATE					, tr("Score viewport"), tr("Rotates camera point of view"), tr("<angle_along_x-axis> <angle_along_y-axis> <angle_along_z-axis> <center_x> <center_y> <center_z>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_TRIG						, tr("Objects and messages"), tr("Forces an object to send its messages"), tr("<target>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_GLOBAL_COLOR				, tr(""), tr(""), tr("<target> <color_name> <r> <g> <b> <a>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_COLOR_ACTIVE				, tr(""), tr(""), tr("<target> <color_name>\n<target> <r> <g> <b> <a>"));

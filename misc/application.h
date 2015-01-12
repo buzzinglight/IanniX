@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -89,7 +89,7 @@ public:
     virtual void selectionClear(bool) = 0;
     virtual void setZoom(qreal axisZoom) = 0;
     virtual void centerOn(const NxPoint & center, bool force = false) = 0;
-    virtual void rotateTo(const NxPoint & rotation, bool force = false) = 0;
+    virtual void rotateTo(const NxPoint & rotation, const NxPoint &rotationCenter = NxPoint(0, 0), bool force = false) = 0;
     virtual bool loadTexture(UiRenderTexture*, bool = false) = 0;
 
 public:
@@ -106,6 +106,7 @@ public:
     static UiReal axisGrid;
     static NxPoint axisCenter, axisCenterDest;
     static NxPoint rotation, rotationDest;
+    static NxPoint rotationCenter, rotationCenterDest;
     static EditingMode editingMode;
     static bool editing, editingFirstPoint;
 };

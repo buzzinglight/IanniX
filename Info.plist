@@ -87,6 +87,8 @@
 			<string>Editor</string>
 		</dict>
 	</array>
+	<key>ForAppStore</key>
+	<true/>
 	<key>LSAppNapIsDisabled</key>
 	<true/>
 </dict>

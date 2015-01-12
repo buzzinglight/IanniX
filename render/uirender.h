@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -149,7 +149,7 @@ private:
 public:
     void flagIsRemoving(bool _val = true) { isRemoving = _val; }
     void centerOn(const NxPoint & center, bool force = false);
-    void rotateTo(const NxPoint & rotation, bool force = false);
+    void rotateTo(const NxPoint & rotation, const NxPoint &rotationCenter = NxPoint(0, 0), bool force = false);
 
 private:
     NxPoint mousePressedRawPos, mousePressedAreaPos, mousePressedAreaPosNoCenter, mousePressedAxisCenter;

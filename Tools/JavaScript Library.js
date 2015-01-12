@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -115,21 +115,30 @@ function angle(x1, y1, x2, y2) {
 	    angle = (-Math.atan(dx / dy) + 3 * HALF_PI) * 180.0 / PI;
 	return angle;
 }
-function norm(value, low, high) {
+function norm(value, low, high, exp) {
 	if((high - low) == 0)
-		return low;
+		return 0;
 	else
-		return (value - low) / (high - low);
+		return linexp((value - low) / (high - low), exp);
 }
-function range(value, low, high) {
+function range(value, low, high, exp) {
+	value = linexp(value, exp);
 	return value * (high - low) + low; 
 }
-function rangeMid(value, low, mid, high) {
+function rangeMid(value, low, mid, high, exp) {
+	value = linexp(value, exp);
 	if(value < 0.5)
 		return (value * 2) * (mid - low) + low;
 	else
 		return (value - .5) * 2 * (high - mid) + mid;
 }
-function map(value, low1, high1, low2, high2) {
-	return range(norm(value, low1, high1), low2, high2);
+function map(value, low1, high1, low2, high2, exp) {
+	return range(norm(value, low1, high1, exp), low2, high2);
+}
+
+function linexp(value, factor) {
+	if((factor == undefined) || (factor == 0))
+		return value;
+	else
+		return (exp(factor * value - factor) - exp(-factor)) / (1 - exp(-factor));
 }

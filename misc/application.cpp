@@ -1,6 +1,6 @@
 /*
     This file is part of IanniX, a graphical real-time open-source sequencer for digital art
-    Copyright (C) 2010-2014 — IanniX Association
+    Copyright (C) 2010-2015 — IanniX Association
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (http://www.buzzinglight.com)
@@ -65,6 +65,8 @@ NxPoint Render::axisCenter;
 NxPoint Render::axisCenterDest;
 NxPoint Render::rotation;
 NxPoint Render::rotationDest;
+NxPoint Render::rotationCenter;
+NxPoint Render::rotationCenterDest;
 UiBool  Render::paintThisGroup         = false;
 UiBool  Render::forceLists             = false;
 UiBool  Render::forceTexture           = false;
