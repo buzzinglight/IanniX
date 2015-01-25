@@ -140,17 +140,13 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionAlign_circle,         SIGNAL(triggered()), SLOT(actionAlign_circle()));
     connect(ui->actionAlign_ellipse,        SIGNAL(triggered()), SLOT(actionAlign_ellipse()));
 
-
-#ifdef Q_OS_MAC
     delete ui->renderPreview;
     ui->renderPreview = new UiRenderPreview(ui->pagePerf, ui->render);
     ui->pagePerf->layout()->addWidget(ui->renderPreview);
     fullscreenDisplays = QApplication::desktop();
     connect(fullscreenDisplays, SIGNAL(screenCountChanged(int)), SLOT(fullscreenDisplaysCountChanged()));
     fullscreenDisplaysCountChanged();
-#else
-    delete ui->actionPerformance;
-#endif
+    //delete ui->actionPerformance;
     ui->render->setFocus();
 }
 
