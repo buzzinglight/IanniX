@@ -31,8 +31,8 @@ UiView::UiView(QWidget *parent) :
     isFullScreen = false;
     freehandCurveId = freehandCurveIndex = 0;
 
-    Help::syncHelpWith(ui->actionImoprt_Text, COMMAND_CURVE_TXT);
-    Help::syncHelpWith(ui->actionImoprt_SVG,  COMMAND_CURVE_PATH);
+    Help::syncHelpWith(ui->actionImport_Text, COMMAND_CURVE_TXT);
+    Help::syncHelpWith(ui->actionImport_SVG,  COMMAND_CURVE_PATH);
 
 #ifndef Q_OS_MAC
     ui->actionDelete->setShortcut(QApplication::translate("UiView", "Delete", 0, QApplication::UnicodeUTF8));
