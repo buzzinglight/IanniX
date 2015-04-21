@@ -138,7 +138,7 @@ void UiHelp::statusHelp() {
 
         if(messageTexts.count()) {
             html += QString("<p class='titre'>%1</p>").arg(tr("GUI MESSAGES"));
-            html += QString("<p class='sstitre'>%1</p>").arg(tr("You've just performed action through graphical user interface. Here are the messages you would have to use if you wanted to control IannIX from an other software ou interface."));
+            html += QString("<p class='sstitre'>%1</p>").arg(tr("You've just performed action through graphical user interface. Here are the messages you have to use if you want to control IannIX from another software or interface."));
 
             html += QString("<p class='code snippet'>");
             for(quint16 i = 0 ; i < messageTexts.count() ; i++) {

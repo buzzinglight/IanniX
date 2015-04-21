@@ -14,7 +14,7 @@
    <string>Form</string>
   </property>
   <property name="statusTip">
-   <string>Open Sound Control Interface|OpenSoundControl a is very versatile protocol allowing IanniX to exchange messages with other softwares. We strongly recommand you to use this protocole instead of MIDI (MIDI resolution is 7bits, OpenSoundControl is 32bits).\nA lot of creative software implement this protocol, like PureData, SuperCollider, MaxMSP...</string>
+   <string>Open Sound Control Interface|OpenSoundControl is a very versatile protocol allowing IanniX to exchange messages with other software. We strongly recommend you to use this protocol instead of MIDI (MIDI resolution is 7bits, OpenSoundControl is 32bits).\nA lot of creative software implement this protocol, like PureData, SuperCollider, MaxMSP...</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -69,7 +69,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using OpenSoundControl</string>
+        <string>Opens the folder where you can find examples of IanniX interfacing with software using OpenSoundControl</string>
        </property>
        <property name="text">
         <string>OPEN EXAMPLES</string>

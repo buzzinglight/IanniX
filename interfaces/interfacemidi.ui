@@ -14,7 +14,7 @@
    <string>Form</string>
   </property>
   <property name="statusTip">
-   <string>MIDI Interface|If you cannot use OpenSoundControl in your creative application, you can use the built in MIDI support of IanniX.\nOn Mac OS X, a new virtual MIDI device will be available; you just have to enable it in the settings of your software.\nIanniX is able to send notes-on/off, control changes, pitchbend... but it is not as simple to control IanniX with a MIDI surface contarol, we strongly recommand to use OpenSoundControl for that.</string>
+   <string>MIDI Interface|If you cannot use OpenSoundControl in your creative application, you can use the built in MIDI support of IanniX.\nOn Mac OS X, a new virtual MIDI device will be available; you just have to enable it in the settings of your software.\nIanniX is able to send notes-on/off, control changes, pitchbend... but it is not as simple to control IanniX with a MIDI surface control, we strongly recommend to use OpenSoundControl for that.</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -69,7 +69,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using a MIDI connexion</string>
+        <string>Opens the folder where you can find examples of IanniX interfacing with software using a MIDI connection</string>
        </property>
        <property name="text">
         <string>OPEN EXAMPLES</string>
@@ -289,7 +289,7 @@ SYNCHRONIZATION</string>
         <property name="text">
          <string>You may need a virtual
 MIDI jack to connect IanniX
-with other MIDI softwares</string>
+with other MIDI software</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
