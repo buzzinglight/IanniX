@@ -451,7 +451,7 @@ QDialogButtonBox QPushButton {
     <addaction name="separator"/>
     <addaction name="actionImoprt_Text"/>
     <addaction name="actionImoprt_SVG"/>
-    <addaction name="actionImoprt_Background"/>
+    <addaction name="actionImport_Background"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
     <addaction name="actionAbout"/>
@@ -1444,7 +1444,7 @@ QDialogButtonBox QPushButton {
     <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
-  <action name="actionImoprt_Background">
+  <action name="actionImport_Background">
    <property name="text">
     <string>Import a background image…</string>
    </property>
