@@ -449,8 +449,8 @@ QDialogButtonBox QPushButton {
     <addaction name="actionReloadScript"/>
     <addaction name="actionClose_score"/>
     <addaction name="separator"/>
-    <addaction name="actionImoprt_Text"/>
-    <addaction name="actionImoprt_SVG"/>
+    <addaction name="actionImport_Text"/>
+    <addaction name="actionImport_SVG"/>
     <addaction name="actionImport_Background"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
@@ -1345,7 +1345,7 @@ QDialogButtonBox QPushButton {
     <enum>QAction::AboutRole</enum>
    </property>
   </action>
-  <action name="actionImoprt_SVG">
+  <action name="actionImport_SVG">
    <property name="text">
     <string>Import SVG file…</string>
    </property>
@@ -1359,7 +1359,7 @@ QDialogButtonBox QPushButton {
     <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
-  <action name="actionImoprt_Text">
+  <action name="actionImport_Text">
    <property name="text">
     <string>Import text…</string>
    </property>
