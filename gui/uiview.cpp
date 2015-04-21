@@ -65,9 +65,9 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionOpen,              SIGNAL(triggered()), ui->render, SLOT(actionOpen()));
     connect(ui->actionSave,              SIGNAL(triggered()), ui->render, SLOT(actionSave()));
     connect(ui->actionSave_score_as,     SIGNAL(triggered()), ui->render, SLOT(actionSave_as()));
-    connect(ui->actionImoprt_SVG,        SIGNAL(triggered()), SLOT(actionImportSVG()));
-    connect(ui->actionImoprt_Background, SIGNAL(triggered()), SLOT(actionImportBackground()));
-    connect(ui->actionImoprt_Text,       SIGNAL(triggered()), SLOT(actionImportText()));
+    connect(ui->actionImport_SVG,        SIGNAL(triggered()), SLOT(actionImportSVG()));
+    connect(ui->actionImport_Background, SIGNAL(triggered()), SLOT(actionImportBackground()));
+    connect(ui->actionImport_Text,       SIGNAL(triggered()), SLOT(actionImportText()));
 
     connect(ui->actionRedo,              SIGNAL(triggered()), ui->render, SLOT(actionRedo()));
     connect(ui->actionUndo,              SIGNAL(triggered()), ui->render, SLOT(actionUndo()));
