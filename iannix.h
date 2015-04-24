@@ -41,9 +41,6 @@
 #include <QDomDocument>
 #include <QFileOpenEvent>
 #include <QDesktopServices>
-#ifdef QT5
-#include <QStandardPaths>
-#endif
 #include <time.h>
 #include "misc/application.h"
 #include "gui/uimessagebox.h"

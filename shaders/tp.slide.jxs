@@ -1,0 +1,75 @@
+<jittershader name="slide">
+	<param name="slide_up" type="float" default="1" />
+	<param name="slide_down" type="float" default="1" />
+	<param name="tex0" type="int" default="0" />
+	<param name="tex1" type="int" default="1" />
+	<language name="glsl" version="1.0">
+		<bind param="tex0" program="fp" />
+		<bind param="tex1" program="fp" />
+		<bind param="slide_up" program="fp" />
+		<bind param="slide_down" program="fp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+// define our varying texture coordinates
+varying vec2 texcoord0;
+varying vec2 texcoord1;
+
+void main(void)
+{
+	// the output vertex postion to the input vertex position
+	// transformed by the current ModelViewProjection matrix 
+	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+
+	// assign our varying texture coordinates to the
+	// input texture coordinate values transformed 
+	// by the appropriate texture matrix. This is
+	// necessary for rectangular and flipped textures 
+	texcoord0 = vec2(gl_TextureMatrix[0] * gl_MultiTexCoord0);
+	texcoord1 = vec2(gl_TextureMatrix[1] * gl_MultiTexCoord1);
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+
+uniform float slide_up;
+uniform float slide_down;
+
+varying vec2 texcoord0;
+varying vec2 texcoord1;
+
+uniform sampler2DRect tex0;
+uniform sampler2DRect tex1;
+
+void main(void)
+{
+	vec4 su, sd, up, down, amount;
+
+	// sample inputs at texcoords
+	vec4 input0 = texture2DRect(tex0, texcoord0);
+	vec4 input1 = texture2DRect(tex1, texcoord1);
+	
+	// get contribution
+	amount.x = input0.x > input1.x ? 1.0 : 0.0;
+	amount.y = input0.y > input1.y ? 1.0 : 0.0;
+	amount.z = input0.z > input1.z ? 1.0 : 0.0;
+	amount.w = input0.w > input1.w ? 1.0 : 0.0;
+	
+	// calculate slide down
+	float d = max(1.0, abs(slide_down));
+	sd = vec4(1.0 / d);
+	down = input1 + ((input0 - input1) * sd);
+
+	// calculate slide up
+	float u = max(1.0, abs(slide_up));
+	su = vec4(1.0 / u);
+	up = input1 + ((input0 - input1) * su);
+
+	// mix between down and up
+	gl_FragColor = mix(down, up, amount);
+}
+
+]]>	
+		</program>
+	</language>
+</jittershader>

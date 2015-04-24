@@ -401,6 +401,11 @@ void IanniX::timerTick(qreal delta) {
                     //Browse cursors
                     foreach(const NxObject *objectCursor, group->objects[activityIterator][ObjectsTypeCursor]) {
                         NxCursor *cursor = (NxCursor*)objectCursor;
+                        NxCurve  *curve  = cursor->getCurve();
+
+                        //Calculate curve
+                        if(curve)
+                            curve->update();
 
                         //Cursor reset
                         if(Transport::forceTimeLocal) {

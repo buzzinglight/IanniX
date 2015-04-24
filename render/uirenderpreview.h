@@ -24,7 +24,11 @@
 #ifndef UIRENDERPREVIEW_H
 #define UIRENDERPREVIEW_H
 
+#ifdef QT4
 #include <QGLWidget>
+#else
+#include <QOpenGLWidget>
+#endif
 
 class NxEventsPropagation {
 public:
@@ -36,11 +40,15 @@ public:
     virtual void keyPressEvent(QKeyEvent *)            {}
 };
 
+#ifdef QT4
 class UiRenderPreview : public QGLWidget {
+#else
+class UiRenderPreview : public QOpenGLWidget {
+#endif
     Q_OBJECT
 
 public:
-    explicit UiRenderPreview(QWidget *parent, QGLWidget *shared = 0);
+    explicit UiRenderPreview(QWidget *parent, void *shared = 0);
     void paintPreview(NxEventsPropagation *_render, GLuint _renderPreviewTexture, QSizeF _renderSize);
 
 private:
@@ -60,6 +68,13 @@ protected:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+
+#ifdef QT5
+public slots:
+    void updateGL() {
+        update();
+    }
+#endif
 
 signals:
     

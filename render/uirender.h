@@ -34,14 +34,13 @@
 #include <QtCore/qmath.h>
 #include <QDir>
 #include <QClipboard>
+#include <QGLWidget>
+#include <QGLShaderProgram>
 #include "interfaces/interfacesyphon.h"
 #include "objects/nxdocument.h"
 #include "misc/application.h"
 
 #include "render/uirenderpreview.h"
-#ifdef QT5
-#include <QStandardPaths>
-#endif
 #ifdef FFMPEG_INSTALLED
 #include "interfaces/qffmpeg/QVideoEncoder.h"
 #endif
@@ -73,7 +72,7 @@ class UiRender : public Render, public NxEventsPropagation {
     Q_OBJECT
 
 public:
-    explicit UiRender(QWidget *parent = 0, QGLWidget *share = 0);
+    explicit UiRender(QWidget *parent = 0, void *share = 0);
     ~UiRender();
 
 public:
@@ -88,6 +87,8 @@ private:
     qreal scale, scaleDest;
     QList<QImage> capturedFrames;
     bool capturedFramesStart;
+private:
+    QGLShaderProgram *shaderProgram;
 
 public:
     inline void startRenderTimer() { timer->start(20); }
@@ -241,7 +242,25 @@ public:
 #ifdef FFMPEG_INSTALLED
     QVideoEncoder videoEncoder;
 #endif
-
+#ifdef QT5
+    inline void qglColor(const QColor &color) const {
+        glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+    }
+    inline void qglClearColor(const QColor &color) const {
+        glClearColor(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+    }
+    inline void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font) {
+        Q_UNUSED(x);
+        Q_UNUSED(y);
+        Q_UNUSED(z);
+        Q_UNUSED(text);
+        Q_UNUSED(font);
+    }
+public slots:
+    void updateGL() {
+        update();
+    }
+#endif
 
 public:
     InterfaceSyphon *interfaceSyphon;
@@ -250,6 +269,8 @@ public:
 private:
     bool renderPreviewTextureInit, performanceMode;
     GLuint renderPreviewTexture;
+private:
+    GLuint destinationTexture, workingTexture;
 };
 
 #endif //RENDER_H

@@ -24,7 +24,7 @@
 #include "uirender.h"
 #include "ui_uirender.h"
 
-UiRender::UiRender(QWidget *parent, QGLWidget *share) :
+UiRender::UiRender(QWidget *parent, void *share) :
     Render(parent, share),
     ui(new Ui::UiRender) {
     capturedFramesStart = false;
@@ -40,10 +40,12 @@ UiRender::UiRender(QWidget *parent, QGLWidget *share) :
     //Syphon
     interfaceSyphon = new InterfaceSyphon();
     renderPreviewTextureInit = false;
+    destinationTexture = workingTexture = 0;
     performanceMode = false;
 
     //Initialisations
     documentToRender = 0;
+    shaderProgram    = 0;
     setDocument(0);
     setMouseTracking(true);
     isRemoving = false;
@@ -64,9 +66,13 @@ UiRender::UiRender(QWidget *parent, QGLWidget *share) :
 UiRender::~UiRender() {
     delete ui;
 }
-void UiRender::changeEvent(QEvent *e) {
-    QGLWidget::changeEvent(e);
-    switch (e->type()) {
+void UiRender::changeEvent(QEvent *event) {
+#ifdef QT4
+    return QGLWidget::changeEvent(event);
+#else
+    return QOpenGLWidget::changeEvent(event);
+#endif
+    switch (event->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
         break;
@@ -157,21 +163,28 @@ bool UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
     Render::forceTexture       = true;
     Render::forceFrustumInInit = true;
 
+#ifdef QT4
     if(filename.isEmpty()) {
         QPixmap picture = renderPixmap(renderSize.width(), renderSize.height());
         if(picture.isNull()) {
             picture = QPixmap::fromImage(grabFrameBuffer(false));
             (new UiMessageBox())->display(tr("Graphical card error"), tr("Due to hardware issue, the high resolution snapshot creation failed.\nA classical snapshot has been saved on your desktop."));
         }
-#ifdef QT4
         picture.save(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
-#else
-        picture.save(QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first() + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
-             #endif
     } else {
         QDir().mkpath(QFileInfo(filename).absoluteDir().absolutePath());
         renderPixmap(renderSize.width(), renderSize.height()).save(filename);
     }
+#else
+    if(filename.isEmpty()) {
+        QPixmap picture = QPixmap::fromImage(grabFramebuffer());
+        (new UiMessageBox())->display(tr("Graphical card error"), tr("Due to hardware issue, the high resolution snapshot creation failed.\nA classical snapshot has been saved on your desktop."));
+        picture.save(QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first() + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
+    }/* else {
+        QDir().mkpath(QFileInfo(filename).absoluteDir().absolutePath());
+        renderPixmap(renderSize.width(), renderSize.height()).save(filename);
+    }*/
+#endif
     Render::forceLists         = false;
     Render::forceTexture       = false;
     Render::forceFrustumInInit = false;
@@ -402,16 +415,103 @@ void UiRender::paintGL() {
             qDebug("%d encode", videoEncoder.encodeImage(grabFrameBuffer()));
 #endif
 
+
+        //#define SHADER_INSTALLED 1
+#ifdef SHADER_INSTALLED
+        glPushMatrix();
+        //Copie de l'écran
+        glEnable(GL_TEXTURE_2D);
+        if(!destinationTexture)
+            glGenTextures(1, &destinationTexture);
+        glBindTexture(GL_TEXTURE_2D, destinationTexture);
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glDisable(GL_TEXTURE_2D);
+
+        //Shader
+        if(!shaderProgram) {
+            shaderProgram = new QGLShaderProgram(this);
+            QFile vertexFile("shaders/Fragment.vsh"), fragmentFile("shaders/Blur.fsh");
+            if((vertexFile.open(QFile::ReadOnly)) && (fragmentFile.open(QFile::ReadOnly))) {
+                shaderProgram->addShaderFromSourceCode(QGLShader::Vertex, vertexFile.readAll());
+                shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, fragmentFile.readAll());
+
+                if(shaderProgram->link())   qDebug("[OPENGL] Shader built");
+                else                        qDebug("[OPENGL] Shader not built : %s", qPrintable(shaderProgram->log().trimmed()));
+            }
+        }
+
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glFrustum(0, renderSize.width(), renderSize.height(), 0, 100, 300);
+        glTranslatef(0, 0, -100);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        //Efface
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        //Feedback initial
+        glEnable(GL_TEXTURE_2D);
+        if(!workingTexture) {
+            glClearColor(1, 0, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glGenTextures(1, &workingTexture);
+            glBindTexture(GL_TEXTURE_2D, workingTexture);
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        }
+        glDisable(GL_TEXTURE_2D);
+
+        shaderProgram->bind();
+        shaderProgram->setUniformValue(shaderProgram->uniformLocation("slide_up"),   (GLfloat)5.);
+        shaderProgram->setUniformValue(shaderProgram->uniformLocation("slide_down"), (GLfloat)5.);
+        shaderProgram->setUniformValue(shaderProgram->uniformLocation("tex0"),       (GLuint)0);
+        shaderProgram->setUniformValue(shaderProgram->uniformLocation("tex1"),       (GLuint)1);
+
+        glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, destinationTexture);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, workingTexture);
+
+        glColor4f(1, 1, 1, 1);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(0, 0);
+        glTexCoord2f(1, 1); glVertex2f(renderSize.width(), 0);
+        glTexCoord2f(1, 0); glVertex2f(renderSize.width(), renderSize.height());
+        glTexCoord2f(0, 0); glVertex2f(0, renderSize.height());
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+        shaderProgram->release();
+
+        //Copie Feedback
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, workingTexture);
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glDisable(GL_TEXTURE_2D);
+        glPopMatrix();
+#endif
+
+
+
 #ifdef SYPHON_INSTALLED
+        //Export Syphon
         if(!interfaceSyphon->serverInit) {
             makeCurrent();
             interfaceSyphon->createSyphonServer();
         }
         if(interfaceSyphon->serverEnable) {
             glEnable(GL_TEXTURE_2D);
-            if(!interfaceSyphon->serverTexture) {
+            if(!interfaceSyphon->serverTexture)
                 glGenTextures(1, &interfaceSyphon->serverTexture);
-            }
             glBindTexture(GL_TEXTURE_2D, interfaceSyphon->serverTexture);
             glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
             interfaceSyphon->publishTexture(GL_TEXTURE_2D, renderSize.width(), renderSize.height());
@@ -419,6 +519,7 @@ void UiRender::paintGL() {
         }
 #endif
 
+        //Mode performance preview
         if((performanceMode) && (Application::current->getPerformancePreview())) {
             glEnable(GL_TEXTURE_2D);
             if(!renderPreviewTextureInit) {
@@ -434,7 +535,11 @@ void UiRender::paintGL() {
         }
 
         if(capturedFramesStart)
+#ifdef QT4
             capturedFrames << grabFrameBuffer();
+#else
+            capturedFrames << grabFramebuffer();
+#endif
     }
 }
 
@@ -974,7 +1079,11 @@ bool UiRender::event(QEvent *event) {
     default:
         break;
     }
+#ifdef QT4
     return QGLWidget::event(event);
+#else
+    return QOpenGLWidget::event(event);
+#endif
 }
 void UiRender::dragEnterEvent(QDragEnterEvent *event) {
     const QMimeData* mimeData = event->mimeData();

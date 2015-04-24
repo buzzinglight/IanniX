@@ -29,6 +29,9 @@ contains(QT_VERSION, "^4.*") {
     message("IanniX For QT5")
     DEFINES += QT5
     QT      += widgets core gui opengl network script xml
+    macx {
+        QMAKE_LFLAGS      += -F/Users/guillaume/Library/Frameworks/
+    }
 }
 macx {
     contains(QT_VERSION, "4.7.4") {
@@ -122,7 +125,7 @@ macx {
 }
 
 #Syphon
-false {
+macx {
     DEFINES           += SYPHON_INSTALLED
     OBJECTIVE_SOURCES += interfaces/interfacesyphon.mm
     LIBS              += -framework Cocoa -framework Syphon

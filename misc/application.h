@@ -30,6 +30,11 @@
 #include <QVariant>
 #include <QMainWindow>
 #include <QPixmap>
+#ifdef QT5
+#include <QOpenGLWidget>
+#include <QStandardPaths>
+#include <QUrlQuery>
+#endif
 #include "applicationexecute.h"
 #include "gui/uihelp.h"
 #include "render/uirenderpreview.h"
@@ -82,9 +87,17 @@ public slots:
 
 enum EditingMode { EditingModeFree, EditingModePoint, EditingModeTriggers, EditingModeCircle };
 
+#ifdef QT4
 class Render : public QGLWidget {
 public:
-    explicit Render(QWidget *parent = 0, QGLWidget *share = 0) : QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent, share) {}
+    explicit Render(QWidget *parent = 0, void *share = 0) : QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent, (QGLWidget*)share) {}
+#else
+    class Render : public QOpenGLWidget {
+    public:
+        explicit Render(QWidget *parent = 0, void * = 0) : QOpenGLWidget(parent) {}
+    public:
+        virtual void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font) = 0;
+#endif
 public:
     virtual void selectionClear(bool) = 0;
     virtual void setZoom(qreal axisZoom) = 0;

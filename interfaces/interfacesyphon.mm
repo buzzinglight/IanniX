@@ -23,7 +23,11 @@
 
 #include "interfacesyphon.h"
 #include "ui_interfacesyphon.h"
+#ifdef QT4
 #import <Syphon/Syphon.h>
+#else
+#import "/Library/Frameworks/Syphon.framework/Versions/A/Headers/Syphon.h"
+#endif
 
 InterfaceSyphon::InterfaceSyphon(QWidget *parent) :
     NetworkInterface(parent),

@@ -33,6 +33,7 @@ NxCurve::NxCurve(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     curveType = CurveTypePoints;
     equationIsValid = false;
     glListRecreateFromEditor = false;
+    curveNeedUpdate = true;
     equationNbEval = 3;
     pathLength = 0;
     pathPointsEditor = 0;
@@ -81,8 +82,9 @@ void NxCurve::setEquation(const QString &type, const QString &_equation) {
 
         equationParser.DefineVar("t", &equationVariableT);
         equationParser.SetExpr(qPrintable(equation));
-        calcEquation();
-        calcBoundingRect();
+        curveNeedUpdate = true;
+        //calcEquation();
+        //calcBoundingRect();
     }
     catch (Parser::exception_type &e) {
         qDebug("[MathParser] Parsing error");
@@ -91,8 +93,9 @@ void NxCurve::setEquation(const QString &type, const QString &_equation) {
 void NxCurve::setEquationPoints(quint16 nbPoints) {
     equationNbPoints = nbPoints;
     equationVariableTSteps = 1. / equationNbPoints;
-    calcEquation();
-    calcBoundingRect();
+    curveNeedUpdate = true;
+    //calcEquation();
+    //calcBoundingRect();
 }
 
 void NxCurve::setEquationParam(const QString &param, qreal value) {
@@ -107,8 +110,9 @@ void NxCurve::setEquationParam(const QString &param, qreal value) {
     }
     else
         equationVariables[param] = value;
-    calcEquation();
-    calcBoundingRect();
+    curveNeedUpdate = true;
+    //calcEquation();
+    //calcBoundingRect();
 }
 void NxCurve::calcEquation() {
     if(id > 0) {
@@ -123,7 +127,7 @@ void NxCurve::calcEquation() {
             }
         }
         catch (Parser::exception_type &e) {
-            qDebug("[MathParser] Curve #%d Calculation error", id);
+            qDebug("[MathParser] Curve #%d Calculation error (%ld), %s\n%s", id, e.GetPos(), qPrintable(QString::fromStdString(e.GetMsg())), qPrintable(QString::fromStdString(e.GetExpr())));
         }
     }
 }
@@ -135,6 +139,8 @@ void NxCurve::paint() {
 #endif
 
     computeInertie();
+
+    update();
 
     //Color
     if(active) {
@@ -256,7 +262,7 @@ void NxCurve::paint() {
             glDisable(GL_LINE_STIPPLE);
             glEndList();
             if(glListRecreateFromEditor)
-                calcBoundingRect();
+                curveNeedUpdate = true;
             if((glListRecreate) && (pathPointsEditor) && (pathPointsEditor->isVisible()))
                 pathPoints.update();
             glListRecreate           = false;
@@ -367,7 +373,7 @@ void NxCurve::addMousePointAt(const NxPoint & _mousePos, bool remove) {
                 }
                 if(pathPoints.count())
                     setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
-                calcBoundingRect();
+                curveNeedUpdate = true;
                 return;
             }
         }
@@ -380,7 +386,7 @@ void NxCurve::setRemovePointAt(quint16 index) {
         pathPoints.removeAt(index);
 
     //Length
-    calcBoundingRect();
+    curveNeedUpdate = true;
 }
 
 bool NxCurve::shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalculation) {
@@ -400,7 +406,7 @@ bool NxCurve::shiftPointAt(quint16 index, qint8 direction, bool boundingRectCalc
         }
     }
     if(boundingRectCalculation)
-        calcBoundingRect();
+        curveNeedUpdate = true;
     return true;
 }
 const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, bool smooth, bool boundingRectCalculation, bool fromGui) {
@@ -498,7 +504,7 @@ const NxPoint & NxCurve::setPointAt(quint16 index, const NxPoint & point, const 
 
     //Length
     if((boundingRectCalculation) && ((hasCreate) || (cursors.count() > 0)))
-        calcBoundingRect();
+        curveNeedUpdate = true;
 
     return point;
 }
@@ -575,7 +581,7 @@ void NxCurve::setEllipse(const NxSize & size) {
     glListRecreate = true;
 
     //Calculations
-    calcBoundingRect();
+    curveNeedUpdate = true;
     resize(1, 1);
 }
 
@@ -644,7 +650,7 @@ void NxCurve::resize(qreal sizeFactorW, qreal sizeFactorH) {
         for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++)
             setPointAt(indexPoint, NxPoint(getPathPointsAt(indexPoint).x() * sizeFactor.width(), getPathPointsAt(indexPoint).y() * sizeFactor.height()), NxPoint(getPathPointsAt(indexPoint).c1.x() * sizeFactor.width(), getPathPointsAt(indexPoint).c1.y() * sizeFactor.height()), NxPoint(getPathPointsAt(indexPoint).c2.x() * sizeFactor.width(), getPathPointsAt(indexPoint).c2.y() * sizeFactor.height()), getPathPointsAt(indexPoint).smooth, false);
     }
-    calcBoundingRect();
+    curveNeedUpdate = true;
 }
 void NxCurve::resize(const NxSize & size) {
     //calcBoundingRect();
@@ -654,7 +660,7 @@ void NxCurve::resize(const NxSize & size) {
 bool NxCurve::translate(const NxPoint & point) {
     for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++)
         setPointAt(indexPoint, getPathPointsAt(indexPoint) + point, getPathPointsAt(indexPoint).c1, getPathPointsAt(indexPoint).c2, getPathPointsAt(indexPoint).smooth, false);
-    calcBoundingRect();
+    curveNeedUpdate = true;
     return true;
 }
 
@@ -1005,7 +1011,7 @@ void NxCurve::resample(quint16 nbPoints, bool smooth, bool triggers) {
         if(pathPoints.count())
             setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
         curveType = CurveTypePoints;
-        calcBoundingRect();
+        curveNeedUpdate = true;
         glListRecreate = true;
     }
 }

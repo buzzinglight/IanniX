@@ -93,7 +93,7 @@ private:
     QHash<QString,qreal> equationVariables;
     qreal equationVariableT, equationNbPoints, equationVariableTSteps;
     Parser equationParser;
-    bool equationIsValid;
+    bool equationIsValid, curveNeedUpdate;
     int equationNbEval;
 public:
     void setPointXAt(const QList<qreal> &points) {
@@ -221,7 +221,7 @@ public:
         if(_pathLength > 0)
             pathLength = _pathLength;
         else
-            calcBoundingRect();
+            curveNeedUpdate = true;
     }
     inline void setInertie(qreal _inertie) {
         inertie = _inertie;
@@ -340,7 +340,10 @@ public:
         return cursors.count()-1;
     }
 
-    inline qreal getPathLength() const  { return pathLength; }
+    inline qreal getPathLength() {
+        update();
+        return pathLength;
+    }
     void addMousePointAt(const NxPoint & _mousePos, bool remove);
     void setRemovePointAt(quint16 index);
     inline quint16 getRemovePointAt() const { return 0.; }
@@ -431,7 +434,7 @@ public:
 
     inline void addCursor(NxObject *cursor) {
         cursors.append(cursor);
-        calcBoundingRect();
+        curveNeedUpdate = true;
         glListRecreate = true;
         if(cursors.count()) {
             if(colorActive   == "_simple_curve_active")   colorActive   = "_curve_active";
@@ -445,7 +448,7 @@ public:
         qint16 index = cursors.lastIndexOf(cursor);
         if(index >= 0)
             cursors.removeAt(index);
-        calcBoundingRect();
+        curveNeedUpdate = true;
         glListRecreate = true;
         if(cursors.count()) {
             if(colorActive   == "_simple_curve_active")   colorActive   = "_curve_active";
@@ -498,6 +501,14 @@ public:
 
 public:
     void paint();
+    inline void update() {
+        if(curveNeedUpdate) {
+            curveNeedUpdate = false;
+            if((curveType == CurveTypeEquationCartesian) || (curveType == CurveTypeEquationPolar))
+                calcEquation();
+            calcBoundingRect();
+        }
+    }
 
 };
 

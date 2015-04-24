@@ -23,8 +23,13 @@
 
 #include "uirenderpreview.h"
 
-UiRenderPreview::UiRenderPreview(QWidget *parent, QGLWidget *shared) :
-    QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent, shared) {
+#ifdef QT4
+UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
+    QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent, (QGLWidget*)shared) {
+#else
+UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
+    QOpenGLWidget(parent) {
+#endif
     setFocusPolicy(Qt::StrongFocus);
     render = 0;
 }

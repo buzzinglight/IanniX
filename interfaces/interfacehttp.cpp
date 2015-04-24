@@ -181,19 +181,22 @@ void InterfaceHttp::parseSocket(QTcpSocket *socket) {
         picFormat.second = -1;
         bool isPic = false, isSync = false;
 #ifdef QT4
-        for(quint16 index = 0 ; index < url.queryItems().count() ; index++) {
-            QString first = url.queryItems().at(index).first.toLower();
+        QList< QPair<QString, QString> > tokens = url.queryItems();
+#else
+        QList< QPair<QString, QString> > tokens = QUrlQuery(url.query()).queryItems();
+#endif
+        for(quint16 index = 0 ; index < tokens.count() ; index++) {
+            QString first = tokens.at(index).first.toLower();
             if((first == "png") || (first == "jpg") || (first == "mjpg")) {
                 isPic = true;
                 picFormat.first  = first;
-                picFormat.second = url.queryItems().at(index).second.toInt();
+                picFormat.second = tokens.at(index).second.toInt();
             }
             else if(first == "sync")
                 isSync = true;
             else
-                commands.append(url.queryItems().at(index).second);
+                commands.append(tokens.at(index).second);
         }
-#endif
 
         QTextStream os(socket);
         if((commands.count() > 0) && (!isPic) && (!isSync)) {
