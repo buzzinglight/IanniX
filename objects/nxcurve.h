@@ -54,6 +54,7 @@ class NxCurve : public NxObject {
     Q_PROPERTY(qreal     setresizef           READ getResizeF               WRITE setResizeF)
     Q_PROPERTY(QString   setequation          READ getEquationStr           WRITE setEquationStr)
     Q_PROPERTY(QString   setequationparam     READ getEquationParamStr      WRITE setEquationParamStr)
+    Q_PROPERTY(QString   setequationparamlist READ getEquationParamListStr  WRITE setEquationParamListStr)
     Q_PROPERTY(quint16   setequationnbpoints  READ getEquationPoints        WRITE setEquationPoints)
     Q_PROPERTY(QString   setpointsellipse     READ getEllipseStr            WRITE setEllipseStr)
     Q_PROPERTY(quint16   removepointat        READ getRemovePointAt         WRITE setRemovePointAt)
@@ -208,6 +209,9 @@ public:
     inline QString getEquationParamStr() const {
         return QString();
     }
+    inline QString getEquationParamListStr() const {
+        return QString();
+    }
     inline qreal getEquationParam(const QString &param) const {
         if(equationVariables.contains(param))   return equationVariables.value(param);
         else                                    return 0;
@@ -216,6 +220,11 @@ public:
         QStringList paramsList = params.split(" ");
         if(paramsList.count() > 1)
             setEquationParam(paramsList.at(0), paramsList.at(1).toDouble());
+    }
+    inline void setEquationParamListStr(const QString &params) {
+        QStringList paramsList = params.split(" ");
+        for(quint16 paramsIndex = 0 ; paramsIndex < paramsList.count() ; paramsIndex++)
+            setEquationParam(QString("k%1").arg(paramsIndex), paramsList.at(paramsIndex).toDouble());
     }
     inline void setPathLength(qreal _pathLength) {
         if(_pathLength > 0)

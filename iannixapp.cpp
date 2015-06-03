@@ -394,6 +394,7 @@ void IanniXApp::setHelp() {
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_TIME				, tr("Objects and time"), tr("Sets cursors to a specific time on curve (absolute time)"), tr("<target> <time>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_LOG						, tr("IanniX actions"), tr("Logs information to IanniX messages log"), tr("<text>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_EQUATION_PARAM		, tr("Objects and 3D space"), tr("Sets a value to an equation parameter"), tr("<target> <param_name> <param_value>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_EQUATION_PARAM_LIST, tr("Objects and 3D space"), tr("Sets values to an equation parameters k0, k1, …, kn"), tr("<target> <param_value_1> <param_value_2> … <param_value_n>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURVE_LINES				, tr("Objects style"), tr("Defines points of a curve as SVG polylines"), tr("See examples through GUI"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_LOAD						, tr("IanniX actions"), tr("Loads a specific score"), tr("<filename>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_MESSAGE_SEND				, tr("IanniX actions"), tr("Send a message (in IanniX format)"), tr("<message>"));
