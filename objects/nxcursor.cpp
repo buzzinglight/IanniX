@@ -347,10 +347,12 @@ void NxCursor::paint() {
                 glEnable(GL_LINE_STIPPLE);
                 glLineStipple(lineFactor, lineStipple);
                 if(depth == 0) {
-                    glBegin(GL_LINE_STRIP);
-                    glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
-                    glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
-                    glEnd();
+                    if(size > 0) {
+                        glBegin(GL_LINE_STRIP);
+                        glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                        glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                        glEnd();
+                    }
                 }
                 else {
                     glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF()/5.);
@@ -361,13 +363,15 @@ void NxCursor::paint() {
                     glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
                     glEnd();
 
-                    glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
-                    glBegin(GL_LINE_LOOP);
-                    glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
-                    glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
-                    glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
-                    glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
-                    glEnd();
+                    if(size > 0) {
+                        glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+                        glBegin(GL_LINE_LOOP);
+                        glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
+                        glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
+                        glVertex3f(cursorPoly.at(2).x(), cursorPoly.at(2).y(), cursorPoly.at(2).z());
+                        glVertex3f(cursorPoly.at(3).x(), cursorPoly.at(3).y(), cursorPoly.at(3).z());
+                        glEnd();
+                    }
                 }
                 glDisable(GL_LINE_STIPPLE);
                 glLineWidth(1);
