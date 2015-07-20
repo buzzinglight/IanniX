@@ -865,6 +865,18 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
                 }
             }
 
+            //Spécial
+            else if(commande == "setlegend") {
+                if(workingDocument == currentDocument) {
+                    if(argc >= 6) {
+                        render->legendColor = QColor(argvDouble(argv, 1), argvDouble(argv, 2), argvDouble(argv, 3), argvDouble(argv, 4));
+                        render->legendSize = argvDouble(argv, 5);
+                        render->legend = argvFullString(command, argv, 6);
+                    }
+                }
+            }
+
+
             //Solo & mute
             else if((commande == COMMAND_SOLO) || (commande == COMMAND_MUTE)) {
                 if(argc > 1) {

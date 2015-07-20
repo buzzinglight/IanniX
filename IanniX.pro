@@ -115,6 +115,13 @@ HEADERS  += interfaces/qwebsockets/websocket.h   interfaces/qwebsockets/websocke
 
 
 
+#Artnet
+macx {
+    INCLUDEPATH += interfaces
+    HEADERS     += interfaces/artnet/artnet.h interfaces/artnet/misc.h interfaces/artnet/packets.h interfaces/artnet/private.h interfaces/artnet/tod.h interfaces/artnet/common.h
+    SOURCES     += interfaces/artnet/artnet.c interfaces/artnet/misc.c interfaces/artnet/network.c interfaces/artnet/receive.c interfaces/artnet/tod.c interfaces/artnet/transmit.c
+}
+
 
 #Zeroconf
 macx {

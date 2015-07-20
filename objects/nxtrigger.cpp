@@ -94,7 +94,7 @@ void NxTrigger::paint() {
 
         //Label
         if((Render::paintThisGroup) && (Application::paintLabel || selectedHover) && (!label.isEmpty()))
-            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id) + " - " + label.toUpper(), Application::renderFont);
+            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, label.toUpper(), Application::renderFont);
         else if(selectedHover)
             Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id), Application::renderFont);
         if((selectedHover) && (!isDrag)) {

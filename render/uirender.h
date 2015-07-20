@@ -89,6 +89,10 @@ private:
     bool capturedFramesStart;
 private:
     QGLShaderProgram *shaderProgram;
+public:
+    QString legend;
+    QColor legendColor;
+    qreal legendSize;
 
 public:
     inline void startRenderTimer() { timer->start(20); }

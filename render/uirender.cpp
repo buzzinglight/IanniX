@@ -43,6 +43,10 @@ UiRender::UiRender(QWidget *parent, void *share) :
     destinationTexture = workingTexture = 0;
     performanceMode = false;
 
+    //Légende
+    legendColor = Qt::white;
+    legendSize = 30;
+
     //Initialisations
     documentToRender = 0;
     shaderProgram    = 0;
@@ -499,6 +503,47 @@ void UiRender::paintGL() {
         glDisable(GL_TEXTURE_2D);
         glPopMatrix();
 #endif
+
+        //Masque
+        if(false) {
+            glPushMatrix();
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            glFrustum(0, renderSize.width(), renderSize.height(), 0, 100, 300);
+            glTranslatef(0, 0, -100);
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+
+            QPointF center(renderSize.width()/2, renderSize.height()/2);
+            QSizeF centerSize(renderSize.height(), renderSize.height());
+            glDisable(GL_DEPTH_TEST);
+            glColor4f(0, 0, 0, 255);
+            glBegin(GL_QUADS);
+
+            glVertex2f(0, 0);
+            glVertex2f(center.x() - centerSize.width()/2, 0);
+            glVertex2f(center.x() - centerSize.width()/2, centerSize.height());
+            glVertex2f(0, centerSize.height());
+
+            glVertex2f(renderSize.width(), 0);
+            glVertex2f(center.x() + centerSize.width()/2, 0);
+            glVertex2f(center.x() + centerSize.width()/2, centerSize.height());
+            glVertex2f(renderSize.width(), centerSize.height());
+
+            glEnd();
+
+            if(!legend.isEmpty()) {
+                QFont font("Avenir");
+                font.setPixelSize(legendSize);
+                font.setItalic(true);
+                qglColor(legendColor);
+                renderText(center.x() - centerSize.width()/2 + 20, center.y() + centerSize.height()/2 - 20, 0, legend, font);
+            }
+
+            glPopMatrix();
+        }
+
+        //glEnable(GL_DEPTH_TEST);
 
 
 
