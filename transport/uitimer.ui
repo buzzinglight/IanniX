@@ -35,7 +35,7 @@ QLabel#time {
     <string notr="true">font-size: 100px;</string>
    </property>
    <property name="text">
-    <string>000:00.000</string>
+    <string>00:00:00.000</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

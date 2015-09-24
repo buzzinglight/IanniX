@@ -115,17 +115,24 @@ void Transport::refreshPerformances() {
 }
 const QString & Transport::getTimeLocalStr() {
     timeLocalStr = "";
+    qreal timeLocalCopy = timeLocal;
 
-    quint16 min = timeLocal / 60;
-    if(min < 10) timeLocalStr += "00";
-    else if(min < 100) timeLocalStr += "0";
+    quint16 hour = qFloor(timeLocalCopy / 3600);
+    if(hour < 10) timeLocalStr += "0";
+    timeLocalStr += QString::number(hour) + ":";
+    timeLocalCopy -= hour*3600;
+
+    quint16 min = qFloor(timeLocalCopy / 60);
+    if(min < 10) timeLocalStr += "0";
     timeLocalStr += QString::number(min) + ":";
+    timeLocalCopy -= min*60;
 
-    quint8 sec = qFloor(timeLocal) % 60;
+    quint8 sec = qFloor(timeLocalCopy);
     if(sec < 10) timeLocalStr += "0";
     timeLocalStr += QString::number(sec) + ":";
+    timeLocalCopy -= sec;
 
-    quint16 milli = (Transport::timeLocal - qFloor(timeLocal)) * 1000;
+    quint16 milli = (timeLocalCopy - qFloor(timeLocalCopy)) * 1000;
     if(milli < 10)       timeLocalStr += "00";
     else if(milli < 100) timeLocalStr += "0";
     timeLocalStr += QString::number(milli);
@@ -176,7 +183,7 @@ void Transport::action() {
     }
     else if(sender() == ui->timeEdit) {
         QStringList transportTime = ui->timeEdit->text().split(":", QString::SkipEmptyParts);
-        if(transportTime.count() == 2) {
+        if(transportTime.count() == 2) { //Retrocomp
             QStringList transportTime2 = transportTime.at(1).split(".", QString::SkipEmptyParts);
             if(transportTime2.count() == 2) {
                 qreal milli = transportTime2.at(1).toUInt();
@@ -185,6 +192,17 @@ void Transport::action() {
                 Application::current->execute(QString("%1 %2").arg(COMMAND_GOTO).arg(min * 60 + sec + milli / 1000.F), ExecuteSourceGui);
             }
         }
+        else if(transportTime.count() == 3) {
+            QStringList transportTime2 = transportTime.at(2).split(".", QString::SkipEmptyParts);
+            if(transportTime2.count() == 2) {
+                qreal milli = transportTime2.at(1).toUInt();
+                qreal sec   = transportTime2.at(0).toUInt();
+                qreal min   = transportTime.at(1).toUInt();
+                qreal hour  = transportTime.at(0).toUInt();
+                Application::current->execute(QString("%1 %2").arg(COMMAND_GOTO).arg(hour * 3600 + min * 60 + sec + milli / 1000.F), ExecuteSourceGui);
+            }
+        }
+
     }
 }
 

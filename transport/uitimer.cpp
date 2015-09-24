@@ -38,9 +38,9 @@ UiTimer::~UiTimer() {
 
 void UiTimer::resizeEvent(QResizeEvent *e) {
     QWidget::resizeEvent(e);
-    ui->time->setStyleSheet(QString("font-size: %1px").arg(width() / 6));
+    ui->time->setStyleSheet(QString("font-size: %1px").arg(width() / 7));
     ui->time->resize(width(), height());
-    setMinimumHeight(width() / 5);
+    setMinimumHeight(width() / 7);
 }
 void UiTimer::showEvent(QShowEvent *e) {
     if(toolbarButton)

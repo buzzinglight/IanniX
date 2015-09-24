@@ -23,13 +23,17 @@
 
 
 //Shortcut to IanniX Object
-function run(_command) 	{	return iannix.execute(_command);		}
-function console(_log)	{ 	return iannix.execute("log " + _log);	}
+function run(_command) 	{
+	return iannix.execute(_command);
+}
 function ask(_category, _label, _variable, _defaultValue) {
 	return iannix.ask(_category, _label, _variable, _defaultValue);
 }
 function title(_title) 	{
 	return iannix.meta(_title);
+}
+function console(_log)	{ 
+	return iannix.execute("log " + JSON.stringify(_log, null, 4));
 }
 
 //Prototypes for Strings
