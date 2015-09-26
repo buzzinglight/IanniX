@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=IanniX
+Comment=Graphical sequencer for digital art
+Exec=iannix
+Icon=/usr/share/pixmaps/iannix.png
+Terminal=false
+Type=Application
+X-MultipleArgs=false
+Categories=Audio;AudioVideoEditing;AudioVideo;Video;Qt;

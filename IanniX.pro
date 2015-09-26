@@ -55,6 +55,28 @@ macx {
 TARGET    = IanniX
 TEMPLATE  = app
 
+unix:!mac {
+    PREFIX = $${PREFIX}
+    isEmpty(PREFIX) {
+        PREFIX = $$(PREFIX)
+    }
+    isEmpty(PREFIX) {
+        PREFIX = /usr/local
+    }
+    message(Install Prefix is: $$PREFIX)
+
+    TARGET         = iannix
+    target.path    = $$PREFIX/bin
+    INSTALLS      += target
+
+    desktop.path   = $$PREFIX/share/applications
+    desktop.files  = iannix.desktop
+    INSTALLS      += desktop
+
+    icons.path     = /usr/share/pixmaps
+    icons.files    = iannix.png
+    INSTALLS      += icons
+}
 
 HEADERS  += iannix.h   iannixapp.h   iannix_spec.h  iannix_cmd.h
 SOURCES  += iannix.cpp iannixapp.cpp iannix_spec.cpp
