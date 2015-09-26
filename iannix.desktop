@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=IanniX
 Comment=Graphical sequencer for digital art
+Comment[fr]=Séquenceur graphique pour l'art numérique
 Exec=iannix
 Icon=/usr/share/pixmaps/iannix.png
 Terminal=false
