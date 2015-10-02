@@ -52,6 +52,7 @@ class ApplicationCurrent : public QObject, public ApplicationExecute {
     Q_OBJECT
 
 public:
+    QDir scriptDir;
     bool hasStarted;
     explicit ApplicationCurrent(QObject *parent) : QObject(parent) {
         hasStarted = false;

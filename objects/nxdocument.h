@@ -158,9 +158,20 @@ public:
 public:
     bool createNewObjectIfExists;
 public slots:
-    void ask(const QString & group, const QString & prompt, const QString & value, const QString & def)     {   return variable->ask(group, prompt, value, def);    }
-    void meta(const QString & meta)                                                                         {   return variable->meta(meta);    }
+    void ask(const QString & group, const QString & prompt, const QString & value, const QString & def)     {   return variable->ask(group, prompt, value, def);                                        }
+    void meta(const QString & meta)                                                                         {   return variable->meta(meta);                                                            }
     const QVariant execute(const QString & command) const                                                   {   return Application::current->execute(command, source, createNewObjectIfExists, true);   }
+    const QVariant load(QString filename) {
+        QString retour;
+        if((!QFile().exists(filename)) && (fileItem))
+            filename = Application::current->scriptDir.absoluteFilePath(fileItem->filename.file.absolutePath() + "/" + filename);
+        QFile file(filename);
+        if(file.open(QFile::ReadOnly)) {
+            retour = file.readAll();
+            file.close();
+        }
+        return retour;
+    }
 
 public:
     static const QString loadLibrary();

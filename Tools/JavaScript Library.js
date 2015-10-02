@@ -35,6 +35,12 @@ function title(_title) 	{
 function console(_log)	{ 
 	return iannix.execute("log " + JSON.stringify(_log, null, 4));
 }
+function load(_filename) {
+	return iannix.load(_filename);
+}
+function loadJSON(_filename) {
+	return JSON.parse(load(_filename));
+}
 
 //Prototypes for Strings
 String.prototype.trim = function()
