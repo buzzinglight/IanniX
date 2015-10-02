@@ -84,11 +84,17 @@ public slots:
     virtual void executeAsScript(const QString &script) = 0;
 };
 
+#ifdef QT5
+#define USE_OPENGLWIDGET
+//#define USE_GLWIDGET
+#else
+#define USE_GLWIDGET
+#endif
 
 
 enum EditingMode { EditingModeFree, EditingModePoint, EditingModeTriggers, EditingModeCircle };
 
-#ifdef QT4
+#ifdef USE_GLWIDGET
 class Render : public QGLWidget {
 public:
     explicit Render(QWidget *parent = 0, void *share = 0) : QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent, (QGLWidget*)share) {}

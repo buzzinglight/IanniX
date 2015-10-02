@@ -95,7 +95,7 @@ void Application::setInterfaces(ApplicationCurrent *_current, Render *_render) {
 
 QImage Application::takeScreenshot() {
     if(render)
-#ifdef QT4
+#ifdef USE_GLWIDGET
         return render->grabFrameBuffer();
 #else
         return render->grabFramebuffer();

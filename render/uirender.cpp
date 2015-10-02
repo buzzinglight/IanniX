@@ -30,6 +30,8 @@ UiRender::UiRender(QWidget *parent, void *share) :
     capturedFramesStart = false;
 
     setFocusPolicy(Qt::StrongFocus);
+    renderTextTextureIndex = 0;
+    renderTextFont = OpenGlFont::getFont(Application::renderFont.family(), Qt::AlignLeft, Application::renderFont.pixelSize());
 
     //Initialize view
     ui->setupUi(this);
@@ -71,7 +73,7 @@ UiRender::~UiRender() {
     delete ui;
 }
 void UiRender::changeEvent(QEvent *event) {
-#ifdef QT4
+#ifdef USE_GLWIDGET
     return QGLWidget::changeEvent(event);
 #else
     return QOpenGLWidget::changeEvent(event);
@@ -181,7 +183,11 @@ bool UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
     }
 #else
     if(filename.isEmpty()) {
+#ifdef USE_GLWIDGET
+        QPixmap picture = QPixmap::fromImage(grabFrameBuffer());
+#else
         QPixmap picture = QPixmap::fromImage(grabFramebuffer());
+#endif
         (new UiMessageBox())->display(tr("Graphical card error"), tr("Due to hardware issue, the high resolution snapshot creation failed.\nA classical snapshot has been saved on your desktop."));
         picture.save(QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first() + "/IanniX_Capture_" + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") + ".png");
     }/* else {
@@ -578,9 +584,8 @@ void UiRender::paintGL() {
             glDisable(GL_TEXTURE_2D);
             Application::current->getRenderPreview()->paintPreview(this, renderPreviewTexture, renderSize);
         }
-
         if(capturedFramesStart)
-#ifdef QT4
+#ifdef USE_GLWIDGET
             capturedFrames << grabFrameBuffer();
 #else
             capturedFrames << grabFramebuffer();
@@ -1124,7 +1129,7 @@ bool UiRender::event(QEvent *event) {
     default:
         break;
     }
-#ifdef QT4
+#ifdef USE_GLWIDGET
     return QGLWidget::event(event);
 #else
     return QOpenGLWidget::event(event);
@@ -1430,3 +1435,45 @@ void UiRender::arrangeObjects(quint16 type) {
     }
 
 }
+
+
+#ifdef USE_OPENGLWIDGET
+void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font) {
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(z);
+    Q_UNUSED(text);
+    Q_UNUSED(font);
+    while(OpenGlTexture::textures.count() < 500) {
+        OpenGlTexture *texte = new OpenGlTexture(this, text, renderTextFont, QSizeF(512, 512));
+        OpenGlTexture::textures.append(texte);
+    }
+    OpenGlTexture *textTextureToUse = 0;
+    foreach(OpenGlTexture *textTexture, OpenGlTexture::textures)
+        if(textTexture->texte == text) {
+            textTextureToUse = textTexture;
+            break;
+        }
+
+    if(!textTextureToUse) {
+        OpenGlTexture::textures[renderTextTextureIndex]->loadTexte(text, renderTextFont, OpenGlTexture::textures.at(renderTextTextureIndex)->size);
+        textTextureToUse = OpenGlTexture::textures.at(renderTextTextureIndex);
+        //qDebug("ICI GENERATION %d", renderTextTextureIndex);
+        renderTextTextureIndex = (renderTextTextureIndex+1) % OpenGlTexture::textures.count();
+    }
+    if(textTextureToUse) {
+        glPushMatrix();
+        glTranslatef(x, y, z);
+        glScalef(0.15/scale, -0.15/scale, 0.15/scale);
+        textTextureToUse->pushTexture();
+        glBegin(GL_QUADS);
+        glTexCoord2f(0, 0); glVertex3f(0, textTextureToUse->size.height(), 0);
+        glTexCoord2f(1, 0); glVertex3f(textTextureToUse->size.width(), textTextureToUse->size.height(), 0);
+        glTexCoord2f(1, 1); glVertex3f(textTextureToUse->size.width(), 0, 0);
+        glTexCoord2f(0, 1); glVertex3f(0, 0, 0);
+        glEnd();
+        textTextureToUse->popTexture();
+        glPopMatrix();
+    }
+}
+#endif

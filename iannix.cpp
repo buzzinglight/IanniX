@@ -369,6 +369,7 @@ void IanniX::timerTick(bool force) {
 }
 
 void IanniX::timerTick(qreal delta) {
+	Transport::currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
     if(Transport::forceTimeLocal) {
         delta = 0;
         if(schedulerActivity == SchedulerOneShot)

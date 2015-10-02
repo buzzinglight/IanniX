@@ -78,6 +78,7 @@ public:
     ~Transport();
 
 public:
+    static qint64 currentMSecsSinceEpoch;
     static qreal timeLocal, scoreSpeed;
     static qreal perfSchedulerRefreshTime, perfSchedulerCounterTime;
     static qreal perfOpenGLRefreshTime,    perfOpenGLCounterTime;

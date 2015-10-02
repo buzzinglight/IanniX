@@ -30,7 +30,7 @@ contains(QT_VERSION, "^4.*") {
     DEFINES += QT5
     QT      += widgets core gui opengl network script xml
     macx {
-        QMAKE_LFLAGS      += -F/Users/guillaume/Library/Frameworks/
+        QMAKE_LFLAGS += -F/Users/guillaume/Library/Frameworks/
     }
 }
 macx {
@@ -115,6 +115,9 @@ FORMS    += items/uitreeview.ui
 HEADERS  += interfaces/extscriptvariableask.h   interfaces/extoscpatternask.h   interfaces/extoscpatterneditor.h
 SOURCES  += interfaces/extscriptvariableask.cpp interfaces/extoscpatternask.cpp interfaces/extoscpatterneditor.cpp
 FORMS    += interfaces/extscriptvariableask.ui  interfaces/extoscpatternask.ui  interfaces/extoscpatterneditor.ui
+
+HEADERS  += abstractionsgl.h
+SOURCES  += abstractionsgl.cpp
 
 
 #Native interfaces

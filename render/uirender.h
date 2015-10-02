@@ -39,6 +39,7 @@
 #include "interfaces/interfacesyphon.h"
 #include "objects/nxdocument.h"
 #include "misc/application.h"
+#include "abstractionsgl.h"
 
 #include "render/uirenderpreview.h"
 #ifdef FFMPEG_INSTALLED
@@ -246,20 +247,16 @@ public:
 #ifdef FFMPEG_INSTALLED
     QVideoEncoder videoEncoder;
 #endif
-#ifdef QT5
+#ifdef USE_OPENGLWIDGET
     inline void qglColor(const QColor &color) const {
         glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
     }
     inline void qglClearColor(const QColor &color) const {
         glClearColor(color.redF(), color.greenF(), color.blueF(), color.alphaF());
     }
-    inline void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font) {
-        Q_UNUSED(x);
-        Q_UNUSED(y);
-        Q_UNUSED(z);
-        Q_UNUSED(text);
-        Q_UNUSED(font);
-    }
+    quint16 renderTextTextureIndex;
+    OpenGlFont renderTextFont;
+    void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font);
 public slots:
     void updateGL() {
         update();

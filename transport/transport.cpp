@@ -24,19 +24,20 @@
 #include "transport.h"
 #include "ui_transport.h"
 
-QString Transport::timeLocalStr         = "000:00.000";
-qreal   Transport::timeLocal            = 0;
-qreal   Transport::scoreSpeed           = 1;
-qreal   Transport::perfSchedulerRefreshTime    = 0;
-qreal   Transport::perfSchedulerCounterTime    = 0;
-qreal   Transport::perfOpenGLRefreshTime       = 0;
-qreal   Transport::perfOpenGLCounterTime       = 0;
-qreal   Transport::renderMeasureAbsoluteValOld = 0;
-QTime   Transport::renderMeasureAbsolute;
-bool    Transport::forceTimeLocal = false;
-qreal   Transport::perfCpu        = 0;
-qreal   Transport::perfMem        = 0;
-UiBool  Transport::timerOk = false;
+qint64    Transport::currentMSecsSinceEpoch = 0;
+QString   Transport::timeLocalStr         = "000:00.000";
+qreal     Transport::timeLocal            = 0;
+qreal     Transport::scoreSpeed           = 1;
+qreal     Transport::perfSchedulerRefreshTime    = 0;
+qreal     Transport::perfSchedulerCounterTime    = 0;
+qreal     Transport::perfOpenGLRefreshTime       = 0;
+qreal     Transport::perfOpenGLCounterTime       = 0;
+qreal     Transport::renderMeasureAbsoluteValOld = 0;
+QTime     Transport::renderMeasureAbsolute;
+bool      Transport::forceTimeLocal = false;
+qreal     Transport::perfCpu        = 0;
+qreal     Transport::perfMem        = 0;
+UiBool    Transport::timerOk = false;
 UiTimer*  Transport::bigTimer = 0;
 UiEditor* Transport::editor   = 0;
 

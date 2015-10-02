@@ -514,7 +514,7 @@ void NxCursor::trig(bool force) {
 }
 
 bool NxCursor::contains(NxTrigger *trigger) const {
-    qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
+    qint64 timestamp = Transport::currentMSecsSinceEpoch;
     if((previousPreviousCursorReliable) && (trigger->getActive()) && (!trigger->cursorTrigged)/* && ((timestamp - trigger->lastTrigTime) > 0)*/) {
         NxPoint centre1 = trigger->getPos() - NxPoint(  (cursorPoly.at(0).x() + cursorPoly.at(1).x() + cursorPoly.at(2).x() + cursorPoly.at(3).x()) / 4.,
                                                         (cursorPoly.at(0).y() + cursorPoly.at(1).y() + cursorPoly.at(2).y() + cursorPoly.at(3).y()) / 4.,
