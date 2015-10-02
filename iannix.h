@@ -64,7 +64,6 @@ class IanniX : public ApplicationCurrent, public NxObjectDispatchProperty, publi
     Q_OBJECT
 
 private:
-    QDir scriptDir;
     QSettings *iniSettings, *globalSettings;
 public:
     explicit IanniX(const QString &_projectToLoad = "", QObject *parent = 0);
