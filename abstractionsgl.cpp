@@ -131,6 +131,8 @@ OpenGlTexture::~OpenGlTexture() {
 
 
 void OpenGlTexture::loadUrl(const QUrl &_url, const QSizeF _size, qreal _blurKernelSize) {
+    Q_UNUSED(_url);
+    Q_UNUSED(_size);
     filename       = "web";
     init           = true;
     blurKernelSize = _blurKernelSize;
@@ -196,6 +198,9 @@ void OpenGlTexture::loadFileVideo(const QString &_filename, const QSizeF &_size,
         connect(video, SIGNAL(mediaEndEvent(const libvlc_event_t*)), SLOT(vlcMediaEndEvent(const libvlc_event_t*)));
     }
     video->setUrl(QUrl::fromLocalFile(_filename), inLoop);
+#else
+    Q_UNUSED(arguments);
+    Q_UNUSED(inLoop);
 #endif
 }
 void OpenGlTexture::loadWebcam(quint16 camId, bool automaticRefresh) {
@@ -226,6 +231,8 @@ void OpenGlTexture::loadWebcam(quint16 camId, bool automaticRefresh) {
                 timerCamera = startTimer(40);
         }
     }
+#else
+    Q_UNUSED(automaticRefresh);
 #endif
 }
 void OpenGlTexture::grabWebcam() {

@@ -29,6 +29,7 @@ UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
 #else
 UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
     QOpenGLWidget(parent) {
+    Q_UNUSED(shared);
 #endif
     setFocusPolicy(Qt::StrongFocus);
     render = 0;

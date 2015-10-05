@@ -41,7 +41,6 @@ public:
 
 private:
     QString group, prompt, value, def;
-    qreal defFloat;
 public:
     void setInfos(const QString & _group, const QString & _prompt, const QString & _value, const QString & _def) {
         group = _group;

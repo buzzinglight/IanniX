@@ -337,8 +337,8 @@ void NxDocument::restoreDefaults() {
     Render::defaultColors.insert("darktheme_simple_curve_active"    , QColor(115, 159,  89, 255));
     Render::defaultColors.insert("darktheme_simple_curve_inactive"  , QColor(115, 159,  89, 255));
     Render::defaultColors.insert("lighttheme_background"            , QColor(242, 241, 237, 255));
-    Render::defaultColors.insert("lighttheme_grid"                  , QColor(  0,   0,   0,  20));
-    Render::defaultColors.insert("lighttheme_axis"                  , QColor(  0,   0,   0,  13));
+    Render::defaultColors.insert("lighttheme_grid"                  , QColor(  0,   0,   0,  80));
+    Render::defaultColors.insert("lighttheme_axis"                  , QColor(  0,   0,   0,  70));
     Render::defaultColors.insert("lighttheme_gui_gridSnap"          , QColor(255, 190, 190, 255));
     Render::defaultColors.insert("lighttheme_gui_axisSnap"          , QColor(255, 190, 190, 255));
     Render::defaultColors.insert("lighttheme_gui_selection"         , QColor(  0,   0,   0,  40));

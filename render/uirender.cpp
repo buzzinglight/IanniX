@@ -169,7 +169,7 @@ bool UiRender::captureFrame(qreal scaleFactor, const QString &filename) {
     Render::forceTexture       = true;
     Render::forceFrustumInInit = true;
 
-#ifdef QT4
+#ifdef QT4 //TODO
     if(filename.isEmpty()) {
         QPixmap picture = renderPixmap(renderSize.width(), renderSize.height());
         if(picture.isNull()) {
@@ -405,7 +405,13 @@ void UiRender::paintGL() {
                             bool oldPaintThisGroup = Render::paintThisGroup;
                             if(!(((!Application::current->isObjectSoloActive) && (object->isNotMuted())) || ((Application::current->isObjectSoloActive) && (object->isSolo()))))
                                 Render::paintThisGroup = false;
-                            object->paint();
+                            if(typeIterator == ObjectsTypeTrigger) {
+                                object->paint();
+                                //if(axisArea.contains(object->getPos()))
+                                //    object->paint();
+                            }
+                            else
+                                object->paint();
                             Render::paintThisGroup = oldPaintThisGroup;
                         }
                     }
@@ -1438,12 +1444,7 @@ void UiRender::arrangeObjects(quint16 type) {
 
 
 #ifdef USE_OPENGLWIDGET
-void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font) {
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    Q_UNUSED(z);
-    Q_UNUSED(text);
-    Q_UNUSED(font);
+void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &) {
     while(OpenGlTexture::textures.count() < 500) {
         OpenGlTexture *texte = new OpenGlTexture(this, text, renderTextFont, QSizeF(512, 512));
         OpenGlTexture::textures.append(texte);

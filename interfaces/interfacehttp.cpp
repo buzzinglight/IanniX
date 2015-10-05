@@ -155,13 +155,22 @@ void InterfaceHttp::parseRequest(QNetworkReply *reply) {
 }
 
 
-//HTTP reception
-void InterfaceHttpServer::incomingConnection(int socketDescriptor) {
+//HTTP reception //TODO
+#ifdef QT4
+void InterfaceHttpServer::incomingConnection(int handle) {
     QTcpSocket *socket = new QTcpSocket(this);
     connect(socket, SIGNAL(readyRead()),    this, SLOT(readClient()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(discardClient()));
-    socket->setSocketDescriptor(socketDescriptor);
+    socket->setSocketDescriptor(handle);
 }
+#else
+void InterfaceHttpServer::incomingConnection(qintptr handle) {
+    QTcpSocket *socket = new QTcpSocket(this);
+    connect(socket, SIGNAL(readyRead()),    this, SLOT(readClient()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(discardClient()));
+    socket->setSocketDescriptor(handle);
+}
+#endif
 void InterfaceHttpServer::readClient() {
     QTcpSocket *socket = (QTcpSocket*)sender();
     if(socket->canReadLine())

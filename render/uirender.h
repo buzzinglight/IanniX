@@ -248,10 +248,10 @@ public:
     QVideoEncoder videoEncoder;
 #endif
 #ifdef USE_OPENGLWIDGET
-    inline void qglColor(const QColor &color) const {
+    inline static void qglColor(const QColor &color) {
         glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
     }
-    inline void qglClearColor(const QColor &color) const {
+    inline static void qglClearColor(const QColor &color) {
         glClearColor(color.redF(), color.greenF(), color.blueF(), color.alphaF());
     }
     quint16 renderTextTextureIndex;

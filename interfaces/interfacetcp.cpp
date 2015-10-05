@@ -105,14 +105,25 @@ bool InterfaceTcpServer::send(const Message &message, QStringList *messageSent) 
 
 
 //TCP reception
-void InterfaceTcpServer::incomingConnection(int socketDescriptor) {
+#ifdef QT4
+void InterfaceTcpServer::incomingConnection(int handle) {
     QTcpSocket *socket = new QTcpSocket(this);
     connect(socket, SIGNAL(readyRead()),    this, SLOT(readClient()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(discardClient()));
-    socket->setSocketDescriptor(socketDescriptor);
+    socket->setSocketDescriptor(handle);
     sockets.append(socket);
     emit(updateConnectedClients());
 }
+#else
+void InterfaceTcpServer::incomingConnection(qintptr handle) {
+    QTcpSocket *socket = new QTcpSocket(this);
+    connect(socket, SIGNAL(readyRead()),    this, SLOT(readClient()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(discardClient()));
+    socket->setSocketDescriptor(handle);
+    sockets.append(socket);
+    emit(updateConnectedClients());
+}
+#endif
 void InterfaceTcpServer::readClient() {
     QTcpSocket *socket = (QTcpSocket*)sender();
     if(socket->isReadable()) {
