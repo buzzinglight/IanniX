@@ -30,8 +30,10 @@ UiRender::UiRender(QWidget *parent, void *share) :
     capturedFramesStart = false;
 
     setFocusPolicy(Qt::StrongFocus);
+#ifdef USE_OPENGLWIDGET
     renderTextTextureIndex = 0;
     renderTextFont = OpenGlFont::getFont(Application::renderFont.family(), Qt::AlignLeft, Application::renderFont.pixelSize());
+#endif
 
     //Initialize view
     ui->setupUi(this);
