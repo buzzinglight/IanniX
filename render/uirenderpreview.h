@@ -29,6 +29,7 @@
 #else
 #include <QOpenGLWidget>
 #endif
+#include <QGLFormat>
 
 class NxEventsPropagation {
 public:

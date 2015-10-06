@@ -30,6 +30,7 @@ UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
 UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
     QOpenGLWidget(parent) {
     Q_UNUSED(shared);
+    setFormat(QGLFormat::toSurfaceFormat(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering)));
 #endif
     setFocusPolicy(Qt::StrongFocus);
     render = 0;

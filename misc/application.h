@@ -101,7 +101,9 @@ public:
 #else
     class Render : public QOpenGLWidget {
     public:
-        explicit Render(QWidget *parent = 0, void * = 0) : QOpenGLWidget(parent) {}
+        explicit Render(QWidget *parent = 0, void * = 0) : QOpenGLWidget(parent) {
+            setFormat(QGLFormat::toSurfaceFormat(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering)));
+        }
     public:
         virtual void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font) = 0;
 #endif
