@@ -40,7 +40,7 @@ NxCurve::NxCurve(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     initializeCustom();
 }
 void NxCurve::initializeCustom() {
-    setSize(1.2);
+    setSize(1);
     setColorActive("_simple_curve_active");
     setColorInactive("_simple_curve_inactive");
     setInertie(1);

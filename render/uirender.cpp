@@ -1467,7 +1467,7 @@ void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const 
     if(textTextureToUse) {
         glPushMatrix();
         glTranslatef(x, y, z);
-        glScalef(0.15/scale, -0.15/scale, 0.15/scale);
+        glScalef(0.05/scale, -0.05/scale, 0.05/scale);
         textTextureToUse->pushTexture();
         glBegin(GL_QUADS);
         glTexCoord2f(0, 0); glVertex3f(0, textTextureToUse->size.height(), 0);

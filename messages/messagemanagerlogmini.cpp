@@ -32,6 +32,9 @@ MessageManagerLogMini::MessageManagerLogMini(QLayout *layout) :
     startTimer(200);
     if(layout)
         layout->addWidget(this);
+
+    //Interfaces link
+    Application::enableMiniLog.setAction(ui->enable, "interfaceEnableLog");
 }
 
 MessageManagerLogMini::~MessageManagerLogMini() {
@@ -39,7 +42,7 @@ MessageManagerLogMini::~MessageManagerLogMini() {
 }
 
 void MessageManagerLogMini::logSend(const MessageLog &log, QStringList *sentMessage) {
-    if((ui->enable->isChecked()) && (canDisplay)) {
+    if((canDisplay) && (Application::enableMiniLog)) {
         QString logged = Transport::timeLocalStr + " : " + log.getVerboseMessage();
         ui->log->setText(logged.replace("\t", " "));
         canDisplay = false;

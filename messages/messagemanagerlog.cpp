@@ -28,7 +28,8 @@ MessageManagerLog::MessageManagerLog(QLayout *layout) :
     QWidget(0),
     ui(new Ui::MessageManagerLog) {
     ui->setupUi(this);
-    logEnable = false;
+
+    enable = false;
     if(layout)
         layout->addWidget(this);
 
@@ -40,11 +41,11 @@ MessageManagerLog::~MessageManagerLog() {
 }
 
 void MessageManagerLog::logSend(const MessageLog &log, QStringList*) {
-    if(logEnable)
+    if(enable)
         ui->logSend->appendPlainText(Transport::timeLocalStr + " : " + log.getVerboseMessage());
 }
 void MessageManagerLog::logReceive(const MessageLog &log, QStringList*) {
-    if(logEnable)
+    if(enable)
         ui->logReceive->appendPlainText(Transport::timeLocalStr + " : " + log.getVerboseMessage());
 }
 

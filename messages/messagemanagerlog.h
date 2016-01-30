@@ -42,7 +42,7 @@ public:
     ~MessageManagerLog();
 
 public:
-    bool logEnable;
+    bool enable;
     void logSend   (const MessageLog &log, QStringList *sentMessage = 0);
     void logReceive(const MessageLog &log, QStringList *sentMessage = 0);
 

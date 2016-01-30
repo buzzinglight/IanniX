@@ -151,6 +151,7 @@ public:
     static UiReal objectsAutosize;
     static UiBool mouseSnapX, mouseSnapY, mouseSnapZ;
     static UiReal followId;
+    static UiBool enableMiniLog;
     static const QString colorsPrefix(qint16 i = -1) {
         if(i < 0) {
             if(colorTheme)   return "lighttheme";

@@ -55,7 +55,7 @@ NxCursor::NxCursor(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     initializeCustom();
 }
 void NxCursor::initializeCustom() {
-    setSize(1.2);
+    setSize(1);
     setColorActive  ("_cursor_active");
     setColorInactive("_cursor_inactive");
     setOffset("0 0 end");

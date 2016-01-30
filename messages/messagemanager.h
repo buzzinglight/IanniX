@@ -49,7 +49,7 @@ public:
     static void addNetworkInterface(MessagesType type, NetworkInterface *networkInterface);
     static void deleteNetworkInterface();
     static inline void setLogVisibility(bool logVisible) {
-        if(messageManagerLog) messageManagerLog->logEnable = logVisible;
+        if(messageManagerLog) messageManagerLog->enable = logVisible;
     }
 
 public:

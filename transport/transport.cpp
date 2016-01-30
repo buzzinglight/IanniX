@@ -142,10 +142,12 @@ const QString & Transport::getTimeLocalStr() {
 }
 
 void Transport::refreshTime() {
-    getTimeLocalStr();
-    if((!ui->timeEdit->hasFocus()) && (isVisible()))
-        ui->timeEdit->setText(timeLocalStr);
-    bigTimer->refreshTime(timeLocalStr);
+    if((true) || (Application::enableMiniLog)) {
+        getTimeLocalStr();
+        if((!ui->timeEdit->hasFocus()) && (isVisible()))
+            ui->timeEdit->setText(timeLocalStr);
+        bigTimer->refreshTime(timeLocalStr);
+    }
 }
 
 void Transport::action() {
