@@ -34,14 +34,16 @@ InterfaceSyphon::InterfaceSyphon(QWidget *parent) :
     ui(new Ui::InterfaceSyphon) {
     ui->setupUi(this);
 
-    //Interfaces link
     serverEnable.setAction(ui->serverEnable, "interfaceSyphonServerEnable");
+    clientEnable.setAction(ui->clientEnable, "interfaceSyphonClientEnable");
 
     //Init code
     serverInit    = false;
     serverTexture = 0;
+    serverSyphon  = nil;
     clientInit    = false;
-    clientSyphon  = 0;
+    clientTexture = 0;
+    clientSyphon  = nil;
     initSyphonServer();
 }
 
@@ -79,6 +81,7 @@ void InterfaceSyphon::createSyphonClient() {
     if(servers) {
         if([servers.servers count] > 0) {
             clientSyphon = [[SyphonClient alloc] initWithServerDescription:[servers.servers objectAtIndex:0] options:nil newFrameHandler:^(SyphonClient *clientSyphon) {
+                clientInit = true;
                 clientTextureOk = true;
             }];
         }
@@ -97,13 +100,13 @@ GLuint InterfaceSyphon::getTexture(QSizeF *size) {
     clientTextureOk = false;
     SyphonImage *frame = [(SyphonClient*)clientSyphon newFrameImageForContext:CGLGetCurrentContext()];
     if(frame) {
-        GLuint texture = frame.textureName;
+        clientTexture = frame.textureName;
         if(size) {
             size->setWidth(frame.textureSize.width);
             size->setHeight(frame.textureSize.height);
         }
         [frame release];
-        return texture;
+        return clientTexture;
     }
     return 0;
 }

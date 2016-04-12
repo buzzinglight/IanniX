@@ -324,21 +324,34 @@ void NxCursor::paint() {
                     glRotatef(cursorAngle.z(), 0, 0, 1);
                     glRotatef(cursorAngle.y(), 0, 1, 0);
                     glRotatef(cursorAngle.x(), 1, 0, 0);
-                    glEnable(GL_TEXTURE_2D);
-                    glBindTexture(GL_TEXTURE_2D, texture->texture);
 
-                    qreal widthRatio = width * texture->originalSize.width() / texture->originalSize.height();
-
-                    glBegin(GL_QUADS);
-                    glTexCoord2d(0, 0); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.bottom(), 0);
-                    glTexCoord2d(1, 0); glVertex3f(0, width/2 * texture->mapping.bottom(), 0);
-                    glTexCoord2d(1, 1); glVertex3f(0, width/2 * texture->mapping.top(), 0);
-                    glTexCoord2d(0, 1); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.top(), 0);
-                    glEnd();
+                    if(texture->isSyphon) {
+                        glEnable(GL_TEXTURE_RECTANGLE_ARB);
+                        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture->texture);
+                        glBegin(GL_QUADS);
+                        qreal widthRatio = width * texture->originalSize.width() / texture->originalSize.height();
+                        glTexCoord2d(0, 0); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.bottom(), 0);
+                        glTexCoord2d(texture->originalSize.width(), 0); glVertex3f(0, width/2 * texture->mapping.bottom(), 0);
+                        glTexCoord2d(texture->originalSize.width(), texture->originalSize.height()); glVertex3f(0, width/2 * texture->mapping.top(), 0);
+                        glTexCoord2d(0, texture->originalSize.height()); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.top(), 0);
+                        glEnd();
+                        glDisable(GL_TEXTURE_RECTANGLE_ARB);
+                    }
+                    else {
+                        glEnable(GL_TEXTURE_2D);
+                        glBindTexture(GL_TEXTURE_2D, texture->texture);
+                        qreal widthRatio = width * texture->originalSize.width() / texture->originalSize.height();
+                        glBegin(GL_QUADS);
+                        glTexCoord2d(0, 0); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.bottom(), 0);
+                        glTexCoord2d(1, 0); glVertex3f(0, width/2 * texture->mapping.bottom(), 0);
+                        glTexCoord2d(1, 1); glVertex3f(0, width/2 * texture->mapping.top(), 0);
+                        glTexCoord2d(0, 1); glVertex3f(widthRatio * texture->mapping.left(),  width/2 * texture->mapping.top(), 0);
+                        glEnd();
+                        glDisable(GL_TEXTURE_2D);
+                    }
 
                     glEnd();
                     glPopMatrix();
-                    glDisable(GL_TEXTURE_2D);
                 }
             }
             if(!textureOk) {

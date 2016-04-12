@@ -114,16 +114,31 @@ void NxTrigger::paint() {
             UiRenderTexture *texture = Render::textures->value(textureName);
             if((texture) && (texture->loaded) && (texture->mapping.width() != 0 ) && (texture->mapping.height() != 0)) {
                 textureOk = true;
-                glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, texture->texture);
-                glBegin(GL_QUADS);
-                qreal widthRatio = cacheSize * texture->originalSize.width() / texture->originalSize.height();
-                glTexCoord2d(0, 0); glVertex3f(widthRatio * texture->mapping.left(),  cacheSize * texture->mapping.bottom(), 0);
-                glTexCoord2d(1, 0); glVertex3f(widthRatio * texture->mapping.right(), cacheSize * texture->mapping.bottom(), 0);
-                glTexCoord2d(1, 1); glVertex3f(widthRatio * texture->mapping.right(), cacheSize * texture->mapping.top(), 0);
-                glTexCoord2d(0, 1); glVertex3f(widthRatio * texture->mapping.left(),  cacheSize * texture->mapping.top(), 0);
-                glEnd();
-                glDisable(GL_TEXTURE_2D);
+
+                if(texture->isSyphon) {
+                    glEnable(GL_TEXTURE_RECTANGLE_ARB);
+                    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture->texture);
+                    glBegin(GL_QUADS);
+                    qreal widthRatio = cacheSize * texture->originalSize.width() / texture->originalSize.height();
+                    glTexCoord2d(0, 0); glVertex3f(widthRatio * texture->mapping.left(),  cacheSize * texture->mapping.bottom(), 0);
+                    glTexCoord2d(texture->originalSize.width(), 0); glVertex3f(widthRatio * texture->mapping.right(), cacheSize * texture->mapping.bottom(), 0);
+                    glTexCoord2d(texture->originalSize.width(), texture->originalSize.height()); glVertex3f(widthRatio * texture->mapping.right(), cacheSize * texture->mapping.top(), 0);
+                    glTexCoord2d(0, texture->originalSize.height()); glVertex3f(widthRatio * texture->mapping.left(),  cacheSize * texture->mapping.top(), 0);
+                    glEnd();
+                    glDisable(GL_TEXTURE_RECTANGLE_ARB);
+                }
+                else {
+                    glEnable(GL_TEXTURE_2D);
+                    glBindTexture(GL_TEXTURE_2D, texture->texture);
+                    glBegin(GL_QUADS);
+                    qreal widthRatio = cacheSize * texture->originalSize.width() / texture->originalSize.height();
+                    glTexCoord2d(0, 0); glVertex3f(widthRatio * texture->mapping.left(),  cacheSize * texture->mapping.bottom(), 0);
+                    glTexCoord2d(1, 0); glVertex3f(widthRatio * texture->mapping.right(), cacheSize * texture->mapping.bottom(), 0);
+                    glTexCoord2d(1, 1); glVertex3f(widthRatio * texture->mapping.right(), cacheSize * texture->mapping.top(), 0);
+                    glTexCoord2d(0, 1); glVertex3f(widthRatio * texture->mapping.left(),  cacheSize * texture->mapping.top(), 0);
+                    glEnd();
+                    glDisable(GL_TEXTURE_2D);
+                }
             }
         }
         if(!textureOk) {

@@ -44,7 +44,7 @@ public:
 public:
     UiBool serverEnable, clientEnable;
     bool   serverInit, clientInit, clientTextureOk;
-    GLuint serverTexture;
+    GLuint serverTexture, clientTexture;
 private:
     void *serverSyphon, *clientSyphon;
 

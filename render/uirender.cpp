@@ -99,8 +99,9 @@ bool UiRender::loadTexture(UiRenderTexture *texture, bool gl) {
             glBindTexture(GL_TEXTURE_2D, texture->texture);
             QImage tex = QGLWidget::convertToGLFormat(QImage(texture->filename.absoluteFilePath()));
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.width(), tex.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.bits());
+            glGenerateMipmap(GL_TEXTURE_2D);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glDisable(GL_TEXTURE_2D);
             texture->originalSize = tex.size();
             texture->loaded = true;
@@ -576,6 +577,17 @@ void UiRender::paintGL() {
             interfaceSyphon->publishTexture(GL_TEXTURE_2D, renderSize.width(), renderSize.height());
             glDisable(GL_TEXTURE_2D);
         }
+
+        //Import Syphon
+        if(!interfaceSyphon->clientInit) {
+            makeCurrent();
+            interfaceSyphon->createSyphonClient();
+            Render::textures->insert("syphon", new UiRenderTexture("syphon", QFileInfo(), NxRect(-4, 4, 8, -8)));
+        }
+        if(interfaceSyphon->clientEnable) {
+            Render::textures->value("syphon")->texture = interfaceSyphon->getTexture(&Render::textures->value("syphon")->originalSize);
+            Render::textures->value("syphon")->loaded = Render::textures->value("syphon")->isSyphon = true;
+        }
 #endif
 
         //Mode performance preview
@@ -607,17 +619,32 @@ void UiRender::paintBackground() {
     if(Render::textures->contains("background")) {
         UiRenderTexture *texture = Render::textures->value("background");
         if((texture) && (texture->loaded) && (texture->mapping.width() != 0) && (texture->mapping.height() != 0)) {
-            glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, texture->texture);
-            glBegin(GL_QUADS);
-            qglColor(Render::colors->value("background_texture_tint"));
-            glLineWidth(1);
-            glTexCoord2d(0, 0); glVertex3f(texture->mapping.left() , texture->mapping.bottom(), 0);
-            glTexCoord2d(1, 0); glVertex3f(texture->mapping.right(), texture->mapping.bottom(), 0);
-            glTexCoord2d(1, 1); glVertex3f(texture->mapping.right(), texture->mapping.top(), 0);
-            glTexCoord2d(0, 1); glVertex3f(texture->mapping.left() , texture->mapping.top(), 0);
-            glEnd();
-            glDisable(GL_TEXTURE_2D);
+            if(texture->isSyphon) {
+                glEnable(GL_TEXTURE_RECTANGLE_ARB);
+                glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture->texture);
+                glBegin(GL_QUADS);
+                qglColor(Render::colors->value("background_texture_tint"));
+                glLineWidth(1);
+                glTexCoord2d(0, 0); glVertex3f(texture->mapping.left() , texture->mapping.bottom(), 0);
+                glTexCoord2d(texture->originalSize.width(), 0); glVertex3f(texture->mapping.right(), texture->mapping.bottom(), 0);
+                glTexCoord2d(texture->originalSize.width(), texture->originalSize.height()); glVertex3f(texture->mapping.right(), texture->mapping.top(), 0);
+                glTexCoord2d(0, texture->originalSize.height()); glVertex3f(texture->mapping.left() , texture->mapping.top(), 0);
+                glEnd();
+                glDisable(GL_TEXTURE_RECTANGLE_ARB);
+            }
+            else {
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, texture->texture);
+                glBegin(GL_QUADS);
+                qglColor(Render::colors->value("background_texture_tint"));
+                glLineWidth(1);
+                glTexCoord2d(0, 0); glVertex3f(texture->mapping.left() , texture->mapping.bottom(), 0);
+                glTexCoord2d(1, 0); glVertex3f(texture->mapping.right(), texture->mapping.bottom(), 0);
+                glTexCoord2d(1, 1); glVertex3f(texture->mapping.right(), texture->mapping.top(), 0);
+                glTexCoord2d(0, 1); glVertex3f(texture->mapping.left() , texture->mapping.top(), 0);
+                glEnd();
+                glDisable(GL_TEXTURE_2D);
+            }
         }
     }
 }
