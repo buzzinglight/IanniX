@@ -5,7 +5,8 @@ interface=:1234 | standart input
 
 [Messages]
 osc://ip_out:port_out/trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id | Default OSC message for triggers
-osc://ip_out:port_out/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos | Default OSC message for cursors
+osc://ip_out:port_out/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos | Default OSC message for cursors in XYZ
+osc://ip_out:port_out/cursor cursor_id cursor_group_id cursor_value_a cursor_value_e cursor_value_d cursor_aPos cursor_ePos cursor_dPos | Default OSC message for cursors in AED
 osc://ip_out:port_out/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0 | Default OSC message for classical playhead
 midi://midi_out/notef 1 trigger_value_y trigger_value_x 3 | Default MIDI message for triggers
 midi://midi_out/note 1 69 127 5 | Play a MIDI note #69 (A | 440Hz) during 5 seconds on channel #1 with maximum velocity

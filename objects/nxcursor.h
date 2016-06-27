@@ -79,7 +79,9 @@ private:
     NxPolygon cursorPoly, cursorPolyOld, cursorPolyOldOld;
     NxPoint cursorPosOld, cursorAngleOld;
     NxPoint cursorPos, cursorRelativePos, cursorAngle;
+    NxPoint cursorAed, cursorRelativeAed;
     NxPoint cursorPosLastSend, cursorRelativePosLastSend, cursorAngleLastSend;
+    NxPoint cursorAedLastSend, cursorRelativeAedLastSend;
     qreal cursorAngleCacheSinZ, cursorAngleCacheCosZ, cursorAngleCacheSinY, cursorAngleCacheCosY;
     GLuint glListCursor;
     quint16 boundsSourceMode;
@@ -430,20 +432,33 @@ public:
     inline const NxPoint & getCurrentValue() const {
         return cursorRelativePos;
     }
-    inline const NxPoint & getCurrentAngle() const {
-        return cursorAngle;
+    inline const NxPoint & getCurrentValueAed() const {
+        return cursorRelativeAed;
     }
     inline const NxPoint & getCurrentPos() const {
         return cursorPos;
     }
+    inline const NxPoint & getCurrentAed() const {
+        return cursorAed;
+    }
     inline const NxPoint & getCurrentValueLastSend() const {
         return cursorRelativePosLastSend;
     }
-    inline const NxPoint & getCurrentAngleLastSend() const {
-        return cursorAngleLastSend;
+    inline const NxPoint & getCurrentValueAedLastSend() const {
+        return cursorRelativeAedLastSend;
     }
     inline const NxPoint & getCurrentPosLastSend() const {
         return cursorPosLastSend;
+    }
+    inline const NxPoint & getCurrentAedLastSend() const {
+        return cursorAedLastSend;
+    }
+
+    inline const NxPoint & getCurrentAngle() const {
+        return cursorAngle;
+    }
+    inline const NxPoint & getCurrentAngleLastSend() const {
+        return cursorAngleLastSend;
     }
 
 

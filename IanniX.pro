@@ -29,11 +29,9 @@ contains(QT_VERSION, "^4.*") {
     message("IanniX For QT5")
     DEFINES += QT5
     QT      += widgets core gui opengl network script xml
-    macx {
-        QMAKE_LFLAGS += -F/Users/guillaume/Library/Frameworks/
-    }
 }
 macx {
+    QMAKE_LFLAGS += -F/Library/Frameworks
     contains(QT_VERSION, "4.7.4") {
         message("IanniX for Mac 32bits")
         DEFINES += IANNIX_32
@@ -41,7 +39,7 @@ macx {
     }
     else {
         DEFINES += IANNIX_64
-        CONFIG  += x86_64
+        #CONFIG  += x86_64
         message("IanniX for Mac 64bits")
     }
 }

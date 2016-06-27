@@ -222,6 +222,19 @@ void NxCursor::calculate() {
         cursorAngle = NxPoint(0, 0, 0);
     cursorRelativePos = getCursorValue(cursorPos);
 
+    //Aed
+    qreal cursorDistance = qSqrt(cursorPos.x()*cursorPos.x() + cursorPos.y()*cursorPos.y() + cursorPos.z()*cursorPos.z());
+    cursorAed = NxPoint(0, 0, cursorDistance);
+    if((cursorPos.x() != 0) && (cursorPos.y() != 0))    cursorAed.setX(qAtan2(cursorPos.y(), cursorPos.x()) * 180. / M_PI - 90);
+    if((cursorPos.z() != 0) && (cursorDistance != 0))   cursorAed.setY(qAtan2(cursorPos.z(), cursorDistance) * 180. / M_PI);
+    while(cursorAed.x() < 0)    cursorAed.setX(cursorAed.x() + 360);
+    qreal cursorRelativeDistance = qSqrt(cursorRelativePos.x()*cursorRelativePos.x() + cursorRelativePos.y()*cursorRelativePos.y() + cursorRelativePos.z()*cursorRelativePos.z());
+    cursorRelativeAed = NxPoint(0, 0, cursorRelativeDistance);
+    if((cursorRelativePos.x() != 0) && (cursorRelativePos.y() != 0))    cursorRelativeAed.setX(qAtan2(cursorRelativePos.y(), cursorRelativePos.x()) * 180. / M_PI - 90);
+    if((cursorRelativePos.z() != 0) && (cursorRelativeDistance != 0))   cursorRelativeAed.setY(qAtan2(cursorRelativePos.z(), cursorRelativeDistance) * 180. / M_PI);
+    while(cursorRelativeAed.x() < 0)    cursorRelativeAed.setX(cursorRelativeAed.x() + 360);
+
+
     //Cursor
     cursorPolyOldOld = cursorPolyOld;
     cursorPolyOld = cursorPoly;
@@ -518,7 +531,9 @@ void NxCursor::trig(bool force) {
     if((force) || ((((previousCursorReliable) && (hasActivity)) || (!curve)) && (canSendOsc()))) {
         MessageManager::outgoingMessage(MessageManagerDestination(this, 0, this));
         cursorPosLastSend         = cursorPos;
+        cursorAedLastSend         = cursorAed;
         cursorRelativePosLastSend = cursorRelativePos;
+        cursorRelativeAedLastSend = cursorRelativeAed;
         cursorAngleLastSend       = cursorAngle;
         timeLocalLastSend         = timeLocal;
         timeLastSend              = time;

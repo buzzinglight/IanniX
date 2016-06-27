@@ -167,18 +167,32 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                         messageScriptValue.setProperty("cursor_yPos", ((NxCursor*)destination.cursor)->getCurrentPos().y());
                     if(patternArgument.contains("cursor_zPos"))
                         messageScriptValue.setProperty("cursor_zPos", ((NxCursor*)destination.cursor)->getCurrentPos().z());
-                    if(patternArgument.contains("cursor_sxPos"))
-                        messageScriptValue.setProperty("cursor_sxPos", ((NxCursor*)destination.cursor)->getCurrentPos().sx());
-                    if(patternArgument.contains("cursor_syPos"))
-                        messageScriptValue.setProperty("cursor_syPos", ((NxCursor*)destination.cursor)->getCurrentPos().sy());
-                    if(patternArgument.contains("cursor_szPos"))
-                        messageScriptValue.setProperty("cursor_szPos", ((NxCursor*)destination.cursor)->getCurrentPos().sz());
                     if(patternArgument.contains("cursor_value_x"))
                         messageScriptValue.setProperty("cursor_value_x", ((NxCursor*)destination.cursor)->getCurrentValue().x());
                     if(patternArgument.contains("cursor_value_y"))
                         messageScriptValue.setProperty("cursor_value_y", ((NxCursor*)destination.cursor)->getCurrentValue().y());
                     if(patternArgument.contains("cursor_value_z"))
                         messageScriptValue.setProperty("cursor_value_z", ((NxCursor*)destination.cursor)->getCurrentValue().z());
+
+                    if(patternArgument.contains("cursor_aPos"))
+                        messageScriptValue.setProperty("cursor_aPos", ((NxCursor*)destination.cursor)->getCurrentAed().x());
+                    if(patternArgument.contains("cursor_ePos"))
+                        messageScriptValue.setProperty("cursor_ePos", ((NxCursor*)destination.cursor)->getCurrentAed().y());
+                    if(patternArgument.contains("cursor_dPos"))
+                        messageScriptValue.setProperty("cursor_dPos", ((NxCursor*)destination.cursor)->getCurrentAed().z());
+                    if(patternArgument.contains("cursor_value_a"))
+                        messageScriptValue.setProperty("cursor_value_a", ((NxCursor*)destination.cursor)->getCurrentValueAed().x());
+                    if(patternArgument.contains("cursor_value_e"))
+                        messageScriptValue.setProperty("cursor_value_e", ((NxCursor*)destination.cursor)->getCurrentValueAed().y());
+                    if(patternArgument.contains("cursor_value_d"))
+                        messageScriptValue.setProperty("cursor_value_d", ((NxCursor*)destination.cursor)->getCurrentValueAed().z());
+
+                    if(patternArgument.contains("cursor_sxPos"))
+                        messageScriptValue.setProperty("cursor_sxPos", ((NxCursor*)destination.cursor)->getCurrentPos().sx());
+                    if(patternArgument.contains("cursor_syPos"))
+                        messageScriptValue.setProperty("cursor_syPos", ((NxCursor*)destination.cursor)->getCurrentPos().sy());
+                    if(patternArgument.contains("cursor_szPos"))
+                        messageScriptValue.setProperty("cursor_szPos", ((NxCursor*)destination.cursor)->getCurrentPos().sz());
                     if(patternArgument.contains("cursor_value_sx"))
                         messageScriptValue.setProperty("cursor_value_sx", ((NxCursor*)destination.cursor)->getCurrentValue().sx());
                     if(patternArgument.contains("cursor_value_sy"))
@@ -198,18 +212,32 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                         messageScriptValue.setProperty("cursor_yPos_delta",     ((NxCursor*)destination.cursor)->getCurrentPos().y()    - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().y());
                     if(patternArgument.contains("cursor_zPos_delta"))
                         messageScriptValue.setProperty("cursor_zPos_delta",     ((NxCursor*)destination.cursor)->getCurrentPos().z()    - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().z());
-                    if(patternArgument.contains("cursor_sxPos_delta"))
-                        messageScriptValue.setProperty("cursor_sxPos_delta",    ((NxCursor*)destination.cursor)->getCurrentPos().sx()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sx());
-                    if(patternArgument.contains("cursor_syPos_delta"))
-                        messageScriptValue.setProperty("cursor_syPos_delta",    ((NxCursor*)destination.cursor)->getCurrentPos().sy()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sy());
-                    if(patternArgument.contains("cursor_szPos_delta"))
-                        messageScriptValue.setProperty("cursor_szPos_delta",    ((NxCursor*)destination.cursor)->getCurrentPos().sz()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sz());
                     if(patternArgument.contains("cursor_value_x_delta"))
                         messageScriptValue.setProperty("cursor_value_x_delta",  ((NxCursor*)destination.cursor)->getCurrentValue().x()  - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().x());
                     if(patternArgument.contains("cursor_value_y_delta"))
                         messageScriptValue.setProperty("cursor_value_y_delta",  ((NxCursor*)destination.cursor)->getCurrentValue().y()  - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().y());
                     if(patternArgument.contains("cursor_value_z_delta"))
                         messageScriptValue.setProperty("cursor_value_z_delta",  ((NxCursor*)destination.cursor)->getCurrentValue().z()  - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().z());
+
+                    if(patternArgument.contains("cursor_aPos_delta"))
+                        messageScriptValue.setProperty("cursor_aPos_delta",     ((NxCursor*)destination.cursor)->getCurrentAed().x()    - ((NxCursor*)destination.cursor)->getCurrentAedLastSend().x());
+                    if(patternArgument.contains("cursor_ePos_delta"))
+                        messageScriptValue.setProperty("cursor_ePos_delta",     ((NxCursor*)destination.cursor)->getCurrentAed().y()    - ((NxCursor*)destination.cursor)->getCurrentAedLastSend().y());
+                    if(patternArgument.contains("cursor_dPos_delta"))
+                        messageScriptValue.setProperty("cursor_dPos_delta",     ((NxCursor*)destination.cursor)->getCurrentAed().z()    - ((NxCursor*)destination.cursor)->getCurrentAedLastSend().z());
+                    if(patternArgument.contains("cursor_value_a_delta"))
+                        messageScriptValue.setProperty("cursor_value_a_delta",  ((NxCursor*)destination.cursor)->getCurrentValueAed().x()  - ((NxCursor*)destination.cursor)->getCurrentValueAedLastSend().x());
+                    if(patternArgument.contains("cursor_value_e_delta"))
+                        messageScriptValue.setProperty("cursor_value_e_delta",  ((NxCursor*)destination.cursor)->getCurrentValueAed().y()  - ((NxCursor*)destination.cursor)->getCurrentValueAedLastSend().y());
+                    if(patternArgument.contains("cursor_value_d_delta"))
+                        messageScriptValue.setProperty("cursor_value_d_delta",  ((NxCursor*)destination.cursor)->getCurrentValueAed().z()  - ((NxCursor*)destination.cursor)->getCurrentValueAedLastSend().z());
+
+                    if(patternArgument.contains("cursor_sxPos_delta"))
+                        messageScriptValue.setProperty("cursor_sxPos_delta",    ((NxCursor*)destination.cursor)->getCurrentPos().sx()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sx());
+                    if(patternArgument.contains("cursor_syPos_delta"))
+                        messageScriptValue.setProperty("cursor_syPos_delta",    ((NxCursor*)destination.cursor)->getCurrentPos().sy()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sy());
+                    if(patternArgument.contains("cursor_szPos_delta"))
+                        messageScriptValue.setProperty("cursor_szPos_delta",    ((NxCursor*)destination.cursor)->getCurrentPos().sz()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sz());
                     if(patternArgument.contains("cursor_value_sx_delta"))
                         messageScriptValue.setProperty("cursor_value_sx_delta", ((NxCursor*)destination.cursor)->getCurrentValue().sx() - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().sx());
                     if(patternArgument.contains("cursor_value_sy_delta"))
@@ -351,24 +379,13 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                     else if(patternArgument == "cursor_label")
                         found = addString(((NxCursor*)destination.cursor)->getLabel(), patternArgument, patternIndex);
 
-                    else if(patternArgument == "cursor_xPos")
-                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().x(), patternArgument, patternIndex);
-                    else if(patternArgument == "cursor_yPos")
-                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().y(), patternArgument, patternIndex);
-                    else if(patternArgument == "cursor_zPos")
-                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().z(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_sxPos")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().sx(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_syPos")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().sy(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_szPos")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().sz(), patternArgument, patternIndex);
-                    else if(patternArgument == "cursor_value_x")
-                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().x(), patternArgument, patternIndex);
-                    else if(patternArgument == "cursor_value_y")
-                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().y(), patternArgument, patternIndex);
-                    else if(patternArgument == "cursor_value_z")
-                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().z(), patternArgument, patternIndex);
+
                     else if(patternArgument == "cursor_value_sx")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().sx(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_value_sy")
@@ -382,18 +399,24 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                     else if(patternArgument == "cursor_angle")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentAngle().z(), patternArgument, patternIndex);
 
+                    else if(patternArgument == "cursor_xPos")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().x(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_yPos")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().y(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_zPos")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().z(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_x")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().x(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_y")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().y(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_z")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().z(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_xPos_delta")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().x()    - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().x(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_yPos_delta")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().y()    - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().y(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_zPos_delta")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().z()    - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().z(), patternArgument, patternIndex);
-                    else if(patternArgument == "cursor_sxPos_delta")
-                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().sx()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sx(), patternArgument, patternIndex);
-                    else if(patternArgument == "cursor_syPos_delta")
-                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().sy()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sy(), patternArgument, patternIndex);
-                    else if(patternArgument == "cursor_szPos_delta")
-                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().sz()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sz(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_value_x_delta")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().x()  - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().x(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_value_y_delta")
@@ -406,6 +429,44 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().sy() - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().sy(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_value_sz_delta")
                         found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().sz() - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().sz(), patternArgument, patternIndex);
+
+                    else if(patternArgument == "cursor_aPos")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentAed().x(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_ePos")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentAed().y(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_dPos")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentAed().z(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_a")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValueAed().x(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_e")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValueAed().y(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_d")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValueAed().z(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_aPos_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentAed().x()    - ((NxCursor*)destination.cursor)->getCurrentAedLastSend().x(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_ePos_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentAed().y()    - ((NxCursor*)destination.cursor)->getCurrentAedLastSend().y(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_dPos_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentAed().z()    - ((NxCursor*)destination.cursor)->getCurrentAedLastSend().z(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_a_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValueAed().x()  - ((NxCursor*)destination.cursor)->getCurrentValueAedLastSend().x(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_e_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValueAed().y()  - ((NxCursor*)destination.cursor)->getCurrentValueAedLastSend().y(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_d_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValueAed().z()  - ((NxCursor*)destination.cursor)->getCurrentValueAedLastSend().z(), patternArgument, patternIndex);
+
+                    else if(patternArgument == "cursor_value_sx_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().sx() - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().sx(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_sy_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().sy() - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().sy(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_value_sz_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentValue().sz() - ((NxCursor*)destination.cursor)->getCurrentValueLastSend().sz(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_sxPos_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().sx()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sx(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_syPos_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().sy()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sy(), patternArgument, patternIndex);
+                    else if(patternArgument == "cursor_szPos_delta")
+                        found = addFloat(((NxCursor*)destination.cursor)->getCurrentPos().sz()   - ((NxCursor*)destination.cursor)->getCurrentPosLastSend().sz(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_time_delta")
                         found = addFloat(((NxCursor*)destination.cursor)->getTimeLocal()         - ((NxCursor*)destination.cursor)->getTimeLocalLastSend(), patternArgument, patternIndex);
                     else if(patternArgument == "cursor_time_percent_delta")

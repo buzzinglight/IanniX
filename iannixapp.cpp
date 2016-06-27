@@ -245,16 +245,30 @@ void IanniXApp::setHelp() {
     Help::categories["values"].infos << HelpInfo(QString("cursor_value_x"),        tr("x mapped coordinate of the running cursor"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_value_y"),        tr("y mapped coordinate of the running cursor"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_value_z"),        tr("z mapped coordinate of the running cursor"));
-    Help::categories["values"].infos << HelpInfo(QString("cursor_time"),           tr("Current progression of the cursor on the curve (in seconds)"));
-    Help::categories["values"].infos << HelpInfo(QString("cursor_time_percent"),   tr("Current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)"));
-    Help::categories["values"].infos << HelpInfo(QString("cursor_angle"),          tr("Angle of the cursor"));
-
     Help::categories["values"].infos << HelpInfo(QString("cursor_xPos_delta"),         tr("Variation of x coordinate of the running cursor"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_yPos_delta"),         tr("Variation of y coordinate of the running cursor"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_zPos_delta"),         tr("Variation of z coordinate of the running cursor"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_value_x_delta"),      tr("Variation of x mapped coordinate of the running cursor"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_value_y_delta"),      tr("Variation of y mapped coordinate of the running cursor"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_value_z_delta"),      tr("Variation of z mapped coordinate of the running cursor"));
+
+
+    Help::categories["values"].infos << HelpInfo(QString("cursor_aPos"),           tr("a coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_ePos"),           tr("e coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_dPos"),           tr("d coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_value_a"),        tr("a mapped coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_value_e"),        tr("e mapped coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_value_d"),        tr("d mapped coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_aPos_delta"),         tr("Variation of a coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_ePos_delta"),         tr("Variation of e coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_dPos_delta"),         tr("Variation of d coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_value_a_delta"),      tr("Variation of a mapped coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_value_e_delta"),      tr("Variation of d mapped coordinate of the running cursor"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_value_d_delta"),      tr("Variation of d mapped coordinate of the running cursor"));
+
+    Help::categories["values"].infos << HelpInfo(QString("cursor_time"),           tr("Current progression of the cursor on the curve (in seconds)"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_time_percent"),   tr("Current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)"));
+    Help::categories["values"].infos << HelpInfo(QString("cursor_angle"),          tr("Angle of the cursor"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_time_delta"),         tr("Variation of current progression of the cursor on the curve (in seconds)"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_time_percent_delta"), tr("Variation of current progression of the cursor on the curve (in percentages, from 0.0 to 1.0)"));
     Help::categories["values"].infos << HelpInfo(QString("cursor_angle_delta"),        tr("Variation of angle of the cursor"));

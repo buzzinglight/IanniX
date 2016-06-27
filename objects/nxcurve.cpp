@@ -245,8 +245,8 @@ void NxCurve::paint() {
                         }
                         else {
                             GLfloat ctrlpoints[4][3] = {
-                                { p1.x(), p1.y(), p1.z() }, { c1.x(), c1.y(), c1.z() },
-                                { c2.x(), c2.y(), c2.z() }, { p2.x(), p2.y(), p2.z() } };
+                                { (GLfloat)p1.x(), (GLfloat)p1.y(), (GLfloat)p1.z() }, { (GLfloat)c1.x(), (GLfloat)c1.y(), (GLfloat)c1.z() },
+                                { (GLfloat)c2.x(), (GLfloat)c2.y(), (GLfloat)c2.z() }, { (GLfloat)p2.x(), (GLfloat)p2.y(), (GLfloat)p2.z() } };
                             glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
                             glEnable(GL_MAP1_VERTEX_3);
                             glBegin(GL_LINE_STRIP);
