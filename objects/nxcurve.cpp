@@ -791,7 +791,7 @@ void NxCurve::calcBoundingRect() {
         if(calculatePathLength)
             step = 0.01;
         for(equationVariableT = 0 ; equationVariableT <= 1 ; equationVariableT += step) {
-            NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);
+            NxPoint minVal(9999,9999,9999,9999), maxVal(-9999,-9999,-9999,-9999);
 
             NxPoint p1 = getPointAt(equationVariableT), p2 = getPointAt(equationVariableT + equationVariableTSteps);
             if(calculatePathLength) {
@@ -800,26 +800,26 @@ void NxCurve::calcBoundingRect() {
             }
 
             //Bounding local
-            if(p1.x() < p2.x())  min.setX(p1.x()); else min.setX(p2.x());
-            if(p1.y() < p2.y())  min.setY(p1.y()); else min.setY(p2.y());
-            if(p1.z() < p2.z())  min.setZ(p1.z()); else min.setZ(p2.z());
-            if(p1.x() > p2.x())  max.setX(p1.x()); else max.setX(p2.x());
-            if(p1.y() > p2.y())  max.setY(p1.y()); else max.setY(p2.y());
-            if(p1.z() > p2.z())  max.setZ(p1.z()); else max.setZ(p2.z());
+            if(p1.x() < p2.x())  minVal.setX(p1.x()); else minVal.setX(p2.x());
+            if(p1.y() < p2.y())  minVal.setY(p1.y()); else minVal.setY(p2.y());
+            if(p1.z() < p2.z())  minVal.setZ(p1.z()); else minVal.setZ(p2.z());
+            if(p1.x() > p2.x())  maxVal.setX(p1.x()); else maxVal.setX(p2.x());
+            if(p1.y() > p2.y())  maxVal.setY(p1.y()); else maxVal.setY(p2.y());
+            if(p1.z() > p2.z())  maxVal.setZ(p1.z()); else maxVal.setZ(p2.z());
 
             //Bounding général
-            if(min.x() < minGlobal.x())  minGlobal.setX(min.x());
-            if(min.y() < minGlobal.y())  minGlobal.setY(min.y());
-            if(min.z() < minGlobal.z())  minGlobal.setZ(min.z());
-            if(max.x() > maxGlobal.x())  maxGlobal.setX(max.x());
-            if(max.y() > maxGlobal.y())  maxGlobal.setY(max.y());
-            if(max.z() > maxGlobal.z())  maxGlobal.setZ(max.z());
+            if(minVal.x() < minGlobal.x())  minGlobal.setX(minVal.x());
+            if(minVal.y() < minGlobal.y())  minGlobal.setY(minVal.y());
+            if(minVal.z() < minGlobal.z())  minGlobal.setZ(minVal.z());
+            if(maxVal.x() > maxGlobal.x())  maxGlobal.setX(maxVal.x());
+            if(maxVal.y() > maxGlobal.y())  maxGlobal.setY(maxVal.y());
+            if(maxVal.z() > maxGlobal.z())  maxGlobal.setZ(maxVal.z());
         }
         boundingRect = NxRect(minGlobal, maxGlobal);
     }
     else if(curveType == CurveTypePoints) {
         for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count()-1 ; indexPoint++) {
-            NxPoint min(9999,9999,9999,9999), max(-9999,-9999,-9999,-9999);
+            NxPoint minVal(9999,9999,9999,9999), maxVal(-9999,-9999,-9999,-9999);
 
             NxPoint p1 = getPathPointsAt(indexPoint), p2 = getPathPointsAt(indexPoint+1);
             NxPoint c1 = getPathPointsAt(indexPoint+1).c1, c2 = getPathPointsAt(indexPoint+1).c2;
@@ -829,12 +829,12 @@ void NxCurve::calcBoundingRect() {
                     pathLength += qSqrt((delta.x()*delta.x()) + (delta.y()*delta.y()) + (delta.z()*delta.z()));
                 }
                 //Bounding local
-                if(p1.x() < p2.x())  min.setX(p1.x()); else min.setX(p2.x());
-                if(p1.y() < p2.y())  min.setY(p1.y()); else min.setY(p2.y());
-                if(p1.z() < p2.z())  min.setZ(p1.z()); else min.setZ(p2.z());
-                if(p1.x() > p2.x())  max.setX(p1.x()); else max.setX(p2.x());
-                if(p1.y() > p2.y())  max.setY(p1.y()); else max.setY(p2.y());
-                if(p1.z() > p2.z())  max.setZ(p1.z()); else max.setZ(p2.z());
+                if(p1.x() < p2.x())  minVal.setX(p1.x()); else minVal.setX(p2.x());
+                if(p1.y() < p2.y())  minVal.setY(p1.y()); else minVal.setY(p2.y());
+                if(p1.z() < p2.z())  minVal.setZ(p1.z()); else minVal.setZ(p2.z());
+                if(p1.x() > p2.x())  maxVal.setX(p1.x()); else maxVal.setX(p2.x());
+                if(p1.y() > p2.y())  maxVal.setY(p1.y()); else maxVal.setY(p2.y());
+                if(p1.z() > p2.z())  maxVal.setZ(p1.z()); else maxVal.setZ(p2.z());
             }
             else {
                 NxPoint pt = getPointAt(indexPoint, 0);
@@ -851,29 +851,29 @@ void NxCurve::calcBoundingRect() {
                     }
 
                     //Bounding local
-                    if(pt.x() < min.x())  min.setX(pt.x());
-                    if(pt.y() < min.y())  min.setY(pt.y());
-                    if(pt.z() < min.z())  min.setZ(pt.z());
-                    if(pt.x() > max.x())  max.setX(pt.x());
-                    if(pt.y() > max.y())  max.setY(pt.y());
-                    if(pt.z() > max.z())  max.setZ(pt.z());
+                    if(pt.x() < minVal.x())  minVal.setX(pt.x());
+                    if(pt.y() < minVal.y())  minVal.setY(pt.y());
+                    if(pt.z() < minVal.z())  minVal.setZ(pt.z());
+                    if(pt.x() > maxVal.x())  maxVal.setX(pt.x());
+                    if(pt.y() > maxVal.y())  maxVal.setY(pt.y());
+                    if(pt.z() > maxVal.z())  maxVal.setZ(pt.z());
                     pt = ptNext;
                 }
             }
             if(calculatePathLength)
                 pathPoints[indexPoint+1].currentLength = pathLength;
-            if(min.x() == max.x())  max.setX(max.x() + 0.001);
-            if(min.y() == max.y())  max.setY(max.y() + 0.001);
-            if(min.z() == max.z())  max.setZ(max.z() + 0.001);
-            pathPoints[indexPoint+1].boundingRect = NxRect(min, max).translated(pos);
+            if(minVal.x() == maxVal.x())  maxVal.setX(maxVal.x() + 0.001);
+            if(minVal.y() == maxVal.y())  maxVal.setY(maxVal.y() + 0.001);
+            if(minVal.z() == maxVal.z())  maxVal.setZ(maxVal.z() + 0.001);
+            pathPoints[indexPoint+1].boundingRect = NxRect(minVal, maxVal).translated(pos);
 
             //Bounding général
-            if(min.x() < minGlobal.x())  minGlobal.setX(min.x());
-            if(min.y() < minGlobal.y())  minGlobal.setY(min.y());
-            if(min.z() < minGlobal.z())  minGlobal.setZ(min.z());
-            if(max.x() > maxGlobal.x())  maxGlobal.setX(max.x());
-            if(max.y() > maxGlobal.y())  maxGlobal.setY(max.y());
-            if(max.z() > maxGlobal.z())  maxGlobal.setZ(max.z());
+            if(minVal.x() < minGlobal.x())  minGlobal.setX(minVal.x());
+            if(minVal.y() < minGlobal.y())  minGlobal.setY(minVal.y());
+            if(minVal.z() < minGlobal.z())  minGlobal.setZ(minVal.z());
+            if(maxVal.x() > maxGlobal.x())  maxGlobal.setX(maxVal.x());
+            if(maxVal.y() > maxGlobal.y())  maxGlobal.setY(maxVal.y());
+            if(maxVal.z() > maxGlobal.z())  maxGlobal.setZ(maxVal.z());
         }
         boundingRect = NxRect(minGlobal, maxGlobal);
     }

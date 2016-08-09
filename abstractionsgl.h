@@ -9,6 +9,7 @@
 #include <QStaticText>
 #include <qmath.h>
 #include <QDateTime>
+#include <QUrl>
 #ifdef VLC_INSTALLED
 #include "drivers/vlc.h"
 #endif

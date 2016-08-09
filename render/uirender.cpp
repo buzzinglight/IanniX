@@ -99,7 +99,9 @@ bool UiRender::loadTexture(UiRenderTexture *texture, bool gl) {
             glBindTexture(GL_TEXTURE_2D, texture->texture);
             QImage tex = QGLWidget::convertToGLFormat(QImage(texture->filename.absoluteFilePath()));
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.width(), tex.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.bits());
+#ifdef Q_OS_MAC
             glGenerateMipmap(GL_TEXTURE_2D);
+#endif
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glDisable(GL_TEXTURE_2D);

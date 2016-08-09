@@ -31,7 +31,7 @@ contains(QT_VERSION, "^4.*") {
     QT      += widgets core gui opengl network script xml
 }
 macx {
-    QMAKE_LFLAGS += -F/Library/Frameworks
+    #QMAKE_LFLAGS += -F/Library/Frameworks
     contains(QT_VERSION, "4.7.4") {
         message("IanniX for Mac 32bits")
         DEFINES += IANNIX_32
@@ -39,7 +39,7 @@ macx {
     }
     else {
         DEFINES += IANNIX_64
-        #CONFIG  += x86_64
+        CONFIG  += x86_64
         message("IanniX for Mac 64bits")
     }
 }
@@ -98,7 +98,7 @@ SOURCES  += geometry/nxpoint.cpp geometry/nxrect.cpp geometry/nxsize.cpp geometr
 HEADERS  += geometry/qmuparser/muParser.h   geometry/qmuparser/muParserBase.h   geometry/qmuparser/muParserBytecode.h   geometry/qmuparser/muParserCallback.h   geometry/qmuparser/muParserError.h   geometry/qmuparser/muParserTokenReader.h   geometry/qmuparser/muParserDef.h   geometry/qmuparser/muParserFixes.h   geometry/qmuparser/muParserStack.h   geometry/qmuparser/muParserToken.h
 SOURCES  += geometry/qmuparser/muParser.cpp geometry/qmuparser/muParserBase.cpp geometry/qmuparser/muParserBytecode.cpp geometry/qmuparser/muParserCallback.cpp geometry/qmuparser/muParserError.cpp geometry/qmuparser/muParserTokenReader.cpp
 
-HEADERS  += objects/nxdocument.h   objects/nxtrigger.h   objects/nxgroup.h   objects/nxcurve.h   objects/nxcursor.h   objects/nxobject.h  
+HEADERS  += objects/nxdocument.h   objects/nxtrigger.h   objects/nxgroup.h   objects/nxcurve.h   objects/nxcursor.h   objects/nxobject.h
 SOURCES  += objects/nxdocument.cpp objects/nxtrigger.cpp objects/nxgroup.cpp objects/nxcurve.cpp objects/nxcursor.cpp objects/nxobject.cpp
 
 HEADERS  += gui/uiinspector.h   gui/uiview.h   gui/uihelp.h   gui/uimessagebox.h   gui/uisplashscreen.h
@@ -209,7 +209,7 @@ macx {
 
 win32 {
     DEFINES             += __WINDOWS_MM__
-    LIBS                += -lwinmm -lsetupapi #-ladvapi32 -luser32
+    LIBS                += -lwinmm -lsetupapi -ladvapi32 -luser32 opengl32.lib
     RC_FILE              = icon.rc
     SOURCES             += interfaces/qextserialport/qextserialport_win.cpp  interfaces/qextserialport/qextserialenumerator_win.cpp
 }

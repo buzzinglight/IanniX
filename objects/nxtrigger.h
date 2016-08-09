@@ -26,6 +26,7 @@
 
 #include "nxobject.h"
 #include "messages/messagemanager.h"
+#include "../abstractionsgl.h"
 
 class NxTrigger : public NxObject {
     Q_OBJECT
