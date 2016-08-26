@@ -38,7 +38,7 @@ function makeWithScript() {
 		addLine();
 
 	//Add triggers
-	for(var i = 0 ; i < 100 ; i++) {
+	for(var i = 0 ; i < 20 ; i++) {
 		run("add trigger " + (2000+i));
 		run("setPos current " + random(-2, 2) + " " + random(-2, 2) + " " + random(-2, 2));
 	}

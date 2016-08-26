@@ -21,6 +21,7 @@
 	min-height: 				20px;
 	color: 						white;
 	border: 					0px solid black;
+	icon-size: 									14px;
 }
 QPushButton, QSpinBox, QDoubleSpinBox, QLineEdit, QPlainTextEdit, QCheckBox::indicator, QRadioButton::indicator, QTreeView::indicator, QComboBox, QTreeView, QHeaderView {
 	border: 					1px solid rgb(55, 55, 55);
@@ -137,6 +138,7 @@ QTreeView {
 	alternate-background-color: 	rgb(55, 55, 55);
 	selection-background-color: 	rgb(0, 187, 255);
 	gridline-color: 							rgb(60, 60, 60);
+	icon-size: 									14px;
 }
 QHeaderView {
 	background: 							transparent;

@@ -31,7 +31,7 @@ contains(QT_VERSION, "^4.*") {
     QT      += widgets core gui opengl network script xml
 }
 macx {
-    #QMAKE_LFLAGS += -F/Library/Frameworks
+    QMAKE_LFLAGS      += -F/Library/Frameworks
     contains(QT_VERSION, "4.7.4") {
         message("IanniX for Mac 32bits")
         DEFINES += IANNIX_32

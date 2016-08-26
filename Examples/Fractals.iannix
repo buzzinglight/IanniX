@@ -78,10 +78,12 @@ function addCurve(recursion, start, end) {
 		run("setWidth        current 2");
 
 		//Add a trigger
-		run("add trigger     " + (2000 + index));
-		run("setSize         current 2");
-		run("setGroup        current triggers");
-		run("setPos          current " + ((end.x-start.x)/2 + start.x) + " " + ((end.y-start.y)/2 + start.y) + " 0");
+		if(index % 5 == 4) {
+			run("add trigger     " + (2000 + index));
+			run("setSize         current 2");
+			run("setGroup        current triggers");
+			run("setPos          current " + ((end.x-start.x)/2 + start.x) + " " + ((end.y-start.y)/2 + start.y) + " 0");
+		}
 		
 		//Recursivity on segments
 		addCurve(recursion + 1, {x:      start.x, y:      start.y} , {x: x1 + start.x, y: y1 + start.y});
