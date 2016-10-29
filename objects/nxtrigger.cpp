@@ -179,8 +179,9 @@ void NxTrigger::trig(NxObject *cursor) {
     else                trigEnd();
 }
 void NxTrigger::trigEnd() {
+    NxObject *cursorTriggedTmp = cursorTrigged;
+    cursorTrigged = 0;
     if(triggerOff > 0) {
-        NxObject *cursorTriggedTmp = cursorTrigged;
         bool sendMessage = false;
         foreach(const QVector<QByteArray> & messagePattern, this->getMessagePatterns()) {
             foreach(const QByteArray &messageArgument, messagePattern) {
@@ -191,5 +192,4 @@ void NxTrigger::trigEnd() {
         if(sendMessage)
             MessageManager::outgoingMessage(MessageManagerDestination(this, this, cursorTriggedTmp));
     }
-    cursorTrigged = 0;
 }

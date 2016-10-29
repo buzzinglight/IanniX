@@ -386,7 +386,7 @@ public:
         if(valItems.count() > 1)
             setEllipse(NxSize(valItems.at(0).toDouble(), valItems.at(1).toDouble()));
     }
-    const QString getEllipseStr() const {
+    const QString getEllipseStr() {
         return QString("%1 %2").arg(getResize().width()/2).arg(getResize().height()/2);
     }
 
@@ -431,10 +431,12 @@ public:
         if(sizeItems.count() > 1)
             setResize(NxSize(sizeItems.at(0).toDouble(), sizeItems.at(1).toDouble()));
     }
-    inline const NxSize getResize() const {
+    inline const NxSize getResize() {
+        calcBoundingRect();
         return boundingRect.size();
     }
-    inline QString getResizeStr() const {
+    inline QString getResizeStr() {
+        calcBoundingRect();
         return QString("%1 %2").arg(boundingRect.size().width()).arg(boundingRect.size().height());
     }
     inline void setResizeF(qreal sizeF) {

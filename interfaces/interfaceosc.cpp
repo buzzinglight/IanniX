@@ -72,6 +72,7 @@ void InterfaceOsc::portChanged() {
     if(socket)
         delete socket;
     socket = new QUdpSocket(this);
+    socket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
     connect(socket, SIGNAL(readyRead()), SLOT(parseOSC()));
 
     if(socket->bind(port))  ui->port->setStyleSheet(ihmFeedbackOk);
