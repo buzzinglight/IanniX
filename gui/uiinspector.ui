@@ -4264,10 +4264,10 @@ GOING FROM</string>
             </widget>
             <widget class="QWidget" name="ssTabRessource">
              <property name="statusTip">
-              <string>Score ressources|These two lists allows you to add external file (image file for triggers appearance or score background) or to create a color palette for your score. Each ressource is identified by a unique string. Once edited, your new ressources will be available in the first tab if you want to apply them on objects.</string>
+              <string>Score resources|These two lists allow you to add external files (image file for triggers appearance or score background) or to create a color palette for your score. Each resource is identified by a unique string. Once edited, your new resources will be available in the first tab if you want to apply them on objects.</string>
              </property>
              <attribute name="title">
-              <string>RESSOURCES</string>
+              <string>RESOURCES</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_14">
               <property name="spacing">
