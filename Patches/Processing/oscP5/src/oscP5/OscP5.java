@@ -7,17 +7,17 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General
  * Public License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
- * 
+ *
  * @author		Andreas Schlegel http://www.sojamo.de/libraries/oscP5
  * @modified	12/19/2011
  * @version		0.9.8
@@ -54,7 +54,7 @@ import netP5.UdpPacketListener;
  * for modern networking technology and has been used in many application areas.
  * for further specifications and application implementations please visit the
  * official osc site.
- * 
+ *
  * @usage Application
  * @example oscP5sendReceive
  * @related OscProperties
@@ -289,7 +289,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 	 * check which eventMethod exists in the Object oscP5 was started from. this
 	 * is necessary for backwards compatibility for oscP5 because the previous
 	 * parameterType for the eventMethod was OscIn and is now OscMessage.
-	 * 
+	 *
 	 * @return boolean
 	 * @invisible
 	 */
@@ -335,7 +335,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 
 	/**
 	 * get the current version of oscP5.
-	 * 
+	 *
 	 * @return String
 	 */
 	public String version() {
@@ -367,7 +367,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 	 * this job is done for you with the plug mechanism. you can also use the
 	 * following array-types int[], float[], String[]. (but only as on single
 	 * parameter e.g. somemethod(int[] theArray) {} ).
-	 * 
+	 *
 	 * @param theObject Object, can be any Object
 	 * @param theMethodName String, the method name an osc message should be
 	 *            forwarded to
@@ -533,7 +533,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 	/**
 	 * incoming osc messages from an udp socket are parsed, processed and
 	 * forwarded to the parent.
-	 * 
+	 *
 	 * @invisible
 	 * @param thePacket DatagramPacket
 	 * @param thePort int
@@ -590,7 +590,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 
 	/**
 	 * returns the current properties of oscP5.
-	 * 
+	 *
 	 * @return OscProperties
 	 * @related OscProperties
 	 * @usage Application
@@ -619,7 +619,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 	 * oscP5 has a logging mechanism which prints out processes, warnings and
 	 * errors into the console window. e.g. turn off the error log with
 	 * setLogStatus(Logger.ERROR, Logger.OFF);
-	 * 
+	 *
 	 * @param theIndex int
 	 * @param theValue int
 	 * @usage Application
@@ -639,7 +639,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 
 	/**
 	 * set timeToLive of a multicast packet.
-	 * 
+	 *
 	 * @param theTTL int
 	 */
 	public void setTimeToLive(int theTTL) {
@@ -678,7 +678,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 	/**
 	 * netinfo() returns an instance of a NetInfo Object from which you can get
 	 * LAN and WAN information.
-	 * 
+	 *
 	 * @return NetInfo
 	 */
 	public NetInfo netInfo() {
@@ -687,7 +687,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 
 	/**
 	 * return the instance of the running TCP server if in TCP mode.
-	 * 
+	 *
 	 * @return TcpServer
 	 */
 	public TcpServer tcpServer() {
@@ -696,7 +696,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 
 	/**
 	 * return the instance of the running TCP client if in TCP mode.
-	 * 
+	 *
 	 * @return TcpClient
 	 */
 	public TcpClient tcpClient() {
@@ -706,8 +706,8 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 	/**
 	 * you can send osc packets in many different ways. see below and use the
 	 * send method that fits your needs.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param thePacket OscPacket
 	 * @param theNetAddress NetAddress
 	 * @usage Application
@@ -775,7 +775,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 
 	/**
 	 * send to tcp client
-	 * 
+	 *
 	 * @param thePacket OscPacket
 	 * @param theClient TcpClient
 	 */
@@ -795,7 +795,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 	/**
 	 * the send method offers a lot of possibilities. have a look in the send
 	 * documentation.
-	 * 
+	 *
 	 * @param thePacket OscPacket
 	 * @param theIpAddress String
 	 * @param thePort int
@@ -818,7 +818,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 	/**
 	 * a static method to send an OscMessage straight out of the box without
 	 * having to instantiate oscP5.
-	 * 
+	 *
 	 * @param theOscMessage OscMessage
 	 * @param theNetAddress NetAddress
 	 * @example oscP5flush
@@ -871,7 +871,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 
 	/**
 	 * old version of constructor. still in here for backwards compatibility.
-	 * 
+	 *
 	 * @deprecated
 	 * @invisible
 	 */
@@ -914,7 +914,7 @@ public class OscP5 implements UdpPacketListener, TcpPacketListener {
 
 	/**
 	 * used by the monome library by jklabs
-	 * 
+	 *
 	 * @deprecated
 	 * @invisible
 	 */

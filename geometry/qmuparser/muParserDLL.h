@@ -1,26 +1,26 @@
 /*
-                 __________                                      
-    _____   __ __\______   \_____  _______  ______  ____ _______ 
+                 __________
+    _____   __ __\______   \_____  _______  ______  ____ _______
    /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
-  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
-        \/                       \/            \/      \/        
+  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|
+        \/                       \/            \/      \/
   Copyright (C) 2011 Ingo Berg
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this
   software and associated documentation files (the "Software"), to deal in the Software
-  without restriction, including without limitation the rights to use, copy, modify, 
-  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
+  without restriction, including without limitation the rights to use, copy, modify,
+  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
   permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-  The above copyright notice and this permission notice shall be included in all copies or 
+  The above copyright notice and this permission notice shall be included in all copies or
   substantial portions of the Software.
 
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
-  NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
-  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+  NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #ifndef MU_PARSER_DLL_H
 #define MU_PARSER_DLL_H
@@ -41,7 +41,7 @@ extern "C"
 {
 #endif
 
-/** \file 
+/** \file
     \brief This file contains the DLL interface of muparser.
 */
 
@@ -55,34 +55,34 @@ typedef void*  muParserHandle_t;    // parser handle
 #endif
 
 typedef int    muBool_t;            // boolean type
-typedef int    muInt_t;             // integer type 
+typedef int    muInt_t;             // integer type
 typedef double muFloat_t;           // floating point type
 
 // function types for calculation
-typedef muFloat_t (*muFun0_t )(); 
-typedef muFloat_t (*muFun1_t )(muFloat_t); 
-typedef muFloat_t (*muFun2_t )(muFloat_t, muFloat_t); 
-typedef muFloat_t (*muFun3_t )(muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muFun4_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muFun5_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muFun6_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muFun7_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muFun8_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muFun9_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muFun10_t)(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
+typedef muFloat_t (*muFun0_t )();
+typedef muFloat_t (*muFun1_t )(muFloat_t);
+typedef muFloat_t (*muFun2_t )(muFloat_t, muFloat_t);
+typedef muFloat_t (*muFun3_t )(muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muFun4_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muFun5_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muFun6_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muFun7_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muFun8_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muFun9_t )(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muFun10_t)(muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
 
 // Function prototypes for bulkmode functions
-typedef muFloat_t (*muBulkFun0_t )(int, int); 
-typedef muFloat_t (*muBulkFun1_t )(int, int, muFloat_t); 
-typedef muFloat_t (*muBulkFun2_t )(int, int, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muBulkFun3_t )(int, int, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muBulkFun4_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muBulkFun5_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muBulkFun6_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muBulkFun7_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muBulkFun8_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muBulkFun9_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
-typedef muFloat_t (*muBulkFun10_t)(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t); 
+typedef muFloat_t (*muBulkFun0_t )(int, int);
+typedef muFloat_t (*muBulkFun1_t )(int, int, muFloat_t);
+typedef muFloat_t (*muBulkFun2_t )(int, int, muFloat_t, muFloat_t);
+typedef muFloat_t (*muBulkFun3_t )(int, int, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muBulkFun4_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muBulkFun5_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muBulkFun6_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muBulkFun7_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muBulkFun8_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muBulkFun9_t )(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
+typedef muFloat_t (*muBulkFun10_t)(int, int, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t, muFloat_t);
 
 typedef muFloat_t (*muMultFun_t)(const muFloat_t*, muInt_t);
 typedef muFloat_t (*muStrFun1_t)(const muChar_t*);
@@ -111,7 +111,7 @@ static const int muBASETYPE_INT    = 1;
 //-----------------------------------------------------------------------------------------------------
 
 
-// Basic operations / initialization  
+// Basic operations / initialization
 API_EXPORT(muParserHandle_t) mupCreate(int nBaseType);
 API_EXPORT(void) mupRelease(muParserHandle_t a_hParser);
 API_EXPORT(const muChar_t*) mupGetExpr(muParserHandle_t a_hParser);
@@ -153,43 +153,43 @@ API_EXPORT(void) mupDefineStrFun1(muParserHandle_t a_hParser, const muChar_t *a_
 API_EXPORT(void) mupDefineStrFun2(muParserHandle_t a_hParser, const muChar_t *a_szName, muStrFun2_t a_pFun);
 API_EXPORT(void) mupDefineStrFun3(muParserHandle_t a_hParser, const muChar_t *a_szName, muStrFun3_t a_pFun);
 
-API_EXPORT(void) mupDefineMultFun( muParserHandle_t a_hParser, 
-                                   const muChar_t* a_szName, 
-                                   muMultFun_t a_pFun, 
+API_EXPORT(void) mupDefineMultFun( muParserHandle_t a_hParser,
+                                   const muChar_t* a_szName,
+                                   muMultFun_t a_pFun,
                                    muBool_t a_bOptimize);
 
-API_EXPORT(void) mupDefineOprt( muParserHandle_t a_hParser, 
-                                const muChar_t* a_szName, 
-                                muFun2_t a_pFun, 
-                                muInt_t a_nPrec, 
+API_EXPORT(void) mupDefineOprt( muParserHandle_t a_hParser,
+                                const muChar_t* a_szName,
+                                muFun2_t a_pFun,
+                                muInt_t a_nPrec,
                                 muInt_t a_nOprtAsct,
                                 muBool_t a_bOptimize);
 
-API_EXPORT(void) mupDefineConst( muParserHandle_t a_hParser, 
-                                 const muChar_t* a_szName, 
+API_EXPORT(void) mupDefineConst( muParserHandle_t a_hParser,
+                                 const muChar_t* a_szName,
                                  muFloat_t a_fVal );
 
-API_EXPORT(void) mupDefineStrConst( muParserHandle_t a_hParser, 
-                                    const muChar_t* a_szName, 
+API_EXPORT(void) mupDefineStrConst( muParserHandle_t a_hParser,
+                                    const muChar_t* a_szName,
                                     const muChar_t *a_sVal );
 
-API_EXPORT(void) mupDefineVar( muParserHandle_t a_hParser, 
-                               const muChar_t* a_szName, 
+API_EXPORT(void) mupDefineVar( muParserHandle_t a_hParser,
+                               const muChar_t* a_szName,
                                muFloat_t *a_fVar);
 
-API_EXPORT(void) mupDefineBulkVar( muParserHandle_t a_hParser, 
-                               const muChar_t* a_szName, 
+API_EXPORT(void) mupDefineBulkVar( muParserHandle_t a_hParser,
+                               const muChar_t* a_szName,
                                muFloat_t *a_fVar);
 
-API_EXPORT(void) mupDefinePostfixOprt( muParserHandle_t a_hParser, 
-                                       const muChar_t* a_szName, 
-                                       muFun1_t a_pOprt, 
+API_EXPORT(void) mupDefinePostfixOprt( muParserHandle_t a_hParser,
+                                       const muChar_t* a_szName,
+                                       muFun1_t a_pOprt,
                                        muBool_t a_bOptimize);
 
 
-API_EXPORT(void) mupDefineInfixOprt( muParserHandle_t a_hParser, 
-                                     const muChar_t* a_szName, 
-                                     muFun1_t a_pOprt, 
+API_EXPORT(void) mupDefineInfixOprt( muParserHandle_t a_hParser,
+                                     const muChar_t* a_szName,
+                                     muFun1_t a_pOprt,
                                      muBool_t a_bOptimize);
 
 // Define character sets for identifiers

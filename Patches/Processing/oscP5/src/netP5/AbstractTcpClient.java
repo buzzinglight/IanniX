@@ -7,17 +7,17 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General
  * Public License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
- * 
+ *
  * @author		Andreas Schlegel http://www.sojamo.de/libraries/oscP5
  * @modified	12/19/2011
  * @version		0.9.8
@@ -63,7 +63,7 @@ public abstract class AbstractTcpClient implements Runnable {
   private Thread _myThread;
 
   private char TERMINATOR = '\0';
-  
+
   /**
    * terminator is readline.
    */
@@ -79,7 +79,7 @@ public abstract class AbstractTcpClient implements Runnable {
    * terminator is newline.
    */
   public static final int MODE_NEWLINE = 2;
-  
+
   /**
    * no terminator required, packets are sent via
    * a tcp stream.
@@ -202,7 +202,7 @@ public abstract class AbstractTcpClient implements Runnable {
   /**
    * to parse an incomming tcp message, a terminator character is required to
    * determine the end of the message so that it can be parsed and forwarded.
-   *  
+   *
    * @param theTerminator
    */
   public void setTerminator(final char theTerminator) {
@@ -385,9 +385,9 @@ public abstract class AbstractTcpClient implements Runnable {
     return _mySocket;
   }
 
-  
+
   /**
-   * get the mode of the terminator. 
+   * get the mode of the terminator.
    * @return
    */
   public int mode() {
