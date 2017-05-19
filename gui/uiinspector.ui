@@ -695,7 +695,7 @@ QDialogButtonBox QPushButton {
               <item>
                <widget class="QWidget" name="widgetStyle" native="true">
                 <property name="statusTip">
-                 <string>Objects style|Objects can have differents graphical behaviours:\n - you can change the colors and texture (images - only for triggers)\n - size or thickness of the object is customisable\n - a label can be set to add human readable information to the object</string>
+                 <string>Objects style|Objects can have different graphical behaviours:\n - you can change the colors and texture (images - only for triggers)\n - size or thickness of the object is customisable\n - a label can be set to add human readable information to the object</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_12">
                  <property name="spacing">
@@ -1072,7 +1072,7 @@ MULTIPLICATION</string>
                       </size>
                      </property>
                      <property name="toolTip">
-                      <string>Multiplies the color of objects by an other color in the palette or a custom color</string>
+                      <string>Multiplies the color of objects by another color in the palette or a custom color</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QComboBox QAbstractItemView {
@@ -1274,7 +1274,7 @@ if INACTIVE</string>
             </widget>
             <widget class="QWidget" name="ssTabInfoSpace">
              <property name="statusTip">
-              <string>Objects and 3D space|Objects are positionned in a 3D space. These options allows you to control how objects interact with space:\n - absolute position\n - size of curves\n - playhead cursor size\n - curve trajectory points (manual or mathematical edition)</string>
+              <string>Objects and 3D space|Objects are positioned in a 3D space. These options allows you to control how objects interact with space:\n - absolute position\n - size of curves\n - playhead cursor size\n - curve trajectory points (manual or mathematical edition)</string>
              </property>
              <attribute name="title">
               <string>3D SPACE</string>
@@ -3376,7 +3376,7 @@ OFFSETS</string>
                    <string>Changes the amount of messages sent by objects (small values may be CPU and network intensive)</string>
                   </property>
                   <property name="specialValueText">
-                   <string>Messages are sent immediatly</string>
+                   <string>Messages are sent immediately</string>
                   </property>
                   <property name="prefix">
                    <string>Messages are sent each </string>
@@ -4583,7 +4583,7 @@ GOING FROM</string>
                </size>
               </property>
               <property name="toolTip">
-               <string>Camera point of view can be controled by an object. Type here the ID of this object.</string>
+               <string>Camera point of view can be controlled by an object. Type here the ID of this object.</string>
               </property>
               <property name="specialValueText">
                <string>no objects</string>

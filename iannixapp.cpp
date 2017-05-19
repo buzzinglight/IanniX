@@ -103,7 +103,7 @@ void IanniXApp::launch(int &argc, char **argv) {
     if(Application::pathApplication.absoluteFilePath().endsWith("/IanniX-build"))
         Application::pathApplication = QFileInfo(Application::pathApplication.absoluteFilePath().remove("-build"));
 
-    qDebug("Pathes");
+    qDebug("Paths");
     qDebug("\tDocuments  : %s", qPrintable(Application::pathDocuments  .absoluteFilePath()));
     qDebug("\tApplication: %s", qPrintable(Application::pathApplication.absoluteFilePath()));
     qDebug("\tCurrent    : %s", qPrintable(Application::pathCurrent    .absoluteFilePath()));

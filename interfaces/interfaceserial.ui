@@ -69,7 +69,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Opens the folder where you can find examples of IanniX interfacing with softwares using serial port</string>
+        <string>Opens the folder where you can find examples of IanniX interfacing with software using serial port</string>
        </property>
        <property name="text">
         <string>OPEN EXAMPLES</string>
