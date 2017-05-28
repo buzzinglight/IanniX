@@ -440,7 +440,7 @@ Bougez un slider sur votre interface de contrôle ou appuyez sur une note MIDI</
         <location filename="../iannix.cpp" line="490"/>
         <location filename="../iannix.cpp" line="501"/>
         <location filename="../iannix.cpp" line="531"/>
-        <source>Coordinates systems are differents.
+        <source>Coordinates systems are different.
 Please enter a scale factor: </source>
         <translation>Les systèmes de coordonnées sont différents.
 Merci de saisir un facteur de taille :</translation>

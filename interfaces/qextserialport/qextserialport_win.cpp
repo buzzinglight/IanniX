@@ -189,7 +189,7 @@ void QextSerialPortPrivate::translateError(ulong error)
     Reads a block of data from the serial port.  This function will read at most maxlen bytes from
     the serial port and place them in the buffer pointed to by data.  Return value is the number of
     bytes actually read, or -1 on error.
-    
+
     \warning before calling this function ensure that serial port associated with this class
     is currently open (use isOpen() function to check if port is open).
 */
@@ -220,7 +220,7 @@ qint64 QextSerialPortPrivate::readData_sys(char *data, qint64 maxSize)
     Writes a block of data to the serial port.  This function will write len bytes
     from the buffer pointed to by data to the serial port.  Return value is the number
     of bytes actually written, or -1 on error.
-    
+
     \warning before calling this function ensure that serial port associated with this class
     is currently open (use isOpen() function to check if port is open).
 */

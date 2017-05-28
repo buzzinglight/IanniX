@@ -1384,10 +1384,10 @@ QDialogButtonBox QPushButton {
     <string>Import text…</string>
    </property>
    <property name="toolTip">
-    <string>Imports glyphes (characters) to score</string>
+    <string>Imports glyphs (characters) to score</string>
    </property>
    <property name="statusTip">
-    <string>Text import|IanniX can import glyphes (characters) from fonts. Note that font sizes are based on print or display units whereas IanniX is based on seconds; you may need to rescale the imported data.</string>
+    <string>Text import|IanniX can import glyphs (characters) from fonts. Note that font sizes are based on print or display units whereas IanniX is based on seconds; you may need to rescale the imported data.</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>

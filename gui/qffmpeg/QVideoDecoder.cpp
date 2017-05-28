@@ -1,8 +1,8 @@
 /*
-	QTFFmpegWrapper - QT FFmpeg Wrapper Class 
+	QTFFmpegWrapper - QT FFmpeg Wrapper Class
 	Copyright (C) 2009,2010:
-			Daniel Roggen, droggen@gmail.com			
-			
+			Daniel Roggen, droggen@gmail.com
+
 	All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -217,7 +217,7 @@ bool QVideoDecoder::decodeSeekFrame(int after)
       //qDebug("Returning already available frame %d @ %d. DesiredFrameTime: %d\n",LastFrameNumber,LastFrameTime,DesiredFrameTime);
 
       return true;
-   }   
+   }
 
    // The last decoded frame wasn't ok; either we need any new frame (after=-1), or a specific new frame with time>after
 

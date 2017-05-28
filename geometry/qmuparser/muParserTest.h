@@ -1,26 +1,26 @@
 /*
-                 __________                                      
-    _____   __ __\______   \_____  _______  ______  ____ _______ 
+                 __________
+    _____   __ __\______   \_____  _______  ______  ____ _______
    /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
-  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
-        \/                       \/            \/      \/        
+  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|
+        \/                       \/            \/      \/
   Copyright (C) 2013 Ingo Berg
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this
   software and associated documentation files (the "Software"), to deal in the Software
-  without restriction, including without limitation the rights to use, copy, modify, 
-  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
+  without restriction, including without limitation the rights to use, copy, modify,
+  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
   permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-  The above copyright notice and this permission notice shall be included in all copies or 
+  The above copyright notice and this permission notice shall be included in all copies or
   substantial portions of the Software.
 
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
-  NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
-  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+  NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #ifndef MU_PARSER_TEST_H
@@ -53,14 +53,14 @@ namespace mu
 
         // Multiarg callbacks
         static value_type f1of1(value_type v) { return v;};
-      	
+
         static value_type f1of2(value_type v, value_type  ) {return v;};
         static value_type f2of2(value_type  , value_type v) {return v;};
 
         static value_type f1of3(value_type v, value_type  , value_type  ) {return v;};
         static value_type f2of3(value_type  , value_type v, value_type  ) {return v;};
         static value_type f3of3(value_type  , value_type  , value_type v) {return v;};
-      	
+
         static value_type f1of4(value_type v, value_type,   value_type  , value_type  ) {return v;}
         static value_type f2of4(value_type  , value_type v, value_type  , value_type  ) {return v;}
         static value_type f3of4(value_type  , value_type,   value_type v, value_type  ) {return v;}
@@ -81,11 +81,11 @@ namespace mu
         static value_type sign(value_type v) { return -v; }
         static value_type add(value_type v1, value_type v2) { return v1+v2; }
         static value_type land(value_type v1, value_type v2) { return (int)v1 & (int)v2; }
-        
+
 
         static value_type FirstArg(const value_type* a_afArg, int a_iArgc)
         {
-          if (!a_iArgc)	
+          if (!a_iArgc)
             throw mu::Parser::exception_type( _T("too few arguments for function FirstArg.") );
 
           return  a_afArg[0];
@@ -93,15 +93,15 @@ namespace mu
 
         static value_type LastArg(const value_type* a_afArg, int a_iArgc)
         {
-          if (!a_iArgc)	
+          if (!a_iArgc)
             throw mu::Parser::exception_type( _T("too few arguments for function LastArg.") );
 
           return  a_afArg[a_iArgc-1];
         }
 
         static value_type Sum(const value_type* a_afArg, int a_iArgc)
-        { 
-          if (!a_iArgc)	
+        {
+          if (!a_iArgc)
             throw mu::Parser::exception_type( _T("too few arguments for function sum.") );
 
           value_type fRes=0;
@@ -120,31 +120,31 @@ namespace mu
         }
 
         static value_type Ping()
-        { 
-          return 10; 
+        {
+          return 10;
         }
 
-        static value_type ValueOf(const char_type*)      
-        { 
-          return 123; 
+        static value_type ValueOf(const char_type*)
+        {
+          return 123;
         }
 
-        static value_type StrFun1(const char_type* v1)                               
-        { 
+        static value_type StrFun1(const char_type* v1)
+        {
           int val(0);
           stringstream_type(v1) >> val;
           return (value_type)val;
         }
 
-        static value_type StrFun2(const char_type* v1, value_type v2)                
-        { 
+        static value_type StrFun2(const char_type* v1, value_type v2)
+        {
           int val(0);
           stringstream_type(v1) >> val;
           return (value_type)(val + v2);
         }
-        
-        static value_type StrFun3(const char_type* v1, value_type v2, value_type v3) 
-        { 
+
+        static value_type StrFun3(const char_type* v1, value_type v2, value_type v3)
+        {
           int val(0);
           stringstream_type(v1) >> val;
           return val + v2 + v3;
@@ -193,10 +193,10 @@ namespace mu
 
         // Test Double Parser
         int EqnTest(const string_type& a_str, double a_fRes, bool a_fPass);
-        int EqnTestWithVarChange(const string_type& a_str, 
-                                 double a_fRes1, 
-                                 double a_fVar1, 
-                                 double a_fRes2, 
+        int EqnTestWithVarChange(const string_type& a_str,
+                                 double a_fRes1,
+                                 double a_fVar1,
+                                 double a_fRes2,
                                  double a_fVar2);
         int ThrowTest(const string_type& a_str, int a_iErrc, bool a_bFail = true);
 

@@ -81,7 +81,7 @@ class QVideoEncoder
 
       virtual int encodeImage(const QImage &);
       virtual int encodeImagePts(const QImage &,unsigned pts);
-      virtual bool isOk();  
+      virtual bool isOk();
 
 };
 
