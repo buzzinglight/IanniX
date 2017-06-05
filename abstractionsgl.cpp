@@ -503,8 +503,8 @@ void OpenGlDrawing::drawRect(OpenGlTexture *texture, qreal alpha, qreal selected
 }
 void OpenGlDrawing::drawRect(const QRectF &rect, const OpenGlColors &colors, OpenGlTexture *texture, qreal alpha, qreal selected, qreal croppingMode, bool ninePatch, QRectF partialTextureRect) {
     QRectF textureRect, targetRect = rect;
-    alpha    = qBound(0., alpha,    1.);
-    selected = qBound(0., selected, 1.);
+    alpha    = qBound(qreal(0.), alpha,    qreal(1.));
+    selected = qBound(qreal(0.), selected, qreal(1.));
 
     //Cropping
     if(!colors.isColorTransparent()) {
@@ -716,7 +716,7 @@ qreal OpenGlDrawing::drawText(QPainter *painter, const QColor &color, const Open
                 //painter->drawStaticText(QPointF(0, 0), staticText);
                 //qDebug("%s\tH:%f\tC:%f\tSH:%f\tPOS:%f", qPrintable(text), rect.height(), rect.center().y(), staticText.size().height(), rect.center().y() - staticText.size().height()/2);
                 if((font.alignementFlags() & Qt::AlignVCenter) == Qt::AlignVCenter)
-                    pos.setY(qMax(0., rect.center().y() - fontHeight/2));
+                    pos.setY(qMax(qreal(0.), rect.center().y() - fontHeight/2));
                 else if((font.alignementFlags() & Qt::AlignBottom) == Qt::AlignBottom)
                     pos.setY(rect.bottom() - fontHeight);
 

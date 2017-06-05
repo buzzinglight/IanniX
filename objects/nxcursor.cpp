@@ -290,10 +290,10 @@ void NxCursor::paint() {
         else if(Render::colors->contains(colorInactive))                                                                color = Render::colors->value(colorInactive);
         else                                                                                                            color = Qt::gray;
     }
-    color.setRgb (qBound(0., color.red()   * colorMultiplyColor.redF(),   255.),
-                  qBound(0., color.green() * colorMultiplyColor.greenF(), 255.),
-                  qBound(0., color.blue()  * colorMultiplyColor.blueF(),  255.),
-                  qBound(0., color.alpha() * colorMultiplyColor.alphaF(), 255.));
+    color.setRgb (qBound(qreal(0.), color.red()   * colorMultiplyColor.redF(),   qreal(255.)),
+                  qBound(qreal(0.), color.green() * colorMultiplyColor.greenF(), qreal(255.)),
+                  qBound(qreal(0.), color.blue()  * colorMultiplyColor.blueF(),  qreal(255.)),
+                  qBound(qreal(0.), color.alpha() * colorMultiplyColor.alphaF(), qreal(255.)));
 
     if(color.alpha() > 0) {
         //Mouse hover
@@ -408,7 +408,7 @@ void NxCursor::paint() {
                 glRotatef(cursorAngle.z(), 0, 0, 1);
                 glRotatef(cursorAngle.y(), 0, 1, 0);
                 glRotatef(cursorAngle.x(), 1, 0, 0);
-                qreal size2 = Render::objectSize / 2 * qMin(1., width);
+                qreal size2 = Render::objectSize / 2 * qMin(qreal(1.), width);
                 glBegin(GL_TRIANGLE_FAN);
                 glLineWidth(2);
                 if(hasActivity) {

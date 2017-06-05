@@ -61,10 +61,10 @@ void NxTrigger::paint() {
         else if(Render::colors->contains(colorInactive))                                                                color = Render::colors->value(colorInactive);
         else                                                                                                            color = Qt::gray;
     }
-    color.setRgb (qBound(0., color.red()   * colorMultiplyColor.redF(),   255.),
-                  qBound(0., color.green() * colorMultiplyColor.greenF(), 255.),
-                  qBound(0., color.blue()  * colorMultiplyColor.blueF(),  255.),
-                  qBound(0., color.alpha() * colorMultiplyColor.alphaF(), 255.));
+    color.setRgb (qBound(qreal(0.), color.red()   * colorMultiplyColor.redF(),   qreal(255.)),
+                  qBound(qreal(0.), color.green() * colorMultiplyColor.greenF(), qreal(255.)),
+                  qBound(qreal(0.), color.blue()  * colorMultiplyColor.blueF(),  qreal(255.)),
+                  qBound(qreal(0.), color.alpha() * colorMultiplyColor.alphaF(), qreal(255.)));
 
     //Size of trigger
     if(cacheSize != Render::objectSize*size) {
