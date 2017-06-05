@@ -49,7 +49,9 @@
   This datatype must be a built in value type. You can not use custom classes.
   It should be working with all types except "int"!
 */
-#define MUP_BASETYPE double
+#ifndef MUP_BASETYPE
+# define MUP_BASETYPE double
+#endif /* MUP_BASETYPE */
 
 /** \brief Activate this option in order to compile with OpenMP support.
 
