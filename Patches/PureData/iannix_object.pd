@@ -1,4 +1,4 @@
-#N canvas 646 74 601 470 10;
+#N canvas 647 70 601 470 10;
 #X obj 56 105 inlet;
 #X obj 88 381 outlet;
 #X obj 105 401 outlet;
@@ -55,7 +55,6 @@
 #X text 44 11 [iannix_object] filter IanniX data;
 #X obj 404 86 route bang;
 #X obj 404 108 t b a;
-#X obj 436 131 list split 1;
 #X obj 126 178 t a a;
 #X connect 0 0 17 0;
 #X connect 12 0 11 0;
@@ -88,8 +87,8 @@
 #X connect 27 0 28 0;
 #X connect 28 0 26 0;
 #X connect 30 0 27 0;
+#X connect 30 1 31 0;
 #X connect 31 0 25 0;
 #X connect 31 1 32 0;
-#X connect 32 0 33 0;
-#X connect 33 0 14 1;
-#X connect 33 1 15 1;
+#X connect 32 0 14 1;
+#X connect 32 1 15 1;
