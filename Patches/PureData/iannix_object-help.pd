@@ -1,0 +1,15 @@
+#N canvas 4 49 724 363 10;
+#X text 229 174 - no argument : outputs all objects (no filtering)
+;
+#X text 148 217 Inlet #2 : desired ID (see arguments);
+#X text 148 247 Outlets : (1) unique ID \, (2) group ID \,;
+#X text 218 259 (3-4-5) mapped X coord \, Y coord \, Z coord \,;
+#X text 218 271 (6-7-8) absolute X coord \, Y coord \, Z coord \,;
+#X text 218 284 (9-10) (triggers only) curve Unique ID \, curve group
+ID \,;
+#X text 218 297 (11) packed data as a list;
+#X obj 116 91 iannix_object;
+#X text 228 188 - one argument : only outputs object with desired ID
+;
+#X text 99 4 [iannix_object] filter data from IanniX;
+#X text 148 154 Arguments :;
