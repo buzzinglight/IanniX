@@ -1,11 +1,13 @@
 /*
     All the files of this directory are part of IanniX, a graphical real-time open-source sequencer for digital art
     Copyright (C) 2010-2015 — IanniX Association
+    Copyright (C) 2017 — IOhannes m zmölnig
 
     Project Manager: Thierry Coduys (http://www.le-hub.org)
     Development:     Guillaume Jacquemin (https://www.buzzinglight.com)
 
-    These files were written by Guillaume Jacquemin and Alexandros Drymonitis.
+    These files were written by Guillaume Jacquemin, Alexandros Drymonitis
+    and IOhannes m zmölnig.
 
     IanniX is a free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
