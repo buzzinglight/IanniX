@@ -52,7 +52,7 @@
 #X obj 404 152 t f;
 #X obj 358 108 t b;
 #X msg 358 130 0;
-#X text 44 11 [iannix_object] filter IanniX data;
+#X text 44 11 [iannix/filter] filter IanniX data;
 #X obj 404 86 route bang;
 #X obj 404 108 t b a;
 #X obj 126 178 t a a;

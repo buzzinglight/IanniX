@@ -1,4 +1,5 @@
-#N canvas 4 49 724 363 10;
+#N canvas 5 49 724 363 10;
+#X declare -path ..;
 #X text 229 174 - no argument : outputs all objects (no filtering)
 ;
 #X text 148 217 Inlet #2 : desired ID (see arguments);
@@ -8,8 +9,9 @@
 #X text 218 284 (9-10) (triggers only) curve Unique ID \, curve group
 ID \,;
 #X text 218 297 (11) packed data as a list;
-#X obj 116 91 iannix_object;
+#X obj 116 91 iannix/filter;
 #X text 228 188 - one argument : only outputs object with desired ID
 ;
-#X text 99 4 [iannix_object] filter data from IanniX;
+#X text 99 4 [iannix/filter] filter data from IanniX;
 #X text 148 154 Arguments :;
+#X obj 495 24 declare -path ..;
