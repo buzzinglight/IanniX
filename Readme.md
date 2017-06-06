@@ -19,3 +19,7 @@ Mac OS X specific
 Linux
 -----
 - You'll need to build Qt before building IanniX
+  - If your distribution supports it, you can also install Qt via the package
+    manager, e.g.:
+
+        aptitude install libqt4-dev libqt4-opengl-dev
