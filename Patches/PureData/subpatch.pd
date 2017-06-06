@@ -1,19 +1,19 @@
-#N canvas 913 22 316 244 10;
-#X obj 30 -6 inlet;
-#X obj 24 41 gemhead;
-#X obj 24 163 cube;
-#X msg 108 146 draw line;
-#X obj 108 106 loadbang;
-#X obj 108 127 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#N canvas 810 49 420 318 10;
+#X obj 30 54 inlet;
+#X obj 24 101 gemhead;
+#X obj 24 223 cube;
+#X msg 108 206 draw line;
+#X obj 108 166 loadbang;
+#X obj 108 187 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X msg 178 146 0.03;
-#X obj 24 83 translateXYZ -0.5 -0.5 0;
-#X obj 24 63 scaleXYZ 6 6 6;
-#X obj 24 141 translateXYZ;
-#X obj 12 119 unpack f f;
-#X obj 168 106 r reset;
-#X msg 218 146 -5 -5;
-#X obj 30 17 unpack s f f f f f f f s;
+#X msg 178 206 0.03;
+#X obj 24 143 translateXYZ -0.5 -0.5 0;
+#X obj 24 123 scaleXYZ 6 6 6;
+#X obj 24 201 translateXYZ;
+#X obj 12 179 unpack f f;
+#X obj 168 166 r reset;
+#X msg 218 206 -5 -5;
+#X obj 30 77 unpack s f f f f f f f s;
 #X connect 0 0 13 0;
 #X connect 1 0 8 0;
 #X connect 3 0 2 0;
