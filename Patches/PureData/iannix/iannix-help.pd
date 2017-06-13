@@ -1,0 +1,36 @@
+#N canvas 159 140 901 429 10;
+#X declare -path ..;
+#X obj 287 134 tgl 15 0 empty empty play/pause -17 -7 0 10 -262144
+-1 -1 0 1;
+#X obj 380 133 bng 15 250 50 0 empty empty fastrewind -17 -7 0 10 -262144
+-1 -1;
+#X obj 256 341 tgl 15 0 empty empty score.playing/paused 17 7 0 10
+-262144 -1 -1 0 1;
+#X obj 276 310 bng 15 250 50 0 empty empty score.rewound 17 7 0 10
+-262144 -1 -1;
+#X floatatom 338 213 3 0 0 0 - - -, f 3;
+#X floatatom 361 213 3 0 0 0 - - -, f 3;
+#X floatatom 384 213 3 0 0 0 - - -, f 3;
+#X text 411 212 Number of triggers / cursors / curves;
+#X floatatom 37 117 5 0 0 2 score.speed - -, f 5;
+#X floatatom 297 286 5 0 0 1 transport.timecode - -, f 5;
+#X obj 194 164 iannix 127.0.0.1 1234 57120;
+#X msg 37 137 send /iannix/speed \$1;
+#X text 108 62 arguments : <IanniX.server.IP> <IanniX.server.OSCinPort>
+<IanniX.server.OSCoutPort>, f 84;
+#X text 167 39 [iannix] interfacing with IanniX via OSC;
+#X obj 670 18 declare -path ..;
+#X obj 211 385 iannix/filter;
+#X text 142 387 see also:;
+#X symbolatom 318 267 12 0 0 0 - - -, f 12;
+#X connect 0 0 10 1;
+#X connect 1 0 10 2;
+#X connect 8 0 11 0;
+#X connect 10 3 2 0;
+#X connect 10 4 3 0;
+#X connect 10 5 9 0;
+#X connect 10 6 17 0;
+#X connect 10 7 4 0;
+#X connect 10 8 5 0;
+#X connect 10 9 6 0;
+#X connect 11 0 10 0;

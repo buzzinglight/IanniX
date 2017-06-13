@@ -1,24 +1,17 @@
-#N canvas 223 99 659 675 10;
-#X obj -38 239 t b f;
-#X msg -39 264 1;
-#X obj -40 285 tabwrite INDEXtrigger;
-#X obj 105 131 bng 25 250 50 0 empty empty empty 17 7 0 10 -262144
+#N canvas 231 61 659 675 10;
+#X obj 181 459 t b f;
+#X msg 181 484 1;
+#X obj 181 505 tabwrite INDEXtrigger;
+#X obj 105 131 bng 25 250 50 0 empty empty init.tab 0 -7 0 10 -262144
 -1 -1;
-#X text 104 114 init tab;
-#X obj 105 196 t b b;
-#X msg 151 213 0;
-#X obj 130 256 + 1;
-#X obj 130 276 t b f;
-#X msg 106 293 0;
-#X obj 206 230 s INITGEN;
-#X obj 106 312 tabwrite INDEXtrigger;
-#X obj 105 235 repeat 3000;
-#X obj 105 256 f;
-#N canvas 358 502 450 300 sutab 0;
-#N canvas 0 22 450 300 (subpatch) 0;
+#X obj 105 166 t b b;
+#X msg 212 190 0;
+#X obj 212 210 s INITGEN;
+#N canvas 362 452 450 300 sutab 0;
+#N canvas 4 50 450 300 (subpatch) 0;
 #X array INDEXtrigger 3000 float 3;
-#A 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+#A 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -77,8 +70,8 @@
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
-#A 2000 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+#A 2000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -109,78 +102,86 @@
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
 #X coords 0 1 3000 -1 50 20 1;
 #X restore 235 107 graph;
-#X restore 334 57 pd sutab;
-#X obj 335 257 + 1;
-#X obj 310 302 sel 1;
-#X obj 335 329 + 1;
-#X obj 164 131 bng 25 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
-#X obj 310 279 tabread INDEXtrigger;
-#X obj 310 237 repeat 3000;
-#X obj 309 578 s pd-Rtrigger;
-#X obj 341 377 + 2000;
-#X obj 310 257 f;
-#X obj 310 329 f;
-#X msg 380 206 0;
-#X text 161 113 create objet;
-#X obj 311 534 pack f f f;
-#X obj 311 400 mod 10;
-#X obj 354 436 sel 1;
-#X obj 311 352 t f f;
-#X obj 354 482 f;
-#X obj 382 482 + 50;
-#X obj 339 509 f;
-#X obj 311 419 t f f b;
-#X msg 310 558 obj \$1 \$2 abs-trigger \$3;
-#X obj 311 461 * 110;
-#X obj -38 216 r RouteTrigger;
-#X obj 310 189 t b b b;
-#X msg 416 208 \; pd-Rtrigger clear \;;
+#X restore 434 57 pd sutab;
+#X obj 442 237 + 1;
+#X obj 410 302 sel 1;
+#X obj 442 328 + 1;
+#X obj 164 131 bng 25 250 50 0 empty empty create.object 0 -7 0 10
+-262144 -1 -1;
+#X obj 410 279 tabread INDEXtrigger;
+#X obj 410 237 f;
+#X obj 410 329 f;
+#X msg 480 166 0;
+#X obj 410 587 pack f f f;
+#X obj 410 419 mod 10;
+#X obj 433 464 sel 1;
+#X obj 410 375 t f f;
+#X obj 453 505 f;
+#X obj 481 505 + 50;
+#X obj 438 562 f;
+#X obj 410 442 t f f b;
+#X msg 410 608 obj \$1 \$2 abs-trigger \$3;
+#X obj 410 484 * 110;
+#X obj 181 436 r RouteTrigger;
+#X msg 538 209 clear;
+#X obj 390 149 t b b b b;
+#X msg 390 171 loadbang;
+#X obj 105 210 s INDEXtrigger;
+#X msg 105 190 const 0;
+#X obj 410 193 i 3000;
+#X obj 410 214 until;
+#X obj 410 257 t f f;
+#X obj 410 351 t f f;
+#X obj 453 526 t f f;
+#X obj 470 186 t a a a;
+#X obj 390 628 s pd-\$1.Rtrigger;
+#X obj 442 395 + 0;
 #X connect 0 0 1 0;
 #X connect 0 1 2 1;
 #X connect 1 0 2 0;
-#X connect 3 0 5 0;
-#X connect 5 0 12 0;
-#X connect 5 1 6 0;
-#X connect 6 0 10 0;
-#X connect 6 0 13 1;
-#X connect 7 0 8 0;
-#X connect 7 0 13 1;
-#X connect 8 0 9 0;
-#X connect 8 1 11 1;
-#X connect 9 0 11 0;
-#X connect 12 0 13 0;
-#X connect 13 0 7 0;
-#X connect 15 0 23 1;
+#X connect 3 0 4 0;
+#X connect 4 0 31 0;
+#X connect 4 1 5 0;
+#X connect 5 0 6 0;
+#X connect 8 0 13 1;
+#X connect 9 0 14 0;
+#X connect 10 0 14 1;
+#X connect 11 0 28 0;
+#X connect 12 0 9 0;
+#X connect 13 0 34 0;
+#X connect 14 0 35 0;
+#X connect 15 0 37 0;
 #X connect 16 0 24 0;
-#X connect 17 0 24 1;
-#X connect 18 0 38 0;
-#X connect 19 0 16 0;
-#X connect 20 0 23 0;
-#X connect 22 0 27 2;
-#X connect 23 0 15 0;
-#X connect 23 0 19 0;
-#X connect 24 0 17 0;
-#X connect 24 0 30 0;
-#X connect 25 0 23 1;
-#X connect 25 0 24 1;
-#X connect 25 0 31 1;
-#X connect 27 0 35 0;
-#X connect 28 0 34 0;
-#X connect 29 0 31 0;
-#X connect 30 0 28 0;
-#X connect 30 1 22 0;
-#X connect 31 0 32 0;
-#X connect 31 0 33 1;
-#X connect 32 0 31 1;
-#X connect 33 0 27 1;
-#X connect 34 0 36 0;
-#X connect 34 1 29 0;
-#X connect 34 2 33 0;
-#X connect 35 0 21 0;
-#X connect 36 0 27 0;
-#X connect 37 0 0 0;
-#X connect 38 0 20 0;
-#X connect 38 1 25 0;
-#X connect 38 2 39 0;
+#X connect 17 0 23 0;
+#X connect 18 0 20 0;
+#X connect 19 0 17 0;
+#X connect 19 1 39 0;
+#X connect 20 0 36 0;
+#X connect 21 0 20 1;
+#X connect 22 0 16 1;
+#X connect 23 0 25 0;
+#X connect 23 1 18 0;
+#X connect 23 2 22 0;
+#X connect 24 0 38 0;
+#X connect 25 0 16 0;
+#X connect 26 0 0 0;
+#X connect 27 0 38 0;
+#X connect 28 0 29 0;
+#X connect 28 1 32 0;
+#X connect 28 2 15 0;
+#X connect 28 3 27 0;
+#X connect 29 0 38 0;
+#X connect 31 0 30 0;
+#X connect 32 0 33 0;
+#X connect 33 0 13 0;
+#X connect 34 0 12 0;
+#X connect 34 1 8 0;
+#X connect 35 0 19 0;
+#X connect 35 1 10 0;
+#X connect 36 0 22 1;
+#X connect 36 1 21 0;
+#X connect 37 0 20 1;
+#X connect 37 1 14 1;
+#X connect 37 2 13 1;
+#X connect 39 0 16 2;
 #X coords 0 -1 1 1 160 60 1 100 100;
