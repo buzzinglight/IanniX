@@ -70,7 +70,7 @@ public:
 
 class InterfaceOsc : public NetworkInterface {
     Q_OBJECT
-    
+
 public:
     explicit InterfaceOsc(QWidget *parent = 0);
     ~InterfaceOsc();
@@ -117,8 +117,8 @@ private:
     QList<Message> bundleMessages;
     quint64 bundleMessageId;
 private:
-    quint8 bufferI[4096], bufferO[4096];
-    quint16 bufferISize, bufferOSize;
+    quint8 bufferI[4096*4], bufferO[4096*4];
+    qint16 bufferISize, bufferOSize;
     char addressBuffer[255], argumentsBuffer[255];
     quint16 indexAddressBuffer, indexArgumentsBuffer;
 private slots:

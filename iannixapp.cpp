@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
     //iannixApp.installTranslator(&translator);
 
     QString appName    = "IanniX ";
-    QString appVersion = "0.9.17";
+    QString appVersion = "0.9.18";
 
 #ifdef Q_OS_MAC
     appName += "Mac";
@@ -61,8 +61,8 @@ int main(int argc, char *argv[]) {
 
     QCoreApplication::setApplicationName   (appName.trimmed());
     QCoreApplication::setApplicationVersion(appVersion.trimmed());
-    QCoreApplication::setOrganizationName  ("buzzing light");
-    QCoreApplication::setOrganizationDomain("org.iannix.desktop");
+    QCoreApplication::setOrganizationName  ("IanniX");
+    QCoreApplication::setOrganizationDomain("iannix");
 
     iannixApp.launch(argc, argv);
 
@@ -350,6 +350,7 @@ void IanniXApp::setHelp() {
     Help::categories["commands"].infos << HelpInfo(COMMAND_ACTIVE					, tr(""), tr(""), tr("<target> <0|1>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_CURVE				, tr("Objects identification"), tr("Associates a cursor to a curve"), tr("<target> <curve_id>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_START				, tr(""), tr(""), tr("<target> <easing> <0> <loop_pattern>"));
+    Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_FIRE				, tr(""), tr(""), tr("<target> <mode: none, group, all>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_WIDTH				, tr(""), tr(""), tr("<target> <width>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_DEPTH				, tr(""), tr(""), tr("<target> <depth>"));
     Help::categories["commands"].infos << HelpInfo(COMMAND_CURSOR_SPEED				, tr(""), tr(""), tr("<target> <speed>\n<target> auto <duration>\n<target> lock <fixed_speed\n<target> autolock <fixed_duration>"));

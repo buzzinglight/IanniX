@@ -30,6 +30,10 @@
 #include "objects/nxcurve.h"
 #include "objects/nxtrigger.h"
 
+#define CURSOR_FIRE_NONE  0
+#define CURSOR_FIRE_GROUP 1
+#define CURSOR_FIRE_ALL   2
+
 #ifndef M_PI
 #define M_PI    (3.14159265358979323846)
 #endif
@@ -51,6 +55,7 @@ class NxCursor : public NxObject, public NxCursorAbstraction {
     Q_PROPERTY(qreal   setdepth             READ getDepth              WRITE setDepth)
     Q_PROPERTY(qreal   settime              READ getTimeLocal          WRITE setTimeLocal)
     Q_PROPERTY(qreal   settimepercent       READ getTimeLocalPercent   WRITE setTimeLocalPercent)
+    Q_PROPERTY(QString setfire              READ getFire               WRITE setFire)
     Q_PROPERTY(bool    trig                 READ getForceTrig          WRITE setForceTrig)
     Q_PROPERTY(QString settextureactive   READ getTextureActive   WRITE setTextureActive)
     Q_PROPERTY(QString settextureinactive READ getTextureInactive WRITE setTextureInactive)
@@ -71,6 +76,7 @@ private:
     NxEasing easing;
     qreal timeFactor, timeFactorF;
     quint16 nbLoop, nbLoopOld;
+    quint8 fire;
     qreal width, depth;
     NxRect boundsSource, boundsTarget;
     bool previousCursorReliable, previousPreviousCursorReliable;
@@ -242,6 +248,20 @@ public:
     }
     inline quint16 getEasing() const {
         return easing.getType();
+    }
+
+    inline void setFire(const QString _fire) {
+        if     (_fire == "none")     fire = CURSOR_FIRE_NONE;
+        else if(_fire == "group")    fire = CURSOR_FIRE_GROUP;
+        else if(_fire == "all")      fire = CURSOR_FIRE_ALL;
+    }
+    inline const QString getFire() const {
+        if     (fire == CURSOR_FIRE_NONE)  return "none";
+        else if(fire == CURSOR_FIRE_GROUP)  return "group";
+        return "all";
+    }
+    inline quint8 getFireValue() const {
+        return fire;
     }
 
     inline void setTimeStartOffset(qreal _timeStartOffset) {

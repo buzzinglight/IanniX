@@ -30,6 +30,7 @@ NxCursor::NxCursor(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem) :
     curve = 0;
     nextTimeOld = 0;
     timeOld = 0;
+    fire = 2;
     time = 0;
     timeLocal = 0;
     timeLocalOld = 0;

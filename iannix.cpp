@@ -369,7 +369,7 @@ void IanniX::timerTick(bool force) {
 }
 
 void IanniX::timerTick(qreal delta) {
-	Transport::currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
+    Transport::currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
     if(Transport::forceTimeLocal) {
         delta = 0;
         if(schedulerActivity == SchedulerOneShot)
@@ -398,10 +398,11 @@ void IanniX::timerTick(qreal delta) {
             foreach(const NxGroup *group, document->groups) {
                 //Browse active/inactive objects
                 for(quint16 activityIterator = 0 ; activityIterator < ObjectsActivityLenght ; activityIterator++) {
-
-                    //Browse cursors
-                    foreach(const NxObject *objectCursor, group->objects[activityIterator][ObjectsTypeCursor]) {
-                        NxCursor *cursor = (NxCursor*)objectCursor;
+                    //Browse active cursors
+                    QHashIterator<quint16, NxObject*> cursorIterator(group->objects[activityIterator][ObjectsTypeCursor]);
+                    while (cursorIterator.hasNext()) {
+                        cursorIterator.next();
+                        NxCursor *cursor = (NxCursor*)cursorIterator.value();
                         NxCurve  *curve  = cursor->getCurve();
 
                         //Calculate curve
@@ -418,9 +419,8 @@ void IanniX::timerTick(qreal delta) {
                         cursor->setTime(delta * Transport::scoreSpeed);
 
                         //Is cursor active ?
-                        if((!Transport::forceTimeLocal) && (cursor->getActive()) && (((!isGroupSoloActive) && (group->isNotMuted())) || ((isGroupSoloActive) && (group->isSolo()))) && (((!isObjectSoloActive) && (cursor->isNotMuted())) || ((isObjectSoloActive) && (cursor->isSolo())))) {
+                        if((!Transport::forceTimeLocal) && (cursor->getActive()) && (((!isGroupSoloActive) && (group->isNotMuted())) || ((isGroupSoloActive) && (group->isSolo()))) && (((!isObjectSoloActive) && (cursor->isNotMuted())) || ((isObjectSoloActive) && (cursor->isSolo()))))
                             timerTrig(cursor);
-                        }
                     }
                 }
             }
@@ -442,28 +442,40 @@ void IanniX::timerTrig(void *object, bool force) {
         cursor->trig(force);
 
     //Browse documents
-    QHashIterator<QString, NxDocument*> documentIterator(documents);
-    while (documentIterator.hasNext()) {
-        documentIterator.next();
-        NxDocument *document = documentIterator.value();
+    if(cursor->getFireValue() > CURSOR_FIRE_NONE) {
+        QHashIterator<QString, NxDocument*> documentIterator(documents);
+        while (documentIterator.hasNext()) {
+            documentIterator.next();
+            NxDocument *document = documentIterator.value();
 
-        //Browse groups
-        foreach(const NxGroup *group, document->groups) {
-            //Browse active triggers
-            foreach(const NxObject *objectTrigger, group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
-                NxTrigger *trigger = (NxTrigger*)objectTrigger;
+            //Browse groups
+            foreach(const NxGroup *group, document->groups) {
+                //Test if group is the right on
+                if((cursor->getFireValue() == CURSOR_FIRE_ALL) || ((cursor->getFireValue() == CURSOR_FIRE_GROUP) && (cursor->getGroupId() == group->getId()))) {
+                    //Browse active triggers
+                    QHashIterator<quint16, NxObject*> triggerIterator(group->objects[ObjectsActivityActive][ObjectsTypeTrigger]);
+                    while (triggerIterator.hasNext()) {
+                        triggerIterator.next();
+                        NxTrigger *trigger = (NxTrigger*)triggerIterator.value();
 
-                //Check the collision
-                if((cursor->contains(trigger)) && (((!isObjectSoloActive) && (trigger->isNotMuted())) || ((isObjectSoloActive) && (trigger->isSolo()))) && ((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (trigger->getSelected()))))
-                    trigger->trig(cursor);
-            }
+                        //Check the collision
+                        if((cursor->contains(trigger)) && (((!isObjectSoloActive) && (trigger->isNotMuted())) || ((isObjectSoloActive) && (trigger->isSolo()))) && ((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (trigger->getSelected()))))
+                            trigger->trig(cursor);
+                    }
 
-            //Browse active curbes
-            if(cursor->getPerformCollision()) {
-                foreach(const NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
-                    //Check the collision
-                    if((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (objectCurve->getSelected())))
-                        cursor->trig((NxCurve*)objectCurve);
+                    //Browse active curbes
+                    if(cursor->getPerformCollision()) {
+                        QHashIterator<quint16, NxObject*> curveIterator(group->objects[ObjectsActivityActive][ObjectsTypeCurve]);
+                        while (curveIterator.hasNext()) {
+                            curveIterator.next();
+                            NxCurve *objectCurve = (NxCurve*)curveIterator.value();
+
+                            //Check the collision
+                            if((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (objectCurve->getSelected())))
+                                cursor->trig((NxCurve*)objectCurve);
+                        }
+
+                    }
                 }
             }
         }
@@ -1079,7 +1091,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
 
                 if(object) {
                     //String parameter
-                    if((commande == COMMAND_GROUP) || (commande == COMMAND_RESIZE) || (commande == COMMAND_POS) || (commande == COMMAND_POS_TRANSLATE) || (commande == COMMAND_LABEL) || (commande == COMMAND_CURSOR_BOUNDS_SOURCE) || (commande == COMMAND_CURSOR_BOUNDS_TARGET) || (commande == COMMAND_CURVE_EQUATION_PARAM) || (commande == COMMAND_CURVE_EQUATION_PARAM_LIST) || (commande == COMMAND_COLOR_ACTIVE) || (commande == COMMAND_COLOR_INACTIVE) || (commande == COMMAND_COLOR_ACTIVE_HUE) || (commande == COMMAND_COLOR_INACTIVE_HUE) || (commande == COMMAND_COLOR_MULTIPLY) || (commande == COMMAND_COLOR_MULTIPLY_HUE) || (commande == COMMAND_MESSAGE) || (commande == COMMAND_CURVE_ELL) || (commande == COMMAND_CURVE_POINT_SHIFT) || (commande == COMMAND_CURVE_POINT_TRANSLATE) || (commande == COMMAND_CURVE_POINT_TRANSLATE2) || (commande == COMMAND_CURVE_EQUATION) || (commande == COMMAND_TEXTURE_ACTIVE) || (commande == COMMAND_TEXTURE_INACTIVE) || (commande == COMMAND_LINE) || (commande == COMMAND_CURSOR_OFFSET) || (commande == COMMAND_CURSOR_START) || (commande == COMMAND_CURSOR_SPEED)) {
+                    if((commande == COMMAND_GROUP) || (commande == COMMAND_RESIZE) || (commande == COMMAND_POS) || (commande == COMMAND_POS_TRANSLATE) || (commande == COMMAND_LABEL) || (commande == COMMAND_CURSOR_BOUNDS_SOURCE) || (commande == COMMAND_CURSOR_BOUNDS_TARGET) || (commande == COMMAND_CURVE_EQUATION_PARAM) || (commande == COMMAND_CURVE_EQUATION_PARAM_LIST) || (commande == COMMAND_COLOR_ACTIVE) || (commande == COMMAND_COLOR_INACTIVE) || (commande == COMMAND_COLOR_ACTIVE_HUE) || (commande == COMMAND_COLOR_INACTIVE_HUE) || (commande == COMMAND_COLOR_MULTIPLY) || (commande == COMMAND_COLOR_MULTIPLY_HUE) || (commande == COMMAND_MESSAGE) || (commande == COMMAND_CURVE_ELL) || (commande == COMMAND_CURVE_POINT_SHIFT) || (commande == COMMAND_CURVE_POINT_TRANSLATE) || (commande == COMMAND_CURVE_POINT_TRANSLATE2) || (commande == COMMAND_CURVE_EQUATION) || (commande == COMMAND_TEXTURE_ACTIVE) || (commande == COMMAND_TEXTURE_INACTIVE) || (commande == COMMAND_LINE) || (commande == COMMAND_CURSOR_OFFSET) || (commande == COMMAND_CURSOR_START) || (commande == COMMAND_CURSOR_SPEED) || (commande == COMMAND_CURSOR_FIRE)) {
                         if(argc > 2)    object->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 2));
                         if(needOutput)  return object->getProperty(qPrintable(commande));
                     }

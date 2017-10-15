@@ -285,8 +285,7 @@ void InterfaceOsc::parseOSC() {
         //Extract host, port & UDP datagram
         QHostAddress receivedHost;
         quint16 receivedPort;
-        bufferISize = socket->readDatagram((char*)bufferI, 4096, &receivedHost, &receivedPort);
-
+        bufferISize = socket->readDatagram((char*)bufferI, 4096*4, &receivedHost, &receivedPort);
 
         if(enable) {
             quint16 indexBuffer = 0;

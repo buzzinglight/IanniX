@@ -79,6 +79,8 @@ UiInspector::UiInspector(QWidget *parent) :
     Help::syncHelpWith(ui->easingCombo,       COMMAND_CURSOR_START);
     Help::syncHelpWith(ui->patternLine,       COMMAND_CURSOR_START);
 
+    Help::syncHelpWith(ui->fireTriggers,      COMMAND_CURSOR_FIRE);
+
     Help::syncHelpWith(ui->colorCombo1,       COMMAND_COLOR_ACTIVE);
     Help::syncHelpWith(ui->colorCombo1,       COMMAND_COLOR_ACTIVE_HUE);
     Help::syncHelpWith(ui->colorCombo2,       COMMAND_COLOR_INACTIVE);
@@ -154,7 +156,6 @@ UiInspector::UiInspector(QWidget *parent) :
         easing.setType(type);
         ui->easingCombo->addItem(QIcon(easing.getPixmap()), tr("Easing") + QString(" %1").arg(type));
     }
-
 
     //Templates
     ui->equationTemplate->clear();
@@ -351,6 +352,13 @@ void UiInspector::actionInfo() {
             Application::current->execute(QString("%1 selection %2 %3").arg(COMMAND_RESIZE).arg(ui->sizeWSpin->value()).arg(ui->sizeHSpin->value()), ExecuteSourceGui);
         else if((ui->patternLine == sender()) || (ui->easingCombo == sender()))
             Application::current->execute(QString("%1 selection %2 0 %3").arg(COMMAND_CURSOR_START).arg(ui->easingCombo->currentIndex()).arg(ui->patternLine->currentText().split(" - ").at(0)), ExecuteSourceGui);
+        else if(ui->fireTriggers == sender()) {
+            QString action = "";
+            if(ui->fireTriggers->currentIndex() == 0)           action = "none";
+            else if(ui->fireTriggers->currentIndex() == 1)      action = "group";
+            else if(ui->fireTriggers->currentIndex() == 2)      action = "all";
+            Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURSOR_FIRE).arg(action), ExecuteSourceGui);
+        }
 
         else if((ui->equationTemplate == sender()) && (!ui->equationTemplate->itemData(ui->equationTemplate->currentIndex()).toString().isEmpty()))
             Application::current->execute(QString("%1 selection %2").arg(COMMAND_CURVE_EQUATION).arg(ui->equationTemplate->itemData(ui->equationTemplate->currentIndex()).toString()), ExecuteSourceGui);
@@ -596,6 +604,7 @@ void UiInspector::refresh() {
                 if(sender() != ui->patternLine)
                     change(indexObject, ui->patternLine, cursor->getStart().mid(4), prevCursor->getStart().mid(4), false);
                 change(indexObject, ui->easingCombo, cursor->getEasing(), prevCursor->getEasing());
+                change(indexObject, ui->fireTriggers, cursor->getFireValue(), prevCursor->getFireValue());
                 change(indexObject, ui->speedSpin, cursor->getTimeFactor(), prevCursor->getTimeFactor());
                 change(indexObject, ui->speedFSpin, cursor->getTimeFactorF(), prevCursor->getTimeFactorF());
                 change(indexObject, ui->cursorSpeedLock, cursor->getLockPathLength(), prevCursor->getLockPathLength());
@@ -724,6 +733,7 @@ void UiInspector::refresh() {
     ui->patternLine->setVisible(showCursorInfo);
     ui->easingLabel->setVisible(showCursorInfo);
     ui->easingCombo->setVisible(showCursorInfo);
+    ui->fireTriggers->setVisible(showCursorInfo);
     ui->patternLabel->setVisible(showCursorInfo);
     ui->offsetInitialSpin->setVisible(showCursorCurveInfo);
     ui->offsetStartSpin->setVisible(showCursorCurveInfo);

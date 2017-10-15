@@ -37,6 +37,7 @@
 #define COMMAND_TRIGGER_OFF                 "settriggeroff"
 #define COMMAND_ACTIVE                      "setactive"
 #define COMMAND_CURSOR_CURVE                "setcurve"
+#define COMMAND_CURSOR_FIRE                 "setfire"
 #define COMMAND_CURSOR_START                "setpattern"
 #define COMMAND_CURSOR_WIDTH                "setwidth"
 #define COMMAND_CURSOR_DEPTH                "setdepth"

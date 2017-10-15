@@ -85,8 +85,8 @@ public slots:
 };
 
 #ifdef QT5
-//#define USE_OPENGLWIDGET
-#define USE_GLWIDGET
+#define USE_OPENGLWIDGET
+//#define USE_GLWIDGET
 #else
 #define USE_GLWIDGET
 #endif

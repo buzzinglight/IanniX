@@ -22,6 +22,11 @@
 */
 
 #include "nxcurve.h"
+#ifdef Q_OS_WIN
+    #define MUSTR(a) QString(a).toStdWString()
+#else
+    #define MUSTR(a) QString(a).toStdString()
+#endif
 
 Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
 
@@ -67,21 +72,21 @@ void NxCurve::setEquation(const QString &type, const QString &_equation) {
         curveType = CurveTypeEquationCartesian;
 
     try {
-        equationParser.DefineConst("PI",         M_PI);
-        equationParser.DefineConst("TWO_PI",     M_PI*2.);
-        equationParser.DefineConst("THIRD_PI",   M_PI/3.);
-        equationParser.DefineConst("QUARTER_PI", M_PI/4.);
-        equationParser.DefineConst("HALF_PI",    M_PI/2.);
-        equationParser.DefineConst("SQRT1_2",    M_SQRT1_2);
-        equationParser.DefineConst("SQRT2",      M_SQRT2);
-        equationParser.DefineConst("E",          M_E);
-        equationParser.DefineConst("LN2",        M_LN2);
-        equationParser.DefineConst("LN10",       M_LN10);
-        equationParser.DefineConst("LOG2E",      M_LOG2E);
-        equationParser.DefineConst("LOG10E",     M_LOG10E);
+        equationParser.DefineConst(MUSTR("PI"),         M_PI);
+        equationParser.DefineConst(MUSTR("TWO_PI"),     M_PI*2.);
+        equationParser.DefineConst(MUSTR("THIRD_PI"),   M_PI/3.);
+        equationParser.DefineConst(MUSTR("QUARTER_PI"), M_PI/4.);
+        equationParser.DefineConst(MUSTR("HALF_PI"),    M_PI/2.);
+        equationParser.DefineConst(MUSTR("SQRT1_2"),    M_SQRT1_2);
+        equationParser.DefineConst(MUSTR("SQRT2"),      M_SQRT2);
+        equationParser.DefineConst(MUSTR("E"),          M_E);
+        equationParser.DefineConst(MUSTR("LN2"),        M_LN2);
+        equationParser.DefineConst(MUSTR("LN10"),       M_LN10);
+        equationParser.DefineConst(MUSTR("LOG2E"),      M_LOG2E);
+        equationParser.DefineConst(MUSTR("LOG10E"),     M_LOG10E);
 
-        equationParser.DefineVar("t", &equationVariableT);
-        equationParser.SetExpr(qPrintable(equation));
+        equationParser.DefineVar(MUSTR("t"), &equationVariableT);
+        equationParser.SetExpr(MUSTR(equation));
         curveNeedUpdate = true;
         //calcEquation();
         //calcBoundingRect();
@@ -102,7 +107,7 @@ void NxCurve::setEquationParam(const QString &param, qreal value) {
     if(!equationVariables.contains(param)) {
         equationVariables.insert(param, value);
         try {
-            equationParser.DefineVar(qPrintable(param), &equationVariables[param]);
+            equationParser.DefineVar(MUSTR(param), &equationVariables[param]);
         }
         catch (Parser::exception_type &e) {
             qDebug("[MathParser] Param error");
@@ -127,7 +132,11 @@ void NxCurve::calcEquation() {
             }
         }
         catch (Parser::exception_type &e) {
-            qDebug("[MathParser] Curve #%d Calculation error (%ld), %s\n%s", id, e.GetPos(), qPrintable(QString::fromStdString(e.GetMsg())), qPrintable(QString::fromStdString(e.GetExpr())));
+#ifdef Q_OS_WIN
+            qDebug("[MathParser] Curve #%d Calculation error (%d), %s\n%s", id, e.GetPos(), qPrintable(QString::fromStdWString(e.GetMsg())), qPrintable(QString::fromStdWString(e.GetExpr())));
+#else
+            qDebug("[MathParser] Curve #%d Calculation error (%d), %s\n%s", id, e.GetPos(), qPrintable(QString::fromStdString(e.GetMsg())), qPrintable(QString::fromStdString(e.GetExpr())));
+#endif
         }
     }
 }
