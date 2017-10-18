@@ -7,7 +7,7 @@ Build IanniX
 
 All platforms
 -------------
-- Download Qt 4.8 for your plateform (http://qt-project.org/downloads) (4.7 is also compatible)
+- Download Qt 5.x for your plateform (http://qt-project.org/downloads) (4.8 and 4.7 are also compatible, specialy for compilation on Mac 32 bits)
 - Download Qt Creator (http://qt-project.org/downloads)
 - Open IanniX.pro and build!
 
