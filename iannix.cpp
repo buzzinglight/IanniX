@@ -220,6 +220,7 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
         quint16   updatePeriod    = globalSettings->value("updatePeriod").toUInt();
         updateAnonymousId         = globalSettings->value("id")          .toString();
         qDebug("Last update : %s (should update each %d day(s))", qPrintable(updateLastDate.toString("dd/MM/yyyy hh:mm:ss")), updatePeriod);
+
         if((!forbidUpdate) && ((updateLastDate.daysTo(QDateTime::currentDateTime()) >= updatePeriod) || (forceUpdate)))
             checkForUpdates();
     }

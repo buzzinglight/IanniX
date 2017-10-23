@@ -80,9 +80,10 @@ qreal UiMessageBox::getDouble(const QString &title, const QString &description, 
     ui->spinpSpin->setDecimals(decimals);
     ui->spinpSpin->setSingleStep(step);
     ui->spinpSpin->setValue(value);
-    ui->spinpPicture->resize(pixmap.size());
-    ui->spinpPicture->setMinimumSize(pixmap.size());
+    ui->spinpPicture->resize(pixmap.size()/2);
+    ui->spinpPicture->setMinimumSize(pixmap.size()/2);
     ui->spinpPicture->setPixmap(pixmap);
+    ui->spinpPicture->setScaledContents(true);
     ui->spinpSpin->setSuffix(" " + suffix);
     ui->spinpSpin->setFocus();
     setUpdatesEnabled(true);
@@ -165,9 +166,10 @@ int UiMessageBox::display(const QString &title, const QString &description1, con
     ui->updatePlain->setMinimumSize(0, 200);
     ui->updatePlain->setPlainText(description2);
     ui->updateLabel2->setText(description3);
-    ui->updatePicture->setMinimumSize(pixmap.size());
-    ui->updatePicture->resize(pixmap.size());
+    ui->updatePicture->setMinimumSize(pixmap.size()/2);
+    ui->updatePicture->resize(pixmap.size()/2);
     ui->updatePicture->setPixmap(pixmap);
+    ui->updatePicture->setScaledContents(true);
     ui->messageButtons->setStandardButtons(buttons);
     setWindowTitle(title);
     setUpdatesEnabled(true);
