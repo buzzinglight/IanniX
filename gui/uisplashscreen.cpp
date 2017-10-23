@@ -27,7 +27,7 @@ UiSplashScreen::UiSplashScreen(const QPixmap &_pixmap) :
     QFrame(0, Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint) {
     pixmap = _pixmap;
     setAttribute(Qt::WA_TranslucentBackground);
-    setFixedSize(pixmap.size());
+    setFixedSize(pixmap.size()/2);
 
     QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.center() - rect().center());

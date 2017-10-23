@@ -29,6 +29,7 @@ UiEditor::UiEditor(QWidget *parent) :
     ui(new Ui::UiEditor) {
     ui->setupUi(this);
     toolbarButton = 0;
+    firstLaunch = true;
 
     QRect screen = QApplication::desktop()->screenGeometry();
     move(screen.bottomRight().x() - rect().width(), 20);
@@ -83,8 +84,11 @@ void UiEditor::setContent(const QString &content, bool raiseWindow) {
     quint16 scrollPos = ui->jsEditor->verticalScrollBar()->sliderPosition();
     ui->jsEditor->setPlainText(content);
     if((!isVisible()) && (raiseWindow)) {
-        show();
-        Application::current->getMainWindow()->raise();
+        if(!firstLaunch) {
+            show();
+            Application::current->getMainWindow()->raise();
+        }
+        firstLaunch = false;
     }
     QTextCursor cursor = ui->jsEditor->textCursor();
     cursor.setPosition(cursorPos);

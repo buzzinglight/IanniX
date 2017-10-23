@@ -604,12 +604,9 @@ QDialogButtonBox QPushButton {
    </property>
    <property name="iconSize">
     <size>
-     <width>28</width>
-     <height>28</height>
+     <width>32</width>
+     <height>32</height>
     </size>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonIconOnly</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -637,8 +634,8 @@ QDialogButtonBox QPushButton {
    </property>
    <property name="iconSize">
     <size>
-     <width>28</width>
-     <height>28</height>
+     <width>32</width>
+     <height>32</height>
     </size>
    </property>
    <attribute name="toolBarArea">
@@ -666,12 +663,9 @@ QDialogButtonBox QPushButton {
    </property>
    <property name="iconSize">
     <size>
-     <width>28</width>
-     <height>28</height>
+     <width>32</width>
+     <height>32</height>
     </size>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonIconOnly</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>

@@ -108,9 +108,8 @@ void IanniXApp::launch(int &argc, char **argv) {
     qDebug("\tApplication: %s", qPrintable(Application::pathApplication.absoluteFilePath()));
     qDebug("\tCurrent    : %s", qPrintable(Application::pathCurrent    .absoluteFilePath()));
     qDebug("Arguments");
-    for(quint16 i = 0 ; i < argc ; i++) {
+    for(quint16 i = 0 ; i < argc ; i++)
         qDebug("\t%2d=\t%s", i, argv[i]);
-    }
     /*
     if(Application::pathCurrent.absoluteFilePath().startsWith("/Users/Guillaume/Documents/buzzinglight/Projets/Coduys/IanniX/IanniX"))
         generateHelp();

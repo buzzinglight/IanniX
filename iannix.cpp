@@ -36,6 +36,7 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
 
 #ifdef QT5
     OpenGlDrawing::dpi = QWindow().devicePixelRatio();
+    qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
     Render::textures   = new UiTextureItems();
     Render::colors     = new UiColorItems();

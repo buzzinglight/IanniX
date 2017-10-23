@@ -61,6 +61,7 @@ public slots:
 
 public:
     QAction *toolbarButton;
+    bool firstLaunch;
 protected:
     void changeEvent(QEvent *e);
     void showEvent(QShowEvent *);
