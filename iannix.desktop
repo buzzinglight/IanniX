@@ -1,10 +1,10 @@
 [Desktop Entry]
 Name=IanniX
 Comment=Graphical sequencer for digital art
-Comment[fr]=Séquenceur graphique pour l'art numérique
-Exec=iannix
-Icon=/usr/share/pixmaps/iannix.png
+Exec=IanniX
+Icon=/usr/share/pixmaps/IanniX.png
 Terminal=false
 Type=Application
 X-MultipleArgs=false
 Categories=Audio;AudioVideoEditing;AudioVideo;Video;Qt;
+Name[en_US]=IanniX.desktop

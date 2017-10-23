@@ -69,10 +69,11 @@ public:
 
 public:
     UiBool visibility;
+    QHash<qint64, QString> clipboards;
 public slots:
     void statusHelp(QString _statusText);
     void messageHelp(QString _messageText);
-    void linkClicked(QUrl);
+    void linkClicked(const QUrl &);
 
 protected:
     void timerEvent(QTimerEvent *);

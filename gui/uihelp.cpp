@@ -37,7 +37,9 @@ UiHelp::UiHelp(QWidget *parent) :
     visibility      = true;
     if(parent == 0) {
         statusHelpWidget = this;
-        setWindowFlags(Qt::Tool);
+        setWindowFlags(Qt::Dialog);
+        setWindowFlag(Qt::WindowMaximizeButtonHint, false);
+        setWindowFlag(Qt::WindowMinimizeButtonHint, false);
         setWindowOpacity(0.9);
     }
     startTimer(150);
@@ -186,9 +188,20 @@ void UiHelp::statusHelp() {
                 html += QString("<span class='action'>%1</span><br/>").arg(messageDescription.replace("\n", "<br/>"));
                 html += messageVerbose;
                 html += "<span class='action'>";
-                html += QString("  &nbsp;<a href='%1 | Copied to clipboard! You can now paste this message in a script (through run() function) or in an OSC message.'>&gt;&nbsp;Copy</a>").arg(messageText);
-                html += QString(" /&nbsp;<a href='%1 | Copied to clipboard! Open a Max patch and choose Edit > Paste. It will automatically create objects to interact with IanniX.'>&gt;&nbsp;for MaxMSP</a>").arg(QString("{ \"boxes\" : [ { \"box\" : { \"maxclass\" : \"flonum\", \"outlettype\" : [ \"float\", \"bang\" ], \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 58.0, 50.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-5\", \"numoutlets\" : 2, \"parameter_enable\" : 0 }  } , { \"box\" : { \"maxclass\" : \"message\", \"text\" : \"/iannix/%1\", \"outlettype\" : [ \"\" ], \"fontname\" : \"Arial\", \"numinlets\" : 2, \"patching_rect\" : [ 37.0, 85.0, 95.0, 18.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-3\", \"numoutlets\" : 1 }  } , { \"box\" : { \"maxclass\" : \"newobj\", \"text\" : \"udpsend 127.0.0.1 %2\", \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 110.0, 140.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-1\", \"numoutlets\" : 0 }  }  ], \"lines\" : [ { \"patchline\" : { \"source\" : [ \"obj-5\", 0 ], \"destination\" : [ \"obj-3\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  } , { \"patchline\" : { \"source\" : [ \"obj-3\", 0 ], \"destination\" : [ \"obj-1\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  }  ], \"appversion\" : { \"major\" : 6, \"minor\" : 0, \"revision\" : 8 }  } ").arg(parametersMessage).arg(oscPort));
-                html += QString(" /&nbsp;<a href='%1 | Copied to clipboard! Open a Processing sketch with IanniX class (provided with IanniX). Paste the code where you want to interact with IanniX.'>&gt;&nbsp;for Processing</a>").arg(QString("iannix.send(%1);").arg(codeMessage));
+                qint64 clipboardsKey;
+
+                clipboardsKey = QDateTime::currentMSecsSinceEpoch();
+                clipboards.insert(clipboardsKey, QString("%1 | Copied to clipboard! You can now paste this message in a script (through run() function) or in an OSC message.").arg(messageText));
+                html += QString("  &nbsp;<a href='clipboard%1'>&gt;&nbsp;Copy</a>").arg(clipboardsKey);
+
+                clipboardsKey--;
+                clipboards.insert(clipboardsKey, QString("%1 | Copied to clipboard! Open a Max patch and choose Edit > Paste. It will automatically create objects to interact with IanniX.").arg(QString("{ \"boxes\" : [ { \"box\" : { \"maxclass\" : \"flonum\", \"outlettype\" : [ \"float\", \"bang\" ], \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 58.0, 50.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-5\", \"numoutlets\" : 2, \"parameter_enable\" : 0 }  } , { \"box\" : { \"maxclass\" : \"message\", \"text\" : \"/iannix/%1\", \"outlettype\" : [ \"\" ], \"fontname\" : \"Arial\", \"numinlets\" : 2, \"patching_rect\" : [ 37.0, 85.0, 95.0, 18.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-3\", \"numoutlets\" : 1 }  } , { \"box\" : { \"maxclass\" : \"newobj\", \"text\" : \"udpsend 127.0.0.1 %2\", \"fontname\" : \"Arial\", \"numinlets\" : 1, \"patching_rect\" : [ 37.0, 110.0, 140.0, 20.0 ], \"fontsize\" : 12.0, \"id\" : \"obj-1\", \"numoutlets\" : 0 }  }  ], \"lines\" : [ { \"patchline\" : { \"source\" : [ \"obj-5\", 0 ], \"destination\" : [ \"obj-3\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  } , { \"patchline\" : { \"source\" : [ \"obj-3\", 0 ], \"destination\" : [ \"obj-1\", 0 ], \"hidden\" : 0, \"disabled\" : 0 }  }  ], \"appversion\" : { \"major\" : 6, \"minor\" : 0, \"revision\" : 8 }  } ").arg(parametersMessage).arg(oscPort)));
+                html += QString(" /&nbsp;<a href='clipboard%1'>&gt;&nbsp;for MaxMSP</a>").arg(clipboardsKey);
+
+                clipboardsKey--;
+                clipboards.insert(clipboardsKey, QString("%1 | Copied to clipboard! Open a Processing sketch with IanniX class (provided with IanniX). Paste the code where you want to interact with IanniX.").arg(QString("iannix.send(%1);").arg(codeMessage)));
+                html += QString(" /&nbsp;<a href='clipboard%1'>&gt;&nbsp;for Processing</a>").arg(clipboardsKey);
+
                 html += "</span><br/>";
                 html += QString("<span class='action'>%1 %2</span><br/>").arg(messageTexts.at(i).second.keyword).arg(messageSyntax.replace(">", "&gt;").replace("<", "&lt;").replace("\n", "<br/>"));
                 html += "<br/>";
@@ -300,20 +313,23 @@ void UiHelp::scriptHelp(const QString &looking, const QStringList &lookCategorie
 }
 
 
-void UiHelp::linkClicked(QUrl url) {
-    QStringList urls = url.toString().split(" | ");
+void UiHelp::linkClicked(const QUrl &url) {
+    QString urlString = url.toString();
+    if(urlString.startsWith("clipboard")) {
+        qint64 clipboardsKey = urlString.remove("clipboard").toLong();
+        QStringList clips = clipboards.value(clipboardsKey).split("|");
+        if(clips.length()) {
+            if((currentTextEdit) || (currentCombo)) {
+                if(currentTextEdit)
+                    currentTextEdit->textCursor().insertText(clips.at(0).trimmed());
+                if(currentCombo)
+                    currentCombo->setEditText(currentCombo->currentText() + clips.at(0).trimmed());
+            }
+            else
+                QApplication::clipboard()->setText(clips.at(0).trimmed());
 
-    if(urls.count()) {
-        if((currentTextEdit) || (currentCombo)) {
-            if(currentTextEdit)
-                currentTextEdit->textCursor().insertText(urls.first());
-            if(currentCombo)
-                currentCombo->setEditText(currentCombo->currentText() + urls.first());
+            if(clips.length())
+                (new UiMessageBox())->display(tr("Help Center"), clips.at(1).trimmed());
         }
-        else
-            QApplication::clipboard()->setText(urls.first());
-
-        if(urls.count() > 1)
-            (new UiMessageBox())->display(tr("Help Center"), urls.at(1));
     }
 }

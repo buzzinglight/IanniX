@@ -72,7 +72,6 @@ void InterfaceOsc::portChanged() {
     if(socket)
         delete socket;
     socket = new QUdpSocket(this);
-    socket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
     connect(socket, SIGNAL(readyRead()), SLOT(parseOSC()));
 
     if(socket->bind(port))  ui->port->setStyleSheet(ihmFeedbackOk);
@@ -367,6 +366,8 @@ void InterfaceOsc::parseOSC() {
                     }
 
                     MessageManager::incomingMessage(MessageIncomming("osc", receivedHost.toString(), receivedPort, commandDestination, command, commandArguments));
+                    qDebug("%s", qPrintable(commandDestination));
+                    //QApplication::processEvents();
 
                     /*
                     Application::synchroLoopGuard = this;
@@ -391,7 +392,8 @@ void InterfaceOsc::parseOSC() {
 }
 
 void InterfaceOsc::networkSynchro(bool start) {
-    if(start)   networkSynchro(QString(COMMAND_PLAY));
+    if(start)
+        networkSynchro(QString(COMMAND_PLAY));
     else {
         if(Transport::timeLocal == 0)
             networkSynchro(QString(COMMAND_FF));
