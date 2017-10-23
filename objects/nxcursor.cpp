@@ -314,9 +314,9 @@ void NxCursor::paint() {
         if((0.0F <= time) && (time <= 1.0F) && (start.count()) && (start.at(nbLoop % start.count()) != 0)) {
             //Label
             if((Render::paintThisGroup) && (Application::paintLabel || selectedHover) && (!label.isEmpty()))
-                Application::render->renderText(cursorPos.x() + 0.2, cursorPos.y() + 0.2, 0, QString::number(id) + " - " + label.toUpper(), Application::renderFont, true);
+                Application::render->renderText(cursorPos.x() + 0.2, cursorPos.y() + 0.2, cursorPos.z(), QString::number(id) + " - " + label.toUpper(), Application::renderFont, true);
             else if(selectedHover)
-                Application::render->renderText(cursorPos.x() + 0.2, cursorPos.y() + 0.2, 0, QString::number(id), Application::renderFont, true);
+                Application::render->renderText(cursorPos.x() + 0.2, cursorPos.y() + 0.2, cursorPos.z(), QString::number(id), Application::renderFont, true);
             if((selectedHover) && (!isDrag)) {
                 qreal startY = -0.1;
                 foreach(const QString & messageLabelItem, messageLabel) {
