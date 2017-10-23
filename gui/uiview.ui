@@ -620,9 +620,10 @@ QDialogButtonBox QPushButton {
    <addaction name="actionDrawFreeCurve"/>
    <addaction name="actionDrawPointCurve"/>
    <addaction name="actionAddMathCurve"/>
-   <addaction name="actionAddFreeCursor"/>
    <addaction name="separator"/>
+   <addaction name="actionAddFreeCursor"/>
    <addaction name="actionAddTimeline"/>
+   <addaction name="separator"/>
    <addaction name="actionDrawFreeCurveSimple"/>
    <addaction name="actionDrawPointCurveSimple"/>
    <addaction name="actionAddMathCurveSimple"/>
@@ -644,18 +645,15 @@ QDialogButtonBox QPushButton {
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionLockPos"/>
    <addaction name="actionPlaySelected"/>
-   <addaction name="separator"/>
    <addaction name="actionAllow_triggers_selection"/>
    <addaction name="actionAllow_curves_selection"/>
    <addaction name="actionAllow_cursors_selection"/>
    <addaction name="separator"/>
+   <addaction name="actionLockPos"/>
    <addaction name="actionToggleLabel"/>
    <addaction name="actionSnapXGrid"/>
    <addaction name="actionSnapYGrid"/>
-   <addaction name="separator"/>
-   <addaction name="actionLight"/>
   </widget>
   <widget class="QToolBar" name="toolBarWindow">
    <property name="windowTitle">
@@ -678,6 +676,8 @@ QDialogButtonBox QPushButton {
    <addaction name="actionShowEditor"/>
    <addaction name="actionShowTimer"/>
    <addaction name="actionShowHelp"/>
+   <addaction name="separator"/>
+   <addaction name="actionLight"/>
    <addaction name="separator"/>
    <addaction name="actionPatchesFolder"/>
   </widget>

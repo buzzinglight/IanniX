@@ -93,8 +93,8 @@ UiView::UiView(QWidget *parent) :
     Application::colorTheme            .setAction(ui->actionLight,                    "guiColorTheme");
     Application::paintAxisGrid         .setAction(ui->actionGrid,                     "guiPaintAxisGrid");
     Application::paintLabel            .setAction(ui->actionToggleLabel,              "guiPaintLabel");
-    Application::mouseSnapX            .setAction(ui->actionSnapXGrid,                "guiMouseSnapX");
-    Application::mouseSnapY            .setAction(ui->actionSnapYGrid,                "guiMouseSnapY");
+    Application::mouseSnapX            .setAction(ui->actionSnapXGrid);
+    Application::mouseSnapY            .setAction(ui->actionSnapYGrid);
     Application::allowLockPos          .setAction(ui->actionLockPos,                  "guiAllowLockPos");
     Application::allowSelectionCursors .setAction(ui->actionAllow_cursors_selection,  "guiAllowSelectionCursors");
     Application::allowSelectionCurves  .setAction(ui->actionAllow_curves_selection,   "guiAllowSelectionCurves");
