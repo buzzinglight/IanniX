@@ -317,19 +317,23 @@ void UiHelp::linkClicked(const QUrl &url) {
     QString urlString = url.toString();
     if(urlString.startsWith("clipboard")) {
         qint64 clipboardsKey = urlString.remove("clipboard").toLong();
-        QStringList clips = clipboards.value(clipboardsKey).split("|");
-        if(clips.length()) {
-            if((currentTextEdit) || (currentCombo)) {
-                if(currentTextEdit)
-                    currentTextEdit->textCursor().insertText(clips.at(0).trimmed());
-                if(currentCombo)
-                    currentCombo->setEditText(currentCombo->currentText() + clips.at(0).trimmed());
-            }
-            else
-                QApplication::clipboard()->setText(clips.at(0).trimmed());
+        if(clipboards.contains(clipboardsKey)) {
+            QStringList clips = clipboards.value(clipboardsKey).split("|");
+            if(clips.length()) {
+                if((currentTextEdit) || (currentCombo)) {
+                    if(currentTextEdit)
+                        currentTextEdit->textCursor().insertText(clips.at(0).trimmed());
+                    if(currentCombo)
+                        currentCombo->setEditText(currentCombo->currentText() + clips.at(0).trimmed());
+                }
+                else
+                    QApplication::clipboard()->setText(clips.at(0).trimmed());
 
-            if(clips.length())
-                (new UiMessageBox())->display(tr("Help Center"), clips.at(1).trimmed());
+                if(clips.length())
+                    (new UiMessageBox())->display(tr("Help Center"), clips.at(1).trimmed());
+            }
         }
+        else
+            qDebug("Big error… %lld", clipboardsKey);
     }
 }
