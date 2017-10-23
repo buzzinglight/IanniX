@@ -96,7 +96,7 @@ Render::Render(QWidget *parent, void*)
     //sf.setRenderableType(QSurfaceFormat::OpenGL);
     //sf.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     //sf.setOption(QSurfaceFormat::DeprecatedFunctions);
-    sf.setSamples(2);
+    sf.setSamples(4./devicePixelRatioFScale());
     setFormat(sf);
 }
 #endif
