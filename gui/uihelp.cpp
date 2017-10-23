@@ -236,7 +236,11 @@ void UiHelp::scriptHelp(const QString &looking, const QStringList &lookCategorie
         html += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">";
         html += "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">";
         html += "body   { background-color: #EEEDE8; font-family: Museo Sans, Museo Sans 500, Arial; font-size: 11px; }";
+#ifdef Q_OS_WIN
         html += ".code  { font-family:Monaco, Lucida Console, Monospace; font-size: 11px; }";
+#else
+        html += ".code  { font-size: 11px; }";
+#endif
         html += ".bold  {  }";
         html += ".titre { font-size: 14px; }";
         html += ".description { background-color: rgb(227,226,220); }";
@@ -244,7 +248,7 @@ void UiHelp::scriptHelp(const QString &looking, const QStringList &lookCategorie
         html += ".example     { background-color: rgb(227,226,220); }";
         html += ".snippet     { background-color: rgb(227,226,220); }";
         html += ".sstitre     { }";
-        html += ".action      { font-size: 9px;}";
+        html += ".action      { font-size: 10px;}";
         html += ".category    { font-size: 16px;  }";
         html += ".hint        { color: rgb(115,159,89); }";
         html += "a	          { color: rgb(244,98,0); text-decoration: none; }";
@@ -316,7 +320,7 @@ void UiHelp::scriptHelp(const QString &looking, const QStringList &lookCategorie
 void UiHelp::linkClicked(const QUrl &url) {
     QString urlString = url.toString();
     if(urlString.startsWith("clipboard")) {
-        qint64 clipboardsKey = urlString.remove("clipboard").toLong();
+        qint64 clipboardsKey = urlString.remove("clipboard").toLongLong();
         if(clipboards.contains(clipboardsKey)) {
             QStringList clips = clipboards.value(clipboardsKey).split("|");
             if(clips.length()) {

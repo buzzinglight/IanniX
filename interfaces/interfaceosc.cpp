@@ -28,7 +28,7 @@ InterfaceOsc::InterfaceOsc(QWidget *parent) :
     NetworkInterface(parent),
     ui(new Ui::InterfaceOsc) {
     ui->setupUi(this);
-    connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
+    //connect(ui->examples, SIGNAL(released()), SLOT(openExamples()));
     socket = 0;
 
     bonjourMenu = new QMenu(this);
@@ -72,7 +72,7 @@ void InterfaceOsc::portChanged() {
     if(socket)
         delete socket;
     socket = new QUdpSocket(this);
-    connect(socket, SIGNAL(readyRead()), SLOT(parseOSC()));
+    //connect(socket, SIGNAL(readyRead()), SLOT(parseOSC()));
 
     if(socket->bind(port))  ui->port->setStyleSheet(ihmFeedbackOk);
     else                    ui->port->setStyleSheet(ihmFeedbackNok);
@@ -366,7 +366,6 @@ void InterfaceOsc::parseOSC() {
                     }
 
                     MessageManager::incomingMessage(MessageIncomming("osc", receivedHost.toString(), receivedPort, commandDestination, command, commandArguments));
-                    qDebug("%s", qPrintable(commandDestination));
                     //QApplication::processEvents();
 
                     /*

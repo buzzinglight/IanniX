@@ -121,7 +121,7 @@ private:
     qint16 bufferISize, bufferOSize;
     char addressBuffer[255], argumentsBuffer[255];
     quint16 indexAddressBuffer, indexArgumentsBuffer;
-private slots:
+public slots:
     void parseOSC();
 
 public:

@@ -122,8 +122,9 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     inspector->setMousePos(NxPoint(0, 0));
 
     //Interfaces
+    interfaceOsc = new InterfaceOsc();
+    MessageManager::addNetworkInterface(MessagesTypeOsc,    interfaceOsc);
     MessageManager::addNetworkInterface(MessagesTypeDirect, new InterfaceDirect());
-    MessageManager::addNetworkInterface(MessagesTypeOsc,    new InterfaceOsc   ());
     MessageManager::addNetworkInterface(MessagesTypeUdp,    new InterfaceUdp   ());
     MessageManager::addNetworkInterface(MessagesTypeTcp,    new InterfaceTcp   ());
     MessageManager::addNetworkInterface(MessagesTypeHttp,   new InterfaceHttp  ());
@@ -361,6 +362,8 @@ void IanniX::timerTick() {
     timerTick(false);
 }
 void IanniX::timerTick(bool force) {
+    interfaceOsc->parseOSC();
+
     qreal renderMeasureAbsoluteVal = Transport::renderMeasureAbsolute.elapsed() / 1000.0F;
     qreal delta = renderMeasureAbsoluteVal - Transport::renderMeasureAbsoluteValOld;
     Transport::renderMeasureAbsoluteValOld = renderMeasureAbsoluteVal;

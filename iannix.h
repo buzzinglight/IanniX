@@ -166,6 +166,7 @@ private:
     ExtWacomManager  *wacom;
 #endif
 public:
+    InterfaceOsc *interfaceOsc;
     bool projectIsLoaded;
     QString projectToLoad;
     void loadProject(const QString & projectFile = "");
