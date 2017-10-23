@@ -36,7 +36,7 @@ function makeWithScript() {
 		addCurve(index);
 
 	//Colors
-	run("setColor lines     0 187 255 200");
+	run("setColor lines     0 187 255 255");
 	run("setColor cursors 255 135   0 255");
 }
 
@@ -62,7 +62,7 @@ function addCurve(index) {
 
 /*
  *	//APP VERSION: NEVER EVER REMOVE THIS LINE
- *	Made with IanniX 0.9.0
+ *	Made with IanniX 0.9.18
  *	//APP VERSION: NEVER EVER REMOVE THIS LINE
  */
 

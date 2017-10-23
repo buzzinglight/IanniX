@@ -24,12 +24,14 @@
 #ifndef UIRENDERPREVIEW_H
 #define UIRENDERPREVIEW_H
 
-#ifdef QT4
+#ifdef USE_GLWIDGET
 #include <QGLWidget>
+#include <QGLFormat>
 #else
 #include <QOpenGLWidget>
+#include <QGLWidget>
+#include <QOpenGLFunctions>
 #endif
-#include <QGLFormat>
 
 class NxEventsPropagation {
 public:

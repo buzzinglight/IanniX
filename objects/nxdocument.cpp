@@ -321,8 +321,8 @@ void NxDocument::askFileClose() {
 void NxDocument::restoreDefaults() {
     Render::defaultColors.insert("background_texture_tint"          , QColor(255, 255, 255, 255));
     Render::defaultColors.insert("darktheme_background"             , QColor(  0,   0,   0, 255));
-    Render::defaultColors.insert("darktheme_grid"                   , QColor(255, 255, 255,  43));
-    Render::defaultColors.insert("darktheme_axis"                   , QColor(255, 255, 255,  28));
+    Render::defaultColors.insert("darktheme_grid"                   , QColor(255, 255, 255,  35));
+    Render::defaultColors.insert("darktheme_axis"                   , QColor(255, 255, 255,  25));
     Render::defaultColors.insert("darktheme_gui_gridSnap"           , QColor( 90,  25,  15, 255));
     Render::defaultColors.insert("darktheme_gui_axisSnap"           , QColor( 90,  25,  15, 255));
     Render::defaultColors.insert("darktheme_gui_selection"          , QColor(255, 255, 255,  40));
@@ -337,8 +337,8 @@ void NxDocument::restoreDefaults() {
     Render::defaultColors.insert("darktheme_simple_curve_active"    , QColor(115, 159,  89, 255));
     Render::defaultColors.insert("darktheme_simple_curve_inactive"  , QColor(115, 159,  89, 255));
     Render::defaultColors.insert("lighttheme_background"            , QColor(242, 241, 237, 255));
-    Render::defaultColors.insert("lighttheme_grid"                  , QColor(  0,   0,   0,  64));
-    Render::defaultColors.insert("lighttheme_axis"                  , QColor(  0,   0,   0,  64));
+    Render::defaultColors.insert("lighttheme_grid"                  , QColor(  0,   0,   0,  15));
+    Render::defaultColors.insert("lighttheme_axis"                  , QColor(  0,   0,   0,  10));
     Render::defaultColors.insert("lighttheme_gui_gridSnap"          , QColor(255, 190, 190, 255));
     Render::defaultColors.insert("lighttheme_gui_axisSnap"          , QColor(255, 190, 190, 255));
     Render::defaultColors.insert("lighttheme_gui_selection"         , QColor(  0,   0,   0,  40));

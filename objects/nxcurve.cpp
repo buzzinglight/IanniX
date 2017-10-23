@@ -201,11 +201,11 @@ void NxCurve::paint() {
         //Label
         if((Render::paintThisGroup) && (Application::paintLabel || selectedHover) && (!label.isEmpty())) {
             NxPoint pt = getPointAt(0);
-            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id) + " - " + label.toUpper(), Application::renderFont);
+            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id) + " - " + label.toUpper(), Application::renderFont, true);
         }
         else if(selectedHover) {
             NxPoint pt = getPointAt(0);
-            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id), Application::renderFont);
+            Application::render->renderText(pt.x() + 0.1, pt.y() + 0.1, pt.z(), QString::number(id), Application::renderFont, true);
         }
 
         //Draw
@@ -215,7 +215,7 @@ void NxCurve::paint() {
                 setPointAt(0, getPathPointsAt(0), getPathPointsAt(0).c1, getPathPointsAt(0).c2, getPathPointsAt(0).smooth);
             */
             glNewList(glListCurve, GL_COMPILE_AND_EXECUTE);
-            glLineWidth(size);
+            glLineWidth(OpenGlDrawing::dpi * size);
             glEnable(GL_LINE_STIPPLE);
             glLineStipple(lineFactor, lineStipple);
 
@@ -266,7 +266,7 @@ void NxCurve::paint() {
                         }
 
                         //if((selected) && (indexPoint == selectedPathPointPoint))
-                        //    UiRenderOptions::render->renderText(p1.x(), p1.y(), p1.z(), QString::number(indexPoint), UiRenderOptions::renderFont);
+                        //    UiRenderOptions::render->renderText(p1.x(), p1.y(), p1.z(), QString::number(indexPoint), UiRenderOptions::renderFont, true);
                     }
                 }
             }
@@ -284,7 +284,7 @@ void NxCurve::paint() {
 
         //Selection
         if((selected) && (curveType == CurveTypePoints)) {
-            glLineWidth(1);
+            glLineWidth(OpenGlDrawing::dpi);
             for(quint16 indexPoint = 0 ; indexPoint < pathPoints.count() ; indexPoint++) {
                 NxPoint p1 = getPathPointsAt(indexPoint);
 
@@ -734,7 +734,10 @@ NxPoint NxCurve::getPointAt(qreal val, bool absoluteTime) {
             }
             lengthOld = length;
         }
-        return getPointAt(index, (lengthTarget - lengthOld) / (length - lengthOld));
+        if((length - lengthOld) != 0)
+            return getPointAt(index, (lengthTarget - lengthOld) / (length - lengthOld));
+        else
+            return getPointAt(index, 0);
     }
     return NxPoint();
 }

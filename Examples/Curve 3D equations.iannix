@@ -36,8 +36,8 @@ function makeWithScript() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");
 	run("setPattern current 0 0 1 -1");
-    run("setWidth   current 1.5");
-    run("setDepth   current 1.5");
+    run("setWidth   current 1");
+    run("setDepth   current 1");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_yPos");
 	//Add trigger
 	run("add trigger " + (2000 + id));
@@ -56,8 +56,8 @@ function makeWithScript() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setWidth   current 1.5");
-    run("setDepth   current 1.5");
+    run("setWidth   current 1");
+    run("setDepth   current 1");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_yPos");
 	//Add trigger
 	run("add trigger " + (2000 + id));
@@ -76,8 +76,8 @@ function makeWithScript() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setWidth   current 1.5");
-    run("setDepth   current 1.5");
+    run("setWidth   current 1");
+    run("setDepth   current 1");
 	//Add trigger
 	run("add trigger " + (2000 + id));
 	run("setPos      current 8 7 0");
@@ -97,8 +97,8 @@ function makeWithScript() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setWidth   current 1.5");
-    run("setDepth   current 1.5");
+    run("setWidth   current 1");
+    run("setDepth   current 1");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param1 cursor_xPos, direct:// setEquationParam 1004 param2 cursor_yPos");
 	//Add trigger
 	run("add trigger " + (2000 + id));
@@ -118,8 +118,8 @@ function makeWithScript() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setWidth   current 1.5");
-    run("setDepth   current 1.5");
+    run("setWidth   current 1");
+    run("setDepth   current 1");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param1 cursor_xPos, direct:// setEquationParam 1005 param2 cursor_yPos");
 	//Add trigger
 	run("add trigger " + (2000 + id));
@@ -140,8 +140,8 @@ function makeWithScript() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setWidth   current 1.5");
-    run("setDepth   current 1.5");
+    run("setWidth   current 1");
+    run("setDepth   current 1");
 	//Add trigger
 	run("add trigger " + (2000 + id));
 	run("setPos      current 8 -4 0");
@@ -161,8 +161,8 @@ function makeWithScript() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setWidth   current 1.5");
-    run("setDepth   current 1.5");
+    run("setWidth   current 1");
+    run("setDepth   current 1");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_xPos");
 	//Add trigger
 	run("add trigger " + (2000 + id));
@@ -182,8 +182,8 @@ function makeWithScript() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setWidth   current 1.5");
-    run("setDepth   current 1.5");
+    run("setWidth   current 1");
+    run("setDepth   current 1");
 	run("setMessage current 20, direct:// setEquationParam " + (1000 + id + 1) + " param cursor_xPos");
 	//Add trigger
 	run("add trigger " + (2000 + id));
@@ -203,8 +203,8 @@ function makeWithScript() {
 	run("setCurve   current lastCurve");	
 	run("setSpeed   current autolock 20");	
 	run("setPattern current 0 0 1 -1");
-    run("setWidth   current 1.5");
-    run("setDepth   current 1.5");
+    run("setWidth   current 1");
+    run("setDepth   current 1");
 	//Add trigger
 	run("add trigger " + (2000 + id));
 	run("setPos      current 7 3 0");
@@ -214,7 +214,7 @@ function makeWithScript() {
 
 /*
  *	//APP VERSION: NEVER EVER REMOVE THIS LINE
- *	Made with IanniX 0.9.0
+ *	Made with IanniX 0.9.18
  *	//APP VERSION: NEVER EVER REMOVE THIS LINE
  */
 

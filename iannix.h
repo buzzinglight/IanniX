@@ -41,6 +41,7 @@
 #include <QDomDocument>
 #include <QFileOpenEvent>
 #include <QDesktopServices>
+#include <QWindow>
 #include <time.h>
 #include "misc/application.h"
 #include "gui/uimessagebox.h"

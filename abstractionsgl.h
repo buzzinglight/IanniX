@@ -1,7 +1,6 @@
 #ifndef ABSTRACTIONSGL_H
 #define ABSTRACTIONSGL_H
 
-#include <QGLWidget>
 #include <QObject>
 #include <QPixmap>
 #include <QImage>
@@ -11,6 +10,15 @@
 #include <QDateTime>
 #include <QUrl>
 #include <QFile>
+#include <QPainter>
+#ifdef USE_GLWIDGET
+#include <QGLWidget>
+#include <QGLFormat>
+#else
+#include <QGLWidget>
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
+#endif
 #ifdef VLC_INSTALLED
 #include "drivers/vlc.h"
 #endif
@@ -377,6 +385,7 @@ private:
 
 class OpenGlDrawing {
 public:
+    static qreal dpi;
     static void drawRectCentred(const QSizeF  &center, const QSizeF &size, const OpenGlColors &colors, OpenGlTexture *texture = 0, qreal alpha = 1., qreal selected = 0, qreal croppingMode = -1, bool ninePatch = false, QRectF partialTextureRect = QRectF(0,0,-1,-1));
     static void drawRectCentred(const QPointF &center, const QSizeF &size, const OpenGlColors &colors, OpenGlTexture *texture = 0, qreal alpha = 1., qreal selected = 0, qreal croppingMode = -1, bool ninePatch = false, QRectF partialTextureRect = QRectF(0,0,-1,-1));
     static void drawRect(OpenGlTexture *texture, const OpenGlColors &colors = OpenGlColors(Qt::white), qreal alpha = 1., qreal selected = 0, qreal croppingMode = -1, bool ninePatch = false, QRectF partialTextureRect = QRectF(0,0,-1,-1));

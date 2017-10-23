@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>775</width>
+    <width>786</width>
     <height>60</height>
    </rect>
   </property>
@@ -783,7 +783,7 @@ QPushButton:disabled {
             <string notr="true">009 fps</string>
            </property>
            <property name="text">
-            <string notr="true">50 fps</string>
+            <string notr="true">60 fps</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>

@@ -34,8 +34,6 @@
 #include <QtCore/qmath.h>
 #include <QDir>
 #include <QClipboard>
-#include <QGLWidget>
-#include <QGLShaderProgram>
 #include "interfaces/interfacesyphon.h"
 #include "objects/nxdocument.h"
 #include "misc/application.h"
@@ -88,15 +86,13 @@ private:
     qreal scale, scaleDest;
     QList<QImage> capturedFrames;
     bool capturedFramesStart;
-private:
-    QGLShaderProgram *shaderProgram;
 public:
     QString legend;
     QColor legendColor;
     qreal legendSize;
 
 public:
-    inline void startRenderTimer() { timer->start(20); }
+    inline void startRenderTimer() { timer->start(16); }
 
 
     inline UiRenderSelection *getSelection() {
@@ -107,6 +103,10 @@ public:
     }
     inline bool isSelection() const {
         return (selection.count() > 0);
+    }
+
+    inline qreal getAutoScale(qreal factor) {
+        return 0.15 * ((1. - factor) + (Render::zoomLinear/1.3) * factor);
     }
 
 
@@ -199,6 +199,7 @@ private:
 signals:
 
 public slots:
+    void cameraPerspectiveChanged() { scaleDest = (cameraPerspective)?(3):(1); }
     void actionNew()        { emit(actionRouteNew()); }
     void actionOpen()       { emit(actionRouteOpen()); }
     void actionSave()       { emit(actionRouteSave()); }
@@ -248,15 +249,36 @@ public:
     QVideoEncoder videoEncoder;
 #endif
 #ifdef USE_OPENGLWIDGET
-    inline static void qglColor(const QColor &color) {
+    inline void qglColor(const QColor &color) {
         glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
     }
-    inline static void qglClearColor(const QColor &color) {
+    inline void qglClearColor(const QColor &color) {
         glClearColor(color.redF(), color.greenF(), color.blueF(), color.alphaF());
     }
     quint16 renderTextTextureIndex;
     OpenGlFont renderTextFont;
-    void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font);
+    void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font, bool billboarded);
+    /*
+    inline void renderText(double x, double y, double z, const QString &str, const QFont & font = QFont()) {
+        // Identify x and y locations to render text within widget
+        int height = this->height();
+        GLdouble textPosX = 0, textPosY = 0, textPosZ = 0;
+        project(x, y, 0f, &textPosX, &textPosY, &textPosZ);
+        textPosY = height - textPosY; // y is inverted
+
+        // Retrieve last OpenGL color to use as a font color
+        GLdouble glColor[4];
+        glGetDoublev(GL_CURRENT_COLOR, glColor);
+        QColor fontColor = QColor(glColor[0], glColor[1], glColor[2], glColor[3]);
+
+        // Render text
+        QPainter painter(this);
+        painter.setPen(fontColor);
+        painter.setFont(font);
+        painter.drawText(textPosX, textPosY, text);
+        painter.end();
+    }
+    */
 public slots:
     void updateGL() {
         update();

@@ -137,6 +137,7 @@ UiInspector::UiInspector(QWidget *parent) :
 
     Application::followId          .setAction(ui->followId,              "scoreFollowId");
     Application::paintCurvesOpacity.setAction(ui->viewCurveOpacityCheck, "guiPaintCurvesOpacity");
+    Render::cameraPerspective      .setAction(ui->viewCameraModeCheck, "guiCameraMode");
 
     ui->followId->setValue(-1);
     ui->ccView->expandAll();

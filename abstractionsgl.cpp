@@ -6,6 +6,7 @@
 QList<OpenGlTexture*> OpenGlTexture::textures = QList<OpenGlTexture*>();
 QHash<QString, OpenGlTexture*> OpenGlTexture::texturesCache = QHash<QString, OpenGlTexture*>();
 quint32 OpenGlTexture::texturesCacheCount = 0;
+qreal OpenGlDrawing::dpi = 1;
 
 OpenGlTexture* OpenGlTexture::createFromFile(QObject *parent, const QString &filename) {
     if(texturesCache.contains(filename)) {
@@ -649,7 +650,7 @@ void OpenGlDrawing::drawRect(const QRectF &rect, const OpenGlColors &colors, Ope
 
     //Bordure
     if((colors.borderNeed()) & (!colors.isBorderTransparent())) {
-        glLineWidth(colors.borderWidth(selected));
+        glLineWidth(OpenGlDrawing::dpi * colors.borderWidth(selected));
         glBegin(GL_LINE_LOOP);
 
         colors.glBorderStart(alpha, selected);
@@ -665,7 +666,7 @@ void OpenGlDrawing::drawRect(const QRectF &rect, const OpenGlColors &colors, Ope
         glVertex2f(targetRect.bottomLeft() .x(), targetRect.bottomLeft() .y());
 
         glEnd();
-        glLineWidth(1);
+        glLineWidth(OpenGlDrawing::dpi);
     }
 }
 
@@ -680,6 +681,7 @@ QImage OpenGlDrawing::drawText(const QColor &color, const OpenGlFont &font, cons
     QPainter painter(&sourceImage);
     OpenGlDrawing::drawText(&painter, color, font, QRectF(QPointF(0, 0), sourceImage.size()), text);
     painter.end();
+
     return sourceImage;
 }
 qreal OpenGlDrawing::drawText(QPainter *painter, const QColor &color, const OpenGlFont &font, const QRectF &rect, const QString &_text) {

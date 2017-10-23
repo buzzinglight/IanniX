@@ -23,14 +23,20 @@
 
 #include "uirenderpreview.h"
 
-#ifdef QT4
+#ifdef USE_GLWIDGET
 UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
     QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent, (QGLWidget*)shared) {
 #else
 UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
     QOpenGLWidget(parent) {
     Q_UNUSED(shared);
-    setFormat(QGLFormat::toSurfaceFormat(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering)));
+    QSurfaceFormat sf;
+    //sf.setProfile(QSurfaceFormat::CompatibilityProfile);
+    //sf.setRenderableType(QSurfaceFormat::OpenGL);
+    //sf.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+    //sf.setOption(QSurfaceFormat::DeprecatedFunctions);
+    sf.setSamples(2);
+    setFormat(sf);
 #endif
     setFocusPolicy(Qt::StrongFocus);
     render = 0;
@@ -38,16 +44,6 @@ UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
 
 void UiRenderPreview::initializeGL() {
     //OpenGL options
-    glEnable(GL_POINT_SMOOTH);
-    glEnable(GL_LINE_SMOOTH);
-    //glEnable(GL_POLYGON_SMOOTH);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-
-    //glHint(GL_PERSPECTIVE_CORRECTION_HINT,  GL_NICEST);
-    glHint(GL_POINT_SMOOTH_HINT,            GL_NICEST);
-    glHint(GL_LINE_SMOOTH_HINT,             GL_NICEST);
-    //glHint(GL_POLYGON_SMOOTH_HINT,          GL_NICEST);
 }
 
 void UiRenderPreview::resizeGL(int width, int height) {
@@ -60,6 +56,7 @@ void UiRenderPreview::resizeGL(int width, int height) {
 }
 
 void UiRenderPreview::paintPreview(NxEventsPropagation *_render, GLuint _renderPreviewTexture, QSizeF _renderSize) {
+    makeCurrent();
     render               = _render;
     renderSize           = _renderSize;
     renderPreviewTexture = _renderPreviewTexture;

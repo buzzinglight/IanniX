@@ -34,6 +34,9 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     NxObject::widgetIconSoloOff   = QIcon(":gui/res_icon_check_solo_off.png");
     NxObject::widgetIconSoloOn    = QIcon(":gui/res_icon_check_solo_on.png");
 
+#ifdef QT5
+    OpenGlDrawing::dpi = QWindow().devicePixelRatio();
+#endif
     Render::textures   = new UiTextureItems();
     Render::colors     = new UiColorItems();
 #ifdef Q_OS_MAC
@@ -41,7 +44,8 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
 #else
     Application::renderFont = QFont("Museo Sans 500");
 #endif
-    Application::renderFont.setPixelSize(10);
+    Application::renderFont.setPixelSize(20);
+
 
     //Updates
     forceUpdate  = false;

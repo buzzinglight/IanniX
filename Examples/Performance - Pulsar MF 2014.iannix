@@ -79,7 +79,7 @@ function makeWithScript() {
 	//Pulsar trigger
 	run("add trigger 	600");
 	run("setGroup       current pulsar");
-	run("setSize        current 2.5");
+	run("setSize        current 1.5");
 	run("setTriggerOff  current 0.2");
 	//run("setColor       current 255 255 255 50");
 	run("setMessage     current 0, osc://ip_out:port_out/trigger 600, osc://ip_out:57121/trigger 0 0 0");

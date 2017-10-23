@@ -26,14 +26,13 @@
 
 #include <QObject>
 #include <QImage>
-#include <QGLWidget>
 #include <QVariant>
 #include <QMainWindow>
 #include <QPixmap>
 #ifdef QT5
-#include <QOpenGLWidget>
 #include <QStandardPaths>
 #include <QUrlQuery>
+#include <QSurfaceFormat>
 #endif
 #include "applicationexecute.h"
 #include "gui/uihelp.h"
@@ -97,15 +96,13 @@ enum EditingMode { EditingModeFree, EditingModePoint, EditingModeTriggers, Editi
 #ifdef USE_GLWIDGET
 class Render : public QGLWidget {
 public:
-    explicit Render(QWidget *parent = 0, void *share = 0) : QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent, (QGLWidget*)share) {}
+    explicit Render(QWidget *parent = 0, void *share = 0);
 #else
     class Render : public QOpenGLWidget {
     public:
-        explicit Render(QWidget *parent = 0, void * = 0) : QOpenGLWidget(parent) {
-            setFormat(QGLFormat::toSurfaceFormat(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering)));
-        }
+        explicit Render(QWidget *parent = 0, void * = 0);
     public:
-        virtual void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font) = 0;
+        virtual void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font, bool billboarded) = 0;
 #endif
 public:
     virtual void selectionClear(bool) = 0;
@@ -121,7 +118,7 @@ public:
     static UiColorItems*   colors;
     static QMap<QString, QColor> defaultColors;
     static UiFileItem      files;
-    static UiBool paintThisGroup;
+    static UiBool paintThisGroup, cameraPerspective;
     static UiBool forceLists, forceTexture, forceFrustumInInit;
     static NxRect axisArea;
     static qreal zoomValue, zoomLinear, zoomLinearDest;

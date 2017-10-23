@@ -31,14 +31,11 @@
 #include <QColor>
 #include <QHash>
 #include <QHashIterator>
-#include <QGLWidget>
-#include <QPainter>
 #include <QTimer>
 #include <QTreeWidgetItem>
 #include <QtCore/qmath.h>
 #include "iannix_spec.h"
 #include "iannix_cmd.h"
-
 #include "misc/application.h"
 #include "transport/transport.h"
 

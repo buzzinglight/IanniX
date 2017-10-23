@@ -314,13 +314,13 @@ void NxCursor::paint() {
         if((0.0F <= time) && (time <= 1.0F) && (start.count()) && (start.at(nbLoop % start.count()) != 0)) {
             //Label
             if((Render::paintThisGroup) && (Application::paintLabel || selectedHover) && (!label.isEmpty()))
-                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id) + " - " + label.toUpper(), Application::renderFont);
+                Application::render->renderText(cursorPos.x() + 0.2, cursorPos.y() + 0.2, 0, QString::number(id) + " - " + label.toUpper(), Application::renderFont, true);
             else if(selectedHover)
-                Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + 0.1, 0, QString::number(id), Application::renderFont);
+                Application::render->renderText(cursorPos.x() + 0.2, cursorPos.y() + 0.2, 0, QString::number(id), Application::renderFont, true);
             if((selectedHover) && (!isDrag)) {
-                qreal startY = -0.4;
+                qreal startY = -0.1;
                 foreach(const QString & messageLabelItem, messageLabel) {
-                    Application::render->renderText(cursorPos.x() + 0.1, cursorPos.y() + startY, cursorPos.z(), messageLabelItem.trimmed(), Application::renderFont);
+                    Application::render->renderText(cursorPos.x() + 0.2, cursorPos.y() + startY, cursorPos.z(), messageLabelItem.trimmed(), Application::renderFont, true);
                     startY -= 0.2 * Render::zoomLinear;
                 }
             }
@@ -370,7 +370,7 @@ void NxCursor::paint() {
             }
             if(!textureOk) {
                 //Cursor
-                glLineWidth(size);
+                glLineWidth(OpenGlDrawing::dpi * size);
                 glEnable(GL_LINE_STIPPLE);
                 glLineStipple(lineFactor, lineStipple);
                 if(depth == 0) {
@@ -382,7 +382,7 @@ void NxCursor::paint() {
                     }
                 }
                 else {
-                    glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF()/5.);
+                    glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF()/5);
                     glBegin(GL_QUADS);
                     glVertex3f(cursorPoly.at(0).x(), cursorPoly.at(0).y(), cursorPoly.at(0).z());
                     glVertex3f(cursorPoly.at(1).x(), cursorPoly.at(1).y(), cursorPoly.at(1).z());
@@ -401,7 +401,7 @@ void NxCursor::paint() {
                     }
                 }
                 glDisable(GL_LINE_STIPPLE);
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
 
                 //Cursor reader
                 glPushMatrix();
@@ -411,14 +411,14 @@ void NxCursor::paint() {
                 glRotatef(cursorAngle.x(), 1, 0, 0);
                 qreal size2 = Render::objectSize / 2 * qMin(qreal(1.), width);
                 glBegin(GL_TRIANGLE_FAN);
-                glLineWidth(2);
+                glLineWidth(OpenGlDrawing::dpi * 2);
                 if(hasActivity) {
                     if((time - timeOld) >= 0)  glVertex3f(size2, 0, 0);
                     else                       glVertex3f(-size2, 0, 0);
                 }
                 glVertex3f(0, -size2, 0);
                 glVertex3f(0, size2, 0);
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
                 glEnd();
                 glPopMatrix();
 
@@ -428,9 +428,9 @@ void NxCursor::paint() {
                     glTranslatef(cursorPos.x(), cursorPos.y(), cursorPos.z());
                     glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 8.F);
                     if(curve)
-                        glLineWidth(curve->getSize());
+                        glLineWidth(OpenGlDrawing::dpi * curve->getSize());
                     else
-                        glLineWidth(1);
+                        glLineWidth(OpenGlDrawing::dpi);
 
                     if((glListRecreate) || (Render::forceLists)) {
                         glNewList(glListCursor, GL_COMPILE_AND_EXECUTE);
@@ -486,7 +486,7 @@ void NxCursor::paint() {
                 }
                 glPushMatrix();
                 glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF() / 2.F);
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
                 glEnable(GL_LINE_STIPPLE);
                 glLineStipple(1, 255);
                 glBegin(GL_LINE_LOOP);
@@ -514,13 +514,13 @@ void NxCursor::paint() {
                     glEnd();
                 }
                 glDisable(GL_LINE_STIPPLE);
-                Application::render->renderText(boundsSource.topLeft().x()     - 0.50, boundsSource.topLeft().y()     - 0.12, boundsSource.topLeft().z(),   QString::number(boundsTarget.topLeft().y(),     'f', 3), Application::renderFont);
-                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.50, boundsSource.bottomLeft().y()  - 0.00, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().y(),  'f', 3), Application::renderFont);
-                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.00, boundsSource.bottomLeft().y()  - 0.22, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().x(),  'f', 3), Application::renderFont);
-                Application::render->renderText(boundsSource.bottomRight().x() - 0.40, boundsSource.bottomRight().y() - 0.22, boundsSource.topRight().z(),  QString::number(boundsTarget.bottomRight().x(), 'f', 3), Application::renderFont);
+                Application::render->renderText(boundsSource.topLeft().x()     - 0.30, boundsSource.topLeft().y()     + 0.30, boundsSource.topLeft().z(),   QString::number(boundsTarget.topLeft().y(),     'f', 3), Application::renderFont, true);
+                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.60, boundsSource.bottomLeft().y()  + 0.30, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().y(),  'f', 3), Application::renderFont, true);
+                Application::render->renderText(boundsSource.bottomLeft().x()  - 0.00, boundsSource.bottomLeft().y()  - 0.15, boundsSource.topLeft().z(),   QString::number(boundsTarget.bottomLeft().x(),  'f', 3), Application::renderFont, true);
+                Application::render->renderText(boundsSource.bottomRight().x() - 0.30, boundsSource.bottomRight().y() - 0.15, boundsSource.topRight().z(),  QString::number(boundsTarget.bottomRight().x(), 'f', 3), Application::renderFont, true);
                 if(boundsSource.length() != 0) {
-                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.bottomRight().z(),     QString::number(boundsTarget.bottomRight().z(), 'f', 3), Application::renderFont);
-                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.topRight().z() - 0.50, QString::number(boundsTarget.topRight().z(),    'f', 3), Application::renderFont);
+                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.bottomRight().z(),     QString::number(boundsTarget.bottomRight().z(), 'f', 3), Application::renderFont, true);
+                    Application::render->renderText(boundsSource.center().x() - 0.40, boundsSource.center().y() - 0.22, boundsSource.topRight().z() - 0.50, QString::number(boundsTarget.topRight().z(),    'f', 3), Application::renderFont, true);
                 }
                 glPopMatrix();
             }

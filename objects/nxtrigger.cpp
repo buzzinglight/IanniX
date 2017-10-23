@@ -85,7 +85,6 @@ void NxTrigger::paint() {
         else
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.1);
 
-
         glPushMatrix();
         glTranslatef(pos.x(), pos.y(), pos.z());
         glRotatef(Render::rotation.z(), 0, 0, -1);
@@ -94,18 +93,16 @@ void NxTrigger::paint() {
 
         //Label
         if((Render::paintThisGroup) && (Application::paintLabel || selectedHover) && (!label.isEmpty()))
-            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, label.toUpper(), Application::renderFont);
+            Application::render->renderText(cacheSize * 1.8, cacheSize * 1.8, 0, label.toUpper(), Application::renderFont, false);
         else if(selectedHover)
-            Application::render->renderText(cacheSize * 1.2, cacheSize * 1.2, 0, QString::number(id), Application::renderFont);
+            Application::render->renderText(cacheSize * 1.8, cacheSize * 1.8, 0, QString::number(id), Application::renderFont, false);
         if((selectedHover) && (!isDrag)) {
-            qreal startY = -0.2 - cacheSize * 1.2;
+            qreal startY = 0.1 - cacheSize * 1.2;
             foreach(const QString & messageLabelItem, messageLabel) {
-                Application::render->renderText(cacheSize * 1.2, startY, 0, messageLabelItem.trimmed(), Application::renderFont);
+                Application::render->renderText(cacheSize * 1.8, startY, 0, messageLabelItem.trimmed(), Application::renderFont, false);
                 startY -= 0.2 * Render::zoomLinear;
             }
         }
-
-
 
         //Draw
         bool textureOk = false;
@@ -146,17 +143,17 @@ void NxTrigger::paint() {
             if(glListTrigger == 0) {
                 glListTrigger = glGenLists(1);
                 glNewList(glListTrigger, GL_COMPILE_AND_EXECUTE);
-                glLineWidth(size);
+                glLineWidth(OpenGlDrawing::dpi * size);
                 glBegin(GL_POLYGON);
-                for(qreal drawAngle = 0 ; drawAngle < 2*M_PI ; drawAngle += 0.3)
-                    glVertex2d(0.7 * qCos(drawAngle), 0.7 * qSin(drawAngle));
+                for(qreal drawAngle = 0 ; drawAngle < 2*M_PI ; drawAngle += 0.1)
+                    glVertex2d(0.5 * qCos(drawAngle), 0.5 * qSin(drawAngle));
                 glEnd();
-                glLineWidth(1.5);
+                glLineWidth(OpenGlDrawing::dpi * 1.5);
                 glBegin(GL_LINE_LOOP);
-                for(qreal drawAngle = 0 ; drawAngle < 2*M_PI ; drawAngle += 0.3)
+                for(qreal drawAngle = 0 ; drawAngle < 2*M_PI ; drawAngle += 0.1)
                     glVertex2d(1.2 * qCos(drawAngle), 1.2 * qSin(drawAngle));
                 glEnd();
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
                 glEndList();
             }
             else

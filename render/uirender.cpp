@@ -53,7 +53,6 @@ UiRender::UiRender(QWidget *parent, void *share) :
 
     //Initialisations
     documentToRender = 0;
-    shaderProgram    = 0;
     setDocument(0);
     setMouseTracking(true);
     isRemoving = false;
@@ -62,7 +61,8 @@ UiRender::UiRender(QWidget *parent, void *share) :
     mouseObjectDrag = false;
     selectedHover = 0;
     scale = 1;
-    scaleDest = 3;
+    connect(&cameraPerspective, SIGNAL(triggered(bool)), SLOT(cameraPerspectiveChanged()));
+    cameraPerspectiveChanged();
 
     //Refresh
     timer = new QTimer(this);
@@ -97,7 +97,11 @@ bool UiRender::loadTexture(UiRenderTexture *texture, bool gl) {
             glEnable(GL_TEXTURE_2D);
             glGenTextures(1, &(texture->texture));
             glBindTexture(GL_TEXTURE_2D, texture->texture);
+#ifdef USE_GLWIDGET
             QImage tex = QGLWidget::convertToGLFormat(QImage(texture->filename.absoluteFilePath()));
+#else
+            QImage tex = QGLWidget::convertToGLFormat(QImage(texture->filename.absoluteFilePath()));
+#endif
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.width(), tex.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.bits());
 #ifdef Q_OS_MAC
             glGenerateMipmap(GL_TEXTURE_2D);
@@ -245,20 +249,19 @@ void UiRender::setPerformanceMode(bool _performanceMode) {
 
 //Initialize event
 void UiRender::initializeGL() {
-    //OpenGL options
-    glEnable(GL_POINT_SMOOTH);
-    glEnable(GL_LINE_SMOOTH);
-    //glEnable(GL_POLYGON_SMOOTH);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
+    QOpenGLFunctions glFuncs(QOpenGLContext::currentContext());
 
-    //glHint(GL_PERSPECTIVE_CORRECTION_HINT,  GL_NICEST);
-    glHint(GL_POINT_SMOOTH_HINT,            GL_NICEST);
-    glHint(GL_LINE_SMOOTH_HINT,             GL_NICEST);
-    //glHint(GL_POLYGON_SMOOTH_HINT,          GL_NICEST);
-
-    //Force resize
-    //resizeGL();
+    //Flags
+    glFuncs.glHint(GL_POINT_SMOOTH_HINT,   GL_NICEST);
+    glFuncs.glHint(GL_LINE_SMOOTH_HINT,    GL_NICEST);
+    glFuncs.glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    glFuncs.glEnable(GL_POINT_SMOOTH);
+    glFuncs.glEnable(GL_LINE_SMOOTH);
+    glFuncs.glEnable(GL_POLYGON_SMOOTH);
+    glFuncs.glEnable(GL_BLEND);
+    glFuncs.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glFuncs.glEnable(GL_BLEND);
+    glFuncs.glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 //Resize event
@@ -295,9 +298,11 @@ void UiRender::setFrustum() {
     //Set axis
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(Render::axisArea.left(), Render::axisArea.right(), Render::axisArea.bottom(), Render::axisArea.top(), 50, 650.0);
+    if(cameraPerspective)
+        glFrustum(Render::axisArea.left(), Render::axisArea.right(), Render::axisArea.bottom(), Render::axisArea.top(), 50, 650.0);
+    else
+        glOrtho(Render::axisArea.left(), Render::axisArea.right(), Render::axisArea.bottom(), Render::axisArea.top(), -650, 650);
     glMatrixMode(GL_MODELVIEW);
-    //glLoadIdentity();
 }
 
 //Paint event
@@ -321,7 +326,7 @@ void UiRender::paintGL() {
         scale = scale + (scaleDest - scale) / 3;
 
         //Object sizes
-        Render::objectSize = 0.15 * ((1. - Application::objectsAutosize/100.) + (Render::zoomLinear/1.3)*(Application::objectsAutosize/100.));
+        Render::objectSize = getAutoScale(Application::objectsAutosize/100.);
 
         if(!Render::forceFrustumInInit) {
             renderSize = size();
@@ -339,7 +344,8 @@ void UiRender::paintGL() {
         glPushMatrix();
 
         //First operations
-        glTranslatef(0.0, 0.0, -150);
+        if(cameraPerspective)
+            glTranslatef(0, 0, -150);
 
         if((Application::followId > 0) && (documentToRender) && (documentToRender->objects.contains(Application::followId)) && (documentToRender->objects.value(Application::followId)->getType() == ObjectsTypeCursor)) {
             NxCursor *object = (NxCursor*)documentToRender->objects.value(Application::followId);
@@ -438,134 +444,6 @@ void UiRender::paintGL() {
             qDebug("%d encode", videoEncoder.encodeImage(grabFrameBuffer()));
 #endif
 
-
-        //#define SHADER_INSTALLED 1
-#ifdef SHADER_INSTALLED
-        glPushMatrix();
-        //Copie de l'écran
-        glEnable(GL_TEXTURE_2D);
-        if(!destinationTexture)
-            glGenTextures(1, &destinationTexture);
-        glBindTexture(GL_TEXTURE_2D, destinationTexture);
-        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glDisable(GL_TEXTURE_2D);
-
-        //Shader
-        if(!shaderProgram) {
-            shaderProgram = new QGLShaderProgram(this);
-            QFile vertexFile("shaders/Fragment.vsh"), fragmentFile("shaders/Blur.fsh");
-            if((vertexFile.open(QFile::ReadOnly)) && (fragmentFile.open(QFile::ReadOnly))) {
-                shaderProgram->addShaderFromSourceCode(QGLShader::Vertex, vertexFile.readAll());
-                shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, fragmentFile.readAll());
-
-                if(shaderProgram->link())   qDebug("[OPENGL] Shader built");
-                else                        qDebug("[OPENGL] Shader not built : %s", qPrintable(shaderProgram->log().trimmed()));
-            }
-        }
-
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glFrustum(0, renderSize.width(), renderSize.height(), 0, 100, 300);
-        glTranslatef(0, 0, -100);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-
-        //Efface
-        glClearColor(0, 0, 0, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        //Feedback initial
-        glEnable(GL_TEXTURE_2D);
-        if(!workingTexture) {
-            glClearColor(1, 0, 0, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
-            glGenTextures(1, &workingTexture);
-            glBindTexture(GL_TEXTURE_2D, workingTexture);
-            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        }
-        glDisable(GL_TEXTURE_2D);
-
-        shaderProgram->bind();
-        shaderProgram->setUniformValue(shaderProgram->uniformLocation("slide_up"),   (GLfloat)5.);
-        shaderProgram->setUniformValue(shaderProgram->uniformLocation("slide_down"), (GLfloat)5.);
-        shaderProgram->setUniformValue(shaderProgram->uniformLocation("tex0"),       (GLuint)0);
-        shaderProgram->setUniformValue(shaderProgram->uniformLocation("tex1"),       (GLuint)1);
-
-        glActiveTexture(GL_TEXTURE0);
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, destinationTexture);
-
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, workingTexture);
-
-        glColor4f(1, 1, 1, 1);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0, 1); glVertex2f(0, 0);
-        glTexCoord2f(1, 1); glVertex2f(renderSize.width(), 0);
-        glTexCoord2f(1, 0); glVertex2f(renderSize.width(), renderSize.height());
-        glTexCoord2f(0, 0); glVertex2f(0, renderSize.height());
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-        shaderProgram->release();
-
-        //Copie Feedback
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, workingTexture);
-        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glDisable(GL_TEXTURE_2D);
-        glPopMatrix();
-#endif
-
-        //Masque
-        if(false) {
-            glPushMatrix();
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            glFrustum(0, renderSize.width(), renderSize.height(), 0, 100, 300);
-            glTranslatef(0, 0, -100);
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-
-            QPointF center(renderSize.width()/2, renderSize.height()/2);
-            QSizeF centerSize(renderSize.height(), renderSize.height());
-            glDisable(GL_DEPTH_TEST);
-            glColor4f(0, 0, 0, 255);
-            glBegin(GL_QUADS);
-
-            glVertex2f(0, 0);
-            glVertex2f(center.x() - centerSize.width()/2, 0);
-            glVertex2f(center.x() - centerSize.width()/2, centerSize.height());
-            glVertex2f(0, centerSize.height());
-
-            glVertex2f(renderSize.width(), 0);
-            glVertex2f(center.x() + centerSize.width()/2, 0);
-            glVertex2f(center.x() + centerSize.width()/2, centerSize.height());
-            glVertex2f(renderSize.width(), centerSize.height());
-
-            glEnd();
-
-            if(!legend.isEmpty()) {
-                QFont font("Avenir");
-                font.setPixelSize(legendSize);
-                font.setItalic(true);
-                qglColor(legendColor);
-                renderText(center.x() - centerSize.width()/2 + 20, center.y() + centerSize.height()/2 - 20, 0, legend, font);
-            }
-
-            glPopMatrix();
-        }
-
-        //glEnable(GL_DEPTH_TEST);
-
-
-
 #ifdef SYPHON_INSTALLED
         //Export Syphon
         if(!interfaceSyphon->serverInit) {
@@ -577,8 +455,8 @@ void UiRender::paintGL() {
             if(!interfaceSyphon->serverTexture)
                 glGenTextures(1, &interfaceSyphon->serverTexture);
             glBindTexture(GL_TEXTURE_2D, interfaceSyphon->serverTexture);
-            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
-            interfaceSyphon->publishTexture(GL_TEXTURE_2D, renderSize.width(), renderSize.height());
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width() * OpenGlDrawing::dpi, renderSize.height() * OpenGlDrawing::dpi, 0);
+            interfaceSyphon->publishTexture(GL_TEXTURE_2D, renderSize.width() * OpenGlDrawing::dpi, renderSize.height() * OpenGlDrawing::dpi);
             glDisable(GL_TEXTURE_2D);
         }
 
@@ -595,18 +473,18 @@ void UiRender::paintGL() {
 #endif
 
         //Mode performance preview
-        if((performanceMode) && (Application::current->getPerformancePreview())) {
+        if((performanceMode) && (Application::current->getPerformancePreview()) && (Application::current->getRenderPreview())) {
             glEnable(GL_TEXTURE_2D);
             if(!renderPreviewTextureInit) {
                 glGenTextures(1, &renderPreviewTexture);
                 renderPreviewTextureInit = true;
             }
             glBindTexture(GL_TEXTURE_2D, renderPreviewTexture);
-            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width(), renderSize.height(), 0);
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width() * OpenGlDrawing::dpi, renderSize.height() * OpenGlDrawing::dpi, 0);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glDisable(GL_TEXTURE_2D);
-            Application::current->getRenderPreview()->paintPreview(this, renderPreviewTexture, renderSize);
+            Application::current->getRenderPreview()->paintPreview(this, renderPreviewTexture, renderSize * OpenGlDrawing::dpi);
         }
         if(capturedFramesStart)
 #ifdef USE_GLWIDGET
@@ -628,7 +506,7 @@ void UiRender::paintBackground() {
                 glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture->texture);
                 glBegin(GL_QUADS);
                 qglColor(Render::colors->value("background_texture_tint"));
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
                 glTexCoord2d(0, 0); glVertex3f(texture->mapping.left() , texture->mapping.bottom(), 0);
                 glTexCoord2d(texture->originalSize.width(), 0); glVertex3f(texture->mapping.right(), texture->mapping.bottom(), 0);
                 glTexCoord2d(texture->originalSize.width(), texture->originalSize.height()); glVertex3f(texture->mapping.right(), texture->mapping.top(), 0);
@@ -641,7 +519,7 @@ void UiRender::paintBackground() {
                 glBindTexture(GL_TEXTURE_2D, texture->texture);
                 glBegin(GL_QUADS);
                 qglColor(Render::colors->value("background_texture_tint"));
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
                 glTexCoord2d(0, 0); glVertex3f(texture->mapping.left() , texture->mapping.bottom(), 0);
                 glTexCoord2d(1, 0); glVertex3f(texture->mapping.right(), texture->mapping.bottom(), 0);
                 glTexCoord2d(1, 1); glVertex3f(texture->mapping.right(), texture->mapping.top(), 0);
@@ -659,85 +537,86 @@ void UiRender::paintAxisGrid() {
     if(Application::paintAxisGrid) {
         //Draw axis
         Render::axisArea.translate(-Render::axisCenter);
+        qreal gridFactor = 10;
 
-        for(qreal x = 0 ; x < ceil(Render::axisArea.right()) ; x += Render::axisGrid) {
+        for(qreal x = 0 ; x < ceil(Render::axisArea.right()*gridFactor) ; x += Render::axisGrid) {
             if((x == 0) && (Application::paintAxisGrid)) {
                 if(Application::mouseSnapX)
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_axisSnap"));
                 else
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_axis"));
-                glLineWidth(2);
+                glLineWidth(OpenGlDrawing::dpi * 2);
             }
             else {
                 if(Application::mouseSnapX)
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_gridSnap"));
                 else
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_grid"));
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
             }
             glBegin(GL_LINES);
-            glVertex3f(x, Render::axisArea.bottom(), 0);
-            glVertex3f(x, Render::axisArea.top(), 0);
+            glVertex3f(x, Render::axisArea.bottom()*gridFactor, 0);
+            glVertex3f(x, Render::axisArea.top()*gridFactor, 0);
             glEnd();
         }
-        for(qreal x = 0 ; x > floor(Render::axisArea.left()) ; x -= Render::axisGrid) {
+        for(qreal x = 0 ; x > floor(Render::axisArea.left()*gridFactor) ; x -= Render::axisGrid) {
             if((x == 0) && (Application::paintAxisGrid)) {
                 if(Application::mouseSnapX)
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_axisSnap"));
                 else
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_axis"));
-                glLineWidth(2);
+                glLineWidth(OpenGlDrawing::dpi * 2);
             }
             else {
                 if(Application::mouseSnapX)
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_gridSnap"));
                 else
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_grid"));
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
             }
             glBegin(GL_LINES);
-            glVertex3f(x, Render::axisArea.bottom(), 0);
-            glVertex3f(x, Render::axisArea.top(), 0);
+            glVertex3f(x, Render::axisArea.bottom()*gridFactor, 0);
+            glVertex3f(x, Render::axisArea.top()*gridFactor, 0);
             glEnd();
         }
-        for(qreal y = 0 ; y < ceil(Render::axisArea.top()) ; y += Render::axisGrid) {
+        for(qreal y = 0 ; y < ceil(Render::axisArea.top()*gridFactor) ; y += Render::axisGrid) {
             if((y == 0) && (Application::paintAxisGrid)) {
                 if(Application::mouseSnapY)
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_axisSnap"));
                 else
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_axis"));
-                glLineWidth(2);
+                glLineWidth(OpenGlDrawing::dpi * 2);
             }
             else {
                 if(Application::mouseSnapY)
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_gridSnap"));
                 else
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_grid"));
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
             }
             glBegin(GL_LINES);
-            glVertex3f(Render::axisArea.left(), y, 0);
-            glVertex3f(Render::axisArea.right(), y, 0);
+            glVertex3f(Render::axisArea.left()*gridFactor, y, 0);
+            glVertex3f(Render::axisArea.right()*gridFactor, y, 0);
             glEnd();
         }
-        for(qreal y = 0 ; y > floor(Render::axisArea.bottom()) ; y -= Render::axisGrid) {
+        for(qreal y = 0 ; y > floor(Render::axisArea.bottom()*gridFactor) ; y -= Render::axisGrid) {
             if((y == 0) && (Application::paintAxisGrid)) {
                 if(Application::mouseSnapY)
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_axisSnap"));
                 else
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_axis"));
-                glLineWidth(2);
+                glLineWidth(OpenGlDrawing::dpi * 2);
             }
             else {
                 if(Application::mouseSnapY)
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_gridSnap"));
                 else
                     qglColor(Render::colors->value(Application::colorsPrefix() + "_grid"));
-                glLineWidth(1);
+                glLineWidth(OpenGlDrawing::dpi);
             }
             glBegin(GL_LINES);
-            glVertex3f(Render::axisArea.left(), y, 0);
-            glVertex3f(Render::axisArea.right(), y, 0);
+            glVertex3f(Render::axisArea.left()*gridFactor, y, 0);
+            glVertex3f(Render::axisArea.right()*gridFactor, y, 0);
             glEnd();
         }
 
@@ -749,7 +628,7 @@ void UiRender::paintAxisGrid() {
 void UiRender::paintSelection() {
     //Axis color
     qglColor(Render::colors->value(Application::colorsPrefix() + "_gui_selection"));
-    glLineWidth(1);
+    glLineWidth(OpenGlDrawing::dpi);
 
     //Draw axis
     glBegin(GL_QUADS);
@@ -1076,7 +955,7 @@ void UiRender::mouseDoubleClickEvent(QMouseEvent *event) {
     bool mouseShift   = event->modifiers() & Qt::ShiftModifier;
 
     if(mouse3D) {
-        scaleDest = 3;
+        cameraPerspectiveChanged();
         Application::current->execute(QString("%1 0 0 0").arg(COMMAND_ROTATE), ExecuteSourceGui);
         translationDest = NxPoint();
         //refresh();
@@ -1477,9 +1356,9 @@ void UiRender::arrangeObjects(quint16 type) {
 
 
 #ifdef USE_OPENGLWIDGET
-void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &) {
+void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &, bool billboarded) {
     while(OpenGlTexture::textures.count() < 500) {
-        OpenGlTexture *texte = new OpenGlTexture(this, text, renderTextFont, QSizeF(512, 512));
+        OpenGlTexture *texte = new OpenGlTexture(this, text, renderTextFont, QSizeF(1024, 128) * OpenGlDrawing::dpi);
         OpenGlTexture::textures.append(texte);
     }
     OpenGlTexture *textTextureToUse = 0;
@@ -1498,7 +1377,17 @@ void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const 
     if(textTextureToUse) {
         glPushMatrix();
         glTranslatef(x, y, z);
-        glScalef(0.05/scale, -0.05/scale, 0.05/scale);
+
+        //Texte billboardé ou non
+        if(billboarded) {
+            glRotatef(Render::rotation.z(), 0, 0, -1);
+            glRotatef(Render::rotation.x(), 0, -1, 0);
+            glRotatef(Render::rotation.y(), -1, 0, 0);
+        }
+
+        //glScalef(0.05/(scale*OpenGlDrawing::dpi), -0.05/(scale*OpenGlDrawing::dpi), 0.05/(scale*OpenGlDrawing::dpi));
+        qreal textScale = getAutoScale(1) * 0.06;
+        glScalef(textScale, -textScale, textScale);
         textTextureToUse->pushTexture();
         glBegin(GL_QUADS);
         glTexCoord2f(0, 0); glVertex3f(0, textTextureToUse->size.height(), 0);

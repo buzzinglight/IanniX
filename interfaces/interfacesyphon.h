@@ -24,8 +24,6 @@
 #ifndef INTERFACESYPHON_H
 #define INTERFACESYPHON_H
 
-#include <QGLWidget>
-#include <QWidget>
 #include "misc/options.h"
 #include "messages/messagemanager.h"
 

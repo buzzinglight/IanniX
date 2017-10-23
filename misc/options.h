@@ -33,13 +33,19 @@
 #include <QPlainTextEdit>
 #include <QComboBox>
 #include <QRadioButton>
-#include <QGLWidget>
 #include <QLineEdit>
 #include <QDesktopServices>
 #include <QList>
 #include <QStandardItem>
 #include <QFileInfo>
 #include <QTreeWidgetItem>
+#ifdef USE_GLWIDGET
+#include <QGLWidget>
+#include <QGLFormat>
+#else
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
+#endif
 #include "geometry/nxrect.h"
 
 class NxCurvePoint : public NxPoint {

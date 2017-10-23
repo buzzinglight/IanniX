@@ -68,6 +68,7 @@ NxPoint Render::rotationDest;
 NxPoint Render::rotationCenter;
 NxPoint Render::rotationCenterDest;
 UiBool  Render::paintThisGroup         = false;
+UiBool  Render::cameraPerspective      = true;
 UiBool  Render::forceLists             = false;
 UiBool  Render::forceTexture           = false;
 UiBool  Render::forceFrustumInInit     = false;
@@ -82,6 +83,23 @@ EditingMode Render::editingMode        = EditingModeFree;
 bool    Render::editing                = false;
 bool    Render::editingFirstPoint      = false;
 
+
+#ifdef USE_GLWIDGET
+Render::Render(QWidget *parent, void *share)
+    : QGLWidget(QGLFormat(QGL::DoubleBuffer | QGL::DirectRendering), parent, (QGLWidget*)share) {
+}
+#else
+Render::Render(QWidget *parent, void*)
+    : QOpenGLWidget(parent) {
+    QSurfaceFormat sf;
+    //sf.setProfile(QSurfaceFormat::CompatibilityProfile);
+    //sf.setRenderableType(QSurfaceFormat::OpenGL);
+    //sf.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+    //sf.setOption(QSurfaceFormat::DeprecatedFunctions);
+    sf.setSamples(2);
+    setFormat(sf);
+}
+#endif
 
 
 

@@ -141,6 +141,7 @@ UiView::UiView(QWidget *parent) :
     connect(ui->actionAlign_ellipse,        SIGNAL(triggered()), SLOT(actionAlign_ellipse()));
 
     delete ui->renderPreview;
+    ui->renderPreview = 0;
     ui->renderPreview = new UiRenderPreview(ui->pagePerf, ui->render);
     ui->pagePerf->layout()->addWidget(ui->renderPreview);
     fullscreenDisplays = QApplication::desktop();

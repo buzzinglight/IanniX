@@ -88,6 +88,10 @@ function onIncomingMessage(protocol, host, port, destination, values) {
  */
 function madeThroughGUI() {
 //GUI: NEVER EVER REMOVE THIS LINE
+	run("center 0 0");
+	run("zoom 165.332");
+	run("rotate 0 0 0");
+
 
 	run("add curve 3");
 	run("setpos current 0 0 0");
@@ -108,44 +112,16 @@ function madeThroughGUI() {
 	run("setwidth current 1");
 
 
+	run("add trigger 7");
+	run("setpos current -1.86317 3.72553 0");
+	run("settriggeroff current 1");
+
 	run("add trigger 4");
 	run("setpos current 5.835 0 0");
 	run("settriggeroff current 1");
 
 	run("add trigger 5");
 	run("setpos current -5.19205 2.1805 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 6");
-	run("setpos current 3.59959 -3.53704 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 7");
-	run("setpos current -1.86317 3.72553 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 8");
-	run("setpos current 0.771448 -3.06821 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 9");
-	run("setpos current -0.625905 2.33335 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 10");
-	run("setpos current 1.07448 -2.2448 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 11");
-	run("setpos current -1.3503 3.02345 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 12");
-	run("setpos current 0.767797 -4.24306 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 13");
-	run("setpos current 0.829902 5.08945 0");
 	run("settriggeroff current 1");
 
 	run("add trigger 14");
@@ -156,140 +132,36 @@ function madeThroughGUI() {
 	run("setpos current 4.72076 3.42154 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 16");
-	run("setpos current -5.41822 -1.27466 0");
+	run("add trigger 12");
+	run("setpos current 0.767797 -4.24306 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 17");
-	run("setpos current 4.87918 -0.702816 0");
+	run("add trigger 13");
+	run("setpos current 0.829902 5.08945 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 18");
-	run("setpos current -3.59507 1.78957 0");
+	run("add trigger 10");
+	run("setpos current 1.07448 -2.2448 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 19");
-	run("setpos current 2.40025 -1.83481 0");
+	run("add trigger 11");
+	run("setpos current -1.3503 3.02345 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 20");
-	run("setpos current -1.95718 1.32456 0");
+	run("add trigger 8");
+	run("setpos current 0.771448 -3.06821 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 21");
-	run("setpos current 2.35313 -1.05695 0");
+	run("add trigger 9");
+	run("setpos current -0.625905 2.33335 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 22");
-	run("setpos current -3.05599 1.62725 0");
+	run("add trigger 52");
+	run("setpos current 0.448322 2.6062 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 23");
-	run("setpos current 3.25585 -3.04027 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 24");
-	run("setpos current -2.38177 4.68929 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 25");
-	run("setpos current 0.475309 -5.71548 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 26");
-	run("setpos current 1.80974 5.52754 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 27");
-	run("setpos current -3.58263 -4.163 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 28");
-	run("setpos current 4.23667 2.26908 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 29");
-	run("setpos current -3.79732 -0.714869 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 30");
-	run("setpos current 2.88481 0.072475 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 31");
-	run("setpos current -2.31527 -0.285077 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 32");
-	run("setpos current 2.58641 0.724831 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 33");
-	run("setpos current -3.56425 -0.603864 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 34");
-	run("setpos current 4.56377 -0.515377 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 35");
-	run("setpos current -4.77397 2.42528 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 36");
-	run("setpos current 3.76611 -4.37614 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 37");
-	run("setpos current -1.77231 5.51511 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 38");
-	run("setpos current -0.437292 -5.39248 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 39");
-	run("setpos current 2.00448 4.22517 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 40");
-	run("setpos current -2.4847 -2.75629 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 41");
-	run("setpos current 2.09372 1.79733 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 42");
-	run("setpos current -1.54909 -1.73432 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 43");
-	run("setpos current 1.60506 2.30103 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 44");
-	run("setpos current -2.56786 -2.75808 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 45");
-	run("setpos current 4.09026 2.36701 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 46");
-	run("setpos current -5.37241 -0.867228 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 47");
-	run("setpos current 5.64629 -1.33839 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 48");
-	run("setpos current -4.64644 3.40459 0");
-	run("settriggeroff current 1");
-
-	run("add trigger 49");
-	run("setpos current 2.77803 -4.53696 0");
+	run("add trigger 53");
+	run("setpos current -0.0239291 -2.3414 0");
 	run("settriggeroff current 1");
 
 	run("add trigger 50");
@@ -300,12 +172,144 @@ function madeThroughGUI() {
 	run("setpos current -0.280634 -3.54652 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 52");
-	run("setpos current 0.448322 2.6062 0");
+	run("add trigger 48");
+	run("setpos current -4.64644 3.40459 0");
 	run("settriggeroff current 1");
 
-	run("add trigger 53");
-	run("setpos current -0.0239291 -2.3414 0");
+	run("add trigger 49");
+	run("setpos current 2.77803 -4.53696 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 38");
+	run("setpos current -0.437292 -5.39248 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 39");
+	run("setpos current 2.00448 4.22517 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 36");
+	run("setpos current 3.76611 -4.37614 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 37");
+	run("setpos current -1.77231 5.51511 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 34");
+	run("setpos current 4.56377 -0.515377 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 35");
+	run("setpos current -4.77397 2.42528 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 32");
+	run("setpos current 2.58641 0.724831 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 33");
+	run("setpos current -3.56425 -0.603864 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 46");
+	run("setpos current -5.37241 -0.867228 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 47");
+	run("setpos current 5.64629 -1.33839 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 44");
+	run("setpos current -2.56786 -2.75808 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 45");
+	run("setpos current 4.09026 2.36701 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 42");
+	run("setpos current -1.54909 -1.73432 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 43");
+	run("setpos current 1.60506 2.30103 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 40");
+	run("setpos current -2.4847 -2.75629 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 41");
+	run("setpos current 2.09372 1.79733 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 22");
+	run("setpos current -3.05599 1.62725 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 23");
+	run("setpos current 3.25585 -3.04027 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 20");
+	run("setpos current -1.95718 1.32456 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 21");
+	run("setpos current 2.35313 -1.05695 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 18");
+	run("setpos current -3.59507 1.78957 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 19");
+	run("setpos current 2.40025 -1.83481 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 16");
+	run("setpos current -5.41822 -1.27466 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 17");
+	run("setpos current 4.87918 -0.702816 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 30");
+	run("setpos current 2.88481 0.072475 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 31");
+	run("setpos current -2.31527 -0.285077 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 28");
+	run("setpos current 4.23667 2.26908 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 29");
+	run("setpos current -3.79732 -0.714869 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 26");
+	run("setpos current 1.80974 5.52754 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 27");
+	run("setpos current -3.58263 -4.163 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 24");
+	run("setpos current -2.38177 4.68929 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 25");
+	run("setpos current 0.475309 -5.71548 0");
+	run("settriggeroff current 1");
+
+	run("add trigger 6");
+	run("setpos current 3.59959 -3.53704 0");
 	run("settriggeroff current 1");
 
 
@@ -322,6 +326,7 @@ function madeThroughGUI() {
  */
 function madeThroughInterfaces() {
 //INTERFACES: NEVER EVER REMOVE THIS LINE
+	run("rotate 0 0 0");
 	run("speed 1");
 
 
@@ -342,7 +347,7 @@ function alterateWithScript() {
 
 /*
  *	//APP VERSION: NEVER EVER REMOVE THIS LINE
- *	Made with IanniX 0.9.16
+ *	Made with IanniX 0.9.18
  *	//APP VERSION: NEVER EVER REMOVE THIS LINE
  */
 

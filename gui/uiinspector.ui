@@ -4658,6 +4658,19 @@ GOING FROM</string>
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="viewCameraModeCheck">
+            <property name="toolTip">
+             <string>Gives a small opacity on curves which has no cursor running on</string>
+            </property>
+            <property name="text">
+             <string>CAMERA IN PERSPECTIVE MODE</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_9">
             <property name="spacing">
              <number>10</number>
@@ -5233,8 +5246,8 @@ padding: 0px;</string>
    <slot>actionInfoGroup()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>124</y>
+     <x>337</x>
+     <y>149</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -5249,8 +5262,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>99</x>
-     <y>132</y>
+     <x>215</x>
+     <y>182</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -5265,8 +5278,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>260</x>
-     <y>136</y>
+     <x>331</x>
+     <y>252</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -5297,8 +5310,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>260</x>
-     <y>136</y>
+     <x>331</x>
+     <y>252</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -5313,8 +5326,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>129</y>
+     <x>334</x>
+     <y>280</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -5329,8 +5342,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>130</y>
+     <x>334</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -5345,8 +5358,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>140</x>
-     <y>135</y>
+     <x>211</x>
+     <y>217</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -5393,8 +5406,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>56</x>
-     <y>357</y>
+     <x>62</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
@@ -5409,8 +5422,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>292</x>
-     <y>357</y>
+     <x>382</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
@@ -5425,8 +5438,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>292</x>
-     <y>386</y>
+     <x>382</x>
+     <y>350</y>
     </hint>
     <hint type="destinationlabel">
      <x>282</x>
@@ -5441,8 +5454,8 @@ padding: 0px;</string>
    <slot>actionCCButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>56</x>
-     <y>386</y>
+     <x>62</x>
+     <y>350</y>
     </hint>
     <hint type="destinationlabel">
      <x>78</x>
@@ -5601,8 +5614,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>165</y>
+     <x>128</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5617,8 +5630,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>176</x>
-     <y>165</y>
+     <x>97</x>
+     <y>132</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5633,8 +5646,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>196</x>
-     <y>200</y>
+     <x>140</x>
+     <y>134</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5649,8 +5662,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>228</y>
+     <x>260</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5665,8 +5678,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>228</y>
+     <x>260</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5681,8 +5694,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>257</y>
+     <x>260</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5697,8 +5710,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>330</x>
-     <y>324</y>
+     <x>137</x>
+     <y>143</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5713,8 +5726,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>254</x>
-     <y>356</y>
+     <x>135</x>
+     <y>143</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5729,8 +5742,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
-     <y>356</y>
+     <x>150</x>
+     <y>143</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -5969,8 +5982,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>320</x>
-     <y>164</y>
+     <x>89</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -6033,8 +6046,8 @@ padding: 0px;</string>
    <slot>actionTexture()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>132</y>
+     <x>334</x>
+     <y>367</y>
     </hint>
     <hint type="destinationlabel">
      <x>493</x>
@@ -6049,8 +6062,8 @@ padding: 0px;</string>
    <slot>actionTexture()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>133</y>
+     <x>334</x>
+     <y>396</y>
     </hint>
     <hint type="destinationlabel">
      <x>503</x>
@@ -6225,8 +6238,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>131</y>
+     <x>334</x>
+     <y>338</y>
     </hint>
     <hint type="destinationlabel">
      <x>698</x>
@@ -6241,8 +6254,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>129</y>
+     <x>334</x>
+     <y>280</y>
     </hint>
     <hint type="destinationlabel">
      <x>656</x>
@@ -6257,8 +6270,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>130</y>
+     <x>334</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
      <x>773</x>
@@ -6273,8 +6286,8 @@ padding: 0px;</string>
    <slot>actionColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>131</y>
+     <x>334</x>
+     <y>338</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -6497,8 +6510,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>276</y>
+     <x>260</x>
+     <y>131</y>
     </hint>
     <hint type="destinationlabel">
      <x>504</x>
@@ -6513,8 +6526,8 @@ padding: 0px;</string>
    <slot>actionInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>289</x>
-     <y>275</y>
+     <x>260</x>
+     <y>131</y>
     </hint>
     <hint type="destinationlabel">
      <x>560</x>
