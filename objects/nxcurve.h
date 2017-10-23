@@ -104,7 +104,7 @@ private:
     UiTreeView *pathPointsEditor;
     qreal inertie;
     qint16 selectedPathPointPoint, selectedPathPointControl1, selectedPathPointControl2;
-    NxSize ellipseSize;
+    NxSize shapeSize;
     GLuint glListCurve;
     QString equation;
     QHash<QString,qreal> equationVariables;
@@ -512,6 +512,8 @@ public:
                 retour += "\t];\n";
                 retour += "\tfor(var i = 0 ; i < points" + idStr + ".length ; i++)\n";
                 retour += QString("\t\trun(\"%1 %2 \" + i + \" \" + points" + idStr + "[i].x + \" \" + points" + idStr + "[i].y + \" \" + points" + idStr + "[i].z + \" \" + points" + idStr + "[i].c1x + \" \" + points" + idStr + "[i].c1y + \" \" + points" + idStr + "[i].c1z + \" \" + points" + idStr + "[i].c2x + \" \" + points" + idStr + "[i].c2y + \" \" + points" + idStr + "[i].c2z);\n").arg(COMMAND_CURVE_POINT).arg(objectId);
+            }
+            else if((curveType == CurveTypePoints) && ((command == COMMAND_RESIZE) || (command == COMMAND_RESIZEF))) {
             }
             else
                 retour += "\trun(\"" + QString("%1 %2 %3").arg(command).arg(objectId).arg(getProperty(qPrintable(command)).toString()) + "\");\n";
