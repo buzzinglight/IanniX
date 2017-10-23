@@ -212,8 +212,10 @@ void Transport::action() {
 void Transport::setSpeed(qreal _scoreSpeed) {
     speedLock = true;
     scoreSpeed = _scoreSpeed;
+
     ui->speedSlider->setValue(scoreSpeed*100.);
     ui->speedSpin->setValue  (scoreSpeed);
+
     speedLock = false;
 }
 
