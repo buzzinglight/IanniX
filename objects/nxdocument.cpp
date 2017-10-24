@@ -144,7 +144,7 @@ void NxDocument::open(bool configure) {
     //Open the script file (if its a file)
     QFileInfo file = getScriptFile();
     if(!file.exists())
-        file = QFileInfo(Application::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
+        file = QFileInfo(Application::pathTools.absoluteFilePath() + "/Score template.iannix");
     QFile scriptFileContent(file.absoluteFilePath());
     if(scriptFileContent.open(QIODevice::ReadOnly | QIODevice::Text)) {
         //Read file
@@ -239,7 +239,7 @@ const QString NxDocument::getContent(bool fromFile) {
     if(fromFile) {
         QFileInfo file = getScriptFile();
         if(!file.exists())
-            file = QFileInfo(Application::pathApplication.absoluteFilePath() + "/Tools/Score template.iannix");
+            file = QFileInfo(Application::pathTools.absoluteFilePath() + "/Score template.iannix");
 
         QFile scoreTemplateFile(file.absoluteFilePath());
         if(scoreTemplateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -273,7 +273,7 @@ void NxDocument::remplaceInFunction(QString *content, const QString &delimiter, 
 const QString NxDocument::loadLibrary() {
     QString scriptContent = "";
 
-    QFileInfoList scriptDirs = QDir(Application::pathApplication.absoluteFilePath() + "/Tools/").entryInfoList(QStringList() << "*.js", QDir::Files | QDir::NoDotAndDotDot);
+    QFileInfoList scriptDirs = QDir(Application::pathTools.absoluteFilePath() + "/").entryInfoList(QStringList() << "*.js", QDir::Files | QDir::NoDotAndDotDot);
     foreach(const QFileInfo & scriptFile, scriptDirs) {
         QFile scriptFileContent(scriptFile.absoluteFilePath());
         if(scriptFileContent.open(QIODevice::ReadOnly | QIODevice::Text)) {

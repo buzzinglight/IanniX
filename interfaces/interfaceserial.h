@@ -48,7 +48,7 @@ private:
 private slots:
     void portChanged();
     void openExamples() {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/Arduino/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathPatches.absoluteFilePath() + "/Arduino/").absoluteFilePath()));
     }
 
 private:

@@ -30,10 +30,13 @@ QWidget*            Application::splash = 0;
 QFileInfo           Application::pathApplication;
 QFileInfo           Application::pathDocuments;
 QFileInfo           Application::pathCurrent;
+QFileInfo           Application::pathTools;
+QFileInfo           Application::pathExamples;
+QFileInfo           Application::pathPatches;
 
 UiString Application::defaultMessageTrigger   = QString("osc://ip_out:port_out/trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id, midi://midi_out/notef 1 trigger_value_y trigger_value_x trigger_duration, tcp:// trigger trigger_id trigger_group_id trigger_value_x trigger_value_y trigger_value_z trigger_xPos trigger_yPos trigger_zPos cursor_id cursor_group_id");
 UiString Application::defaultMessageCursor    = QString("osc://ip_out:port_out/cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos, tcp:// cursor cursor_id cursor_group_id cursor_value_x cursor_value_y cursor_value_z cursor_xPos cursor_yPos cursor_zPos");
-UiString Application::defaultMessageCurve     = QString("osc://ip_out:port_out/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0, tcp:// curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y 0 collision_xPos collision_yPos 0");
+UiString Application::defaultMessageCurve     = QString("osc://ip_out:port_out/curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y collision_value_z collision_xPos collision_yPos collision_zPos, tcp:// curve collision_curve_id collision_curve_group_id collision_value_x collision_value_y collision_value_z collision_xPos collision_yPos collision_zPos");
 UiString Application::defaultMessageTransport = QString("osc://ip_out:port_out/transport status global_time global_time_verbose nb_triggers nb_cursors nb_curves, tcp:// transport status nb_triggers nb_cursors nb_curves");
 UiString Application::defaultMessageSync      = QString("osc://ip_out:port_out/iannix/ status");
 UiString Application::defaultMessage          = QString("osc://ip_out:port_out/object trigger_id trigger_group_id cursor_id cursor_group_id");

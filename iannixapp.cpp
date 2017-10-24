@@ -38,6 +38,11 @@ int main(int argc, char *argv[]) {
 
     IanniXApp iannixApp(argc, argv);
 
+#ifdef QT5
+    qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
+    qApp->setAttribute(Qt::AA_ShareOpenGLContexts);
+#endif
+
     //QString locale = QLocale::system().name();
     //QTranslator translator;
     //translator.load("Translation_" + locale, "Tools");
@@ -83,9 +88,10 @@ void IanniXApp::launch(int &argc, char **argv) {
     //Start
     setHelp();
 
-    QDir pathApplicationDir = QDir(QCoreApplication::applicationDirPath()).absolutePath();
+    QDir pathApplicationDir = QDir(QCoreApplication::applicationDirPath()).absolutePath(), pathApplicationDirM;
 #ifdef Q_OS_MAC
     pathApplicationDir.cdUp();
+    pathApplicationDirM = pathApplicationDir;
     pathApplicationDir.cdUp();
     pathApplicationDir.cdUp();
 #endif
@@ -103,10 +109,22 @@ void IanniXApp::launch(int &argc, char **argv) {
     if(Application::pathApplication.absoluteFilePath().endsWith("/IanniX-build"))
         Application::pathApplication = QFileInfo(Application::pathApplication.absoluteFilePath().remove("-build"));
 
+#ifdef Q_OS_MAC
+    Application::pathExamples = pathApplicationDirM.absolutePath() + "/Resources/Examples";
+    Application::pathTools    = pathApplicationDirM.absolutePath() + "/Resources/Tools";
+    Application::pathPatches  = pathApplicationDirM.absolutePath() + "/Resources/Patches";
+#else
+    Application::pathExamples = Application::pathApplication.absoluteFilePath() + "/Examples";
+    Application::pathTools    = Application::pathApplication.absoluteFilePath() + "/Tools";
+    Application::pathPatches  = Application::pathApplication.absoluteFilePath() + "/Patches";
+#endif
+
     qDebug("Paths");
     qDebug("\tDocuments  : %s", qPrintable(Application::pathDocuments  .absoluteFilePath()));
     qDebug("\tApplication: %s", qPrintable(Application::pathApplication.absoluteFilePath()));
     qDebug("\tCurrent    : %s", qPrintable(Application::pathCurrent    .absoluteFilePath()));
+    qDebug("\tExamples   : %s", qPrintable(Application::pathExamples   .absoluteFilePath()));
+    qDebug("\tTools      : %s", qPrintable(Application::pathTools      .absoluteFilePath()));
     qDebug("Arguments");
     for(quint16 i = 0 ; i < argc ; i++)
         qDebug("\t%2d=\t%s", i, argv[i]);
@@ -135,8 +153,8 @@ void IanniXApp::launch(int &argc, char **argv) {
     }
 
     //Add font
-    if(QFontDatabase::addApplicationFont(Application::pathApplication.absoluteFilePath() + "/Tools/Museo.ttf"))
-        qDebug("Loading IanniX font failed : %s", qPrintable(Application::pathApplication.absoluteFilePath() + "/Tools/Museo.ttf"));
+    if(QFontDatabase::addApplicationFont(Application::pathTools.absoluteFilePath() + "/Museo.ttf"))
+        qDebug("Loading IanniX font failed : %s", qPrintable(Application::pathTools.absoluteFilePath() + "/Museo.ttf"));
     //List of fonts
     if(false) {
         qDebug("[FONTS]");
@@ -288,8 +306,10 @@ void IanniXApp::setHelp() {
     Help::categories["values"].infos << HelpInfo(QString("collision_curve_zPos"),         tr("z coordinate of the collided curve"));
     Help::categories["values"].infos << HelpInfo(QString("collision_xPos"),        tr("x coordinate of the collision between the cursor and the curve"));
     Help::categories["values"].infos << HelpInfo(QString("collision_yPos"),        tr("y coordinate of the collision between the cursor and the curve"));
+    Help::categories["values"].infos << HelpInfo(QString("collision_zPos"),        tr("z coordinate of the collision between the cursor and the curve"));
     Help::categories["values"].infos << HelpInfo(QString("collision_value_x"),	   tr("x mapped coordinate of the collision between the cursor and the curve"));
     Help::categories["values"].infos << HelpInfo(QString("collision_value_y"),	   tr("y mapped coordinate of the collision between the cursor and the curve"));
+    Help::categories["values"].infos << HelpInfo(QString("collision_value_z"),	   tr("z mapped coordinate of the collision between the cursor and the curve"));
     Help::categories["values"].infos << HelpInfo(QString("collision_distance"),	   tr("Distance between the collision and the cursor"));
     Help::categories["values"].infos << HelpInfo(QString("timetag"),               tr("Set an OSC Timetag (compliant with Internet NTP timestamps) to message"));
     Help::categories["values"].infos << HelpInfo(QString("status"),                tr("Playback status of score (\"play\"), \"stop\" or \"fastrewind\")"));

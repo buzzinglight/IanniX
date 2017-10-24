@@ -45,7 +45,7 @@ private:
 private slots:
     void portChanged();
     void openExamples() {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/PureData/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathPatches.absoluteFilePath() + "/PureData/").absoluteFilePath()));
     }
 
 private:

@@ -136,7 +136,7 @@ public slots:
     void receivedMidiRealtime(quint8 type, quint8 val1, quint8 val2);
     void networkManualParsing();
     void openExamples() {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/Ableton Live/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathPatches.absoluteFilePath() + "/Ableton Live/").absoluteFilePath()));
     }
     void downloadMidiJack() {
         QDesktopServices::openUrl(QUrl("http://www.nerds.de/data/setuploopbe1.exe"));

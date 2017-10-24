@@ -73,7 +73,7 @@ ExtOscPatternEditor::ExtOscPatternEditor(QWidget *parent) :
     ui->templates->clear();
     addTemplate("Templates", true);
     addTemplate("--");
-    QFileInfoList files = QDir(Application::pathApplication.absoluteFilePath() + "/Tools/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    QFileInfoList files = QDir(Application::pathTools.absoluteFilePath() + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
     files <<              QDir(Application::pathDocuments.absoluteFilePath()   + "/Templates/").entryInfoList(QStringList() << "*.txt", QDir::Files | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
     bool firstTemplate = true;
     QString title;

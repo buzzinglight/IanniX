@@ -136,7 +136,7 @@ class Application : public QObject {
     Q_OBJECT
 
 public:
-    static QFileInfo pathApplication, pathDocuments, pathCurrent;
+    static QFileInfo pathApplication, pathDocuments, pathCurrent, pathExamples, pathTools, pathPatches;
     static Render *render;
     static ApplicationCurrent *current;
     static void* synchroLoopGuard;

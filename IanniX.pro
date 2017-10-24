@@ -42,6 +42,18 @@ macx {
         CONFIG  += x86_64
         message("IanniX for Mac 64bits")
     }
+
+    BUNDLE_RES3.files  = Examples
+    BUNDLE_RES3.path   = Contents/Resources
+    QMAKE_BUNDLE_DATA += BUNDLE_RES3
+
+    BUNDLE_RES2.files  = Tools
+    BUNDLE_RES2.path   = Contents/Resources
+    QMAKE_BUNDLE_DATA += BUNDLE_RES2
+
+    BUNDLE_RES4.files  = Patches
+    BUNDLE_RES4.path   = Contents/Resources
+    QMAKE_BUNDLE_DATA += BUNDLE_RES4
 }
 !macx {
     DEFINES += IANNIX_64

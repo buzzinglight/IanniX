@@ -106,9 +106,9 @@ private slots:
     void portChanged();
     void portOutChanged();
     void openExamples() {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/MaxMSP/").absoluteFilePath()));
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/PureData/").absoluteFilePath()));
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/Processing/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathPatches.absoluteFilePath() + "/MaxMSP/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathPatches.absoluteFilePath() + "/PureData/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathPatches.absoluteFilePath() + "/Processing/").absoluteFilePath()));
     }
 
 private:

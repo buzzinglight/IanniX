@@ -93,7 +93,7 @@ public slots:
     void actionResize(QSize size);
     void gridChange();
     void actionPatchesFolder() {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathPatches.absoluteFilePath() + "/").absoluteFilePath()));
     }
 
 

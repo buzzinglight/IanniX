@@ -287,10 +287,14 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                         messageScriptValue.setProperty("collision_xPos", destination.collisionPoint.x());
                     if(patternArgument.contains("collision_yPos"))
                         messageScriptValue.setProperty("collision_yPos", destination.collisionPoint.y());
+                    if(patternArgument.contains("collision_zPos"))
+                        messageScriptValue.setProperty("collision_zPos", destination.collisionPoint.z());
                     if(patternArgument.contains("collision_value_x"))
                         messageScriptValue.setProperty("collision_value_x", destination.collisionValue.x());
                     if(patternArgument.contains("collision_value_y"))
                         messageScriptValue.setProperty("collision_value_y", destination.collisionValue.y());
+                    if(patternArgument.contains("collision_value_z"))
+                        messageScriptValue.setProperty("collision_value_z", destination.collisionValue.z());
                     if((patternArgument.contains("collision_distance")) && (((NxCursor*)destination.cursor))) {
                         NxPoint cursorPosDelta = (((NxCursor*)destination.cursor))?(destination.collisionPoint - ((NxCursor*)destination.cursor)->getCurrentPos()):(NxPoint());
                         messageScriptValue.setProperty("collision_distance", qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()));
@@ -510,10 +514,14 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                         found = addFloat(destination.collisionPoint.x(), patternArgument, patternIndex);
                     else if(patternArgument == "collision_yPos")
                         found = addFloat(destination.collisionPoint.y(), patternArgument, patternIndex);
+                    else if(patternArgument == "collision_zPos")
+                        found = addFloat(destination.collisionPoint.z(), patternArgument, patternIndex);
                     else if(patternArgument == "collision_value_x")
                         found = addFloat(destination.collisionValue.x(), patternArgument, patternIndex);
                     else if(patternArgument == "collision_value_y")
                         found = addFloat(destination.collisionValue.y(), patternArgument, patternIndex);
+                    else if(patternArgument == "collision_value_z")
+                        found = addFloat(destination.collisionValue.z(), patternArgument, patternIndex);
                     else if((patternArgument == "collision_distance") && (((NxCursor*)destination.cursor))) {
                         NxPoint cursorPosDelta = destination.collisionPoint - ((NxCursor*)destination.cursor)->getCurrentPos();
                         found = addFloat(qSqrt(cursorPosDelta.x()*cursorPosDelta.x() + cursorPosDelta.y()*cursorPosDelta.y() + cursorPosDelta.z()*cursorPosDelta.z()), patternArgument, patternIndex);

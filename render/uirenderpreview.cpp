@@ -35,7 +35,7 @@ UiRenderPreview::UiRenderPreview(QWidget *parent, void *shared) :
     //sf.setRenderableType(QSurfaceFormat::OpenGL);
     //sf.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     //sf.setOption(QSurfaceFormat::DeprecatedFunctions);
-    sf.setSamples(2);
+    sf.setSamples(4./devicePixelRatioFScale());
     setFormat(sf);
 #endif
     setFocusPolicy(Qt::StrongFocus);

@@ -77,7 +77,7 @@ private slots:
     void updateConnectedClients();
     void parseXml(const QDomDocument&, QTcpSocket*);
     void openExamples() {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathApplication.absoluteFilePath() + "/Patches/Adobe Flash/").absoluteFilePath()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(Application::pathPatches.absoluteFilePath() + "/Adobe Flash/").absoluteFilePath()));
     }
 
 public:
