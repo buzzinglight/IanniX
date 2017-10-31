@@ -7,9 +7,9 @@ Build IanniX
 
 All platforms
 -------------
-- Download Qt 4.8 for your plateform (http://qt-project.org/downloads) (4.7 is also compatible)
-- Download Qt Creator (http://qt-project.org/downloads)
-- Open IanniX.pro and build!
+- Download & install Qt5 for your plateform
+- Download & install QtCreator (included in Qt5 package)
+- Open IanniX.pro and build/run!
 
 Mac OS X specific
 -----------------
@@ -18,7 +18,7 @@ Mac OS X specific
 
 Linux
 -----
-- You'll need to build Qt before building IanniX
+- You'll need to download & build Qt before building IanniX
   - If your distribution supports it, you can also install Qt via the package
     manager, e.g.:
 
