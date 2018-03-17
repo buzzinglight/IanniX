@@ -102,7 +102,7 @@ private:
     static QString portOutName, portInName;
 private:
     const QString getPortName(QString port) {
-        return qPrintable(port.replace(" ", "_").replace("/", "_").toLower().trimmed());
+        return qPrintable(port.replace(" ", "_").replace("/", "_").split(":")[0].toLower().trimmed());
     }
     const QString getPortNameStd(std::string string) {
         QString retour;

@@ -51,6 +51,8 @@ InterfaceMidi::InterfaceMidi(QWidget *parent) :
             portOut.remove(getPortName(portOutName));
         if (portIn .value(getPortName(portInName)) ->getPortCount() == 0)
             portIn.remove(getPortName(portInName));
+        if(ui->aliasPort->findText(portOutName) < 0)
+            ui->aliasPort->addItem(portOutName);
 #endif
 #if defined(__LINUX_ALSASEQ__) || defined(__MACOSX_CORE__)
         if(portOut.value(getPortName(portOutName)) != 0)
