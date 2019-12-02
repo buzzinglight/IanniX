@@ -11,13 +11,13 @@ Build IanniX
 
 All platforms
 -------------
-- Download & install Qt5 for your plateform
+- Download & install Qt5 for your platform
 - Download & install QtCreator (included in Qt5 package)
 - Open IanniX.pro and build/run!
 
 Mac OS X specific
 -----------------
-- Download Syphon Framework (http://syphon-framework.googlecode.com/) and add it to /Library/Frameworks folder
+- Download Syphon Framework (http://syphon.v002.info/) and add it to `/Library/Frameworks` folder
 - If you want to build IanniX with Kinect support, you'll need libfreenect (http://openkinect.org/wiki/Getting_Started)
 
 Linux
