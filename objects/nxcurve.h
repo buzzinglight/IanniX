@@ -28,6 +28,7 @@
 #include <QScriptValue>
 #include <QVarLengthArray>
 #include <QBitmap>
+#include <QPainterPath>
 #include "geometry/qmuparser/muParser.h"
 #include "nxobject.h"
 #include "qmath.h"
