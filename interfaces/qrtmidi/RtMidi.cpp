@@ -1664,6 +1664,7 @@ void MidiOutAlsa :: initialize( const std::string& clientName )
   data->seq = seq;
   data->portNum = -1;
   data->vport = -1;
+  data->subscription = 0;
   data->bufferSize = 32;
   data->coder = 0;
   data->buffer = 0;
@@ -1808,6 +1809,8 @@ void MidiOutAlsa :: sendMessage( std::vector<unsigned char> *message )
 {
   int result;
   AlsaMidiData *data = static_cast<AlsaMidiData *> (apiData_);
+  if ( data->vport < 0 )
+    return;
   unsigned int nBytes = message->size();
   if ( nBytes > data->bufferSize ) {
     data->bufferSize = nBytes;
@@ -1827,6 +1830,7 @@ void MidiOutAlsa :: sendMessage( std::vector<unsigned char> *message )
   snd_seq_event_t ev;
   snd_seq_ev_clear(&ev);
   snd_seq_ev_set_source(&ev, data->vport);
+  snd_seq_ev_set_dest(&ev, snd_seq_client_id( data->seq ), data->vport);
   snd_seq_ev_set_subs(&ev);
   snd_seq_ev_set_direct(&ev);
   for ( unsigned int i=0; i<nBytes; ++i ) data->buffer[i] = message->at(i);
