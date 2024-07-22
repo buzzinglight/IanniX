@@ -2,7 +2,7 @@
 Name=IanniX
 Comment=Graphical sequencer for digital art
 Exec=IanniX
-Icon=/usr/share/pixmaps/IanniX.png
+Icon=/usr/share/pixmaps/iannix.png
 Terminal=false
 Type=Application
 X-MultipleArgs=false
