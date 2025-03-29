@@ -5,3 +5,6 @@
 *.mov
 *-build
 Thumbs.db
+*.o
+Iannix.app
+.uv
