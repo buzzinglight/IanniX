@@ -203,7 +203,17 @@ bool UiView::getPerformancePreview() const {
 }
 
 void UiView::keyPressEvent(QKeyEvent *event) {
-    ui->render->keyPressEvent(event);
+    if(event->modifiers() & Qt::MetaModifier) { // Cmd key on macOS
+        if(event->key() == Qt::Key_BracketLeft) {
+            ui->render->adjustOpacity(false); // Decrease opacity
+            return;
+        } else if(event->key() == Qt::Key_BracketRight) {
+            ui->render->adjustOpacity(true); // Increase opacity
+            return;
+        }
+    }
+
+    QMainWindow::keyPressEvent(event); // Pass unhandled events to the base class
 }
 void UiView::closeEvent(QCloseEvent *event) {
     emit(actionRouteCloseEvent(event));

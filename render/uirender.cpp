@@ -1571,3 +1571,11 @@ void UiRender::toggleBorderlessMode() {
         activateWindow();
     }
 }
+
+void UiRender::adjustOpacity(bool increase) {
+    qreal currentOpacity = windowOpacity();
+    qreal newOpacity = increase ? currentOpacity + 0.1 : currentOpacity - 0.1;
+    newOpacity = qBound(0.1, newOpacity, 1.0); // Clamp between 0.1 and 1.0
+    setWindowOpacity(newOpacity);
+    qDebug() << "Performance window opacity set to:" << newOpacity;
+}

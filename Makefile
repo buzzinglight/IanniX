@@ -17591,16 +17591,7 @@ messagemanagerlogmini.o: messages/messagemanagerlogmini.cpp messages/messagemana
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qmenu.h \
 		transport/uiabout.h \
 		transport/uieditor.h \
-		ui_messagemanagerlogmini.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h
+		ui_messagemanagerlogmini.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o messagemanagerlogmini.o messages/messagemanagerlogmini.cpp
 
 messagemanagerlog.o: messages/messagemanagerlog.cpp messages/messagemanagerlog.h \
@@ -17886,20 +17877,7 @@ messagemanagerlog.o: messages/messagemanagerlog.cpp messages/messagemanagerlog.h
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qmenu.h \
 		transport/uiabout.h \
 		transport/uieditor.h \
-		ui_messagemanagerlog.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSplitter \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qsplitter.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_messagemanagerlog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o messagemanagerlog.o messages/messagemanagerlog.cpp
 
 messagemanager.o: messages/messagemanager.cpp messages/messagemanager.h \
@@ -18829,20 +18807,7 @@ transport.o: transport/transport.cpp transport/transport.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qmenu.h \
 		transport/uiabout.h \
 		transport/uieditor.h \
-		ui_transport.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QIcon \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QFrame \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSlider \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_transport.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o transport.o transport/transport.cpp
 
 uitimer.o: transport/uitimer.cpp transport/uitimer.h \
@@ -19119,13 +19084,7 @@ uitimer.o: transport/uitimer.cpp transport/uitimer.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QFileSystemWatcher \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qfilesystemwatcher.h \
 		items/uipathpointsitem.h \
-		ui_uitimer.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qcoreapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qeventloop.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h
+		ui_uitimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uitimer.o transport/uitimer.cpp
 
 uiabout.o: transport/uiabout.cpp transport/uiabout.h \
@@ -19234,25 +19193,7 @@ uiabout.o: transport/uiabout.cpp transport/uiabout.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtouchdevice.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QDesktopWidget \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qdesktopwidget.h \
-		ui_uiabout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QVariant \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qcoreapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qeventloop.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QLabel \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlabel.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qframe.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QTextEdit \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtextedit.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qabstractscrollarea.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextdocument.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextoption.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextcursor.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextformat.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qpen.h
+		ui_uiabout.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uiabout.o transport/uiabout.cpp
 
 uieditor.o: transport/uieditor.cpp transport/uieditor.h \
@@ -19527,26 +19468,7 @@ uieditor.o: transport/uieditor.cpp transport/uieditor.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QFileSystemWatcher \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qfilesystemwatcher.h \
 		items/uipathpointsitem.h \
-		ui_uieditor.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qcoreapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qeventloop.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSplitter \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qsplitter.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QStatusBar \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qstatusbar.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QToolBar \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtoolbar.h \
-		gui/qjsedit/jsedit.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QColor
+		ui_uieditor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uieditor.o transport/uieditor.cpp
 
 uirender.o: render/uirender.cpp render/uirender.h \
@@ -19894,11 +19816,7 @@ uirender.o: render/uirender.cpp render/uirender.h \
 		geometry/qmuparser/muParserBytecode.h \
 		geometry/qmuparser/muParserTemplateMagic.h \
 		interfaces/extscriptvariableask.h \
-		ui_uirender.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h
+		ui_uirender.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uirender.o render/uirender.cpp
 
 uirenderpreview.o: render/uirenderpreview.cpp render/uirenderpreview.h \
@@ -22817,24 +22735,7 @@ uiinspector.o: gui/uiinspector.cpp gui/uiinspector.h \
 		interfaces/extoscpatterneditor.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QCompleter \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qcompleter.h \
-		ui_uiinspector.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QFrame \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QGridLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSlider \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSplitter \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qsplitter.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QTabWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_uiinspector.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uiinspector.o gui/uiinspector.cpp
 
 uiview.o: gui/uiview.cpp gui/uiview.h \
@@ -23190,28 +23091,7 @@ uiview.o: gui/uiview.cpp gui/uiview.h \
 		interfaces/extoscpatterneditor.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QCompleter \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qcompleter.h \
-		ui_uiview.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QDockWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qdockwidget.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QMenuBar \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qmenubar.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QStackedWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qstackedwidget.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QStatusBar \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qstatusbar.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QToolBar \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtoolbar.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_uiview.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uiview.o gui/uiview.cpp
 
 uihelp.o: gui/uihelp.cpp gui/uihelp.h \
@@ -23426,20 +23306,7 @@ uihelp.o: gui/uihelp.cpp gui/uihelp.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QVariant \
 		geometry/nxpoint.h \
 		geometry/nxsize.h \
-		ui_uihelp.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qcoreapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qeventloop.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QTextBrowser \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtextbrowser.h
+		ui_uihelp.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uihelp.o gui/uihelp.cpp
 
 uimessagebox.o: gui/uimessagebox.cpp gui/uimessagebox.h \
@@ -23554,57 +23421,14 @@ uimessagebox.o: gui/uimessagebox.cpp gui/uimessagebox.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QMessageBox \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qmessagebox.h \
 		ui_uimessagebox.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QVariant \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qcoreapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qeventloop.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QCheckBox \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qcheckbox.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qabstractbutton.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qicon.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QDoubleSpinBox \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qspinbox.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qabstractspinbox.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qvalidator.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qregularexpression.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QLabel \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlabel.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qframe.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QLineEdit \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlineedit.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextcursor.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextformat.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qpen.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextoption.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QPlainTextEdit \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qplaintextedit.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtextedit.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qabstractscrollarea.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextdocument.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qabstracttextdocumentlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qglyphrun.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qrawfont.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qfontdatabase.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QStackedWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qstackedwidget.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QWidget \
 		misc/application.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QObject \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QImage \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QVariant \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qmainwindow.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtabwidget.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qicon.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QPixmap \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QStandardPaths \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qstandardpaths.h \
@@ -23623,23 +23447,42 @@ uimessagebox.o: gui/uimessagebox.cpp gui/uimessagebox.h \
 		geometry/nxpolygon.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QVector \
 		gui/uihelp.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QWidget \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QFile \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QFileInfo \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qfileinfo.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QUrl \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QTextCursor \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextcursor.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextformat.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qpen.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextoption.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QTextBlock \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextobject.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextlayout.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qglyphrun.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qrawfont.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qfontdatabase.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QComboBox \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qcombobox.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qabstractitemdelegate.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qstyleoption.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qabstractspinbox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qvalidator.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qregularexpression.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qslider.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qabstractslider.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qstyle.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtabbar.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qrubberband.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qframe.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qabstractitemmodel.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QPlainTextEdit \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qplaintextedit.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtextedit.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qabstractscrollarea.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qtextdocument.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qabstracttextdocumentlayout.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QScrollBar \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qscrollbar.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QClipboard \
@@ -23651,13 +23494,20 @@ uimessagebox.o: gui/uimessagebox.cpp gui/uimessagebox.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qaction.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qactiongroup.h \
 		misc/options.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QCheckBox \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qcheckbox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qabstractbutton.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QPushButton \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qpushbutton.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QDateTime \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qdatetime.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpinBox \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qspinbox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QDoubleSpinBox \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QRadioButton \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qradiobutton.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QLineEdit \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlineedit.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QDesktopServices \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qdesktopservices.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QList \
@@ -23689,6 +23539,8 @@ uimessagebox.o: gui/uimessagebox.cpp gui/uimessagebox.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qopenglversionfunctions.h \
 		render/uirenderpreview.h \
 		interfaces/extkinectmanager.h \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QLabel \
+		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlabel.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QKeyEvent \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QPainter \
 		interfaces/qkinect/QKinect.h \
@@ -24408,21 +24260,7 @@ uitreeview.o: items/uitreeview.cpp items/uitreeview.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QVariant \
 		geometry/nxpoint.h \
 		geometry/nxsize.h \
-		ui_uitreeview.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qcoreapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qeventloop.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qdesktopwidget.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_uitreeview.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uitreeview.o items/uitreeview.cpp
 
 uitreeviewwidget.o: items/uitreeviewwidget.cpp items/uitreeviewwidget.h \
@@ -25737,26 +25575,7 @@ extscriptvariableask.o: interfaces/extscriptvariableask.cpp interfaces/extscript
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtabwidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qrubberband.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qtreewidgetitemiterator.h \
-		ui_extscriptvariableask.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QVariant \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qcoreapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qeventloop.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qdesktopwidget.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QDialogButtonBox \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qdialogbuttonbox.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHeaderView \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qheaderview.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QLabel \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlabel.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h
+		ui_extscriptvariableask.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o extscriptvariableask.o interfaces/extscriptvariableask.cpp
 
 extoscpatternask.o: interfaces/extoscpatternask.cpp interfaces/extoscpatternask.h \
@@ -26067,21 +25886,7 @@ extoscpatternask.o: interfaces/extoscpatternask.cpp interfaces/extoscpatternask.
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/lib/QtNetwork.framework/Headers/QTcpSocket \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/lib/QtNetwork.framework/Headers/qtcpsocket.h \
 		messages/messagemanagerloginterface.h \
-		ui_extoscpatternask.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSplitter \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qsplitter.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QTabWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_extoscpatternask.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o extoscpatternask.o interfaces/extoscpatternask.cpp
 
 extoscpatterneditor.o: interfaces/extoscpatterneditor.cpp interfaces/extoscpatterneditor.h \
@@ -26374,19 +26179,7 @@ extoscpatterneditor.o: interfaces/extoscpatterneditor.cpp interfaces/extoscpatte
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qmenu.h \
 		transport/uiabout.h \
 		transport/uieditor.h \
-		ui_extoscpatterneditor.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QFrame \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_extoscpatterneditor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o extoscpatterneditor.o interfaces/extoscpatterneditor.cpp
 
 abstractionsgl.o: abstractionsgl.cpp abstractionsgl.h \
@@ -26884,14 +26677,7 @@ interfacehttp.o: interfaces/interfacehttp.cpp interfaces/interfacehttp.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/qtextcodec.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/lib/QtNetwork.framework/Headers/QNetworkProxy \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/lib/QtNetwork.framework/Headers/qnetworkproxy.h \
-		ui_interfacehttp.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_interfacehttp.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interfacehttp.o interfaces/interfacehttp.cpp
 
 interfacemidi.o: interfaces/interfacemidi.cpp interfaces/interfacemidi.h \
@@ -27223,18 +27009,7 @@ interfacemidi.o: interfaces/interfacemidi.cpp interfaces/interfacemidi.h \
 		transport/uieditor.h \
 		messages/messagemanagerlog.h \
 		messages/messagemanagerlogmini.h \
-		ui_interfacemidi.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_interfacemidi.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interfacemidi.o interfaces/interfacemidi.cpp
 
 interfaceosc.o: interfaces/interfaceosc.cpp interfaces/interfaceosc.h \
@@ -27552,19 +27327,7 @@ interfaceosc.o: interfaces/interfaceosc.cpp interfaces/interfaceosc.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QMetaType \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QString \
 		interfaces/zeroconf/bonjourserviceregister.h \
-		ui_interfaceosc.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/QIcon \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_interfaceosc.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interfaceosc.o interfaces/interfaceosc.cpp
 
 interfaceserial.o: interfaces/interfaceserial.cpp interfaces/interfaceserial.h \
@@ -27874,21 +27637,7 @@ interfaceserial.o: interfaces/interfaceserial.cpp interfaces/interfaceserial.h \
 		interfaces/qextserialport/qextserialport_global.h \
 		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtCore/QtGlobal \
 		interfaces/qextserialport/qextserialenumerator.h \
-		ui_interfaceserial.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QFormLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qformlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_interfaceserial.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interfaceserial.o interfaces/interfaceserial.cpp
 
 interfacetcp.o: interfaces/interfacetcp.cpp interfaces/interfacetcp.h \
@@ -28199,18 +27948,7 @@ interfacetcp.o: interfaces/interfacetcp.cpp interfaces/interfacetcp.h \
 		transport/uieditor.h \
 		messages/messagemanagerlog.h \
 		messages/messagemanagerlogmini.h \
-		ui_interfacetcp.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_interfacetcp.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interfacetcp.o interfaces/interfacetcp.cpp
 
 interfaceudp.o: interfaces/interfaceudp.cpp interfaces/interfaceudp.h \
@@ -28515,18 +28253,7 @@ interfaceudp.o: interfaces/interfaceudp.cpp interfaces/interfaceudp.h \
 		transport/uieditor.h \
 		messages/messagemanagerlog.h \
 		messages/messagemanagerlogmini.h \
-		ui_interfaceudp.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout
+		ui_interfaceudp.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interfaceudp.o interfaces/interfaceudp.cpp
 
 interfacedirect.o: interfaces/interfacedirect.cpp interfaces/interfacedirect.h \
@@ -28831,17 +28558,7 @@ interfacedirect.o: interfaces/interfacedirect.cpp interfaces/interfacedirect.h \
 		transport/uieditor.h \
 		messages/messagemanagerlog.h \
 		messages/messagemanagerlogmini.h \
-		ui_interfacedirect.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QSpacerItem
+		ui_interfacedirect.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interfacedirect.o interfaces/interfacedirect.cpp
 
 qextserialport.o: interfaces/qextserialport/qextserialport.cpp interfaces/qextserialport/qextserialport.h \
@@ -30219,15 +29936,6 @@ interfacesyphon.o: interfaces/interfacesyphon.mm interfaces/interfacesyphon.h \
 		messages/messagemanagerlog.h \
 		messages/messagemanagerlogmini.h \
 		ui_interfacesyphon.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qguiapplication.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtGui/qinputmethod.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/QVBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qlayoutitem.h \
-		/opt/homebrew/Cellar/qt@5/5.15.16_1/include/QtWidgets/qgridlayout.h \
 		/Library/Frameworks/Syphon.framework/Versions/A/Headers/Syphon.h \
 		/Library/Frameworks/Syphon.framework/Headers/Syphon/SyphonServerDirectory.h \
 		/Library/Frameworks/Syphon.framework/Headers/Syphon/SyphonMetalServer.h \

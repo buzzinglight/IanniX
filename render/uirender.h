@@ -279,6 +279,8 @@ private:
     GLuint renderPreviewTexture;
 private:
     GLuint destinationTexture, workingTexture;
+public:
+    void adjustOpacity(bool increase);  // Adjust window opacity by 0.1 increments
 };
 
 #endif //RENDER_H
