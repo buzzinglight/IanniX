@@ -32,16 +32,20 @@ contains(QT_VERSION, "^4.*") {
 }
 macx {
     QMAKE_LFLAGS      += -F/Library/Frameworks
-    contains(QT_VERSION, "4.7.4") {
-        message("IanniX for Mac 32bits")
-        DEFINES += IANNIX_32
-        CONFIG  += x86 x86_64
-    }
-    else {
-        DEFINES += IANNIX_64
-        CONFIG  += x86_64
-        message("IanniX for Mac 64bits")
-    }
+#    contains(QT_VERSION, "4.7.4") {
+#        message("IanniX for Mac 32bits")
+#        DEFINES += IANNIX_32
+#        CONFIG  += x86 x86_64
+#    }
+#    else {
+#        DEFINES += IANNIX_64
+#        CONFIG  += x86_64
+#        message("IanniX for Mac 64bits")
+#    }
+
+    DEFINES += IANNIX_64
+    CONFIG  += x86_64
+    message("IanniX for Mac 64bits")
 
     BUNDLE_RES3.files  = Examples
     BUNDLE_RES3.path   = Contents/Resources
@@ -171,6 +175,14 @@ macx {
     DEFINES           += SYPHON_INSTALLED
     OBJECTIVE_SOURCES += interfaces/interfacesyphon.mm
     LIBS              += -framework Cocoa -framework Syphon
+    INCLUDEPATH += /Library/Frameworks/Syphon.framework/Headers
+    INCLUDEPATH += /Library/Frameworks/Syphon.framework/Headers/Syphon
+
+    # Add Syphon framework to the app bundle
+    QMAKE_POST_LINK += mkdir -p $$OUT_PWD/IanniX.app/Contents/Frameworks/ && cp -R /Library/Frameworks/Syphon.framework $$OUT_PWD/IanniX.app/Contents/Frameworks/
+
+    # Ensure the app uses the bundled framework at runtime
+    QMAKE_LFLAGS += -rpath @executable_path/../Frameworks
 }
 
 #Kinect
