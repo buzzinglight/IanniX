@@ -35,6 +35,7 @@ contains(QT_VERSION, "^4.*") {
 }
 
 # Add include path for Qt
+QT_DIR = /opt/homebrew/opt/qt@5 
 INCLUDEPATH += $$[QT_INSTALL_HEADERS]
 INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtWidgets
 INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtGui
