@@ -35,6 +35,7 @@ UiHelp::UiHelp(QWidget *parent) :
     currentCombo    = 0;
     currentTextEdit = 0;
     visibility      = true;
+
     if(parent == 0) {
         statusHelpWidget = this;
         setWindowFlags(Qt::Dialog);
@@ -42,6 +43,10 @@ UiHelp::UiHelp(QWidget *parent) :
         setWindowFlag(Qt::WindowMinimizeButtonHint, false);
         setWindowOpacity(0.9);
     }
+
+    // Set a darker text color for better contrast
+    setStyleSheet("QWidget { color: #333333; background-color: rgba(255, 255, 255, 0.9); }");
+
     startTimer(150);
 }
 
