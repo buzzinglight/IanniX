@@ -470,14 +470,38 @@ void UiRender::paintGL() {
         if(!interfaceSyphon->serverInit) {
             makeCurrent();
             interfaceSyphon->createSyphonServer();
+            interfaceSyphon->serverInit = true;
+            qDebug() << "Syphon server initialized";
         }
         if(interfaceSyphon->serverEnable) {
+            qDebug() << "Publishing to Syphon, screen size:" << renderSize.width() << "x" << renderSize.height();
+            
+            // Create a texture for Syphon to publish
             glEnable(GL_TEXTURE_2D);
-            if(!interfaceSyphon->serverTexture)
+            if(!interfaceSyphon->serverTexture) {
                 glGenTextures(1, &interfaceSyphon->serverTexture);
+                qDebug() << "Generated new texture for Syphon:" << interfaceSyphon->serverTexture;
+            }
+            
+            // Bind the texture and copy the framebuffer
             glBindTexture(GL_TEXTURE_2D, interfaceSyphon->serverTexture);
-            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width() * OpenGlDrawing::dpi, renderSize.height() * OpenGlDrawing::dpi, 0);
-            interfaceSyphon->publishTexture(GL_TEXTURE_2D, renderSize.width() * OpenGlDrawing::dpi, renderSize.height() * OpenGlDrawing::dpi);
+            
+            // Apply texture parameters for better quality
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            
+            // Copy the current framebuffer to the texture
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 
+                          renderSize.width() * OpenGlDrawing::dpi, 
+                          renderSize.height() * OpenGlDrawing::dpi, 0);
+            
+            // Publish the texture to Syphon - fix: remove first parameter (texture ID)
+            // The serverTexture is likely a property already accessible in the publishTexture method
+            interfaceSyphon->publishTexture(GL_TEXTURE_2D, 
+                                          renderSize.width() * OpenGlDrawing::dpi, 
+                                          renderSize.height() * OpenGlDrawing::dpi);
             glDisable(GL_TEXTURE_2D);
         }
 
