@@ -49,6 +49,7 @@ private:
     QSize previousSize;
     QDesktopWidget *fullscreenDisplays;
     QList<QPushButton*> fullscreenButtons;
+    QAction *actionBorderlessMode; // Action for toggling borderless mode
 
 public:
     UiRender*        getRender() const;
@@ -64,6 +65,7 @@ public slots:
     void showTransport();
     void showInspector();
     void showEditor();
+    void actionToggleBorderlessMode(); // Slot for toggling borderless mode
 
     void toggleFullscreen(bool);
     void goToFullscreen();

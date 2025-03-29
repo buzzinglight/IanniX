@@ -1125,8 +1125,16 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
     if((event->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier)
         translationUnit = 1;
 
-    // Toggle borderless mode with 'B' key when in performance mode
-    if(performanceMode && event->key() == Qt::Key_B) {
+    // Toggle borderless mode with Cmd+B (Control+B on Windows/Linux) when in performance mode
+#ifdef Q_OS_MAC
+    if(performanceMode && 
+       (event->modifiers() & Qt::MetaModifier) && 
+       event->key() == Qt::Key_B) {
+#else
+    if(performanceMode && 
+       (event->modifiers() & Qt::ControlModifier) && 
+       event->key() == Qt::Key_B) {
+#endif
         toggleBorderlessMode();
         return;
     }

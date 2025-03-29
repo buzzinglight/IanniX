@@ -38,6 +38,21 @@ UiView::UiView(QWidget *parent) :
     ui->actionDelete->setShortcut(QApplication::trUtf8("UiView", "Delete"));
 #endif
 
+    // Create the Borderless Mode action
+    actionBorderlessMode = new QAction(tr("Borderless mode"), this);
+    actionBorderlessMode->setCheckable(true);
+    actionBorderlessMode->setStatusTip(tr("Removes window borders when in performance mode"));
+#ifdef Q_OS_MAC
+    actionBorderlessMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
+#else
+    actionBorderlessMode->setShortcut(QKeySequence(Qt::META + Qt::Key_B));
+#endif
+    connect(actionBorderlessMode, SIGNAL(triggered()), SLOT(actionToggleBorderlessMode()));
+    
+    // Add the action to the Display menu
+    ui->menuView->addSeparator();
+    ui->menuView->addAction(actionBorderlessMode);
+
     //About
     about = new UiAbout();
 
@@ -625,4 +640,9 @@ void UiView::editingMove(const NxPoint & point, bool add, bool mouseState) {
         freehandCurveIndex--;
         editingStopWithoutRemoval(isLoop);
     }
+}
+
+void UiView::actionToggleBorderlessMode() {
+    // Call the toggleBorderlessMode method on the render object
+    ui->render->toggleBorderlessMode();
 }
