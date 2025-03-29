@@ -46,6 +46,7 @@ UiRender::UiRender(QWidget *parent, void *share) :
     renderPreviewTextureInit = false;
     destinationTexture = workingTexture = 0;
     performanceMode = false;
+    borderlessMode = false;
 
     //Légende
     legendColor = Qt::white;
@@ -235,7 +236,16 @@ void UiRender::setPerformanceMode(bool _performanceMode) {
     performanceMode = _performanceMode;
     if(performanceMode) {
         setParent(0);
-        setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
+        
+        // Apply window flags based on borderless mode setting
+        if(borderlessMode) {
+            // Frameless window without decorations
+            setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+        } else {
+            // Normal window with title and buttons
+            setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
+        }
+        
         move(pos());
         resize(size());
         show();
@@ -407,7 +417,7 @@ void UiRender::paintGL() {
             paintAxisGrid();
 
             //Paint selection
-            paintSelection();
+            paintSelection(); 
 
             //Draw objects
             //Browse groups
@@ -1115,6 +1125,12 @@ void UiRender::keyPressEvent(QKeyEvent *event) {
     if((event->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier)
         translationUnit = 1;
 
+    // Toggle borderless mode with 'B' key when in performance mode
+    if(performanceMode && event->key() == Qt::Key_B) {
+        toggleBorderlessMode();
+        return;
+    }
+
     NxPoint translation;
     if(event->key() == Qt::Key_Left)
         translation += NxPoint(translationUnit, 0);
@@ -1528,3 +1544,22 @@ void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const 
     QGLWidget::renderText(x, y, z, text, font);
 }
 #endif
+
+void UiRender::toggleBorderlessMode() {
+    borderlessMode = !borderlessMode;
+    qDebug() << "Toggling borderless mode:" << borderlessMode;
+    
+    if(performanceMode) {
+        // Re-apply window flags based on new borderless mode setting
+        if(borderlessMode) {
+            // Frameless window without decorations
+            setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+        } else {
+            // Normal window with title and buttons
+            setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
+        }
+        // Need to show the window again after changing flags
+        show();
+        activateWindow();
+    }
+}
