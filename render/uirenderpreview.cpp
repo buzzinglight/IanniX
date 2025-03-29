@@ -64,9 +64,19 @@ void UiRenderPreview::paintPreview(NxEventsPropagation *_render, GLuint _renderP
 }
 
 void UiRenderPreview::paintGL() {
+    // Skip if we have no valid texture or render
+    if (renderPreviewTexture == 0 || !render) {
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+        qDebug("UiRenderPreview::paintGL - No valid texture or render (texture: %u)", renderPreviewTexture);
+        return;
+    }
+
+    // Clear the screen with black
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // Calculate scale to maintain aspect ratio
     qreal scaleX = 1, scaleY = 1;
     qreal ratioRender  = (qreal)width()            / (qreal)height();
     qreal ratioTexture = (qreal)renderSize.width() / (qreal)renderSize.height();
@@ -74,16 +84,31 @@ void UiRenderPreview::paintGL() {
     if(ratioRender >= ratioTexture) scaleX = ratioTexture / ratioRender;
     else                            scaleY = ratioRender  / ratioTexture;
 
-    glPushMatrix();
+    qDebug("UiRenderPreview::paintGL - Drawing texture %u with size %.0fx%.0f in viewport %dx%d", 
+           renderPreviewTexture, renderSize.width(), renderSize.height(), width(), height());
+
+    // Prepare the drawing
+    glLoadIdentity();
     glTranslatef((1-scaleX)/2, (1-scaleY)/2, 0);
+    
+    // Draw texture using modern OpenGL 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, renderPreviewTexture);
+    
+    // Explicitly set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    // Draw quad with texture
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Set color to white for proper texture rendering
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0);    glVertex3f(0,      0,      0);
     glTexCoord2f(1, 0);    glVertex3f(scaleX, 0,      0);
     glTexCoord2f(1, 1);    glVertex3f(scaleX, scaleY, 0);
     glTexCoord2f(0, 1);    glVertex3f(0,      scaleY, 0);
     glEnd();
+    
     glDisable(GL_TEXTURE_2D);
-    glPopMatrix();
 }

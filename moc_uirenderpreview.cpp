@@ -77,7 +77,7 @@ void UiRenderPreview::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
 }
 
 QT_INIT_METAOBJECT const QMetaObject UiRenderPreview::staticMetaObject = { {
-    QMetaObject::SuperData::link<QOpenGLWidget::staticMetaObject>(),
+    QMetaObject::SuperData::link<QGLWidget::staticMetaObject>(),
     qt_meta_stringdata_UiRenderPreview.data,
     qt_meta_data_UiRenderPreview,
     qt_static_metacall,
@@ -96,12 +96,12 @@ void *UiRenderPreview::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_UiRenderPreview.stringdata0))
         return static_cast<void*>(this);
-    return QOpenGLWidget::qt_metacast(_clname);
+    return QGLWidget::qt_metacast(_clname);
 }
 
 int UiRenderPreview::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QOpenGLWidget::qt_metacall(_c, _id, _a);
+    _id = QGLWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {

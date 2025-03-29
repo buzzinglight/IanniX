@@ -43,7 +43,7 @@ public:
     virtual void keyPressEvent(QKeyEvent *)            {}
 };
 
-#ifdef QT4
+#ifdef USE_GLWIDGET
 class UiRenderPreview : public QGLWidget {
 #else
 class UiRenderPreview : public QOpenGLWidget {

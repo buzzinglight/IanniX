@@ -258,32 +258,15 @@ public:
     quint16 renderTextTextureIndex;
     OpenGlFont renderTextFont;
     void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font, bool billboarded);
-    /*
-    inline void renderText(double x, double y, double z, const QString &str, const QFont & font = QFont()) {
-        // Identify x and y locations to render text within widget
-        int height = this->height();
-        GLdouble textPosX = 0, textPosY = 0, textPosZ = 0;
-        project(x, y, 0f, &textPosX, &textPosY, &textPosZ);
-        textPosY = height - textPosY; // y is inverted
+#else
+    // Add renderText method with 6 parameters for consistency
+    void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font, bool billboarded);
+#endif
 
-        // Retrieve last OpenGL color to use as a font color
-        GLdouble glColor[4];
-        glGetDoublev(GL_CURRENT_COLOR, glColor);
-        QColor fontColor = QColor(glColor[0], glColor[1], glColor[2], glColor[3]);
-
-        // Render text
-        QPainter painter(this);
-        painter.setPen(fontColor);
-        painter.setFont(font);
-        painter.drawText(textPosX, textPosY, text);
-        painter.end();
-    }
-    */
 public slots:
     void updateGL() {
         update();
     }
-#endif
 
 public:
     InterfaceSyphon *interfaceSyphon;

@@ -25,11 +25,21 @@ contains(QT_VERSION, "^4.*") {
     message("IanniX For QT4")
     DEFINES += QT4
     QT      += core gui opengl network script xml
+    DEFINES += USE_GLWIDGET
 } else {
     message("IanniX For QT5")
     DEFINES += QT5
+    # Force USE_GLWIDGET for both Qt4 and Qt5 to ensure consistent OpenGL widget usage
+    DEFINES += USE_GLWIDGET
     QT      += widgets core gui opengl network script xml
 }
+
+# Add include path for Qt
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtWidgets
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtGui
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtCore
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtOpenGL
 macx {
     QMAKE_LFLAGS      += -F/Library/Frameworks
 #    contains(QT_VERSION, "4.7.4") {
@@ -178,8 +188,14 @@ macx {
     INCLUDEPATH += /Library/Frameworks/Syphon.framework/Headers
     INCLUDEPATH += /Library/Frameworks/Syphon.framework/Headers/Syphon
 
-    # Add Syphon framework to the app bundle
-    QMAKE_POST_LINK += mkdir -p $$OUT_PWD/IanniX.app/Contents/Frameworks/ && cp -R /Library/Frameworks/Syphon.framework $$OUT_PWD/IanniX.app/Contents/Frameworks/
+    # Add Syphon framework to the app bundle - use full absolute paths with quotes for iCloud Drive compatibility
+    DESTDIR = $${OUT_PWD}
+    message("Output directory is: $$DESTDIR")
+    
+    # Use a more robust shell script approach with proper quoting for the Syphon framework copy
+    QMAKE_POST_LINK += "mkdir -p \"$${DESTDIR}/IanniX.app/Contents/Frameworks/\" && "
+    QMAKE_POST_LINK += "cp -R /Library/Frameworks/Syphon.framework \"$${DESTDIR}/IanniX.app/Contents/Frameworks/\" && "
+    QMAKE_POST_LINK += "echo 'Syphon framework copied to app bundle'"
 
     # Ensure the app uses the bundled framework at runtime
     QMAKE_LFLAGS += -rpath @executable_path/../Frameworks

@@ -231,6 +231,7 @@ void UiRender::rotateTo(const NxPoint & rotation, const NxPoint & rotationCenter
 }
 
 void UiRender::setPerformanceMode(bool _performanceMode) {
+    qDebug() << "Setting performance mode:" << _performanceMode;
     performanceMode = _performanceMode;
     if(performanceMode) {
         setParent(0);
@@ -238,8 +239,13 @@ void UiRender::setPerformanceMode(bool _performanceMode) {
         move(pos());
         resize(size());
         show();
-        //activateWindow();
-        //raise();
+        
+        // Make sure the preview widget exists
+        if(!Application::current->getRenderPreview()) {
+            qDebug() << "Warning: Performance preview widget is null!";
+        } else {
+            qDebug() << "Performance preview widget is valid";
+        }
     }
     else {
         //activateWindow();
@@ -247,10 +253,24 @@ void UiRender::setPerformanceMode(bool _performanceMode) {
     }
 }
 
-//Initialize event
+// Initialize event
 void UiRender::initializeGL() {
+    // We need to use QGLFunctions instead of QOpenGLFunctions with USE_GLWIDGET
+#ifdef USE_GLWIDGET
+    // Use GL functions directly
+    //Flags
+    glHint(GL_POINT_SMOOTH_HINT,   GL_NICEST);
+    glHint(GL_LINE_SMOOTH_HINT,    GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    glEnable(GL_POINT_SMOOTH);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_POLYGON_SMOOTH);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#else
     QOpenGLFunctions glFuncs(QOpenGLContext::currentContext());
-
     //Flags
     glFuncs.glHint(GL_POINT_SMOOTH_HINT,   GL_NICEST);
     glFuncs.glHint(GL_LINE_SMOOTH_HINT,    GL_NICEST);
@@ -262,6 +282,7 @@ void UiRender::initializeGL() {
     glFuncs.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glFuncs.glEnable(GL_BLEND);
     glFuncs.glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#endif
 }
 
 //Resize event
@@ -474,17 +495,94 @@ void UiRender::paintGL() {
 
         //Mode performance preview
         if((performanceMode) && (Application::current->getPerformancePreview()) && (Application::current->getRenderPreview())) {
-            glEnable(GL_TEXTURE_2D);
+            qDebug() << "Performance mode active - preparing texture for preview";
+            
+#ifdef USE_GLWIDGET
+            // Use direct OpenGL calls with QGLWidget
+            
+            // Initialize texture if needed
             if(!renderPreviewTextureInit) {
+                qDebug() << "Creating new render preview texture";
                 glGenTextures(1, &renderPreviewTexture);
+                glBindTexture(GL_TEXTURE_2D, renderPreviewTexture);
+                
+                // Pre-allocate texture with correct dimensions
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 
+                         renderSize.width() * OpenGlDrawing::dpi, 
+                         renderSize.height() * OpenGlDrawing::dpi, 
+                         0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+                         
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                
                 renderPreviewTextureInit = true;
+                qDebug() << "Texture initialized with ID:" << renderPreviewTexture 
+                         << "size:" << renderSize.width() * OpenGlDrawing::dpi 
+                         << "x" << renderSize.height() * OpenGlDrawing::dpi;
             }
+            
+            // Copy current frame to texture
             glBindTexture(GL_TEXTURE_2D, renderPreviewTexture);
-            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, renderSize.width() * OpenGlDrawing::dpi, renderSize.height() * OpenGlDrawing::dpi, 0);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glDisable(GL_TEXTURE_2D);
-            Application::current->getRenderPreview()->paintPreview(this, renderPreviewTexture, renderSize * OpenGlDrawing::dpi);
+            
+            // Ensure viewport dimensions match the texture dimensions
+            GLint viewport[4];
+            glGetIntegerv(GL_VIEWPORT, viewport);
+            qDebug() << "Current viewport:" << viewport[0] << viewport[1] << viewport[2] << viewport[3];
+            
+            // Copy framebuffer to texture
+            glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 
+                             renderSize.width() * OpenGlDrawing::dpi, 
+                             renderSize.height() * OpenGlDrawing::dpi);
+#else
+            // Use QOpenGLFunctions for modern macOS compatibility
+            QOpenGLFunctions glFuncs(QOpenGLContext::currentContext());
+            
+            // Initialize texture if needed
+            if(!renderPreviewTextureInit) {
+                qDebug() << "Creating new render preview texture";
+                glGenTextures(1, &renderPreviewTexture);
+                glBindTexture(GL_TEXTURE_2D, renderPreviewTexture);
+                
+                // Pre-allocate texture with correct dimensions
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 
+                         renderSize.width() * OpenGlDrawing::dpi, 
+                         renderSize.height() * OpenGlDrawing::dpi, 
+                         0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+                         
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                
+                renderPreviewTextureInit = true;
+                qDebug() << "Texture initialized with ID:" << renderPreviewTexture 
+                         << "size:" << renderSize.width() * OpenGlDrawing::dpi 
+                         << "x" << renderSize.height() * OpenGlDrawing::dpi;
+            }
+            
+            // Copy current frame to texture
+            glBindTexture(GL_TEXTURE_2D, renderPreviewTexture);
+            
+            // Ensure viewport dimensions match the texture dimensions
+            GLint viewport[4];
+            glGetIntegerv(GL_VIEWPORT, viewport);
+            qDebug() << "Current viewport:" << viewport[0] << viewport[1] << viewport[2] << viewport[3];
+            
+            // Copy framebuffer to texture
+            glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 
+                             renderSize.width() * OpenGlDrawing::dpi, 
+                             renderSize.height() * OpenGlDrawing::dpi);
+#endif
+            
+            // Pass texture to preview widget
+            if(Application::current->getRenderPreview()) {
+                qDebug() << "Sending texture" << renderPreviewTexture << "to preview window";
+                Application::current->getRenderPreview()->paintPreview(this, renderPreviewTexture, renderSize * OpenGlDrawing::dpi);
+            } else {
+                qDebug() << "Performance preview widget is null";
+            }
         }
         if(capturedFramesStart)
 #ifdef USE_GLWIDGET
@@ -1356,7 +1454,7 @@ void UiRender::arrangeObjects(quint16 type) {
 
 
 #ifdef USE_OPENGLWIDGET
-void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &, bool billboarded) {
+void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font, bool billboarded) {
     while(OpenGlTexture::textures.count() < 500) {
         OpenGlTexture *texte = new OpenGlTexture(this, text, renderTextFont, QSizeF(1024, 128) * OpenGlDrawing::dpi);
         OpenGlTexture::textures.append(texte);
@@ -1398,5 +1496,11 @@ void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const 
         textTextureToUse->popTexture();
         glPopMatrix();
     }
+}
+#else
+// Traditional renderText method wrapper for QGLWidget
+void UiRender::renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font, bool billboarded) {
+    // For QGLWidget, ignore the billboarded parameter and use the normal renderText
+    QGLWidget::renderText(x, y, z, text, font);
 }
 #endif

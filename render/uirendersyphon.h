@@ -11,4 +11,5 @@ public:
 
 protected:
     void *mSyphon;
+    GLuint texture;
 };

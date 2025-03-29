@@ -97,6 +97,7 @@ enum EditingMode { EditingModeFree, EditingModePoint, EditingModeTriggers, Editi
 class Render : public QGLWidget {
 public:
     explicit Render(QWidget *parent = 0, void *share = 0);
+    virtual void renderText(qreal x, qreal y, qreal z, const QString &text, const QFont &font, bool billboarded) = 0;
 #else
     class Render : public QOpenGLWidget {
     public:
