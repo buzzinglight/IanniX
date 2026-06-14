@@ -2,6 +2,11 @@ About IanniX
 ============
 IanniX is a graphical open-source sequencer, based on Iannis Xenakis works, for digital art. IanniX syncs via Open Sound Control (OSC) events and curves to your real-time environment.
 
+Future development ans Apple Silicon Support
+============
+IanniX is no longer actively maintained; the original team is trying to keep the program alive as much as possible.
+Support for Apple Silicon is not planned; however, a fork aims to provide this support: https://github.com/languel/IanniX
+
 Documentation
 ============
 https://github.com/buzzinglight/IanniX/wiki
